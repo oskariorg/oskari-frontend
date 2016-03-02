@@ -19,10 +19,10 @@ Requests feature info for the given spot on the map to be shown.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* lon </td><td> Number </td><td> x coordinate of the feature info location</td><td> </td>
+  <td> \* lon </td><td> Number </td><td> x coordinate of the feature info location</td><td> </td>
 </tr>
 <tr>
-  <td>/* lat </td><td> Number </td><td> y coordinate of the feature info location</td><td> </td>
+  <td> \* lat </td><td> Number </td><td> y coordinate of the feature info location</td><td> </td>
 </tr>
 </table>
 

@@ -19,7 +19,7 @@ Requests a progress spinner to be shown or hidden on a map.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* show </td><td> Boolean </td><td> whether to show or hide the spinner</td><td> </td>
+  <td> \* show </td><td> Boolean </td><td> whether to show or hide the spinner</td><td> </td>
 </tr>
 </table>
 

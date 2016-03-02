@@ -15,10 +15,10 @@ Event is sent after marker has been added to the map. It is used to notify marke
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* data </td><td> Object </td><td> marker parameters </td><td> </td>
+  <td> \* data </td><td> Object </td><td> marker parameters </td><td> </td>
 </tr>
 <tr>
-  <td>/* id </td><td> String </td><td> id of the marker that was added to the map</td><td> </td>
+  <td> \* id </td><td> String </td><td> id of the marker that was added to the map</td><td> </td>
 </tr>
 </table>
 

@@ -15,22 +15,22 @@ Event is used to notify that map has been moved or zoomed.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td> * centerX </td><td> Number </td><td> longitude of map center </td><td> </td>
+  <td> \* centerX </td><td> Number </td><td> longitude of map center </td><td> </td>
 </tr>
 <tr>
-  <td> * centerY </td><td> Number </td><td> latitude of map center </td><td> </td>
+  <td> \* centerY </td><td> Number </td><td> latitude of map center </td><td> </td>
 </tr>
 <tr>
-  <td> * zoom </td><td> Number </td><td> map zoomlevel (0-12) </td><td> </td>
+  <td> \* zoom </td><td> Number </td><td> map zoomlevel (0-12) </td><td> </td>
 </tr>
 <tr>
-  <td> * marker </td><td> Boolean </td><td> this should be removed, always sent as false </td><td> </td>
+  <td> \* marker </td><td> Boolean </td><td> this should be removed, always sent as false </td><td> </td>
 </tr>
 <tr>
-  <td> * scale </td><td> Number </td><td> map scale </td><td> </td>
+  <td> \* scale </td><td> Number </td><td> map scale </td><td> </td>
 </tr>
 <tr>
-  <td> * creator </td><td> String </td><td> class identifier of an object that sends an event </td><td> </td>
+  <td> \* creator </td><td> String </td><td> class identifier of an object that sends an event </td><td> </td>
 </tr>
 </table>
 

@@ -37,10 +37,10 @@ Parameters for data-object:
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* x</td><td> Number </td><td> x coordinate of the marker location </td><td> </td>
+  <td> \* x</td><td> Number </td><td> x coordinate of the marker location </td><td> </td>
 </tr>
 <tr>
-  <td>/* y</td><td> Number </td><td> y coordinate of the marker location </td><td> </td>
+  <td> \* y</td><td> Number </td><td> y coordinate of the marker location </td><td> </td>
 </tr>
 <tr>
   <td> color </td><td> String </td><td> marker colour </td><td> ffde00 </td>

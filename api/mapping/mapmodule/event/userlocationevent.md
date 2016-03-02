@@ -15,10 +15,10 @@ Used to notify that the ``GetUserLocationRequest`` has received a user geolocati
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* lon </td><td> Number </td><td> x coordinate of user location </td><td> </td>
+  <td> \* lon </td><td> Number </td><td> x coordinate of user location </td><td> </td>
 </tr>
 <tr>
-  <td>/* lat </td><td> Number </td><td> y coordinate of user location </td><td> </td>
+  <td> \* lat </td><td> Number </td><td> y coordinate of user location </td><td> </td>
 </tr>
 </table>
 

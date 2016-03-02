@@ -15,16 +15,16 @@ Event is used to nofify user about the map click. Event includes information abo
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* lonlat</td><td> Object </td><td> object with lon and lat keys as coordinates where the map was clicked </td><td> </td>
+  <td> \* lonlat</td><td> Object </td><td> object with lon and lat keys as coordinates where the map was clicked </td><td> </td>
 </tr>
 <tr>
-  <td>/* mouseX </td><td> Number </td><td> viewport mouse position x coordinate when click happened </td><td> </td>
+  <td> \* mouseX </td><td> Number </td><td> viewport mouse position x coordinate when click happened </td><td> </td>
 </tr>
 <tr>
-  <td>/* mouseY </td><td> Number </td><td> viewport mouse position y coordinate when click happened </td><td> </td>
+  <td> \* mouseY </td><td> Number </td><td> viewport mouse position y coordinate when click happened </td><td> </td>
 </tr>
 <tr>
-  <td>/* ctrlKeyDown </td><td> Boolean </td><td> True if Ctrl key was pressed </td><td> </td>
+  <td> \* ctrlKeyDown </td><td> Boolean </td><td> True if Ctrl key was pressed </td><td> </td>
 </tr>
 </table>
 

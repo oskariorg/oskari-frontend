@@ -15,16 +15,16 @@ Used to notify that drawing is completed.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>/* id </td><td> String</td><td> drawing id as given in StartDrawingRequest</td><td> </td>
+  <td> \* id </td><td> String</td><td> drawing id as given in StartDrawingRequest</td><td> </td>
 </tr>
 <tr>
-  <td>/* geojson </td><td> Object</td><td> drawn shape</td><td> </td>
+  <td> \* geojson </td><td> Object</td><td> drawn shape</td><td> </td>
 </tr>
 <tr>
-  <td>/* data </td><td> Object</td><td> additional info, like bufferedGeoJson and shape</td><td> </td>
+  <td> \* data </td><td> Object</td><td> additional info, like bufferedGeoJson and shape</td><td> </td>
 </tr>
 <tr>
-  <td>/* isFinished </td><td> Boolean</td><td> true if drawing is finished</td><td> </td>
+  <td> \* isFinished </td><td> Boolean</td><td> true if drawing is finished</td><td> </td>
 </tr>
 </table>
 
