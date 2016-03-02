@@ -1196,7 +1196,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var featureGeometryId = null;
             var coords = new OpenLayers.LonLat(me.clickCoords.x, me.clickCoords.y);
             for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                if (me.layerGeometries.geometry.components[i].atPoint(coords)) {
+                if (me.layerGeometries.geometry.components[i].atPoint(coords, 1, 1)) {
                     featureGeometryId = i;
                     break;
                 }
