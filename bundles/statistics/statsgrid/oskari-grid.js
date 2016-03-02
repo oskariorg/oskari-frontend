@@ -1,6 +1,31 @@
 Polymer({
   "is": "oskari-grid",
   "properties": {
+    "statsToggleClass": {
+      "type": String,
+      "notify": true,
+      "value": "toggleCollapsed"
+    },
+    "unselectedToggleClass": {
+      "type": String,
+      "notify": true,
+      "value": "toggleCollapsed"
+    },
+    "selectedToggleClass": {
+      "type": String,
+      "notify": true,
+      "value": "toggleExpanded"
+    },
+    "numIncluded": {
+      "type": Number,
+      "notify": true,
+      "value": 0
+    },
+    "numExcluded": {
+      "type": Number,
+      "notify": true,
+      "value": 0
+    },
     "rows": {
       "type": Array,
       "notify": true
@@ -50,10 +75,17 @@ Polymer({
   ],
   "toggleStats": function() {
     this.$.statsCollapse.toggle();
+    this.set('statsToggleClass', (this.$$('#statsCollapse').opened) ? 'toggleExpanded' : 'toggleCollapsed');
     this.resize();
   },
   "toggleUnselected": function() {
     this.$$('#unselectedCollapse').toggle();
+    this.set('unselectedToggleClass', (this.$$('#unselectedCollapse').opened) ? 'toggleExpanded' : 'toggleCollapsed');
+    this.resize();
+  },
+  "toggleSelected": function() {
+    this.$$('#selectedCollapse').toggle();
+    this.set('selectedToggleClass', (this.$$('#selectedCollapse').opened) ? 'toggleExpanded' : 'toggleCollapsed');
     this.resize();
   },
   "allSelectedChanged": function() {
@@ -81,6 +113,8 @@ Polymer({
         me.push("unselectedRows", row);
       }
     });
+    me.numIncluded = me.selectedRows.length;
+    me.numExcluded = me.unselectedRows.length;
   },
   "selectionsChanged": function() {
     var me = this;
@@ -127,6 +161,7 @@ Polymer({
   "onSort": function(event) {
     if (this.sorting) {
       this.fire("onSort", {index: event.target.index, header: event.target.header});
+      this.splitRows();
     }
   },
   "onDelete": function(event) {
@@ -154,16 +189,17 @@ Polymer({
     if (this.$$('#unselectedCollapse') && this.$$('#unselectedCollapse').opened) {
       // We have to add this height manually, because it takes time for the statisticsContainer to expand.
       var margin = 20;
-      unselectedHeight += Math.min(margin + jQuery('#oskari-grid-unselected').height(), 150);
+      unselectedHeight += Math.min(margin + jQuery('#oskari-grid-unselected').height(), 150 - margin);
     }
     var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
     var headerHeight = jQuery('#oskari-grid-header').height();
     var regionSelectorHeight = jQuery('#region-category-selector').height();
     var totalHeight = jQuery('.statsgrid_100').height() - 10;
     var bodyWidth = jQuery('.statsgrid_100').width() - 10;
+    var selectedHeight = jQuery('#selectedContainer').height() + 20;
 
     var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
-    var bodyHeight = gridHeight - statsHeight - unselectedHeight - headerHeight - 20;
+    var bodyHeight = gridHeight - statsHeight - unselectedHeight - headerHeight - selectedHeight - 20;
     jQuery('#oskariGrid').height(gridHeight);
     jQuery('#oskari-grid-body').height(bodyHeight);
     var colWidthNum = 120;

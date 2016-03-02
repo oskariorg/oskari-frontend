@@ -8,3 +8,17 @@
 .statsgrid .indicatorselector .indicator-cont .chzn-search input {
 	width : 263px;
 }
+span.toggleCollapsed {
+	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/expand.gif') no-repeat center center;
+    width: 9px;
+    height: 9px;
+    margin-right: 5px;
+    padding: 5px;
+}
+span.toggleExpanded {
+	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/collapse.gif') no-repeat center center;
+    width: 9px;
+    height: 9px;
+    margin-right: 5px;
+    padding: 5px;
+}
