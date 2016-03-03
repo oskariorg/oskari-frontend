@@ -4,7 +4,7 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-y: none; overflow-x: scroll; display: block; max-width: 650px;">
+    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
       <thead class="oskari-grid-width" id="oskari-grid-header" style="">
         <tr class="oskari-grid-width">
           <template is="dom-if" if="[[selection]]">
@@ -28,6 +28,7 @@
               </template>
             </th>
           </template>
+          <th><span class$="[[addIndicatorToggleClass]]"></span></th>
         </tr>
       </thead>
       <tbody class="oskari-grid-width" style="padding: 0px; border: 0px;">
@@ -38,7 +39,7 @@
         </tr>
         <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
           <iron-collapse id="statsCollapse">
-            <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block;">
+            <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block; margin: 0px;">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
                 <tr class="oskari-grid-width">
                   <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
@@ -46,6 +47,7 @@
                       <span>[[datum]]</span>
                     </td>
                   </template>
+                  <td></td>
                 </tr>
               </template>
             </table>
@@ -61,7 +63,7 @@
           </tr>
           <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
             <iron-collapse id="unselectedCollapse">
-              <table class="oskari-grid-width">
+              <table class="oskari-grid-width" style="margin: 0px;">
                 <tbody id="oskari-grid-unselected" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
                   <template is="dom-repeat" items="{{unselectedRows}}" as="unselectedRow" id="unselected-rows-template">
                     <tr class="oskari-grid-width">
@@ -71,6 +73,7 @@
                           <span>[[datum]]</span>
                         </td>
                       </template>
+                      <td></td>
                     </tr>
                   </template>
                 </tbody>
@@ -87,7 +90,7 @@
         </tr>
         <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
           <iron-collapse id="selectedCollapse" opened="true">
-            <table class="oskari-grid-width">
+            <table class="oskari-grid-width" style="margin: 0px;">
               <tbody id="oskari-grid-body" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
                 <template is="dom-repeat" items="{{selectedRows}}" as="row" id="rowsTemplate">
                   <tr class="oskari-grid-width">
@@ -99,6 +102,7 @@
                         <span>[[datum]]</span>
                       </td>
                     </template>
+                    <td></td>
                   </tr>
                 </template>
               </tbody>

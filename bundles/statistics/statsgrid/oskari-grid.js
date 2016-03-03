@@ -138,11 +138,11 @@ Polymer({
     setTimeout(this.resize.bind(this), 100);
   },
   "headersChanged": function() {
-    this.numcols = this.headers.length + 1;
+    this.numcols = this.headers.length + 2;
     setTimeout(this.resize.bind(this), 100);
   },
   "rowsChanged": function() {
-    this.numcols = this.headers.length + 1;
+    this.numcols = this.headers.length + 2;
     this.splitRows();
     setTimeout(this.resize.bind(this), 100);
   },
@@ -182,22 +182,20 @@ Polymer({
     var statsHeight = jQuery('#statisticsContainer').height();
     if (this.$.statsCollapse.opened) {
       // We have to add this height manually, because it takes time for the statisticsContainer to expand.
-      var margin = 20;
-      statsHeight += jQuery('#oskari-grid-statistics').height() + margin;
+      statsHeight += jQuery('#oskari-grid-statistics').height();
     }
     var unselectedHeight = jQuery('#unselectedContainer').height();
     if (this.$$('#unselectedCollapse') && this.$$('#unselectedCollapse').opened) {
       // We have to add this height manually, because it takes time for the statisticsContainer to expand.
-      var margin = 20;
-      unselectedHeight += Math.min(margin + jQuery('#oskari-grid-unselected').height(), 150 - margin);
+      unselectedHeight += Math.min(jQuery('#oskari-grid-unselected').height(), 150);
     }
     var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
     var headerHeight = jQuery('#oskari-grid-header').height();
     var regionSelectorHeight = jQuery('#region-category-selector').height();
     var totalHeight = jQuery('.statsgrid_100').height() - 10;
     var bodyWidth = jQuery('.statsgrid_100').width() - 10;
-    var selectedHeight = jQuery('#selectedContainer').height() + 20;
-
+    var selectedHeight = jQuery('#selectedContainer').height();
+    
     var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
     var bodyHeight = gridHeight - statsHeight - unselectedHeight - headerHeight - selectedHeight - 20;
     jQuery('#oskariGrid').height(gridHeight);
@@ -207,8 +205,8 @@ Polymer({
     var colWidth = colWidthNum + 'px';
     var checkboxColWidth = checkboxColWidthNum + 'px';
     var gridWidthNum = 0;
-    var lastColIndex = this.headers.length;
-    ['checkbox'].concat(this.headers).forEach(function(header, headerIndex) {
+    var lastColIndex = this.headers.length + 1;
+    ['checkbox'].concat(this.headers).concat(['addIndicator']).forEach(function(header, headerIndex) {
       // The indexing starts at 1, and the first header column is actually nth-child(3) because of the template.
       var thisColWidthNum = colWidthNum;
       if (headerIndex == 0) {
@@ -218,6 +216,11 @@ Polymer({
       gridWidthNum += thisColWidthNum;
       var index = (headerIndex == 0)?(headerIndex + 1):(headerIndex + 2);
       var unselectedColumnIndex = headerIndex + 1;
+      if (headerIndex == lastColIndex) {
+        // The last column is static, and is preceded by the column repeating template element.
+        unselectedColumnIndex++;
+        index++;
+      }
 
       jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('max-width', thisColWidth);
       jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', thisColWidth);
@@ -248,7 +251,7 @@ Polymer({
     jQuery('.oskari-grid-width').css('max-width', gridWidth);
     jQuery('.oskari-grid-width').css('min-width', gridWidth);
     jQuery('.oskari-grid-width').css('width', gridWidth);
-    this.headers.forEach(function(header, headerIndex) {
+    this.headers.concat('addIndicator').forEach(function(header, headerIndex) {
       // The indexing starts at 1.
       var index = headerIndex + 1;
       var statsColWidth = colWidth;
@@ -256,6 +259,11 @@ Polymer({
       if (headerIndex == 0) {
         var paddingAndBorder = 1;
         statsColWidth = (colWidthNum + checkboxColWidthNum + paddingAndBorder) + 'px';
+      }
+      // There is one fewer columns in the statistics table.
+      if (headerIndex == lastColIndex - 1) {
+        // The last column is static, and is preceded by the column repeating template element.
+        index++;
       }
       jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('max-width', statsColWidth);
       jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('min-width', statsColWidth);
