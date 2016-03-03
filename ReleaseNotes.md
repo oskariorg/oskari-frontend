@@ -2,6 +2,11 @@
 
 ## 1.36
 
+### Openlayers 3 layerplugins
+
+Added crossOrigin=anonymous option for all Openlayers 3 layer plugins (wms, wmts, arcgis, wfs, stats, analysis, userlayer).
+This enables taking a snapshot of the map programmatically when the layers on the map enable cross-origin usage.
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
