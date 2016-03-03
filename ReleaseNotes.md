@@ -7,6 +7,13 @@
 Added crossOrigin=anonymous option for all Openlayers 3 layer plugins (wms, wmts, arcgis, wfs, stats, analysis, userlayer).
 This enables taking a snapshot of the map programmatically when the layers on the map enable cross-origin usage.
 
+### Openlayers 3 mapmodule
+
+Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
+The function produces a dataURL for PNG-image from the map contents.
+This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
+The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
@@ -16,7 +23,6 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
         animationSpeed: 3000
     }
 ```
-
 
 ### mapfull
 
