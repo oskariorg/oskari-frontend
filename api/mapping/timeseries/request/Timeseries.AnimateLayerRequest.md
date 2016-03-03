@@ -25,7 +25,7 @@ Activates timeseries playback UI to map and init this.
   <td> \* times </td><td> Object/Array </td><td> layer supported times (ISO8601 format)</td><td> </td>
 </tr>
 <tr>
-  <td> autoPlay </td><td> Booelan </td><td> start auto play</td><td> </td>
+  <td> autoPlay </td><td> Boolean </td><td> start auto play</td><td> </td>
 </tr>
 <tr>
   <td> \* dimensionName </td><td> String </td><td> layer dimension name</td><td> </td>
