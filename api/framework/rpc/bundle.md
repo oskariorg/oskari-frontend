@@ -457,6 +457,12 @@ For example in RPC-client you can:
        channel.log('GetFeatures: ', data);
     });
 
+
+**getScreenshot() (beta)**
+
+This is an experimental function that might be changed/removed. It's only available when the Oskari instance uses Openlayers 3 based mapmodule.
+The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
+
 ### Allowed events
 
 Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc. 

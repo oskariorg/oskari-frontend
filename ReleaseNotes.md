@@ -2,6 +2,22 @@
 
 ## 1.36
 
+### Openlayers 3 layerplugins
+
+Added crossOrigin=anonymous option for all Openlayers 3 layer plugins (wms, wmts, arcgis, wfs, stats, analysis, userlayer).
+This enables taking a snapshot of the map programmatically when the layers on the map enable cross-origin usage.
+
+### Openlayers 3 mapmodule
+
+Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
+The function produces a dataURL for PNG-image from the map contents.
+This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
+The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
+### rpc
+
+Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
@@ -12,10 +28,19 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
     }
 ```
 
-
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
+
+## 1.35.1
+
+### mapwmts
+
+Fixes an issue with wmts-layers when proxying the layer on OL3. Previously used the url from capabilities, the fix is to use the one provided by oskari-server as layer url so we can override the url with a proxied one. With OL2 this works correctly even before this.
+
+### myplaces2
+
+All toolbar buttons were removed if measuretools config was not given. Fix so it only affects the additional measure tools instead of all buttons.
 
 ## 1.35
 

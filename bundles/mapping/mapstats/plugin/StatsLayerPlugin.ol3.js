@@ -221,7 +221,8 @@ Oskari.clazz.define(
                         params: {
                             'LAYERS': wms.LAYERS,
                             'FORMAT': wms.FORMAT
-                        }
+                        },
+                        crossOrigin : 'anonymous'
                     }),
                     id: layer.getId(),
                     transparent: true,

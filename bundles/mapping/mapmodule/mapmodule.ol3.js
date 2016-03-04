@@ -147,6 +147,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return extent;
         },
+        /**
+         * Produces an dataurl for PNG-image from the map contents.
+         * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
+         * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
+         */
+        getScreenshot : function() {
+            try {
+                var imageData = null;
+                this.getMap().once('postcompose', function(event) {
+                    var canvas = event.context.canvas;
+                    imageData = canvas.toDataURL('image/png');
+                });
+
+                this.getMap().renderSync();
+                return imageData;
+           } catch(err) {
+               this.getSandbox().printWarn('Error producing a screenshot' + err);
+           }
+           return '';
+        },
 
 /*<------------- / OL3 specific ----------------------------------- */
 

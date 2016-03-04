@@ -92,7 +92,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                         urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
                         params : {
                             'layers' : 'show:' + layer.getLayerName()
-                        }
+                        },
+                        crossOrigin : 'anonymous'
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -105,7 +106,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 // Layer URL is like: http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x} format
                 openlayer = new ol.layer.Tile({
                     source: new ol.source.XYZ({
-                         url: layer.getLayerUrl()
+                        url: layer.getLayerUrl(),
+                        crossOrigin : 'anonymous'
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
