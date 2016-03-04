@@ -147,7 +147,11 @@ Polymer({
         source = {},
         description = {},
         layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
-        layerName = layer.getLayerName();
+        layerName = layer.getLayerName(),
+        loggedIn = this.user._loggedIn,
+        pluginName = 'fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin';
+      
+      // TODO: If the user is not logged in, we will just put this indicator into user's browser session.
       title[this.language] = this.$.indicator_title.value;
       source[this.language] = this.$.indicator_sources.value;
       description[this.language] = this.$.indicator_description.value;
@@ -157,24 +161,40 @@ Polymer({
           "primary value": regionItem.value
         };
       });
-      var formData = "title=" + encodeURIComponent(JSON.stringify(title)) + "&" +
-        "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
-        "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
-        "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
-        "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
-        "material="+ encodeURIComponent(this.selectedLayer) + "&" +
-        "category="+ encodeURIComponent(layerName) + "&" +
-        "data=" + encodeURIComponent(JSON.stringify(rows));
-      $.ajax({
-        // For old jQuery.
-        type: "POST",
-        url: this.ajaxUrl + "?action_route=SaveUserIndicator",
-        data: formData,
-        success: function(response) {
-          me.fire("onUserIndicatorsChanged", {});
-          // TODO: We should automatically add the added indicator here to the grid.
-        }
-      });
+      if (loggedIn) {
+        var formData = "title=" + encodeURIComponent(JSON.stringify(title)) + "&" +
+          "source=" + encodeURIComponent(JSON.stringify(source)) + "&" +
+          "description=" + encodeURIComponent(JSON.stringify(description)) + "&" +
+          "year=" + encodeURIComponent(this.$.indicator_year.value) + "&" +
+          "published=" + encodeURIComponent(this.$.indicator_publicity.value) + "&" +
+          "material="+ encodeURIComponent(this.selectedLayer) + "&" +
+          "category="+ encodeURIComponent(layerName) + "&" +
+          "data=" + encodeURIComponent(JSON.stringify(rows));
+        $.ajax({
+          // For old jQuery.
+          type: "POST",
+          url: this.ajaxUrl + "?action_route=SaveUserIndicator",
+          data: formData,
+          success: function(response) {
+            me.fire("onUserIndicatorsChanged", {pluginName: pluginName, id: title[this.language]});
+          }
+        });
+      } else {
+        var newIndicator = {
+          datasourceId: pluginName,
+          indicatorId: title[this.language],
+          name: title,
+          title: title,
+          source: source,
+          description: description,
+          selectors: [],
+          indicatorValues: {}
+        };
+        this.regionItems.forEach(function (regionItem) {
+          newIndicator.indicatorValues[regionItem.key] = regionItem.value && Number(regionItem.value) || null;
+        });
+        me.fire("onUserIndicatorsChanged", {pluginName: pluginName, id: title[this.language], indicator: newIndicator});
+      }
       this.set("showUserIndicatorView", false);
     },
     "clearForm": function() {

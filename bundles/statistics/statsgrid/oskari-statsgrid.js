@@ -102,7 +102,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       eventBuilder = this.sandbox.getEventBuilder(
           'MapStats.HoverTooltipContentEvent'
       ),
-      item = this.selectedIndicator.data[regionCode],
+      item = this.selectedIndicator && this.selectedIndicator.data[regionCode] || null,
       content;
 
       if (item === null || item === undefined) {
@@ -110,7 +110,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
             'sendTooltipData: item not found for',
             regionCode,
             'in',
-            this.selectedIndicator.data
+            this.selectedIndicator && this.selectedIndicator.data
         );
       }
 
@@ -134,9 +134,13 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
       vis_name = layer.getLayerName(),
       vis_attr = me.layerInfo[me.selectedLayer].idTag,
-      vis_codes = indicatorValues && Object.keys(indicatorValues) || [],
+      vis_codes = indicatorValues && Object.keys(indicatorValues).filter(function(regionCode) {
+        return indicatorValues[regionCode] !== null && indicatorValues[regionCode] !== undefined;
+      }) || [],
       col_values = vis_codes.map(function(regionKey) {
         return indicatorValues[regionKey];
+      }).filter(function(value) {
+        return value !== null && value !== undefined;
       });
       me.set("selectedIndicatorKey", cacheKey);
       if (eventBuilder) {
@@ -151,7 +155,11 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         // Oskari.mapframework.domain.WmsLayer
         // layertype STATS
         event = eventBuilder(layer, data);
-        me.sandbox.notifyAll(event);
+        try {
+          me.sandbox.notifyAll(event);
+        } catch (e) {
+          // Sometimes the map throws weird exceptions.
+        }
       }
     },
     "onSort": function(event) {
@@ -306,21 +314,21 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
               return {
                 id: cacheKey,
                 indicatorId: indicator.indicatorId,
-                title: indicator.title[me.language]
-              + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
-              sort: true,
-              filter: true,
-              delete: true
+                title: indicator.title[me.language] +
+                  ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
+                sort: true,
+                filter: true,
+                delete: true
               }
             }
             return {
               id: cacheKey,
               indicatorId: indicator.indicatorId,
-              title: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language]
-            + ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
-            sort: true,
-            filter: true,
-            delete: true
+              title: me.sources[indicator.datasourceId].indicators[indicator.indicatorId].name[me.language] +
+                ((selectorsAsString.length > 0) ? "/" : "") + selectorsAsString,
+              sort: true,
+              filter: true,
+              delete: true
             }
           })));
       var ajaxCallMade = false;
@@ -472,8 +480,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       })) {
         return;
       }
-      var
-      regionKeyedValues = {};
+      var regionKeyedValues = {};
 
       // Transposing the array keyed by indicators in cache to being keyed by regions.
       me.selectedIndicators.forEach(function(indicator) {

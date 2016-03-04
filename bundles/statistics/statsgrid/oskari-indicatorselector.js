@@ -100,8 +100,23 @@ Polymer({
   "hideSpinner": function(e, response) {
     this.showSpinner = false;
   },
-  "onUserIndicatorsChanged": function() {
-    this.$.indicatorsAjax.generateRequest();
+  "onUserIndicatorsChanged": function(params) {
+    if (this.user._loggedIn) {
+      // We will only fetch new user indicators from the server if the user is logged in.
+      this.$.indicatorsAjax.generateRequest();
+    } else if (params && params.detail) {
+      this.datasourceId = params.detail.pluginName;
+      this.indicatorId = params.detail.id;
+      var cacheKey = this.$.statsgrid.getCacheKey(params.detail.pluginName, params.detail.id,
+          this.selectedLayer, "[]");
+      params.detail.indicator.id = cacheKey;
+      params.detail.indicator.public = false;
+      this.sources[params.detail.pluginName].indicators[params.detail.id] = params.detail.indicator;
+
+      this.push('selectedIndicators', params.detail.indicator);
+      this.$.statsgrid.cache[cacheKey] = params.detail.indicator;
+      this.$.statsgrid.handleResponse();
+    }
   },
   "sendTooltipData": function(feature) {
     return this.$.statsgrid.sendTooltipData(feature);
@@ -149,7 +164,7 @@ Polymer({
       success: function(results) {
         me.set("indicator", results);
         me.sources[me.datasourceId].indicators[me.indicatorId] = results;
-        me.set("selectors", me.indicator.selectors);
+        me.set("selectors", me.indicator && me.indicator.selectors || []);
         me.getSelectors(me.sources, me.datasourceId, me.indicatorId);
       }
     });
