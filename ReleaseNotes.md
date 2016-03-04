@@ -14,6 +14,10 @@ The function produces a dataURL for PNG-image from the map contents.
 This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
 The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
 
+### rpc
+
+Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
