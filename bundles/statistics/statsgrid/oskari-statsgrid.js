@@ -72,6 +72,10 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         "type": Boolean,
         "notify": true,
         "value": false
+      },
+      "indicatorExpanded": {
+        "type": Boolean,
+        "notify": true
       }
     },
     "listeners": {

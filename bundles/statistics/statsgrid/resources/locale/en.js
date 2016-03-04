@@ -136,6 +136,7 @@ Oskari.registerLocalization({
         "not_included": "Not included",
         "noMatch": "No results matched",
         "selectIndicator": "Select an indicator",
+        "addIndicatorButton": "Add an indicator",
         "noDataSource": "No data source matched",
         "selectDataSource": "Select a data source",
         "filterTitle": "Filter out column data",

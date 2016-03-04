@@ -28,7 +28,12 @@
               </template>
             </th>
           </template>
-          <th><span class$="[[addIndicatorToggleClass]]"></span></th>
+          <th>
+            <div>
+              <div class$="[[indicatorToggleClass]]" on-tap="toggleIndicators"></div>
+              <div>[[locale.addIndicatorButton]]</div>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody class="oskari-grid-width" style="padding: 0px; border: 0px;">

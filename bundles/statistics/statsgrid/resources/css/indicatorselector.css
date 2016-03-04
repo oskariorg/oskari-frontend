@@ -8,17 +8,34 @@
 .statsgrid .indicatorselector .indicator-cont .chzn-search input {
 	width : 263px;
 }
-span.toggleCollapsed {
+.toggleCollapsed {
 	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/expand.gif') no-repeat center center;
     width: 9px;
     height: 9px;
     margin-right: 5px;
     padding: 5px;
 }
-span.toggleExpanded {
+.toggleExpanded {
 	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/collapse.gif') no-repeat center center;
     width: 9px;
     height: 9px;
     margin-right: 5px;
     padding: 5px;
+}
+
+.toggleCollapsedBig {
+	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/expand_big.png') no-repeat center center;
+    padding: 0px;
+    margin: 1px;
+    height: 36px;
+    width: 36px;
+    float: left;
+}
+.toggleExpandedBig {
+	background: url('/Oskari/bundles/statistics/statsgrid/resources/images/collapse_big.png') no-repeat center center;
+    padding: 0px;
+    margin: 1px;
+    height: 36px;
+    width: 36px;
+    float: left;
 }

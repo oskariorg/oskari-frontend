@@ -135,6 +135,7 @@ Oskari.registerLocalization({
         "showSelected": "Näytä vain valitut alueet taulukossa",
         "noMatch": "Indikaattoria ei löytynyt",
         "selectIndicator": "Valitse indikaattori",
+        "addIndicatorButton": "Lisää indikaattori",
         "noDataSource": "Tietolähdettä ei löytynyt",
         "selectDataSource": "Valitse tietolähde",
         "filterTitle": "Suodata sarakkeen arvoja",

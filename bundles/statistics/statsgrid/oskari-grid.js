@@ -16,6 +16,11 @@ Polymer({
       "notify": true,
       "value": "toggleExpanded"
     },
+    "indicatorToggleClass": {
+      "type": String,
+      "notify": true,
+      "value": "toggleCollapsedBig"
+    },
     "numIncluded": {
       "type": Number,
       "notify": true,
@@ -39,6 +44,10 @@ Polymer({
       "type": Array,
       "notify": true,
       "value": function() { return [];}
+    },
+    "indicatorExpanded": {
+      "type": Boolean,
+      "notify": true
     },
     "headers": {
       "type": Array,
@@ -86,6 +95,11 @@ Polymer({
   "toggleSelected": function() {
     this.$$('#selectedCollapse').toggle();
     this.set('selectedToggleClass', (this.$$('#selectedCollapse').opened) ? 'toggleExpanded' : 'toggleCollapsed');
+    this.resize();
+  },
+  "toggleIndicators": function() {
+    this.indicatorExpanded = !this.indicatorExpanded;
+    this.set('indicatorToggleClass', this.indicatorExpanded ? 'toggleExpandedBig' : 'toggleCollapsedBig');
     this.resize();
   },
   "allSelectedChanged": function() {
@@ -189,7 +203,10 @@ Polymer({
       // We have to add this height manually, because it takes time for the statisticsContainer to expand.
       unselectedHeight += Math.min(jQuery('#oskari-grid-unselected').height(), 150);
     }
-    var indicatorSelectorHeight = jQuery('#indicatorSelectorDiv').height();
+    var indicatorSelectorHeight = 0;
+    if (this.indicatorExpanded) {
+      indicatorSelectorHeight += jQuery('#indicatorSelectorDiv').height();
+    }
     var headerHeight = jQuery('#oskari-grid-header').height();
     var regionSelectorHeight = jQuery('#region-category-selector').height();
     var totalHeight = jQuery('.statsgrid_100').height() - 10;
