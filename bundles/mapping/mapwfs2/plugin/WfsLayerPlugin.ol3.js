@@ -1346,8 +1346,8 @@ Oskari.clazz.define(
                         url: imageUrl,
                         imageExtent: boundsObj,
                         imageSize: ols,
-                        logo: false
-
+                        logo: false,
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     title: layerName
                 });

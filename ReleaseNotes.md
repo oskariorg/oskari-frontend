@@ -2,6 +2,32 @@
 
 ## 1.36
 
+### Openlayers 3 layerplugins
+
+Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
+This is required for layers that will need to be used for the new getScreenshot() functionality.
+When using oskari-server add the crossOrigin value to the layers that support it in `oskari_maplayer` tables `attributes` column:
+
+    {
+      "crossOrigin" : "anonymous"
+    }
+
+You should check that the layer tile requests have the `Access-Control-Allow-Origin` header properly configured before configuring the layer.
+If the layer doesn't provide the header the layer tiles will NOT load and the console shows an error message like this:
+
+    Image from origin 'http://where.tiles.are.loaded' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://oskari.instance' is therefore not allowed access.
+
+### Openlayers 3 mapmodule
+
+Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
+The function produces a dataURL for PNG-image from the map contents.
+This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
+The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
+### rpc
+
+Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
@@ -12,10 +38,19 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
     }
 ```
 
-
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
+
+## 1.35.1
+
+### mapwmts
+
+Fixes an issue with wmts-layers when proxying the layer on OL3. Previously used the url from capabilities, the fix is to use the one provided by oskari-server as layer url so we can override the url with a proxied one. With OL2 this works correctly even before this.
+
+### myplaces2
+
+All toolbar buttons were removed if measuretools config was not given. Fix so it only affects the additional measure tools instead of all buttons.
 
 ## 1.35
 

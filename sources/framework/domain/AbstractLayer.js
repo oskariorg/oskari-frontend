@@ -974,10 +974,15 @@ Oskari.clazz.define(
         },
         /**
          * @method getAttributes
+         * @param {String} key optional key to get value directly from attributes
          * @return {Object} optional layer attributes like heatmap-parameters
          */
-        getAttributes: function () {
-            return this._attributes || {};
+        getAttributes: function (key) {
+            var attr = this._attributes || {};
+            if(key) {
+                return attr[key];
+            }
+            return attr;
         },
         /**
          * @method setAttributes

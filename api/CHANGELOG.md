@@ -5,6 +5,15 @@ when the service provider gives notice about Oskari version being upgraded. Oska
 
 Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature, modifies the current functionality or if something has been removed. [rpc] tag indicates that the change affects RPC API.
 
+## 1.36
+
+### RPC
+
+#### [add] [rpc] New function
+
+An experimental getScreenshot() function is now available when the Oskari instance uses Openlayers 3 based mapmodule.
+The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
+
 ## 1.35
 
 ### RPC
