@@ -290,6 +290,23 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
+
+            getPixelMeasuresInScale : function(mmMeasures, scale) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    mapScale = this.sandbox.getMap().getScale(),
+                    scalein = scale,
+                    pixelMeasures = [];
+                if(!scalein){
+                    scalein = mapScale;
+                }
+                if(mmMeasures && mmMeasures.constructor === Array){
+                    pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
+                }
+                return {
+                    pixelMeasures: pixelMeasures,
+                    scale: scalein
+                };
+            },
             resetState : function() {
                 this.sandbox.resetState();
             },
