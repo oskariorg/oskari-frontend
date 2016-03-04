@@ -4,8 +4,18 @@
 
 ### Openlayers 3 layerplugins
 
-Added crossOrigin=anonymous option for all Openlayers 3 layer plugins (wms, wmts, arcgis, wfs, stats, analysis, userlayer).
-This enables taking a snapshot of the map programmatically when the layers on the map enable cross-origin usage.
+Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
+This is required for layers that will need to be used for the new getScreenshot() functionality.
+When using oskari-server add the crossOrigin value to the layers that support it in `oskari_maplayer` tables `attributes` column:
+
+    {
+      "crossOrigin" : "anonymous"
+    }
+
+You should check that the layer tile requests have the `Access-Control-Allow-Origin` header properly configured before configuring the layer.
+If the layer doesn't provide the header the layer tiles will NOT load and the console shows an error message like this:
+
+    Image from origin 'http://where.tiles.are.loaded' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://oskari.instance' is therefore not allowed access.
 
 ### Openlayers 3 mapmodule
 

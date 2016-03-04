@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                         params : {
                             'layers' : 'show:' + layer.getLayerName()
                         },
-                        crossOrigin : 'anonymous'
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 openlayer = new ol.layer.Tile({
                     source: new ol.source.XYZ({
                         url: layer.getLayerUrl(),
-                        crossOrigin : 'anonymous'
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),

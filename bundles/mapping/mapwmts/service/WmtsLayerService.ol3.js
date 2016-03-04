@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 buffer: 0,
                 displayInLayerSwitcher: false,
                 isBaseLayer: false,
-                crossOrigin : 'anonymous'
+                crossOrigin : layer.getAttributes('crossOrigin')
             };
 
             var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {
