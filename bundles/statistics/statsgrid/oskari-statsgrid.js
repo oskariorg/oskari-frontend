@@ -289,6 +289,12 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       }
       this.selectedIndicatorChanged(this.selectedIndicatorKey);
     },
+    /**
+     * A stable stringify for JSON objects.
+     */
+    "stringify": function(obj) {
+      return "{" + Object.keys(obj).sort().map(function(key) {return key + ":" + obj[key]}).join(",") + "}";
+    },
     "selectedIndicatorsChanged": function() {
       var me = this,
         indicators = this.selectedIndicators || [],
@@ -303,8 +309,8 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       }].concat(
           indicators.map(function(indicator) {
             var selectors = me.toSelectorsParameter(indicator.selectors),
-            selectorsKey = JSON.stringify(selectors),
-            cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
+              selectorsKey = me.stringify(selectors),
+              cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
                 me.selectedLayer, selectorsKey),
                 selectorsAsString = indicator.selectors.map(function(selector) {
                   return selector.value;
@@ -335,7 +341,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       var ajaxCallMade = false;
       indicators.forEach(function(indicator) {
         var selectors = me.toSelectorsParameter(indicator.selectors),
-        selectorsString = JSON.stringify(selectors),
+        selectorsString = me.stringify(selectors),
         cacheKey = me.getCacheKey(indicator.datasourceId, indicator.indicatorId,
             me.selectedLayer, selectorsString);
         if (me.cache[cacheKey]) {

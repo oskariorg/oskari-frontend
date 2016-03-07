@@ -52,6 +52,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
         getSelectors: function () {
             return this.selectors;
         },
+        // A stable stringify for JSON objects.
+        "stringify": function(obj) {
+          return ",".join(Object.keys(obj).sort().map(function(key) {return key + ":" + obj[key]}));
+        },
         /**
          * Returns unique id for the indicator selections.
          * The same indicator can be added multiple times with different options so datasource and indicatorId alone can't be used
@@ -66,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
                 key = this.getDatasourceId() + separator + this.getIndicatorId(),
                 opts = this.getSelectors();
             if(opts) {
-                key = key + separator + JSON.stringify(opts);
+                key = key + separator + this.stringify(opts);
             }
             return key;
         }

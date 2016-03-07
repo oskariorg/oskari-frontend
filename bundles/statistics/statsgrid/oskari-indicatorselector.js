@@ -301,15 +301,25 @@ Polymer({
     setTimeout(this.setSelectorsToDefaultValues.bind(this), 50);
     setTimeout(this.resize.bind(this), 100);
   },
-  "getSelectorsKey": function() {
+  "getIndicatorKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
+    return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
+  },
+  /**
+   * Converts the selector array into selectors key-value object required by the interface.
+   */
+  "toSelectorsParameter": function(selectorsArray) {
     var selectors = {};
-    this.selectorItems.forEach(function(selector) {
-      selectors[selector.name] = selector.value;
+    selectorsArray.forEach(function(selector) {
+      // This works for both the selector boxes and the indicator selectors.
+      selectors[selector.name || selector.selectorId] = selector.value;
     });
     return selectors;
   },
-  "getIndicatorKey": function(datasourceId, indicatorId, selectedLayer, selectorsString) {
-    return datasourceId + ":" + indicatorId + ":" + selectedLayer + ":" + selectorsString;
+  /**
+   * A stable stringify for JSON objects.
+   */
+  "stringify": function(obj) {
+    return "{" + Object.keys(obj).sort().map(function(key) {return key + ":" + obj[key]}).join(",") + "}";
   },
   "onAddIndicatorToGrid": function(e) {
     var selectors = this.$.indicatorSelectors,
@@ -321,14 +331,25 @@ Polymer({
         value: select.value
       });
     });
-    this.push('selectedIndicators', {
-      datasourceId: this.datasourceId,
-      indicatorId: this.indicatorId,
-      selectors: values,
-      public: this.sources[this.datasourceId].indicators[this.indicatorId].public
-    });
     this.selectorSelectedIndicatorKey = this.getIndicatorKey(this.datasourceId, this.indicatorId,
-        this.selectedLayer, this.getSelectorsKey());
+        this.selectedLayer, this.stringify(this.toSelectorsParameter(this.selectorItems)));
+    var indicatorAlreadyAdded = false;
+    this.selectedIndicators.forEach(function(selectedIndicator) {
+      var thisIndicatorKey = this.getIndicatorKey(selectedIndicator.datasourceId, selectedIndicator.indicatorId,
+          this.selectedLayer, this.stringify(this.toSelectorsParameter(selectedIndicator.selectors)));
+      if (this.selectorSelectedIndicatorKey == thisIndicatorKey) {
+        this.$.statsgrid.selectedIndicatorChanged(thisIndicatorKey);
+        indicatorAlreadyAdded = true;
+      }
+    }.bind(this));
+    if (!indicatorAlreadyAdded) {
+      this.push('selectedIndicators', {
+        datasourceId: this.datasourceId,
+        indicatorId: this.indicatorId,
+        selectors: values,
+        public: this.sources[this.datasourceId].indicators[this.indicatorId].public
+      });
+    }
   },
   "attached": function() {
     jQuery('#statsgrid').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height()); 
