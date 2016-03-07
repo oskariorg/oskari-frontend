@@ -1,10 +1,42 @@
-# GetRouteRequest
+# GetRouteRequest [RPC]
 
-This request is used to get route plan between two points.
+Get route plan between two points.
+
+## Description
+
+Request forwards route parameters to the request handler. Parameters include coordinates of two points, coordinate system and other optional route parameters.
+
+## Parameters
+
+(* means the parameter is required)
+
+<table class="table">
+<tr>
+  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
+</tr>
+<tr>
+  <td>/* SRS </td><td> String </td><td> Coordinate system of the route coordinates, for example EPSG:3067</td><td> </td>
+</tr>
+<tr>
+  <td>/* fromlat </td><td> Number </td><td> y coordinate of the starting point </td><td> </td>
+</tr>
+<tr>
+  <td>/* fromlon </td><td> Number </td><td> x coordinate of the starting point </td><td> </td>
+</tr>
+<tr>
+  <td>/* tolat </td><td> Number </td><td> y coordinate of the arrival point </td><td> </td>
+</tr>
+<tr>
+  <td>/* tolon </td><td> Number </td><td> x coordinate of the arrival point </td><td> </td>
+</tr>
+<tr>
+  <td> lang </td><td> String </td><td> the language in which to get instructions </td><td> </td>
+</tr>
+</table>
 
 ## Examples
 
-#### Get route insctructions between two points:
+Get route insctructions between two points:
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('GetRouteRequest', [{
@@ -16,7 +48,6 @@ sb.postRequestByName('GetRouteRequest', [{
     }]);
 ```
 
-After the routing is completed a ``RouteSuccessEvent`` is triggered where following data is available:
-- event.getSuccess(), tells at routing request founds some route and there is no errors
-- event.getPlan(), tells routing plan. Plan is same format as OpenTripPlanner respose with some conditions (geoJSON added, point coordinates are transfredded same coordinate reference system as map projection)
-- event.getRequestParameters(), tells request paremeters of routing
+## Related api
+
+- RouteResultEvent

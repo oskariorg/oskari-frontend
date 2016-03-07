@@ -1,8 +1,17 @@
-# RemoveFeaturesFromMapRequest
+# RemoveFeaturesFromMapRequest [rpc]
+
+Remove vector features from map
+
+## Use cases
+
+- remove features from specific layer
+- remove all features from map
+
+## Description
 
 Removes all or specific vector features from the specified layer or all features from all layers. 
 
-##Examples
+## Examples
 
 Remove all vectors from all layers
 ```javascript
@@ -20,3 +29,6 @@ Remove all feature's whose 'test_property' === 1 from myLayer
 ```javascript
 this.sandbox.postRequestByName(rn, ['test_property', 1, myLayer);
 ```
+## Related api
+
+- addFeaturesToMapRequest

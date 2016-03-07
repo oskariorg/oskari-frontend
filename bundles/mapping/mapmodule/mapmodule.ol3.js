@@ -148,6 +148,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return extent;
         },
+        /**
+         * Produces an dataurl for PNG-image from the map contents.
+         * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
+         * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
+         */
+        getScreenshot : function() {
+            try {
+                var imageData = null;
+                this.getMap().once('postcompose', function(event) {
+                    var canvas = event.context.canvas;
+                    imageData = canvas.toDataURL('image/png');
+                });
+
+                this.getMap().renderSync();
+                return imageData;
+           } catch(err) {
+               this.getSandbox().printWarn('Error producing a screenshot' + err);
+           }
+           return '';
+        },
 
 /*<------------- / OL3 specific ----------------------------------- */
 
@@ -309,8 +329,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return a.getZIndex()-b.getZIndex();
             });
         },
-/* --------- /Impl specific --------------------------------------> */
 
+        calculatePixelsInScale: function(mmMeasures, plotScale) {
+            var units = this.getMap().getView().getProjection().getUnits(),
+                view = this.getMap().getView(),
+                centerCoords = view.getCenter(),
+                tempCoords = [],
+                tempPixels,
+                centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                scaleCoef = plotScale/1000;
+                pixels = [];
+
+            for (var i = 0; i < mmMeasures.length; ++i) {
+                // mm measure in metres  e.g. in 1:10 000  10 mm  is 100 000 mm (100 m)
+                var in_m = mmMeasures[i] * scaleCoef * mpu;
+                // Use coordinates to get pixel size
+                tempCoords[0] = centerCoords[0] + in_m;
+                tempCoords[1] = centerCoords[1];
+                tempPixels = this.getMap().getPixelFromCoordinate(tempCoords);
+
+                pix = tempPixels[0] - centerPixels[0];
+
+                pixels.push(pix);
+            }
+            return pixels;
+        },
+
+/* --------- /Impl specific --------------------------------------> */
 
 /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */

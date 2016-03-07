@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>LaKaPaShowFAQBundle</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.LaKaPaShowFAQBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a FAQ tool. Users can see FAQ page.
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapashowfaq.png)
+![screenshot](lakapashowfaq.png)
 
 
 ## Bundle configuration

@@ -1,13 +1,4 @@
-# [Name of the bundle]
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`[bundle id]`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance.html)</td>
-  </tr>
-</table>
+# [bundle id]
 
 [Tell here shortly what functionality does the bundle add. For example: Provides functionality for other bundles to show an infobox on the map.]
 
@@ -47,17 +38,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td> `[request name]` </td><td> [For example: Infobox is opened on given location and with given content based on request data]</td>
-  </tr>
-</table>
-
 ## Requests the bundle sends out
 
 [Example:]
@@ -74,6 +54,7 @@ state : {
   <td> `userinterface.UpdateExtensionRequest` </td>
   <td> When an embedded maps 'Edit' link is clicked to close the personaldata flyout </td>
 </tr>
+</table>
 
 ## Events the bundle listens to
 
@@ -92,19 +73,3 @@ state : {
     <td> AfterChangeMapLayerOpacityEvent </td><td>Changes map layer opacity</td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-[Example:]
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it is triggered/what it tells other components</th>
-  </tr>
-  <tr>
-    <td> DrawFilterPlugin.FinishedDrawFilteringEvent </td><td> Sent when geometry editing is finished </td>
-  </tr>
-</table>
-
-This bundle doesn't send out any events.
-
-## Dependencies

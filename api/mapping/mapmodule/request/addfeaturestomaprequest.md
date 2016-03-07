@@ -1,8 +1,14 @@
-# AddFeaturesToMapRequest
+# AddFeaturesToMapRequest [RPC]
 
-Vector features can be added on the map by AddFeaturesToMapRequest. The request must contain the geometries of the features. Optionally, also additional control options such as features' style can be provided in a JSON-object.
+Allows user to add features to map.
 
-The geometry must be provided either as a WKT-string or a GeoJSON - object, e.g.
+## Use cases
+
+- add features to map
+
+## Description
+
+Vector features can be added on the map. The request must contain the geometries of the features. Optionally, also additional control options such as features' style can be provided in a JSON-object. The geometry must be provided either as a WKT-string or a GeoJSON - object, e.g.
 
 WKT
 ```javascript
@@ -91,7 +97,9 @@ Options object
   </li>
 </ul>
 
-##Usage example (GeoJSON)
+## Examples
+
+Usage example (GeoJSON)
 
 ```javascript
 //define the features as GeoJSON
@@ -154,7 +162,7 @@ Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
     attributes: null
 }]);
 ```
-##Usage example (WKT)
+Usage example (WKT)
 
 ```javascript
 //define a wkt-geometry
@@ -198,5 +206,7 @@ Oskari.getSandbox().postRequestByName(rn, [WKT, {
     attributes: attributes
 }]);
 ```
+## Related api
 
+- removeFeaturesFromMapRequest
 

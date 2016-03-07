@@ -1,13 +1,6 @@
 # Map Publisher 2
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>publisher2</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/classes/Oskari.mapframework.bundle.publisher.PublisherBundleInstance.html)</td>
-  </tr>
-</table>
+Allows creation of embedded maps
 
 ## Description
 
@@ -33,10 +26,10 @@ publisher settings.
 ## Screenshot
 
 ### Start publishing
-![start](/images/bundles/publisher_start.png)
+![start](publisher_start.png)
 
 ### Map publishing
-![map](/images/bundles/publisher_map.png)
+![map](publisher_map.png)
 
 ## Bundle configuration
 
@@ -136,19 +129,6 @@ The publisher provides some default tools:
 - my location
 - controls (moving map by dragging/keyboard)
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-<table class="table">
-<tr>
-  <th> Request </th><th> Where/why it's used</th>
-</tr>
-<tr>
-  <td> publisher.PublishMapEditorRequest </td><td>Enables users open the publisher with existing published map to modify it</td>
-</tr>
-</table>
 
 ## Requests the bundle sends out
 <table class="table">
@@ -198,16 +178,6 @@ No statehandling has been implemented.
   </tr>
 </table>
 
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th> Event </th><th> When it is triggered/what it tells other components</th>
-  </tr>
-  <tr>
-    <td> Publisher.MapPublishedEvent </td><td> Sends when the server returns a valid response that the map has been published.</td>
-  </tr>
-</table>
 
 ## Dependencies
 

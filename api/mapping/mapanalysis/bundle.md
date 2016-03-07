@@ -1,13 +1,4 @@
-# Map analysis
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>mapAnalysis</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapanalysis.MapAnalysisBundleInstance.html)</td>
-  </tr>
-</table>
+# mapanalysis
 
 ## Description
 

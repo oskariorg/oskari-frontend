@@ -32,7 +32,8 @@ Oskari.clazz.define(
                 request.getContent(),
                 request.getPosition(),
                 request.getColourScheme(),
-                request.getFont()
+                request.getFont(),
+                request.getAdditionalTools()
             );
         }
     }, {

@@ -1,6 +1,14 @@
-# ZoomToFeaturesRequest
+# ZoomToFeaturesRequest [RPC]
 
-This request is used to zoom to the extent of all or specific features on the specified layers. If layer(s) not giving, will zoom to all features on the layers, that were created by the VectorLayerPlugin 
+Zoom to specific or all features on a map.
+
+## Use cases
+
+- Zoom to features on a map
+
+## Description
+
+This request is used to zoom to the extent of all or specific features on the specified layers. If layer(s) not giving, will zoom to all features on the layers, that were created by the VectorLayerPlugin
 
 ## Parameters
 
@@ -20,8 +28,7 @@ This request is used to zoom to the extent of all or specific features on the sp
 
 ## Examples
 
-###Zoom to extent of the features with id=='F1' or id=='F2' on the layer with layerId == 'layer1' or layerId == 'layer2':
-
+Zoom to extent of the features with id=='F1' or id=='F2' on the layer with layerId == 'layer1' or layerId == 'layer2':
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [
@@ -32,8 +39,7 @@ sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [
 
 After the zooming is completed a 'FeatureEvent' is triggered with operation 'zoom' and array of the features that was zoomed to.
 
-###Zoom to all features on the layer, where layerId == 'testlayer':
-
+Zoom to all features on the layer, where layerId == 'testlayer':
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [
@@ -43,8 +49,7 @@ sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [
 ```
 After the zooming is completed a 'FeatureEvent' is triggered with operation 'zoom' and array of the features that was zoomed to.
 
-###Zoom to all features on the layers, that are handling by the VectorLayerPlugin 
-
+Zoom to all features on the layers, that are handling by the VectorLayerPlugin 
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', []);

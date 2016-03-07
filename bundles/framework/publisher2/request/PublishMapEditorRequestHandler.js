@@ -19,7 +19,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                     conf: {
                         plugins: [
                             {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'}
+                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
                         ]
                     }
                 }

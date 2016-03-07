@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>LakapaHelpBundle</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description
@@ -15,7 +12,7 @@ This bundle provides a help tool. User can see help.
 
 ## Screenshot
 
-![screenshot](/images/bundles/lakapahelp.png)
+![screenshot](lakapahelp.png)
 
 
 ## Bundle configuration

@@ -1,17 +1,12 @@
-# Backend Status
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>backendstatus</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance.html)</td>
-  </tr>
-</table>
+# backendstatus
 
 ## Description
 
 Polls a backend system for map layers monitoring statuses and informs interested parties via an event.
+
+## Screenshot
+
+![screenshot](backendstatus.png)
 
 ## Bundle configuration
 
@@ -49,18 +44,6 @@ This bundle doesn't send out any requests.
   </tr>
 </table>
 
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>`BackendStatus.BackendStatusChangedEvent`</td>
-    <td>Sends the event when the status of a map layer has changed or if it's status is 'DOWN'. If the number of changed layers exceeds 100, sends a "bulk update" instead of single ones.</td>
-  </tr>
-</table>
-
 ## Dependencies
 
 <table class="table">
@@ -78,7 +61,3 @@ This bundle doesn't send out any requests.
     <td>User interface</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.

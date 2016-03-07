@@ -545,13 +545,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             icon.addClass('icon-arrow-white-down');
             content.show();
 
-            if(toolStyle && !me.isMobile) {
-                layersContent.css('height', (0.75 * size.height) + 'px');
-            }
-            // use default
-            else {
-                layersContent.css('height', (0.85 * size.height) + 'px');
-            }
 
 
             if(me.isMobile){
@@ -560,6 +553,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             } else {
                 content.removeClass('mobile');
                 header.removeClass('mobile');
+            }
+
+            var layersTitle = div.find('.content-header');
+            var layersTitleHeight = 0;
+
+            if(layersTitle.length==0){
+                layersTitle = div.find('.header');
+            }
+
+            // Get layers title height
+            if(layersTitle.length>0){
+                layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
+            }
+
+            // use default
+            if(!me.isMobile) {
+                layersContent.css('height', '');
+                layersContent.css('max-height', (size.height - layersTitleHeight) + 'px');
+            }
+            else {
+                layersContent.css('max-height', '');
+                layersContent.css('height', (size.height - layersTitleHeight) + 'px');
             }
         },
 

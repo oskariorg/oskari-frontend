@@ -46,7 +46,7 @@ Oskari.clazz.define(
                     width : 2
                 }
             }
-        };       
+        };
     },
     {
         /**
@@ -98,7 +98,7 @@ Oskari.clazz.define(
             }
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
-            
+
             me._shape = shape;
             me._buffer = options.buffer;
             me._id = id;
@@ -331,7 +331,8 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         drawStartEvent: function(options) {
-            var me = this;           
+            var me = this;
+
             me._draw[me._id].on('drawstart', function(evt) {
             	// stop modify iteraction while draw-mode is active
             	if(options.modifyControl) {
@@ -408,7 +409,7 @@ Oskari.clazz.define(
                 if (geom instanceof ol.geom.Polygon) {
                   output = me.getPolygonArea(geom);
                   tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                  // for Polygon-drawing checking itself-intersection 
+                  // for Polygon-drawing checking itself-intersection
                   if(me._featuresValidity[me._sketch.getId()]===false) {
                       output = me._loc.intersectionNotAllowed;
                       me._area = output;
@@ -416,7 +417,7 @@ Oskari.clazz.define(
                 } else if (geom instanceof ol.geom.LineString) {
                   output = me.getLineLength(geom);
                   tooltipCoord = geom.getLastCoordinate();
-                }              
+                }
                 if(me._options.showMeasureOnMap) {
                     me._map.getOverlays().forEach(function (o) {
                       if(o.id === me._sketch.getId()) {
@@ -593,10 +594,10 @@ Oskari.clazz.define(
             if(!id || id===undefined || id === '') {
             	_.each(iteraction, function (key) {
                 	me._map.removeInteraction(key);
-            	});            	
+            	});
             } else {
             	me._map.removeInteraction(iteraction[id]);
-            }        
+            }
         },
         setVariablesToNull: function() {
         	this._shape = null;

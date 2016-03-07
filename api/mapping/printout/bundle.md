@@ -1,13 +1,4 @@
-# Printout
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>printout</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.printout.PrintoutBundleInstance.html)</td>
-  </tr>
-</table>
+# printout
 
 ## Description
 
@@ -19,7 +10,7 @@ Manages settings panel when user has entered to the print mode.
 
 ## Screenshot
 
-![screenshot](/images/bundles/printout.png)
+![screenshot](printout.png)
 
 ## Bundle configuration
 
@@ -33,20 +24,6 @@ Configuration is available for print preview service urls and legend styling par
                     "charsInrow" : 32         (Max length of title row without line break)
                     ...
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>PrintMapRequest</td><td>Prints map when requested</td>
-  </tr>
-</table>
 
 ## Requests the bundle sends out
 
@@ -87,10 +64,6 @@ No statehandling has been implemented.
     <td>PrintWithoutUIEvent</td>Print pdf/png with predefined params without UI</td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Plugins
 

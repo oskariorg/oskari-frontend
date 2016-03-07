@@ -1,18 +1,12 @@
 # Get Info Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.mapmodule.GetInfoPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 This plugin provides view of the from GetFeatureInfo and similar results what are processed in backend
 
 ## Screenshot
 
-![screenshot](/images/bundles/gfi_query.png)
+![screenshot](images/gfi_query.png)
 
 ## Bundle configuration
 

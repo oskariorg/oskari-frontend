@@ -4,9 +4,6 @@
   <tr>
     <td>ID</td><td>LakapaSaveUserMapState</td>
   </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.liikennevirasto.bundle.lakapa.SaveUserMapStateBundleInstance.html)</td>
-  </tr>
 </table>
 
 ## Description

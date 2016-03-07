@@ -1,13 +1,4 @@
-# Analyse
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`analyse`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/link/here)</td>
-  </tr>
-</table>
+# analyse
 
 ## Description
 
@@ -15,7 +6,7 @@ Bundle manages analyse parameter and data setups, requests analyse execute actio
 
 ## Screenshot
 
-![screenshot](/images/bundles/analyse.png)
+![screenshot](analyse.png)
 
 ## Bundle configuration
 
@@ -34,16 +25,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`analyse.AnalyseRequest`</td><td>*NOT IMPLEMENTED YET*</td>
-  </tr>
-</table>
 
 ## Requests the bundle sends out
 
@@ -95,13 +76,6 @@ state : {
     <td>Refreshes the data panel</td>
   </tr>
 </table>
-
-
-
-## Events the bundle sends out 
-
-### 
-
 
 ## Dependencies
 

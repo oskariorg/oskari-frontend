@@ -1,18 +1,8 @@
-# Findbycoordinates
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>findbycoordinates</td>
-  </tr>
-</table>
+# findbycoordinates
 
 ## Description
 
 Creates a service and a user interface for searching nearest address on a map and adds a button to the toolbar for reverse geocode search. Requires server side functionality.
-
-## Screenshot
-
-![screenshot](/images/bundles/heatmap2.png)
 
 ## Bundle configuration
 

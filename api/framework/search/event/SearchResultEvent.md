@@ -1,54 +1,115 @@
-# SearchResultEvent
+# SearchResultEvent [rpc]
 
-Used to notify the ``SearchRequest`` is received a reply from search.
+Notifies that search result has been got.
 
-# Event methods
+## Description
 
-## getName
+Used to notify that the ``SearchRequest`` has received a reply from search.
 
-Get event name.
+## Parameters
 
-## getSuccess
+(* means the parameter is required)
 
-Get search success status. If it's true, search is done and even if no items are found. If false then search is not success.
+<table class="table">
+<tr>
+  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
+</tr>
+<tr>
+  <td> \* success</td><td> Boolean </td><td> true if result was got successfully</td><td> </td>
+</tr>
+<tr>
+  <td> \* requestParameters</td><td> Object </td><td> request parameters</td><td> </td>
+</tr>
+<tr>
+  <td> \* result</td><td> Object </td><td> search result</td><td> </td>
+</tr>
+</table>
 
-## getResult
+## Event methods
 
+### getName()
+Returns event name
 
-Get search result items. totalCount is between 0 - 200
-e.g.
-``
-result: Object
-locations: Array[8]
-0: Object
-id: 0
-lat: "7277772.598"
-lon: "447834.33"
-name: "Kylmäaho"
-rank: 50
-type: "Talo"
-village: "Ii"
-zoomScale: 2800
-__proto__: Object
-1: Object
-2: Object
-3: Object
-4: Object
-5: Object
-6: Object
-7: Object
-length: 8
-__proto__: Array[0]
-methods: Array[3]
-totalCount: 8
-``
+### getSuccess()
+Returns true if result was got successfully
 
-## getRequestParameters
+### getResult()
+Returns search result as JSON
 
-Get request parameters. 
-- searchKey and epsg values
-- e.g {"searchKey": "Helsinki", "epsg":"EPSG:3067"
+### getRequestParameters()
+Returns request parameters as JSON
 
-## getParams
+### getParams()
+Returns event parameters as an object:
+<pre class="event-code-block">
+<code>
+{
+    success: this._success,
+    result: this._result,
+    requestParameters: this._requestParameters
+};
+</code>
+</pre>
 
-all event data.
+## RPC
+
+Event occurs after a search request.
+
+<pre class="event-code-block">
+<code>
+{
+  "success": true,
+  "result": {
+    "methods": [
+      {},
+      {},
+      {}
+    ],
+    "totalCount": 4,
+    "locations": [
+      {
+        "id": 0,
+        "rank": 10,
+        "lon": "389828.281",
+        "village": "Vantaa",
+        "name": "Vantaa",
+        "zoomScale": 56650,
+        "type": "Kunta, kaupunki",
+        "lat": "6686279.347"
+      },
+      {
+        "id": 1,
+        "rank": 30,
+        "lon": "383183.648",
+        "village": "Hausjärvi",
+        "name": "Vantaa",
+        "zoomScale": 11300,
+        "type": "Kylä, kaupunginosa tai kulmakunta",
+        "lat": "6733424.84"
+      },
+      {
+        "id": 2,
+        "rank": 50,
+        "lon": "387139.034",
+        "village": "Helsinki",
+        "name": "Vantaa",
+        "zoomScale": 5650,
+        "type": "Virtavesi",
+        "lat": "6683063.213"
+      },
+      {
+        "id": 3,
+        "rank": 50,
+        "lon": "383746.169",
+        "village": "Nurmijärvi",
+        "name": "Vantaa",
+        "zoomScale": 2800,
+        "type": "Talo",
+        "lat": "6708499.96"
+      }
+    ]
+  },
+  "requestParameters": "Vantaa"
+}
+</code>
+</pre>

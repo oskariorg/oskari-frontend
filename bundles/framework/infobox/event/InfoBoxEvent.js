@@ -32,7 +32,7 @@ function(_popupId, _popupOpen, _contentId) {
     },
     /**
      * Serialization for RPC
-     * @return 
+     * @return
      */
     getParams: function () {
         return {

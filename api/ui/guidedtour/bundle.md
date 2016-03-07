@@ -1,13 +1,4 @@
-# Guided Tour
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>guidedtour</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance.html)</td>
-  </tr>
-</table>
+# guidedtour
 
 ## Description
 
@@ -15,19 +6,7 @@ Shows a dialog on startup to instruct user on map functionalities in paikkatieto
 
 ## Screenshot
 
-![screenshot](/images/bundles/guidedtour.png)
-
-## Bundle configuration
-
-No configuration is required.
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
+![screenshot](guidedtour.png)
 
 ## Requests the bundle sends out
 
@@ -39,14 +18,6 @@ This bundle doesn't handle any requests.
     <td>userinterface.UpdateExtensionRequest</td><td>Opens and closes flyouts when demonstrating functionalities</td>
   </tr>
 </table>
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

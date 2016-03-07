@@ -1,18 +1,12 @@
 # My Location Plugin
 
-<table class="table">
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin.html)</td>
-  </tr>
-</table>
-
 ## Description
 
 The plugin offers the user a center map a his geolocation.
 
 ## Screenshot
 
-![screenshot](/images/bundles/mylocationplugin.png)
+![screenshot](images/mylocationplugin.png)
 
 ## Bundle configuration
 

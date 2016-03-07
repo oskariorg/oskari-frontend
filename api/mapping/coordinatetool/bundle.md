@@ -1,13 +1,4 @@
-# Coordinate Display
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>coordinatetool</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance.html)</td>
-  </tr>
-</table>
+# coordinatetool
 
 ## Description
 
@@ -19,7 +10,7 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatetool.plugin.
 
 ## Screenshot
 
-![screenshot](/images/bundles/coordinatetool.png)
+![screenshot](coordinatetool.png)
 
 
 ## Bundle configuration
@@ -33,14 +24,6 @@ No configuration is required, but there is one possible configuration:
 ```
 
 Setting roundToDecimals to wanted number will coordinates rounded by wanted decimal plates. 
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
 
@@ -76,13 +59,7 @@ This bundle doesn't handle any requests.
     <td>`Publisher2.ColourSchemeChangedEvent`</td><td>Updates the UI colour schema from event.</td>
   </tr>
 
-
-  
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send any events.
 
 ## Dependencies
 

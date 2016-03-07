@@ -5,6 +5,21 @@ when the service provider gives notice about Oskari version being upgraded. Oska
 
 Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature, modifies the current functionality or if something has been removed. [rpc] tag indicates that the change affects RPC API.
 
+## 1.36
+
+### RPC
+
+#### [add] [rpc] New function
+
+An experimental getScreenshot() function is now available when the Oskari instance uses Openlayers 3 based mapmodule.
+The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
+
+GetPixelMeasuresInScale([mm_measure1, mm_measure2,..],scale) function is now available for requesting pixel values.
+Input: array of mm measurements , requested scale e.g. [[210,297], 100000]
+Output: array of pixel measurements , requested scale
+Returns pixel mesurements for mm measurements in requested scale.
+Use case: Plot paper size area on a map. See plotPlotArea-function in rpc_example.html.
+
 ## 1.35
 
 ### RPC
@@ -36,7 +51,9 @@ GetAllLayers now returns also minimum zoom level and maximum zoom level for the 
 
 #### [mod] [rpc] New rpc-client version
 
-The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.0.
+The JSChannel dependency has been updated. The old version is not compatible with the new one so rpc-client needs to be updated to 2.0.1.
+
+This fix error when sending more than one paramaeter with null values.
 
 #### [add] [rpc] New functions
 

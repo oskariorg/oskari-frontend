@@ -77,6 +77,9 @@ Oskari.clazz.define(
             me._headerCloseButton = jQuery(
                 '<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'
             );
+            me._headerAdditionalButton = jQuery(
+                '<div class="icon-close-white"></div>'
+            );
             me._contentDiv = jQuery('<div class="popupContent"></div>');
             me._contentWrapper = jQuery('<div class="contentWrapper"></div>');
             me._actionLink = jQuery(
@@ -120,7 +123,7 @@ Oskari.clazz.define(
          * }
          * }]
          */
-        popup: function (id, title, contentData, lonlat, colourScheme, font) {
+        popup: function (id, title, contentData, lonlat, colourScheme, font, additionalTools) {
             if (_.isEmpty(contentData)) {
                 return;
             }
@@ -137,16 +140,16 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
+            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools);
         },
 
         /**
          * @method _renderPopup
          */
-        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
+        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContent = me._renderPopupContent(id, title, contentDiv),
+                popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
                 popup;
 
             if (refresh) {
@@ -185,7 +188,7 @@ Oskari.clazz.define(
             }
 
             me._panMapToShowPopup(lonlat);
-            me._setClickEvent(id, popup, contentData);
+            me._setClickEvent(id, popup, contentData, additionalTools);
 
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
@@ -219,8 +222,9 @@ Oskari.clazz.define(
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function (id, title, contentDiv) {
-            var arrow = this._arrow.clone(),
+        _renderPopupContent: function (id, title, contentDiv, additionalTools) {
+            var me = this,
+                arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
@@ -228,8 +232,21 @@ Oskari.clazz.define(
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
+
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
+
+            //add additional btns
+               jQuery.each( additionalTools, function( index, key ){
+                    var additionalButton = me._headerAdditionalButton.clone();
+                    additionalButton.attr({
+                        'id': key.name,
+                        'class': key.iconCls,
+                        'style': key.styles
+                    });
+                    headerWrapper.append(additionalButton);
+                });
+
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
                 contentDiv.outerHTML();
@@ -260,7 +277,7 @@ Oskari.clazz.define(
 
                 contentWrapper.append(datum.html);
 
-	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
+                contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 for (key in datum.actions) {
                     if (datum.actions.hasOwnProperty(key)) {
@@ -290,7 +307,7 @@ Oskari.clazz.define(
             }, me._contentDiv.clone());
         },
 
-        _setClickEvent: function (id, popup, contentData) {
+        _setClickEvent: function (id, popup, contentData, additionalTools) {
             var me = this;
             // override
             popup.events.un({
@@ -301,9 +318,10 @@ Oskari.clazz.define(
             popup.events.on({
                 'click': function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
+
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
-                    } else { // Action links
+                    }else { // Action links
                         var i = link.attr('contentdata'),
                             text = link.attr('value');
                         if (!text) {
@@ -313,6 +331,16 @@ Oskari.clazz.define(
                             contentData[i].actions[text]();
                         }
                     }
+
+                    if(additionalTools.length > 0){
+                        jQuery.each( additionalTools, function( index, key ){
+                            if (link.hasClass(key.iconCls)) {
+                                me.close(id);
+                                key.callback(key.params);
+                            }
+                        });
+                    }
+
                     if(!link.is('a') || link.parents('.getinforesult_table').length) {
                         evt.stopPropagation();
                     }

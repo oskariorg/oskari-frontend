@@ -1,13 +1,4 @@
-# User Guide
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>userguide</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.userguide.UserGuideBundleInstance.html)</td>
-  </tr>
-</table>
+# userguide
 
 ## Description
 
@@ -59,18 +50,6 @@ Example of Request URL:
 
 `http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetArticlesByTag&tags=tag1%2Ctag2`
 
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>userguide.ShowUserGuideRequest</td><td>Shows userguide</td>
-  </tr>
-</table>
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -92,7 +71,3 @@ Example of Request URL:
     <td>userinterface.ExtensionUpdatedEvent</td><td>Handles the updated event</td>
   </tr>
 </table>
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.

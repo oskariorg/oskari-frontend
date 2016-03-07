@@ -1,13 +1,6 @@
-# Toolbar
+# toolbar
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>toolbar</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance.html)</td>
-  </tr>
-</table>
+Generic and extensible toolbar implementation
 
 ## Description
 
@@ -89,26 +82,6 @@ state : {
 }
 ```
 
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td> Toolbar.AddToolButtonRequest </td><td> tbd</td>
-  </tr>
-  <tr>
-    <td> Toolbar.RemoveToolButtonRequest </td><td> tbd</td>
-  </tr>
-  <tr>
-    <td> Toolbar.ToolButtonStateRequest </td><td> tbd</td>
-  </tr>
-  <tr>
-    <td> Toolbar.SelectToolButtonRequest </td><td> tbd</td>
-  </tr>
-</table>
-
 ## Requests the bundle sends out
 
 Currently default buttons send out requests but these should be defined in bundles that use toolbar.
@@ -125,21 +98,6 @@ Currently default buttons send out requests but these should be defined in bundl
   </tr>
   <tr>
     <td> ClearHistoryRequest </td><td> tbd</td>
-  </tr>
-</table>
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-<table class="table">
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td> Toolbar.ToolSelectedEvent </td><td> Notifies that a tool has been selected. If bundle has own toolbar buttons, they should listen to this and act if the functionality has been canceled and clean up anything they might have on screen regarding that tool. The event specifies the new tool id/group which has been selected.</td>
   </tr>
 </table>
 

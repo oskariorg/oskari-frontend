@@ -1,13 +1,4 @@
-# My Places Import
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>myplacesimport</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance.html)</td>
-  </tr>
-</table>
+# myplacesimport
 
 ## Description
 
@@ -28,14 +19,6 @@ This bundle allows the user to import and save their own datas.
 * flyoutClazz is the used flyout class
 * maxFileSizeMb is the maximum upload file size in Mb
 
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
 ## Requests the bundle sends out
 
 <table class="table">
@@ -52,14 +35,6 @@ This bundle doesn't handle any requests.
     <td>`userinterface.UpdateExtensionRequest`</td><td>Extends the basic UI view.</td>
   </tr>
 </table>
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

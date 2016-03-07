@@ -71,10 +71,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         },
 
-        setState: function (state) {
-            this.state = state;
-        },
-
         /**
          * @public @method scheduleShowMetadata
          *
@@ -129,29 +125,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
+            me.instance.state = {current:allMetadata};
         },
 
-        /**
-         * @method setContentState
-
-         * restore state from store
-         */
-        setContentState: function (contentState) {
-            this.contentState = contentState;
-        },
-
-        /**
-         * @method getContentState
-         *
-         * get state for store
-         */
-        getContentState: function () {
-            return this.contentState;
-        },
-
-        resetContentState: function () {
-            this.contentState = {};
-        },
         /**
          *
          * Basically a tab template to add to each metadatapanel created.

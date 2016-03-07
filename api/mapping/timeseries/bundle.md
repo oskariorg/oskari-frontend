@@ -1,38 +1,41 @@
-# Timeseries
+# timeseries
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>timeseries</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance.html)</td>
-  </tr>
-</table>
+Adds time dimension support for wms and wmts layer.
 
 ## Description
 
-Bundle creates timeseries playback module to over map when layer supports time dimensions.
-
+Defines a timeseries playback ui. The ui is visible when layer where have a time dimension is added to map.
 
 ## Screenshot
 
-![screenshot](/images/bundles/timeseries.png)
+![Timeseries](timeseries.png)
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required, but it can be used to customize animotion speen in milliseconds. If not set, animation speed will be 4000 ms.
+
+```javascript
+{
+  "animationSpeed" : 3000
+}
+```
 
 ## Bundle state
 
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
+No statehandling has been implemented for the bundle.
 
 ## Requests the bundle sends out
 
-This bundle doesn't send out any requests.
+<table class="table">
+<tr>
+  <th> Request </th>
+  <th> Where/why it's used</th>
+</tr>
+<tr>
+  <td> `MapModulePlugin.MapLayerUpdateRequest` </td>
+  <td> Updates layers time parameter </td>
+</tr>
+</table>
 
 ## Events the bundle listens to
 
@@ -41,47 +44,15 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td> MapSizeChangedEvent </td><td> Update timeslider when map size have been changed.</td>
+    <td> MapLayerEvent </td><td> Check timeseries playback UI visibility</td>
   </tr>
   <tr>
-    <td> MapLayerEvent </td><td> Checks playback slider visibility. </td>
+    <td> MapSizeChangedEvent </td><td> Build timeseries UI again to support different map window sizes </td>
   </tr>
   <tr>
-    <td> AfterMapLayerAddEvent </td><td> Checks playback slider visibility. </td>
+    <td> AfterMapLayerAddEvent </td><td>Shows timeseries playback UI if added layer have time dimension </td>
   </tr>
   <tr>
-    <td> AfterMapLayerRemoveEvent </td><td> Checks playback slider visibility. </td>
-  </tr>
-</table>
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
-
-## Dependencies
-
-<table class="table">
-  <tr>
-    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
-  </tr>
-  <tr>
-    <td> [jQuery](http://api.jquery.com/) </td>
-    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
-    <td> Used to create the component UI from begin to end</td>
-  </tr>
-  <tr>
-    <td> [Oskari mapmodule](/documentation/bundles/framework/mapmodule) </td>
-    <td> Expects to be present in application setup </td>
-    <td> To register plugin to map/gain control to Openlayers map</td>
-  </tr>
-  <tr>
-    <td> [OpenLayers](http://openlayers.org/) </td>
-    <td> Expects OpenLayers already linked </td>
-    <td></td>
-  </tr>
-  <tr>
-    <td> [Moment.js](http://momentjs.com//) </td>
-    <td> Expects to be present in application setup. </td>
-    <td> Calculate timeseries to playback slider. </td>
+    <td> AfterMapLayerRemoveEvent </td><td>Remove timeseries playback UI from map if removed layer is same than animated layer</td>
   </tr>
 </table>

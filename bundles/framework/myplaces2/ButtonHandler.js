@@ -117,35 +117,42 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             // request toolbar to add buttons
             var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            for (tool in this.buttons) {
-                if (this.buttons.hasOwnProperty(tool)) {
-                    sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
+            var addAdditionalMeasureTools = me.instance.conf.measureTools === true;
 
-                    // for logged-in-user: add line & area buttons
-                    if (sandbox.getUser().isLoggedIn()) {
-                        var loc = me.instance.getLocalization();
-                        if (tool === 'line') {
-                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
-                            measureTool.callback = function () {
-                                me.startNewDrawing({
-                                    drawMode: 'measureline'
-                                });
-                            };
-                            measureTool.iconCls = 'tool-measure-line';
-                            measureTool.tooltip = loc.tools.measureline.tooltip;
-                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
-                        }
-                        if (tool === 'area') {
-                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
-                            measureTool.callback = function () {
-                                me.startNewDrawing({
-                                    drawMode: 'measurearea'
-                                });
-                            };
-                            measureTool.iconCls = 'tool-measure-area';
-                            measureTool.tooltip = loc.tools.measurearea.tooltip;
-                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
-                        }
+            for (tool in this.buttons) {
+                if (!this.buttons.hasOwnProperty(tool)) {
+                    continue;
+                }
+                sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
+
+                // for logged-in-user: add line & area measurement tools if configured
+                // basic measurement tools should be configured off so these can be used
+                // as replacements - this way measurement can be saved as myplaces
+                // TODO: this is not the way to do this: instead allow request to be used for
+                // saving a place and make the basic measurement tools use it when available
+                if (sandbox.getUser().isLoggedIn() && addAdditionalMeasureTools) {
+                    var loc = me.instance.getLocalization();
+                    if (tool === 'line') {
+                        measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                        measureTool.callback = function () {
+                            me.startNewDrawing({
+                                drawMode: 'measureline'
+                            });
+                        };
+                        measureTool.iconCls = 'tool-measure-line';
+                        measureTool.tooltip = loc.tools.measureline.tooltip;
+                        sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                    }
+                    if (tool === 'area') {
+                        measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                        measureTool.callback = function () {
+                            me.startNewDrawing({
+                                drawMode: 'measurearea'
+                            });
+                        };
+                        measureTool.iconCls = 'tool-measure-area';
+                        measureTool.tooltip = loc.tools.measurearea.tooltip;
+                        sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                     }
                 }
             }

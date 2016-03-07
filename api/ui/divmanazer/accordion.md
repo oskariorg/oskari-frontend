@@ -13,7 +13,7 @@ an open/close button.
 
 *Example use from `publisher` bundle*
 
-![screenshot](/images/bundles/accordion.png)
+![screenshot](accordion.png)
 
 ## How to use
 

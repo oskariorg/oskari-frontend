@@ -1,13 +1,6 @@
-# Personal Data
+# personaldata
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>`personaldata`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance.html)</td>
-  </tr>
-</table>
+Provides generic functionality to show user-specific information.
 
 ## Description
 
@@ -15,7 +8,7 @@ The bundle lists user's account information and saved data in the application.
 Currently lists account info, saved map views and embedded maps.
 Other bundles can request to list data related to their domain (eg. my places, user indicators) here.
 
-![Personal data](/images/bundles/personaldata.png)
+![Personal data](personaldata.png)
 
 *Here shown with tabs added by `myplaces`, `statistics/statsgrid`, `analysis/analyse` and `myplacesimport` bundles*
 
@@ -39,30 +32,6 @@ Configuration is optional:
 
 changeInfoUrl should point to an url where the user can change his/her profile information.
 The bundle will show a link to the configured page if the URL is configured.
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`PersonalData.AddTabRequest`</td><td>*Adds tab to Flyout Tab container*</td>
-  </tr>
-</table>
-
-```javascript
-var title = "Tab Title";
-var content = jQuery("<div>Lorem ipsum</div>");
-var first = true;
-var reqName = 'PersonalData.AddTabRequest';
-var reqBuilder = sandbox.getRequestBuilder(reqName);
-var req = reqBuilder(title, content, first);
-```
 
 ## Requests the bundle sends out
 
@@ -107,11 +76,6 @@ var req = reqBuilder(title, content, first);
     <td> `Publisher.MapPublishedEvent` </td><td> Refreshes the embedded maps listing </td>
   </tr>
 </table>
-
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

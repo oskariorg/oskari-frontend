@@ -1,13 +1,6 @@
-# Promote
+# promote
 
-<table class="table">
-  <tr>
-    <td>ID</td><td>promote</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.promote.PromoteBundleInstance.html)</td>
-  </tr>
-</table>
+Used as a placeholder for functionalities that require login.
 
 ## Description
 
@@ -74,26 +67,6 @@ conf = {
     }
 };
 ```
-
-## Bundle state
-
-No statehandling has been implemented.
-
-## Requests the bundle handles
-
-This bundle doesn't handle any requests.
-
-## Requests the bundle sends out
-
-This bundle doesn't send out any requests.
-
-## Events the bundle listens to
-
-This bundle doesn't listen to any events.
-
-## Events the bundle sends out
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 

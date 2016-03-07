@@ -1,13 +1,4 @@
-# MetadataCatalogue
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`metadatacatalogue`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](/api/latest/classes/Oskari.mapframework.bundle.metadatacatalogue.MetadataCatalogueBundleInstance.html)</td>
-  </tr>
-</table>
+# metadatacatalogue
 
 ## Description
 
@@ -27,22 +18,6 @@ No configuration is required, but there is two possible configurations:
 Setting hideMetadataXMLLink to true will hide metadata XML link (ISO 19139 XML -file).
 
 Setting hideMetaDataPrintLink to true will hide print link.
-
-
-## Bundle state
-
-No state is required.
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>`AddSearchResultActionRequest`</td><td>Shows action element in metadata search results list</td>
-  </tr>
-</table>
 
 ## Requests the bundle sends out
 

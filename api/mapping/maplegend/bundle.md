@@ -1,13 +1,4 @@
-# Map Legend
-
-<table class="table">
-  <tr>
-    <td>ID</td><td>`maplegend`</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link](/api/latest/classes/Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance.html)</td>
-  </tr>
-</table>
+# maplegend
 
 ## Description
 
@@ -15,7 +6,7 @@ Displays legend images of selected map layers in a Flyout if the layers have leg
 
 ## Screenshot
 
-![Map legend](/images/bundles/maplegends.png)
+![Map legend](maplegends.png)
 
 ## Bundle configuration
 

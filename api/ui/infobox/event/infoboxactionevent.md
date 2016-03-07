@@ -1,4 +1,4 @@
-# InfoboxActionEvent
+# InfoboxActionEvent [rpc]
 
 Used to notify which link/button is clicked in the infobox.
 
