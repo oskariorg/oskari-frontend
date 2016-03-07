@@ -222,7 +222,7 @@ Oskari.clazz.define(
                             'LAYERS': wms.LAYERS,
                             'FORMAT': wms.FORMAT
                         },
-                        crossOrigin : 'anonymous'
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     transparent: true,

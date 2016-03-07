@@ -348,7 +348,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 tempCoords[1] = centerCoords[1];
                 tempPixels = this.getMap().getPixelFromCoordinate(tempCoords);
 
-                pix = Math.round(tempPixels[0] - centerPixels[0]);
+                pix = tempPixels[0] - centerPixels[0];
 
                 pixels.push(pix);
             }

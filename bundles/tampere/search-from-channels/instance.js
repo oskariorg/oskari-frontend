@@ -271,7 +271,7 @@ Oskari.clazz.define(
                     var searchFromChannelsContainer = jQuery(".searchFromChannelsContainer"),
                     advancedContainer = searchFromChannelsContainer.find('div.advanced'),
                     moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
-
+                     
                     advancedContainer.empty();
                     me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
                 }
@@ -320,9 +320,10 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
+
             var me = this,
                 searchFromChannelsContainer = me.templates.searchFromChannelsTab.clone();
-
+                
             me.optionPanel = me.templates.optionPanel.clone();
             searchFromChannelsContainer.append(me.optionPanel);
 
@@ -427,7 +428,7 @@ Oskari.clazz.define(
             var controls = searchFromChannelsContainer.find('div.controls');
             controls.append(field.getField());
             controls.append(button.getElement());
-
+     
             var advancedContainer = searchFromChannelsContainer.find('div.advanced');
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
@@ -435,10 +436,10 @@ Oskari.clazz.define(
 
             me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
             advancedContainer.hide();
-
-            moreLessLink.click(function () {
+     
+            moreLessLink.click(function () {      
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
-                    // open advanced/toggle link text
+                    // open advanced/toggle link text         
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (!advancedContainer.is(':empty')) {
                          advancedContainer.show();
@@ -480,11 +481,11 @@ Oskari.clazz.define(
 
                     me.sandbox.request(me, req);
                 }
-
+            
                 me._createAdvancedPanel(data, advancedContainer, moreLessLink);
-                me._progressSpinner.stop();
+                me._progressSpinner.stop();    
             }
-
+                
             }, function (data) {
                 me._progressSpinner.stop();
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -603,7 +604,7 @@ Oskari.clazz.define(
                 );
 
                 mapDiv.append(searchResultWindow);
-                me._updateMapModuleSize(mapDiv, searchResultWindow);
+                me._updateMapModuleSize(mapDiv, searchResultWindow);               
 
                 resultList = searchResultWindow.find('div.resultList');
                 resultList.empty();
@@ -611,7 +612,7 @@ Oskari.clazz.define(
 
              if (result.totalCount === 1) {
                     // move map etc
-                    me._resultClicked(result.locations[0], true);
+                    me._resultClicked(result.locations[0], true);               
                 }
             }
 
@@ -628,7 +629,7 @@ Oskari.clazz.define(
 
                     panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     panel.setTitle(type);
-
+                    
                     // render results
                     var table = me.templates.templateResultTable.clone(),
                         tableHeaderRow = table.find('thead tr'),
@@ -680,16 +681,16 @@ Oskari.clazz.define(
                     panel.setVisible(true);
 
                     if(types.length == 1){
-                        panel.open();
+                        panel.open();     
                     }
-
+                   
                     accordion.addPanel(panel);
                 }
             });
 
             resultList.append('<div><h3>' +
                 me.getLocalization('searchResults') + ' ' + result.totalCount + ' ' +
-                me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
+                me.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');   
 
             accordion.insertTo(resultList);
 
@@ -754,7 +755,7 @@ Oskari.clazz.define(
                 me._clearMapFromResults();
                 me._closeMapPopup();
             }
-
+            
         },
 
         /**
@@ -836,13 +837,13 @@ Oskari.clazz.define(
                 feature,
                 geometry,
                 mapMoveRequest,
-                bounds,
+                bounds, 
                 center,
                 isSelected = false;
 
             jQuery.each(result.locations, function( i, value ){
                 if(showAll){
-                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
+                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);  
                     feature = format.read(value.GEOMETRY);
                     olLayer.addFeatures([feature]);
                     isSelected = true;
@@ -850,13 +851,13 @@ Oskari.clazz.define(
                     var row = tableBody.find("tr[name="+value.id+"]");
                     var firstCell = row.find("td:first-child");
                     if(firstCell.find("input").is(":checked")){
-                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
+                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, 'WKT', {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]); 
                         feature = format.read(value.GEOMETRY);
                         olLayer.addFeatures([feature]);
                         isSelected = true;
                     }
                 }
-
+                
             });
 
             if(isSelected){
@@ -892,7 +893,7 @@ Oskari.clazz.define(
                     }else{
                         me._resultClicked(scopedValue, true);
                     }
-
+                   
                     return false;
                 };
             };
@@ -1068,7 +1069,7 @@ Oskari.clazz.define(
             dataFields.sort(me._sortAdvanced);
 
             for (i = 0; i < dataFields.length; i += 1) {
-                dataField = dataFields[i];
+                dataField = dataFields[i];            
 
                 value = dataField["wfsId"];
                 text = dataField.topic[Oskari.getLang()];

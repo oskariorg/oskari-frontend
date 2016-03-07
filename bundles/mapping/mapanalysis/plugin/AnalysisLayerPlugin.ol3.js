@@ -88,7 +88,7 @@ Oskari.clazz.define(
                             'LAYERS': wms.LAYERS,
                             'FORMAT': wms.FORMAT
                         },
-                        crossOrigin : 'anonymous'
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     minResolution: minResolution,
                     maxResolution: maxResolution,

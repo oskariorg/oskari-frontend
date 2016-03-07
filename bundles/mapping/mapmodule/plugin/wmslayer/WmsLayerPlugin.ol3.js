@@ -84,7 +84,7 @@ Oskari.clazz.define(
                         source: new ol.source.ImageWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
-                            crossOrigin : 'anonymous'
+                            crossOrigin : _layer.getAttributes('crossOrigin')
                         }),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
@@ -94,7 +94,7 @@ Oskari.clazz.define(
                         source : new ol.source.TileWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
-                            crossOrigin : 'anonymous'
+                            crossOrigin : _layer.getAttributes('crossOrigin')
                         }),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
