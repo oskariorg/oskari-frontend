@@ -409,5 +409,24 @@
 			},
 			"Require-Bundle-Instance": []
 		}
+	},
+	{
+		"instanceProps": {
+			
+		},
+		"title": "SelectedFeaturedata",
+		"fi": "selected-featuredata",
+		"bundleinstancename": "selected-featuredata",
+		"sv": "selected-featuredata",
+		"en": "selected-featuredata",
+		"bundlename": "selected-featuredata",
+		"metadata": {
+			"Import-Bundle": {
+				"selected-featuredata": {
+					"bundlePath": "/Oskari/packages/framework/bundle/"
+				}
+			},
+			"Require-Bundle-Instance": []
+		}
 	}]
 }

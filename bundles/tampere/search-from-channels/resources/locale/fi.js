@@ -26,7 +26,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä (*). Hakusanassa saa olla enintään yksi jokerimerkki ja sen tulee olla sanan lopussa.",
         "generic_error": "Haku epäonnistui. Kokeile uudestaan myöhemmin.",
-        "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Lisäksi sallittuja ovat kysymysmerkki (?), jolla voi korvata sanasta yhden merkin, ja jokerimerkki (*), jolla voi korvata sanan loppuosan. Jokerimerkki voi olla ainoastaan sanan lopussa.",
+        "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Lisäksi sallittuja ovat kysymysmerkki (?), jolla voi korvata sanasta yhden merkin, ja jokerimerkki (*), jolla voi korvata sanan loppuosan. Jokerimerkki voi olla ainoastaan sanan lopussa.", 
         "show-all-on-map": "Näytä kaikki kartalla",
         "show-selected-on-map": "Näytä valitut kartalla",
         "no_selected_rows_alert_title": "Näytä valitut kartalla",
