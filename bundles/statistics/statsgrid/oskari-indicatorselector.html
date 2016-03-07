@@ -45,7 +45,7 @@
             <template is="dom-repeat" items="[[selectorItems]]" as="selector">
               <label for="[[selector.name]]">[[selectorOption.label]]</label>
               <select id="[[selector.name]]" style="width: 300px;" value="{{selector.value::change}}"
-                on-change="onSelectorsChanged">
+                on-change="selectorsChanged">
                 <template is="dom-repeat" items="[[selector.values]]" as="selectorOption">
                   <option value="[[selectorOption.val]]">[[selectorOption.text]]</option>
                 </template>

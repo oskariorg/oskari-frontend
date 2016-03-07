@@ -143,9 +143,6 @@ Polymer({
   "evaluateHideGrid": function(showUserIndicatorView, selectedIndicatorsSplices) {
     this.hideGrid = !!this.showUserIndicatorView;
   },
-  "onSelectorsChanged": function(event) {
-    this.selectorsChanged(this.sources, this.datasourceId, this.indicatorId);
-  },
   "datasourceChanged": function(datasourceId) {
     var me = this;
     this.set("indicatorId", undefined);
@@ -276,6 +273,15 @@ Polymer({
   "resize": function() {
     this.$.statsgrid.$['indicator-data-grid'].resize();
   },
+  "setSelectorsToDefaultValues": function() {
+    this.selectors.forEach(function(selector) {
+      this.$$('#' + selector.id).selectedIndex = "1";
+    }.bind(this));
+    this.selectorItems.forEach(function(item) {
+      item.value = item.values[1].val;
+    });
+    this.allSelectorsSelected = true;
+  },
   "getSelectors": function(sources, datasourceId, indicatorId) {
     var me = this,
     indicator = sources[datasourceId].indicators[indicatorId];
@@ -292,6 +298,7 @@ Polymer({
             }))
       };
     }));
+    setTimeout(this.setSelectorsToDefaultValues.bind(this), 50);
     setTimeout(this.resize.bind(this), 100);
   },
   "getSelectorsKey": function() {

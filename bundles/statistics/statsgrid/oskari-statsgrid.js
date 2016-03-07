@@ -189,9 +189,9 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
     },
     "selectedIndicatorChanged": function(indicatorKey) {
       var me = this,
-      indicatorHeader,
-      i = 0,
-      index;
+        indicatorHeader,
+        i = 0,
+        index;
       me.rowHeaders.forEach(function (header) {
         if (header.id === indicatorKey) {
           indicatorHeader = header;
@@ -287,12 +287,13 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
           // Highlighting this layer to enable mouse interaction.
           me.sandbox.postRequestByName('HighlightMapLayerRequest', [statsLayer.getId()]);
       }
+      this.selectedIndicatorChanged(this.selectedIndicatorKey);
     },
     "selectedIndicatorsChanged": function() {
       var me = this,
-      indicators = this.selectedIndicators || [],
-      layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
-      layerName = layer.getLayerName();
+        indicators = this.selectedIndicators || [],
+        layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
+        layerName = layer.getLayerName();
       // This is needed to initialize the native dropdown to the correct value.
       this.$.selectRegionCategory.value = this.selectedLayer;
       this.set("rowHeaders", [{
