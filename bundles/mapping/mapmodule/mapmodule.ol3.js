@@ -30,7 +30,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-    }, {
+        this._defaulfMarkerShape = 2;
+     }, {
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -455,7 +456,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return new ol.style.Style(olStyle);
-        },
+        },      
         /**
          * Parses stroke style from json
          * @method __getStrokeStyle
@@ -481,17 +482,29 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __getImageStyle: function(styleDef) {
             var image = {};
+            if(styleDef.image.shape) {
+            	var svg = this.__getSVG(styleDef.image);
+                image = new ol.style.Icon({
+	              	src: svg
+                });
+              return image;
+            }
             if(styleDef.image.radius) {
                 image.radius = styleDef.image.radius;
+            }
+            if(styleDef.snapToPixel) {
+                image.snapToPixel = styleDef.snapToPixel;
             }
             if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
                 image.fill = new ol.style.Fill({
                     color: styleDef.image.fill.color
                 });
             }
+            if(styleDef.stroke) {
+                image.stroke = this.__getStrokeStyle(styleDef);
+            }
             return new ol.style.Circle(image);
         },
-
         /**
          * Parses JSON and returns matching ol.style.Text
          * @param  {Object} textStyleJSON text style definition
@@ -505,29 +518,67 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(textStyleJSON.scale) {
                 text.scale = textStyleJSON.scale;
             }
+            if(textStyleJSON.offsetX) {
+                text.offsetX = textStyleJSON.offsetX;
+            }
+            if(textStyleJSON.offsetY) {
+                text.offsetY = textStyleJSON.offsetY;
+            }
+            if(textStyleJSON.rotation) {
+                text.rotation = textStyleJSON.rotation;
+            }
+            if(textStyleJSON.textAlign) {
+                text.textAlign = textStyleJSON.textAlign;
+            } 
+            if(textStyleJSON.textBaseline) {
+                text.textBaseline = textStyleJSON.textBaseline;
+            }
+            if(textStyleJSON.font) {
+                text.font = textStyleJSON.font;
+            }
             if(Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
                 text.fill = new ol.style.Fill({
                     color: textStyleJSON.fill.color
                 });
             }
             if(textStyleJSON.stroke) {
-                var textStroke = {};
-                if(textStyleJSON.stroke.color) {
-                    textStroke.color = textStyleJSON.stroke.color;
-                }
-                if(textStyleJSON.stroke.width) {
-                    textStroke.width = textStyleJSON.stroke.width;
-                }
-                text.stroke = new ol.style.Stroke(textStroke);
+                text.stroke = this.__getStrokeStyle(textStyleJSON);
             }
-
             if (textStyleJSON.labelText) {
                 text.text = textStyleJSON.labelText;
             }
-
             return new ol.style.Text(text);
-        }
+        },
+        __getSVG: function(markerStyle) {
+        	var svg = Oskari.markers[markerStyle.shape];
+        	if(!svg) {
+                svg = Oskari.markers[this._defaulfMarkerShape];
+            }
+            if(markerStyle.color) {
+                svg = this.__changePathAttribute(svg, 'fill', markerStyle.color);
+            }
+            if(markerStyle.stroke) {
+                svg = this.__changePathAttribute(svg, 'stroke', markerStyle.stroke);
+            }
+            if(markerStyle.size) {
+            	svg = this.__changeSvgAttribute(svg, 'height', markerStyle.size);
+                svg = this.__changeSvgAttribute(svg, 'width', markerStyle.size);
+            }
+            var svgSrc = 'data:image/svg+xml,' + escape(svg);
 
+        	return svgSrc;
+        },
+        __changePathAttribute: function(svg, attr, value){
+           var htmlObject = jQuery(svg);
+           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
+           return htmlObject[0].outerHTML;
+        },
+        __changeSvgAttribute: function(svg, attr, value){
+            var htmlObject = jQuery(svg);
+            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
+            console.log(htmlObject[0].outerHTML);
+            return htmlObject[0].outerHTML;
+        }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

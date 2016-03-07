@@ -45,7 +45,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me.dialog = null;
         me._buttonsAdded = false;
         me._waitingUserClickToAddMarker = false;
-
         // Show the marker button
         me._showMarkerButton = true;
         if ((conf) && (typeof conf.markerButton === "boolean")) {
@@ -475,43 +474,84 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
                     iconSrc = data.iconUrl;
                     if (jQuery.isNumeric(markerData.size)) {
-                        size = data.size;
+                        size = data.size
                     } else {
                         size = me._defaultIconUrlSize;
                     }
                 } else {
                     // Construct image
-                    iconSrc = this.constructImage(data);
+                    //iconSrc = this.constructImage(data);
                     size = this._getSizeInPixels(data.size);
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
                 size = this._getSizeInPixels(data.size);
             }
+            if (typeof data.color === 'string') {
+                if(data.color.charAt(0)!=='#') {
+                    data.color = '#' + data.color;
+                }
+            } else {
+                 data.color = me._defaultData.color;
+            }
+            if (typeof data.stroke === 'string') {
+                 if(data.stroke.charAt(0)!=='#') {
+                     data.stroke = '#' + data.stroke;
+                 }
+            } else {
+                  data.stroke = me._strokeStyle.stroke;
+            }
+            var style = {
+                image : {
+                    shape: data.shape,
+                    size: me._getSizeInPixels(data.size),
+                    color: data.color,
+                    stroke: data.stroke,
+                    opacity: 1
+                },
+                text : {
+                    font: 'bold 16px Arial',
+                    textAlign: 'left',
+                    textBaseline: 'middle',
+                    offsetX: 8 + 2 * data.size,
+                    offsetY: 8,
+                    fill : {
+                        color : '#000000'
+                    },
+                    stroke : {
+                        color: '#ffffff',
+                        width: 1
+                    },
+                    labelText: decodeURIComponent(data.msg)
+                }
+            };
 
-            var markerLayer = this.getMarkersLayer(),
-                point = new OpenLayers.Geometry.Point(data.x, data.y),
+            var markerStyle = this.getMapModule().getStyle(style);
+            var markerLayer = this.getMarkersLayer();
+
+            var  point = new OpenLayers.Geometry.Point(data.x, data.y),
                 newMarker = new OpenLayers.Feature.Vector(point, {
                     markerId: data.id
-                }, {
+                },
+                markerStyle
+                /*{
                     externalGraphic: iconSrc,
-                    graphicWidth: size,
-                    graphicHeight: size,
+                    graphicWidth: me._getSizeInPixels(data.size),
+                    graphicHeight: me._getSizeInPixels(data.size),
                     fillOpacity: 1,
                     label: decodeURIComponent(data.msg),
                     fontColor: '$000000',
                     fontSize: '16px',
                     fontFamily: 'Arial',
                     fontWeight: 'bold',
-
                     labelAlign: 'lm',
                     labelXOffset: 8 + 2 * data.size,
                     labelYOffset: 8,
                     labelOutlineColor: 'white',
                     labelOutlineWidth: 1
-                });
+                }*/
+            );
             newMarker.id = data.id;
-
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
 
@@ -538,12 +578,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {*}
          */
         constructImage: function(marker) {
-            var me = this,
-                size,
-                color,
-                iconSrc = me.getDefaultIconUrl();
+            //var me = this,
+                //size,
+                //color,
+                //conSrc = me.getDefaultIconUrl();
 
-            if (typeof Raphael !== 'undefined') {
+            /*if (typeof Raphael !== 'undefined') {
                 // Handling the size parameter
                 if (typeof marker.size !== 'number') {
                     marker.size = parseInt(marker.size, 10);
@@ -553,6 +593,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     return;
                 }
                 size = this._getSizeInPixels(size);
+
                 var paper = Raphael(0, 0, size, size);
                 paper.clear();
 
@@ -580,7 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 } else {
                     color = me._defaultData.color;
                 }
-
+                console.log(charIndex);
                 // Create image
                 paper.print(
                     0, 55 * size / 100,
@@ -595,13 +636,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
                 // Base64 encoding for cross-browser compatibility
                 iconSrc =
-                    me._preSVGIconUrl + jQuery.base64.encode(paper.toSVG());
+                  me._preSVGIconUrl + jQuery.base64.encode(paper.toSVG());
                 // Remove paper (unfortunately it's a visible SVG element in document.body)
                 paper.remove();
             }
             return iconSrc;
         },
-
         /**
          * Converts from abstract marker size to real pixel size
          *
@@ -610,7 +650,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _getSizeInPixels: function(size) {
-            return 40 + 10 * size;
+            //return 40 + 10 * size;
+            return 20 + 4 * size;
         },
 
         /**

@@ -11,7 +11,7 @@ Oskari.clazz.define(
      *
      *
      */
-    function (creator, loc, defaultValues) {
+    function (creator, loc, defaultValues) {       
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
@@ -60,49 +60,49 @@ Oskari.clazz.define(
 
         this.symbolButtons = {
             'square': {
-                iconCls: 'marker-square',
+                iconCls: '',
                 iconId: 1,
                 offset: [5,36],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'dot': {
-                iconCls: 'marker-dot',
+                iconCls: '',
                 iconId: 5,
                 offset: [5,30],
                 scale: 0
                 //            tooltip : loc.tooltip, //todo
             },
             'arrow': {
-                iconCls: 'marker-arrow',
+                iconCls: '',
                 iconId: 6,
                 offset: [5,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'pin': {
-                iconCls: 'marker-pin',
+                iconCls: '',
                 iconId: 3,
                 offset: [2,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'pin2': {
-                iconCls: 'marker-pin2',
+                iconCls: '',
                 iconId: 2,
                 offset: [5,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'stud': {
-                iconCls: 'marker-stud',
+                iconCls: '',
                 iconId: 0,
                 offset: [2,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'flag': {
-                iconCls: 'marker-flag',
+                iconCls: '',
                 iconId: 4,
                 offset: [9,35],
                 scale: 2
@@ -207,9 +207,10 @@ Oskari.clazz.define(
                     btnContainer = this.templateSymbolButton.clone();
                     button = this.symbolButtons[buttonName];
                     btnContainer.addClass(button.iconCls);
+                    btnContainer.html(Oskari.markers[button.iconId]);
                     btnContainer.attr('id', button.iconId + 'marker');
                     if (button.iconId === parseInt(me.values.shape, 10)) {
-                        btnContainer.css('border', '2px solid');
+                    //btnContainer.css('border', '2px solid');
                     }
                     // FIXME create function outside loop
                     btnContainer.click(function () {
