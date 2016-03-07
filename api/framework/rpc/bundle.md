@@ -104,6 +104,28 @@ channel.onReady(function() {
             document.getElementById('rpcControls').appendChild(zoombar);
         }
     );
+    
+            'GetPixelMeasuresInScale': function () {
+                // A4 example ( size in mm units and portrait orientation
+                var me = scale = document.getElementById("inputPlotScale").value;
+                if(scale && Number(scale) < 1){
+                    jQuery('#publishedMap').parent().find('#id_plot_bbox').remove();
+                    channel.log('GetPixelMeasuresInScale: ', ' old plot area removed, if any exists');
+                    savedPlotAreaData = null;
+                    return;
+                }
+                if(!scale || scale === ''){
+                    channel.getMapPosition(function(data){
+                        savedPlotAreaData = [[210, 297], data.scale];
+                    });
+                }
+                else {
+                    savedPlotAreaData = [[210, 297], scale];
+                }
+    
+                plotPlotArea([[210, 297], scale]);
+    
+            },
 
     // Get current map position
     channel.getMapPosition(
@@ -254,7 +276,7 @@ If configuration is not set these defaults will be used:
 ```javascript
 {
     "allowedFunctions" : ["getAllLayers", "getMapPosition", "getSupportedEvents", "getSupportedFunctions", "getSupportedRequests",
-        "getZoomRange", "getMapBbox", "resetState", "getCurrentState", "useState", "getFeatures"],
+        "getZoomRange", "getPixelMeasuresInScale", "getMapBbox", "resetState", "getCurrentState", "useState", "getFeatures"],
     "allowedEvents" : ["AfterMapMoveEvent", "MapClickedEvent", "AfterAddMarkerEvent", "MarkerClickEvent", "RouteResultEvent", "UserLocationEvent", "DrawingEvent"],
     "allowedRequests" : ["InfoBox.ShowInfoBoxRequest", "MapModulePlugin.AddMarkerRequest", "MapModulePlugin.AddFeaturesToMapRequest", "MapModulePlugin.RemoveFeaturesFromMapRequest", "MapModulePlugin.GetFeatureInfoRequest", "MapModulePlugin.MapLayerVisibilityRequest", "MapModulePlugin.RemoveMarkersRequest", "MapMoveRequest", "ShowProgressSpinnerRequest", "GetRouteRequest", "ChangeMapLayerOpacityRequest", "MyLocationPlugin.GetUserLocationRequest",  "DrawTools.StartDrawingRequest", "DrawTools.StopDrawingRequest", "MapModulePlugin.ZoomToFeaturesRequest"]
 }
@@ -271,6 +293,7 @@ Defaults at the moment are all the functions defined in RPC-bundles availableFun
 - getSupportedFunctions()
 - getSupportedRequests()
 - getZoomRange()
+- getPixelMeasuresInScale([mm_measure1, mm_measure2,..],scale)
 - getMapBbox()
 - resetState()
 - getCurrentState()
@@ -366,6 +389,7 @@ Returns functions that are supported by rpc functionality.
         "getMapBbox": true,
         "getMapPosition": true,
         "getZoomRange": true,
+        "getPixelMeasuresInScale":true,
         "resetState": true,
         "getCurrentState": true,
         "useState": true,
@@ -404,6 +428,23 @@ Returns information about map zoom range.
         "max": 13,
         "current": 4
     }
+    
+**getPixelMeasuresInScale([mm_measure1, mm_measure2,..], scale)**
+    
+    Returns pixel mesurements for mm measurements in requested scale.
+    Scale is optional. If scale is not defined, current map scale is used.
+    Pixel values could be used for to plot  e.g. A4 size area on the map.
+    input: [[210,297], 100000] returns below data
+    
+        {
+          "pixelMeasures": [
+            82,
+            116
+          ],
+          "scale": "100000"
+        }
+        
+
 
 **resetState()**
 
