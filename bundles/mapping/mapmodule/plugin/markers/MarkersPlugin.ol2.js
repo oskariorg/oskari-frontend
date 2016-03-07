@@ -578,12 +578,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {*}
          */
         constructImage: function(marker) {
-            //var me = this,
-                //size,
-                //color,
-                //conSrc = me.getDefaultIconUrl();
+            var me = this,
+                size,
+                color,
+                conSrc = me.getDefaultIconUrl();
 
-            /*if (typeof Raphael !== 'undefined') {
+            if (typeof Raphael !== 'undefined') {
                 // Handling the size parameter
                 if (typeof marker.size !== 'number') {
                     marker.size = parseInt(marker.size, 10);
