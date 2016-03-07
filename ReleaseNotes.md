@@ -2,6 +2,12 @@
 
 ## 1.36
 
+### core/AbstractLayer
+
+getAttribute() now takes an optional param which can be used to get a value from attributes:
+
+    layer.getAttribute('attributeName');
+
 ### Openlayers 3 layerplugins
 
 Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
