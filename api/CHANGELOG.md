@@ -14,6 +14,8 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 An experimental getScreenshot() function is now available when the Oskari instance uses Openlayers 3 based mapmodule.
 The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
 
+Usage requires additional configuration on the map layers used on the published map!
+
 GetPixelMeasuresInScale([mm_measure1, mm_measure2,..],scale) function is now available for requesting pixel values.
 Input: array of mm measurements , requested scale e.g. [[210,297], 100000]
 Output: array of pixel measurements , requested scale

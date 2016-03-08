@@ -463,6 +463,19 @@ For example in RPC-client you can:
 This is an experimental function that might be changed/removed. It's only available when the Oskari instance uses Openlayers 3 based mapmodule.
 The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
 
+Usage requires additional configuration on the map layers used on the published map. The map layers have to be set to support CORS in oskari's layer administration, i.e. the attributes-field must contain the crossOrigin definition:
+```javascript
+{
+    crossOrigin: 'anonymous'
+}
+```
+
+Additionally, the service providing the layer tiles must support CORS, i.e. have the Access-Control-Allow-Origin - header set.
+
+```javascript
+Access-Control-Allow-Origin:*
+´´´
+
 ### Allowed events
 
 Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc. 
