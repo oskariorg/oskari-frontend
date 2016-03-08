@@ -517,7 +517,7 @@ Additionally, the service providing the layer tiles must support CORS, i.e. have
 
 ```javascript
 Access-Control-Allow-Origin:*
-´´´
+```
 
 ### Allowed events
 
