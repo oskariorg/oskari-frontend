@@ -15,10 +15,11 @@ An experimental **getScreenshot()** function is now available when the Oskari in
 The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
 
 **GetPixelMeasuresInScale([mm_measure1, mm_measure2,..],scale)** function is now available for requesting pixel values.
-Input: array of mm measurements , requested scale e.g. [[210,297], 100000]
-Output: array of pixel measurements , requested scale
+Input: array of mm measurements , requested scale (optional) e.g. [[210,297], 100000]
+Output: array of pixel measurements , requested scale 
 Returns pixel mesurements for mm measurements in requested scale.
 Use case: Plot paper size area on a map. See plotPlotArea-function in rpc_example.html.
+If scale is not entered, function computes fit scale so that paper size area covers the whole map. 
 
 ## 1.35
 
