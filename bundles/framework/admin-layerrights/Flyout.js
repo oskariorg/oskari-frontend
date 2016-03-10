@@ -262,7 +262,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             var thCell = me._templates.cellTh.clone();
             thCell.html(columnsLoc.name);
             headerRow.append(thCell);
-            
+
             jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
                 var thCell = me._templates.cellTh.clone();
                 var headerName = header.name;
@@ -282,18 +282,18 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 	value = null,
                 	tooltip = null,
                 	dataCell = me._templates.cellTd.clone();
-                
+
                 if(layer) {
                     tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
                 }
-                
+
                 cell = me._templates.name.clone();
                 cell.attr('data-resource', layerRight.resourceName);
                 cell.attr('data-namespace', layerRight.namespace);
                 cell.html(layerRight.name);
                 dataCell.append(cell);
                 dataRow.append(dataCell);
-                
+
                 // lets loop through permissions
                 jQuery.each(layerRight.permissions, function(index, permission) {
                     var allow = permission.allow,
@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     if(allow == "true"){
                         cell.attr('checked', 'checked');
                     }
-                    
+
                     cell.attr('title', tooltip);
                     dataCell.append(cell);
                     dataRow.append(dataCell);
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 dataObj.namespace       = tdName.attr('data-namespace');
                 dataObj.roleId = me.activeRole;
                 dataObj.permissions = [];
-                
+
                 for (j = 0; j < tds.length; j += 1) {
                     td = jQuery(tds[j]);
                     right = td.attr('data-right');
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                         dirty = true;
                     }
                     dataObj.permissions.push({key: right, value: value});
-                    
+
                 }
 
                 if (cleanDataObj.resourceName !== dataObj.resourceName) {
