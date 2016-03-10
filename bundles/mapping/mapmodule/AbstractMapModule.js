@@ -206,7 +206,6 @@ Oskari.clazz.define(
         getPixelFromCoordinate: Oskari.AbstractFunc('getPixelFromCoordinate'),
         getMapCenter: Oskari.AbstractFunc('getMapCenter'),
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
-        calculatePixelsInScale: Oskari.AbstractFunc('calculatePixelsInScale'),
         getSize: Oskari.AbstractFunc('getSize'),
         getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
         /**

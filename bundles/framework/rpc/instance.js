@@ -302,13 +302,13 @@ Oskari.clazz.define(
 
             getPixelMeasuresInScale : function(mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                    mapScale = this.sandbox.getMap().getScale(),
                     scalein = scale,
                     pixelMeasures = [];
-                if(!scalein){
-                    scalein = mapScale;
-                }
+
                 if(mmMeasures && mmMeasures.constructor === Array){
+                    if(!scalein){
+                        scalein = mapModule.calculateFitScale4Measures(mmMeasures);
+                    }
                     pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
                 }
                 return {
