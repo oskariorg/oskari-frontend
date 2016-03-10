@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @class Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance
 *
 * Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance.
@@ -109,7 +109,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
-            
+
             if(flyout.isFlyoutVisible() && content.length > 0){
                     flyout.createUI(content, data);
             }else{
@@ -144,7 +144,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     callback : function(params) {
 
                         flyout.createUI(params.content, params.data);
-                        
+
                         var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
                         Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
                     }

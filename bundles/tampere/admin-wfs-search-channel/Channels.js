@@ -146,7 +146,7 @@ Oskari.clazz.define(
                         );
                         return false;
                     }
-     
+
                     var newParams = jQuery(this).prev("label").clone(true);
                     newParams.find(".remove--param").removeClass("hidden");
                     jQuery(this).before(newParams);
@@ -233,12 +233,12 @@ Oskari.clazz.define(
                     var wfsLayers = jQuery.grep(allLayers, function(layer,index){
                         return layer.type.toLowerCase() === 'wfslayer';
                     });
-                    me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
+                    me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
                             value: "",
                             text : ""
                     }));
                     jQuery.each(wfsLayers, function(index, layer){
-                        me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', { 
+                        me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
                             value: layer.id,
                             text : layer.name[Oskari.getLang()]
                         }));
@@ -287,7 +287,7 @@ Oskari.clazz.define(
 
                         jQuery.each(data.propertyTypes, function(name, type){
                             jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', {
-                                type: type, 
+                                type: type,
                                 value: name,
                                 text : name
                             }));
@@ -315,7 +315,7 @@ Oskari.clazz.define(
             container.find('ul').remove();
             // get channels with ajax
             var me = this;
-            
+
             jQuery.ajax({
                 type: 'GET',
                 url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
@@ -628,7 +628,7 @@ Oskari.clazz.define(
                         me._progressSpinner.stop();
                     },600);
                 });
-               
+
                 fragment.attr('method', 'POST');
             } else {
                 fragment.attr('method', 'PUT');

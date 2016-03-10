@@ -141,7 +141,7 @@ Oskari.clazz.define(
                     currPopup.contentData.slice(), contentData.slice());
                 currPopup.contentData = contentData;
             }
-           
+
             me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools);
         },
 
@@ -231,7 +231,7 @@ Oskari.clazz.define(
             header.append(title);
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
-            
+
             //add additional btns
             jQuery.each( additionalTools, function( index, key ){
                 var additionalButton = me._headerAdditionalButton.clone();
