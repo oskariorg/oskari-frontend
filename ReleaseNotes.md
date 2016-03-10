@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### selected-featuredata
+
+*New bundle!* Selected-featuredata allows infobox opening in new flyout.
+
 ### Openlayers 3 layerplugins
 
 Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
