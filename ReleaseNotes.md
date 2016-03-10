@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### selected-featuredata
+
+*New bundle!* Selected-featuredata allows infobox opening in new flyout.
+
 ### core/AbstractLayer
 
 getAttribute() now takes an optional param which can be used to get a value from attributes:
