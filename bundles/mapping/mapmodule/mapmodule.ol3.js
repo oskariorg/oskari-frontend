@@ -348,13 +348,51 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 tempCoords[1] = centerCoords[1];
                 tempPixels = this.getMap().getPixelFromCoordinate(tempCoords);
 
-                pix = Math.round(tempPixels[0] - centerPixels[0]);
+                pix = tempPixels[0] - centerPixels[0];
 
                 pixels.push(pix);
             }
             return pixels;
         },
+        /* Calculate best fix scale based on measures in case of two measures
+         * The case of two measures is interpreted as paper size
+         * If first measure is shorter than second, then orientation is portrait
+         * @param mmMeasures    unit mm
+         * return fixScale or MapScale
+         */
+        calculateFitScale4Measures: function(mmMeasures) {
+            var map = this.getMap(),
+                units = map.getView().getProjection().getUnits(),
+                mapScale = this._sandbox.getMap().getScale(),
+                extent = map.getView().calculateExtent(map.getSize()),
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                margin = 10.0;
+                scaleCoef = mapScale/1000;
 
+            if(mmMeasures.length != 2){
+                return mapScale;
+            }
+
+            if(mmMeasures[0] > mmMeasures[1]){
+                //landscape
+                // fit width scale
+                var view_width = extent[2] - extent[0];
+                var paper_width =  mmMeasures[0] * scaleCoef * mpu;
+                if(paper_width > view_width){
+                    return Math.round((view_width/(paper_width + margin)) * mapScale);
+                }
+            } else {
+                //portrait
+                var view_height = extent[3] - extent[1];
+                var paper_height =  mmMeasures[1] * scaleCoef * mpu;
+                if(paper_height > view_height){
+                    return Math.round((view_height/(paper_height + margin)) * mapScale);
+                }
+            }
+
+            return mapScale;
+
+        },
 /* --------- /Impl specific --------------------------------------> */
 
 /* Impl specific - PRIVATE
