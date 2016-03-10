@@ -832,7 +832,7 @@ Oskari.clazz.define(
                positioning : 'bottom-center',
                id: id
            });
-           tooltip.values_.element.style.pointerEvents = 'none';
+           tooltip.getElement().style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
        }
