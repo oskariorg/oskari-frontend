@@ -26,6 +26,12 @@ div.layerselection2 .layer.selected {
       margin-right: 10px; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
+    div.layerselection2 .layer.selected div.layer-info .content-editor-button {
+      float: right;
+      line-height: 7px;
+      margin-right: 20px; }
+    div.layerselection2 .layer.selected div.layer-info h4 {
+      display: inline; }
   div.layerselection2 .layer.selected div.layer-tools {
     background-color: #f3f3f3;
     padding: 7px; }
