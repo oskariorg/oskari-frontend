@@ -700,7 +700,7 @@ Oskari.clazz.define(
                 lon : lonlat.lon,
                 lat : lonlat.lat,
                 json : json
-            }, keepPrevious);
+            }, keepPrevious, true);
         },
 
         /**

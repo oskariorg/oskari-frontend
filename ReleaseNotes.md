@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### selected-featuredata
+
+*New bundle!* Selected-featuredata allows infobox opening in new flyout.
+
 ### core/AbstractLayer
 
 getAttribute() now takes an optional param which can be used to get a value from attributes:
@@ -34,6 +38,10 @@ The function returns an empty string if the dataURL can't be produced. A warning
 
 Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
 
+New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
+http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
+
+
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
@@ -43,6 +51,14 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
         animationSpeed: 3000
     }
 ```
+
+###tampere/conter-editor
+
+New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at oskari.org / Adding functionalities 
+
+### divmanazer/FilterDialog  & analysis/AnalyseService
+A modification in the request of describe WFS feature type.
+&simpe=true request paramater is added to get similiar response as before.
 
 ### mapfull
 

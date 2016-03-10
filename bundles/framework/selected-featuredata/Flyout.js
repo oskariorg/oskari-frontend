@@ -48,13 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          *
          * @param {Object} el
          * Reference to the container in browser
-         * @param {Number} width
-         * Container size(?) - not used
-         * @param {Number} height
-         * Container size(?) - not used
          *
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = el[0];
 
             if (!jQuery(this.container).hasClass('selected-featuredata')) {
@@ -134,7 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             howManyShowLink = jQuery(me.container).find('.selected_featuredata_howmany_show');
 
             //Show many or one link created only once
-            if(howManyShowLink.length == 0){
+            if(howManyShowLink.length === 0){
                 jQuery(me.container).append(me.createShowManyOrOneLink());
             }
 
@@ -149,7 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
             me.removeAllMarkersAndHighlights();
 
             //check if certain layer has tab allready
-            if(jQuery('.selected_featuredata_tabcontent_'+layer.getId()).length == 0){
+            if(jQuery('.selected_featuredata_tabcontent_'+layer.getId()).length === 0){
                 tabContent.attr('class','selected_featuredata_tabcontent_'+layer.getId());
                 me.addTab(data, tabContent, tabName, layer.getId());
                 me.addAccordion(data.html, tabContent, layer.getId(), mapobject);
@@ -273,15 +269,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * @return {[Boolean]} [true/false]
          */
         compareAccodionPanelHtml: function(newHtml, tabContent){
-            var me = this,
-            output = {
+            var output = {
                 add: true,
                 id: null
             };
 
             tabContent.find('.accordion_panel>.content>div').each(function(){
                 var oldHtml = jQuery(this);
-                if(oldHtml.html() == newHtml.html()){
+                if(oldHtml.html() === newHtml.html()){
                     output.id = oldHtml.parents('.accordion_panel').find('.header').attr('id');
                     output.add = false;
                 }
@@ -316,15 +311,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
             panel.destroy();
 
-            if(tabContent.find('.accordion_panel>.content').length == 0){
+            if(tabContent.find('.accordion_panel>.content').length === 0){
                  me.removeAllMarkersAndHighlights();
 
                 jQuery.each(me.tabsContainer.panels, function(index, tabpanel){
-                    if(typeof(tabpanel) != "undefined"){
-                    if(tabpanel.id == layerId){
+                    if(tabpanel && tabpanel.id === layerId){
                         tabpanel.destroy();
                         me.tabsContainer.panels.splice(jQuery.inArray(tabpanel, me.tabsContainer.panels),1);
-                    }
                     }
                 });
 
@@ -332,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 tabsItem.find("li:first a").trigger("click");
             }
 
-            if(tabsItem.children().length == 0){
+            if(tabsItem.children().length === 0){
                 me.clearFlyout();
                 me.sandbox.postRequestByName(
                    'userinterface.UpdateExtensionRequest',
@@ -405,7 +398,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 "href": "JavaScript:void(0);",
                 "class": 'selected_featuredata_show_all_on_map',
                 "text": me._getLocalization('show_all_on_map'),
-                click: function(e){
+                click: function(){
 
                     me.removeAllMarkersAndHighlights();
 
@@ -419,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     var header = tabContent.find(".accordion_panel .header");
                     jQuery(header).each(function() {
                         var el = jQuery(this);
-                        if(el.data("type") == "WFS"){
+                        if(el.data("type") === "WFS"){
                             wfs = true;
                             featureIds.push(el.data("featureid"));
                             var point = new OpenLayers.Geometry.Point(el.data("x"),el.data("y"));
@@ -559,7 +552,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          * @param  {[String]} y [lat]
          */
         showWmsMarker: function(x,y){
-            var me = this;
             var sb = Oskari.getSandbox();
             var reqBuilder = sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
@@ -600,9 +592,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
         getEventHandlers: function () {
 
         },
-        onEvent: function (event) {
 
-        },
         /**
          * @method _getLocalization
          */

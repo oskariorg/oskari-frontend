@@ -104,7 +104,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * @param  {[Object]} params     [params]
          */
         resultHandler: function(content, data, formatters, params){
-            var me = this;
             // show infobox
 
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
@@ -202,7 +201,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     // not me -> do nothing
                     return;
                 }
-                if (event.getViewState() == 'close') {
+                if (event.getViewState() === 'close') {
                      this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
                 }
                 if (doOpen) {
@@ -214,7 +213,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     }
                 }
             },
-            'MapClickedEvent': function (event){
+            'MapClickedEvent': function (){
                 //if show many or one accordions is clicked
                 if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
                     this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
