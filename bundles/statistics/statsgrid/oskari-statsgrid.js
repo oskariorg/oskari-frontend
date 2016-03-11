@@ -98,7 +98,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
     },
     "sendTooltipData": function(feature) {
       var featureAttributes = feature.attributes,
-      regionCode = featureAttributes[this.layerInfo[this.selectedLayer].idTag],
+      regionCode = featureAttributes[this.layerInfo[this.selectedLayer].regionIdTag],
       eventBuilder = this.sandbox.getEventBuilder(
           'MapStats.HoverTooltipContentEvent'
       ),
@@ -133,7 +133,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       },
       layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
       vis_name = layer.getLayerName(),
-      vis_attr = me.layerInfo[me.selectedLayer].idTag,
+      vis_attr = me.layerInfo[me.selectedLayer].regionIdTag,
       vis_codes = indicatorValues && Object.keys(indicatorValues).filter(function(regionCode) {
         return indicatorValues[regionCode] !== null && indicatorValues[regionCode] !== undefined;
       }) || [],

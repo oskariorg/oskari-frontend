@@ -255,7 +255,7 @@ Polymer({
     .concat(Object.keys(sources).map(function(sourceId) {
       return {
         val: sourceId,
-        text: me.locale.statistic.plugins[sources[sourceId].localizationKey]
+        text: sources[sourceId].locale[me.language].name
       };
     }));
   },
