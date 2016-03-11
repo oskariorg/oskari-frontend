@@ -385,13 +385,13 @@ Oskari.clazz.define(
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-               
+
                var colourScheme, font;
                if (_.isObject(this._config)) {
                   colourScheme = this._config.colourScheme;
                   font = this._config.font;
                }
-               
+
                this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,
                 font: font,

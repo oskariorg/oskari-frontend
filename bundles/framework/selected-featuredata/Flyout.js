@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                     me._panels[compare.id].open();
                 }
             }
-          
+
         },
         /**
          * [addTab adds tab]
@@ -233,7 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 panel.setTitle(me._getLocalization('accordion-title') +' '+ number);
                 panelId = panelId + layerId + '_' + number;
                 panel.setId(panelId);
-                
+
                 for (var i in me._panels) {
                     if(i.indexOf(layerId) >= 0){
                         me._panels[i].close();
@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
 
             if(tabContent.find('.accordion_panel>.content').length === 0){
                  me.removeAllMarkersAndHighlights();
-                
+
                 jQuery.each(me.tabsContainer.panels, function(index, tabpanel){
                     if(tabpanel && tabpanel.id === layerId){
                         tabpanel.destroy();
@@ -371,7 +371,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 "class": 'selected_featuredata_accpanel_showonmap',
                 "text": me._getLocalization('accordion-show-onmap'),
                 click: function(e){
-                    
+
                     var features = mapobject.features[0];
                     me.removeAllMarkersAndHighlights();
                     me.moveMapRequest(mapobject.lonlat.lon, mapobject.lonlat.lat);
@@ -492,7 +492,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                         tabContent.find('.selected_featuredata_removed_map_text').remove();
                     }
                 }
-            } 
+            }
         },
         /**
          * [zoomMapToCertainExtent zooms map to extent and minus 1 zoom back]
@@ -507,7 +507,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
                 _map.zoomToExtent(dataextent);
                 newZoom = _map.getZoom() - 1;
                 _map.zoomTo(newZoom);
-        },  
+        },
         /**
          * [highlightWFSFeature highlight wfs object on map]
          * @param  {[String]} layerId   [Oskari layerId]

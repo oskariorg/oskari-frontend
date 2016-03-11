@@ -104,7 +104,9 @@ Oskari.clazz.define(
             me._id = id;
             me._options = options;
             me._layerId = shape + 'DrawLayer';
-
+            if(options.modifyControl===undefined) {
+                options.modifyControl = true;
+            }
             me.setDefaultStyle(options.style);
 
             me._loc = Oskari.getLocalization('DrawTools', Oskari.getLang() || Oskari.getDefaultLanguage());
@@ -144,7 +146,9 @@ Oskari.clazz.define(
             if(options.drawControl !== false) {
                 me.addDrawInteraction(me._layerId, shape, options);
             }
-
+            if(options.modifyControl !== false) {
+                me.addModifyInteraction(me._layerId, shape, options);
+            }
 //          me.reportDrawingEvents();
         },
         /**
@@ -330,8 +334,8 @@ Oskari.clazz.define(
             var me = this;
 
             me._draw[me._id].on('drawstart', function(evt) {
-            	// stop modify iteraction while draw-mode
-            	if(options.modifyControl !== false) {
+                // stop modify iteraction while draw-mode is active
+                if(options.modifyControl) {
                      me.removeInteractions(me._modify, me._id);
                 }
                 me._mode = 'draw';
@@ -588,15 +592,15 @@ Oskari.clazz.define(
         removeInteractions : function(iteraction, id) {
             var me = this;
             if(!id || id===undefined || id === '') {
-            	_.each(iteraction, function (key, iter) {
-                	me._map.removeInteraction(key);
-            	});
+                _.each(iteraction, function (key) {
+                    me._map.removeInteraction(key);
+                });
             } else {
-            	me._map.removeInteraction(iteraction[id]);
+                me._map.removeInteraction(iteraction[id]);
             }
         },
         setVariablesToNull: function() {
-        	this._shape = null;
+            this._shape = null;
             this._buffer= null;
             this._id = null;
             this._sketch = null;
@@ -815,22 +819,23 @@ Oskari.clazz.define(
           }
           return cnt === splits.length;
        },
-    /**@method createDrawingTooltip
-     * - creates a new tooltip on drawing
-     */
-    createDrawingTooltip : function(id, tooltipClass) {
-        var me = this;
-        var tooltipElement = document.createElement('div');
-        tooltipElement.className =  tooltipClass + ' ' + id;
-        var tooltip = new ol.Overlay({
-            element : tooltipElement,
-            offset : [ 0, -5 ],
-            positioning : 'bottom-center',
-            id: id
-        });
-        tooltip.id = id;
-        me._map.addOverlay(tooltip);
-    }
+       /**@method createDrawingTooltip
+       * - creates a new tooltip on drawing
+       */
+       createDrawingTooltip : function(id, tooltipClass) {
+           var me = this;
+           var tooltipElement = document.createElement('div');
+           tooltipElement.className =  tooltipClass + ' ' + id;
+           var tooltip = new ol.Overlay({
+               element : tooltipElement,
+               offset : [ 0, -5 ],
+               positioning : 'bottom-center',
+               id: id
+           });
+           tooltip.getElement().style.pointerEvents = 'none';
+           tooltip.id = id;
+           me._map.addOverlay(tooltip);
+       }
    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**

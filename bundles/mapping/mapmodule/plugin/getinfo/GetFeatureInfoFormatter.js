@@ -233,7 +233,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         return coll || [];
     },
-    
+
     /**
      * Formats a GFI HTML or JSON object to result HTML
      *
@@ -317,7 +317,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             var parsedHTML = me.formatters.html(datum.content);
             if (jQuery.trim(parsedHTML.html()) === '') {
                 return null;
-            } 
+            }
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);

@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method start
          * Implements BundleInstance protocol start method
          */
-        start: function () {            
+        start: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 'ContentEditor.ShowContentEditorRequest',
                 me.showContentEditorRequestHandler
             );
-            
+
             this.__setupLayerTools();
         },
 
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             }
             return handler.apply(this, [event]);
         },
-        
+
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -204,7 +204,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 //Why this.sideContentEditor is null?
                 this.sandbox.findRegisteredModuleInstance("ContentEditor").sideContentEditor.prepareRequest(evt.getDrawing());
             },
-            WFSFeatureGeometriesEvent: function (evt) 
+            WFSFeatureGeometriesEvent: function (evt)
             {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.ParseWFSFeatureGeometries(evt);
@@ -345,9 +345,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
-                
+
             }
-            
+
             me.sandbox.postRequestByName('MapFull.MapSizeUpdateRequest', []);
         },
         _getFakeExtension: function (name) {

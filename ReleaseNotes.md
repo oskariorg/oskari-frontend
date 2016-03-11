@@ -54,7 +54,7 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
 
 ###tampere/conter-editor
 
-New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at ../oskari-server/install.md 
+New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at oskari.org / Adding functionalities 
 
 ### divmanazer/FilterDialog  & analysis/AnalyseService
 A modification in the request of describe WFS feature type.
