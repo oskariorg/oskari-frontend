@@ -261,14 +261,14 @@
 		},  {
 			"instanceProps": {},
 			"title": "Karttajulkaisu",
-			"bundleinstancename": "publisher",
+			"bundleinstancename": "publisher2",
 			"fi": "jquery",
 			"sv": "jquery",
 			"en": "jquery",
-			"bundlename": "publisher",
+			"bundlename": "publisher2",
 			"metadata": {
 				"Import-Bundle": {
-					"publisher": {
+					"publisher2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				},
