@@ -6,11 +6,18 @@
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.
 
-### core/AbstractLayer
+### core
+
+#### AbstractLayer
 
 getAttribute() now takes an optional param which can be used to get a value from attributes:
 
     layer.getAttribute('attributeName');
+
+#### maplayer-service
+
+When loading maplayers the service sends the map srs with parameter "srs". Previously used parameter "epsg".
+Most of the other ajax-calls use "srs" so this is a consistency improvement.
 
 ### Openlayers 3 layerplugins
 
