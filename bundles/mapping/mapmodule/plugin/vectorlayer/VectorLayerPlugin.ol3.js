@@ -543,7 +543,7 @@ Oskari.clazz.define(
             }
         },
         setupFeatureStyle: function(options, feature) {
-            var style = this.getStyle(options);
+            var style = this.getStyle(options, feature);
             //set up property-based labeling
             if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
                 var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
@@ -576,13 +576,43 @@ Oskari.clazz.define(
          *     }
          * }
          */
-        getStyle : function(options) {
-            var me = this;
+        getStyle : function(options, feature) {
+            var me = this,
+                optionalStyle = null;
             var styles = options.featureStyle || me._layerStyles[options.layerId] ||{};
 
             // overriding default style with feature/layer style
             var styleDef = jQuery.extend({}, this._defaultStyle, styles);
-            return me.getMapModule().getStyle(styleDef);
+            // Optional styles based on property values
+            if ( feature && options.optionalStyles){
+                optionalStyle = me.getOptionalStyle(options.optionalStyles, styleDef, feature);
+            }
+            return  optionalStyle ? optionalStyle : me.getMapModule().getStyle(styleDef);
+        },
+        /**
+         * @method getOptionalStyle
+         * Returns a style, if style property value matches to any of feature property values
+         * @param {Object} optional style
+         * @param {Object} default style
+         * @param {Object} feature properties
+         * @return
+         * */
+        getOptionalStyle: function (optionalStyles, defStyle, feature) {
+            var me = this;
+            for (var i in optionalStyles) {
+                if (optionalStyles[i].hasOwnProperty('property') && feature.getProperties()) {
+                    // check feature property  values and take style, if there is match case
+                    var property = optionalStyles[i]['property'];
+                    if (property.hasOwnProperty('key') && property.hasOwnProperty('value') && feature.getProperties().hasOwnProperty(property.key)) {
+                        if (property.value === feature.getProperties()[property.key]) {
+                            // overriding default style with feature style
+                            var styleOpt = jQuery.extend({}, defStyle, optionalStyles[i]);
+                            return me.getMapModule().getStyle(styleOpt);
+                        }
+                    }
+                }
+            }
+
         },
         /**
          * @method zoomToFeatures
