@@ -70,6 +70,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.allClickedFeatures = [];
         me.fieldsTypes = [];
         me.featureDuringEdit = false;
+        me.processGFIRequest = true;
+        me.GFIFirstRequestProcessed = false;
+        me.highlightFeaturesIds = [];
     }, {
         __name: 'ContentEditor',
         /**
@@ -589,13 +592,22 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 this._addDrawTools();
             }
 
-            var highlightFeaturesIds = [];
-            for (var i = 0; i < data.features.length; i++) {
-                if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
-                highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+            if (me.processGFIRequest != true) {
+                if (me.GFIFirstRequestProcessed == true) {
+                    me._highlighGeometries(me.highlightFeaturesIds, layer, true);
+                    return;
+                } else {
+                    me.GFIFirstRequestProcessed = true;
+                }
             }
 
-            this._highlighGeometries(highlightFeaturesIds, layer, true);
+            me.highlightFeaturesIds = [];
+            for (var i = 0; i < data.features.length; i++) {
+                if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != ""))
+                me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]);
+            }
+
+            this._highlighGeometries(me.highlightFeaturesIds, layer, true);
 
             var isVisibleLayer = false;
             for (var i = 0; i < this.allVisibleLayers.length; i++) {
@@ -922,12 +934,15 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         saveButton.setTitle(me.loc.buttons.save);
                         saveButton.setHandler(function() {
                             me._saveFeature();
+                            me._enableGFIRequestProcess();
                         });
                         
                         var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                         cancelButton.setTitle(me.loc.buttons.cancel);
                         cancelButton.setHandler(function() {
                             me._cancelFeature();
+                            me._enableGFIRequestProcess();
+                            me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                         });
                         var drawToolsContainer = $("<div/>").addClass("content-draw-tools");
                         drawToolsContainer.append(me._addDrawTools());
@@ -962,6 +977,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             cancelButton.setTitle(me.loc.buttons.cancel);
                             cancelButton.setHandler(function () {
                                 me.closeDialog();
+                                me._enableGFIRequestProcess();
                             });
                             me.showMessage(me.loc.deleteFeature.title, me.loc.deleteFeature.text, [deleteButton, cancelButton], true);
                         });
@@ -969,6 +985,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         var editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                         editButton.setTitle(me.loc.buttons.editFeature);
                         editButton.setHandler(function () {
+                            me.processGFIRequest = false;
                             if (me.featureDuringEdit) {
                                 me.featureDuringEdit = false;
                                 me._showEditUnsavedInfoModal(fragment.fid);
@@ -1109,14 +1126,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             var geomDeleteButton = $("<div />").addClass('selection-remove tool');
+            
+            geomDeleteButton.on('click', function() {
+                me.sendStopDrawRequest(true);
+                me.operationMode = "delete";
+            });
 
             if (me.layerGeometries != null && me.layerGeometries.geometry.components.length <= 1) {
                 geomDeleteButton.addClass("disabled");
-            } else {
-                geomDeleteButton.on('click', function() {
-                    me.sendStopDrawRequest(true);
-                    me.operationMode = "delete";
-                });
             }
 
             var toolContainer = $("<div />").addClass('toolrow');
@@ -1196,7 +1213,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var featureGeometryId = null;
             var coords = new OpenLayers.LonLat(me.clickCoords.x, me.clickCoords.y);
             for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                if (me.layerGeometries.geometry.components[i].atPoint(coords, 1, 1)) {
+                if (me.layerGeometries.geometry.components[i].atPoint(coords)) {
                     featureGeometryId = i;
                     break;
                 }
@@ -1284,6 +1301,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     {'dateFormat':'yy-mm-dd'}
                   )
                 );
+        },
+        _enableGFIRequestProcess: function () {
+            var me = this;
+            me.processGFIRequest = true;
+            me.GFIFirstRequestProcessed = false;
         }
     }, {
         /**
