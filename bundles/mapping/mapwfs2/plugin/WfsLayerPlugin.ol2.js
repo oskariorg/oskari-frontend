@@ -471,8 +471,8 @@ Oskari.clazz.define(
 
             for (i = 0; i < layers.length; i += 1) {
 
-                // Clean layer data if not in scale and manual refresh
-                if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) && layers[i].isManualRefresh()) {
+                // Clean layer data cache if not in scale
+                if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) ) {
                     me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
                     continue;
                 }
