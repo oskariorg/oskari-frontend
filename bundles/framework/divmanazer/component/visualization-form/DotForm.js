@@ -11,7 +11,7 @@ Oskari.clazz.define(
      *
      *
      */
-    function (creator, loc, defaultValues) {
+    function (creator, loc, defaultValues) {       
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
@@ -60,49 +60,49 @@ Oskari.clazz.define(
 
         this.symbolButtons = {
             'square': {
-                iconCls: 'marker-square',
+                iconCls: '',
                 iconId: 1,
                 offset: [5,36],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'dot': {
-                iconCls: 'marker-dot',
+                iconCls: '',
                 iconId: 5,
                 offset: [5,30],
                 scale: 0
                 //            tooltip : loc.tooltip, //todo
             },
             'arrow': {
-                iconCls: 'marker-arrow',
+                iconCls: '',
                 iconId: 6,
                 offset: [5,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'pin': {
-                iconCls: 'marker-pin',
+                iconCls: '',
                 iconId: 3,
                 offset: [2,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'pin2': {
-                iconCls: 'marker-pin2',
+                iconCls: '',
                 iconId: 2,
                 offset: [5,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'stud': {
-                iconCls: 'marker-stud',
+                iconCls: '',
                 iconId: 0,
                 offset: [2,35],
                 scale: 2
                 //            tooltip : loc.tooltip, //todo
             },
             'flag': {
-                iconCls: 'marker-flag',
+                iconCls: '',
                 iconId: 4,
                 offset: [9,35],
                 scale: 2
@@ -155,6 +155,7 @@ Oskari.clazz.define(
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
         this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
         this.previewSize = 50;
+        this._markerTemplate = jQuery('<svg viewBox="0 0 30 30" width="30" height="30" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" id="svg_1">');
     }, {
         /**
          * @method getValues
@@ -176,6 +177,80 @@ Oskari.clazz.define(
             if (values !== null && values !== undefined) {
                 jQuery.extend(true, this.values, values);
             }
+        },
+        getSvg: function(svgObject){
+            var marker = this._markerTemplate.clone();
+
+            
+            if(!svgObject) {
+                svgObject = Oskari.markers[2];
+            }
+            
+            svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', '#000000');
+            svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', '#000000');
+            
+
+            svgObject.svg = this.__addPositionMarks(svgObject, 30);
+
+            marker.append(svgObject.svg);
+
+            var markerHTML = marker[0].outerHTML;
+            
+            markerHTML = this.__changeSvgAttribute(markerHTML, 'height', 30);
+            markerHTML = this.__changeSvgAttribute(markerHTML, 'width', 30);
+
+            return markerHTML;
+        },
+        /**
+         * Add x and y attributes to svg image
+         * @method  @private __addPositionMarks
+         * @param  {Object} svgObject the svg object
+         * @return {String} svg string
+         */
+        __addPositionMarks: function(svgObject, size) {
+            var htmlObject = jQuery(svgObject.svg);
+            var height = htmlObject.attr('height');
+            var width = htmlObject.attr('width');
+
+            var x = (size - width)/2;
+            var y = (size - height)/2;
+
+            // Check if marker y is center of marker
+            if(svgObject.y == height/2) {
+                //y += height/2 + svgObject.y;
+            }
+
+            if(!isNaN(x) && !isNaN(y)) {
+                htmlObject.attr('x', x);
+                htmlObject.attr('y', y);
+            }
+            return htmlObject[0].outerHTML;
+        },
+        /**
+         * Changes svg path attributes
+         * @method  @private __changePathAttribute description]
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changePathAttribute: function(svg, attr, value){
+           var htmlObject = jQuery(svg);
+           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
+           return htmlObject[0].outerHTML;
+        },
+        /**
+         * Changes svg attribute
+         * @method  @private __changeSvgAttribute
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changeSvgAttribute: function(svg, attr, value){
+            var htmlObject = jQuery(svg);
+            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
+            return htmlObject[0].outerHTML;
         },
         /**
          * @method showForm
@@ -202,14 +277,20 @@ Oskari.clazz.define(
                 buttonName,
                 btnContainer,
                 button;
+            
+            var baseFontIndex = 57344;
             for (buttonName in this.symbolButtons) {
                 if (this.symbolButtons.hasOwnProperty(buttonName)) {
                     btnContainer = this.templateSymbolButton.clone();
                     button = this.symbolButtons[buttonName];
                     btnContainer.addClass(button.iconCls);
+                    
+                    
+                    btnContainer.html(me.getSvg(Oskari.markers[button.iconId]));
+
                     btnContainer.attr('id', button.iconId + 'marker');
                     if (button.iconId === parseInt(me.values.shape, 10)) {
-                        btnContainer.css('border', '2px solid');
+                    //btnContainer.css('border', '2px solid');
                     }
                     // FIXME create function outside loop
                     btnContainer.click(function () {

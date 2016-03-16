@@ -113,7 +113,7 @@ Oskari.clazz.define(
 
             me._sandbox = me.getSandbox();
             me._map = me.getMapModule().getMap();
-
+            
             // creating layer for drawing (if layer not already added)
             if(!me._drawLayers[me._layerId]) {
                 me.addVectorLayer(me._layerId);
@@ -215,7 +215,6 @@ Oskari.clazz.define(
                 isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-//            console.log(JSON.stringify(geojson));
             me._sandbox.notifyAll(event);
         },
         /**
@@ -832,7 +831,7 @@ Oskari.clazz.define(
                positioning : 'bottom-center',
                id: id
            });
-           tooltip.getElement().style.pointerEvents = 'none';
+           tooltip.values_.element.style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
        }

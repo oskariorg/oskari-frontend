@@ -87,6 +87,13 @@ Oskari.clazz.define(
 
         // mapcontrols assumes this to be present before init or start
         me._localization = null;
+
+        me._defaultMarker = {
+            shape: 2,
+            size: 64
+        };
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" id="svg_1">');
+
     }, {
         /**
          * @method init
@@ -1068,6 +1075,101 @@ Oskari.clazz.define(
         },
 /* --------------- /PUBLISHER ------------------------ */
 
+
+/* --------------- SVG MARKER ------------------------ */
+        /**
+         * Gets the svg marker to be used draw marker
+         * @method  @public getSvg
+         * @param  {Object} markerStyle marker style
+         * @return {String} marget svg image format
+         */
+        getSvg: function(markerStyle){
+            var marker = this._markerTemplate.clone();
+
+            var svgObject = Oskari.markers[markerStyle.shape];
+            if(!svgObject) {
+                svgObject = Oskari.markers[this._defaultMarker.shape];
+            }
+            if(markerStyle.color) {
+                svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', markerStyle.color);
+            }
+            if(markerStyle.stroke) {
+                svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', markerStyle.stroke);
+            }
+
+            svgObject.svg = this.__addPositionMarks(svgObject);
+
+            marker.append(svgObject.svg);
+
+            var markerHTML = marker[0].outerHTML;
+            if(markerStyle.size) {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
+            } else {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
+            }
+            
+            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+
+            return svgSrc;
+        },
+
+        /**
+         * Add x and y attributes to svg image
+         * @method  @private __addPositionMarks
+         * @param  {Object} svgObject the svg object
+         * @return {String} svg string
+         */
+        __addPositionMarks: function(svgObject) {
+            var htmlObject = jQuery(svgObject.svg);
+            var defaultCenter = this._defaultMarker.size / 2;
+            var height = htmlObject.attr('height');
+            var width = htmlObject.attr('width');
+
+            var x = defaultCenter - svgObject.x;
+            var y = defaultCenter - height - svgObject.y;
+
+            // Check if marker y is center of marker
+            if(svgObject.y == height/2) {
+                y += height/2 + svgObject.y;
+            }
+
+            if(!isNaN(x) && !isNaN(y)) {
+                htmlObject.attr('x', x);
+                htmlObject.attr('y', y);
+            }
+            return htmlObject[0].outerHTML;
+        },
+        /**
+         * Changes svg path attributes
+         * @method  @private __changePathAttribute description]
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changePathAttribute: function(svg, attr, value){
+           var htmlObject = jQuery(svg);
+           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
+           return htmlObject[0].outerHTML;
+        },
+        /**
+         * Changes svg attribute
+         * @method  @private __changeSvgAttribute
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changeSvgAttribute: function(svg, attr, value){
+            var htmlObject = jQuery(svg);
+            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
+            return htmlObject[0].outerHTML;
+        },
+/* --------------- /SVG MARKER ------------------------ */
+
+
 /* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
          * Removes all the css classes which respond to given regex from all elements
@@ -1163,6 +1265,7 @@ Oskari.clazz.define(
                 return null;
             }
         },
+
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme

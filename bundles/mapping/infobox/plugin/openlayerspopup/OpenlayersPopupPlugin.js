@@ -645,6 +645,7 @@ Oskari.clazz.define(
             // deletes reference to the same id will work next time also
             var pid,
                 popup,
+                event,
             	sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
@@ -655,7 +656,7 @@ Oskari.clazz.define(
                             position.lat !== popup.lonlat.lat) {
                             popup.popup.setPosition(undefined);  //destroy();
                             delete this._popups[pid];
-                            var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                            event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
                         	sandbox.notifyAll(event);
                         }
                     }
@@ -668,7 +669,7 @@ Oskari.clazz.define(
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
                 }
                 delete this._popups[id];
-                var event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+                event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
             	sandbox.notifyAll(event);
             }
             // else notify popup not found?
