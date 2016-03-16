@@ -470,6 +470,13 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
+
+                // Clean layer data if not in scale and manual refresh
+                if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) && layers[i].isManualRefresh()) {
+                    me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
+                    continue;
+                }
+
                 if (!layers[i].hasFeatureData() || !layers[i].isVisible()) {
                     continue;
                 }
@@ -1742,6 +1749,15 @@ Oskari.clazz.define(
                 stripbox[i] = bbox[i].toPrecision(13);
             }
             return stripbox.join(',');
+        },
+        OLlayerVisibility: function (layer) {
+            var    me = this,
+                mapLayers = me.getMapModule().getOLMapLayers(layer.getId()),
+                mapLayer = mapLayers.length ? mapLayers[0] : null;
+            if(mapLayer){
+                return mapLayer.getVisibility();
+            }
+            return layer.isVisible();
         },
         hasUI: function() {
             return false;
