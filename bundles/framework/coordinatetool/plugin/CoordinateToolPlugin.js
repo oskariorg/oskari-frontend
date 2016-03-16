@@ -160,6 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if(me._toolOpen) {
                 el.removeClass('active');
                 me._toolOpen = false;
+                me._popup.close(true);
             } else {
                 el.addClass('active');
                 me._toolOpen = true;
