@@ -113,7 +113,7 @@ Oskari.clazz.define(
 
             me._sandbox = me.getSandbox();
             me._map = me.getMapModule().getMap();
-            
+
             // creating layer for drawing (if layer not already added)
             if(!me._drawLayers[me._layerId]) {
                 me.addVectorLayer(me._layerId);
@@ -831,7 +831,7 @@ Oskari.clazz.define(
                positioning : 'bottom-center',
                id: id
            });
-           tooltip.values_.element.style.pointerEvents = 'none';
+           tooltip.getElement().style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
        }
