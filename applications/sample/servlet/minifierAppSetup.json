@@ -217,20 +217,14 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Koordinaattin�ytt�",
-			"bundleinstancename": "coordinatedisplay",
-			"fi": "coordinatedisplay",
-			"sv": "coordinatedisplay",
-			"en": "coordinatedisplay",
-			"bundlename": "coordinatedisplay",
-			"metadata": {
-				"Import-Bundle": {
-					"coordinatedisplay": {
-						"bundlePath": "../../../packages/framework/bundle/"
+			"bundlename" : "coordinatetool",
+			"bundleinstancename" : "coordinatetool",
+			"metadata" : {
+				"Import-Bundle" : {
+					"coordinatetool" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		},  {
 			"instanceProps": {},
@@ -267,14 +261,14 @@
 		},  {
 			"instanceProps": {},
 			"title": "Karttajulkaisu",
-			"bundleinstancename": "publisher",
+			"bundleinstancename": "publisher2",
 			"fi": "jquery",
 			"sv": "jquery",
 			"en": "jquery",
-			"bundlename": "publisher",
+			"bundlename": "publisher2",
 			"metadata": {
 				"Import-Bundle": {
-					"publisher": {
+					"publisher2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				},
@@ -575,6 +569,16 @@
                 }
             }
         }, {
+			"bundlename" : "heatmap",
+			"bundleinstancename" : "heatmap",
+			"metadata" : {
+				"Import-Bundle" : {
+					"heatmap" : {
+						"bundlePath" : "../../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
             "title": "Timeseries",
             "bundlename": "timeseries",
             "metadata": {
@@ -600,5 +604,5 @@
 				"Require-Bundle-Instance": []
 			}
 		}
-	]
+    ]
 }

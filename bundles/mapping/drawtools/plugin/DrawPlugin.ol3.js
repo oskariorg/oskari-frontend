@@ -105,7 +105,7 @@ Oskari.clazz.define(
             me._options = options;
             me._layerId = shape + 'DrawLayer';
             if(options.modifyControl===undefined) {
-            	options.modifyControl = true;
+                options.modifyControl = true;
             }
             me.setDefaultStyle(options.style);
 
@@ -334,8 +334,8 @@ Oskari.clazz.define(
             var me = this;
 
             me._draw[me._id].on('drawstart', function(evt) {
-            	// stop modify iteraction while draw-mode is active
-            	if(options.modifyControl) {
+                // stop modify iteraction while draw-mode is active
+                if(options.modifyControl) {
                      me.removeInteractions(me._modify, me._id);
                 }
                 me._mode = 'draw';
@@ -592,15 +592,15 @@ Oskari.clazz.define(
         removeInteractions : function(iteraction, id) {
             var me = this;
             if(!id || id===undefined || id === '') {
-            	_.each(iteraction, function (key) {
-                	me._map.removeInteraction(key);
-            	});
+                _.each(iteraction, function (key) {
+                    me._map.removeInteraction(key);
+                });
             } else {
-            	me._map.removeInteraction(iteraction[id]);
+                me._map.removeInteraction(iteraction[id]);
             }
         },
         setVariablesToNull: function() {
-        	this._shape = null;
+            this._shape = null;
             this._buffer= null;
             this._id = null;
             this._sketch = null;
@@ -832,7 +832,8 @@ Oskari.clazz.define(
                positioning : 'bottom-center',
                id: id
            });
-           tooltip.values_.element.style.pointerEvents = 'none';
+
+           tooltip.getElement().style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
        }

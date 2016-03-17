@@ -370,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 margin = 10.0;
                 scaleCoef = mapScale/1000;
 
-            if(mmMeasures.length != 2){
+            if(mmMeasures.length !== 2){
                 return mapScale;
             }
 

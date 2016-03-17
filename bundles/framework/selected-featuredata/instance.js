@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @class Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance
 *
 * Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance.
@@ -104,12 +104,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * @param  {[Object]} params     [params]
          */
         resultHandler: function(content, data, formatters, params){
-            var me = this;
             // show infobox
 
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
-            
+
             if(flyout.isFlyoutVisible() && content.length > 0){
                     flyout.createUI(content, data);
             }else{
@@ -144,7 +143,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     callback : function(params) {
 
                         flyout.createUI(params.content, params.data);
-                        
+
                         var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
                         Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
                     }
@@ -175,7 +174,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
 
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
@@ -202,7 +200,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     // not me -> do nothing
                     return;
                 }
-                if (event.getViewState() == 'close') {
+                if (event.getViewState() === 'close') {
                      this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
                 }
                 if (doOpen) {
@@ -214,7 +212,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     }
                 }
             },
-            'MapClickedEvent': function (event){
+            'MapClickedEvent': function (){
                 //if show many or one accordions is clicked
                 if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
                     this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
