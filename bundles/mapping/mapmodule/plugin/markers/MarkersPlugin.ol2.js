@@ -581,7 +581,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 size,
                 color,
-                conSrc = me.getDefaultIconUrl();
+                iconSrc = me.getDefaultIconUrl();
 
             if (typeof Raphael !== 'undefined') {
                 // Handling the size parameter

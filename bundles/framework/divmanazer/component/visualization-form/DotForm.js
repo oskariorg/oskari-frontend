@@ -202,14 +202,14 @@ Oskari.clazz.define(
                 buttonName,
                 btnContainer,
                 button;
-            
+
             var baseFontIndex = 57344;
             for (buttonName in this.symbolButtons) {
                 if (this.symbolButtons.hasOwnProperty(buttonName)) {
                     btnContainer = this.templateSymbolButton.clone();
                     button = this.symbolButtons[buttonName];
                     btnContainer.addClass(button.iconCls);
-                    
+
                     var svgObj = jQuery(Oskari.markers[button.iconId].svg);
                     svgObj.find('path').attr({
                         fill: '#000000',
