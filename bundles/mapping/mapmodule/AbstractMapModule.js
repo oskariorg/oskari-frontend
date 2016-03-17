@@ -92,7 +92,7 @@ Oskari.clazz.define(
             shape: 2,
             size: 64
         };
-        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" id="svg_1">');
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg">');
 
     }, {
         /**
@@ -1127,13 +1127,11 @@ Oskari.clazz.define(
             var height = htmlObject.attr('height');
             var width = htmlObject.attr('width');
 
-            var x = defaultCenter - svgObject.x;
-            var y = defaultCenter - height - svgObject.y;
+            var dx = svgObject.x || 16;
+            var dy = svgObject.y || 16;
 
-            // Check if marker y is center of marker
-            if(svgObject.y == height/2) {
-                y += height/2 + svgObject.y;
-            }
+            var x = defaultCenter - dx;
+            var y = defaultCenter - (defaultCenter - dy);
 
             if(!isNaN(x) && !isNaN(y)) {
                 htmlObject.attr('x', x);

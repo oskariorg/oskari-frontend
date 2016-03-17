@@ -155,7 +155,6 @@ Oskari.clazz.define(
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
         this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
         this.previewSize = 50;
-        this._markerTemplate = jQuery('<svg viewBox="0 0 30 30" width="30" height="30" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" id="svg_1">');
     }, {
         /**
          * @method getValues
@@ -177,75 +176,6 @@ Oskari.clazz.define(
             if (values !== null && values !== undefined) {
                 jQuery.extend(true, this.values, values);
             }
-        },
-        getSvg: function(svgObject){
-            var marker = this._markerTemplate.clone();
-
-            
-            if(!svgObject) {
-                svgObject = Oskari.markers[2];
-            }
-            
-            svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', '#000000');
-            svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', '#000000');
-            
-
-            svgObject.svg = this.__addPositionMarks(svgObject, 30);
-
-            marker.append(svgObject.svg);
-
-            var markerHTML = marker[0].outerHTML;
-            
-            markerHTML = this.__changeSvgAttribute(markerHTML, 'height', 30);
-            markerHTML = this.__changeSvgAttribute(markerHTML, 'width', 30);
-
-            return markerHTML;
-        },
-        /**
-         * Add x and y attributes to svg image
-         * @method  @private __addPositionMarks
-         * @param  {Object} svgObject the svg object
-         * @return {String} svg string
-         */
-        __addPositionMarks: function(svgObject, size) {
-            var htmlObject = jQuery(svgObject.svg);
-            var height = htmlObject.attr('height');
-            var width = htmlObject.attr('width');
-
-            var x = (size - width)/2;
-            var y = (size - height)/2;
-
-            if(!isNaN(x) && !isNaN(y)) {
-                htmlObject.attr('x', x);
-                htmlObject.attr('y', y);
-            }
-            return htmlObject[0].outerHTML;
-        },
-        /**
-         * Changes svg path attributes
-         * @method  @private __changePathAttribute description]
-         * @param  {String} svg   svg format
-         * @param  {String} attr  attribute name
-         * @param  {String} value attribute value
-         * @return {String} svg string
-         */
-        __changePathAttribute: function(svg, attr, value){
-           var htmlObject = jQuery(svg);
-           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
-           return htmlObject[0].outerHTML;
-        },
-        /**
-         * Changes svg attribute
-         * @method  @private __changeSvgAttribute
-         * @param  {String} svg   svg format
-         * @param  {String} attr  attribute name
-         * @param  {String} value attribute value
-         * @return {String} svg string
-         */
-        __changeSvgAttribute: function(svg, attr, value){
-            var htmlObject = jQuery(svg);
-            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
-            return htmlObject[0].outerHTML;
         },
         /**
          * @method showForm
@@ -280,8 +210,16 @@ Oskari.clazz.define(
                     button = this.symbolButtons[buttonName];
                     btnContainer.addClass(button.iconCls);
                     
-                    
-                    btnContainer.html(me.getSvg(Oskari.markers[button.iconId]));
+                    var svgObj = jQuery(Oskari.markers[button.iconId].svg);
+                    svgObj.find('path').attr({
+                        fill: '#000000',
+                        stroke: '#000000'
+                    });
+                    svgObj.attr({
+                        x: 0,
+                        y: 0
+                    });
+                    btnContainer.html(svgObj[0].outerHTML);
 
                     btnContainer.attr('id', button.iconId + 'marker');
                     if (button.iconId === parseInt(me.values.shape, 10)) {
