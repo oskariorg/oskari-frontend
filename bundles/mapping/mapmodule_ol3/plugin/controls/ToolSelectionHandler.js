@@ -61,12 +61,150 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 type = 'LineString';
                 id = 'measureline';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                                   allowMultipleDrawing: 'single'}]);
+                     showMeasureOnMap: true}]);
+//                me.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', ['PolygonDrawLayer', false]);
             } else if (toolName === 'map_control_measure_area_tool') {
                 type = 'Polygon';
                 id = 'measurearea';
-                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                                   allowMultipleDrawing: 'single'}]);
+                
+                me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {showMeasureOnMap: true}]);
+    
+//                var geojsonObject = {
+//                        'type': 'FeatureCollection',
+//                        'crs': {
+//                          'type': 'name',
+//                          'properties': {
+//                            'name': 'EPSG:3067'
+//                          }
+//                        },
+//                        'features': [
+//                          {
+//                            'type': 'Feature',
+//                            'geometry': {
+//                              'type': 'Point',
+//                              'coordinates': [488704, 6939136]
+//                            },
+//                            'properties': {
+//                              'kohteenTyyppi': 'rakennus'
+//                            }
+//                          }
+//                        ]
+//                      };        
+                var geojsonObject = {
+                		'id': 'olenPiste',
+                	    'type': 'FeatureCollection',
+                	    'crs': {
+                	      'type': 'name',
+                	      'properties': {
+                	        'name': 'EPSG:3067'
+                	      }
+                	    },
+                	    'features': [
+                	      {
+                	        'type': 'Feature',
+                	        'geometry': {
+                	          'type': 'Point',
+                	          'coordinates': [488704, 6939136]
+                	        },
+                	        'properties': {
+                	          'id': 'olenPiste',
+                	          'species': 'parcel1'
+                	        }
+                	      }
+                	    ]
+                	  };
+                
+                  var params = [geojsonObject, {
+                		  layerId: 'layer1',
+                          clearPrevious: false,
+                          centerTo: false,
+                          cursor: 'zoom-in',
+                          featureStyle: {
+                              fill: {
+                                  color: 'rgba(0,0,0,1)'
+                              },
+                              stroke : {
+                                  color: '#ff0000',
+                                  width: 5
+                              },          
+                              image : {
+                                  radius: 40,
+                                  fill : {
+                                      color : 'rgba(255,0,0,1)'
+                                  }
+                            	  //,
+//                                  shape: 1,
+//                                  size: 1                                  
+                              },
+                              text : {
+                                  scale : 1.3,
+                                  fill : {
+                                      color : 'rgba(0,0,0,1)'
+                                  },
+                                  stroke : {
+                                      color : 'rgba(255,255,255,1)',
+                                      width : 2
+                                  }                                 
+                              }                            
+                          }
+                  }];
+//                var options = {
+//                	    'minResolution': 0,
+//                	    'maxResolution': 1000
+//                	  };
+//                	  var params = [geojsonObject, {
+//                	    layerId: 'layer1',
+//                	    clearPrevious: false,
+//                	    layerOptions: options,
+//                	    centerTo: false,
+//                	    featureStyle: {
+//                	      stroke: {
+//                	        color : 'rgba(255,0,0,1)',
+//                	        width: 3},
+//                	      image : {
+//                              radius: 40,
+//                              fill : {
+//                                  color : 'rgba(255,0,0,1)'
+//                              }
+//                                                       
+//                          },
+//                	      text : {
+//                	        scale : 2,
+//                	        fill : {
+//                	          color : 'rgba(0,0,0,1)'
+//                	        },
+//                	        stroke : {
+//                	          color : 'rgba(255,255,255,1)',
+//                	          width : 2
+//                	        },
+//                	        labelText: 'blaa blaa'
+//                	      }
+//                	    },
+//                	    cursor: 'pointer',
+//                	    prio: 4,
+//                	    minScale: 1000
+//                	  }];
+//                  Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
+                  var layers = {layer: ['layer1']};
+                  var features = {'id': ['olenPiste']};
+//                  Oskari.getSandbox().postRequestByName('MapModulePlugin.ZoomToFeaturesRequest',[layers, features]);
+                  
+                  var data = {
+                		    x: 373285,
+                		    y: 6702913,
+                		    msg : 'testi\n uuuu',
+                		    shape: 2,
+                		    size: 3,
+                		    color: 'bf2652',
+                		    stroke: 'bbbbbb'
+                		};
+                  Oskari.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest', [data, "marker_id"]);
+                  /*var x = 373285,
+                      y = 6702913,
+                      zoomLevel = 12;
+                  Oskari.getSandbox().postRequestByName(
+                      'MapMoveRequest', [x, y, zoomLevel]
+                  );*/
             }
         }
     }, {

@@ -303,18 +303,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
+         * Transforms coordinates from srs projection to the targerSRS projection.
          * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @param {String} targetsrs projection to transform to like "EPSG:4326" (optional, defaults to map projection)
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
+        transformCoordinates: function (pLonlat, srs, targetSRS) {
+            if(!targetSRS) {
+                targetSRS = this.getProjection();
+            }
+            if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
             // TODO: check that srs definition exists as in OL2
             //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
-            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, this.getProjection());
+            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
             return {
               lon : transformed[0],
               lat : transformed[1]
@@ -660,7 +664,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __changeSvgAttribute: function(svg, attr, value){
             var htmlObject = jQuery(svg);
             htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
-            console.log(htmlObject[0].outerHTML);
             return htmlObject[0].outerHTML;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */

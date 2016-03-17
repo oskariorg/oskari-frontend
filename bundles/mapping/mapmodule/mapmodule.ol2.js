@@ -316,13 +316,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projection.
+         * Transforms coordinates from srs projection to the targerSRS projection.
          * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @param {String} targetsrs projection to transform to like "EPSG:4326" (optional, defaults to map projection)
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
+        transformCoordinates: function (pLonlat, srs, targetSRS) {
+        console.log(pLonlat);
+            if(!targetSRS) {
+                targetSRS = this.getProjection();
+            }
+            if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
             var isProjectionDefined = Proj4js.defs[srs];
@@ -330,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
             }
             var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
-            var transformed = tmp.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
+            var transformed = tmp.transform(new OpenLayers.Projection(srs), new OpenLayers.Projection(targetSRS));
 
             return {
                 lon : transformed.lon,
@@ -473,6 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.strokeWidth = styleDef.stroke.width;
                 }
             }
+
             if (styleDef.image.radius) {
                 if(styleDef.image.radius) {
                     olStyle.pointRadius = styleDef.image.radius;
@@ -488,11 +494,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
           */
           if(styleDef.text.font) {
             var split = styleDef.text.font.split(" ");
+            if(split[1]) {
+               olStyle.fontSize = split[1];
+            }
             if(split[0]) {
                 olStyle.fontWeight = split[0];
-            }
-            if(split[1]) {
-                olStyle.fontSize = split[1];
             }
             if(split[2]) {
                 olStyle.fontFamily = split[2];
@@ -525,6 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
           } else if (styleDef.text.labelProperty) {
              olStyle.label = "${"+styleDef.text.labelProperty+"}";
           }
+          console.log(olStyle);
             return olStyle;
         },
         __getSVG: function(markerStyle) {
