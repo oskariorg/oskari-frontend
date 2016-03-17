@@ -215,11 +215,6 @@ Oskari.clazz.define(
             var x = (size - width)/2;
             var y = (size - height)/2;
 
-            // Check if marker y is center of marker
-            if(svgObject.y == height/2) {
-                //y += height/2 + svgObject.y;
-            }
-
             if(!isNaN(x) && !isNaN(y)) {
                 htmlObject.attr('x', x);
                 htmlObject.attr('y', y);
