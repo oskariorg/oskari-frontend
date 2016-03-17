@@ -92,7 +92,7 @@ Oskari.clazz.define(
             shape: 2,
             size: 64
         };
-        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg">');
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" />');
 
     }, {
         /**
