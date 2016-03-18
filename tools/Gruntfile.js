@@ -13,27 +13,6 @@ module.exports = function (grunt) {
         compileAppSetupToStartupSequence: {
             files: ['../tests/minifierFullMapAppSetup.json']
         },
-        watch: {
-            appsetup: {
-                files: '<%= compileAppSetupToStartupSequence.files %>',
-                tasks: ['compileAppSetupToStartupSequence']
-            },
-            src: {
-                //            files: '<config:lint.files>',
-                files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
-                // uncommented as validate causes unnecessary delay
-                //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-                tasks: ['compileDev', 'karma:dev:run']
-            },
-            test: {
-                files: ['../tests/**/*.js'],
-                tasks: ['karma:dev:run']
-            },
-            sass: {
-                files: ['../bundles/**/scss/*.scss', '../applications/**/scss/*.scss'],
-                tasks: ['compileDev']
-            }
-        },
         sprite: {
             options: {
                 iconDirectoryPath: '../applications/sample/servlet/icons',
@@ -63,28 +42,6 @@ module.exports = function (grunt) {
                 defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },
-        karma: {
-            options: {
-                configFile: 'karma.conf.js'
-            },
-            dev: {
-                background: true
-            },
-            ci: {
-                browsers: ['PhantomJS'],
-                proxies: {
-                    '/': 'http://demo.oskari.org/'
-                },
-                reporters: ['junit'],
-                junitReporter: {
-                    outputFile: 'test-results.xml'
-                },
-                singleRun: true
-            },
-            test: {
-                configFile: 'src.conf.js'
-            }
-        },
         clean: {
             options: {
                 force: true
@@ -99,15 +56,6 @@ module.exports = function (grunt) {
                     outdir: '../oskari.org/api/<%= version %>',
                     themedir: '../docs/yui/theme'
                 }
-            }
-        },
-        mddocs: {
-            options: {
-                'toolsPath': process.cwd(),
-                'docsPath': '../docs',
-                'docsurl': '/Oskari/<%= version %>docs/',
-                'apiurl': '/Oskari/<%= version %>api/classes/',
-                'outdir': '../dist/<%= version %>docs/'
             }
         },
         validateLocalizationJSON: {
@@ -139,46 +87,6 @@ module.exports = function (grunt) {
             target: {
                 expand: true,
                 src: ['../bundles/*/*/']
-            }
-        },
-        compress: {
-            zip: {
-                options: {
-                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.zip',
-                    mode: 'zip',
-                    pretty: true
-                },
-                files: [
-                    // Copy all files under the application template folder
-                    {
-                        cwd: 'oskari_application_template/',
-                        src: '**/*',
-                        dest: '/',
-                        expand: true
-                    },
-                    // Copy all minified oskari files
-                    {
-                        cwd: '../dist/<%= versionNum %>/<%= compress.options.fullMap %>',
-                        src: 'oskari*',
-                        dest: '/min/',
-                        expand: true
-                    }, {
-                        src: '../bundles/bundle.js',
-                        dest: '/',
-                    // The following does not exist.
-                    // }, {
-                    //     src: '../packages/openlayers/startup.js',
-                    //     dest: '/',
-                    }
-                ]
-            },
-            tgz: {
-                options: {
-                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.tgz',
-                    mode: 'tgz',
-                    pretty: true
-                },
-                files: '<%= compress.zip.files %>'
             }
         },
 
@@ -240,41 +148,41 @@ module.exports = function (grunt) {
             }
         },
         minifyPolymer: {
-        default: {
-            files: [{
-                expand: true,
-                cwd: '../',
-                src: ['bundles/statistics/statsgrid/**/*.html'],
-                dest: 'Oskari/'
-            }]
-        }
+            default: {
+                files: [{
+                    expand: true,
+                    cwd: '../',
+                    src: ['bundles/statistics/statsgrid/**/*.html'],
+                    dest: 'Oskari/'
+                }]
+            }
         },
         minifyPolymerCSS: {
-        default: {
-            files: [{
-                expand: true,
-                cwd: '../',
-                src: ['bundles/statistics/statsgrid/**/*.css'],
-                dest: 'Oskari/'
-            }]
-        }
+            default: {
+                files: [{
+                    expand: true,
+                    cwd: '../',
+                    src: ['bundles/statistics/statsgrid/**/*.css'],
+                    dest: 'Oskari/'
+                }]
+            }
         },
         vulcanize: {
-        default: {
-            options: {
-                abspath: '.',
-                inlineScripts: true,
-                inlineCss: true,
-                stripComments: true,
-                excludes: ["Oskari/libraries/requirejs/require-2.1.15.js"]
-            },
-            files: {
-                '../bundles/statistics/statsgrid/vulcanized.html': [
-                    'Oskari/bundles/statistics/statsgrid/requireJsLibs.html',
-                    'Oskari/bundles/statistics/statsgrid/oskari-statsview.html'
-                ]
+            default: {
+                options: {
+                    abspath: '.',
+                    inlineScripts: true,
+                    inlineCss: true,
+                    stripComments: true,
+                    excludes: ["Oskari/libraries/requirejs/require-2.1.15.js"]
+                },
+                files: {
+                    '../bundles/statistics/statsgrid/vulcanized.html': [
+                        'Oskari/bundles/statistics/statsgrid/requireJsLibs.html',
+                        'Oskari/bundles/statistics/statsgrid/oskari-statsview.html'
+                    ]
+                }
             }
-        }
         }
     });
 
@@ -282,22 +190,19 @@ module.exports = function (grunt) {
     // Actually load this plugin's task(s).
     grunt.loadTasks('tasks');
 
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-trimtrailingspaces');
+
     grunt.loadNpmTasks('grunt-minify-polymer');
     grunt.loadNpmTasks('grunt-vulcanize');
 
     // Default task(s).
-    grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev']);
-    grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
+    grunt.registerTask('default', ['build']);
     grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:stats', 'vulcanize']);
+
     grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
     grunt.registerTask('devRelease', 'Release build without minification',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
@@ -307,6 +212,7 @@ module.exports = function (grunt) {
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
             grunt.task.run(nonMinifiedTaskStr, releaseManualTaskStr);
     });
+
     grunt.registerTask('release', 'Release build',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
             var minifyStatsTaskStr = 'minifyStats:' + (version || '') + ':' + (configs || '') + ':' +
@@ -314,69 +220,6 @@ module.exports = function (grunt) {
                 releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
             grunt.task.run(minifyStatsTaskStr, releaseManualTaskStr);
-    });
-
-    // Default task.
-    //    grunt.registerTask('default', 'watch testacularServer:dev');
-    //    grunt.registerTask('default', 'testacularServer:dev watch');
-    //    grunt.registerTask('default', 'lint test concat min');
-    grunt.registerTask('compileDev', 'Developer compile', function () {
-        var options = this.options();
-        // set task configs
-        grunt.config.set('compile.dev.options', options);
-        grunt.task.run('compile');
-
-        grunt.config.set(
-            'compileAppCSS.dev.options', {
-                appSetupFile: '../applications/sample/servlet/minifierAppSetup.json',
-                dest: options.dest
-            }
-        );
-        grunt.task.run('compileAppCSS');
-    });
-
-    grunt.registerTask('compileAppSetupToStartupSequence', function () {
-        var done = this.async(),
-            starttime = (new Date()).getTime(),
-            files,
-            outputFilename,
-            fs = require('fs'),
-            cfgFile,
-            startupSequence,
-            definedBundles = {},
-            bundle,
-            result = 'var _defaultsStartupSeq = ',
-            i,
-            ilen;
-
-        grunt.log.writeln('Running compile AppSetup to startupSequence...');
-
-        // read files and parse output name
-        files = grunt.config(this.name).files[0];
-        outputFilename = files.replace('.json', '.opts.js');
-
-        // read file
-        cfgFile = fs.readFileSync(files, 'utf8');
-
-        // convert to usable format
-        startupSequence = JSON.parse(cfgFile).startupSequence;
-
-        // loop startup sequence bundles and add to hashmap of defined bundles
-        for (i = 0, ilen = startupSequence.length; i < ilen; i += 1) {
-            bundle = startupSequence[i];
-            // Add here code to change bundlePath to "ignored/butRequiredToBeInMinifierFullMapAppSetupInTests/packages/framework/bundle/"
-            // or something similar as the bundlePaths are not used with minifierAppSetup
-            definedBundles[bundle.bundlename] = bundle;
-        }
-
-        // add stringified bundle definitions
-        result += JSON.stringify(definedBundles);
-
-        // write file to be used in testing as is
-        fs.writeFileSync(outputFilename, result, 'utf8');
-
-        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + (((new Date()).getTime() - starttime) / 1000) + ' seconds');
-        done();
     });
 
     grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
@@ -532,9 +375,6 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
-        if (!skipDocumentation) {
-//            grunt.task.run('oskaridoc');
-        }
 
         if (grunt.config.get('compress.options.fullMap')) {
             grunt.task.run('compress');
@@ -645,7 +485,6 @@ module.exports = function (grunt) {
                 src: '**/*.scss',
                 dest: '../bundles/',
                 rename: function (dest, src) {
-                    
                     var target = dest + src.replace('/scss/', '/resources/css/');
                     grunt.log.writeln('Target: ' + target);
                     return target;
