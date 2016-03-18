@@ -102,7 +102,7 @@ Oskari.clazz.define(
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
         this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
-        this._previewTemplate = jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"><svg viewBox="0 0 32 32" width="32" height="32" x="9" y="9" id="marker"></svg></svg>');
+        this._previewTemplate = jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><svg viewBox="0 0 32 32" width="32" height="32" x="9" y="9" id="marker"></svg></svg>');
         this._previewSize = 50;
     }, {
         /**
@@ -167,11 +167,13 @@ Oskari.clazz.define(
                     fill: '#000000',
                     stroke: '#000000'
                 });
+
                 svgObj.attr({
                     x: 0,
                     y: 0
                 });
-                btnContainer.html(svgObj[0].outerHTML);
+
+                btnContainer.html(svgObj.outerHTML());
 
                 if(i == this.defaultValues.shape) {
                     btnContainer.css('border', '2px solid');

@@ -575,11 +575,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 var size = (styleDef.image && styleDef.image.size) ? styleDef.image.size : this._defaultMarker.size;
 
             	var svg = me.getSvg(styleDef.image);
-                image = new ol.style.Icon({
-	              	src: svg,
-                    size: [size,size]
-                });
-              return image;
+                if(svg) {
+                    image = new ol.style.Icon({
+	              	    src: svg,
+                        size: [size,size]
+                    });
+                    return image;
+                }
             }
             if(styleDef.image.radius) {
                 image.radius = styleDef.image.radius;

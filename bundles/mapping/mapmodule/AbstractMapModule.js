@@ -92,7 +92,7 @@ Oskari.clazz.define(
             shape: 2,
             size: 64
         };
-        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" />');
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
     }, {
         /**
@@ -1084,24 +1084,43 @@ Oskari.clazz.define(
          * @return {String} marget svg image format
          */
         getSvg: function(markerStyle){
-            var marker = this._markerTemplate.clone();
+            var sandbox = this.getSandbox(),
+                marker = this._markerTemplate.clone(),
+                svgObject = null;
 
-            var svgObject = Oskari.markers[markerStyle.shape];
-            if(!svgObject) {
-                svgObject = Oskari.markers[this._defaultMarker.shape];
+            // marker shape is number --> find it form Oskari.markers
+            if(!isNaN(markerStyle.shape)) {
+                svgObject = Oskari.markers[markerStyle.shape];
+                if(!svgObject) {
+                    svgObject = Oskari.markers[this._defaultMarker.shape];
+                }
+
+                if(markerStyle.color) {
+                    svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', markerStyle.color);
+                }
+                if(markerStyle.stroke) {
+                    svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', markerStyle.stroke);
+                }
             }
-            if(markerStyle.color) {
-                svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', markerStyle.color);
+            // marker shape is svg
+            else if(markerStyle.shape.toLowerCase().substring(0,4) === '<svg') {
+                svgObject = {
+                    svg: markerStyle.shape,
+                    x: markerStyle.x,
+                    y: markerStyle.y
+                };
             }
-            if(markerStyle.stroke) {
-                svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', markerStyle.stroke);
-            }
+            // marker icon not found
+            else {
+                sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
+                return null;
+            }            
 
             svgObject.svg = this.__addPositionMarks(svgObject);
 
             marker.append(svgObject.svg);
-
-            var markerHTML = marker[0].outerHTML;
+            
+            var markerHTML = marker.outerHTML();
             if(markerStyle.size) {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
@@ -1137,7 +1156,8 @@ Oskari.clazz.define(
                 htmlObject.attr('x', x);
                 htmlObject.attr('y', y);
             }
-            return htmlObject[0].outerHTML;
+
+            return htmlObject.outerHTML();
         },
         /**
          * Changes svg path attributes
@@ -1149,8 +1169,14 @@ Oskari.clazz.define(
          */
         __changePathAttribute: function(svg, attr, value){
            var htmlObject = jQuery(svg);
-           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
-           return htmlObject[0].outerHTML;
+           var sandbox = this.getSandbox();
+           htmlObject.find('path').attr(attr,value);
+
+           if(htmlObject.find('path').length>1) {
+              sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+           }
+           
+           return htmlObject.outerHTML();
         },
         /**
          * Changes svg attribute
@@ -1162,8 +1188,9 @@ Oskari.clazz.define(
          */
         __changeSvgAttribute: function(svg, attr, value){
             var htmlObject = jQuery(svg);
-            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
-            return htmlObject[0].outerHTML;
+            var sandbox = this.getSandbox();
+            htmlObject.attr(attr,value);
+            return htmlObject.outerHTML();
         },
 /* --------------- /SVG MARKER ------------------------ */
 

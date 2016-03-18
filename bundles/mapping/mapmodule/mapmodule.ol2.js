@@ -456,7 +456,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
             if(!isNaN(styleDef.image.shape)) {
-                olStyle.externalGraphic = this.getSvg(styleDef.image);
+                var svg = this.getSvg(styleDef.image);
+                if(svg) {
+                    olStyle.externalGraphic = svg;
+                }
             }
             if(styleDef.image.size) {
                 olStyle.graphicWidth = styleDef.image.size;
