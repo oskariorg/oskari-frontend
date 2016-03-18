@@ -571,7 +571,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __getImageStyle: function(styleDef) {
             var me = this;
             var image = {};
-            if(!isNaN(styleDef.image.shape)) {
+            if(styleDef.image.shape) {
                 var size = (styleDef.image && styleDef.image.size) ? styleDef.image.size : this._defaultMarker.size;
 
             	var svg = me.getSvg(styleDef.image);
