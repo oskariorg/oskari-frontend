@@ -763,7 +763,7 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        var ollayer = this.getOLMapLayer(layerId);
+                        var ollayer = me.getOLMapLayer(layer);
                         tiles = ollayer.getSource().getNonCachedGrid(grid);
                         //tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
