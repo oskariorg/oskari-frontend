@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             y: 0,
             color: 'ffde00',
             msg: '',
-            shape: 2,
+            shape: 4,
             size: 1,
             transient: false
         };
@@ -474,13 +474,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
                     iconSrc = data.iconUrl;
                     if (jQuery.isNumeric(markerData.size)) {
-                        size = data.size
+                        size = data.size;
                     } else {
                         size = me._defaultIconUrlSize;
                     }
                 } else {
                     // Construct image
-                    //iconSrc = this.constructImage(data);
                     size = this._getSizeInPixels(data.size);
                 }
             } else {
@@ -621,7 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 } else {
                     color = me._defaultData.color;
                 }
-                console.log(charIndex);
+
                 // Create image
                 paper.print(
                     0, 55 * size / 100,
