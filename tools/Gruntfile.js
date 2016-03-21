@@ -21,14 +21,7 @@ module.exports = function (grunt) {
                 spritePathInCSS: '../icons'
             }
         },
-        compileDev: {
-            options: {
-                appSetupFile: '../tests/minifierFullMapAppSetup.json',
-                dest: '../dist/',
-                concat: true
-            }
-        },
-        release: {
+        releaseManual: {
             options: {
                 configs: '../applications/sample/servlet/minifierAppSetup.json,../applications/sample/servlet_published_ol3/minifierAppSetup.json',
                 defaultIconDirectoryPath: '../applications/default/icons/'
@@ -46,17 +39,8 @@ module.exports = function (grunt) {
             options: {
                 force: true
             },
-            build: ['../build'],
+            build: ['../build', 'Oskari', '../bundles/statistics/statsgrid/vulcanized.html'],
             dist: ['../dist']
-        },
-        oskaridoc: {
-            dist: {
-                options: {
-                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../oskari.org/api/<%= version %>',
-                    themedir: '../docs/yui/theme'
-                }
-            }
         },
         validateLocalizationJSON: {
             target: {
@@ -218,7 +202,7 @@ module.exports = function (grunt) {
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
                 releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
-            grunt.task.run(minifyStatsTaskStr, releaseManualTaskStr);
+            grunt.task.run(/*minifyStatsTaskStr, */releaseManualTaskStr);
     });
 
     grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
@@ -241,12 +225,12 @@ module.exports = function (grunt) {
         if(!version) {
             version  = new Date().toISOString().replace(/:/g,'');
             grunt.log.writeln('No version specified, using current timestamp: ' + version + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.configs && !configs) {
             configs = options.configs;
             grunt.log.writeln('No setup specified, using default: ' + configs + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
             defaultIconDirectoryPath = options.defaultIconDirectoryPath;
