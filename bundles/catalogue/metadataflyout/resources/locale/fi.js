@@ -17,6 +17,7 @@ Oskari.registerLocalization(
             "inspire": "Inspire-metatiedot",
             "jhs": "JHS 158 -metatiedot",
             "quality": "Laatutiedot",
+            "actions":"Toiminnot",
             "xml": "ISO 19139 XML -tiedosto",
             "map": "Kattavuus",
             "pdf": "Tuloste",
@@ -430,6 +431,11 @@ Oskari.registerLocalization(
                 "temporalValidity": "Ajanmukaisuus",
                 "thematicClassificationCorrectness": "Luokittelun oikeellisuus",
                 "topologicalConsistency": "Topologinen eheys"
+            },
+            "layerList": {
+                "title": "Karttatasot",
+                "show":"Näytä karttataso",
+                "hide": "Piilota karttataso"
             }
         },
         "tile": {
