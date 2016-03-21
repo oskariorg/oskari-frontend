@@ -99,6 +99,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/publisher2/tools/CoordinateTool.js"
+        },
+        {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/ScalebarTool.js"
         },
         {
