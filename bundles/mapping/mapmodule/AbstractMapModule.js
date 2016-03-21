@@ -1087,7 +1087,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
                 svgObject = null;
-
+                
             // marker shape is number --> find it form Oskari.markers
             if(!isNaN(markerStyle.shape)) {
                 svgObject = Oskari.markers[markerStyle.shape];
@@ -1103,11 +1103,11 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if(markerStyle.shape.toLowerCase().substring(0,4) === '<svg') {
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {                
                 svgObject = {
-                    svg: markerStyle.shape,
-                    x: markerStyle.x,
-                    y: markerStyle.y
+                    svg: markerStyle.shape.svg,
+                    x: markerStyle.shape.x,
+                    y: markerStyle.shape.y
                 };
             }
             // marker icon not found
