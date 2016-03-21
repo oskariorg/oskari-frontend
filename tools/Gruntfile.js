@@ -297,10 +297,6 @@ module.exports = function (grunt) {
                 imageDest: imageDest
             });
             grunt.config.set('sprite.' + appName + '.options', options);
-
-            if (appName === 'full-map') {
-                grunt.config.set('compress.options.fullMap', appName);
-            }
         }
 
         // add resources to dist
@@ -357,9 +353,6 @@ module.exports = function (grunt) {
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
 
-        if (grunt.config.get('compress.options.fullMap')) {
-            grunt.task.run('compress');
-        }
         if (copyResourcesToApplications) {
             grunt.task.run('copy:final');
         }
