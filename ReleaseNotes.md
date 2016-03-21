@@ -2,6 +2,23 @@
 
 ## 1.36
 
+### coordinatetool
+
+Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.
+
+Display is false by default. 
+
+Configure coordinatetool bundle config in default view in portti_view_bundle_seq table for to get w3w displayed.
+
+    {
+    "isReverseGeocode" : true,
+    "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+    }
+
+### metadata flyout
+
+New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
+
 ### selected-featuredata
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.

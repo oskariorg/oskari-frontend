@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._name = 'CoordinateToolPlugin';
         this._toolOpen = false;
         this._showMouseCoordinates = false;
-        this._showReverseGeocode = config.isReverseGeocode;
+        this._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
         this._popup = null;
         this._latInput = null;
         this._lonInput = null;
