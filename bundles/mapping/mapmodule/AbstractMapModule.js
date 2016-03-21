@@ -1096,16 +1096,16 @@ Oskari.clazz.define(
                 }
 
                 if(markerStyle.color) {
-                    svgObject.svg = this.__changePathAttribute(svgObject.svg, 'fill', markerStyle.color);
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', markerStyle.color);
                 }
                 if(markerStyle.stroke) {
-                    svgObject.svg = this.__changePathAttribute(svgObject.svg, 'stroke', markerStyle.stroke);
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', markerStyle.stroke);
                 }
             }
             // marker shape is svg
             else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {                
                 svgObject = {
-                    svg: markerStyle.shape.svg,
+                    data: markerStyle.shape.data,
                     x: markerStyle.shape.x,
                     y: markerStyle.shape.y
                 };
@@ -1116,9 +1116,9 @@ Oskari.clazz.define(
                 return null;
             }            
 
-            svgObject.svg = this.__addPositionMarks(svgObject);
+            svgObject.data = this.__addPositionMarks(svgObject);
 
-            marker.append(svgObject.svg);
+            marker.append(svgObject.data);
             
             var markerHTML = marker.outerHTML();
             if(markerStyle.size) {
@@ -1141,7 +1141,7 @@ Oskari.clazz.define(
          * @return {String} svg string
          */
         __addPositionMarks: function(svgObject) {
-            var htmlObject = jQuery(svgObject.svg);
+            var htmlObject = jQuery(svgObject.data);
             var defaultCenter = this._defaultMarker.size / 2;
             var height = htmlObject.attr('height');
             var width = htmlObject.attr('width');
