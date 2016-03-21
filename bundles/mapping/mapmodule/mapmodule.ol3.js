@@ -111,6 +111,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
+
+                clearTimeout(this.mouseMoveTimer);
+                this.mouseMoveTimer = setTimeout(function() {
+                    // No mouse move in 1000 ms - mouse move paused
+                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
+                    sandbox.notifyAll(hoverEvent);
+                }, 1000);
                 var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
                 sandbox.notifyAll(hoverEvent);
             });
