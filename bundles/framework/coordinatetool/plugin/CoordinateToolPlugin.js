@@ -99,7 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crs = me.getMapModule().getProjection(),
                 crsDefaultText = loc.crs.default,
                 popupName = 'xytoolpopup',
-                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
+                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
+                popupLocation;
 
             me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             me._latInput = popupContent.find('.lat-input');
@@ -152,7 +153,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             });
             me._popup.show(popupTitle, popupContent, [centerToCoordsBtn]);
             me._popup.adaptToMapSize(me._sandbox, popupName);
-            me._popup.moveTo(me.getElement(), 'left', true);
+
+            //check location of the tool and open popup according to it
+            if (me._config.location && me._config.location.classes === "top left") {
+                popupLocation = "right";
+            } else {
+                popupLocation = "left";
+            }
+            me._popup.moveTo(me.getElement(), popupLocation, true);
+            me.refresh();
         },
 
         /**
@@ -226,10 +235,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _createControlElement: function () {
             var me = this,
-                el = me._templates.coordinatetool.clone(),
-                loc = me._locale;
-               
-            el.attr('title', loc.tooltip.tool);
+                el = me._templates.coordinatetool.clone();
+            
+            me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
+        
+            el.attr('title', me._locale.tooltip.tool);
 
             // Bind event listeners
             // XY icon click
