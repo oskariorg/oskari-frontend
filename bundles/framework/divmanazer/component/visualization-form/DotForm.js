@@ -162,7 +162,7 @@ Oskari.clazz.define(
                 var markerObj = Oskari.markers[i];
                 btnContainer = this.templateSymbolButton.clone();
 
-                var svgObj = jQuery(Oskari.markers[i].svg);
+                var svgObj = jQuery(Oskari.markers[i].data);
                 svgObj.find('path').attr({
                     fill: '#000000',
                     stroke: '#000000'
@@ -463,7 +463,7 @@ Oskari.clazz.define(
             var iconObj = Oskari.markers[me.values.shape];
             var size = 20+this.values.size*5;
 
-            var iconSvg = jQuery(iconObj.svg);
+            var iconSvg = jQuery(iconObj.data);
             iconSvg.attr({
                 x: 0,
                 y: 0
