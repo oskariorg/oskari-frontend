@@ -21,6 +21,11 @@ Oskari.registerLocalization(
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "w3w": "What3words: ",
+                "errorTitle": "What3words fel",
+                "error": "Fel på finna 3 ord koordinaaten"
+            },
             "tooltip" : {
                 "tool": "Visa/stäng koordinaterna verktyget",
                 "close": "Stäng"
