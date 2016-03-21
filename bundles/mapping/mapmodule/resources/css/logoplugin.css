@@ -11,7 +11,7 @@
   .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
     color: inherit; }
   .logoplugin .icon {
-    background-image: url('../images/pti_icon.png');
+    background-image: url("../images/pti_icon.png");
     display: inline-block;
     height: 25px;
     width: 25px;

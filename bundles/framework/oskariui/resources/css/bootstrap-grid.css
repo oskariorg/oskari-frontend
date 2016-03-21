@@ -15,12 +15,14 @@
     line-height: 0; }
   .oskariui .clearfix:after {
     clear: both; }
+
 .oskariui .hide-text {
   font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
   border: 0; }
+
 .oskariui .input-block-level {
   display: block;
   width: 100%;
@@ -28,6 +30,7 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
+
 .oskariui .row {
   margin-left: -20px;
   *zoom: 1; }
@@ -37,8 +40,13 @@
     line-height: 0; }
   .oskariui .row:after {
     clear: both; }
-.oskariui .container, .oskariui .navbar-static-top .container, .oskariui .navbar-fixed-top .container, .oskariui .navbar-fixed-bottom .container {
+
+.oskariui .container,
+.oskariui .navbar-static-top .container,
+.oskariui .navbar-fixed-top .container,
+.oskariui .navbar-fixed-bottom .container {
   width: 940px; }
+
 .oskariui .container {
   margin-right: auto;
   margin-left: auto;
@@ -49,6 +57,7 @@
     line-height: 0; }
   .oskariui .container:after {
     clear: both; }
+
 .oskariui .container-fluid {
   padding-right: 20px;
   padding-left: 20px;
@@ -59,54 +68,79 @@
     line-height: 0; }
   .oskariui .container-fluid:after {
     clear: both; }
+
 .oskariui .span12 {
   width: 940px; }
+
 .oskariui .span11 {
   width: 860px; }
+
 .oskariui .span10 {
   width: 780px; }
+
 .oskariui .span9 {
   width: 700px; }
+
 .oskariui .span8 {
   width: 620px; }
+
 .oskariui .span7 {
   width: 540px; }
+
 .oskariui .span6 {
   width: 460px; }
+
 .oskariui .span5 {
   width: 380px; }
+
 .oskariui .span4 {
   width: 300px; }
+
 .oskariui .span3 {
   width: 220px; }
+
 .oskariui .span2 {
   width: 140px; }
+
 .oskariui .span1 {
   width: 60px; }
+
 .oskariui .offset12 {
   margin-left: 980px; }
+
 .oskariui .offset11 {
   margin-left: 900px; }
+
 .oskariui .offset10 {
   margin-left: 820px; }
+
 .oskariui .offset9 {
   margin-left: 740px; }
+
 .oskariui .offset8 {
   margin-left: 660px; }
+
 .oskariui .offset7 {
   margin-left: 580px; }
+
 .oskariui .offset6 {
   margin-left: 500px; }
+
 .oskariui .offset5 {
   margin-left: 420px; }
+
 .oskariui .offset4 {
   margin-left: 340px; }
+
 .oskariui .offset3 {
   margin-left: 260px; }
+
 .oskariui .offset2 {
   margin-left: 180px; }
+
 .oskariui .offset1 {
   margin-left: 100px; }
+
 .oskariui .row-fluid {
   width: 100%;
   *zoom: 1; }

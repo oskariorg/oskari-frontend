@@ -9,7 +9,7 @@
   display: block; }
 
 .panbuttonDivImg {
-  background-image: url('../images/sprite.png'); }
+  background-image: url("../images/sprite.png"); }
   .panbuttonDivImg.root {
     background-position: 0px -90px; }
   .panbuttonDivImg.left {
