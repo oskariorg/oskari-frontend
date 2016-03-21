@@ -36,6 +36,8 @@ div.coordinatetool__popup {
     font-style: italic; }
   div.coordinatetool__popup div.projectionchange {
     margin: 10px; }
+  div.coordinatetool__popup div.projectionchange select#projection {
+    width: 170px; }
 
 .coordinate-label {
   width: 70px;

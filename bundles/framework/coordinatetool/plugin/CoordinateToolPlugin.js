@@ -129,14 +129,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._initProjectionChange();
             }
 
-            //set the same width for the projection change select as the text inputs.
-            if (me._projectionSelect) {
-                var inputWidth = popupContent.find('.lon-input').outerWidth();
-                if (inputWidth > 0) {
-                    me._projectionSelect.css('width', inputWidth);
-                }
-            }
-
             me._popup.addClass('coordinatetool__popup');
             me._popup.createCloseIcon();
             me._popup.onClose(function () {
