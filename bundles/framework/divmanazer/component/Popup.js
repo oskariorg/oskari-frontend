@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="content"></div><div class="actions"></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;

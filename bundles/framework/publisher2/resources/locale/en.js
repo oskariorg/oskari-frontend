@@ -61,6 +61,7 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
+                "CoordinateToolPlugin": "Coordinate tool",
                 "toolbarToolNames": {
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",

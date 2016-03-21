@@ -61,6 +61,7 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin":"Kartlagren meny",
+                "CoordinateToolPlugin": "Koordinat verktyg",
                 "toolbarToolNames": {
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
