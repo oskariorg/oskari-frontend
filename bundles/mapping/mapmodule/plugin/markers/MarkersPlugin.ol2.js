@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             y: 0,
             color: 'ffde00',
             msg: '',
-            shape: 4,
+            shape: 2,
             size: 1,
             transient: false
         };
