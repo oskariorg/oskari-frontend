@@ -21,7 +21,9 @@ New tab containing misc functionalities (actionlinks, list of layers associated 
 
 ### tools
 
-Upgraded build-tools with new dependency versions. Tested to work with Nodejs 5.3.0, 5.7.0 and 5.9.0.
+Upgraded build-tools with new dependency versions.
+Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
+Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
 
 ### selected-featuredata
 
