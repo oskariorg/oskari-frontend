@@ -19,6 +19,10 @@ Configure coordinatetool bundle config in default view in portti_view_bundle_seq
 
 New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
 
+### tools
+
+Upgraded build-tools with new dependency versions. Tested to work with Nodejs 5.3.0, 5.7.0 and 5.9.0.
+
 ### selected-featuredata
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.
