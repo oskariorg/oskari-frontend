@@ -15,6 +15,10 @@ Configure coordinatetool bundle config in default view in portti_view_bundle_seq
     "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
     }
 
+### metadata flyout
+
+New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
+
 ### selected-featuredata
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.
