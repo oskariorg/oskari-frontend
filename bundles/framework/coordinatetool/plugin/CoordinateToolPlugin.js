@@ -154,6 +154,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             me._popup.moveTo(me.getElement(), popupLocation, true);
             me.refresh();
+
+            if (this._showReverseGeocode){
+                this._update3words();
+            }
         },
 
         /**
