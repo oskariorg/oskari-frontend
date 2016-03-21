@@ -15,6 +15,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         this.sandbox = null;
         this.started = false;
         this._localization = null;
+        this.coordinateToolService = undefined;
     }, {
         __name: 'coordinatetool',
         /**
@@ -83,13 +84,53 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);
-
+            this.coordinateToolService = this.createService(sandbox, me.conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var locale = this.getLocalization('display');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
+        },
+        /**
+         * Creates the coordinate tool service and registers it to the sandbox.
+         *
+         * @method createService
+         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param  {}  configuration   conf.reverseGeocodingIds is in use
+         * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
+         */
+        createService: function(sandbox, conf) {
+            var coordinateToolService = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
+                this, conf
+            );
+            sandbox.registerService(coordinateToolService);
+            return coordinateToolService;
+        },
+        /**
+         * Returns the coordinate tool service.
+         *
+         * @method getService
+         * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
+         */
+        getService: function() {
+            return this.coordinateToolService;
+        },
+        /**
+         * @public @method showMessage
+         * Shows user a message with ok button
+         *
+         * @param {String} title popup title
+         * @param {String} message popup message
+         *
+         */
+        showMessage: function (title, message) {
+            var dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            dialog.show(title, message);
+            dialog.fadeout(5000);
         },
         /**
          * @method update
