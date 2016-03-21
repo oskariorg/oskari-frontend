@@ -45,6 +45,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          */
         this._tabContainer = null;
 
+        this._maplayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
         /**
          * @static @private @property _templates HTML/underscore templates for the User Interface
          */
@@ -453,11 +455,102 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '       <% }); %> '+
                     '    <% } %> '+
                     '</article>'
+                ),
+                'actions': _.template(
+                    '<article>'+
+                    '</article>'
                 )
-
-            }
+            },
+            'layerList': _.template(
+                '<table class="metadataSearchResult">'+
+                '   <tr>'+
+                '       <td>'+
+                '           <div class="layerListHeader"><h2></h2></div>'+
+                '           <ul class="layerList">'+
+                '           </ul>'+
+                '       </td>'+
+                '   </tr>'+
+                '</table>'
+            ),
+            'layerItem': _.template(
+                '<li>'+
+                '   <%=layer.getName()%>&nbsp;&nbsp;'+
+                '   <a href="JavaScript:void(0);" class="layerLink">'+
+                '       <%=hidden ? locale.layerList.show : locale.layerList.hide%>'+
+                '   </a>'+
+                '</li>'
+            )
         };
     }, {
+        /**
+         * @static
+         * @property __name
+         *
+         */
+        __name: 'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
+
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method onEvent
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+
+        },
+
+        /**
+         * @property eventHandlers
+         * @static
+         *
+         */
+        eventHandlers: {
+            AfterMapLayerAddEvent: function (event) {
+                /* this might react when layer added */
+                this.renderMapLayerList();
+            },
+            /**
+             * @method AfterMapLayerRemoveEvent
+             */
+            AfterMapLayerRemoveEvent: function (event) {
+                this.renderMapLayerList();
+            },
+            MapLayerVisibilityChangedEvent: function(event) {
+                this.renderMapLayerList();
+            },
+            MapLayerEvent: function(event) {
+                /*add + no layerid -> mass load -> all map layers probably loaded*/
+                if (event.getOperation() === "add" && event.getLayerId() === null) {
+                    this.renderMapLayerList();
+                }
+            },
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Catch my flyout 
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this;
+                if (event.getExtension().getName() !== me.instance.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                var viewState = event.getViewState();
+                if (viewState === 'close') {
+                    //parent closing -> clear my eventhandlers
+                    for (var p in me.eventHandlers) {
+                        if (me.eventHandlers.hasOwnProperty(p)) {
+                            me.instance.sandbox.unregisterFromEventByName(me, p);
+                        }
+                    }
+                }
+            }
+        },
         /**
          * @public @method init
          *
@@ -484,13 +577,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
+            var additionalTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
                     entry.setId(tabId);
-
                     //skip async tabs whose content comes from someplace else
                     if (me._templates.tabs[tabId]) {
                         //the "native" tabs have keys in this bundles locale
@@ -499,19 +592,25 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                             me._templates.tabs[tabId](model)
                         );
                     } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
+                        additionalTabsFound = true;
                         var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
-                        me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
-                            if (newTab && newTab.getId() && !newTab.content) {
-                                if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
-                                    me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab);
-                                }
-                            }
-                        });
                     }
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
+                    
                 }
+            }
+
+            /*add the tab change event listener only once.*/
+            if (additionalTabsFound) {
+                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                    if (newTab && newTab.getId() && !newTab.content) {
+                        if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
+                            me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        }
+                    }
+                });
             }
 
             browseGraphics =
@@ -528,7 +627,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
             if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
-                entry = jQuery('<a />');
+                entry = jQuery('<a></a>');
                 entry.html(locale.xml);
                 entry.attr('href', model.metadataURL);
                 entry.attr('target', '_blank');
@@ -536,7 +635,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
             if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
-                entry = jQuery('<a />');
+                entry = jQuery('<a></a>');
                 entry.html(locale.pdf);
                 entry.attr(
                     'href',
@@ -553,7 +652,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
 
-            me._tabContainer.setExtra(links);
+//            me._tabContainer.setExtra(links);
+            me.addActions(links);
+            me.renderMapLayerList();
+
             me.setTitle(me._model.identification.citation.title);
             if (open) {
                 me.open();
@@ -579,6 +681,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function(tabsJSON) {
+            //TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
             me._additionalTabs = tabsJSON;
             for (var tabId in tabsJSON) {
@@ -586,6 +689,89 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
         },
 
+
+        /**
+         * @method addActions 
+         * 
+         * set up actions tab content based on conf
+         */
+        addActions: function(links) {
+            var me = this,
+                container = me._tabs['actions'].getContainer();
+            _.each(links, function(link) {
+                container.append(link);
+                container.append('<br/>');
+            });
+        },
+
+        renderMapLayerList: function() {
+            var me = this,
+                container = me._tabs['actions'].getContainer(),
+                layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
+                layerList,
+                layerListHeader;
+
+            container.find('table.metadataSearchResult').remove();
+            container.append(me._templates['layerList']());
+
+            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : "";
+            container.find('h2').html(layerListHeader);
+
+            layerListElement = container.find('ul.layerList');
+            _.each(layers, function(layer) {
+                var layerListItem = jQuery(me._templates['layerItem']({
+                    layer: layer,
+                    hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
+                    locale: me.locale
+                }));
+                layerListElement.append(layerListItem);
+
+                jQuery(layerListItem).find('a.layerLink').on('click', function() {
+                    var labelText = me._toggleMapLayerVisibility(layer);
+                    jQuery(this).html(labelText);
+                });
+            });
+        },
+        /**
+         * @method @private _toggleMapLayerVisibility
+         *
+         * add / remove map layer from map and turn visible.
+         * return labeltext to show / hide maplayer
+         */
+        _toggleMapLayerVisibility: function(layer) {
+            var me = this,
+                labelText;
+            //not added -> add.
+            if (me.isLayerSelected(layer) && layer.isVisible()) {
+                //added -> remove from map
+                me.instance.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
+                labelText = me.locale.layerList.show;
+            } else {
+                me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), layer.isVisible()]);
+                //turn visible in case was invisible 
+                if (!layer.isVisible()) {
+                    me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
+                }
+                labelText = me.locale.layerList.hide;
+            }
+            return labelText;
+        },
+        _toggleMetadataCoverage: function() {
+            var me = this;
+            me._model;
+
+        },
+        isLayerSelected: function(layer) {
+            var me = this,
+                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            for (var k = 0; k < selectedLayers.length; k += 1) {
+                selectedLayer = selectedLayers[k];
+                if (layer.getId() === selectedLayer.getId()) {
+                    return true;
+                }
+            }
+            return false;
+        },
         /**
          * @public @method getState
          *
