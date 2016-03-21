@@ -21,6 +21,11 @@ Oskari.registerLocalization(
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "w3w": "What3words: ",
+                "errorTitle": "What3words virhe",
+                "error": "Kolmen sanan koordinaattia ei saatu haettu osoitetulle paikalle"
+            },
             "tooltip": {
                 "tool": "Näytä koordinaatit tai kohdista kartta antamiisi koordinaatteihin.",
                 "close": "Sulje"
