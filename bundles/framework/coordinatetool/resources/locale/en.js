@@ -22,9 +22,11 @@ Oskari.registerLocalization(
                 "lat": "N / lat:"
             },
             "reversegeocode": {
-                "w3w": "What3words: ",
-                "errorTitle": "What3words error",
-                "error": "Error to get 3 words for the current position"
+                "errorTitle": "Reverse geocoding error",
+                "error": "Error to get reverse geocode for the current position",
+                "WHAT3WORDS_CHANNEL": {
+                    "label": "What3words: "
+                }
             },
             "tooltip": {
                 "tool": "Show coordinates or type coordinates and focus map on them.",

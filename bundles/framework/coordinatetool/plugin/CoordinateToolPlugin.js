@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._popup = null;
         this._latInput = null;
         this._lonInput = null;
-        this._w3wLabel = null;
+        this._reverseGeocodeLabel = null;
         this._dialog = null;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '   </div>' +
                 '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   <div class="margintop">'+
-                '      <div class="reversegeocode-label floatleft w3w-label"></div>'+
+                '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
                 '   </div>' +
                 '</div>'),
             projectionSelect: jQuery(
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
-            me._w3wLabel = popupContent.find('.w3w-label');
+            me._reverseGeocodeLabel = popupContent.find('.reverseGeocode-label');
 
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.lat-label').html(loc.compass.lat);
@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _update3words: function(data){
             var me = this,
-                preLabel = me._locale.reversegeocode ? me._locale.reversegeocode.w3w : 'What3words: ';
+                locale = me._locale.reversegeocode,
                 service = me._instance.getService();
 
             if (!data || !data.lonlat) {
@@ -383,8 +383,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 // Success callback
                 function (response) {
                     if (response) {
-                        if(response[0].name && me._w3wLabel ){
-                            me._w3wLabel.html(me._locale.reversegeocode.w3w + '<u>' + response[0].name + '</u>');
+                        if(response[0].name && me._reverseGeocodeLabel && response[0].channelId && locale[response[0].channelId]){
+                            me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
                         }
                     }
                 },
