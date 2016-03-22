@@ -22,9 +22,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._name = 'CoordinateToolPlugin';
         this._toolOpen = false;
         this._showMouseCoordinates = false;
+        this._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
         this._popup = null;
         this._latInput = null;
         this._lonInput = null;
+        this._reverseGeocodeLabel = null;
         this._dialog = null;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
@@ -43,6 +45,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <div class="clear"></div>'+
                 '   </div>' +
                 '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   <div class="margintop">'+
+                '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
+                '   </div>' +
                 '</div>'),
             projectionSelect: jQuery(
                 '<div class="clear"></div>'+
@@ -100,6 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
+            me._reverseGeocodeLabel = popupContent.find('.reverseGeocode-label');
 
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.lat-label').html(loc.compass.lat);
@@ -129,14 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._initProjectionChange();
             }
 
-            //set the same width for the projection change select as the text inputs.
-            if (me._projectionSelect) {
-                var inputWidth = popupContent.find('.lon-input').outerWidth();
-                if (inputWidth > 0) {
-                    me._projectionSelect.css('width', inputWidth);
-                }
-            }
-
             me._popup.addClass('coordinatetool__popup');
             me._popup.createCloseIcon();
             me._popup.onClose(function () {
@@ -156,6 +154,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             me._popup.moveTo(me.getElement(), popupLocation, true);
             me.refresh();
+
+            if (this._showReverseGeocode){
+                this._update3words();
+            }
         },
 
         /**
@@ -357,6 +359,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
         },
         /**
+         * Update 3words value to inputs
+         * @method  @private _update3words
+         * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
+         * @return {[type]}      [description]
+         */
+        _update3words: function(data){
+            var me = this,
+                locale = me._locale.reversegeocode,
+                service = me._instance.getService();
+
+            if (!data || !data.lonlat) {
+                // update with map coordinates if coordinates not given
+                var map = me.getSandbox().getMap();
+                data = {
+                    'lonlat': {
+                        'lat': parseFloat(map.getY()),
+                        'lon': parseFloat(map.getX())
+                    }
+                };
+            }
+            service.getReverseGeocode(
+                // Success callback
+                function (response) {
+                    if (response) {
+                        if(response[0].name && me._reverseGeocodeLabel && response[0].channelId && locale[response[0].channelId]){
+                            me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
+                        }
+                    }
+                },
+                // Error callback
+                function (jqXHR, textStatus, errorThrown) {
+                    me._instance.showMessage(me._locale.reversegeocode.errorTitle, me._locale.reversegeocode.error);
+                },data.lonlat.lon, data.lonlat.lat);
+
+        },
+        /**
          * Updates the given coordinates to the UI
          * @method @public refresh
          *
@@ -379,6 +417,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 me._updateLonLat(data);
             }
+
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
@@ -405,14 +444,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  */
                 MouseHoverEvent: function (event) {
                     if(this._showMouseCoordinates) {
-                        this.refresh({
+                        var data = {
                             'lonlat': {
                                 'lat': parseFloat(event.getLat()),
                                 'lon': parseFloat(event.getLon())
                             }
-                        });
+                        };
+                        this.refresh(data);
+                        if (event.isPaused() && this._showReverseGeocode){
+                            this._update3words(data);
+                        }
                     }
-
                 },
                 /**
                  * @method AfterMapMoveEvent
@@ -422,15 +464,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(!this._showMouseCoordinates) {
                         this.refresh();
                     }
+                    if (this._showReverseGeocode){
+                        this._update3words();
+                    }
+
                 },
                 /**
                  * @method MapClickedEvent
                  * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
                  */
                 MapClickedEvent: function (event) {
+                    var lonlat = event.getLonLat();
                     if(!this._showMouseCoordinates) {
-                        var lonlat = event.getLonLat();
                         this.refresh({
+                            'lonlat': {
+                                'lat': parseFloat(lonlat.lat),
+                                'lon': parseFloat(lonlat.lon)
+                            }
+                        });
+                    }
+                    if (this._showReverseGeocode){
+                        this._update3words({
                             'lonlat': {
                                 'lat': parseFloat(lonlat.lat),
                                 'lon': parseFloat(lonlat.lon)

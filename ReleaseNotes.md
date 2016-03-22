@@ -2,6 +2,29 @@
 
 ## 1.36
 
+### coordinatetool
+
+Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.
+
+Display is false by default. 
+
+Configure coordinatetool bundle config in default view in portti_view_bundle_seq table for to get w3w displayed.
+
+    {
+    "isReverseGeocode" : true,
+    "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+    }
+
+### metadata flyout
+
+New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
+
+### tools
+
+Upgraded build-tools with new dependency versions.
+Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
+Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
+
 ### selected-featuredata
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.

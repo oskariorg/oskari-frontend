@@ -21,6 +21,13 @@ Oskari.registerLocalization(
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "errorTitle": "Reverse geokoodaus virhe",
+                "error": "Osoitetulle paikalle ei saatu haettua geokoodausta",
+                "WHAT3WORDS_CHANNEL": {
+                    "label": "What3words: "
+                }
+            },
             "tooltip": {
                 "tool": "Näytä koordinaatit tai kohdista kartta antamiisi koordinaatteihin.",
                 "close": "Sulje"

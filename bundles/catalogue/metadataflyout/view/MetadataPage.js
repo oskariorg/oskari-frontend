@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     model
                 );
 
-                if (me.additionalTabs) {
+                if (me.additionalTabs && !jQuery.isEmptyObject(me.additionalTabs)) {
                     panel.addTabs(me.additionalTabs);
                 }
 
