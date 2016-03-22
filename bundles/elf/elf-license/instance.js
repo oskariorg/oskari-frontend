@@ -482,7 +482,7 @@ function () {
             me._dialog.makeModal();
         }
 
-        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+        me._progressSpinner.insertTo(jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog'));
 
         // If there is orderer licensemodel then open it
         if(data.licenseModels.length === 1) {
@@ -724,7 +724,7 @@ function () {
 
         me._fixModelsHeight(dialogContent, models);
 
-        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+        me._progressSpinner.insertTo(jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog'));
 
         // If there is only one licensemodel then open it
         if(data.licenseModels.length === 1) {
@@ -912,9 +912,9 @@ function () {
     _showLicenseModels: function(){
         var me = this;
         me._dialogStep = 'step1';
-        jQuery('.elf_license_dialog_license_details').hide();
-        jQuery('.elf_license_dialog_license_data').show();
-        jQuery('.elf_license_dialog_license_price').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').hide();
         me._checkButtonsVisibility();
     },
     /**
@@ -925,10 +925,10 @@ function () {
     _showLicenseDetails: function(){
         var me = this;
         me._dialogStep = 'step2';
-        jQuery('.elf_license_dialog_license_details').show();
-        jQuery('.elf_license_dialog_license_data').hide();
-        jQuery('.elf_license_dialog_license_price').hide();
-        jQuery('.elf_license_dialog_license_details').removeClass('large');
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').removeClass('large');
         me._checkButtonsVisibility();
     },
     /**
@@ -939,9 +939,9 @@ function () {
     _showLicensePriceSummary: function(){
         var me = this;
         me._dialogStep = 'step3';
-        jQuery('.elf_license_dialog_license_price').show();
-        jQuery('.elf_license_dialog_license_details').hide();
-        jQuery('.elf_license_dialog_license_data').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').hide();
         me._checkButtonsVisibility();
     },
     /**
@@ -954,7 +954,7 @@ function () {
     _showLicenseOrderSummaryDialog: function(model){
         var me = this,
             licenseSummary = me._templates.licenceModelSummaryDetails.clone(),
-            licensePrice = jQuery('.elf_license_dialog_license_price'),
+            licensePrice = jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price'),
             basicData = licenseSummary.find('.license_basic_data');
 
         me.nextBtn.setTitle(me._locale.buttons.conclude);
@@ -994,7 +994,7 @@ function () {
     _showLicenseParams: function(model, licenseData) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
-            licenseDetails = jQuery('.elf_license_dialog_license_details'),
+            licenseDetails = jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data');
 
         me._showLicenseDetails();
