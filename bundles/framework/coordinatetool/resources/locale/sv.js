@@ -26,6 +26,9 @@ Oskari.registerLocalization(
                 "error": "Fel på finna geokod för koordinaaten",
                 "WHAT3WORDS_CHANNEL": {
                     "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL" : {
+                    "label": "Adress: "
                 }
             },
             "tooltip" : {

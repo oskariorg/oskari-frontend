@@ -26,6 +26,9 @@ Oskari.registerLocalization(
                 "error": "Osoitetulle paikalle ei saatu haettua geokoodausta",
                 "WHAT3WORDS_CHANNEL": {
                     "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL" : {
+                    "label": "Osoite: "
                 }
             },
             "tooltip": {

@@ -26,6 +26,9 @@ Oskari.registerLocalization(
                 "error": "Error to get reverse geocode for the current position",
                 "WHAT3WORDS_CHANNEL": {
                     "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL": {
+                    "label": "Address: "
                 }
             },
             "tooltip": {
