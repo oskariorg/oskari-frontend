@@ -241,8 +241,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.unbind('click');
             el.bind('click', function(event){
-                me._toggleToolState();
-                event.stopPropagation();
+                if (me._sandbox.mapMode !== "mapPublishMode") {
+                    me._toggleToolState();
+                    event.stopPropagation();
+                }
             });
 
             me._changeToolStyle(null, el);
