@@ -26,6 +26,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             return this.__name;
         },
         /**
+         * Needed by sandbox.register()
+         */
+        init : function() {},
+
+        /**
          * @method setSandbox
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          * Sets the sandbox reference to this component
@@ -91,6 +96,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
+            sandbox.register(me);
         },
         /**
          * Creates the coordinate tool service and registers it to the sandbox.
@@ -145,5 +151,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @property {String[]} protocol
          * @static
          */
-        protocol: ['Oskari.bundle.BundleInstance']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });
