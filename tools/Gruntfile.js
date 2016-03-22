@@ -21,13 +21,6 @@ module.exports = function (grunt) {
                 spritePathInCSS: '../icons'
             }
         },
-        compileDev: {
-            options: {
-                appSetupFile: '../tests/minifierFullMapAppSetup.json',
-                dest: '../dist/',
-                concat: true
-            }
-        },
         releaseManual: {
             options: {
                 configs: '../applications/sample/servlet/minifierAppSetup.json,../applications/sample/servlet_published_ol3/minifierAppSetup.json',
@@ -48,15 +41,6 @@ module.exports = function (grunt) {
             },
             build: ['../build', 'Oskari', '../bundles/statistics/statsgrid/vulcanized.html'],
             dist: ['../dist']
-        },
-        oskaridoc: {
-            dist: {
-                options: {
-                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../oskari.org/api/<%= version %>',
-                    themedir: '../docs/yui/theme'
-                }
-            }
         },
         validateLocalizationJSON: {
             target: {
@@ -89,7 +73,6 @@ module.exports = function (grunt) {
                 src: ['../bundles/*/*/']
             }
         },
-
         trimtrailingspaces: {
             main: {
               src: ['../bundles/**/*.js'],
@@ -316,10 +299,6 @@ module.exports = function (grunt) {
                 concat: true
             });
             grunt.config.set('sprite.' + appName + '.options', options);
-
-            if (appName === 'full-map') {
-                grunt.config.set('compress.options.fullMap', appName);
-            }
         }
 
         // add resources to dist
@@ -376,9 +355,6 @@ module.exports = function (grunt) {
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
 
-        if (grunt.config.get('compress.options.fullMap')) {
-            grunt.task.run('compress');
-        }
         if (copyResourcesToApplications) {
             grunt.task.run('copy:final');
         }

@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         me.container = null;
         me.state = null;
         me.template = null;
-        me.columns = null;
         me.cleanData = null;
         me.activeRole = null;
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
@@ -88,13 +87,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             );
             var rightsLoc = this.instance._localization.rights,
                 elParent;
-            this.columns = [
-                {id: "name", "name": rightsLoc.name},
-                {id: "isSelected", "name": rightsLoc.rightToPublish},
-                {id: "isViewSelected", "name": rightsLoc.rightToView},
-                {id: "isDownloadSelected", "name": rightsLoc.rightToDownload},
-                {id: "isViewPublishedSelected", "name": rightsLoc.rightToPublishView}
-            ];
 
             elParent = this.container.parentElement.parentElement;
             jQuery(elParent).addClass('admin-layerrights-flyout');
@@ -253,23 +245,31 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         /**
          * @method createLayerRightGrid
          * Creates the permissions table as a String
-         * @param {Array} columnHeaders
          * @param {Object} layerRightsJSON
          * @return {String} Permissions table
          */
-        createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
+        createLayerRightGrid: function (layerRightsJSON) {
             "use strict";
             var me = this,
                 table = me._templates.table.clone(),
                 thead = table.find('thead'),
                 tbody = table.find('tbody'),
                 service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
-                headerRow = me._templates.row.clone();
+                headerRow = me._templates.row.clone(),
+                columnsLoc = this.instance.getLocalization('rights');
 
             // Create headers
-            jQuery.each(columnHeaders, function(index, header) {
+            var thCell = me._templates.cellTh.clone();
+            thCell.html(columnsLoc.name);
+            headerRow.append(thCell);
+
+            jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
                 var thCell = me._templates.cellTh.clone();
-                thCell.html(header.name);
+                var headerName = header.name;
+                if (typeof columnsLoc[header.name] !== 'undefined') {
+                    headerName = columnsLoc[header.name];
+                }
+                thCell.html(headerName);
                 headerRow.append(thCell);
             });
             thead.append(headerRow);
@@ -277,29 +277,35 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             // Create rows
             jQuery.each(layerRightsJSON, function(index, layerRight) {
                 var layer = service.findMapLayer(layerRight.id),
-                    dataRow = me._templates.row.clone();
-                // lets loop through header
-                jQuery.each(columnHeaders, function(index, header) {
-                    var value = layerRight[header.id],
-                        tooltip = header.name,
-                        dataCell = me._templates.cellTd.clone(),
-                        cell = null;
+                    dataRow = me._templates.row.clone(),
+                	cell = null,
+                	value = null,
+                	tooltip = null,
+                	dataCell = me._templates.cellTd.clone();
 
-                    if (header.id === 'name') {
-                        if(layer) {
-                            tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
-                        }
-                        cell = me._templates.name.clone();
-                        cell.attr('data-resource', layerRight.resourceName);
-                        cell.attr('data-namespace', layerRight.namespace);
-                        cell.html(value);
-                    } else {
-                        cell = me._templates.checkBox.clone();
-                        cell.attr('data-right', header.id);
-                        if(value){
-                            cell.attr('checked', 'checked');
-                        }
+                if(layer) {
+                    tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
+                }
+
+                cell = me._templates.name.clone();
+                cell.attr('data-resource', layerRight.resourceName);
+                cell.attr('data-namespace', layerRight.namespace);
+                cell.html(layerRight.name);
+                dataCell.append(cell);
+                dataRow.append(dataCell);
+
+                // lets loop through permissions
+                jQuery.each(layerRight.permissions, function(index, permission) {
+                    var allow = permission.allow,
+                        tooltip = permission.name,
+                        dataCell = me._templates.cellTd.clone();
+
+                    cell = me._templates.checkBox.clone();
+                    cell.attr('data-right', permission.id);
+                    if(allow == "true"){
+                        cell.attr('checked', 'checked');
                     }
+
                     cell.attr('title', tooltip);
                     dataCell.append(cell);
                     dataRow.append(dataCell);
@@ -344,6 +350,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 dataObj.resourceName    = tdName.attr('data-resource');
                 dataObj.namespace       = tdName.attr('data-namespace');
                 dataObj.roleId = me.activeRole;
+                dataObj.permissions = [];
 
                 for (j = 0; j < tds.length; j += 1) {
                     td = jQuery(tds[j]);
@@ -353,7 +360,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     if (cleanDataObj[right] !== value) {
                         dirty = true;
                     }
-                    dataObj[right] = value;
+                    dataObj.permissions.push({key: right, value: value});
+
                 }
 
                 if (cleanDataObj.resourceName !== dataObj.resourceName) {
@@ -395,7 +403,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 me.progressSpinner.stop();
                 // store unaltered data so we can do a dirty check on save
                 me.cleanData = result.resource;
-                var table = me.createLayerRightGrid(me.columns, result.resource);
+                var table = me.createLayerRightGrid(result.resource);
                 jQuery(me.container).find('.admin-layerrights-layers').empty().append(table);
             });
         },

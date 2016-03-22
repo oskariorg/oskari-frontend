@@ -10,8 +10,8 @@ div.renderdialog label {
 
 div.renderdialog div.icon-button {
   margin: 0 2px 2px;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: inline-block;
   border: 1px solid #000000;
   -webkit-box-sizing: border-box;
@@ -196,6 +196,14 @@ div.pointform div.column1 {
 div.pointform div.sizer {
   margin-left: 7px;
   margin-top: 6px; }
+
+div.fill div.icon-button {
+  width: 30px !important;
+  height: 30px !important; }
+
+div.areaform .icon-button, div.lineform .icon-button {
+  width: 30px !important;
+  height: 30px !important; }
 
 div.areaform div.column1, div.lineform div.column1 {
   float: left;

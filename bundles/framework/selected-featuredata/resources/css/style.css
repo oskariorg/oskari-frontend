@@ -1,0 +1,48 @@
+﻿.icon-selected-featuredata{
+	cursor: pointer;
+	background: url("../images/icon-selected-featuredata-valk.png");
+	position: absolute; 
+	top: 12px; 
+	right: 23px; 
+	width: 20px; 
+	height: 20px;
+}
+.selected_featuredata_howmany_show{
+    margin: 0px 0 10px 0px;
+    float: left;
+}
+.selected_featuredata_show_all_on_map{
+	float: right;
+	margin: 0px 0 10px 0px;
+}
+.selected_featuredata_add_layer_to_map{
+	float: right;
+	margin: 0px 0 10px 0px;
+}
+.selected_featuredata_removed_map_text{
+	float: left;
+	color: #ff667c;
+}
+.selected_featuredata_accpanel_showonmap{
+	float: right;
+	margin-top: 7px;
+}
+.selected_featuredata_accpanel_close{
+	float: right;
+	margin: 10px;
+}
+.icon-minimize{
+	display: inline-block;
+}
+.selected-featuredata-flyout.oskari-minimized{
+	display: block;
+}
+.oskari-minimized .selected-featuredata{
+	display: none;
+}
+.oskari-minimized .oskari-flyouttools{
+	margin-left: 10px;
+}
+.selected-featuredata .hidden{
+	display: none;
+}

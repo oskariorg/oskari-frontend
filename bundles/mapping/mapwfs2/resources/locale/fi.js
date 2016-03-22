@@ -27,7 +27,7 @@ Oskari.registerLocalization(
         },
         "information": {
             "title": "Kohdetietojen esittäminen",
-            "info": "Osa valituista vektoritasoista (WFS) ei päivity automaattisesti. Zbr/><br/> Valitse haluamasi alue kartalta ja klikkaa Päivitä-painiketta kartalla.<br/><br/>Klikkaa Kohdetiedot nähdäksesi tason kohdetiedot."
+            "info": "Osa valituista vektoritasoista (WFS) ei päivity automaattisesti. <br/><br/> Valitse haluamasi alue kartalta ja klikkaa Päivitä-painiketta kartalla.<br/><br/>Klikkaa Kohdetiedot nähdäksesi tason kohdetiedot."
         },
         "button": {
             "cancel": "Peruuta",

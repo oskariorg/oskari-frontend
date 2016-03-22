@@ -2,6 +2,8 @@
   "name": "OskariTools",
   "version": "0.0.1",
   "description": "Build tools for Oskari applications",
+  "author": "nls-oskari",
+  "license": "MIT",
   "keywords": [
     "Oskari"
   ],

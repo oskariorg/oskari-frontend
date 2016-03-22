@@ -150,11 +150,20 @@ Oskari.clazz.define(
                 allowedFunctions = [];
                 // allow all available functions by default
                 var funcs = this._availableFunctions;
+
+                // Special handling for getScreenshot() since it's not always present
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                if(typeof mapModule.getScreenshot === 'function') {
+                    // this is only available in Openlayers3 implementation of mapmodule
+                    funcs['getScreenshot'] = function() {
+                        return mapModule.getScreenshot();
+                    };
+                }
+
                 for(var name in funcs) {
-                    if(!funcs.hasOwnProperty(name)) {
-                        continue;
+                    if(funcs.hasOwnProperty(name)) {
+                        allowedFunctions.push(name);
                     }
-                    allowedFunctions.push(name);
                 }
             }
 
@@ -288,6 +297,23 @@ Oskari.clazz.define(
                     min: 0,
                     max: mapModule.getMaxZoomLevel(),
                     current: mapModule.getMapZoom()
+                };
+            },
+
+            getPixelMeasuresInScale : function(mmMeasures, scale) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    scalein = scale,
+                    pixelMeasures = [];
+
+                if(mmMeasures && mmMeasures.constructor === Array){
+                    if(!scalein){
+                        scalein = mapModule.calculateFitScale4Measures(mmMeasures);
+                    }
+                    pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
+                }
+                return {
+                    pixelMeasures: pixelMeasures,
+                    scale: scalein
                 };
             },
             resetState : function() {

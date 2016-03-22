@@ -343,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 dataType: 'json',
                 data : {
                     timestamp : timeStamp,
-                    epsg : epsg
+                    srs : epsg
                 },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {

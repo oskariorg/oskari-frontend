@@ -320,6 +320,7 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
+
             var me = this,
                 searchFromChannelsContainer = me.templates.searchFromChannelsTab.clone();
 

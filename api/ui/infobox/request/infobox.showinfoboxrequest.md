@@ -22,16 +22,16 @@ All the parameters are wrapped inside one array.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td> * id </td><td> String </td><td> id for infobox so we can use additional requests to control it </td><td> </td>
+  <td> \* id </td><td> String </td><td> id for infobox so we can use additional requests to control it </td><td> </td>
 </tr>
 <tr>
-  <td> * title </td><td> String </td><td> infobox title </td><td> </td>
+  <td> \* title </td><td> String </td><td> infobox title </td><td> </td>
 </tr>
 <tr>
-  <td> * contentData </td><td> Object[] </td><td> JSON presentation for the infobox data </td><td> </td>
+  <td> \* contentData </td><td> Object[] </td><td> JSON presentation for the infobox data </td><td> </td>
 </tr>
 <tr>
-  <td> * lonlat </td><td> Object </td><td> Coordinates where the infobox should be shown. </td><td> </td>
+  <td> \* lonlat </td><td> Object </td><td> Coordinates where the infobox should be shown. </td><td> </td>
 </tr>
 <tr>
   <td> hidePrevious </td><td> Boolean </td><td> if true, hides any previous popups when showing this </td><td> false </td>

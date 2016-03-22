@@ -21,6 +21,16 @@ Oskari.registerLocalization(
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "errorTitle": "Reverse geocoding error",
+                "error": "Error to get reverse geocode for the current position",
+                "WHAT3WORDS_CHANNEL": {
+                    "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL": {
+                    "label": "Address: "
+                }
+            },
             "tooltip": {
                 "tool": "Show coordinates or type coordinates and focus map on them.",
                 "close": "Close"

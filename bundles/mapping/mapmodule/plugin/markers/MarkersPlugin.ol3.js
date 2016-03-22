@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             x: 0,
             y: 0,
             color: 'ffde00',
+            stroke: 'b4b4b4',
             msg: '',
             shape: 2,
             size: 1,
@@ -473,37 +474,53 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     }
                 } else {
                     // Construct image
-                    iconSrc = this.constructImage(data);
+                    //iconSrc = this.constructImage(data);
                     size = this._getSizeInPixels(data.size);
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
                 size = this._getSizeInPixels(data.size);
             }
-
-            var markerLayer = this.getMarkersLayer(),
-                markerStyle = new ol.style.Style({
-                    image: new ol.style.Icon({
-                        src: iconSrc,
-                        size: [size,size]
-                    }),
-                    text: new ol.style.Text({
-                        text: decodeURIComponent(data.msg),
-                        textAlign: 'left',
-                        textBaseline: 'middle',
-                        offsetX: 8 + 2 * data.size,
-                        offsetY: -8,
-                        fill: new ol.style.Fill({
-                            color: '#000000'
-                        }),
-                        stroke: new ol.style.Stroke({
-                            color: '#ffffff',
-                            width: 1
-                        }),
-                        font: 'bold 16px Arial'
-                    })
-                }),
-                newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point([data.x, data.y])});
+            if (typeof data.color === 'string') {
+                if(data.color.charAt(0)!=='#') {
+                    data.color = '#' + data.color;
+                }
+            } else {
+                 data.color = me._defaultData.color;
+            }
+            if (typeof data.stroke === 'string') {
+                 if(data.stroke.charAt(0)!=='#') {
+                     data.stroke = '#' + data.stroke;
+                 }
+            } else {
+                  data.stroke = me._defaultData.stroke;
+            }
+            var style = {        	                      
+                image : {
+                    shape: data.shape,
+                    size: me._getSizeInPixels(data.size),
+                    color: data.color,
+                    stroke: data.stroke
+                },
+                text : {
+                    font: 'bold 16px Arial',
+                    textAlign: 'left',
+                    textBaseline: 'middle',
+                    offsetX: 8 + 2 * data.size,
+                    offsetY: 8,
+                    fill : {
+                        color : '#000000'
+                    },
+                    stroke : {
+                    	color: '#ffffff',
+                    	width: 1
+                    },
+                    labelText: decodeURIComponent(data.msg)
+                }        	
+            };
+            var markerLayer = this.getMarkersLayer();
+            var markerStyle = this.getMapModule().getStyle(style);
+            var newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point([data.x, data.y])});
 
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
@@ -537,58 +554,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 color,
                 iconSrc = me.getDefaultIconUrl();
 
-            if (typeof Raphael !== 'undefined') {
-                // Handling the size parameter
-                if (typeof marker.size !== 'number') {
-                    marker.size = parseInt(marker.size, 10);
-                }
-                size = marker.size;
-                if (isNaN(size)) {
-                    return;
-                }
-                size = this._getSizeInPixels(size);
-                var paper = Raphael(0, 0, size, size);
-                paper.clear();
-
-                // Construct marker parameters
-                var font = paper.getFont(me._font.name),
-                    charIndex = me.getFont().baseIndex;
-
-                if (typeof marker.shape === 'number') {
-                    charIndex += marker.shape;
-                } else {
-                    var parsedShape = parseInt(marker.shape, 10);
-                    if (!isNaN(parsedShape)) {
-                        charIndex += parsedShape;
-                    } else {
-                        charIndex += me._defaultData.shape;
-                    }
-                }
-
-                if (typeof marker.color === 'string') {
-                    color = '#' + marker.color;
-                } else {
-                    color = me._defaultData.color;
-                }
-
-                // Create image
-                paper.print(
-                    0, 55 * size / 100,
-                    String.fromCharCode(charIndex),
-                    font,
-                    size
-                ).attr({
-                    'fill': color,
-                    'stroke_width': me._strokeStyle.stroke_width,
-                    'stroke': me._strokeStyle.stroke
-                });
-
-                // Base64 encoding for cross-browser compatibility
-                iconSrc =
-                    me._preSVGIconUrl + jQuery.base64.encode(paper.toSVG());
-                // Remove paper (unfortunately it's a visible SVG element in document.body)
-                paper.remove();
-            }
             return iconSrc;
         },
 

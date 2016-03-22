@@ -2,12 +2,7 @@ div.layerselection2 {
 	.layer.selected {
 		border: 1pt solid #c0d0e0;
 		margin: 0 5px 5px 0;
-                /*
-                This used to have a defunct CSS hack for IE 9 only:
-                height: 70px\9;
-                It was never functional because SASS compiled it into single character.
-                It was removed.  
-                */
+		height: unquote("70px\\9"); /*IE9 */ 
 
 		div.layer-info {
 			background-color: #FFF;
