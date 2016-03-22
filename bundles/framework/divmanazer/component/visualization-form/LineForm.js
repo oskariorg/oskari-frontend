@@ -92,6 +92,13 @@ Oskari.clazz.define(
         this.templateWidthValue = jQuery('<input type="number" name="width" class="linewidth" min="' + this.minWidth + '" max="' + this.maxWidth + '" step=1 value="' + this.values.width + '">');
         this.previewSize = 50;
         this.selectColor = '#dddddd';
+
+        this._previewSize = 50;
+        this._previewTemplates = [
+            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="#000000" d="M10,15L20,35L40,25" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="#000000" d="M10,15L20,35L40,25" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="#000000" d="M11.788854381999831,14.105572809000083L20.73205080756888,32.267949192431125L39.10557280900009,23.211145618000167M8.211145618000169,15.894427190999917L19.26794919243112,37.732050807568875L40.89442719099991,26.788854381999833" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
+        ];
     }, {
         /**
          * Returns the values.
@@ -441,36 +448,29 @@ Oskari.clazz.define(
         _updatePreview: function (dialog) {
             var me = this,
                 view = dialog === undefined || dialog === null ? jQuery('.lineform') : dialog,
-                content = view.find('.preview'),
+                preview = view.find('.preview'),
                 preview;
-            if (content.length > 0) {
-                preview = content.get(0);
-                if (preview.children.length === 0) {
-                    this.paper = Raphael(preview,50,50);
-                }
-            } else {
+            if (preview.length == 0) {
                 return;
             }
 
-            var attributes = {
+            var previewTemplate = me._previewTemplates[me.values.style].clone();
+
+            previewTemplate.find('path').attr({
                 'stroke': '#' + me.values.color,
                 'fill': 'none',
                 'stroke-width': me.values.width,
                 'stroke-linejoin': me.values.corner === 0 ? 'miter' : 'round',
-                'stroke-linecap': me.values.cap === 0 ? 'butt' : 'round',
-                //"stroke-dasharray": me.values.style === 1 ? "3 "+ (2 + 0.25 * me.values.width) : ""
-                // Raphael.js without patch:
-                'stroke-dasharray': me.values.style === 1 ? '- ' : ''
-            };
+                'stroke-linecap': me.values.cap === 0 ? 'butt' : 'round'
+            });
 
-            var p1 = [10, 15];
-            var p2 = [20, 35];
-            var p3 = [40, 25];
-            this.paper.clear();
-            if (me.values.style !== 2) {
-                this.paper.path('M' + p1[0] + ',' + p1[1] + 'L' + p2 + ',' + p3).attr(attributes);
-            } else {
-                // double line
+            preview.empty();
+            
+            // Calculate double line
+            if (me.values.style == 2) {
+                var p1 = [10, 15];
+                var p2 = [20, 35];
+                var p3 = [40, 25];
                 var d = 1.5 + 0.5 * me.values.width;
                 var p1a = [p1[0] + 2 * d / Math.sqrt(5), p1[1] - d / Math.sqrt(5)];
                 var p1b = [p1[0] - 2 * d / Math.sqrt(5), p1[1] + d / Math.sqrt(5)];
@@ -485,9 +485,12 @@ Oskari.clazz.define(
 
                 var p3a = [p3[0] - d / Math.sqrt(5), p3[1] - 2 * d / Math.sqrt(5)];
                 var p3b = [p3[0] + d / Math.sqrt(5), p3[1] + 2 * d / Math.sqrt(5)];
-                this.paper.path('M' + p1a[0] + ',' + p1a[1] + 'L' + p2a + ',' + p3a + 'M' + p1b[0] + ',' + p1b[1] + 'L' + p2b + ',' + p3b).attr(attributes);
-                this.paper.circle(0,0,0); // IE8 refresh work-around
+                previewTemplate.find('path').attr('d', 'M' + p1a[0] + ',' + p1a[1] + 'L' + p2a + ',' + p3a + 'M' + p1b[0] + ',' + p1b[1] + 'L' + p2b + ',' + p3b);
             }
+            preview.append(previewTemplate);
+
+            // Refresh svg to show correctly
+            preview.html(preview.html());
         },
 
         /**

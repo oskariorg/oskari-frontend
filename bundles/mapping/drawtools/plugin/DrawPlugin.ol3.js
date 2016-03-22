@@ -215,7 +215,6 @@ Oskari.clazz.define(
                 isFinished = options.isFinished;
             }
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-//            console.log(JSON.stringify(geojson));
             me._sandbox.notifyAll(event);
         },
         /**

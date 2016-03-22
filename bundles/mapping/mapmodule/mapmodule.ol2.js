@@ -29,6 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
 
     function (id, imageUrl, options, mapDivId) {
+		this._defaulfMarkerShape = 2;
+		this._preSVGIconUrl = 'data:image/svg+xml;base64,';
     }, {
 
         /**
@@ -40,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _initImpl: function (sandbox, options, map) {
             /*Added to handle pink tiles */
-            var olOpts = options.openLayers || {};
+      	    var olOpts = options.openLayers || {};
             OpenLayers.IMAGE_RELOAD_ATTEMPTS = olOpts.imageReloadAttemps || 5;
             OpenLayers.Util.onImageLoadErrorColor = olOpts.onImageLoadErrorColor || 'transparent';
 
@@ -453,11 +455,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             styleDef = styleDef || {};
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
-                olStyle.fill = true;
-                olStyle.fillColor = styleDef.fill.color;
+            var svg = this.getSvg(styleDef.image);
+            if(svg) {
+                olStyle.externalGraphic = svg;
             }
-
+            
+            if(styleDef.image.size) {
+                olStyle.graphicWidth = styleDef.image.size;
+                olStyle.graphicHeight = styleDef.image.size;
+            }
+            if(styleDef.image.opacity) {
+                olStyle.fillOpacity = styleDef.image.opacity;
+            }
             if(styleDef.stroke) {
                 if(styleDef.stroke.color) {
                     olStyle.strokeColor = styleDef.stroke.color;
@@ -466,40 +475,58 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.strokeWidth = styleDef.stroke.width;
                 }
             }
-
-            if (styleDef.image) {
+            if (styleDef.image.radius) {
                 if(styleDef.image.radius) {
                     olStyle.pointRadius = styleDef.image.radius;
+                    //currently only supporting circle
+                    olStyle.graphicName = "circle";
                 }
-                //currently only supporting circle
-                olStyle.graphicName = "circle";
             }
-            if(styleDef.text) {
-                /*
+            /*
                 TODO: figure out ol2 equivalent to this... "normal" font size * scale?
                 if(styleDef.text.scale) {
                     olStyle.scale = styleDef.text.scale;
                 }
-                */
-                if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
-                    olStyle.fontColor = styleDef.text.fill.color;
-                }
-                if(styleDef.text.stroke) {
-                    if(styleDef.text.stroke.color) {
-                        olStyle.labelOutlineColor = styleDef.text.stroke.color;
-                    }
-                    if(styleDef.text.stroke.width) {
-                        olStyle.labelOutlineWidth = styleDef.text.stroke.width;
-                    }
-                }
-
-                //label
-                if (styleDef.text.labelText) {
-                    olStyle.label = styleDef.text.labelText;
-                } else if (styleDef.text.labelProperty) {
-                    olStyle.label = "${"+styleDef.text.labelProperty+"}";
-                }
+          */
+          if(styleDef.text.font) {
+            var split = styleDef.text.font.split(" ");
+            if(split[0]) {
+                olStyle.fontWeight = split[0];
             }
+            if(split[1]) {
+                olStyle.fontSize = split[1];
+            }
+            if(split[2]) {
+                olStyle.fontFamily = split[2];
+            }
+          }
+          if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
+              olStyle.fontColor = styleDef.text.fill.color;
+          }
+          if(styleDef.text.stroke) {
+              if(styleDef.text.stroke.color) {
+                  olStyle.labelOutlineColor = styleDef.text.stroke.color;
+              }
+              if(styleDef.text.stroke.width) {
+                  olStyle.labelOutlineWidth = styleDef.text.stroke.width;
+              }
+          }
+          if(styleDef.labelAlign) {
+             olStyle.labelAlign = styleDef.text.labelAlign;
+          }
+          if(styleDef.text.offsetX) {
+             olStyle.labelXOffset = styleDef.text.offsetX;
+          }
+          if(styleDef.text.offsetY) {
+             olStyle.labelYOffset = styleDef.text.offsetY;
+          }
+
+          //label
+          if (styleDef.text.labelText) {
+             olStyle.label = styleDef.text.labelText;
+          } else if (styleDef.text.labelProperty) {
+             olStyle.label = "${"+styleDef.text.labelProperty+"}";
+          }
             return olStyle;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
