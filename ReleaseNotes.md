@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### openlayers 3 version update
+
+Updated openlayers version from 3.11.2 -> 3.14.2 
+
 ### coordinatetool
 
 Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.

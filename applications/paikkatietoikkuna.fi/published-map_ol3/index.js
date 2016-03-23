@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
 
 
     //TODO: remove the ugly ol3 hack once we have a way to build a working ol3...
-    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-oskari.js", function() {
+    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.14.2-oskari.js", function() {
         if(!ajaxUrl) {
             jQuery('#mapdiv').append('Unable to start');
             return;
@@ -67,7 +67,7 @@ jQuery(document).ready(function() {
 
         function start(appSetup, appConfig, cb) {
             var app = Oskari.app;
-            /*
+        /*
         var plugins = appConfig.mapfull.conf.plugins,
             wfs;
         for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
@@ -88,7 +88,7 @@ jQuery(document).ready(function() {
                 "disconnectTime": 30000
             };
         }
-*/
+        */
             app.setApplicationSetup(appSetup);
             app.setConfiguration(appConfig);
             app.startApplication(function(startupInfos) {
