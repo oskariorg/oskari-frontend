@@ -63,6 +63,7 @@ jQuery(document).ready(function() {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
     
+    /*
     var plugins = appConfig.mapfull.conf.plugins,
         wfs;
     for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
@@ -71,7 +72,6 @@ jQuery(document).ready(function() {
             break;
         }
     }
-    pullu
     if (wfs) {
         wfs.config = {
             "maxBackoff": 60000,
@@ -84,7 +84,7 @@ jQuery(document).ready(function() {
             "disconnectTime": 30000
         };
     }
-    
+*/    
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
