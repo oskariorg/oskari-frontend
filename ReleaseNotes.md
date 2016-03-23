@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### openlayers 3 version update
+
+Updated openlayers version in published maps from 3.11.2 -> 3.14.2 
+
 ### core
 
 Marker icons are now defined markerShapes array in /Oskari/bundles/bundle.js. 
