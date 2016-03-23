@@ -45,6 +45,11 @@ Configure coordinatetool bundle config in default view in portti_view_bundle_seq
     "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
     }
 
+
+### statehandler and publishedstatehandler
+
+State management improved, because of bugs in published view / previous state selector and in normal view 
+
 ### metadata flyout
 
 New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
