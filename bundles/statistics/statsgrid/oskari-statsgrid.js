@@ -15,7 +15,7 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         "notify": true
       },
       "selectedLayer": {
-        "type": String,
+        "type": Number,
         "notify": true
       },
       "layerInfo": {
@@ -89,7 +89,8 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       "selectedIndicatorsChanged(ajaxUrl, selectedIndicators.splices, sources, selectedIndicators, regionInfo)",
       "sortChanged(sortColumnIdx, sortDirection)",
       "updateSelectedIndicators(sources)",
-      "selectedIndicatorChanged(selectedIndicatorKey, rows, rowHeaders)"
+      "selectedIndicatorChanged(selectedIndicatorKey, rows, rowHeaders)",
+      "layerInfoChanged(layerInfo)"
     ],
     "ajaxError": function(e) {
       var me = this;
@@ -114,13 +115,15 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
         );
       }
 
-      content = '<p>' + this.regionInfo[regionCode].localizedName;
-      content += item ? '<br />' + item : '';
-      content += '</p>';
+      if (this.regionInfo[regionCode]) {
+        content = '<p>' + this.regionInfo[regionCode].localizedName;
+        content += item ? '<br />' + item : '';
+        content += '</p>';
 
-      if (eventBuilder) {
-        var event = eventBuilder(content);
-        this.sandbox.notifyAll(event);
+        if (eventBuilder) {
+          var event = eventBuilder(content);
+          this.sandbox.notifyAll(event);
+        }
       }
     },
     "showIndicatorOnMap": function(cacheKey, index, header) {
@@ -240,12 +243,18 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       });
       return selectors;
     },
+    "layerInfoChanged": function() {
+      var me = this;
+      if (!me.selectedLayer && me.layerInfo) {
+        me.selectedLayer = Object.keys(me.layerInfo)[0];
+      }
+    },
     "getLayerInfoAsArray": function(layerInfo) {
       var me = this,
       array = [];
       Object.keys(layerInfo).forEach(function(layerId) {
         var layer = me.sandbox.findMapLayerFromAllAvailable(layerId),
-        layerName = layer.getLayerName();
+          layerName = layer.getLayerName();
 
         array.push({
           "val": layerId,
@@ -256,6 +265,9 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
     },
     "selectedLayerChanged": function(ajaxUrl, layer) {
       var me = this;
+      if (!layer) {
+        return;
+      }
       $.ajax({
         url: me.ajaxUrl,
         data: me.getRegionInfoParams(layer),
@@ -298,8 +310,11 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
     "selectedIndicatorsChanged": function() {
       var me = this,
         indicators = this.selectedIndicators || [],
-        layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer),
-        layerName = layer.getLayerName();
+        layer = me.sandbox.findMapLayerFromAllAvailable(me.selectedLayer);
+      if (!layer) {
+        return;
+      }
+      var layerName = layer.getLayerName();
       // This is needed to initialize the native dropdown to the correct value.
       this.$.selectRegionCategory.value = this.selectedLayer;
       this.set("rowHeaders", [{
