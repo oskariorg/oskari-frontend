@@ -550,8 +550,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         constructImage: function(marker) {
             var me = this,
-                size,
-                color,
                 iconSrc = me.getDefaultIconUrl();
 
             return iconSrc;

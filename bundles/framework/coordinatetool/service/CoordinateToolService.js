@@ -63,7 +63,9 @@ function(instance, config) {
         var me = this,
             url = me._getReverseGeocodeUrl(lon, lat);
 
-        if (id) url += ('&id=' + id);
+        if (id) {
+            url += '&id=' + id;
+        }
 
         jQuery.ajax({
             url : url,
@@ -86,24 +88,23 @@ function(instance, config) {
             }
         });
     },
-        _handleResponse: function(response, cb) {
-            var me = this,
-                result=[];
-
-            if(response.locations){
-                _.each(response.locations, function(location) {
-                    var loca = {};
-                    loca.channelId = location.channelId;
-                    loca.name = location.name;
-                    result.push(loca);
-                });
-
-            }
-
-            if (_.isFunction(cb)) cb(result);
-
-
+    _handleResponse: function(response, cb) {
+        var result=[];
+        if(response.locations){
+            _.each(response.locations, function(location) {
+                var loca = {};
+                loca.channelId = location.channelId;
+                loca.name = location.name;
+                result.push(loca);
+            });
         }
+
+        if (_.isFunction(cb)) {
+            cb(result);
+        }
+
+
+    }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 });

@@ -137,7 +137,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          */
         addTabs: function (data) {
             //TODO: mechanism to add tab dynamically _after_ the flyout has already been created! 
-            var me = this;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     this.additionalTabs[key] = data[key];

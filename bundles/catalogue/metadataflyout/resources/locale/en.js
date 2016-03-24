@@ -437,7 +437,7 @@ Oskari.registerLocalization({
                 "title": "Map layers",
                 "show":"Show map layer",
                 "hide": "Hide map layer"
-            },
+            }
         },
         "tile": {
             "title": "Metadata",

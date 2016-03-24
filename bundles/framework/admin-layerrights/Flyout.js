@@ -85,10 +85,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     '   </form>' +
                     '</div>\n'
             );
-            var rightsLoc = this.instance._localization.rights,
-                elParent;
-
-            elParent = this.container.parentElement.parentElement;
+            var elParent = this.container.parentElement.parentElement;
             jQuery(elParent).addClass('admin-layerrights-flyout');
         },
 
@@ -279,7 +276,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 var layer = service.findMapLayer(layerRight.id),
                     dataRow = me._templates.row.clone(),
                 	cell = null,
-                	value = null,
                 	tooltip = null,
                 	dataCell = me._templates.cellTd.clone();
 
@@ -302,7 +298,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
-                    if(allow == "true"){
+                    if(allow === "true"){
                         cell.attr('checked', 'checked');
                     }
 

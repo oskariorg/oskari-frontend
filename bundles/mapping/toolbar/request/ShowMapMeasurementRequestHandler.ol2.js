@@ -83,8 +83,6 @@ Oskari.clazz.define(
                     dialog.setContent(me._content);
                     me._dialogShown = true;
                 }
-                /*dialog.addClass('myplaces2');*/
-
                 me._content.html(value);
             }
         },

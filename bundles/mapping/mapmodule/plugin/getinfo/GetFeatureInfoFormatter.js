@@ -18,10 +18,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             var parsedHTML = jQuery('<div></div>').append(datumContent);
             // Remove stuff from head etc. that we don't need/want
             parsedHTML.find('link, meta, script, style, title').remove();
-            // let's not return a bunch of empty html
-            /*if (jQuery.trim(parsedHTML.html()) === '') {
-                return null;
-            }*/
             // Add getinforesult class etc. so the table is styled properly
             parsedHTML.find('table').addClass('getinforesult_table');
             // FIXME this is unnecessary, we can do this with a css selector.
@@ -37,8 +33,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @return {jQuery} formatted html
          */
         myplace: function(place){
-            var me = this,
-                content = jQuery('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
+            var content = jQuery('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
                 desc = content.find('p.myplaces_desc'),
                 img = content.find('a.myplaces_imglink'),
                 link = content.find('a.myplaces_link');

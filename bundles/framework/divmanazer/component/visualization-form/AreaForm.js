@@ -531,7 +531,7 @@ Oskari.clazz.define(
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
                 preview = view.find('.preview');
 
-            if (preview.length == 0) {
+            if (preview.length === 0) {
                 return;
             }
 

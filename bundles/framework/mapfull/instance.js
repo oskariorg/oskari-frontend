@@ -448,8 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 layer,
                 sandbox =  me.getSandbox(),
                 rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
-                rbStyle = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest');
+                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 

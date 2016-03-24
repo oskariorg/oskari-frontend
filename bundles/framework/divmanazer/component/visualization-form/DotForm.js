@@ -148,9 +148,7 @@ Oskari.clazz.define(
             // Shape selection
             var dialogContent = me.templateSymbolDialogContent.clone(),
                 content = dialogContent.find('div.symbols'),
-                buttonName,
-                btnContainer,
-                button;
+                btnContainer;
 
             var btnHandler = function(buttonId){
                 me.values.shape = buttonId;
@@ -159,7 +157,6 @@ Oskari.clazz.define(
             };
 
             for (var i=0;i<Oskari.markers.length;i++) {
-                var markerObj = Oskari.markers[i];
                 btnContainer = this.templateSymbolButton.clone();
 
                 var svgObj = jQuery(Oskari.markers[i].data);
@@ -175,7 +172,7 @@ Oskari.clazz.define(
 
                 btnContainer.html(svgObj.outerHTML());
 
-                if(i == this.defaultValues.shape) {
+                if(i === this.defaultValues.shape) {
                     btnContainer.css('border', '2px solid');
                 }
 
@@ -194,7 +191,6 @@ Oskari.clazz.define(
                 numIntervals = me.maxSize - me.minSize,
                 intervalWidth = sizerWidth / numIntervals,
                 numVisValues = 0,
-                i,
                 newSizerValue,
                 position;
 
@@ -427,7 +423,7 @@ Oskari.clazz.define(
          */
         _selectButton: function (selectedButtonId) {
             var dialogContent = jQuery('.pointform');
-            var content = dialogContent.find('div.symbols')
+            var content = dialogContent.find('div.symbols');
             content.find('.icon-button').css('border', '1px solid');
             content.find('.icon-button[data-button-id=' + selectedButtonId + ']').css('border', '2px solid');
         },
@@ -454,7 +450,7 @@ Oskari.clazz.define(
             var view = dialog === undefined || dialog === null ? jQuery('.pointform') : dialog,
                 preview = view.find('.preview');
 
-            if (preview.length == 0) {
+            if (preview.length === 0) {
                 return;
             }
 

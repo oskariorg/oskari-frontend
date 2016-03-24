@@ -1143,8 +1143,6 @@ Oskari.clazz.define(
         __addPositionMarks: function(svgObject) {
             var htmlObject = jQuery(svgObject.data);
             var defaultCenter = this._defaultMarker.size / 2;
-            var height = htmlObject.attr('height');
-            var width = htmlObject.attr('width');
 
             var dx = svgObject.x || 16;
             var dy = svgObject.y || 16;
@@ -1188,7 +1186,6 @@ Oskari.clazz.define(
          */
         __changeSvgAttribute: function(svg, attr, value){
             var htmlObject = jQuery(svg);
-            var sandbox = this.getSandbox();
             htmlObject.attr(attr,value);
             return htmlObject.outerHTML();
         },

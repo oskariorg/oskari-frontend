@@ -284,7 +284,7 @@ Oskari.clazz.define(
                                 contentdata: index,
                                 value: key
                             });
-                            if (key == primaryButton) {
+                            if (key === primaryButton) {
                                 btn.addClass('primary');
                             }
                         } else {
@@ -334,7 +334,7 @@ Oskari.clazz.define(
                 if(!link.is('a') || link.parents('.getinforesult_table').length) {
                     evt.stopPropagation();
                 }
-            }
+            };
         },
 
         /**
@@ -443,12 +443,13 @@ Oskari.clazz.define(
                 'margin-left': '-10px'
             });
 
-            var header = popup.find('.popupHeader').css('width', '100%'),
-                content = popup.find('.popupContent').css({
-                    'margin-left': '0',
-                    'padding': '5px 20px 5px 20px',
-                    'max-height': maxHeight - 40 + 'px'
-                });
+            popup.find('.popupHeader').css('width', '100%');
+
+            var content = popup.find('.popupContent').css({
+                'margin-left': '0',
+                'padding': '5px 20px 5px 20px',
+                'max-height': maxHeight - 40 + 'px'
+            });
 
             popup.find('.olPopupContent').css({
                 'width': '100%',
@@ -480,10 +481,6 @@ Oskari.clazz.define(
                     'height': height
                 });
             }
-
-
-            //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
-
         },
 
         /**
@@ -504,7 +501,7 @@ Oskari.clazz.define(
                 pany = 0,
                 popup = jQuery('.olPopup'),
                 infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128; //300;
+                infoboxHeight = popup.height() + 128;
 
             if (pixels[0] + infoboxWidth > width) {
                 panx = width - (pixels[0] + infoboxWidth);
@@ -604,7 +601,6 @@ Oskari.clazz.define(
             // The elements where the font style should be applied to.
             var elements = [],
                 j,
-                k,
                 el;
 
             elements.push(div);
@@ -654,7 +650,7 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
-                            popup.popup.setPosition(undefined);  //destroy();
+                            popup.popup.setPosition(undefined);
                             delete this._popups[pid];
                             event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
                         	sandbox.notifyAll(event);

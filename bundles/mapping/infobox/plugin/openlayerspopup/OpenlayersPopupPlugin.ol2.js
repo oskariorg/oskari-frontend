@@ -247,7 +247,7 @@ Oskari.clazz.define(
                                 contentdata: index,
                                 value: key
                             });
-                            if (key == primaryButton) {
+                            if (key === primaryButton) {
                                 btn.addClass('primary');
                             }
                         } else {
@@ -320,9 +320,9 @@ Oskari.clazz.define(
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var oldData = oldData || [],
-                newData = newData || [],
-                nLen = newData.length,
+            oldData = oldData || [];
+            newData = newData || [];
+            var nLen = newData.length,
                 oLen = oldData.length;
 
             for (var i = 0; i < oLen; i += 1) {
@@ -442,8 +442,8 @@ Oskari.clazz.define(
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
-            var header = popup.find('.popupHeader').css('width', '100%'),
-                maxWidth = size.width * 0.7,
+            popup.find('.popupHeader').css('width', '100%');
+            var maxWidth = size.width * 0.7,
                 maxHeight = size.height * 0.7,
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
@@ -480,9 +480,6 @@ Oskari.clazz.define(
                     'height': height
                 });
             }
-
-            //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
-
         },
 
         /**
@@ -503,7 +500,7 @@ Oskari.clazz.define(
                 pany = 0,
                 popup = jQuery('.olPopup'),
                 infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128; //300;
+                infoboxHeight = popup.height() + 128;
 
             if (pixels.x + infoboxWidth > width) {
                 panx = width - (pixels.x + infoboxWidth);
@@ -603,7 +600,6 @@ Oskari.clazz.define(
             // The elements where the font style should be applied to.
             var elements = [],
                 j,
-                k,
                 el;
 
             elements.push(div);
