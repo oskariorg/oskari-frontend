@@ -232,9 +232,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _createControlElement: function () {
             var me = this,
                 el = me._templates.coordinatetool.clone();
-            
+
             me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-        
+
             el.attr('title', me._locale.tooltip.tool);
 
             // Bind event listeners

@@ -668,7 +668,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
-             * Catch my flyout 
+             * Catch my flyout
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this;
@@ -833,8 +833,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             me.addActions(links);
         },
         /**
-         * @method addActions 
-         * 
+         * @method addActions
+         *
          * set up actions tab content based on conf
          */
         addActions: function(links) {
@@ -887,7 +887,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 labelText = me.locale.layerList.show;
             } else {
                 me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), layer.isVisible()]);
-                //turn visible in case was invisible 
+                //turn visible in case was invisible
                 if (!layer.isVisible()) {
                     me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
                 }

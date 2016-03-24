@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-        
+
      }, {
         /**
          * @method _initImpl
@@ -547,7 +547,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return new ol.style.Style(olStyle);
-        },      
+        },
         /**
          * Parses stroke style from json
          * @method __getStrokeStyle
@@ -629,7 +629,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             if(textStyleJSON.textAlign) {
                 text.textAlign = textStyleJSON.textAlign;
-            } 
+            }
             if(textStyleJSON.textBaseline) {
                 text.textBaseline = textStyleJSON.textBaseline;
             }
@@ -649,7 +649,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             return new ol.style.Text(text);
         }
-        
+
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

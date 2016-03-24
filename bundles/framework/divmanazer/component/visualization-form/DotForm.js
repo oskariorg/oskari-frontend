@@ -11,7 +11,7 @@ Oskari.clazz.define(
      *
      *
      */
-    function (creator, loc, defaultValues) {    
+    function (creator, loc, defaultValues) {
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
@@ -178,12 +178,12 @@ Oskari.clazz.define(
 
                 btnContainer.attr('id', i + 'marker');
                 btnContainer.attr('data-button-id', i);
-                
+
                 btnContainer.click(function () {
                     btnHandler(parseInt(jQuery(this).attr('data-button-id')));
                 });
                 content.append(btnContainer);
-            }            
+            }
 
             // Size slider
             var nSizeValues = 10,
@@ -464,13 +464,13 @@ Oskari.clazz.define(
                 x: 0,
                 y: 0
             });
-            
+
             var x = (me._previewSize - size)/2;
             var y = (me._previewSize - size)/2;
 
             iconSvg.find('path').attr({
-                'stroke-width': 1, 
-                'fill': '#'+me.values.color, 
+                'stroke-width': 1,
+                'fill': '#'+me.values.color,
                 'stroke': '#b4b4b4'
             });
 
@@ -483,7 +483,7 @@ Oskari.clazz.define(
                 y: y
             });
 
-            
+
             preview.empty();
             preview.append(previewTemplate);
         },

@@ -464,7 +464,7 @@ Oskari.clazz.define(
             });
 
             preview.empty();
-            
+
             // Calculate double line
             if (me.values.style === 2) {
                 var p1 = [10, 15];

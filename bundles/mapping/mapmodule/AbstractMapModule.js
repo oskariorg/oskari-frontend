@@ -1087,7 +1087,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
                 svgObject = null;
-                
+
             // marker shape is number --> find it form Oskari.markers
             if(!isNaN(markerStyle.shape)) {
                 svgObject = Oskari.markers[markerStyle.shape];
@@ -1103,7 +1103,7 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {                
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {
                 svgObject = {
                     data: markerStyle.shape.data,
                     x: markerStyle.shape.x,
@@ -1114,12 +1114,12 @@ Oskari.clazz.define(
             else {
                 sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
                 return null;
-            }            
+            }
 
             svgObject.data = this.__addPositionMarks(svgObject);
 
             marker.append(svgObject.data);
-            
+
             var markerHTML = marker.outerHTML();
             if(markerStyle.size) {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
@@ -1128,7 +1128,7 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
-            
+
             var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
 
             return svgSrc;
@@ -1173,7 +1173,7 @@ Oskari.clazz.define(
            if(htmlObject.find('path').length>1) {
               sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
            }
-           
+
            return htmlObject.outerHTML();
         },
         /**

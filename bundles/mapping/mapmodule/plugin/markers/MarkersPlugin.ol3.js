@@ -495,7 +495,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             } else {
                   data.stroke = me._defaultData.stroke;
             }
-            var style = {        	                      
+            var style = {
                 image : {
                     shape: data.shape,
                     size: me._getSizeInPixels(data.size),
@@ -516,7 +516,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     	width: 1
                     },
                     labelText: decodeURIComponent(data.msg)
-                }        	
+                }
             };
             var markerLayer = this.getMarkersLayer();
             var markerStyle = this.getMapModule().getStyle(style);
