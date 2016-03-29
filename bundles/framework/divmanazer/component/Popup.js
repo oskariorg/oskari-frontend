@@ -397,7 +397,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             };
 
             for (var p in this.eventHandlers) {
-                if (eventHandlers.hasOwnProperty(p)) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
                     this.sandbox.registerForEventByName(this, p);
                 }
             }
