@@ -8,7 +8,6 @@ StatsView = Polymer({
     "user": Object,
     "selectedLayer": {
       "type": Number,
-      "value": 9,
       "notify": true
     },
     "embedded": {

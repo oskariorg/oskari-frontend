@@ -11,8 +11,7 @@ Polymer({
       "value": false
     },
     "selectedLayer": {
-      "type": String,
-      "value": "oskari:kunnat2013",
+      "type": Number,
       "notify": true
     },
     "sources": {

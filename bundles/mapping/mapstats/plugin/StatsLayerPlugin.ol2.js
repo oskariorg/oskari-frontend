@@ -168,7 +168,7 @@ Oskari.clazz.define(
         },
 
         /**
-         * Activates the hover and select controls.
+         * Activates the hover, select and highlight controls.
          *
          * @method activateControls
          */
@@ -180,10 +180,13 @@ Oskari.clazz.define(
             if (me._getFeatureControlSelect) {
                 me._getFeatureControlSelect.activate();
             }
+            if (me._highlightCtrl) {
+                me._highlightCtrl.activate();
+            }
         },
 
         /**
-         * Deactivates the hover and select controls.
+         * Deactivates the hover, select and highlight controls.
          *
          * @method deactivateControls
          */
@@ -195,6 +198,9 @@ Oskari.clazz.define(
             if (me._getFeatureControlSelect) {
                 me._getFeatureControlSelect.deactivate();
             }
+            if (me._highlightCtrl) {
+              me._highlightCtrl.deactivate();
+          }
         },
 
         /**
@@ -570,7 +576,7 @@ Oskari.clazz.define(
             me.getMap().removeControl(me._getFeatureControlSelect);
             me.getMap().removeLayer(me._statsDrawLayer);
         },
-
+        
         /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent

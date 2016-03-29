@@ -10,7 +10,7 @@ Polymer({
       "notify": true
     },
     "selectedLayer": {
-      "type": String,
+      "type": Number,
       "notify": true
     },
     "layerInfo": {
@@ -36,9 +36,13 @@ Polymer({
     "show(showUserIndicatorView)"
     ],
     "getLayerName": function(locale, layerKey) {
-      var layer = this.sandbox.findMapLayerFromAllAvailable(layerKey),
-        layerName = layer.getLayerName();
-      return this.localize(this.locale.regionCategories, layerName);
+      var layer = this.sandbox.findMapLayerFromAllAvailable(layerKey);
+      if (layer) {
+        var layerName = layer.getLayerName();
+        return this.localize(this.locale.regionCategories, layerName);
+      } else {
+        return "";
+      }
     },
     "show": function() {
       // This is needed to initialize the native dropdown to the correct value.
