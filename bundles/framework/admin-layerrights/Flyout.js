@@ -298,7 +298,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
-                    if(allow === "true"){
+                    if(allow === true){
                         cell.attr('checked', 'checked');
                     }
 
@@ -397,11 +397,47 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 externalType: externalType
             }, function (result) {
                 me.progressSpinner.stop();
+                var mappedResult = me.mapResult(result);
                 // store unaltered data so we can do a dirty check on save
-                me.cleanData = result.resource;
-                var table = me.createLayerRightGrid(result.resource);
+                me.cleanData = mappedResult;
+                var table = me.createLayerRightGrid(mappedResult);
                 jQuery(me.container).find('.admin-layerrights-layers').empty().append(table);
             });
+        },
+        /**
+         * Maps names for permissions
+         * @param  {Object} result response from GetPermissionsLayerHandlers
+         * @return {Object[]}    resource array of response with populated permission names
+         */
+        mapResult : function(result) {
+            //result.names = [id : VIEW_LAYER, name : 'ui name'];
+            //result.resource = [{permissions : [{id : VIEW_LAYER, name : "populate"}]}]
+            var nameMapper = {};
+            result.names.forEach(function(item) {
+                // for whatever reason...
+                if(item.id === 'VIEW_LAYER') {
+                    item.name = 'rightToView';
+                } else if(item.id === 'VIEW_PUBLISHED') {
+                    item.name = 'rightToPublishView';
+                } else if(item.id === 'PUBLISH') {
+                    item.name = 'rightToPublish';
+                } else if(item.id === 'DOWNLOAD') {
+                    item.name = 'rightToDownload';
+                }
+                nameMapper[item.id] = item.name;
+            });
+
+            var mapped = [];
+            result.resource.forEach(function(resource) {
+                resource.permissions.forEach(function(permission) {
+                    if(permission.name) {
+                        return;
+                    }
+                    permission["name"] = nameMapper[permission.id] || permission.id;
+                });
+                mapped.push(resource);
+            });
+            return mapped;
         },
 
         /**
