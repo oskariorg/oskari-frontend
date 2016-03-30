@@ -11,15 +11,8 @@ div.mapplugin.coordinatetool {
 
 div.coordinatetool__popup {
     width: 280px;
-    display:none;
     z-index:15000;
     background-color: #ffffff;
-
-    div.coordinatetool__close {
-      position: absolute;
-      top: 8px;
-      right: 5px;
-    }
 
     div.actions {
       float: right;
@@ -41,25 +34,29 @@ div.coordinatetool__popup {
       }
     }
 
+    .margintop {
+        margin-top: 10px;
+    }
+
+    .coordinatetool-divider {
+      margin-bottom: 5px;
+      height: 1px;
+      border-top: 1px solid #DDDDDD;
+    }
+
+    .coordinatetool-projection-change-header {
+      font-style: italic;
+    }
+
+    div.projectionchange {
+      margin: 10px;
+    }
+
     div.content {
       .srs {
           color: #b3b3b3;
           font-size: 12px;
         }
-
-      .margintop {
-          margin-top: 10px;
-      }
-
-      .coordinatetool-divider {
-        margin-bottom: 5px;
-        height: 1px;
-        border-top: 1px solid #DDDDDD;
-      }
-
-      .coordinatetool-projection-change-header {
-        font-style: italic;
-      }
     }
 }
 

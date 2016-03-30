@@ -559,6 +559,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(styleDef.stroke.width) {
                 stroke.width = styleDef.stroke.width;
             }
+            if(styleDef.stroke.lineDash) {
+                stroke.lineDash = styleDef.stroke.lineDash;
+            }
+
 
             return new ol.style.Stroke(stroke);
         },

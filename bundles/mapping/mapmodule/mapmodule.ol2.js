@@ -319,11 +319,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Transforms coordinates from srs projection to the targerSRS projection.
          * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @param {String} targetsrs projection to transform to like "EPSG:4326" (optional, defaults to map projection)
+         * @param {String} targetSRS projection to transform to like "EPSG:4326" (optional, defaults to map projection)
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
-        console.log(pLonlat);
             if(!targetSRS) {
                 targetSRS = this.getProjection();
             }
@@ -531,7 +530,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
           } else if (styleDef.text.labelProperty) {
              olStyle.label = "${"+styleDef.text.labelProperty+"}";
           }
-          console.log(olStyle);
             return olStyle;
         },
         __getSVG: function(markerStyle) {
