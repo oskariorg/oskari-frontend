@@ -736,8 +736,7 @@ function () {
             dialogContent = me._templates.metadataFlyoutLicenseDialog.clone(),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
             licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
-            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
-            metadataTitle = '';
+            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title');
         dialogContent.find('.elf_license_dialog_name').html(data.name);
         dialogContent.find('.elf_license_dialog_description').html(data.description);
 
@@ -790,10 +789,10 @@ function () {
             } else {
                 me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
             }
-        }
+        };
 
         licenseDialogLink.on('click' , function() {
-            closureMagic(metadataModel)   
+            closureMagic(metadataModel);
         });
         dialogContent.append(licenseDialogLink);
 

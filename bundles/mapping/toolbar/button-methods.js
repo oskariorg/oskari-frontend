@@ -139,7 +139,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         // FIXME use ===
-        if (btn.sticky == true) {
+        if (btn.sticky === true) {
             // notify components that tool has changed
             e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
             this.sandbox.notifyAll(e);

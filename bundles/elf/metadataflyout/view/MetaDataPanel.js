@@ -532,7 +532,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
-             * Catch my flyout 
+             * Catch my flyout
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this;
@@ -564,7 +564,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 identification,
                 images = [],
                 me = this,
-                links,
                 locale = me.locale,
                 model = me._model,
                 tabContainerHeader,
@@ -598,7 +597,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     }
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
-                    
+
                 }
             }
 
@@ -625,35 +624,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 images[i] = new Image();
                 images[i].src = identification.browseGraphics[i].fileName;
             }
-
-            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
-                entry = jQuery('<a></a>');
-                entry.html(locale.xml);
-                entry.attr('href', model.metadataURL);
-                entry.attr('target', '_blank');
-                links = entry;
-            }
-
-            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
-                entry = jQuery('<a></a>');
-                entry.html(locale.pdf);
-                entry.attr(
-                    'href',
-                    '/catalogue/portti-metadata-printout-service/' +
-                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
-                    '&title=' + me.locale.metadata_printout_title +
-                    '&metadataresourceuuid=' + me._model.fileIdentifier
-                );
-                entry.attr('target', '_blank');
-                if(links){
-                    links = links.add(entry);
-                } else {
-                    links = entry;
-                }
-            }
-
-//            me._tabContainer.setExtra(links);
-            me.addActions(links);
+            me.addActionLinks();
             me.renderMapLayerList();
 
             me.setTitle(me._model.identification.citation.title);
@@ -689,10 +660,41 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
         },
 
+        addActionLinks: function() {
+            var me = this,
+                locale = me.locale,
+                model = me._model,
+                links;
+            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
+                entry = jQuery('<a></a>');
+                entry.html(locale.xml);
+                entry.attr('href', model.metadataURL);
+                entry.attr('target', '_blank');
+                links = entry;
+            }
 
+            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
+                entry = jQuery('<a></a>');
+                entry.html(locale.pdf);
+                entry.attr(
+                    'href',
+                    '/catalogue/portti-metadata-printout-service/' +
+                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
+                    '&title=' + me.locale.metadata_printout_title +
+                    '&metadataresourceuuid=' + me._model.fileIdentifier
+                );
+                entry.attr('target', '_blank');
+                if(links){
+                    links = links.add(entry);
+                } else {
+                    links = entry;
+                }
+            }
+            me.addActions(links);
+        },
         /**
-         * @method addActions 
-         * 
+         * @method addActions
+         *
          * set up actions tab content based on conf
          */
         addActions: function(links) {
@@ -708,7 +710,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             var me = this,
                 container = me._tabs['actions'].getContainer(),
                 layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
-                layerList,
                 layerListHeader;
 
             container.find('table.metadataSearchResult').remove();
@@ -748,7 +749,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 labelText = me.locale.layerList.show;
             } else {
                 me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), layer.isVisible()]);
-                //turn visible in case was invisible 
+                //turn visible in case was invisible
                 if (!layer.isVisible()) {
                     me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
                 }

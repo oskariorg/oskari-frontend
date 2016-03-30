@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._lonInput = null;
         this._reverseGeocodeLabel = null;
         this._dialog = null;
+        this._reverseGeocodeNotImplementedError = false;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popupContent: jQuery(
@@ -83,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _getPopup: function(){
             var me = this,
-                popup = me._popup || jQuery('.coordinatetool__popup');
+                popup = me._popup;
             return popup;
         },
 
@@ -232,9 +233,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _createControlElement: function () {
             var me = this,
                 el = me._templates.coordinatetool.clone();
-            
+
             me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-        
+
             el.attr('title', me._locale.tooltip.tool);
 
             // Bind event listeners
@@ -369,7 +370,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _update3words: function(data){
             var me = this,
                 locale = me._locale.reversegeocode,
-                service = me._instance.getService();
+                service = me._instance.getService(),
+                popup = me._getPopup();
+            
+            if(me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
+                return;
+            }
 
             if (!data || !data.lonlat) {
                 // update with map coordinates if coordinates not given
@@ -384,15 +390,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             service.getReverseGeocode(
                 // Success callback
                 function (response) {
-                    if (response) {
-                        if(response[0].name && me._reverseGeocodeLabel && response[0].channelId && locale[response[0].channelId]){
-                            me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
-                        }
+                    var hasResponse = (response && response.length > 0 && response[0].name && response[0].channelId) ? true : false;
+
+                    if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]){
+                        me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
                     }
                 },
                 // Error callback
                 function (jqXHR, textStatus, errorThrown) {
-                    me._instance.showMessage(me._locale.reversegeocode.errorTitle, me._locale.reversegeocode.error);
+                    if(jqXHR.status === 501) {
+                        me._reverseGeocodeNotImplementedError = true;
+                    }
+                    var messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    var message = me._instance.getName() + ': Cannot reverse geocode';
+                    if(messageJSON && messageJSON.error) {
+                        message = me._instance.getName() + ': ' + messageJSON.error;
+                    }
+
+                    me._sandbox.printWarn(message);
                 },data.lonlat.lon, data.lonlat.lat);
 
         },

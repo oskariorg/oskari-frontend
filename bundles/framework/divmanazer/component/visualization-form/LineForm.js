@@ -448,9 +448,8 @@ Oskari.clazz.define(
         _updatePreview: function (dialog) {
             var me = this,
                 view = dialog === undefined || dialog === null ? jQuery('.lineform') : dialog,
-                preview = view.find('.preview'),
-                preview;
-            if (preview.length == 0) {
+                preview = view.find('.preview');
+            if (preview.length === 0) {
                 return;
             }
 
@@ -465,9 +464,9 @@ Oskari.clazz.define(
             });
 
             preview.empty();
-            
+
             // Calculate double line
-            if (me.values.style == 2) {
+            if (me.values.style === 2) {
                 var p1 = [10, 15];
                 var p2 = [20, 35];
                 var p3 = [40, 25];
