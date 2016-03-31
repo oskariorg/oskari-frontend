@@ -22,6 +22,16 @@ Oskari.registerLocalization(
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "errorTitle": "Reverse geocoding error",
+                "error": "Error to get reverse geocode for the current position",
+                "WHAT3WORDS_CHANNEL": {
+                    "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL": {
+                    "label": "Address: "
+                }
+            },
             "tooltip": {
                 "tool": "Show coordinates or type coordinates and focus map on them.",
                 "close": "Close"
@@ -45,7 +55,7 @@ Oskari.registerLocalization(
                 "projections": {
                     "EPSG:3067": "ETRS-TM35FIN",
                     "NLSFI:etrs_gk": "ETRS-GKn",
-                    "EPSG:4326": "KKJ:n peruskoordinaatisto",
+                    "NLSFI:kkj": "KKJ:n peruskoordinaatisto",
                     "NLSFI:ykj": "KKJ:n yhtenäiskoordinaatisto (YKJ)",
                     "EPSG:4258": "ETRS89 maantieteelliset koordinaatit (~WGS84)",
                     "LATLON:kkj": "KKJ maantieteelliset koordinaatit",

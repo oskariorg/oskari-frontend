@@ -22,12 +22,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._name = 'CoordinateToolPlugin';
         this._toolOpen = false;
         this._showMouseCoordinates = false;
+        this._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
         this._popup = null;
         this._latInput = null;
         this._lonInput = null;
+        this._reverseGeocodeLabel = null;
         this._dialog = null;
         this._mouseMovingNow = false;
         this._coordinatesFromServer = null;
+        this._reverseGeocodeNotImplementedError = false;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popupContent: jQuery(
@@ -45,6 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <div class="clear"></div>'+
                 '   </div>' +
                 '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   <div class="margintop">'+
+                '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
+                '   </div>' +
                 '</div>'),
             projectionSelect: jQuery(
                 '<div class="clear"></div>'+
@@ -91,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _getPopup: function(){
             var me = this,
-                popup = me._popup || jQuery('.coordinatetool__popup');
+                popup = me._popup;
             return popup;
         },
 
@@ -107,11 +113,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crs = me.getMapModule().getProjection(),
                 crsDefaultText = loc.crs.default,
                 popupName = 'xytoolpopup',
-                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
+                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
+                popupLocation;
 
             me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
+            me._reverseGeocodeLabel = popupContent.find('.reverseGeocode-label');
 
             me._popupContent = popupContent;
 
@@ -142,6 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             popupContent.find('#mousecoordinates').bind('change', function(){
                 me._showMouseCoordinates = jQuery(this).prop('checked');
                 me._setDisabledInputs(me._showMouseCoordinates, false);
+                me._mouseMovingNow = me._showMouseCoordinates;
             });
 
             me._popup.makeDraggable();
@@ -152,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             else if (me._config && typeof me._config.supportedProjections === 'object') {
                 me._initProjectionChange();
             }
-
             //set the same width for the projection change select as the text inputs.
             if (me._projectionSelect) {
                var inputWidth = popupContent.find('.lon-input').outerWidth();
@@ -160,7 +168,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                    me._projectionSelect.css('width', inputWidth);
                }
             }
-
             me._popup.addClass('coordinatetool__popup');
             me._popup.createCloseIcon();
             me._popup.onClose(function () {
@@ -170,12 +177,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             });
             me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
             me._popup.adaptToMapSize(me._sandbox, popupName);
-            me._popup.moveTo(me.getElement(), 'left', true);
-            me.refresh();
+
             //set the same width for the projection change select as the content element.
             var selectWidth =  jQuery('div.coordinatetool__popup .content').outerWidth();
             if (selectWidth > 0) {
                 me._projectionSelect.css('width', selectWidth);
+            }
+            //check location of the tool and open popup according to it
+            if (me._config.location && me._config.location.classes === "top left") {
+                popupLocation = "right";
+            } else {
+                popupLocation = "left";
+            }
+            me._popup.moveTo(me.getElement(), popupLocation, true);
+            me.refresh();
+
+            if (this._showReverseGeocode){
+                this._update3words();
             }
         },
 
@@ -230,10 +248,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 },
                 loc = me._locale;
-                data = me.transformCoordinates(data, me._projectionSelect.val(), me.getMap().getProjection());
+                data = me.transformCoordinates(data, me._projectionSelect.val(), me.getMapModule().getProjection());
             if(this.getMapModule().isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(data.lonlat.lon, data.lonlat.lat);
+                //debugger;
                 me._sandbox.request(this, moveReq);
             } else {
                 if(!me._dialog) {
@@ -259,7 +278,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 },
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if(reqBuilder) {
-                var msg = me._latInput.val() + ', ' + me._lonInput.val() + ' (' + jQuery("#projection option:selected" ).text() + ')';
+
+                var msg = me._latInput.val() + ', ' + me._lonInput.val();
+                if(me._config.supportedProjections) {
+                    msg += ' (' + jQuery("#projection option:selected" ).text() + ')';
+                }
                 var marker = {
                     x: me._lon,
                     y: me._lat,
@@ -277,17 +300,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _createControlElement: function () {
             var me = this,
-                el = me._templates.coordinatetool.clone(),
-                loc = me._locale;
+                el = me._templates.coordinatetool.clone();
 
-            el.attr('title', loc.tooltip.tool);
+            me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
+
+            el.attr('title', me._locale.tooltip.tool);
 
             // Bind event listeners
             // XY icon click
             el.unbind('click');
             el.bind('click', function(event){
-                me._toggleToolState();
-                event.stopPropagation();
+                if (me._sandbox.mapMode !== "mapPublishMode") {
+                    me._toggleToolState();
+                    event.stopPropagation();
+                }
             });
 
             me._changeToolStyle(null, el);
@@ -431,7 +457,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             if (me._latInput && me._lonInput) {
-                if(conf && _.isArray(conf.supportedProjections) && me._projectionSelect.val() !== me.getMap().getProjection() && !me._coordinatesFromServer) {
+                if(conf && _.isArray(conf.supportedProjections) && me._projectionSelect.val() !== me.getMapModule().getProjection() && !me._coordinatesFromServer && data.lonlat.lat!=0 && data.lonlat.lon!=0) {
                      me._latInput.val("~" + data.lonlat.lat.toFixed(roundToDecimals));
                      me._lonInput.val("~" + data.lonlat.lon.toFixed(roundToDecimals));
                 } else {
@@ -440,6 +466,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._coordinatesFromServer = false;
                 }
             }
+        },
+        /**
+         * Update 3words value to inputs
+         * @method  @private _update3words
+         * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
+         * @return {[type]}      [description]
+         */
+        _update3words: function(data){
+            var me = this,
+                locale = me._locale.reversegeocode,
+                service = me._instance.getService(),
+                popup = me._getPopup();
+
+            if(me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
+                return;
+            }
+
+            if (!data || !data.lonlat) {
+                // update with map coordinates if coordinates not given
+                var map = me.getSandbox().getMap();
+                data = {
+                    'lonlat': {
+                        'lat': parseFloat(map.getY()),
+                        'lon': parseFloat(map.getX())
+                    }
+                };
+            }
+            service.getReverseGeocode(
+                // Success callback
+                function (response) {
+                    var hasResponse = (response && response.length > 0 && response[0].name && response[0].channelId) ? true : false;
+
+                    if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]){
+                        me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
+                    }
+                },
+                // Error callback
+                function (jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.status === 501) {
+                        me._reverseGeocodeNotImplementedError = true;
+                    }
+                    var messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    var message = me._instance.getName() + ': Cannot reverse geocode';
+                    if(messageJSON && messageJSON.error) {
+                        message = me._instance.getName() + ': ' + messageJSON.error;
+                    }
+
+                    me._sandbox.printWarn(message);
+                },data.lonlat.lon, data.lonlat.lat);
+
         },
         /**
          * Updates the given coordinates to the UI
@@ -463,9 +539,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._lon = data.lonlat.lon;
             me._lat = data.lonlat.lat;
             if(this._config && _.isArray(this._config.supportedProjections) && me._projectionSelect) {
-                data = me.transformCoordinates(data, me.getMap().getProjection(), me._projectionSelect.val());
+                data = me.transformCoordinates(data, me.getMapModule().getProjection(), me._projectionSelect.val());
             }
             me._updateLonLat(data);
+
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
@@ -475,7 +552,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          /**
          * Updates the given coordinates to the UI
          * @method transformCoordinates
-         * @param {Object} data: lat/lon coordinates to betransformed
+         * @param {Object} data: lat/lon coordinates to be transformed
          * @param {String} srs: projection for given lonlat params like "EPSG:4326"
          * @param {String} targetSRS: projection to transform to like "EPSG:4326"
          * @return {Object} dataFront: transformed coordinates as object with lon and lat keys
@@ -489,9 +566,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             return dataFront;
         },
+         /**
+         * Transforms the given coordinates using action_route=Coordinates and updates coordinates to the inputs
+         * @method getTransformedCoordinatesFromServer
+         * @param {Object} lonlat: lat/lon coordinates to be transformed
+         * @param {String} srs: projection for given lonlat params like "EPSG:4326"
+         * @param {String} targetSRS: projection to transform to like "EPSG:4326"
+         */
         getTransformedCoordinatesFromServer: function (lonlat, srs, targetSRS) {
             var me = this;
-            if(me._projectionSelect.val() !== me.getMap().getProjection() && !me._mouseMovingNow) {
+            if(me._projectionSelect.val() !== me.getMapModule().getProjection() && !me._mouseMovingNow) {
                 jQuery.ajax({
                     url: me._sandbox.getAjaxUrl('Coordinates'),
                     data: {
@@ -508,6 +592,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                     'lat': response.lat
                                 }
                             };
+                            //TO DO: set spinner into coordinatetool-popup
                             me.getSandbox().postRequestByName('ShowProgressSpinnerRequest',[true]);
                             me._coordinatesFromServer = true;
                             me._updateLonLat(newLonLat);
@@ -544,21 +629,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                        }
                     };
                     if(me._showMouseCoordinates) {
-                        me.refresh(data);
-                        //if mouse is moving, do not transform coordinate before the mouse stopped
-
-                        /*if(event.isPaused()) {
+                    //if mouse is moving, do not transform coordinate before the mouse stopped
+                        if(event.isPaused() && me._config.supportedProjections) {
                             me._mouseMovingNow = false;
-                            me.getTransformedCoordinatesFromServer(data, me.getMap().getProjection(), me._projectionSelect.val());
+                            me.getTransformedCoordinatesFromServer(data.lonlat, me.getMapModule().getProjection(), me._projectionSelect.val());
                             me._mouseMovingNow = true;
-                        }*/
-
-                        clearTimeout(this.mouseMoveTimer);
-                        this.mouseMoveTimer = setTimeout(function() {
-                            me._mouseMovingNow = false;
-                            me.getTransformedCoordinatesFromServer(data, me.getMap().getProjection(), me._projectionSelect.val());
-                        }, 500);
-                        me._mouseMovingNow = true;
+                        }
+                        me.refresh(data);
+                        if (event.isPaused() && this._showReverseGeocode){
+                            this._update3words(data);
+                        }
                     }
                 },
                 /**
@@ -569,15 +649,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(!this._showMouseCoordinates) {
                         this.refresh();
                     }
+                    if (this._showReverseGeocode){
+                        this._update3words();
+                    }
+
                 },
                 /**
                  * @method MapClickedEvent
                  * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
                  */
                 MapClickedEvent: function (event) {
+                    var lonlat = event.getLonLat();
                     if(!this._showMouseCoordinates) {
-                        var lonlat = event.getLonLat();
                         this.refresh({
+                            'lonlat': {
+                                'lat': parseFloat(lonlat.lat),
+                                'lon': parseFloat(lonlat.lon)
+                            }
+                        });
+                    }
+                    if (this._showReverseGeocode){
+                        this._update3words({
                             'lonlat': {
                                 'lat': parseFloat(lonlat.lat),
                                 'lon': parseFloat(lonlat.lon)

@@ -87,6 +87,13 @@ Oskari.clazz.define(
 
         // mapcontrols assumes this to be present before init or start
         me._localization = null;
+
+        me._defaultMarker = {
+            shape: 2,
+            size: 64
+        };
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
+
     }, {
         /**
          * @method init
@@ -1068,6 +1075,123 @@ Oskari.clazz.define(
         },
 /* --------------- /PUBLISHER ------------------------ */
 
+
+/* --------------- SVG MARKER ------------------------ */
+        /**
+         * Gets the svg marker to be used draw marker
+         * @method  @public getSvg
+         * @param  {Object} markerStyle marker style
+         * @return {String} marget svg image format
+         */
+        getSvg: function(markerStyle){
+            var sandbox = this.getSandbox(),
+                marker = this._markerTemplate.clone(),
+                svgObject = null;
+
+            // marker shape is number --> find it form Oskari.markers
+            if(!isNaN(markerStyle.shape)) {
+                svgObject = Oskari.markers[markerStyle.shape];
+                if(!svgObject) {
+                    svgObject = Oskari.markers[this._defaultMarker.shape];
+                }
+
+                if(markerStyle.color) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', markerStyle.color);
+                }
+                if(markerStyle.stroke) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', markerStyle.stroke);
+                }
+            }
+            // marker shape is svg
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {
+                svgObject = {
+                    data: markerStyle.shape.data,
+                    x: markerStyle.shape.x,
+                    y: markerStyle.shape.y
+                };
+            }
+            // marker icon not found
+            else {
+                sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
+                return null;
+            }
+
+            svgObject.data = this.__addPositionMarks(svgObject);
+
+            marker.append(svgObject.data);
+
+            var markerHTML = marker.outerHTML();
+            if(markerStyle.size) {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
+            } else {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
+            }
+
+            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+
+            return svgSrc;
+        },
+
+        /**
+         * Add x and y attributes to svg image
+         * @method  @private __addPositionMarks
+         * @param  {Object} svgObject the svg object
+         * @return {String} svg string
+         */
+        __addPositionMarks: function(svgObject) {
+            var htmlObject = jQuery(svgObject.data);
+            var defaultCenter = this._defaultMarker.size / 2;
+
+            var dx = svgObject.x || 16;
+            var dy = svgObject.y || 16;
+
+            var x = defaultCenter - dx;
+            var y = defaultCenter - (defaultCenter - dy);
+
+            if(!isNaN(x) && !isNaN(y)) {
+                htmlObject.attr('x', x);
+                htmlObject.attr('y', y);
+            }
+
+            return htmlObject.outerHTML();
+        },
+        /**
+         * Changes svg path attributes
+         * @method  @private __changePathAttribute description]
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changePathAttribute: function(svg, attr, value){
+           var htmlObject = jQuery(svg);
+           var sandbox = this.getSandbox();
+           htmlObject.find('path').attr(attr,value);
+
+           if(htmlObject.find('path').length>1) {
+              sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+           }
+
+           return htmlObject.outerHTML();
+        },
+        /**
+         * Changes svg attribute
+         * @method  @private __changeSvgAttribute
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changeSvgAttribute: function(svg, attr, value){
+            var htmlObject = jQuery(svg);
+            htmlObject.attr(attr,value);
+            return htmlObject.outerHTML();
+        },
+/* --------------- /SVG MARKER ------------------------ */
+
+
 /* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
          * Removes all the css classes which respond to given regex from all elements
@@ -1163,6 +1287,7 @@ Oskari.clazz.define(
                 return null;
             }
         },
+
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme

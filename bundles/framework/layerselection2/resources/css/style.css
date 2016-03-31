@@ -18,7 +18,7 @@ div.layerselection2 .layer.selected {
       cursor: move;
       display: inline; }
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
-        font: 14pt Arial, sans-serif;
+        font: 14pt Arial,sans-serif;
         padding: 0; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-refresh {
       float: right;
@@ -26,12 +26,6 @@ div.layerselection2 .layer.selected {
       margin-right: 10px; }
     div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
-    div.layerselection2 .layer.selected div.layer-info .content-editor-button {
-      float: right;
-      line-height: 7px;
-      margin-right: 20px; }
-    div.layerselection2 .layer.selected div.layer-info h4 {
-      display: inline; }
   div.layerselection2 .layer.selected div.layer-tools {
     background-color: #f3f3f3;
     padding: 7px; }
@@ -46,7 +40,7 @@ div.layerselection2 .layer.selected {
         display: inline-block; }
       div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity {
         display: inline-block;
-        background-image: url('../images/opacity_slider.png');
+        background-image: url("../images/opacity_slider.png");
         background-repeat: no-repeat; }
         div.layerselection2 .layer.selected div.layer-tools div.left-tools div.layer-opacity input.opacity {
           padding: 1px;
@@ -65,6 +59,7 @@ div.layerselection2 .layer.selected {
     background-color: #f3f3f3; }
     div.layerselection2 .layer.selected div.stylesel label {
       padding: 7px; }
+
 div.layerselection2 ul.selectedLayersList {
   height: 100%;
   width: 100%;

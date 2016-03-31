@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-        this._defaulfMarkerShape = 2;
+
      }, {
         /**
          * @method _initImpl
@@ -112,6 +112,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
+
+                clearTimeout(this.mouseMoveTimer);
+                this.mouseMoveTimer = setTimeout(function() {
+                    // No mouse move in 1000 ms - mouse move paused
+                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
+                    sandbox.notifyAll(hoverEvent);
+                }, 1000);
                 var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
                 sandbox.notifyAll(hoverEvent);
             });
@@ -310,19 +317,30 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
+
             if(!targetSRS) {
                 targetSRS = this.getProjection();
             }
             if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
-            // TODO: check that srs definition exists as in OL2
-            //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
-            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
+
+            var isSRSDefined = ol.proj.get(srs);
+            var isTargetSRSDefined = ol.proj.get(targetSRS);
+
+            if (isSRSDefined && isTargetSRSDefined) {
+              var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
+                  return {
+                      lon : transformed[0],
+                      lat : transformed[1]
+                  };
+            }
+            
             return {
-              lon : transformed[0],
-              lat : transformed[1]
+                lon : 0,
+                lat : 0
             };
+
         },
         /**
          * @method orderLayersByZIndex
@@ -544,7 +562,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return new ol.style.Style(olStyle);
-        },      
+        },
         /**
          * Parses stroke style from json
          * @method __getStrokeStyle
@@ -573,14 +591,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {ol.style.Circle}
          */
         __getImageStyle: function(styleDef) {
+            var me = this;
             var image = {};
-            if(styleDef.image.shape) {
-            	var svg = this.__getSVG(styleDef.image);
+            var size = (styleDef.image && styleDef.image.size) ? styleDef.image.size : this._defaultMarker.size;
+
+          	var svg = me.getSvg(styleDef.image);
+            if(svg) {
                 image = new ol.style.Icon({
-	              	src: svg
+              	    src: svg,
+                    size: [size,size]
                 });
-              return image;
+                return image;
             }
+
             if(styleDef.image.radius) {
                 image.radius = styleDef.image.radius;
             }
@@ -621,7 +644,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             if(textStyleJSON.textAlign) {
                 text.textAlign = textStyleJSON.textAlign;
-            } 
+            }
             if(textStyleJSON.textBaseline) {
                 text.textBaseline = textStyleJSON.textBaseline;
             }
@@ -640,35 +663,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.text = textStyleJSON.labelText;
             }
             return new ol.style.Text(text);
-        },
-        __getSVG: function(markerStyle) {
-        	var svg = Oskari.markers[markerStyle.shape];
-        	if(!svg) {
-                svg = Oskari.markers[this._defaulfMarkerShape];
-            }
-            if(markerStyle.color) {
-                svg = this.__changePathAttribute(svg, 'fill', markerStyle.color);
-            }
-            if(markerStyle.stroke) {
-                svg = this.__changePathAttribute(svg, 'stroke', markerStyle.stroke);
-            }
-            if(markerStyle.size) {
-            	svg = this.__changeSvgAttribute(svg, 'height', markerStyle.size);
-                svg = this.__changeSvgAttribute(svg, 'width', markerStyle.size);
-            }
-            var svgSrc = 'data:image/svg+xml,' + escape(svg);
-
-        	return svgSrc;
-        },
-        __changePathAttribute: function(svg, attr, value){
-           var htmlObject = jQuery(svg);
-           htmlObject.find("path")[0].attributes[attr].nodeValue = value;
-           return htmlObject[0].outerHTML;
-        },
-        __changeSvgAttribute: function(svg, attr, value){
-            var htmlObject = jQuery(svg);
-            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
-            return htmlObject[0].outerHTML;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {

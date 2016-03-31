@@ -25,8 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHa
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var sandbox = core.getSandbox(),
-                requestOperation = request.getOp();
+            var requestOperation = request.getOp();
 
             if (requestOperation === 'add') {
                 this._toolbar._addToolbar(request.getId(), request.getData());

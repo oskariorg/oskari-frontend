@@ -459,9 +459,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             styleDef = styleDef || {};
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            if(styleDef.image.shape) {
-                olStyle.externalGraphic = this.__getSVG(styleDef.image);
+            var svg = this.getSvg(styleDef.image);
+            if(svg) {
+                olStyle.externalGraphic = svg;
             }
+
             if(styleDef.image.size) {
                 olStyle.graphicWidth = styleDef.image.size;
                 olStyle.graphicHeight = styleDef.image.size;
@@ -531,35 +533,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
              olStyle.label = "${"+styleDef.text.labelProperty+"}";
           }
             return olStyle;
-        },
-        __getSVG: function(markerStyle) {
-            var svg = Oskari.markers[markerStyle.shape];
-            if(!svg) {
-                svg = Oskari.markers[this._defaulfMarkerShape];
-            }
-            if(markerStyle.color) {
-                svg = this.__changePathAttribute(svg, "fill", markerStyle.color);
-            }
-            if(markerStyle.stroke) {
-               svg = this.__changePathAttribute(svg, "stroke", markerStyle.stroke);
-            }
-            if(markerStyle.size) {
-                svg = this.__changeSvgAttribute(svg, 'height', markerStyle.size);
-                svg = this.__changeSvgAttribute(svg, 'width', markerStyle.size);
-            }
-            iconSrc = this._preSVGIconUrl + jQuery.base64.encode(svg);
-
-            return iconSrc;
-        },
-        __changePathAttribute: function(svg, attr, value){
-            var htmlObject = jQuery(svg);
-            htmlObject.find("path")[0].attributes[attr].nodeValue = value;
-            return htmlObject[0].outerHTML;
-        },
-        __changeSvgAttribute: function(svg, attr, value){
-            var htmlObject = jQuery(svg);
-            htmlObject.find("svg").prevObject[0].attributes[attr].nodeValue = value;
-            return htmlObject[0].outerHTML;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 

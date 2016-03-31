@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="content"></div><div class="actions"></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
@@ -387,15 +387,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 MapSizeChangedEvent: function (evt) {
                     this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
-            },
+            };
 
             this.onEvent = function (event) {
                 var eventHandler = this.eventHandlers[event.getName()];
-                if (eventHandler) eventHandler.apply(this, [event]);
-            }
+                if (eventHandler) {
+                    eventHandler.apply(this, [event]);
+                }
+            };
 
             for (var p in this.eventHandlers) {
-                this.sandbox.registerForEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    this.sandbox.registerForEventByName(this, p);
+                }
             }
         },
 
@@ -441,10 +445,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             // when dialog is opened check the size of  the screen
             if (!size) {
-                var size = {
+                size = {
                     width: window.innerWidth,
                     height: window.innerHeight
-                }
+                };
             }
 
             if (me.popupClass) {

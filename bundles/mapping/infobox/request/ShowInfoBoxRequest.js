@@ -42,7 +42,7 @@ Oskari.clazz
             this._title = title;
             this._content = content;
             this._position = position;
-            this._hidePrevious = (hidePrevious == true);
+            this._hidePrevious = (hidePrevious === true);
             this._colourScheme = colourScheme;
             this._font = font;
             this._additionalTools = [];

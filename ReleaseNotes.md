@@ -2,6 +2,64 @@
 
 ## 1.36
 
+### openlayers 3 version update
+
+Updated openlayers version in published maps from 3.11.2 -> 3.14.2 
+
+### core
+
+Marker icons are now defined markerShapes array in /Oskari/bundles/bundle.js. 
+Array contains objects which tell following info:
+- x: image center point in pixels (starting left to right)
+- y: image center point in pixels (starting bottom to up)
+- data: marker svg. Marker must be 32 x 32 pixel size.
+
+For example:
+  {
+      x: 14.06,
+      y: 5.38,
+      data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
+  };
+
+In the future markers will be transferred to another place.
+
+
+### divmanazer/ui-components
+
+Removed Raphael library from package.
+
+### divmanazer/visualization-form
+
+Removed Raphael dependencies from DotForm, AreaForm and LineForm. Make dot, line and area previews without Raphael library.
+
+### coordinatetool
+
+Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.
+
+Display is false by default. 
+
+Configure coordinatetool bundle config in default view in portti_view_bundle_seq table for to get w3w displayed.
+
+    {
+    "isReverseGeocode" : true,
+    "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+    }
+
+
+### statehandler and publishedstatehandler
+
+State management improved, because of bugs in published view / previous state selector and in normal view 
+
+### metadata flyout
+
+New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
+
+### tools
+
+Upgraded build-tools with new dependency versions.
+Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
+Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
+
 ### selected-featuredata
 
 *New bundle!* Selected-featuredata allows infobox opening in new flyout.
@@ -40,6 +98,12 @@ Openlayers 3 implementation of mapmodule now offers a new function getScreenshot
 The function produces a dataURL for PNG-image from the map contents.
 This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
 The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
+SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
+
+### Openlayers 2 mapmodule
+
+SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
 
 ### rpc
 

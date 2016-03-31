@@ -474,13 +474,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
                     iconSrc = data.iconUrl;
                     if (jQuery.isNumeric(markerData.size)) {
-                        size = data.size
+                        size = data.size;
                     } else {
                         size = me._defaultIconUrlSize;
                     }
                 } else {
                     // Construct image
-                    //iconSrc = this.constructImage(data);
                     size = this._getSizeInPixels(data.size);
                 }
             } else {
@@ -579,67 +578,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         constructImage: function(marker) {
             var me = this,
-                size,
-                color,
-                conSrc = me.getDefaultIconUrl();
-
-            if (typeof Raphael !== 'undefined') {
-                // Handling the size parameter
-                if (typeof marker.size !== 'number') {
-                    marker.size = parseInt(marker.size, 10);
-                }
-                size = marker.size;
-                if (isNaN(size)) {
-                    return;
-                }
-                size = this._getSizeInPixels(size);
-
-                var paper = Raphael(0, 0, size, size);
-                paper.clear();
-
-                // Test lines for pixel level accuracy
-                // var lines = paper.path("M0 0L"+size+" "+size+" M0 "+size+" L"+size+" 0");
-                // lines.attr("stroke", "#000");
-
-                // Construct marker parameters
-                var font = paper.getFont(me._font.name),
-                    charIndex = me.getFont().baseIndex;
-
-                if (typeof marker.shape === 'number') {
-                    charIndex += marker.shape;
-                } else {
-                    var parsedShape = parseInt(marker.shape, 10);
-                    if (!isNaN(parsedShape)) {
-                        charIndex += parsedShape;
-                    } else {
-                        charIndex += me._defaultData.shape;
-                    }
-                }
-
-                if (typeof marker.color === 'string') {
-                    color = '#' + marker.color;
-                } else {
-                    color = me._defaultData.color;
-                }
-                console.log(charIndex);
-                // Create image
-                paper.print(
-                    0, 55 * size / 100,
-                    String.fromCharCode(charIndex),
-                    font,
-                    size
-                ).attr({
-                    'fill': color,
-                    'stroke_width': me._strokeStyle.stroke_width,
-                    'stroke': me._strokeStyle.stroke
-                });
-
-                // Base64 encoding for cross-browser compatibility
-                iconSrc =
-                  me._preSVGIconUrl + jQuery.base64.encode(paper.toSVG());
-                // Remove paper (unfortunately it's a visible SVG element in document.body)
-                paper.remove();
-            }
+                iconSrc = me.getDefaultIconUrl();
             return iconSrc;
         },
         /**
@@ -650,8 +589,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _getSizeInPixels: function(size) {
-            //return 40 + 10 * size;
-            return 20 + 4 * size;
+            return 40 + 10 * size;
         },
 
         /**

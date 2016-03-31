@@ -93,6 +93,9 @@ Oskari.clazz.define(
             me._contentSeparator = jQuery(
                 '<div class="infoboxLine">separator</div>'
             );
+            me._popupWrapper = jQuery(
+                '<div class="olPopup"></div>'
+            );
         },
 
         /**
@@ -127,7 +130,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 refresh = (currPopup &&
@@ -146,23 +148,26 @@ Oskari.clazz.define(
         /**
          * @method _renderPopup
          */
-        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools) {
+         _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
-                popup;
+                popupContentHtml = me._renderPopupContent(id, title, contentDiv, additionalTools),
+                popupElement = me._popupWrapper.clone(),
+                lonlatArray = [lonlat.lon, lonlat.lat];
 
+            popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
-                popup.setContentHTML(popupContent);
+                jQuery('.olPopup').empty();
+                jQuery('.olPopup').html(popupContentHtml);
+                popup.setPosition(lonlatArray);
             } else {
-                popup = new OpenLayers.Popup(
-                    id,
-                    lonlat,
-                    new OpenLayers.Size(400, 300),
-                    popupContent,
-                    false
-                );
+                popup = new ol.Overlay({
+                    element: popupElement[0],
+                    position: lonlatArray,
+                    offset: [10, -20],
+                    autoPan: true
+                });
                 me._popups[id] = {
                     title: title,
                     contentData: contentData,
@@ -172,25 +177,17 @@ Oskari.clazz.define(
                     font: font
                 };
 
-                popup.moveTo = function (px) {
-                    if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
-                        this.div.style.left = px.x + 'px';
-                        var topy = px.y - 20;
-                        this.div.style.top = topy + 'px';
-                    }
-                };
-
-                me.getMapModule().getMap().addPopup(popup);
+                me.getMapModule().getMap().addOverlay(popup);
+                jQuery('.olPopup').html(popupContentHtml);
             }
 
             if (me.adaptable) {
                 me._adaptPopupSize(id, refresh);
             }
 
-            me._panMapToShowPopup(lonlat);
+            me._panMapToShowPopup(lonlatArray);
             me._setClickEvent(id, popup, contentData, additionalTools);
 
-            popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
             jQuery(popup.groupDiv).css('overflow', 'visible');
 
@@ -232,20 +229,20 @@ Oskari.clazz.define(
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
-
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
 
             //add additional btns
-               jQuery.each( additionalTools, function( index, key ){
-                    var additionalButton = me._headerAdditionalButton.clone();
-                    additionalButton.attr({
-                        'id': key.name,
-                        'class': key.iconCls,
-                        'style': key.styles
-                    });
-                    headerWrapper.append(additionalButton);
+            jQuery.each( additionalTools, function( index, key ){
+                var additionalButton = me._headerAdditionalButton.clone();
+                additionalButton.attr({
+                    'id': key.name,
+                    'class': key.iconCls,
+                    'style': key.styles
                 });
+                headerWrapper.append(additionalButton);
+            });
+
 
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
@@ -265,7 +262,6 @@ Oskari.clazz.define(
          */
         _renderContentData: function (id, contentData) {
             var me = this;
-
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
@@ -277,7 +273,7 @@ Oskari.clazz.define(
 
                 contentWrapper.append(datum.html);
 
-                contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
+	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 for (key in datum.actions) {
                     if (datum.actions.hasOwnProperty(key)) {
@@ -288,7 +284,7 @@ Oskari.clazz.define(
                                 contentdata: index,
                                 value: key
                             });
-                            if (key == primaryButton) {
+                            if (key === primaryButton) {
                                 btn.addClass('primary');
                             }
                         } else {
@@ -309,44 +305,36 @@ Oskari.clazz.define(
 
         _setClickEvent: function (id, popup, contentData, additionalTools) {
             var me = this;
-            // override
-            popup.events.un({
-                'click': popup.onclick,
-                scope: popup
-            });
 
-            popup.events.on({
-                'click': function (evt) {
-                    var link = jQuery(evt.target || evt.srcElement);
+            popup.getElement().onclick = function(evt) {
+                var link = jQuery(evt.target || evt.srcElement);
 
-                    if (link.hasClass('olPopupCloseBox')) { // Close button
-                        me.close(id);
-                    }else { // Action links
-                        var i = link.attr('contentdata'),
-                            text = link.attr('value');
-                        if (!text) {
-                            text = link.html();
+                if (link.hasClass('olPopupCloseBox')) { // Close button
+                    me.close(id);
+                } else { // Action links
+                    var i = link.attr('contentdata'),
+                        text = link.attr('value');
+                    if (!text) {
+                        text = link.html();
+                    }
+                    if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
+                        contentData[i].actions[text]();
+
+                    }
+                }
+                if(additionalTools.length > 0){
+                    jQuery.each( additionalTools, function( index, key ){
+                        if (link.hasClass(key.iconCls)) {
+                            me.close(id);
+                            key.callback(key.params);
                         }
-                        if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-                            contentData[i].actions[text]();
-                        }
-                    }
+                    });
+                }
 
-                    if(additionalTools.length > 0){
-                        jQuery.each( additionalTools, function( index, key ){
-                            if (link.hasClass(key.iconCls)) {
-                                me.close(id);
-                                key.callback(key.params);
-                            }
-                        });
-                    }
-
-                    if(!link.is('a') || link.parents('.getinforesult_table').length) {
-                        evt.stopPropagation();
-                    }
-                },
-                scope: popup
-            });
+                if(!link.is('a') || link.parents('.getinforesult_table').length) {
+                    evt.stopPropagation();
+                }
+            };
         },
 
         /**
@@ -361,13 +349,14 @@ Oskari.clazz.define(
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var oldData = oldData || [],
-                newData = newData || [],
-                nLen = newData.length,
-                oLen = oldData.length;
+            var retData,
+                i,
+                j,
+                nLen,
+                oLen;
 
-            for (var i = 0; i < oLen; i += 1) {
-                for (var j = 0; j < nLen; j += 1) {
+            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
+                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
                     if (newData[j].layerId &&
                         newData[j].layerId === oldData[i].layerId) {
                         oldData[i] = newData[j];
@@ -377,39 +366,7 @@ Oskari.clazz.define(
                 }
             }
 
-            return this._mergeContentData(oldData, newData);
-        },
-
-        /**
-         * Merge content data
-         * @method  @private_mergeContentData
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _mergeContentData: function(oldData, newData){
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen,
-                found,
-                notSameData = [];
-
-            for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                found = false;
-                for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                    if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
-                        found = true;
-                    }
-                }
-
-                if(!found){
-                    notSameData.push(newData[j]);
-                }
-            }
-
-            retData = oldData.concat(notSameData);
+            retData = oldData.concat(newData);
 
             return retData;
         },
@@ -469,10 +426,12 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            //viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
-                left = parseFloat(popup.css('left'));
+                left = parseFloat(popup.css('left')),
+                maxWidth = size.width * 0.7,
+                maxHeight = size.height * 0.7;
+
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -483,14 +442,14 @@ Oskari.clazz.define(
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
-            var header = popup.find('.popupHeader').css('width', '100%'),
-                maxWidth = size.width * 0.7,
-                maxHeight = size.height * 0.7,
-                content = popup.find('.popupContent').css({
-                    'margin-left': '0',
-                    'padding': '5px 20px 5px 20px',
-                    'max-height': maxHeight - 40 + 'px'
-                });
+
+            popup.find('.popupHeader').css('width', '100%');
+
+            var content = popup.find('.popupContent').css({
+                'margin-left': '0',
+                'padding': '5px 20px 5px 20px',
+                'max-height': maxHeight - 40 + 'px'
+            });
 
             popup.find('.olPopupContent').css({
                 'width': '100%',
@@ -505,6 +464,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'overflow' : 'visible',
                 'z-index': '16000'
             });
 
@@ -521,9 +481,6 @@ Oskari.clazz.define(
                     'height': height
                 });
             }
-
-            //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
-
         },
 
         /**
@@ -534,27 +491,27 @@ Oskari.clazz.define(
          */
         _panMapToShowPopup: function (lonlat) {
             var me = this,
-                pixels = me.getMap().getViewPortPxFromLonLat(lonlat),
-                size = me.getMap().getCurrentSize(),
-                width = size.w,
-                height = size.h;
+                pixels = me.getMapModule().getPixelFromCoordinate(lonlat),
+                size = me.getMapModule().getSize(),
+                width = size.width,
+                height = size.height;
             // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0,
                 pany = 0,
                 popup = jQuery('.olPopup'),
                 infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128; //300;
+                infoboxHeight = popup.height() + 128;
 
-            if (pixels.x + infoboxWidth > width) {
-                panx = width - (pixels.x + infoboxWidth);
+            if (pixels[0] + infoboxWidth > width) {
+                panx = width - (pixels[0] + infoboxWidth);
             }
-            if (pixels.y + infoboxHeight > height) {
-                pany = height - (pixels.y + infoboxHeight);
+            if (pixels[1] + infoboxHeight > height) {
+                pany = height - (pixels[1] + infoboxHeight);
             }
             // check that we are not "over the top"
-            else if (pixels.y < 25) {
-                pany = 25;
+            else if (pixels[1] < 70) {
+                pany = 70;
             }
             if (panx !== 0 || pany !== 0) {
                 me.getMapModule().panMapByPixels(-panx, -pany);
@@ -644,7 +601,6 @@ Oskari.clazz.define(
             // The elements where the font style should be applied to.
             var elements = [],
                 j,
-                k,
                 el;
 
             elements.push(div);
@@ -680,17 +636,25 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id) {
+        close: function (id, position) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
-                popup;
+                popup,
+                event,
+            	sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        popup.popup.destroy();
-                        delete this._popups[pid];
+                        if (!position ||
+                            position.lon !== popup.lonlat.lon ||
+                            position.lat !== popup.lonlat.lat) {
+                            popup.popup.setPosition(undefined);
+                            delete this._popups[pid];
+                            event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                        	sandbox.notifyAll(event);
+                        }
                     }
                 }
                 return;
@@ -698,9 +662,11 @@ Oskari.clazz.define(
             // id specified, delete only single popup
             if (this._popups[id]) {
                 if (this._popups[id].popup) {
-                    this._popups[id].popup.destroy();
+                    this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
                 }
                 delete this._popups[id];
+                event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+            	sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },

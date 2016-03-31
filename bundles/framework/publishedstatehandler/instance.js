@@ -318,10 +318,23 @@ Oskari.clazz.define(
                     nextLayers = nextState.selectedLayers,
                     ln,
                     prevLayer,
-                    nextLayer;
-                if (prevLayers.length !== nextLayers.length) {
+                    nextLayer,
+                    allInvisible = true;
+                if (prevLayers.length !== nextLayers.length && nextLayers.length !== 0) {
                     return true;
                 }
+
+                for (ln = 0; ln < nextLayers.length; ln += 1) {
+                    nextLayer = nextLayers[ln];
+                    if (!nextLayer.hidden) {
+                        allInvisible = false;
+                    }
+                }
+                if(allInvisible){
+                    //Don't save state when all are invisible
+                    return false;
+                }
+
                 for (ln = 0; ln < nextLayers.length; ln += 1) {
                     prevLayer = prevLayers[ln];
                     nextLayer = nextLayers[ln];

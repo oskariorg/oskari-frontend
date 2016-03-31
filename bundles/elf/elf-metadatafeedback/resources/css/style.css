@@ -3,7 +3,7 @@ div.userfeedback-values {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: #333; }
@@ -14,7 +14,7 @@ div.userfeedback-values {
     text-decoration: none; }
   div.userfeedback-values a:focus {
     outline: thin dotted #333;
-    outline: 5px auto-webkit-focus-ring-color;
+    outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
     color: #005580;
     text-decoration: underline; }
@@ -108,7 +108,7 @@ div.userfeedback-values {
     font-weight: normal;
     line-height: 20px; }
   div.userfeedback-values input, div.userfeedback-values select, div.userfeedback-values textarea {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
   div.userfeedback-values label {
     display: block;
     margin-bottom: 5px; }
@@ -134,10 +134,10 @@ div.userfeedback-values {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border linear .2s, box-shadow linear .2s;
-    -moz-transition: border linear .2s, box-shadow linear .2s;
-    -o-transition: border linear .2s, box-shadow linear .2s;
-    transition: border linear .2s, box-shadow linear .2s; }
+    -webkit-transition: border linear .2s,box-shadow linear .2s;
+    -moz-transition: border linear .2s,box-shadow linear .2s;
+    -o-transition: border linear .2s,box-shadow linear .2s;
+    transition: border linear .2s,box-shadow linear .2s; }
   div.userfeedback-values textarea:focus, div.userfeedback-values input[type="text"]:focus {
     border-color: rgba(82, 168, 236, 0.8);
     outline: 0;
@@ -155,7 +155,7 @@ div.userfeedback-values {
     border: 1px solid #ccc; }
   div.userfeedback-values select:focus {
     outline: thin dotted #333;
-    outline: 5px auto-webkit-focus-ring-color;
+    outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
   div.userfeedback-values input[class*="span"], div.userfeedback-values textarea[class*="span"] {
     float: none;
@@ -340,9 +340,9 @@ div.userfeedback-values {
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px; }
     div.userfeedback-values .swMain .buttonDisabled {
-      color: #F8F8F8 !important;
+      color: #F8F8F8  !important;
       background-color: #CCCCCC !important;
-      border: 1px solid #CCCCCC !important;
+      border: 1px solid #CCCCCC  !important;
       cursor: text; }
     div.userfeedback-values .swMain .buttonPrevious {
       display: block;
@@ -429,10 +429,10 @@ span.feedbacklist-userrole {
   float: right; }
 
 div.icon-star-off {
-  background-image: url('../images/star-off.png'); }
+  background-image: url("../images/star-off.png"); }
 
 div.icon-star-on {
-  background-image: url('../images/star-on.png'); }
+  background-image: url("../images/star-on.png"); }
 
 div.icon-star-half {
-  background-image: url('../images/star-half.png'); }
+  background-image: url("../images/star-half.png"); }

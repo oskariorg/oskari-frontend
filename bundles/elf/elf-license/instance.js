@@ -17,6 +17,14 @@ function () {
     this.nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     this._templates = {
+        metadataFlyoutLicenseDialog: jQuery('<div class="elf_license_dialog" style="width:100%!important;">' +
+            '   <div class="elf_license_dialog_name"></div>' +
+            '   <div class="elf_license_dialog_license_data" style="height:auto!important;">' +
+            '      <div class="elf_license_dialog_description"></div>' +
+            '      <div class="elf_license_dialog_descriptions_title"></div>' +
+            '      <ul class="elf_license_dialog_descriptions"></ul>' +
+            '      </div>' +
+            '</div>'),
         licenseDialog: jQuery('<div class="elf_license_dialog">' +
             '   <div class="elf_license_dialog_name"></div>' +
             '   <div class="elf_license_dialog_license_data">' +
@@ -138,6 +146,9 @@ function () {
         me._paramIntElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamIntElement', me, me._validator);
         me._paramTextElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamTextElement', me, me._validator);
         me._paramBlnElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamBlnElement', me, me._validator);
+
+        this._addLicenseTabToMetadataFlyout();
+
     },
     /**
      * Activate metadata search results show license link
@@ -165,6 +176,24 @@ function () {
             me._sandbox.request(me, request);
         }
     },
+    _addLicenseTabToMetadataFlyout: function() {
+        var me = this,
+            reqBuilder = me.sandbox.getRequestBuilder('catalogue.AddTabRequest');
+        var data = {
+            'license': {
+                template: null,
+                title: me._locale.getLicenseText,
+                tabActivatedCallback: function(uuid, panel, metadataModel) {
+                    me._getLicenseInfoForMetadataFlyout(metadataModel, panel);
+                }
+            }
+        };
+
+        if (reqBuilder) {
+            var request = reqBuilder(data);
+            me.sandbox.request(me, request);
+        }
+    },
     /**
      * Get license information
      * @method _getLicenseInfo
@@ -174,11 +203,8 @@ function () {
      */
     _getLicenseInfo: function(metadata) {
         var me = this;
-
         me._progressSpinner.insertTo(jQuery('.actionPlaceholder').parents('.oskari-flyoutcontent'));
-
         me._progressSpinner.start();
-
         me.licenseService.doLicenseInformationSearch({
             id: metadata.license
         }, function (response) {
@@ -197,6 +223,42 @@ function () {
             me.getSandbox().printWarn('ELF license info failed', [].slice.call(arguments));
             me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
         });
+    },
+    /**
+     * Get license information (in search results)
+     * @method _getLicenseInfo
+     * @private
+     *
+     * @param {Object} metadata metadata information
+     */
+    _getLicenseInfoForMetadataFlyout: function(metadataModel, panel) {
+        var me = this;
+        //make some room for progress spinner
+        panel.setContent('<br><br>');
+        me._progressSpinner.insertTo(panel.html);
+        me._progressSpinner.start();
+
+        //license info is the first / only item under the metadata's onlineresources. At least sometimes. This is hardly a bullet-proof solution...
+        var licenseUrl = metadataModel.onlineResources[0].url;
+        me.licenseService.doLicenseInformationSearch({
+            id: licenseUrl
+        }, function (response) {
+            me._progressSpinner.stop();
+            if (response) {
+                panel.setContent(me._getLicenseInfoContentForMetadataFlyout(response, metadataModel));
+            } else {
+                me._getLicenseInfoForMetadataFlyoutFailed(panel);
+            }
+        }, function () {
+            me._progressSpinner.stop();
+            me.getSandbox().printWarn('ELF license info failed', [].slice.call(arguments));
+            me._getLicenseInfoForMetadataFlyoutFailed(panel);
+
+        });
+    },
+    _getLicenseInfoForMetadataFlyoutFailed: function(panel) {
+        var me = this;
+        panel.setContent('<div><h2>'+me._locale.errors.cannotGetLicenseInformation.title+'</h2><p>'+me._locale.errors.cannotGetLicenseInformation.message+'</p></div>');
     },
     /**
      * Get price
@@ -420,7 +482,7 @@ function () {
             me._dialog.makeModal();
         }
 
-        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+        me._progressSpinner.insertTo(jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog'));
 
         // If there is orderer licensemodel then open it
         if(data.licenseModels.length === 1) {
@@ -662,13 +724,82 @@ function () {
 
         me._fixModelsHeight(dialogContent, models);
 
-        me._progressSpinner.insertTo(jQuery('.elf_license_dialog'));
+        me._progressSpinner.insertTo(jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog'));
 
         // If there is only one licensemodel then open it
         if(data.licenseModels.length === 1) {
             me._showLicenseParams(data.licenseModels[0], data);
         }
     },
+    _getLicenseInfoContentForMetadataFlyout: function(data, metadataModel) {
+        var me = this,
+            dialogContent = me._templates.metadataFlyoutLicenseDialog.clone(),
+            title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
+            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
+            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title');
+        dialogContent.find('.elf_license_dialog_name').html(data.name);
+        dialogContent.find('.elf_license_dialog_description').html(data.description);
+
+        // If found models, show them
+        if(data.licenseModels.length > 0)  {
+            var description = jQuery('<li class="description"></li>');
+            var localeDescription = me._locale.dialog.licenseModelDescriptions;
+            for(var i in localeDescription) {
+                if(localeDescription.hasOwnProperty(i)) {
+                    var d = description.clone();
+                    var text = me._locale.dialog.licenseModelDescriptions[i];
+                    d.html(text);
+                    licenseDescriptions.append(d);
+                }
+            }
+            if(licenseDescriptions.find('.description').length>0) {
+                licenseDescriptionsTitle.html(me._locale.dialog.licenseModelDescriptionsTitle);
+            } else {
+                licenseDescriptions.remove();
+            }
+        }
+        // If not found then shows message
+        else {
+            title.addClass('text');
+            licenseDescriptions.remove();
+            licenseDescriptionsTitle.remove();
+            // If user has already logged in  then shows at no right to anyone license
+            if (me._sandbox.getUser().isLoggedIn()) {
+                title.html(me._locale.dialog.noRightToAnyLicenseModels);
+            }
+            // Else if user has not logged in then show log in message
+            else {
+                title.html(me._locale.dialog.loginShort);
+            }
+        }
+        var licenseDialogLink = jQuery("<a>"+me._locale.getLicenseText+"</a>");
+        licenseDialogLink.attr('href','JavaScript:void(0);');
+        var closureMagic = function(metadataModel) {
+            if (data) {
+                //fake a similar kind of json that is produced by the search channel -> the dialog only uses name and organization from here...
+                var metadata = {
+                    "name": metadataModel.identification.citation.title,
+                    "organization": metadataModel.metadataResponsibleParties[0].organisationName
+                };
+                if(data.userLicense){
+                    me._showLicenseDeactivateDialog(data, metadata);
+                } else {
+                    me._showLicenseSubscriptionInformationDialog(data, metadata);
+                }
+            } else {
+                me._showMessage(me._locale.errors.cannotGetLicenseInformation.title, me._locale.errors.cannotGetLicenseInformation.message);
+            }
+        };
+
+        licenseDialogLink.on('click' , function() {
+            closureMagic(metadataModel);
+        });
+        dialogContent.append(licenseDialogLink);
+
+        return dialogContent;
+    },
+
+
     /**
      * @method  @private _fixModelsHeight fix models height
      * @param  {Object} dialogContent jQuery object for dialogContent div
@@ -780,9 +911,9 @@ function () {
     _showLicenseModels: function(){
         var me = this;
         me._dialogStep = 'step1';
-        jQuery('.elf_license_dialog_license_details').hide();
-        jQuery('.elf_license_dialog_license_data').show();
-        jQuery('.elf_license_dialog_license_price').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').hide();
         me._checkButtonsVisibility();
     },
     /**
@@ -793,10 +924,10 @@ function () {
     _showLicenseDetails: function(){
         var me = this;
         me._dialogStep = 'step2';
-        jQuery('.elf_license_dialog_license_details').show();
-        jQuery('.elf_license_dialog_license_data').hide();
-        jQuery('.elf_license_dialog_license_price').hide();
-        jQuery('.elf_license_dialog_license_details').removeClass('large');
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').removeClass('large');
         me._checkButtonsVisibility();
     },
     /**
@@ -807,9 +938,9 @@ function () {
     _showLicensePriceSummary: function(){
         var me = this;
         me._dialogStep = 'step3';
-        jQuery('.elf_license_dialog_license_price').show();
-        jQuery('.elf_license_dialog_license_details').hide();
-        jQuery('.elf_license_dialog_license_data').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price').show();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details').hide();
+        jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_data').hide();
         me._checkButtonsVisibility();
     },
     /**
@@ -822,7 +953,7 @@ function () {
     _showLicenseOrderSummaryDialog: function(model){
         var me = this,
             licenseSummary = me._templates.licenceModelSummaryDetails.clone(),
-            licensePrice = jQuery('.elf_license_dialog_license_price'),
+            licensePrice = jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_price'),
             basicData = licenseSummary.find('.license_basic_data');
 
         me.nextBtn.setTitle(me._locale.buttons.conclude);
@@ -862,7 +993,7 @@ function () {
     _showLicenseParams: function(model, licenseData) {
         var me = this,
             modelDetails = me._templates.licenceModelDetails.clone(),
-            licenseDetails = jQuery('.elf_license_dialog_license_details'),
+            licenseDetails = jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data');
 
         me._showLicenseDetails();

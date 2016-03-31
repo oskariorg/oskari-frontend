@@ -28,12 +28,11 @@ Oskari.clazz.define(
                 /*
                  * Openlayers 3
                  */
-                /*
+                
                 {
                     "type": "text/javascript",
-                    "src": "../../../../libraries/ol3/ol-v3.11.0-beta.2.simple_optimizations.js"
+                    "src": "../../../../libraries/ol3/ol-v3.14.2-oskari.js"
                 },
-                */
                 /*
                  * Proj4js
                  */

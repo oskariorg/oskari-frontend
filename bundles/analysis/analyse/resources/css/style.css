@@ -5,6 +5,7 @@ div.notLoggedIn {
 
 #contentMap.mapAnalyseMode {
   margin-left: 384px; }
+
 #contentMap div.basic_analyse {
   background: white;
   position: absolute;
@@ -13,17 +14,20 @@ div.notLoggedIn {
   left: 0;
   z-index: 1500;
   width: 384px; }
+
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
 
 div.analyse div.startview div.error ul li {
   color: red; }
+
 div.analyse div.startview div.icon-info {
   float: right; }
 
 div.analyse-featurelist ul {
   margin-top: 10px;
   margin-bottom: 15px; }
+
 div.analyse-featurelist li {
   list-style-type: none; }
 
@@ -37,12 +41,14 @@ div.basic_analyse > div.content {
   height: -webkit-calc(100% - 88px);
   height: -o-calc(100% - 88px);
   height: calc(100% - 88px); }
+
 div.basic_analyse > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px;
   height: 37px; }
   div.basic_analyse > div.header div.icon-close {
     float: right; }
+
 div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
@@ -53,6 +59,7 @@ div.basic_analyse div.analyse-select-featurelist {
     padding-top: 10px; }
     div.basic_analyse div.analyse-select-featurelist ul li {
       list-style-type: none; }
+
 div.basic_analyse div.analyse_difference_cont ul {
   margin: 0;
   padding: 0;
@@ -60,26 +67,35 @@ div.basic_analyse div.analyse_difference_cont ul {
   div.basic_analyse div.analyse_difference_cont ul li {
     list-style-type: none;
     margin: 5px; }
+
 div.basic_analyse div.icon-info {
   float: right;
   cursor: help; }
+
 div.basic_analyse div.icon-funnel, div.basic_analyse div.icon-funnel-active {
   cursor: pointer; }
+
 div.basic_analyse div.icon-menu {
   margin: -5px 100px; }
+
 div.basic_analyse div.location {
   height: 30px; }
+
 div.basic_analyse div.previewNotes {
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 2px; }
+
 div.basic_analyse div.tool {
   margin: 5px; }
+
 div.basic_analyse div.drawFilter {
   margin: 5px; }
+
 div.basic_analyse div.icon-close.analyse-temp-feature {
   display: inline-block;
   cursor: pointer; }
+
 div.basic_analyse div.toolContainer {
   margin: 5px 15px 5px 5px;
   display: inline-block; }
@@ -91,6 +107,7 @@ div.basic_analyse div.toolContainer {
   div.basic_analyse div.toolContainer div.buttons {
     display: inline-block;
     float: right; }
+
 div.basic_analyse div.drawFilterContainer {
   margin: 5px;
   display: inline-block; }
@@ -109,15 +126,19 @@ div.basic_analyse div.drawFilterContainer {
   div.basic_analyse div.drawFilterContainer div.buttons {
     display: inline-block;
     float: right; }
+
 div.basic_analyse div.form div.field input, div.basic_analyse div.form div.field select {
   width: 80%;
   background-color: white;
   filter: Alpha(opacity=100) !important;
   /* unquote for libsass bug */ }
+
 div.basic_analyse div.header-icon-info {
   margin: 10px; }
+
 div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input, div.basic_analyse div.analyse_areas_and_sectors_cont input {
   margin-right: 10px; }
+
 div.basic_analyse div.analyse_settings_cont label {
   margin: 5px 0; }
   div.basic_analyse div.analyse_settings_cont label input[type=text] {
@@ -125,6 +146,7 @@ div.basic_analyse div.analyse_settings_cont label {
   div.basic_analyse div.analyse_settings_cont label select {
     margin-top: 7px;
     margin-bottom: 10px; }
+
 div.basic_analyse select.settings_buffer_units, div.basic_analyse select.settings_area_size_units {
   width: 110px; }
 
@@ -288,6 +310,7 @@ div.filter-popup-multiselect {
 
 div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }
+
 div.divmanazerpopup.analyse-draw-dialog {
   max-width: 280px; }
 

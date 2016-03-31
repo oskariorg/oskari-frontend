@@ -50,6 +50,10 @@ div.coordinatetool__popup {
 
     div.projectionchange {
       margin: 10px;
+
+      select#projection {
+        width: 170px;
+      }
     }
 
     div.content {

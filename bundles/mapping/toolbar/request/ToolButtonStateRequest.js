@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonStateR
 function(id, group, state) {
     this._id = id;
     this._group = group;
-    this._state = (state == true);
+    this._state = (state === true);
 }, {
     /** @static @property __name request name */
     __name : "Toolbar.ToolButtonStateRequest",
