@@ -429,10 +429,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                             var request = visibilityRequestBuilder(me.layerId, true);
                             me.sandbox.request(me.instance.getName(), request);
-
-                            if (me.operationMode == "edit" && deleteFeature != true) {
-                                me._highlighGeometries(me.highlightFeaturesIds, layer, true);
-                            }
+							me._highlighGeometries([], layer, true);
                         }, 500);
                         me.closeDialog();
                     });
