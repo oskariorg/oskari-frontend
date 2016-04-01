@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.35.2
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol2/ol3
+
+Fixed map move so at this not send twice setLocation request.
+
 ## 1.35.1
 
 ### mapwmts
