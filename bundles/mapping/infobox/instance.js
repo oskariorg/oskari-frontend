@@ -80,16 +80,12 @@ function() {
 		sandbox.addRequestHandler('InfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
 		sandbox.addRequestHandler('InfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
         sandbox.addRequestHandler('InfoBox.RefreshInfoBoxRequest', this.requestHandlers.refreshInfoHandler);
-
-        //sandbox.registerAsStateful(this.mediator.bundleId, this);
 	},
 	/**
 	 * @method init
 	 * implements Module protocol init method - initializes request handlers
 	 */
 	init : function() {
-		var me = this;
-
         var adaptable = this.conf && this.conf.adaptable === true;
 		// register plugin for map (actual popup implementation handling)
 		this.popupPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
@@ -146,7 +142,6 @@ function() {
 	stop : function() {
 		var me = this;
         var sandbox = this.sandbox;
-        //sandbox.unregisterStateful(this.mediator.bundleId);
 		for(var p in me.eventHandlers) {
 			if(p) {
 				sandbox.unregisterFromEventByName(me, p);
@@ -182,16 +177,17 @@ function() {
         var popups = this.popupPlugin.getPopups();
 
         for(var id in popups) {
-            var popup = popups[id];
-            var data = {
-                id: id,
-                title : popup.title,
-                data : popup.contentData,
-                lonlat : popup.lonlat
-            };
-            state.popups.push(data);
+        	if (popups.hasOwnProperty(id)) {
+	            var popup = popups[id];
+	            var data = {
+	                id: id,
+	                title : popup.title,
+	                data : popup.contentData,
+	                lonlat : popup.lonlat
+	            };
+	            state.popups.push(data);
+        	}
         }
-
         return state;
     }
 }, {

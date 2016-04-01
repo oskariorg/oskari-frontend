@@ -367,11 +367,11 @@ Oskari.clazz.define(
          */
         _handleInfoResult: function (data) {
             var me = this,
-            content = [],
-            contentData = {},
-            fragments = [],
-            colourScheme,
-            font;
+                content = [],
+                contentData = {},
+                fragments = [],
+                colourScheme,
+                font;
 
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
@@ -386,18 +386,17 @@ Oskari.clazz.define(
                 content.push(contentData);
             }
 
-               var colourScheme, font;
-               if (_.isObject(this._config)) {
-                  colourScheme = this._config.colourScheme;
-                  font = this._config.font;
-               }
+            if (_.isObject(this._config)) {
+                colourScheme = this._config.colourScheme;
+                font = this._config.font;
+            }
 
-               this._showGfiInfo(content, data, this.formatters, {
+            this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,
                 font: font,
                 title: this._loc.title,
                 infoboxId: this.infoboxId
-               });
+            });
         },
 
         /**

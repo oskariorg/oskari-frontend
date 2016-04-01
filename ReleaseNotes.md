@@ -2,6 +2,16 @@
 
 ## 1.36
 
+### toolbar and infobox
+
+Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
+
+### openlayers 3 custom build configuration files created
+
+Openlayers 3 build configuration files are located under tools/conf/ol3. To create custom build of ol3, use ol-custom.json and ol-custom-debug.json files in build script.
+
+NOTE! ol-custom.json doesn't have support for statistical functionality! 
+
 ### openlayers 3 version update
 
 Updated openlayers version in published maps from 3.11.2 -> 3.14.2 

@@ -36,8 +36,7 @@ Oskari.clazz.category(
                 reqBuilder = sandbox.getRequestBuilder('ToolSelectionRequest'),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
                 gfiReqBuilder = sandbox.getRequestBuilder(gfiRn),
-                group,
-                req;
+                group;
 
             var buttonGroups = [{
                     'name': 'history',
@@ -179,16 +178,17 @@ Oskari.clazz.category(
                 }];
 
             for (group in buttonGroups) {
-                var buttonGroup = buttonGroups[group],
-                    tool;
-                for (tool in buttonGroup.buttons) {
-                    if (this._isButtonConfigured(tool, buttonGroup.name)) {
-                        this.addToolButton(tool, buttonGroup.name, buttonGroup.buttons[tool]);
+                if (buttonGroups.hasOwnProperty(group)) {
+                    var buttonGroup = buttonGroups[group],
+                        tool;
+                    for (tool in buttonGroup.buttons) {
+                        if (this._isButtonConfigured(tool, buttonGroup.name)) {
+                            this.addToolButton(tool, buttonGroup.name, buttonGroup.buttons[tool]);
+                        }
                     }
                 }
             }
         },
-
         /**
          * Returns the map url for link tool
          * @private

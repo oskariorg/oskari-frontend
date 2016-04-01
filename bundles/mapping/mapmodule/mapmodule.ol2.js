@@ -459,7 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(svg) {
                 olStyle.externalGraphic = svg;
             }
-            
+
             if(styleDef.image.size) {
                 olStyle.graphicWidth = styleDef.image.size;
                 olStyle.graphicHeight = styleDef.image.size;
