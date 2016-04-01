@@ -459,14 +459,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             styleDef = styleDef || {};
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
+            var size = (styleDef.image && styleDef.image.size) ? this.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+            styleDef.image.size = size;
+
             var svg = this.getSvg(styleDef.image);
             if(svg) {
                 olStyle.externalGraphic = svg;
             }
 
             if(styleDef.image.size) {
-                olStyle.graphicWidth = styleDef.image.size;
-                olStyle.graphicHeight = styleDef.image.size;
+                olStyle.graphicWidth = size;
+                olStyle.graphicHeight = size;
             }
             if(styleDef.image.opacity) {
                 olStyle.fillOpacity = styleDef.image.opacity;

@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                       lat : transformed[1]
                   };
             }
-            
+
             return {
                 lon : 0,
                 lat : 0
@@ -593,13 +593,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __getImageStyle: function(styleDef) {
             var me = this;
             var image = {};
-            var size = (styleDef.image && styleDef.image.size) ? styleDef.image.size : this._defaultMarker.size;
+            var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+            styleDef.image.size = size;
 
           	var svg = me.getSvg(styleDef.image);
             if(svg) {
                 image = new ol.style.Icon({
               	    src: svg,
-                    size: [size,size]
+                    size: [size, size]
                 });
                 return image;
             }

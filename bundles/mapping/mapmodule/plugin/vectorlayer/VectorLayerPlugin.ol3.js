@@ -36,7 +36,9 @@ Oskari.clazz.define(
                 stroke : {
                     color : 'rgba(255,255,255,1)',
                     width : 2
-                }
+                },
+                offsetX: 55,
+                offsetY: 10
             }
         };
         this._pointerMoveAdded = false;
@@ -91,7 +93,8 @@ Oskari.clazz.define(
                     var olLayer = new ol.layer.Vector({
                       name: me._olLayerPrefix + layerId,
                       id: layerId,
-                      source: vectorSource});
+                      source: vectorSource
+                    });
 
                     olLayer.setOpacity(opacity);
 
@@ -267,6 +270,7 @@ Oskari.clazz.define(
          */
 
         addFeaturesToMap: function(geometry, options){
+       // debugger;
             var me = this,
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
@@ -394,7 +398,6 @@ Oskari.clazz.define(
                       data: features,
                       prio: prio
                     });
-
 
                     me._layers[options.layerId] = layer;
                     me._map.addLayer(layer);

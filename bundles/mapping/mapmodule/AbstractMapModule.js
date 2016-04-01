@@ -1189,6 +1189,15 @@ Oskari.clazz.define(
             htmlObject.attr(attr,value);
             return htmlObject.outerHTML();
         },
+        /**
+         * Converts from abstract marker size to real pixel size
+         * @method  @public getMarkerIconSize
+         * @param size Abstract size
+         * @returns {number} Size in pixels
+         */
+        getMarkerIconSize : function(size) {
+            return 40 + 10 * size;
+        },
 /* --------------- /SVG MARKER ------------------------ */
 
 
