@@ -29,13 +29,12 @@ jQuery(document).ready(function() {
         url: ajaxUrl + 'action_route=GetAppSetup',
         success : function(setup) {
             var app = Oskari.app;
-            setup.startupSequence[11].metadata['Import-Bundle'].statsgrid.bundlePath = '/Oskari/packages/statistics/polymer/';
             app.setApplicationSetup(setup);
             app.setConfiguration(setup.configuration);
             app.startApplication(function(startupInfos) {
                 // all bundles have been loaded
             });
-        } 
+        }
     });
 
 });
