@@ -1,0 +1,46 @@
+<link href="libs/polymer/polymer.html" rel="import">
+<link href="requirejs.html" rel="import">
+<!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
+<link href="libs/iron-ajax/iron-ajax.html" rel="import">
+<link href="libs/iron-collapse/iron-collapse.html" rel="import">
+<link href="libs/paper-menu/paper-menu.html" rel="import">
+<link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
+<link href="oskari-filter-on-value-dialog.html" rel="import">
+<link href="oskari-grid.html" rel="import">
+<link href="oskari-spinner.html" rel="import">
+
+<dom-module id="oskari-statsgrid">
+
+  <template>
+    <iron-ajax
+      auto
+      url="{{ajaxUrl}}"
+      params='{"action_route": "GetLayerInfo"}'
+      handle-as="json"
+      last-response="{{layerInfo}}"
+      debounce-duration="300"
+      id="layerInfoAjax"
+      on-error="ajaxError"></iron-ajax>
+    <div id="oskari-stats-data-grid">
+      <oskari-spinner visible="[[showSpinner]]" spinnerId="indicatorDataSpinner">
+      </oskari-spinner>
+      <div id="region-category-selector">
+        <label for="selectRegionCategory">[[locale.selectRegionCategory]]</label>
+        <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
+          <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
+            <option value="[[item.val]]">[[item.text]]</option>
+          </template>
+        </select>
+      </div>
+      <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
+        on-sort="onSort" on-filter="onFilter" on-delete="onDelete" on-selections-changed="updateStatistics"
+        filtering sorting deleting="[[!embedded]]" locale="[[locale]]" indicator-expanded="{{indicatorExpanded}}"/>
+      <content></content>
+    </div>
+  </template>
+
+  <script src="oskari-statsgrid.js">
+  </script>
+
+</dom-module>
+

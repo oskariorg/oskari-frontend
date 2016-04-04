@@ -3,8 +3,7 @@
   "private": true,
   "dependencies": {
     "jquery": "1.10.2",
-    "openlayers": "2.13.1",
-    "chosen": "~1.0.0",
+    "chosen": "~1.4.2",
     "jquery-migrate": "1.2.1",
     "jquery-ui": "1.9.1",
     "slickgrid": "~2.1.0",
@@ -20,5 +19,8 @@
     "geostats": "https://github.com/simogeo/geostats.git",
     "jscolor": "http://jscolor.com/release/jscolor-1.4.2.zip"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "jquery": "1.10.2"
+  }
 }

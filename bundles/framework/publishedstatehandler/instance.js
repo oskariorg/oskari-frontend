@@ -82,7 +82,6 @@ Oskari.clazz.define(
                 }
             }
 
-            var ajaxUrl = sandbox.getAjaxUrl();
             sandbox.addRequestHandler(
                 'StateHandler.SetStateRequest',
                 this.requestHandlers.setStateHandler

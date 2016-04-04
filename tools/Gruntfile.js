@@ -202,7 +202,7 @@ module.exports = function (grunt) {
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
                 releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
-            grunt.task.run(/*minifyStatsTaskStr, */releaseManualTaskStr);
+            grunt.task.run(minifyStatsTaskStr, releaseManualTaskStr);
     });
 
     grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
@@ -288,13 +288,15 @@ module.exports = function (grunt) {
 
             grunt.config.set('compile.' + appName + '.options', {
                 appSetupFile: config,
-                dest: dest
+                dest: dest,
+                concat: true
             });
             grunt.config.set('compileAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: config,
                 dest: dest,
-                imageDest: imageDest
+                imageDest: imageDest,
+                concat: true
             });
             grunt.config.set('sprite.' + appName + '.options', options);
         }
@@ -434,7 +436,7 @@ module.exports = function (grunt) {
 
 
         if (this.data && this.data.options) {
-            grunt.log.writeln('Minifying...');
+            grunt.log.writeln('Minifying... ' + appName);
             grunt.config.set('minifyAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: this.data.options.appSetupFile,

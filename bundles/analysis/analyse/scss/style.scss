@@ -11,7 +11,7 @@
 }
 
 /* SASS removes whitespace that calc requires, so unquote() whatever calculation you pass to this */
-@mixin calcProperty($property, $calculation) { 
+@mixin calcProperty($property, $calculation) {
     #{$property}: -moz-calc(#{$calculation});
     #{$property}: -webkit-calc(#{$calculation});
     #{$property}: -o-calc(#{$calculation});
@@ -23,7 +23,7 @@ div.notLoggedIn {
 }
 
 #contentMap {
-    
+
     &.mapAnalyseMode {
         margin-left: 384px;
     }

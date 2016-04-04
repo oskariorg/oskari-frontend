@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     mapHeight = jQuery(window).height(),
                     mapWidth = contentMap.width(),
                     sidebar = jQuery('#sidebar:visible'),
-                    statsgrid = jQuery('.oskari-view.statsgrid:visible'),
+                    statsgrid = jQuery('.statsgrid:visible'),
                     maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
                     mapTools = jQuery('#maptools:visible');
 
@@ -544,7 +544,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.getSandbox().getMap(),
+            var me = this,
+                map = this.getSandbox().getMap(),
                 selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 mapmodule = this.getMapModule(),
                 i,

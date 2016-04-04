@@ -1,6 +1,6 @@
 /**
- * @class Oskari.userinterface.component.Popup
- * Provides a popup window to replace alert
+ * @class Oskari.userinterface.component.Overlay
+ * Provides an Overlay panel
  */
 Oskari.clazz.define('Oskari.userinterface.component.Overlay',
 
