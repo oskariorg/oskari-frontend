@@ -442,11 +442,7 @@ Oskari.clazz.define(
                 descending: pDescending
             };
             locations.sort(function (a, b) {
-                var sortResult = naturalSort(a[pAttribute].toLowerCase(), b[pAttribute].toLowerCase());
-                if (pDescending) {
-                    sortResult =  -1 * sortResult;
-                }
-                return sortResult;
+                return Oskari.util.naturalSort(a[pAttribute].toLowerCase(), b[pAttribute].toLowerCase(), pDescending);
             });
             return locations;
         },
