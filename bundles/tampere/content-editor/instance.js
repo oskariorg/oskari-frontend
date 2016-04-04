@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 // detect layerId and replace with the corresponding layerModel
                 layerModel = service.findMapLayer(layerModel);
             }
-            if(!layerModel || !layerModel.getPermission("editLayerContent") || !layerModel.isLayerOfType("WFS")) {
+            if(!layerModel || !layerModel.getPermission("EDIT_LAYER_CONTENT") || !layerModel.isLayerOfType("WFS")) {
                 return;
             }
 
