@@ -30,43 +30,43 @@ function() {
             "src" : "../../../../bundles/statistics/publishedgrid/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/statistics/statsgrid/view/MainPanel.js"
+            "src": "../../../../bundles/statistics/statsgrid.polymer/view/MainPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageClassificationPlugin.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/plugin/ManageClassificationPlugin.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/event/StatsDataChangedEvent.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/event/StatsDataChangedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/event/IndicatorsEvent.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/event/IndicatorsEvent.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/statistics/statsgrid/service/CallbackQueue.js"
+            "src": "../../../../bundles/statistics/statsgrid.polymer/service/CallbackQueue.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/service/StatisticsService.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/TooltipContentRequest.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/TooltipContentRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/TooltipContentRequestHandler.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/TooltipContentRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequest.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/IndicatorsRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequestHandler.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/IndicatorsRequestHandler.js"
         },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/divmanazer/component/buttons/CloseButton.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/css/style.css"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/css/style.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/css/classifyplugin.css"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/css/classifyplugin.css"
         }, {
             "src" : "../../../../bundles/statistics/publishedgrid/resources/css/publishedgrid.css",
             "type" : "text/css"
@@ -83,19 +83,19 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/fi.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/sv.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/en.js"
         }],
         "links": [{
             "rel": "import",
-            "href": "/Oskari/bundles/statistics/statsgrid/oskari-statsview.html"
+            "href": "/Oskari/bundles/statistics/statsgrid.polymer/oskari-statsview.html"
         }]
     },
     "bundle" : {
