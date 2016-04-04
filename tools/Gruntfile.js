@@ -286,10 +286,15 @@ module.exports = function (grunt) {
             // setting task configs
             grunt.config.set('copy.' + appName + '.files', files);
 
+            // Change to true to get oskari.min.js with non-minified content (it's big, don't use in production)
+            var concatInsteadOfMinify = false;
+            if(concatInsteadOfMinify) {
+                grunt.log.warn('!!!Using concatenated instead of minified build!!!');
+            }
             grunt.config.set('compile.' + appName + '.options', {
                 appSetupFile: config,
                 dest: dest,
-                concat: true
+                concat: concatInsteadOfMinify
             });
             grunt.config.set('compileAppCSS.' + appName + '.options', {
                 appName: appName,
