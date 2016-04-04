@@ -442,42 +442,13 @@ Oskari.clazz.define(
                 descending: pDescending
             };
             locations.sort(function (a, b) {
-                return me._searchResultComparator(a, b, pAttribute, pDescending);
+                var sortResult = naturalSort(a[pAttribute].toLowerCase(), b[pAttribute].toLowerCase());
+                if (pDescending) {
+                    sortResult =  -1 * sortResult;
+                }
+                return sortResult;
             });
             return locations;
-        },
-
-        /**
-         * @private @method _searchResultComparator
-         * Compares the given attribute on given objects for sorting
-         * search result objects.
-         *
-         * @param {Object} a search result 1
-         * @param {Object} b search result 2
-         * @param {String} pAttribute attributename to sort by (e.g.
-         * a[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         *
-         */
-        _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase(),
-                nameB = b[pAttribute].toLowerCase(),
-                value = 0;
-            if (nameA === nameB || 'name' === pAttribute) {
-                // Because problem with address 1 and address 10 then
-                // id are ranked right
-                nameA = a.id;
-                nameB = b.id;
-            }
-            if (nameA < nameB) {
-                value = -1;
-            } else if (nameA > nameB) {
-                value = 1;
-            }
-            if (pDescending) {
-                value = value * -1;
-            }
-            return value;
         },
 
         addSearchResultAction: function (action) {

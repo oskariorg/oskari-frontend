@@ -2,6 +2,18 @@
 
 ## 1.36
 
+### libraries/javascript-natural-sort
+
+*New library!*  Added library for sorting arrays.
+
+### framework/search
+
+Fixed search result table sorting when columns contains word and numbers.
+
+### divmanazer/grid
+
+Fixed table sorting when columns contains word and numbers.
+
 ### toolbar and infobox
 
 Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
@@ -32,7 +44,6 @@ For example:
   };
 
 In the future markers will be transferred to another place.
-
 
 ### divmanazer/ui-components
 
@@ -133,7 +144,7 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
     }
 ```
 
-###tampere/conter-editor
+### tampere/conter-editor
 
 New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at oskari.org / Adding functionalities 
 
@@ -144,6 +155,12 @@ A modification in the request of describe WFS feature type.
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
+
+## 1.35.2
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol2/ol3
+
+Fixed map move so at this not send twice setLocation request.
 
 ## 1.35.1
 
