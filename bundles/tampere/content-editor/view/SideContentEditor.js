@@ -1105,7 +1105,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     if (me.layerGeometries.geometry.id.indexOf("Multi") > -1) {
                         if (me.layerGeometries.geometry.components != undefined) {
                             for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                                if (me.layerGeometries.geometry.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}))
+                                if (me.layerGeometries.geometry.components[i].atPoint({lon:me.clickCoords.x,lat:me.clickCoords.y}, 2, 2))
                                 {
                                     me.clickedGeometryNumber = i;
                                     break;
@@ -1217,7 +1217,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var featureGeometryId = null;
             var coords = new OpenLayers.LonLat(me.clickCoords.x, me.clickCoords.y);
             for (var i = 0; i < me.layerGeometries.geometry.components.length; i++) {
-                if (me.layerGeometries.geometry.components[i].atPoint(coords)) {
+                if (me.layerGeometries.geometry.components[i].atPoint(coords, 2, 2)) {
                     featureGeometryId = i;
                     break;
                 }
