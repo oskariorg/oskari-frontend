@@ -14,9 +14,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
     }, {
         "create": function () {
             return Oskari.clazz.create("Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance",
-                'StatsGrid', 
-                null, 
-                "Oskari.statistics.bundle.statsgrid.Tile", 
+                'StatsGrid',
+                null,
+                "Oskari.statistics.bundle.statsgrid.Tile",
                 "Oskari.statistics.bundle.statsgrid.StatsView");
         },
         "update": function (manager, bundle, bi, info) {
