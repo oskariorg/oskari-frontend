@@ -2101,7 +2101,8 @@ Oskari = (function () {
                 // From bundle.js:
                 //   "rel": "import",
                 //   "href": "/Oskari/bundles/statistics/statsgrid/vulcanized.html"
-                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid/vulcanized.html");
+                // FIXME: We need a generic way of telling these kind of things. Something in startupsequence fragment perhaps or in packages/*/bundle.js
+                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html");
             }
             if (bundleDefinitionState.state !== 1) {
                 me.log('Pending DEFINITION at sources for ' + biid + ' to ' +
