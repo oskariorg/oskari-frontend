@@ -1,4 +1,4 @@
-Polymer.require(['/Oskari/bundles/statistics/statsgrid/libs/spinner/spin.min.js'], function(Spinner) {
+Polymer.require(['/Oskari/bundles/statistics/statsgrid.polymer/libs/spinner/spin.min.js'], function(Spinner) {
   return {
     "is": "oskari-spinner",
     "properties": {
