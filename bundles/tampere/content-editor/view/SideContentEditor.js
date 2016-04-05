@@ -381,11 +381,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         sendRequest: function (requestData, deleteFeature)
         {
-            var me = this;
-            var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okButton.setTitle(me.loc.buttons.ok);
+            var me = this,
+                okButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                url = null;
 
-            var url = null;
+            okButton.setTitle(me.loc.buttons.ok);
             if (me.operationMode == "create") {
                 url = ajaxUrl + 'action_route=InsertFeature';
             } else {
@@ -426,8 +426,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
                     okButton.setHandler(function () {
                         setTimeout(function() {
-                            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-                            var request = visibilityRequestBuilder(me.layerId, true);
+                            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                                request = visibilityRequestBuilder(me.layerId, true);
+                            // Trick for wfs tile refresh
+                            mapModule.notifyMoveEnd();
                             me.sandbox.request(me.instance.getName(), request);
 							me._highlighGeometries([], layer, true);
                         }, 500);
@@ -1194,12 +1197,17 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 url : ajaxUrl + 'action_route=DeleteFeature',
                 success : function(response) {
                     me._clearFeaturesList();
+                    var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(me._getLayerById(me.selectedLayerId));
+                    me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
                         setTimeout(function() {
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                             var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
+                            // Trick for wfs tile refresh
+                            mapModule.notifyMoveEnd(me.getName());
                         }, 1000);
                         me.closeDialog();
                     });
