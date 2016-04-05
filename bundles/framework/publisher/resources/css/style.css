@@ -94,7 +94,7 @@ div.basic_publisher > div.header {
 div.basic_publisher .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0;
-  height: 70px9;
+  height: 70px\9;
   /*IE9 */ }
   div.basic_publisher .layer.selected.out-of-scale, div.basic_publisher .layer.selected.out-of-content, div.basic_publisher .layer.selected.hidden {
     color: #909090; }

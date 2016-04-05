@@ -1,4 +1,3 @@
-@charset "UTF-8";
 #contentMap.mapPublishMode > #mapdiv,
 #contentMap.mapPublishMode > div.row-fluid {
   position: relative;
@@ -171,8 +170,12 @@ div.publisher div.startview ul {
 div.basic_publisher div.form div.field input,
 div.field select {
   width: 100%;
-  width: 80%�/;
-  /* unquote for libsass bug */
+  /*
+    This used to have a defunct CSS hack for IE 10 only:
+    width: 80%\0;
+    It was never functional because SASS compiled it into single character.
+    It was removed.  
+    */
   background-color: #FFF; }
 
 /* Buttons */

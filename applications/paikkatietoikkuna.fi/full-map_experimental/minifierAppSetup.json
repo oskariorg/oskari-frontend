@@ -249,36 +249,15 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
 			"title": "Karttajulkaisu",
-			"bundleinstancename": "publisher",
-			"fi": "jquery",
-			"sv": "?",
-			"en": "?",
-			"bundlename": "publisher",
-			"metadata": {
-				"Import-Bundle": {
-					"publisher": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
-			"title": "Karttajulkaisu2",
 			"bundleinstancename": "publisher2",
-			"fi": "jquery",
-			"sv": "?",
-			"en": "?",
 			"bundlename": "publisher2",
 			"metadata": {
 				"Import-Bundle": {
 					"publisher2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},
@@ -441,18 +420,24 @@
 			},
 			"instanceProps": {}
 		}, {
+			"title": "Teemakartat",
+			"fi": "Teemakartat",
+			"sv": "Tematiska Kartor",
+			"en": "Thematic Maps",
 			"bundleinstancename": "statsgrid",
 			"bundlename": "statsgrid",
 			"metadata": {
 				"Import-Bundle": {
 					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/bundle/"
+						"bundlePath": "../../../packages/statistics/polymer/"
 					},
 					"geostats": {
 						"bundlePath": "../../../packages/libraries/bundle/"
 					}
-				}
-			}
+				},
+				"Require-Bundle-Instance": []
+			},
+			"instanceProps": {}
 		}, {
 			"instanceProps": {},
 			"title": "Karttatasot",
@@ -590,6 +575,27 @@
 					}
 				}
 			}
-		}
+		},
+		{
+		    "bundlename" : "metrics",
+		    "bundleinstancename" : "metrics",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "metrics" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
+		}, {
+            "title": "Timeseries",
+            "bundlename": "timeseries",
+            "metadata": {
+                "Import-Bundle": {
+                    "timeseries": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }
 	]
 }

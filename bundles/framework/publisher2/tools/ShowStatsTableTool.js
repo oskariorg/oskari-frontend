@@ -37,17 +37,22 @@ function() {
     getTool: function(pdata){
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
+            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid._getState(),
             layer = me._getStatsLayer();
 
         if(!me.__tool) {
             statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+            statsGridState.embedded = true;
+            statsGridState.layerId = layer._id;
 
             me.__tool = {
 
-                id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+                id: 'Oskari.statistics.bundle.statsgrid.view.MainPanel',
                 title: 'grid',
                 config: {
+                    'localization': Oskari.getLocalization('StatsGrid'),
+                    'sandbox': me.__sandbox,
+                    // FIXME: Are the next useful in the published grid?
                     'published': true,
                     'layer': layer,
                     'state': statsGridState
@@ -89,37 +94,43 @@ function() {
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
             request,
-            elLeft,
-            statsContainer;
+            statsContainer,
+            statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
+            statsGridState = statsGrid.state;
+
+        statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+        statsGridState.embedded = true;
+        statsGridState.layerId = statsLayer._id;
 
         me.state.enabled = enabled;
 
-        if(!me.__plugin && enabled) {
+        if(!me.__plugin) {
             me.statsService = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
-                me.__instance
+                me.__instance.sandbox
             );
             if(statsLayer){
                 request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
             me.__sandbox.registerService(me.statsService);
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config, Oskari.getLocalization('StatsGrid'));
-            me.__mapmodule.registerPlugin(me.__plugin);
+            me.__plugin = Oskari.clazz.create(tool.id, me, tool.config.localization, tool.config.sandbox);
+        }
+        me.statsContainer = jQuery('.publishedgrid');
+        if(me.statsContainer.length == 0) {
+            var elLeft = jQuery('.oskariui-left');
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
+            elLeft.html(me.statsContainer);
         }
 
         if(enabled === true) {
-            elLeft = jQuery('.oskariui-left');
-            elLeft.html(me.statsContainer);
-            me.__plugin.startPlugin(me.__sandbox);
-            me.__plugin.createStatsOut(me.statsContainer);
+            me.__plugin.embedded = true;
+            me.__plugin.state = statsGridState;
+            me.__plugin.statslayer = statsLayer;
+            me.__plugin.render(me.statsContainer, me);
             me.__started = true;
         } else {
-            if (me.__started === true) {
-                me.__plugin.stopPlugin(me.__sandbox);
-            }
-            jQuery('.publishedgrid').remove();
+            me.statsContainer.empty();
         }
 
         if (enabled) {
@@ -149,12 +160,13 @@ function() {
      * @return {Object} filtered state
      */
     _filterIndicators: function (statsGridState) {
-        statsGridState.indicators = _.filter(statsGridState.indicators, function (indicator) {
+        statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+            var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
             return (
                 // indicators
-                (!indicator.ownIndicator) ||
+                (!ownIndicator) ||
                 // own indicators
-                (indicator.ownIndicator && indicator.public)
+                (ownIndicator && indicator.public)
             );
         });
         return statsGridState;
@@ -177,20 +189,11 @@ function() {
         /**
          * @private @method _getState
          * Get state config from current tool, if sandbox returns  default config
-         *
          */
         _getState: function () {
-            var me = this,
-                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-                statsGridState = statsGrid.state;
-
-            statsGridState.gridShown = me.state.enabled;
-            // Grid state is not in sandbox, if no touch to grid in view edit mode
-            // TODO improve state management in statsgrid
-            if(!('currentColumn' in statsGrid.state) && me.__tool) {
-                statsGridState = me.__tool.config.state;
-            }
-            return me._filterIndicators(_.clone(statsGridState, true));
+            return {
+                gridShown: this.state.enabled
+            };
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

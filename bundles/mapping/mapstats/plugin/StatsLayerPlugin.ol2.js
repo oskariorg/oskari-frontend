@@ -18,7 +18,7 @@ Oskari.clazz.define(
         me._name = 'StatsLayerPlugin';
 
         me._supportedFormats = {};
-        me._statsDrawLayer = null;
+        me._statsDrawLayers = [];
         me._highlightCtrl = null;
         me._navCtrl = null;
         me._getFeatureControlHover = null;
@@ -168,7 +168,7 @@ Oskari.clazz.define(
         },
 
         /**
-         * Activates the hover and select controls.
+         * Activates the hover, select and highlight controls.
          *
          * @method activateControls
          */
@@ -180,10 +180,13 @@ Oskari.clazz.define(
             if (me._getFeatureControlSelect) {
                 me._getFeatureControlSelect.activate();
             }
+            if (me._highlightCtrl) {
+                me._highlightCtrl.activate();
+            }
         },
 
         /**
-         * Deactivates the hover and select controls.
+         * Deactivates the hover, select and highlight controls.
          *
          * @method deactivateControls
          */
@@ -195,6 +198,201 @@ Oskari.clazz.define(
             if (me._getFeatureControlSelect) {
                 me._getFeatureControlSelect.deactivate();
             }
+            if (me._highlightCtrl) {
+              me._highlightCtrl.deactivate();
+          }
+        },
+        
+        /**
+         * Resets the hover control for a new layer.
+         */
+        resetControls: function(queryableMapLayers, newLayer) {
+          var me = this;
+          if (me._highlightCtrl) {
+            me._highlightCtrl.deactivate();
+            me.getMap().removeControl(me._highlightCtrl);
+          }
+          if (me._getFeatureControlHover) {
+            me._getFeatureControlHover.deactivate();
+            me.getMap().removeControl(me._getFeatureControlHover);
+          }
+
+          // Hover control
+          me._highlightCtrl = new OpenLayers.Control.SelectFeature(
+              newLayer,
+              {
+                hover: true,
+                highlightOnly: true,
+                outFeature: function (feature) {
+                  me._highlightCtrl.unhighlight(feature);
+                  me._removePopup();
+                },
+                renderIntent: 'temporary'
+              }
+          );
+          // Make sure selected feature doesn't swallow events so we can drag above it
+          // http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues
+          if (me._highlightCtrl.handlers !== undefined) { // OL 2.7
+            me._highlightCtrl.handlers.feature.stopDown = false;
+          } else if (me._highlightCtrl.handler !== undefined) { // OL < 2.7
+            me._highlightCtrl.handler.stopDown = false;
+            me._highlightCtrl.handler.stopUp = false;
+          }
+          me.getMap().addControl(this._highlightCtrl);
+          me._highlightCtrl.activate();
+
+          me._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
+            drillDown: false,
+            hover: true,
+            handlerOptions: {
+              'hover': {
+                delay: 0
+              },
+              'stopSingle': false
+            },
+            infoFormat: 'application/vnd.ogc.gml',
+            layers: queryableMapLayers,
+            eventListeners: {
+              getfeatureinfo: function (event) {
+                var drawLayer = me.getDrawLayer(),
+                i;
+                if (typeof drawLayer === 'undefined') {
+                  return;
+                }
+                if (event.features.length === 0) {
+                  for (i = 0; i < drawLayer.features.length; i += 1) {
+                    if (!drawLayer.features[i].selected) {
+                      drawLayer.removeFeatures(
+                          [drawLayer.features[i]]
+                      );
+                    }
+                  }
+                  me._removePopup();
+                  return;
+                }
+                var found = false,
+                attrText = me.featureAttribute;
+
+                for (i = 0; i < drawLayer.features.length; i += 1) {
+                  if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
+                    found = true;
+                  } else if (!drawLayer.features[i].selected) {
+                    drawLayer.removeFeatures(
+                        [drawLayer.features[i]]
+                    );
+                  }
+                }
+
+                if (!found) {
+                  drawLayer.addFeatures([event.features[0]]);
+                  me._highlightCtrl.highlight(event.features[0]);
+
+                  me._removePopup();
+                  me._addPopup(event);
+                }
+                drawLayer.redraw();
+              },
+              beforegetfeatureinfo: function (event) {},
+              nogetfeatureinfo: function (event) {}
+            }
+          });
+          // Add the control to the map
+          me.getMap().addControl(me._getFeatureControlHover);
+
+
+          // Activate only is mode is on.
+          if (me._modeVisible) {
+            me._getFeatureControlHover.activate();
+          }
+
+          // Select control
+          me._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
+            drillDown: true,
+            hover: false,
+            handlerOptions: {
+              'click': {
+                delay: 0
+              },
+              'pixelTolerance': 5
+            },
+            infoFormat: 'application/vnd.ogc.gml',
+            layers: queryableMapLayers,
+            eventListeners: {
+              getfeatureinfo: function (event) {
+                if (event.features.length === 0) {
+                  return;
+                }
+                var newFeature = event.features[0],
+                drawLayer = me.getDrawLayer();
+
+                if (typeof drawLayer === 'undefined') {
+                  return;
+                }
+                var foundInd = -1,
+                attrText = me.featureAttribute,
+                i,
+                featureStyle;
+
+                for (i = 0; i < drawLayer.features.length; i += 1) {
+                  if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
+                    foundInd = i;
+                    break;
+                  }
+                }
+                featureStyle = OpenLayers.Util.applyDefaults(
+                    featureStyle,
+                    OpenLayers.Feature.Vector.style['default']
+                );
+                featureStyle.fillColor = '#ff0000';
+                featureStyle.strokeColor = '#ff3333';
+                featureStyle.strokeWidth = 3;
+                featureStyle.fillOpacity = 0.2;
+
+                if (foundInd >= 0) {
+                  drawLayer.features[i].selected =
+                    !drawLayer.features[i].selected;
+                  if (drawLayer.features[i].selected) {
+                    drawLayer.features[i].style = featureStyle;
+                  } else {
+                    drawLayer.features[i].style = null;
+                    me._highlightCtrl.highlight(drawLayer.features[i]);
+                  }
+                  if (eventBuilder) {
+                    highlightEvent = eventBuilder(
+                        drawLayer.features[i].attributes,
+                        drawLayer.features[i].selected,
+                        'click'
+                    );
+                  }
+                } else {
+                  drawLayer.addFeatures([newFeature]);
+                  newFeature.selected = true;
+                  newFeature.style = featureStyle;
+                  if (eventBuilder) {
+                    highlightEvent = eventBuilder(
+                        newFeature.attributes,
+                        newFeature.selected,
+                        'click'
+                    );
+                  }
+                }
+                drawLayer.redraw();
+
+                if (highlightEvent) {
+                  me.getSandbox().notifyAll(highlightEvent);
+                }
+              },
+              beforegetfeatureinfo: function (event) {},
+              nogetfeatureinfo: function (event) {}
+            }
+          });
+          // Add the control to the map
+          me.getMap().addControl(me._getFeatureControlSelect);
+          // Activate only is mode is on.
+          if (me._modeVisible) {
+            me._getFeatureControlSelect.activate();
+          }
+
         },
 
         /**
@@ -238,7 +436,7 @@ Oskari.clazz.define(
                 );
 
             // Select control
-            me._statsDrawLayer = new OpenLayers.Layer.Vector(
+            var newLayer = new OpenLayers.Layer.Vector(
                 'Stats Draw Layer',
                 {
                     styleMap: new OpenLayers.StyleMap({
@@ -259,183 +457,13 @@ Oskari.clazz.define(
                     })
                 }
             );
-            me.getMap().addLayers([me._statsDrawLayer]);
-
-            // Hover control
-            me._highlightCtrl = new OpenLayers.Control.SelectFeature(
-                me._statsDrawLayer,
-                {
-                    hover: true,
-                    highlightOnly: true,
-                    outFeature: function (feature) {
-                        me._highlightCtrl.unhighlight(feature);
-                        me._removePopup();
-                    },
-                    renderIntent: 'temporary'
-                }
-            );
-            // Make sure selected feature doesn't swallow events so we can drag above it
-            // http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues
-            if (me._highlightCtrl.handlers !== undefined) { // OL 2.7
-                me._highlightCtrl.handlers.feature.stopDown = false;
-            } else if (me._highlightCtrl.handler !== undefined) { // OL < 2.7
-                me._highlightCtrl.handler.stopDown = false;
-                me._highlightCtrl.handler.stopUp = false;
-            }
-            me.getMap().addControl(this._highlightCtrl);
-            me._highlightCtrl.activate();
+            newLayer.layerId = layer.getId();
+            me._statsDrawLayers.push(newLayer);
+            me.getMap().addLayers([newLayer]);
 
             var queryableMapLayers = [openLayer];
 
-            me._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
-                drillDown: false,
-                hover: true,
-                handlerOptions: {
-                    'hover': {
-                        delay: 0
-                    },
-                    'stopSingle': false
-                },
-                infoFormat: 'application/vnd.ogc.gml',
-                layers: queryableMapLayers,
-                eventListeners: {
-                    getfeatureinfo: function (event) {
-                        var drawLayer = me.getDrawLayer(),
-                            i;
-                        if (typeof drawLayer === 'undefined') {
-                            return;
-                        }
-                        if (event.features.length === 0) {
-                            for (i = 0; i < drawLayer.features.length; i += 1) {
-                                if (!drawLayer.features[i].selected) {
-                                    drawLayer.removeFeatures(
-                                        [drawLayer.features[i]]
-                                    );
-                                }
-                            }
-                            me._removePopup();
-                            return;
-                        }
-                        var found = false,
-                            attrText = me.featureAttribute;
-
-                        for (i = 0; i < drawLayer.features.length; i += 1) {
-                            if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
-                                found = true;
-                            } else if (!drawLayer.features[i].selected) {
-                                drawLayer.removeFeatures(
-                                    [drawLayer.features[i]]
-                                );
-                            }
-                        }
-
-                        if (!found) {
-                            drawLayer.addFeatures([event.features[0]]);
-                            me._highlightCtrl.highlight(event.features[0]);
-
-                            me._removePopup();
-                            me._addPopup(event);
-                        }
-                        drawLayer.redraw();
-                    },
-                    beforegetfeatureinfo: function (event) {},
-                    nogetfeatureinfo: function (event) {}
-                }
-            });
-            // Add the control to the map
-            me.getMap().addControl(me._getFeatureControlHover);
-            // Activate only is mode is on.
-            if (me._modeVisible) {
-                me._getFeatureControlHover.activate();
-            }
-
-            // Select control
-            me._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
-                drillDown: true,
-                hover: false,
-                handlerOptions: {
-                    'click': {
-                        delay: 0
-                    },
-                    'pixelTolerance': 5
-                },
-                infoFormat: 'application/vnd.ogc.gml',
-                layers: queryableMapLayers,
-                eventListeners: {
-                    getfeatureinfo: function (event) {
-                        if (event.features.length === 0) {
-                            return;
-                        }
-                        var newFeature = event.features[0],
-                            drawLayer = me.getDrawLayer();
-
-                        if (typeof drawLayer === 'undefined') {
-                            return;
-                        }
-                        var foundInd = -1,
-                            attrText = me.featureAttribute,
-                            i,
-                            featureStyle;
-
-                        for (i = 0; i < drawLayer.features.length; i += 1) {
-                            if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
-                                foundInd = i;
-                                break;
-                            }
-                        }
-                        featureStyle = OpenLayers.Util.applyDefaults(
-                            featureStyle,
-                            OpenLayers.Feature.Vector.style['default']
-                        );
-                        featureStyle.fillColor = '#ff0000';
-                        featureStyle.strokeColor = '#ff3333';
-                        featureStyle.strokeWidth = 3;
-                        featureStyle.fillOpacity = 0.2;
-
-                        if (foundInd >= 0) {
-                            drawLayer.features[i].selected =
-                                !drawLayer.features[i].selected;
-                            if (drawLayer.features[i].selected) {
-                                drawLayer.features[i].style = featureStyle;
-                            } else {
-                                drawLayer.features[i].style = null;
-                                me._highlightCtrl.highlight(drawLayer.features[i]);
-                            }
-                            if (eventBuilder) {
-                                highlightEvent = eventBuilder(
-                                    drawLayer.features[i].attributes,
-                                    drawLayer.features[i].selected,
-                                    'click'
-                                );
-                            }
-                        } else {
-                            drawLayer.addFeatures([newFeature]);
-                            newFeature.selected = true;
-                            newFeature.style = featureStyle;
-                            if (eventBuilder) {
-                                highlightEvent = eventBuilder(
-                                    newFeature.attributes,
-                                    newFeature.selected,
-                                    'click'
-                                );
-                            }
-                        }
-                        drawLayer.redraw();
-
-                        if (highlightEvent) {
-                            me.getSandbox().notifyAll(highlightEvent);
-                        }
-                    },
-                    beforegetfeatureinfo: function (event) {},
-                    nogetfeatureinfo: function (event) {}
-                }
-            });
-            // Add the control to the map
-            me.getMap().addControl(me._getFeatureControlSelect);
-            // Activate only is mode is on.
-            if (me._modeVisible) {
-                me._getFeatureControlSelect.activate();
-            }
+            me.resetControls(queryableMapLayers, newLayer);
 
             openLayer.opacity = layer.getOpacity() / 100;
 
@@ -568,9 +596,11 @@ Oskari.clazz.define(
 //            me.getMap().removeControl(me._navCtrl);
             me.getMap().removeControl(me._getFeatureControlHover);
             me.getMap().removeControl(me._getFeatureControlSelect);
-            me.getMap().removeLayer(me._statsDrawLayer);
+            me._statsDrawLayers.forEach(function(statsDrawLayer) {
+              me.getMap().removeLayer(statsDrawLayer);
+            });
         },
-
+        
         /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent
@@ -578,11 +608,17 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
          */
         _mapLayerVisibilityChangedEvent: function (event) {
-            var mapLayer = event.getMapLayer();
+            var mapLayer = event.getMapLayer(),
+              me = this;
             if (mapLayer._layerType !== 'STATS') {
-                return;
+              return;
             }
-            this._statsDrawLayer.setVisibility(mapLayer.isVisible());
+            me._statsDrawLayers.forEach(function(statsDrawLayer) {
+              if (statsDrawLayer.layerId == mapLayer.getId()) {
+                // FIXME: Test that this actually works. The layerId is set when the drawlayer is created.
+                statsDrawLayer.setVisibility(mapLayer.isVisible());
+              }
+            });
 
             // Do nothing if not in statistics mode.
             if (this._modeVisible) {
@@ -738,7 +774,7 @@ Oskari.clazz.define(
                 mapLayer.mergeNewParams({
                     VIS_ID: params.VIS_ID,
                     VIS_NAME: params.VIS_NAME,
-                    VIS_ATTR: params.VIS_ATTR,
+                    VIS_ATTR: params.VIS_ATTR, // This must be the name of the attribute that has the values.
                     VIS_CLASSES: params.VIS_CLASSES,
                     VIS_COLORS: params.VIS_COLORS,
                     LAYERS: params.VIS_NAME

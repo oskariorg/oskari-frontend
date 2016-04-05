@@ -116,7 +116,44 @@ Oskari.clazz.define(
         this._selectedRegionCategory = undefined;
         this._defaultRegionCategory = 'KUNTA';
         this._dataSources = {};
+        this._acceptedRegionCategories = this.CATEGORY_MAPPINGS.categories;
     }, {
+        // moved from statslayers in preparation for the new statsgrid implementation
+        CATEGORY_MAPPINGS : {
+            'categories': [
+                'KUNTA',
+                'ALUEHALLINTOVIRASTO',
+                'MAAKUNTA',
+                'NUTS1',
+                'SAIRAANHOITOPIIRI',
+                //'SUURALUE',
+                'SEUTUKUNTA',
+                'ERVA',
+                'ELY-KESKUS'
+            ],
+            'wmsNames': {
+                'KUNTA': 'oskari:kunnat2013',
+                'ALUEHALLINTOVIRASTO': 'oskari:avi',
+                'MAAKUNTA': 'oskari:maakunta',
+                'NUTS1': 'oskari:nuts1',
+                'SAIRAANHOITOPIIRI': 'oskari:sairaanhoitopiiri',
+                //'SUURALUE': 'oskari:',
+                'SEUTUKUNTA': 'oskari:seutukunta',
+                'ERVA': 'oskari:erva-alueet',
+                'ELY-KESKUS': 'oskari:ely'
+            },
+            'filterProperties': {
+                'KUNTA': 'kuntakoodi',
+                'ALUEHALLINTOVIRASTO': 'avi_nro',
+                'MAAKUNTA': 'maakuntanro',
+                'NUTS1': 'code',
+                'SAIRAANHOITOPIIRI': 'sairaanhoitopiirinro',
+                //'SUURALUE': '',
+                'SEUTUKUNTA': 'seutukuntanro',
+                'ERVA': 'erva_numero',
+                'ELY-KESKUS': 'ely_nro'
+            }
+        },
         /**
          * @private @method startPlugin
          *
@@ -190,8 +227,6 @@ Oskari.clazz.define(
                 return;
             }
 
-            this._acceptedRegionCategories =
-                layer.getCategoryMappings().categories;
             // indicator params are select-elements
             // (indicator drop down select and year & gender selects)
             this.prepareIndicatorParams(container);
@@ -1768,7 +1803,7 @@ Oskari.clazz.define(
                 CHECKED_COUNT: this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
                 CUR_COL: curCol,
                 VIS_NAME: me._layer.getLayerName(), //"ows:kunnat2013",
-                VIS_ATTR: me._layer.getFilterPropertyName(), //"kuntakoodi",
+                VIS_ATTR: me.layerFilterPropertyName, //"kuntakoodi",
                 VIS_CODES: munArray,
                 COL_VALUES: statArray
             });
@@ -2492,12 +2527,10 @@ Oskari.clazz.define(
         },
         _setLayerToCategory: function (category) {
             var layer = this.getLayer(),
-                categoryMappings = layer.getCategoryMappings();
+                categoryMappings = this.CATEGORY_MAPPINGS;
 
             layer.setLayerName(categoryMappings.wmsNames[category]);
-            layer.setFilterPropertyName(
-                categoryMappings.filterProperties[category]
-            );
+            this.layerFilterPropertyName = categoryMappings.filterProperties[category];
         },
 
         /**
@@ -3034,7 +3067,7 @@ Oskari.clazz.define(
 
         _getHilightPropertyName: function () {
             var layer = this.getLayer(),
-                categoryMappings = layer.getCategoryMappings() || {},
+                categoryMappings = this.CATEGORY_MAPPINGS || {},
                 propertyMappings = categoryMappings.filterProperties || {},
                 property = propertyMappings[this._selectedRegionCategory || 'KUNTA'];
 
