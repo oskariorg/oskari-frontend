@@ -24,108 +24,54 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
+            "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/publishedgrid/instance.js"
         }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageClassificationPlugin.js"
+            "type": "text/javascript",
+            "src": "../../../../bundles/statistics/statsgrid.polymer/view/MainPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/plugin/ManageStatsPlugin.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/plugin/ManageClassificationPlugin.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/event/StatsDataChangedEvent.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/event/StatsDataChangedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/event/IndicatorsEvent.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/event/IndicatorsEvent.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/statistics/statsgrid.polymer/service/CallbackQueue.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/service/StatisticsService.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/service/StatisticsService.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/TooltipContentRequest.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/TooltipContentRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/TooltipContentRequestHandler.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/TooltipContentRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequest.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/IndicatorsRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequestHandler.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/request/IndicatorsRequestHandler.js"
         },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/divmanazer/component/buttons/CloseButton.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/css/style.css"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/css/style.css"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/css/classifyplugin.css"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/css/classifyplugin.css"
         }, {
             "src" : "../../../../bundles/statistics/publishedgrid/resources/css/publishedgrid.css",
             "type" : "text/css"
         }, {
-            "type" : "text/css",
-            "src" : "../../../../libraries/slickgrid/css/slick.grid.css"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../libraries/slickgrid/css/municipality.css"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../libraries/slickgrid/css/slick-default-theme.css"
-        }, {
             "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.core.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.formatters.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.editors.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangedecorator.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangeselector.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.cellselectionmodel.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
-            "type" : "text/css"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.headerbuttons.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.headerbuttons.css",
-            "type" : "text/css"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.rowselectionmodel.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/plugins/slick.checkboxselectcolumn2.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.grid.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.groupitemmetadataprovider.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/slick.dataview.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/controls/slick.pager.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
             "type" : "text/javascript"
         }, {
             "src" : "../../../../libraries/chosen/chosen.jquery.js",
@@ -137,15 +83,19 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/fi.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/sv.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/statsgrid/resources/locale/en.js"
+            "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/locale/en.js"
+        }],
+        "links": [{
+            "rel": "import",
+            "href": "/Oskari/bundles/statistics/statsgrid.polymer/oskari-statsview.html"
         }]
     },
     "bundle" : {

@@ -57,7 +57,7 @@ jQuery.fn.outerHTML = function (arg) {
  *
  * Oskari
  *
- * A set of metdhods to support loosely coupled classes and instances for the
+ * A set of methods to support loosely coupled classes and instances for the
  * mapframework
  *
  * @to-do - class instance checks against class metadata - protocol
@@ -371,10 +371,10 @@ Oskari = (function () {
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
      * 'static' assumes srcs are already loaded <any-other> is assumed as a
      * request to load built js packs using this path pattern
-     * .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
+     * .../<bundles-path>/<bundle-name>/build/<any-other>.js
      */
     var supportBundleAsync = false,
-        mode = 'dev',
+        mode = 'default',
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
@@ -405,9 +405,9 @@ Oskari = (function () {
              */
             dev: function (fileName, basePath) {
                 if (basePathForBundles) {
-                    return basePathForBundles + fileName + '?ts=' + instTs;
+                    return basePathForBundles + fileName;
                 }
-                return fileName + '?ts=' + instTs;
+                return fileName;
             }
         };
 
@@ -1229,7 +1229,7 @@ Oskari = (function () {
 
         this.filesRequested = 0;
         this.filesLoaded = 0;
-        this.files = {};
+        this.files = [];
         this.fileList = [];
         this.metadata = {};
     };
@@ -1248,7 +1248,10 @@ Oskari = (function () {
             var me = this,
                 def;
 
-            if (!me.files[fn]) {
+            var matches = me.files.filter(function(item){
+                return item.fn === fn;
+            });
+            if (matches.length == 0) {
                 def = {
                     src: fn,
                     type: pdef && pdef.type ? pdef.type : 'text/javascript',
@@ -1256,7 +1259,10 @@ Oskari = (function () {
                     state: false
 
                 };
-                me.files[fn] = def;
+                me.files.push({
+                    fn: fn,
+                    def: def
+                });
 
                 if ('text/javascript' === def.type) {
                     me.filesRequested += 1;
@@ -1319,8 +1325,7 @@ Oskari = (function () {
                 }
             };
             f = false;
-            for (n = 0; n < me.fileList.length; n += 1) {
-                def = me.fileList[n];
+            me.fileList.forEach(function(def) {
                 fn = def.src;
                 st = me._buildScriptTag(fn, onFileLoaded, def.type, def.id);
                 if (st) {
@@ -1332,7 +1337,7 @@ Oskari = (function () {
                         f = true;
                     }
                 }
-            }
+            });
             if (f) {
                 me.head.appendChild(fragment);
             }
@@ -1665,6 +1670,24 @@ Oskari = (function () {
         },
 
         /**
+         * @private @method _loadLink
+         *
+         * @param {string}   rel type
+         * @param {string}   href Contains import url
+         *
+         */
+        _loadLink: function (rel, href) {
+            this.log('Loading link ' + rel + ": " + href);
+            var importParentElement = document.head || document.body,
+                linkElement;
+
+            linkElement = document.createElement('link');
+            linkElement.rel = rel;
+            linkElement.href = href;
+            importParentElement.appendChild(linkElement);
+        },
+
+        /**
          * @private @method _self
          *
          *
@@ -1751,8 +1774,8 @@ Oskari = (function () {
          * @public @method installBundleClassInfo
          * Installs a bundle defined as Oskari native Class
          *
-         * @param {string} biid      Bundle implementation I
-D         * @param {Object} classInfo ClassInfo
+         * @param {string} biid      Bundle implementation ID
+         * @param {Object} classInfo ClassInfo
          *
          */
         installBundleClassInfo: function (biid, classInfo) {
@@ -1847,9 +1870,11 @@ D         * @param {Object} classInfo ClassInfo
             sourceDefinitions = sourceDefinitions || {};
             // linter doesn't recognize the filter expression
             /*jshint forin: false*/
-            for (p in sourceDefinitions) {
-                if (sourceDefinitions.hasOwnProperty(p) &&
-                        (p === 'scripts' || p === 'locales')) {
+            if (sourceDefinitions.links) {
+                Array.prototype.push.apply(srcFiles.links, sourceDefinitions.links);
+            }
+            Object.keys(sourceDefinitions).forEach(function (p) {
+                if (p === 'scripts' || p === 'locales') {
                     for (n = 0; n < sourceDefinitions[p].length; n += 1) {
                         def = sourceDefinitions[p][n];
                         if (def.type === 'text/css') {
@@ -1858,6 +1883,7 @@ D         * @param {Object} classInfo ClassInfo
                             if (fn.indexOf('http') === -1) {
                                 fnWithPath = bundlePath + '/' + fn;
                             }
+                            // TODO: Order these like the files.
                             srcFiles.css[fnWithPath] = def;
                         } else if (def.type) {
                             srcFiles.count += 1;
@@ -1872,12 +1898,20 @@ D         * @param {Object} classInfo ClassInfo
                             if (p !== 'locales' || _isPackedMode() ||
                                     def.lang === undefined ||
                                     Oskari.getLang() === def.lang) {
-                                srcFiles.files[fnWithPath] = def;
+                                var def = {
+                                        p: p,
+                                        n: n,
+                                        def: sourceDefinitions[p][n]
+                                };
+                                srcFiles.files.push({
+                                    fn: fnWithPath,
+                                    def: def
+                                });
                             }
                         }
                     }
                 }
-            }
+            });
         },
 
         /**
@@ -1908,6 +1942,25 @@ D         * @param {Object} classInfo ClassInfo
         },
 
         /**
+         * @private @method _feedLinkLoader
+         *
+         * @param {string}   biid       Bundle implementation ID
+         * @param {string}   bundlePath Bundle path
+         * @param {Object}   srcFiles   Bundle source files object
+         *
+         */
+        _feedLinkLoader: function (biid, bundlePath, srcFiles) {
+            var me = this;
+            if (!_isPreloaded() && srcFiles.links) {
+                srcFiles.links.forEach(function (src) {
+                    var href = _buildPathForLoaderMode(src.href, bundlePath);
+                    me._loadLink(src.rel, href);
+                    me.log('- added link source ' + href + ", for: " + biid);
+                });
+            }
+        },
+
+        /**
          * @private @method _feedBundleLoader
          *
          * @param {function()} cb         Callback function
@@ -1934,12 +1987,7 @@ D         * @param {Object} classInfo ClassInfo
              * if using compiled javascript
              */
             if (_isPackedMode()) {
-                fileCount = 0;
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        fileCount += 1;
-                    }
-                }
+                fileCount = srcFiles.files.length;
                 if (fileCount > 0) {
                     srcsFn = _buildPathForPackedMode(bundlePath);
                     bl.add(srcsFn, 'text/javascript');
@@ -1956,12 +2004,10 @@ D         * @param {Object} classInfo ClassInfo
                  * else load any files
                  */
             } else {
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        bl.add(js, srcFiles.files[js]);
-                        me.log('- added script source ' + js + ' for ' + biid);
-                    }
-                }
+                srcFiles.files.forEach(function (def) {
+                    bl.add(def.fn, def.def);
+                    me.log('- added script source ' + js + ' for ' + biid);
+                });
             }
 
             bl.commit();
@@ -2035,6 +2081,29 @@ D         * @param {Object} classInfo ClassInfo
                     );
             }
 
+            srcFiles = {
+                    count: 0,
+                    loaded: 0,
+                    files: [],
+                    css: {},
+                    links: []
+                };
+
+            srcs = me.sources[biid];
+            bundlePath = bundleDefinitionState.bundlePath;
+            me._handleSourceFiles(srcFiles, bundlePath, srcs);
+
+            if (_isPreloaded() && biid === "statsgrid") {
+                // This is only used for the vulcanized Polymer bundles.
+                // In a perfect world we would get srcFiles.vulcanizedHtml information from packages/.../bundle.js
+                // but this is no such a world. So, for now, this is hardcoded here.
+                // me._loadLink(srcFiles.vulcanizedHtml.rel, srcFiles.vulcanizedHtml.href);
+                // From bundle.js:
+                //   "rel": "import",
+                //   "href": "/Oskari/bundles/statistics/statsgrid/vulcanized.html"
+                // FIXME: We need a generic way of telling these kind of things. Something in startupsequence fragment perhaps or in packages/*/bundle.js
+                me._loadLink("import", "/Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html");
+            }
             if (bundleDefinitionState.state !== 1) {
                 me.log('Pending DEFINITION at sources for ' + biid + ' to ' +
                     bundleDefinitionState.state + ' -> postponed'
@@ -2043,13 +2112,6 @@ D         * @param {Object} classInfo ClassInfo
             }
 
             me.log('STARTING load for sources ' + biid);
-
-            srcFiles = {
-                count: 0,
-                loaded: 0,
-                files: {},
-                css: {}
-            };
 
             callback = function () {
                 me.log('Finished loading ' + srcFiles.count + ' files for ' +
@@ -2061,14 +2123,14 @@ D         * @param {Object} classInfo ClassInfo
 
                 me.postChange(null, null, 'bundle_sources_loaded');
             };
-            bundlePath = bundleDefinitionState.bundlePath;
-
-            srcs = me.sources[biid];
-
-            me._handleSourceFiles(srcFiles, bundlePath, srcs);
 
             me._feedCSSLoader(
                 callback,
+                biid,
+                bundlePath,
+                srcFiles
+            );
+            me._feedLinkLoader(
                 biid,
                 bundlePath,
                 srcFiles
@@ -3937,6 +3999,94 @@ Oskari.util = (function () {
         }
         return cnt === splits.length;
     };
+
+    /**
+     * Natural array sort
+     * @method  naturalSort
+     * @param  {String|Integer|Double} valueA     sorted value a
+     * @param  {String|Integer|Double} valueB     soted value b
+     * @param  {Boolean} descending is descending
+     * @return {Integer}            sort number
+     */
+    util.naturalSort = function(valueA, valueB, descending) {
+        var re = /(^([+\-]?(?:\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[\da-fA-F]+$|\d+)/g,
+            sre = /^\s+|\s+$/g,   // trim pre-post whitespace
+            snre = /\s+/g,        // normalize all whitespace to single ' ' character
+            dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
+            hre = /^0x[0-9a-f]+$/i,
+            ore = /^0/,
+            i = function(s) {
+                return ('' + s).toLowerCase().replace(sre, '');
+            },
+            // convert all to strings strip whitespace
+            x = i(valueA) || '',
+            y = i(valueB) || '',
+            // chunk/tokenize
+            xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+            yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+            // numeric, hex or date detection
+            xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && Date.parse(x)),
+            yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
+            normChunk = function(s, l) {
+                // normalize spaces; find floats not starting with '0', string or 0 if not defined (Clint Priest)
+                return (!s.match(ore) || l == 1) && parseFloat(s) || s.replace(snre, ' ').replace(sre, '') || 0;
+            },
+            sortFunc = function(oFxNcL, oFyNcL){
+                // handle numeric vs string comparison - number < string - (Kyle Adams)
+                if (isNaN(oFxNcL) !== isNaN(oFyNcL)) {
+                    retValue = (isNaN(oFxNcL)) ? 1 : -1;
+                    return true;
+                }
+                // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+                else if (typeof oFxNcL !== typeof oFyNcL) {
+                    oFxNcL += '';
+                    oFyNcL += '';
+                }
+
+                if (oFxNcL < oFyNcL) {
+                    retValue = -1;
+                    return true;
+                }
+                if (oFxNcL > oFyNcL) {
+                    retValue = 1;
+                    return true;
+                }
+            },
+            oFxNcL, oFyNcL,
+            retValue = 0,
+            sortCompleted = false;
+
+        // first try and sort Hex codes or Dates
+        if (yD) {
+            if ( xD < yD ) {
+                retValue = -1;
+                sortCompleted = true;
+            }
+            else if ( xD > yD ) {
+                retValue = 1;
+                sortCompleted = true;
+            }
+        }
+
+        if(!sortCompleted) {
+            // natural sorting through split numeric strings and default strings
+            for(var cLoc=0, xNl = xN.length, yNl = yN.length, numS=Math.max(xNl, yNl); cLoc < numS; cLoc++) {
+                oFxNcL = normChunk(xN[cLoc] || '', xNl);
+                oFyNcL = normChunk(yN[cLoc] || '', yNl);
+
+                sortCompleted = sortFunc(oFxNcL, oFyNcL);
+
+                if(sortCompleted) {
+                    break;
+                }
+            }
+        }
+        if (descending) {
+            retValue =  -1 * retValue;
+        }
+        return retValue;
+    };
+
 
     return util;
 }());

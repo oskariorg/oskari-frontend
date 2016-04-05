@@ -1200,11 +1200,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
-                var sortResult = naturalSort(nameA, nameB);
-                if (pDescending) {
-                    sortResult =  -1 * sortResult;
-                }
-                return sortResult;
+                return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         },
 

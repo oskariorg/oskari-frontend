@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 locale = me._locale.reversegeocode,
                 service = me._instance.getService(),
                 popup = me._getPopup();
-            
+
             if(me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
                 return;
             }

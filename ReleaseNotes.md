@@ -2,10 +2,6 @@
 
 ## 1.36
 
-### libraries/javascript-natural-sort
-
-*New library!*  Added library for sorting arrays.
-
 ### framework/search
 
 Fixed search result table sorting when columns contains word and numbers.
@@ -30,6 +26,8 @@ Updated openlayers version in published maps from 3.11.2 -> 3.14.2
 
 ### core
 
+#### markers
+
 Marker icons are now defined markerShapes array in /Oskari/bundles/bundle.js. 
 Array contains objects which tell following info:
 - x: image center point in pixels (starting left to right)
@@ -44,6 +42,10 @@ For example:
   };
 
 In the future markers will be transferred to another place.
+
+#### util.naturalSort
+
+Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
 
 ### divmanazer/ui-components
 
