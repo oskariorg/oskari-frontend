@@ -68,7 +68,7 @@
   padding-top: 5px; }
 
 .icon-help {
-  background-image: url(/Oskari/bundles/statistics/statsgrid/resources/images/help.png); }
+  background-image: url(../images/help.png); }
 
 .statsgrid-highlight-row {
   background-color: yellow; }
@@ -217,7 +217,7 @@ form.statsgrid2_indicator_selector {
 .grid-header-menubutton {
   width: 16px;
   height: 16px;
-  background-image: url("/Oskari/bundles/statistics/statsgrid/resources/images/down.gif");
+  background-image: url("../images/down.gif");
   background-position: 50% 50%;
   right: 3px;
   bottom: 3px;
