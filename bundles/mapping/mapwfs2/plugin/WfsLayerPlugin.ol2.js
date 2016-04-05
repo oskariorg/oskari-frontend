@@ -265,14 +265,14 @@ Oskari.clazz.define(
                 /**
                  * @method AfterMapMoveEvent
                  */
-                AfterMapMoveEvent: function () {
+                AfterMapMoveEvent: function (event) {
                     if (me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
                             'setLocation deferred (to aftermapmove)'
                         );
                         return;
                     }
-                    me.mapMoveHandler();
+                    me.mapMoveHandler(null, event);
                 },
 
                 /**
@@ -429,7 +429,7 @@ Oskari.clazz.define(
         /**
          * @method mapMoveHandler
          */
-        mapMoveHandler: function (reqLayerId) {
+        mapMoveHandler: function (reqLayerId, event) {
             var me = this,
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
@@ -473,6 +473,9 @@ Oskari.clazz.define(
 
                 if (!layers[i].hasFeatureData() || !layers[i].isVisible()) {
                     continue;
+                }
+                if(event && event.getCreator() === 'ContentEditor'){
+                    me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
                 }
                 // clean features lists
                 layers[i].setActiveFeatures([]);
