@@ -80,7 +80,7 @@ jQuery(document).ready(function() {
 		return false;
 	});
 
-	hub.subscribe("map-initialized", function(e) {
+	hub.subscribe("oskari-map-initialized", function(e) {
 		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
 	});
 	hub.subscribe("inforequest-map-click", function(e) {

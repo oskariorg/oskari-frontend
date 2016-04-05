@@ -1,10 +1,11 @@
 jQuery(document).ready(function() {
-	Oskari.setLang('en');
+	Oskari.setLang('fi');
 	Oskari.setLoaderMode('dev');
 	var appSetup;
 	var appConfig;
     var wtf=''; // state, what are we doing now
 	var downloadConfig = function(notifyCallback) {
+
 		jQuery.ajax({
 			type : 'GET',
 			dataType : 'json',
@@ -54,6 +55,7 @@ jQuery(document).ready(function() {
 	
 	
 	var kuntakysely = function(x,y) {
+
 				jQuery.ajax({
 				type : "POST",
 				url : appConfig.ajaxurl + "/Kunta",
@@ -91,6 +93,7 @@ jQuery(document).ready(function() {
 			});
 		return false;
 	});
+	
 	
 	
 	jQuery("#binfopoint").click(function() {
@@ -176,10 +179,33 @@ jQuery(document).ready(function() {
 		return false;
 	});
 		
-		hub.subscribe("map-draw-done", function(e) {
-			alert(""+wtf+" I got a map-draw-done event: " + e.data.drawing);
+		jQuery("#bviewvectors").click(function() {
+		jQuery("#eventMessages").html("bviewvectors<br/>" + jQuery("#eventMessages").html())
+
+		hub.send("oskari-show-shapes", {
+					drawing:   jQuery("#geomtextarea").val(),
+					style: {fillColor: "#7F0886", fillOpacity: 0.35, strokeColor: "#7F0886"},
+					clear: jQuery('#shall_we_clear_layer_first').is(':checked')
+					});
+		return false;
+		//["POLYGON((439343 6905482, 439943 6905482, 439343 6905982, 439343 6905482))","POLYGON((440343 6905482, 440943 6905482, 440343 6905982, 440343 6905482))"]
+	});				
+		
+			jQuery("#beditvectors").click(function() {
+		jQuery("#eventMessages").html("beditvectors<br/>" + jQuery("#eventMessages").html())
+
+		hub.send("map-draw-start", {
+					drawing:   jQuery("#geomtextarea").val(),
+					drawMode : 'area'
+					});
+		return false;
+		//["POLYGON((439343 6905482, 439943 6905482, 439343 6905982, 439343 6905482))","POLYGON((440343 6905482, 440943 6905482, 440343 6905982, 440343 6905482))"]
+	});			
+	
+		hub.subscribe("oskari-save-drawings", function(e) {
+			alert(""+wtf+" I got a oskari-save-drawings event: " + e.data.drawing);
 			if(wtf == 'kuntakysely'){
-			// pyydettin piste kuntakyselyä varten, joten kysytään kunta 
+			// pyydettin piste kuntakyselyï¿½ varten, joten kysytï¿½ï¿½n kunta 
 			kuntakysely(e.data.drawing.x + "," + e.data.drawing.y );
 			}
 			
@@ -188,7 +214,7 @@ jQuery(document).ready(function() {
 			alert("point ");
 	});
 	
-	hub.subscribe("map-initialized", function(e) {
+	hub.subscribe("oskari-map-initialized", function(e) {
 		jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
 	});
 	hub.subscribe("inforequest-map-click", function(e) {

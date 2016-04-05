@@ -28,29 +28,38 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/instance.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/plugin/Markers.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/plugin/Markers.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/request/ClearMapRequest.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/request/ClearMapRequest.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/request/ClearMapRequestHandler.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/request/ClearMapRequestHandler.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/request/AddMarkerRequest.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/request/AddMarkerRequest.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/request/AddMarkerRequestHandler.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/request/AddMarkerRequestHandler.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../libraries/OpenLayers/OpenLayers_Control_TileStitchPrinter.js"
+			"src" : "../../../../bundles/lupapiste/bundle/lupakartta/event/PlaceSaved.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/lupapiste/lupakartta/plugin/Print.js"
-		}]
+      "type" : "text/javascript",
+      "src" : "../../../../bundles/lupapiste/bundle/lupakartta/event/FeaturesAdded.js"
+    }, {
+      "type" : "text/javascript",
+      "src" : "../../../../libraries/jsts/javascript.util.js"
+    }, {
+      "type" : "text/javascript",
+      "src" : "../../../../libraries/jsts/jsts.js"
+    }, {
+      "type" : "text/css",
+      "src" : "../../../../resources/lupapiste/bundle/lupakartta/css/lupakartta.css"      
+  }]
 	},
 	"bundle" : {
 		"manifest" : {

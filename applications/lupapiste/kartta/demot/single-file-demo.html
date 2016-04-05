@@ -1,9 +1,11 @@
+﻿<!DOCTYPE html>
 <html>
 <head>
 <title>lupapiste single file js</title>
+
+<meta charset="utf-8">
 <!-- ############# css ################# -->
 
-<link rel="stylesheet" type="text/css" href="../../css/icons.css" />
 <link rel="stylesheet" type="text/css" href="../../build/oskarimap.css" />
 <style type="text/css">
 @media screen {
@@ -16,7 +18,11 @@
   #contentMap {
     float:left;
   }
-  
+     #maptools {
+    background-color: #333438;
+    position: absolute;
+    z-index: 2;
+  } 
 
   #eventMessages {
   	float: left;
@@ -30,13 +36,14 @@
 
 <!-- ############# Javascript ################# -->
 <script type="text/javascript" 
-	src="http://code.jquery.com/jquery-1.7.2.min.js">
+	src="http://code.jquery.com/jquery-1.8.0.min.js">
 </script>
 
 <script type="text/javascript" src="../hub.js">
 </script>
 
-<!--  OSKARI -->
+    <!--  OSKARI -->
+
 <script type="text/javascript" src="../../build/oskarimap.js"></script>
 
 <!-- index.js -->
@@ -44,11 +51,19 @@
 <!-- ############# /Javascript ################# -->
 </head>
 <body>
-
+<nav id="maptools">
+<div id="loginbar">
+</div>
+<div id="menubar">
+</div>
+<div id="divider">
+</div>
+<div id="toolbar">
+</div>
+</nav>
 <div id="contentMap">
 <div id="mapdiv"> </div>
 </div>
-
 
 <div id="eventMessages"> </div>
 <div id="formi">
@@ -60,6 +75,9 @@
 <input type="button" id="piirra" value="osoita piste"/>
 Tyhjenn&auml; ennen lis&auml;yst&auml;: <input type="checkbox" id="checkbox1" /><br/>
 <input type="button" id="tyhjenna" value="poista pisteet"/>
+<input type="button" id="oskari-set-layers_button" value="Oskari set layers" />
+<input type="button" id="oskari-show-layers_button" value="Oskari show layers" /><br/>
+<input type="button" id="oskari-show-shapes_button" value="Oskari show shapes" />
 </div>
 </div>
 

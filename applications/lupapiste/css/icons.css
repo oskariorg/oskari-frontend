@@ -148,6 +148,18 @@
     background: url('../img/icons.png') -544px 0px;
 }
 
+.myplaces-draw-circle {
+    width: 32px;
+    height: 32px;
+    background: url('../img/draw-circle.png');
+}
+
+.myplaces-draw-ellipse {
+    width: 32px;
+    height: 32px;
+    background: url('../img/draw-ellipse.png');
+}
+
 .tool-history-back {
     width: 32px;
     height: 32px;
