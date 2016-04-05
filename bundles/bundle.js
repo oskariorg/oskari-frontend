@@ -3954,7 +3954,7 @@ Oskari.util = (function () {
             hre = /^0x[0-9a-f]+$/i,
             ore = /^0/,
             i = function(s) {
-                return (Oskari.util.naturalSort.insensitive && ('' + s).toLowerCase() || '' + s).replace(sre, '');
+                return ('' + s).toLowerCase().replace(sre, '');
             },
             // convert all to strings strip whitespace
             x = i(valueA) || '',
@@ -3969,35 +3969,60 @@ Oskari.util = (function () {
                 // normalize spaces; find floats not starting with '0', string or 0 if not defined (Clint Priest)
                 return (!s.match(ore) || l == 1) && parseFloat(s) || s.replace(snre, ' ').replace(sre, '') || 0;
             },
-            oFxNcL, oFyNcL, retValue = 0;
+            sortFunc = function(oFxNcL, oFyNcL){
+                // handle numeric vs string comparison - number < string - (Kyle Adams)
+                if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { 
+                    retValue = (isNaN(oFxNcL)) ? 1 : -1;
+                    return true;
+                }
+                // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+                else if (typeof oFxNcL !== typeof oFyNcL) {
+                    oFxNcL += '';
+                    oFyNcL += '';
+                }
+
+                if (oFxNcL < oFyNcL) { 
+                    retValue = -1;
+                    return true;
+                }
+                if (oFxNcL > oFyNcL) { 
+                    retValue = 1;
+                    return true;
+                }
+            },
+            oFxNcL, oFyNcL, 
+            retValue = 0,
+            sortCompleted = false;
 
         // first try and sort Hex codes or Dates
         if (yD) {
-            if ( xD < yD ) { return -1; }
-            else if ( xD > yD ) { return 1; }
+            if ( xD < yD ) { 
+                retValue = -1;
+                sortCompleted = true;
+            }
+            else if ( xD > yD ) { 
+                retValue = 1;
+                sortCompleted = true;
+            }
         }
-        // natural sorting through split numeric strings and default strings
-        for(var cLoc=0, xNl = xN.length, yNl = yN.length, numS=Math.max(xNl, yNl); cLoc < numS; cLoc++) {
-            oFxNcL = normChunk(xN[cLoc] || '', xNl);
-            oFyNcL = normChunk(yN[cLoc] || '', yNl);
-            // handle numeric vs string comparison - number < string - (Kyle Adams)
-            if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
-            // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
-            else if (typeof oFxNcL !== typeof oFyNcL) {
-                oFxNcL += '';
-                oFyNcL += '';
-            }
-            if (oFxNcL < oFyNcL) { 
-                retValue = -1; 
-            }
-            if (oFxNcL > oFyNcL) { 
-                retValue = 1; 
+
+        if(!sortCompleted) {
+            // natural sorting through split numeric strings and default strings
+            for(var cLoc=0, xNl = xN.length, yNl = yN.length, numS=Math.max(xNl, yNl); cLoc < numS; cLoc++) {
+                oFxNcL = normChunk(xN[cLoc] || '', xNl);
+                oFyNcL = normChunk(yN[cLoc] || '', yNl);
+
+                sortCompleted = sortFunc(oFxNcL, oFyNcL);
+
+                if(sortCompleted) {
+                    break;
+                }
             }
         }
         if (descending) {
             retValue =  -1 * retValue;
         }
-        return retValue;
+        return retValue;        
     };
 
 
