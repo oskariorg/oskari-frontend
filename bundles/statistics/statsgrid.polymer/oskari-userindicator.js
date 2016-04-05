@@ -154,7 +154,7 @@ Polymer({
         layerName = layer.getLayerName(),
         loggedIn = this.user._loggedIn,
         pluginName = 'fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin';
-      
+
       // TODO: If the user is not logged in, we will just put this indicator into user's browser session.
       title[this.language] = this.$.indicator_title.value;
       source[this.language] = this.$.indicator_sources.value;

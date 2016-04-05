@@ -118,7 +118,7 @@ function MakePromise (asap) {
 		});
 	};
 
-	
+
   return Promise;
 }
 

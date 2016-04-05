@@ -351,8 +351,8 @@ Polymer({
     }
   },
   "attached": function() {
-    jQuery('#statsgrid').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height()); 
-    jQuery('#userindicatordiv').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height()); 
+    jQuery('#statsgrid').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height());
+    jQuery('#userindicatordiv').height(jQuery(window).height() - jQuery('#indicatorSelectorDiv').height());
   }
 });
 

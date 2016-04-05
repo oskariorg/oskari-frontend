@@ -202,7 +202,7 @@ Oskari.clazz.define(
               me._highlightCtrl.deactivate();
           }
         },
-        
+
         /**
          * Resets the hover control for a new layer.
          */
@@ -600,7 +600,7 @@ Oskari.clazz.define(
               me.getMap().removeLayer(statsDrawLayer);
             });
         },
-        
+
         /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent

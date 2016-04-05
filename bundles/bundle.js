@@ -4033,7 +4033,7 @@ Oskari.util = (function () {
             },
             sortFunc = function(oFxNcL, oFyNcL){
                 // handle numeric vs string comparison - number < string - (Kyle Adams)
-                if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { 
+                if (isNaN(oFxNcL) !== isNaN(oFyNcL)) {
                     retValue = (isNaN(oFxNcL)) ? 1 : -1;
                     return true;
                 }
@@ -4043,26 +4043,26 @@ Oskari.util = (function () {
                     oFyNcL += '';
                 }
 
-                if (oFxNcL < oFyNcL) { 
+                if (oFxNcL < oFyNcL) {
                     retValue = -1;
                     return true;
                 }
-                if (oFxNcL > oFyNcL) { 
+                if (oFxNcL > oFyNcL) {
                     retValue = 1;
                     return true;
                 }
             },
-            oFxNcL, oFyNcL, 
+            oFxNcL, oFyNcL,
             retValue = 0,
             sortCompleted = false;
 
         // first try and sort Hex codes or Dates
         if (yD) {
-            if ( xD < yD ) { 
+            if ( xD < yD ) {
                 retValue = -1;
                 sortCompleted = true;
             }
-            else if ( xD > yD ) { 
+            else if ( xD > yD ) {
                 retValue = 1;
                 sortCompleted = true;
             }
@@ -4084,7 +4084,7 @@ Oskari.util = (function () {
         if (descending) {
             retValue =  -1 * retValue;
         }
-        return retValue;        
+        return retValue;
     };
 
 

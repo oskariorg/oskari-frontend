@@ -212,7 +212,7 @@ Polymer({
     var totalHeight = jQuery('.statsgrid_100').height() - 10;
     var bodyWidth = jQuery('.statsgrid_100').width() - 10;
     var selectedHeight = jQuery('#selectedContainer').height();
-    
+
     var gridHeight = totalHeight - indicatorSelectorHeight - regionSelectorHeight;
     var bodyHeight = gridHeight - statsHeight - unselectedHeight - headerHeight - selectedHeight - 20;
     jQuery('#oskariGrid').height(gridHeight);

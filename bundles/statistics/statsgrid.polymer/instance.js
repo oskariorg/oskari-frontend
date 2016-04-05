@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             );
             sandbox.registerService(statsService);
             me.statsService = statsService;
-                
+
             // Handles user indicators
             var userIndicatorsService = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             sandbox.registerService(userIndicatorsService);
             userIndicatorsService.init();
             me.userIndicatorsService = userIndicatorsService;
-            
+
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
                 'state': me._getState()
@@ -201,13 +201,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 state = me._getState();
 
             state.selectedIndicators = state.selectedIndicators || [];
-            
+
             var indicator = {
               datasourceId: 'fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin',
               indicatorId: userIndicator.id,
               selectors: []
             };
-            
+
             state.selectedIndicators.push(indicator);
             if (!view.isVisible) {
                 view.prepareMode(true, null, true);
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 if (layerId !== null && layerId !== undefined) {
                     layer = this.sandbox.getService('Oskari.mapframework.service.MapLayerService').findMapLayer(layerId);
                 }
-                
+
                 // view._layer isn't set if we call this without a layer...
                 view.prepareMode(true, layer, false);
 
