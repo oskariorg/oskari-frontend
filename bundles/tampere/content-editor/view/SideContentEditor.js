@@ -313,6 +313,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             jQuery.ajax({
                 type : 'GET',
                 data : {'layer_id':me.layerId},
+                dataType : 'text',
                 url : ajaxUrl + 'action_route=GetWFSLayerGeometryType',
                 success : function(response) {
                     me._parseLayerGeometryResponse(response);
