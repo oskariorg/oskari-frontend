@@ -596,6 +596,21 @@
                     }
                 }
             }
-        }
+        },
+	  {
+		"title": "Tampere",
+		"fi": "Tampere",
+		"sv": "Tampere",
+		"en": "Tampere",
+		"bundlename": "content-editor",
+		"bundleinstancename": "content-editor",
+		"metadata": {
+		  "Import-Bundle": {
+			"content-editor": {
+			  "bundlePath": "../../../packages/tampere/bundle/"
+			}
+		  }
+		}
+	  }
 	]
 }

@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
             var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId),
                 i;
             var olLayerList,
+                wfsLayerPlugin,
                 count;
             if (!layer) {
                 return;
@@ -52,6 +53,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
                 this.sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layerId + ", found " + count);
 
             } else {
+                if (layer.isLayerOfType("WFS")) {
+                    // request current tiles from transport, clean wfs/wms buffer and redraw
+                    wfsLayerPlugin = this.mapModule.getPluginInstances('WfsLayerPlugin');
+                    wfsLayerPlugin.refreshLayer(layerId);
+                }
+
                 olLayerList = this.mapModule.getOLMapLayers(layerId);
                 count = 0;
                 if (olLayerList) {

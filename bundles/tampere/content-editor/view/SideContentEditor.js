@@ -427,10 +427,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     okButton.setHandler(function () {
                         setTimeout(function() {
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                                 request = visibilityRequestBuilder(me.layerId, true);
-                            // Trick for wfs tile refresh
-                            mapModule.notifyMoveEnd();
                             me.sandbox.request(me.instance.getName(), request);
 							me._highlighGeometries([], layer, true);
                         }, 500);
@@ -1203,11 +1200,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         setTimeout(function() {
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-                            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                             var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
-                            // Trick for wfs tile refresh
-                            mapModule.notifyMoveEnd(me.getName());
                         }, 1000);
                         me.closeDialog();
                     });
