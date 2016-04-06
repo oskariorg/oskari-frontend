@@ -96,12 +96,24 @@ module.exports = function (grunt) {
             nonminified: {
                 files: [{
                     expand: true,
-                    src: '../bundles/statistics/statsgrid.polymer/**/*.html',
+                    src: [
+                             '../bundles/statistics/statsgrid.polymer/**/*.html',
+                             '../bundles/statistics/statsgrid.polymer/polymerjs/*.js'
+                         ],
                     dest: 'Oskari/bundles'
                 },
                 {
                     expand: true,
                     src: '../bundles/statistics/statsgrid.polymer/**/*.css',
+                    dest: 'Oskari/bundles'
+                }]
+            },
+            vulcanjs: {
+                files: [{
+                    expand: true,
+                    src: [
+                             '../bundles/statistics/statsgrid.polymer/polymerjs/*.js'
+                         ],
                     dest: 'Oskari/bundles'
                 }]
             },
@@ -161,8 +173,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '../bundles/statistics/statsgrid.polymer/vulcanized.html': [
-                        'Oskari/bundles/statistics/statsgrid.polymer/requireJsLibs.html',
-                        'Oskari/bundles/statistics/statsgrid.polymer/oskari-statsview.html'
+                        'Oskari/bundles/statistics/statsgrid.polymer/oskari-vulcanization-base.html'
                     ]
                 }
             }
@@ -184,7 +195,7 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['build']);
-    grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:stats', 'vulcanize']);
+    grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:vulcanjs', 'copy:stats', 'vulcanize']);
 
     grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
     grunt.registerTask('devRelease', 'Release build without minification',
