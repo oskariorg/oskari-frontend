@@ -138,6 +138,10 @@ module.exports = function (grunt) {
                 {
                     src: '../bundles/statistics/statsgrid.polymer/libs/spinner/spin.min.js',
                     dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/spinner/spin.min.js'
+                },
+                {
+                    src: '../bundles/statistics/statsgrid.polymer/libs/webcomponents-lite/webcomponents-lite.js',
+                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/webcomponents-lite/webcomponents-lite.js'
                 }
                 ]
             }
