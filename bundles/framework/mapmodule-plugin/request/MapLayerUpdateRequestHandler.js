@@ -30,7 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
             var layerId = request.getLayerId();
             var forced = request.isForced();
             var params = request.getParameters();
-            var wfsRefresh = request.isWfsRefresh();
 
             var sandbox = this.sandbox;
             var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId),
@@ -54,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
                 this.sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layerId + ", found " + count);
 
             } else {
-                if (wfsRefresh && layer.isLayerOfType("WFS")) {
+                if (layer.isLayerOfType("WFS")) {
                     // request current tiles from transport, clean wfs/wms buffer and redraw
                     wfsLayerPlugin = this.mapModule.getPluginInstances('WfsLayerPlugin');
                     wfsLayerPlugin.refreshLayer(layerId);

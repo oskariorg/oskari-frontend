@@ -1200,7 +1200,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         setTimeout(function() {
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-                            var request = visibilityRequestBuilder(me.selectedLayerId, true, null, true);
+                            var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
                         }, 1000);
                         me.closeDialog();
