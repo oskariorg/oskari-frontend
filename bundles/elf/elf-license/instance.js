@@ -18,19 +18,13 @@ function () {
     this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     this._templates = {
         metadataFlyoutLicenseDialog: jQuery('<div class="elf_license_dialog" style="width:100%!important;">' +
-            '   <div class="elf_license_dialog_name"></div>' +
             '   <div class="elf_license_dialog_license_data" style="height:auto!important;">' +
-            '      <div class="elf_license_dialog_description"></div>' +
             '      <div class="elf_license_dialog_descriptions_title"></div>' +
-            '      <ul class="elf_license_dialog_descriptions"></ul>' +
+            '      <div class="elf_license_dialog_descriptions"></div>' +
             '      </div>' +
             '</div>'),
         licenseDialog: jQuery('<div class="elf_license_dialog">' +
-            '   <div class="elf_license_dialog_name"></div>' +
             '   <div class="elf_license_dialog_license_data">' +
-            '      <div class="elf_license_dialog_description"></div>' +
-            '      <div class="elf_license_dialog_descriptions_title"></div>' +
-            '      <ul class="elf_license_dialog_descriptions"></ul>' +
             '      <div class="elf_license_dialog_licensemodels_title"></div>' +
             '      <div class="elf_license_dialog_licensemodels">' +
             '      </div>' +
@@ -451,8 +445,6 @@ function () {
         });
 
         me._dialog.addClass('elf_license_dialog');
-        dialogContent.find('.elf_license_dialog_name').html(data.name);
-        dialogContent.find('.elf_license_dialog_description').html(data.description);
         title.removeClass('text');
 
         // If  founded models then shows them
@@ -643,8 +635,8 @@ function () {
             dialogContent = me._templates.licenseDialog.clone(),
             models = dialogContent.find('.elf_license_dialog_licensemodels'),
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
-            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
-            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
+//            licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
+//            licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title'),
             metadataTitle = '',
             cancelBtn = me._dialog.createCloseButton(this._locale.buttons.close);
 
@@ -664,28 +656,11 @@ function () {
         });
 
         me._dialog.addClass('elf_license_dialog');
-        dialogContent.find('.elf_license_dialog_name').html(data.name);
-        dialogContent.find('.elf_license_dialog_description').html(data.description);
         title.removeClass('text');
 
         // If  founded models then shows them
         if(data.licenseModels.length > 0)  {
             title.html(me._locale.dialog.licenseModelsTitle);
-            var description = jQuery('<li class="description"></li>');
-            var localeDescription = me._locale.dialog.licenseModelDescriptions;
-            for(var i in localeDescription) {
-                if(localeDescription.hasOwnProperty(i)) {
-                    var d = description.clone();
-                    var text = me._locale.dialog.licenseModelDescriptions[i];
-                    d.html(text);
-                    licenseDescriptions.append(d);
-                }
-            }
-            if(licenseDescriptions.find('.description').length>0) {
-                licenseDescriptionsTitle.html(me._locale.dialog.licenseModelDescriptionsTitle);
-            } else {
-                licenseDescriptions.remove();
-            }
             dialogContent.find('.help').html(me._locale.dialog.help.info);
             jQuery.each(data.licenseModels, function(index, model){
                 var modelEl = me._templates.licenseModel.clone();
@@ -701,8 +676,6 @@ function () {
         // If not found then shows message
         else {
             title.addClass('text');
-            licenseDescriptions.remove();
-            licenseDescriptionsTitle.remove();
             // If user has already logged in  then shows at no right to anyone license
             if (me._sandbox.getUser().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
@@ -737,9 +710,6 @@ function () {
             title = dialogContent.find('.elf_license_dialog_licensemodels_title'),
             licenseDescriptions = dialogContent.find('.elf_license_dialog_descriptions'),
             licenseDescriptionsTitle = dialogContent.find('.elf_license_dialog_descriptions_title');
-        dialogContent.find('.elf_license_dialog_name').html(data.name);
-        dialogContent.find('.elf_license_dialog_description').html(data.description);
-
         // If found models, show them
         if(data.licenseModels.length > 0)  {
             var description = jQuery('<li class="description"></li>');
