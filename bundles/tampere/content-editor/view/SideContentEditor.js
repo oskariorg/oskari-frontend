@@ -165,6 +165,20 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     return this.allClickedFeatures[i];
                 }
             }
+            //did not find from own clicked features, try searching wfs layer
+            return this._findGeometryByFidFromLayer(fid);
+        },
+        _findGeometryByFidFromLayer: function (fid) {
+            var layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.selectedLayerId);
+            var geometries = layer.getClickedGeometries();
+            var wkt = new OpenLayers.Format.WKT();
+            for(var j = 0; j < geometries.length; j++) {
+                if(geometries[j][0] === fid) {
+                    var feature = wkt.read(geometries[j][1]);
+                    var geometry = feature.geometry;
+                    return {fid: fid, geometry: geometry};
+                }
+            }
             return null;
         },
         _addClickedFeature: function (clickedFeature) {
