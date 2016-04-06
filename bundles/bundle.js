@@ -1793,6 +1793,27 @@ Oskari = (function () {
          *
          */
         installBundleClass: function (biid, className) {
+            if(!Oskari.samiRegistry) {
+                Oskari.samiRegistry = {};
+            }
+            var clazz = Oskari.clazz.create(className);
+            if(clazz) {
+                Oskari.samiRegistry[biid] = {
+                    clazz : clazz,
+                    metadata : cs.getMetadata(className).meta
+                };
+                this.installBundleClassOld(biid, className);
+            }
+        },
+        /**
+         * @public @method installBundleClass
+         * Installs a bundle defined as Oskari native Class.
+         *
+         * @param {string} biid      Bundle implementation ID
+         * @param {string} className Class name
+         *
+         */
+        installBundleClassOld: function (biid, className) {
             var classmeta = cs.getMetadata(className),
                 bundleDefinition = cs.builder(className),
                 sourceFiles = classmeta.meta.source,
@@ -2830,6 +2851,184 @@ Oskari = (function () {
             return this.appConfig;
         },
 
+    startApplication: function (callback) {
+        var me = this;
+        var appConfig = this.appConfig;
+        var seq = this.appSetup.startupSequence.slice(0);
+        this.processSequence(seq, callback);
+    },
+    /**
+     * {
+            "bundleinstancename": "openlayers-default-theme",
+            "bundlename": "openlayers-default-theme",
+            "metadata": {
+                "Import-Bundle": {
+                    "openlayers-default-theme": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    },
+                    "openlayers-full-map": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    }
+                }
+            }
+        }
+     * @param  {[type]} sequence [description]
+     * @return {[type]}          [description]
+     */
+    processSequence : function(sequence, callback) {
+        var me = this;
+        if(sequence.length === 0) {
+            // everything has been loaded
+            callback();
+            return;
+        }
+        var seqToLoad = sequence.shift();
+        var bundleToStart = seqToLoad.bundlename;
+        var configId = seqToLoad.bundleinstancename;
+        var config = this.appConfig[configId] || {};
+        if(typeof seqToLoad !== 'object') {
+            // log error: block not object
+            // iterate to next
+            this.processSequence(sequence, callback);
+            return;
+        }
+        if(typeof seqToLoad.metadata !== 'object' ||
+            typeof seqToLoad.metadata['Import-Bundle']  !== 'object') {
+            // log error: "Nothing to load"
+            // iterate to next
+            this.processSequence(sequence, callback);
+            return;
+        }
+        var bundlesToBeLoaded = seqToLoad.metadata['Import-Bundle'];
+        var paths = [];
+        var bundles = [];
+        for(var id in bundlesToBeLoaded) {
+            var value = bundlesToBeLoaded[id];
+            if(typeof value !== 'object' ||
+                typeof value.bundlePath !== 'string') {
+                // log error: bundle object not defined
+                continue;
+            }
+            var basepath = value.bundlePath + '/' + id;
+            var path = basepath + '/bundle.js';
+            paths.push(path.split('//').join('/'));
+            bundles.push({
+                id : id,
+                path : basepath
+            });
+        }
+        // load all bundlePaths mentioned in sequence-block
+        require(paths, function() {
+            // if loaded undefined - find from Oskari.instalBundle register with id
+            for(var i = 0; i < arguments.length; ++i) {
+                if(typeof arguments[i] !== 'undefined') {
+                    // this would be a bundle.js with amd support
+                    debugger;
+                }
+            }
+            console.log(bundles);
+            // the loaded files have resulted in calls to
+            // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
+            // TODO: loop all bundles and require sources from installs
+            me.processBundleJS(bundles, function() {
+                var bundle = Oskari.samiRegistry[bundleToStart];
+                var instance = bundle.clazz.create();
+                if(instance) {
+                    // hrrrr, ugly hack for one bundle...
+                    instance.mediator = {
+                        manager : {
+                            bundleDefinitionStates : {
+                                'openlayers-default-theme' : {
+                                    bundlePath : 'moi'
+                                }
+                            }
+                        }
+                    };
+                    // quick'n'dirty property injection
+                    for(var key in config) {
+                        instance[key] = config[key];
+                    }
+                    instance.start();
+                }
+                me.processSequence(sequence, callback);
+            });
+        });
+    },
+    processBundleJS : function(bundles, callback) {
+        var me = this;
+        var loading = [];
+        var done = function(id) {
+            // remove id from loading array
+            var index = loading.indexOf(id);
+            loading.splice(index, 1);
+            // once loading is empty - call callback
+            if(loading.length === 0) {
+                callback();
+            }
+
+        };
+        bundles.forEach(function(item) {
+            var bundle = Oskari.samiRegistry[item.id];
+            if(!bundle.clazz || !bundle.metadata || !bundle.metadata.source) {
+                return;
+            }
+            loading.push(item.id);
+            me.handleBundleLoad(item.path, bundle.metadata.source, function() {
+                done(item.id);
+            });
+        });
+    },
+    handleBundleLoad : function(basePath, src, callback) {
+        var me = this;
+        var files = [];
+
+        var getPath = function(base, src) {
+            var path = base + '/' + src;
+            // TODO: handle case where src start with /
+            return path.split('//').join('/');
+
+        };
+        // src.locales
+        // src.scripts
+        // src.resources
+        if(src.locales) {
+            src.locales.forEach(function(file) {
+                if(file.src.endsWith('.js')) {
+                    files.push(getPath(basePath, file.src));
+                }
+            });
+        }
+        if(src.resources) {
+            src.resources.forEach(function(file) {
+                if(file.src.endsWith('.js')) {
+                    files.push(getPath(basePath, file.src));
+                }
+            });
+        }
+        if(src.scripts) {
+            src.scripts.forEach(function(file) {
+
+                if(file.src.endsWith('.js')) {
+                    files.push(getPath(basePath, file.src));
+                }
+                else if (file.src.endsWith('.css')) {
+                    me.linkCss(getPath(basePath, file.src));
+                }
+            });
+        }
+        require(files, function() {
+            callback();
+        });
+    },
+    linkCss : function(href) {
+        var importParentElement = document.head || document.body;
+        var linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.rel = 'text/css';
+        linkElement.href = href;
+        importParentElement.appendChild(linkElement);
+    },
+
         /**
          * @public @method startApplication
          * Starts JSON setup (set with setApplicationSetup)
@@ -2837,7 +3036,7 @@ Oskari = (function () {
          * @param {function(Object)} callback Callback function
          *
          */
-        startApplication: function (callback) {
+        startApplicationOld: function (callback) {
             var me = this,
                 appConfig = this.appConfig,
                 seq = this.appSetup.startupSequence.slice(0),
