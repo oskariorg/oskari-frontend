@@ -14,12 +14,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
      *            forced true to force the update (optional)
      * @param {Object}
      *            optParameters additional parameters for WMS layer (optional, used for OpenLayers.Layer.mergeNewParams())
+     * @param {Boolean}
+     *            request current tiles from transport, clean wfs/wms buffer and redraw
      */
 
-    function (layerId, forced, optParameters) {
+    function (layerId, forced, optParameters, wfsRefresh) {
         this._layerId = layerId;
         this._forced = (forced == true);
         this._parameters = optParameters;
+        this._wfsRefresh = (wfsRefresh == true);
     }, {
         /** @static @property __name request name */
         __name: "MapModulePlugin.MapLayerUpdateRequest",
@@ -59,6 +62,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
          */
         setParameters: function (p) {
             this._parameters = p;
+        },
+        /**
+         * @method isWfsRefresh
+         * @return {Boolean}
+         */
+        isWfsRefresh: function () {
+            return this._wfsRefresh;
         }
     }, {
         /**
