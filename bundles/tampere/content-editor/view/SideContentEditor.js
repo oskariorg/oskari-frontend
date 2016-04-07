@@ -422,10 +422,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me._clearFeaturesList();
                     var layer = me._getLayerById(me.layerId);
                     wfsLayerPlugin.deleteTileCache(me.layerId, layer.getCurrentStyle().getName());
-                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.layerId, 'update');
-                    me.sandbox.notifyAll(event)
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
+                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.layerId, 'update');
+                    me.sandbox.notifyAll(event);
                     me.sendStopDrawRequest(true);
 
                     okButton.setHandler(function () {
@@ -1202,10 +1202,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     // remove old custom tiles
                     var layer = me._getLayerById(me.selectedLayerId);
                     wfsLayerPlugin.deleteTileCache(me.selectedLayerId, layer.getCurrentStyle().getName());
-                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.selectedLayerId, 'update');
-                    me.sandbox.notifyAll(event);
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
+                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.selectedLayerId, 'update');
+                    me.sandbox.notifyAll(event);
                     okButton.setHandler(function () {
                         setTimeout(function() {
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
