@@ -383,7 +383,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         {
             var me = this,
                 okButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                url = null;
+                url = null,
+                wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModule').getPluginInstances('WfsLayerPlugin');
 
             okButton.setTitle(me.loc.buttons.ok);
             if (me.operationMode == "create") {
@@ -420,6 +421,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
                     me._clearFeaturesList();
                     var layer = me._getLayerById(me.layerId);
+                    wfsLayerPlugin.deleteTileCache(me.layerId, layer.getCurrentStyle().getName());
+                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.layerId, 'update');
+                    me.sandbox.notifyAll(event)
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     me.sendStopDrawRequest(true);
@@ -1178,6 +1182,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             var requestData = {};
             requestData.layerId = me.selectedLayerId;
             requestData.featureId = fid;
+            var wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModule').getPluginInstances('WfsLayerPlugin');
 
             var okButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okButton.setTitle(me.loc.buttons.ok);
@@ -1194,7 +1199,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 url : ajaxUrl + 'action_route=DeleteFeature',
                 success : function(response) {
                     me._clearFeaturesList();
-                    var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(me._getLayerById(me.selectedLayerId));
+                    // remove old custom tiles
+                    var layer = me._getLayerById(me.selectedLayerId);
+                    wfsLayerPlugin.deleteTileCache(me.selectedLayerId, layer.getCurrentStyle().getName());
+                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.selectedLayerId, 'update');
+                    me.sandbox.notifyAll(event);
+                    var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
                         setTimeout(function() {
@@ -1202,7 +1212,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                             var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
-                        }, 1000);
+                        }, 500);
                         me.closeDialog();
                     });
                     me.showMessage(me.loc.featureDelete.header, me.loc.featureDelete.success, [okButton]);
