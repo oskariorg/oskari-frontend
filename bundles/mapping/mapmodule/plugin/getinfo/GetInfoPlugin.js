@@ -439,7 +439,7 @@ Oskari.clazz.define(
                     params.title,
                     content,
                     data.lonlat,
-                    true,
+                    false,
                     params.colourScheme,
                     params.font
                 );
