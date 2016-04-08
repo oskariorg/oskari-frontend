@@ -315,12 +315,6 @@ Oskari.clazz.define(
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me.mapLayerVisibilityChangedHandler(event);
-                    if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
-                        me.getSandbox().printDebug(
-                            'sending deferred setLocation'
-                        );
-                        me.mapMoveHandler(event.getMapLayer().getId());
-                    }
                 },
 
                 /**
@@ -705,6 +699,13 @@ Oskari.clazz.define(
                     layer.getId(),
                     layer.isVisible()
                 );
+
+                if (event.getMapLayer().isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
+                    this.getSandbox().printDebug(
+                        'sending deferred setLocation'
+                    );
+                    this.mapMoveHandler(event.getMapLayer().getId());
+                }
             }
         },
 

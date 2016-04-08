@@ -89,13 +89,12 @@ table.oskari-grid td, table.oskari-grid th {
   max-width: 110px;
   overflow: hidden;
   border: 1px solid #E6E6E6;
-  text-overflow: ellipsis;
-  padding-left: 10px;
-  padding-right: 10px; }
+  text-overflow: ellipsis; }
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
 
 table.oskari-grid th {
+  padding: 0px;
   background-color: #F3F3F3; }
   table.oskari-grid th a {
     color: inherit;

@@ -339,6 +339,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             };
         },
         /**
+         * @private @method _filterIndicators
+         * Filters out user's indicators which aren't allowed to be published.
+         *
+         * @param  {Object} statsGridState
+         *
+         * @return {Object} filtered state
+         */
+        _filterIndicators: function (statsGridState) {
+            statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+                var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
+                return (
+                    // indicators
+                    (!ownIndicator) ||
+                    // own indicators
+                    (ownIndicator && indicator.public)
+                );
+            });
+            return statsGridState;
+        },
+        /**
+         * Get stats layer.
+         * @method @private _getStatsLayer
+         *
+         * @return founded stats layer, if not found then null
+         */
+         _getStatsLayer: function(){
+             var me = this,
+                 selectedLayers = this.instance.getSandbox().findAllSelectedMapLayers(),
+                 statsLayer = null,
+                 layer;
+             for (i = 0; i < selectedLayers.length; i += 1) {
+                 layer = selectedLayers[i];
+                 if (layer.getLayerType() === 'stats') {
+                     statsLayer = layer;
+                     break;
+                 }
+             }
+             return statsLayer;
+         },
+        /**
         * Gather selections.
         * @method _gatherSelections
         * @private
@@ -346,6 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _gatherSelections: function(){
             var me = this,
                 sandbox = this.instance.getSandbox(),
+                statsLayer = me._getStatsLayer(),
                 selections = {
                     configuration: {
 
@@ -357,6 +398,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             selections.configuration.mapfull = {
                 state: mapFullState
             };
+            var me = this,
+                statsGrid = sandbox.getStatefulComponents().statsgrid;
+
+            if (statsGrid) {
+                var statsGridState = statsGrid._getState();
+                // Filtering indicators here in the publishing step, because for
+                // the private state they are allowed.
+                statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+                statsGridState.embedded = true;
+                statsGridState.layerId = statsLayer._id;
+                selections.configuration.publishedgrid = {
+                    state: statsGridState
+                };
+            }
 
             jQuery.each(me.panels, function(index, panel){
                 if (panel.validate && typeof panel.validate === 'function') {

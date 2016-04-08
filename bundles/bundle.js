@@ -57,7 +57,7 @@ jQuery.fn.outerHTML = function (arg) {
  *
  * Oskari
  *
- * A set of metdhods to support loosely coupled classes and instances for the
+ * A set of methods to support loosely coupled classes and instances for the
  * mapframework
  *
  * @to-do - class instance checks against class metadata - protocol
@@ -86,50 +86,6 @@ jQuery.fn.outerHTML = function (arg) {
  */
 Oskari = (function () {
     var oskariVersion = "1.36.0";
-    // TODO: markerShapes should be part of mapmodule.
-    var markerShapes = [];
-
-    markerShapes[0] = {
-        x: 14.06,
-        y: 5.38,
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
-    };
-
-    markerShapes[1] = {
-        x: 16,
-        y: 6.84,
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 22.20134,7.4273516 c 0,0 -12.40234,0 -12.40234,0 0,0 0,12.3046904 0,12.3046904 0,0 3.41797,0 3.41797,0 0,0 2.73437,4.39453 2.73437,4.39453 0,0 2.73438,-4.39453 2.73438,-4.39453 0,0 3.51562,0 3.51562,0 0,0 0,-12.3046904 0,-12.3046904 0,0 0,0 0,0"/></svg>'
-    };
-
-    markerShapes[2] = {
-        x: 16,
-        y: 5.19,
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 16.00025,5.7495486 c -1.99219,0 -3.51562,0.58594 -4.92187,1.99219 C 9.67213,9.1479886 8.969,10.788619 8.969,12.780799 c 0,1.17188 0.58594,2.8125 1.75781,5.03907 1.17188,2.22656 2.34375,4.10156 3.51563,5.625 0,0 1.75781,2.46093 1.75781,2.46093 4.6875,-6.21093 7.03125,-10.54687 7.03125,-13.125 0,-1.99218 -0.70312,-3.6328104 -2.10937,-5.0390604 -1.40625,-1.40625 -2.92969,-1.99219 -4.92188,-1.99219 0,0 0,0 0,0 m 0,9.9609404 c -0.82031,0 -1.40625,-0.23437 -1.99219,-0.82031 -0.58593,-0.58594 -0.82031,-1.17188 -0.82031,-1.99219 0,-0.82031 0.23438,-1.52344 0.82031,-2.10937 0.58594,-0.58594 1.17188,-0.8203204 1.99219,-0.8203204 0.82031,0 1.52344,0.2343804 2.10938,0.8203204 0.58593,0.58593 0.82031,1.28906 0.82031,2.10937 0,0.82031 -0.23438,1.40625 -0.82031,1.99219 -0.58594,0.58594 -1.28907,0.82031 -2.10938,0.82031 0,0 0,0 0,0"/></svg>'
-    };
-
-    markerShapes[3] = {
-        x: 12.74,
-        y: 5.63,
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 13.48113,25.7265 c 0,0 1.99218,-8.3203 1.99218,-8.3203 0,0 -1.40625,-0.2344 -1.40625,-0.2344 0,0 -1.99218,8.5547 -1.99218,8.5547 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0 M 10.903,11.3124 c 0,1.4063 0.46875,2.5782 1.40625,3.6329 0.9375,1.0546 2.22656,1.5234 3.63281,1.5234 1.40625,0 2.57813,-0.4688 3.63282,-1.5234 1.05468,-1.0547 1.52343,-2.2266 1.52343,-3.6329 0,-1.4062 -0.46875,-2.5781 -1.52343,-3.5156 -1.05469,-0.9375 -2.22657,-1.5234 -3.63282,-1.5234 -1.40625,0 -2.69531,0.5859 -3.63281,1.5234 -0.9375,0.9375 -1.40625,2.1094 -1.40625,3.5156 0,0 0,0 0,0"/></svg>'
-    };
-
-    markerShapes[4] = {
-        x: 20.12,
-        y: 5.41,
-        data: '<svg width="32" height="32"><g transform="translate(1.2364754,0.92819)"><path fill="#000000" stroke="#000000" d="m 19.50313,25.03281 c 0,0 4.80468,-19.80468 4.80468,-19.80468 0,0 -1.52343,0 -1.52343,0 0,0 -4.6875,19.80468 -4.6875,19.80468 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0 M 8.01875,5.11094 c 0,0 2.10938,5.27344 2.10938,5.27344 0,0 -4.45313,5.15625 -4.45313,5.15625 0,0 13.47656,0 13.47656,0 0,0 2.46094,-10.42969 2.46094,-10.42969 0,0 -13.59375,0 -13.59375,0 0,0 0,0 0,0"/></g></svg>'
-    };
-
-    markerShapes[5] = {
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 8.969,15.99975 c 0,1.99219 0.70313,3.51563 2.10938,4.92188 1.40625,1.40625 2.92968,2.10937 4.92187,2.10937 1.99219,0 3.51563,-0.70312 4.92188,-2.10937 1.40625,-1.40625 2.10937,-2.92969 2.10937,-4.92188 0,-1.99219 -0.70312,-3.51562 -2.10937,-4.92187 C 19.51588,9.67163 17.99244,8.9685 16.00025,8.9685 c -1.99219,0 -3.51562,0.70313 -4.92187,2.10938 -1.40625,1.40625 -2.10938,2.92968 -2.10938,4.92187 0,0 0,0 0,0"/></svg>'
-    };
-
-    markerShapes[6] = {
-        x: 16,
-        y: 5.41,
-        data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 19.280933,16.92943 c 0,0 0,-10.8984403 0,-10.8984403 0,0 -6.5625,0 -6.5625,0 0,0 0,10.8984403 0,10.8984403 0,0 -4.5703104,0 -4.5703104,0 0,0 7.8515604,8.78906 7.8515604,8.78906 0,0 7.85156,-8.78906 7.85156,-8.78906 0,0 -4.57031,0 -4.57031,0 0,0 0,0 0,0"/></svg>'
-    };
-
-
 
     var isDebug = false,
         isConsole = window.console && window.console.debug,
@@ -371,10 +327,10 @@ Oskari = (function () {
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
      * 'static' assumes srcs are already loaded <any-other> is assumed as a
      * request to load built js packs using this path pattern
-     * .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
+     * .../<bundles-path>/<bundle-name>/build/<any-other>.js
      */
     var supportBundleAsync = false,
-        mode = 'dev',
+        mode = 'default',
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
@@ -405,9 +361,9 @@ Oskari = (function () {
              */
             dev: function (fileName, basePath) {
                 if (basePathForBundles) {
-                    return basePathForBundles + fileName + '?ts=' + instTs;
+                    return basePathForBundles + fileName;
                 }
-                return fileName + '?ts=' + instTs;
+                return fileName;
             }
         };
 
@@ -1229,7 +1185,7 @@ Oskari = (function () {
 
         this.filesRequested = 0;
         this.filesLoaded = 0;
-        this.files = {};
+        this.files = [];
         this.fileList = [];
         this.metadata = {};
     };
@@ -1248,7 +1204,10 @@ Oskari = (function () {
             var me = this,
                 def;
 
-            if (!me.files[fn]) {
+            var matches = me.files.filter(function(item){
+                return item.fn === fn;
+            });
+            if (matches.length == 0) {
                 def = {
                     src: fn,
                     type: pdef && pdef.type ? pdef.type : 'text/javascript',
@@ -1256,7 +1215,10 @@ Oskari = (function () {
                     state: false
 
                 };
-                me.files[fn] = def;
+                me.files.push({
+                    fn: fn,
+                    def: def
+                });
 
                 if ('text/javascript' === def.type) {
                     me.filesRequested += 1;
@@ -1319,8 +1281,7 @@ Oskari = (function () {
                 }
             };
             f = false;
-            for (n = 0; n < me.fileList.length; n += 1) {
-                def = me.fileList[n];
+            me.fileList.forEach(function(def) {
                 fn = def.src;
                 st = me._buildScriptTag(fn, onFileLoaded, def.type, def.id);
                 if (st) {
@@ -1332,7 +1293,7 @@ Oskari = (function () {
                         f = true;
                     }
                 }
-            }
+            });
             if (f) {
                 me.head.appendChild(fragment);
             }
@@ -1665,6 +1626,24 @@ Oskari = (function () {
         },
 
         /**
+         * @private @method _loadLink
+         *
+         * @param {string}   rel type
+         * @param {string}   href Contains import url
+         *
+         */
+        _loadLink: function (rel, href) {
+            this.log('Loading link ' + rel + ": " + href);
+            var importParentElement = document.head || document.body,
+                linkElement;
+
+            linkElement = document.createElement('link');
+            linkElement.rel = rel;
+            linkElement.href = href;
+            importParentElement.appendChild(linkElement);
+        },
+
+        /**
          * @private @method _self
          *
          *
@@ -1751,8 +1730,8 @@ Oskari = (function () {
          * @public @method installBundleClassInfo
          * Installs a bundle defined as Oskari native Class
          *
-         * @param {string} biid      Bundle implementation I
-D         * @param {Object} classInfo ClassInfo
+         * @param {string} biid      Bundle implementation ID
+         * @param {Object} classInfo ClassInfo
          *
          */
         installBundleClassInfo: function (biid, classInfo) {
@@ -1847,9 +1826,11 @@ D         * @param {Object} classInfo ClassInfo
             sourceDefinitions = sourceDefinitions || {};
             // linter doesn't recognize the filter expression
             /*jshint forin: false*/
-            for (p in sourceDefinitions) {
-                if (sourceDefinitions.hasOwnProperty(p) &&
-                        (p === 'scripts' || p === 'locales')) {
+            if (sourceDefinitions.links) {
+                Array.prototype.push.apply(srcFiles.links, sourceDefinitions.links);
+            }
+            Object.keys(sourceDefinitions).forEach(function (p) {
+                if (p === 'scripts' || p === 'locales') {
                     for (n = 0; n < sourceDefinitions[p].length; n += 1) {
                         def = sourceDefinitions[p][n];
                         if (def.type === 'text/css') {
@@ -1858,6 +1839,7 @@ D         * @param {Object} classInfo ClassInfo
                             if (fn.indexOf('http') === -1) {
                                 fnWithPath = bundlePath + '/' + fn;
                             }
+                            // TODO: Order these like the files.
                             srcFiles.css[fnWithPath] = def;
                         } else if (def.type) {
                             srcFiles.count += 1;
@@ -1872,12 +1854,20 @@ D         * @param {Object} classInfo ClassInfo
                             if (p !== 'locales' || _isPackedMode() ||
                                     def.lang === undefined ||
                                     Oskari.getLang() === def.lang) {
-                                srcFiles.files[fnWithPath] = def;
+                                var def = {
+                                        p: p,
+                                        n: n,
+                                        def: sourceDefinitions[p][n]
+                                };
+                                srcFiles.files.push({
+                                    fn: fnWithPath,
+                                    def: def
+                                });
                             }
                         }
                     }
                 }
-            }
+            });
         },
 
         /**
@@ -1908,6 +1898,25 @@ D         * @param {Object} classInfo ClassInfo
         },
 
         /**
+         * @private @method _feedLinkLoader
+         *
+         * @param {string}   biid       Bundle implementation ID
+         * @param {string}   bundlePath Bundle path
+         * @param {Object}   srcFiles   Bundle source files object
+         *
+         */
+        _feedLinkLoader: function (biid, bundlePath, srcFiles) {
+            var me = this;
+            if (!_isPreloaded() && srcFiles.links) {
+                srcFiles.links.forEach(function (src) {
+                    var href = _buildPathForLoaderMode(src.href, bundlePath);
+                    me._loadLink(src.rel, href);
+                    me.log('- added link source ' + href + ", for: " + biid);
+                });
+            }
+        },
+
+        /**
          * @private @method _feedBundleLoader
          *
          * @param {function()} cb         Callback function
@@ -1934,12 +1943,7 @@ D         * @param {Object} classInfo ClassInfo
              * if using compiled javascript
              */
             if (_isPackedMode()) {
-                fileCount = 0;
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        fileCount += 1;
-                    }
-                }
+                fileCount = srcFiles.files.length;
                 if (fileCount > 0) {
                     srcsFn = _buildPathForPackedMode(bundlePath);
                     bl.add(srcsFn, 'text/javascript');
@@ -1956,12 +1960,10 @@ D         * @param {Object} classInfo ClassInfo
                  * else load any files
                  */
             } else {
-                for (js in srcFiles.files) {
-                    if (srcFiles.files.hasOwnProperty(js)) {
-                        bl.add(js, srcFiles.files[js]);
-                        me.log('- added script source ' + js + ' for ' + biid);
-                    }
-                }
+                srcFiles.files.forEach(function (def) {
+                    bl.add(def.fn, def.def);
+                    me.log('- added script source ' + js + ' for ' + biid);
+                });
             }
 
             bl.commit();
@@ -2035,6 +2037,29 @@ D         * @param {Object} classInfo ClassInfo
                     );
             }
 
+            srcFiles = {
+                    count: 0,
+                    loaded: 0,
+                    files: [],
+                    css: {},
+                    links: []
+                };
+
+            srcs = me.sources[biid];
+            bundlePath = bundleDefinitionState.bundlePath;
+            me._handleSourceFiles(srcFiles, bundlePath, srcs);
+
+            if (_isPreloaded() && biid === "statsgrid") {
+                // This is only used for the vulcanized Polymer bundles.
+                // In a perfect world we would get srcFiles.vulcanizedHtml information from packages/.../bundle.js
+                // but this is no such a world. So, for now, this is hardcoded here.
+                // me._loadLink(srcFiles.vulcanizedHtml.rel, srcFiles.vulcanizedHtml.href);
+                // From bundle.js:
+                //   "rel": "import",
+                //   "href": "/Oskari/bundles/statistics/statsgrid/vulcanized.html"
+                // FIXME: We need a generic way of telling these kind of things. Something in startupsequence fragment perhaps or in packages/*/bundle.js
+                //me._loadLink("import", "/Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html");
+            }
             if (bundleDefinitionState.state !== 1) {
                 me.log('Pending DEFINITION at sources for ' + biid + ' to ' +
                     bundleDefinitionState.state + ' -> postponed'
@@ -2043,13 +2068,6 @@ D         * @param {Object} classInfo ClassInfo
             }
 
             me.log('STARTING load for sources ' + biid);
-
-            srcFiles = {
-                count: 0,
-                loaded: 0,
-                files: {},
-                css: {}
-            };
 
             callback = function () {
                 me.log('Finished loading ' + srcFiles.count + ' files for ' +
@@ -2061,14 +2079,14 @@ D         * @param {Object} classInfo ClassInfo
 
                 me.postChange(null, null, 'bundle_sources_loaded');
             };
-            bundlePath = bundleDefinitionState.bundlePath;
-
-            srcs = me.sources[biid];
-
-            me._handleSourceFiles(srcFiles, bundlePath, srcs);
 
             me._feedCSSLoader(
                 callback,
+                biid,
+                bundlePath,
+                srcFiles
+            );
+            me._feedLinkLoader(
                 biid,
                 bundlePath,
                 srcFiles
@@ -2929,7 +2947,7 @@ D         * @param {Object} classInfo ClassInfo
         /* */
         clazz: cs,
         VERSION : oskariVersion,
-        markers: markerShapes,
+        markers: [],
 
         /**
          * @public @method Oskari.$
@@ -3262,7 +3280,22 @@ D         * @param {Object} classInfo ClassInfo
          */
         setSandbox: function (sandboxName, sandbox) {
             return ga.apply(cs, [sandboxName || 'sandbox', sandbox]);
-        }
+        },
+
+        /**
+         * @public @static @method Oskari.setMarkers
+         * @param {Array} markers markers
+         */
+        setMarkers: function(markers) {
+            this.markers = markers;
+        },
+        /**
+         * @public @static @method Oskari.getMarkers
+         * @return {Array} markers markers
+         */
+        getMarkers: function() {
+            return this.markers || [];
+        },
     };
 
     /* Oskari1BuilderAPI */
@@ -3937,6 +3970,94 @@ Oskari.util = (function () {
         }
         return cnt === splits.length;
     };
+
+    /**
+     * Natural array sort
+     * @method  naturalSort
+     * @param  {String|Integer|Double} valueA     sorted value a
+     * @param  {String|Integer|Double} valueB     soted value b
+     * @param  {Boolean} descending is descending
+     * @return {Integer}            sort number
+     */
+    util.naturalSort = function(valueA, valueB, descending) {
+        var re = /(^([+\-]?(?:\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[\da-fA-F]+$|\d+)/g,
+            sre = /^\s+|\s+$/g,   // trim pre-post whitespace
+            snre = /\s+/g,        // normalize all whitespace to single ' ' character
+            dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
+            hre = /^0x[0-9a-f]+$/i,
+            ore = /^0/,
+            i = function(s) {
+                return ('' + s).toLowerCase().replace(sre, '');
+            },
+            // convert all to strings strip whitespace
+            x = i(valueA) || '',
+            y = i(valueB) || '',
+            // chunk/tokenize
+            xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+            yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+            // numeric, hex or date detection
+            xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && Date.parse(x)),
+            yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
+            normChunk = function(s, l) {
+                // normalize spaces; find floats not starting with '0', string or 0 if not defined (Clint Priest)
+                return (!s.match(ore) || l == 1) && parseFloat(s) || s.replace(snre, ' ').replace(sre, '') || 0;
+            },
+            sortFunc = function(oFxNcL, oFyNcL){
+                // handle numeric vs string comparison - number < string - (Kyle Adams)
+                if (isNaN(oFxNcL) !== isNaN(oFyNcL)) {
+                    retValue = (isNaN(oFxNcL)) ? 1 : -1;
+                    return true;
+                }
+                // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+                else if (typeof oFxNcL !== typeof oFyNcL) {
+                    oFxNcL += '';
+                    oFyNcL += '';
+                }
+
+                if (oFxNcL < oFyNcL) {
+                    retValue = -1;
+                    return true;
+                }
+                if (oFxNcL > oFyNcL) {
+                    retValue = 1;
+                    return true;
+                }
+            },
+            oFxNcL, oFyNcL,
+            retValue = 0,
+            sortCompleted = false;
+
+        // first try and sort Hex codes or Dates
+        if (yD) {
+            if ( xD < yD ) {
+                retValue = -1;
+                sortCompleted = true;
+            }
+            else if ( xD > yD ) {
+                retValue = 1;
+                sortCompleted = true;
+            }
+        }
+
+        if(!sortCompleted) {
+            // natural sorting through split numeric strings and default strings
+            for(var cLoc=0, xNl = xN.length, yNl = yN.length, numS=Math.max(xNl, yNl); cLoc < numS; cLoc++) {
+                oFxNcL = normChunk(xN[cLoc] || '', xNl);
+                oFyNcL = normChunk(yN[cLoc] || '', yNl);
+
+                sortCompleted = sortFunc(oFxNcL, oFyNcL);
+
+                if(sortCompleted) {
+                    break;
+                }
+            }
+        }
+        if (descending) {
+            retValue =  -1 * retValue;
+        }
+        return retValue;
+    };
+
 
     return util;
 }());

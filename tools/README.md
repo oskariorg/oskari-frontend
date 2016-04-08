@@ -75,3 +75,7 @@ Run command:
 	npm run build-ol3
 
 Note! You must have java.exe in $PATH for building ol3 successfully.
+
+### Custom build
+
+Build configuration files are located under tools/conf/ol3. To create custom build, change the file names in build script (tools/tasks/buildOskariOL3.js) to ol-custom.json and ol-custom-debug.json, or create your own configuration file.

@@ -248,4 +248,10 @@ div.asdiLoginInputField {
     background-image: url('asdi_logoplugin_logo.png') !important;
     width: 23px !important;
     height: 27px !important;
+    float: left;
 }
+
+.logoplugin .data-sources, .logoplugin .terms {
+    float: left;
+}
+

@@ -156,10 +156,11 @@ Oskari.clazz.define(
                 me._updatePreview(dialogContent);
             };
 
-            for (var i=0;i<Oskari.markers.length;i++) {
+            var markers = Oskari.getMarkers();
+            for (var i=0;i<markers.length;i++) {
                 btnContainer = this.templateSymbolButton.clone();
 
-                var svgObj = jQuery(Oskari.markers[i].data);
+                var svgObj = jQuery(markers[i].data);
                 svgObj.find('path').attr({
                     fill: '#000000',
                     stroke: '#000000'
@@ -456,7 +457,12 @@ Oskari.clazz.define(
 
             var previewTemplate = me._previewTemplate.clone();
             var marker = previewTemplate.find('#marker');
-            var iconObj = Oskari.markers[me.values.shape];
+
+            var iconObj = Oskari.getMarkers()[me.values.shape];
+            if(!iconObj){
+                preview.empty();
+                return;
+            }
             var size = 20+this.values.size*5;
 
             var iconSvg = jQuery(iconObj.data);
