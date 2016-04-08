@@ -227,6 +227,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 }
             });
 
+            Oskari.setMarkers(me.conf.svgMarkers || []);
+
             // take map div ID from config if available
             if (conf.mapElement) {
                 me.mapDivId = conf.mapElement;
