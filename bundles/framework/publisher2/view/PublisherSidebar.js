@@ -401,8 +401,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 statsGrid = sandbox.getStatefulComponents().statsgrid;
 
-            if (statsGrid) {
-                var statsGridState = statsGrid._getState();
+            if (statsGrid && statsLayer) {
+                var statsGridState = statsGrid.getState();
                 // Filtering indicators here in the publishing step, because for
                 // the private state they are allowed.
                 statsGridState = me._filterIndicators(_.clone(statsGridState, true));
