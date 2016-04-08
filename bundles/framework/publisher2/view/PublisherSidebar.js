@@ -399,16 +399,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 state: mapFullState
             };
             var me = this,
-                statsGrid = sandbox.getStatefulComponents().statsgrid,
-                statsGridState = statsGrid._getState();
-            // Filtering indicators here in the publishing step, because for
-            // the private state they are allowed.
-            statsGridState = me._filterIndicators(_.clone(statsGridState, true));
-            statsGridState.embedded = true;
-            statsGridState.layerId = statsLayer._id;
-            selections.configuration.publishedgrid = {
-                state: statsGridState
-            };
+                statsGrid = sandbox.getStatefulComponents().statsgrid;
+
+            if (statsGrid && statsLayer) {
+                var statsGridState = statsGrid.getState();
+                // Filtering indicators here in the publishing step, because for
+                // the private state they are allowed.
+                statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+                statsGridState.embedded = true;
+                statsGridState.layerId = statsLayer._id;
+                selections.configuration.publishedgrid = {
+                    state: statsGridState
+                };
+            }
 
             jQuery.each(me.panels, function(index, panel){
                 if (panel.validate && typeof panel.validate === 'function') {
