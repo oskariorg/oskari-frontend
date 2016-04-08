@@ -2891,6 +2891,7 @@ Oskari = (function () {
                 var instance = bundle.clazz.create();
                 if(instance) {
                     // hrrrr, ugly hack for one bundle...
+                    /*
                     instance.mediator = {
                         manager : {
                             bundleDefinitionStates : {
@@ -2900,11 +2901,17 @@ Oskari = (function () {
                             }
                         }
                     };
+                    */
+                   instance.mediator = {
+                   		bundleId : bundleToStart
+                   }
                     // quick'n'dirty property injection
                     for(var key in config) {
                         instance[key] = config[key];
                     }
+                    console.log('Starting bundle ' + bundleToStart);
                     instance.start();
+                    console.log('Started bundle ' + bundleToStart);
                 }
                 me.processSequence(sequence, callback);
             });
@@ -2938,9 +2945,30 @@ Oskari = (function () {
         var me = this;
         var files = [];
 
+		// http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
+		var absolute = function(base, relative) {
+		    var stack = base.split("/"),
+		        parts = relative.split("/");
+		    stack.pop(); // remove current file name (or empty string)
+		                 // (omit if "base" is the current folder without trailing slash)
+		    for (var i=0; i<parts.length; i++) {
+		        if (parts[i] == ".")
+		            continue;
+		        if (parts[i] == "..")
+		            stack.pop();
+		        else
+		            stack.push(parts[i]);
+		    }
+		    return stack.join("/");
+		}
+
         var getPath = function(base, src) {
-            var path = base + '/' + src;
-            // TODO: handle case where src start with /
+            // handle case where src start with /
+        	var path = src;
+            // handle relative ../../ case with src
+        	if (src.indexOf('/') !== 0) {
+        		path = absolute(base, src);
+        	}
             return path.split('//').join('/');
 
         };
@@ -2968,19 +2996,27 @@ Oskari = (function () {
                     files.push(getPath(basePath, file.src));
                 }
                 else if (file.src.endsWith('.css')) {
-                    me.linkCss(getPath(basePath, file.src));
+                    me.linkFile(getPath(basePath, file.src));
                 }
+            });
+        }
+
+        if(src.links) {
+            src.links.forEach(function(file) {
+            	if(file.rel.toLowerCase() === 'import') {
+                    me.linkFile(getPath(basePath, file.href), file.rel, 'text/html');
+            	}
             });
         }
         require(files, function() {
             callback();
         });
     },
-    linkCss : function(href) {
+    linkFile : function(href, rel, type) {
         var importParentElement = document.head || document.body;
         var linkElement = document.createElement('link');
-        linkElement.rel = 'stylesheet';
-        linkElement.rel = 'text/css';
+        linkElement.rel = rel || 'stylesheet';
+        linkElement.type = type || 'text/css';
         linkElement.href = href;
         importParentElement.appendChild(linkElement);
     },
