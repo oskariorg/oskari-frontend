@@ -1088,11 +1088,12 @@ Oskari.clazz.define(
                 marker = this._markerTemplate.clone(),
                 svgObject = null;
 
-            // marker shape is number --> find it form Oskari.markers
+            // marker shape is number --> find it from Oskari.getMarkers()
             if(!isNaN(markerStyle.shape)) {
-                svgObject = Oskari.markers[markerStyle.shape];
+                var markers = Oskari.getMarkers();
+                svgObject = markers[markerStyle.shape];
                 if(!svgObject) {
-                    svgObject = Oskari.markers[this._defaultMarker.shape];
+                    svgObject = markers[this._defaultMarker.shape];
                 }
 
                 if(markerStyle.color) {
