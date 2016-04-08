@@ -3,6 +3,7 @@
  RequireJS 2.2.0 Copyright jQuery Foundation and other contributors.
  Released under MIT license, http://github.com/requirejs/requirejs/LICENSE
 */
+/*
 var requirejs,require,define;
 (function(ga){function ka(b,c,d,g){return g||""}function K(b){return"[object Function]"===Q.call(b)}function L(b){return"[object Array]"===Q.call(b)}function y(b,c){if(b){var d;for(d=0;d<b.length&&(!b[d]||!c(b[d],d,b));d+=1);}}function X(b,c){if(b){var d;for(d=b.length-1;-1<d&&(!b[d]||!c(b[d],d,b));--d);}}function x(b,c){return la.call(b,c)}function e(b,c){return x(b,c)&&b[c]}function D(b,c){for(var d in b)if(x(b,d)&&c(b[d],d))break}function Y(b,c,d,g){c&&D(c,function(c,e){if(d||!x(b,e))!g||"object"!==
 typeof c||!c||L(c)||K(c)||c instanceof RegExp?b[e]=c:(b[e]||(b[e]={}),Y(b[e],c,d,g))});return b}function z(b,c){return function(){return c.apply(b,arguments)}}function ha(b){throw b;}function ia(b){if(!b)return b;var c=ga;y(b.split("."),function(b){c=c[b]});return c}function F(b,c,d,g){c=Error(c+"\nhttp://requirejs.org/docs/errors.html#"+b);c.requireType=b;c.requireModules=g;d&&(c.originalError=d);return c}function ma(b){function c(a,n,b){var h,k,f,c,d,l,g,r;n=n&&n.split("/");var q=p.map,m=q&&q["*"];
@@ -35,7 +36,7 @@ K(require)||(w=require,require=void 0);g=requirejs=function(b,c,d,m){var r,q="_"
 {},e;if(E){e=g.createNode(m,c,d);e.setAttribute("data-requirecontext",b.contextName);e.setAttribute("data-requiremodule",c);!e.attachEvent||e.attachEvent.toString&&0>e.attachEvent.toString().indexOf("[native code")||ca?(e.addEventListener("load",b.onScriptLoad,!1),e.addEventListener("error",b.onScriptError,!1)):(S=!0,e.attachEvent("onreadystatechange",b.onScriptLoad));e.src=d;if(m.onNodeCreated)m.onNodeCreated(e,m,c,d);P=e;H?C.insertBefore(e,H):C.appendChild(e);P=null;return e}if(ja)try{setTimeout(function(){},
 0),importScripts(d),b.completeLoad(c)}catch(q){b.onError(F("importscripts","importScripts failed for "+c+" at "+d,q,[c]))}};E&&!w.skipDataMain&&X(document.getElementsByTagName("script"),function(b){C||(C=b.parentNode);if(O=b.getAttribute("data-main"))return u=O,w.baseUrl||-1!==u.indexOf("!")||(I=u.split("/"),u=I.pop(),T=I.length?I.join("/")+"/":"./",w.baseUrl=T),u=u.replace(U,""),g.jsExtRegExp.test(u)&&(u=O),w.deps=w.deps?w.deps.concat(u):[u],!0});define=function(b,c,d){var e,g;"string"!==typeof b&&
 (d=c,c=b,b=null);L(c)||(d=c,c=null);!c&&K(d)&&(c=[],d.length&&(d.toString().replace(qa,ka).replace(ra,function(b,d){c.push(d)}),c=(1===d.length?["require"]:["require","exports","module"]).concat(c)));S&&(e=P||pa())&&(b||(b=e.getAttribute("data-requiremodule")),g=J[e.getAttribute("data-requirecontext")]);g?(g.defQueue.push([b,c,d]),g.defQueueMap[b]=!0):V.push([b,c,d])};define.amd={jQuery:!0};g.exec=function(b){return eval(b)};g(w)}})(this);
-
+*/
 if (!String.prototype.endsWith) {
   String.prototype.endsWith = function(searchString, position) {
       var subjectString = this.toString();
@@ -2873,6 +2874,13 @@ Oskari = (function () {
                 path : basepath
             });
         }
+        if(this.isBundleLoaded(bundleToStart)) {
+        	console.log('Bundle preloaded ' + bundleToStart);
+        	me.startBundle(bundleToStart, config);
+            me.processSequence(sequence, callback);
+            return;
+        }
+    	console.log('Loading bundles');
         // load all bundlePaths mentioned in sequence-block
         require(paths, function() {
             // if loaded undefined - find from Oskari.instalBundle register with id
@@ -2882,40 +2890,39 @@ Oskari = (function () {
                     debugger;
                 }
             }
-            console.log(bundles);
+            console.log('Loaded bundles', bundles);
             // the loaded files have resulted in calls to
             // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
             // TODO: loop all bundles and require sources from installs
             me.processBundleJS(bundles, function() {
-                var bundle = Oskari.samiRegistry[bundleToStart];
-                var instance = bundle.clazz.create();
-                if(instance) {
-                    // hrrrr, ugly hack for one bundle...
-                    /*
-                    instance.mediator = {
-                        manager : {
-                            bundleDefinitionStates : {
-                                'openlayers-default-theme' : {
-                                    bundlePath : 'moi'
-                                }
-                            }
-                        }
-                    };
-                    */
-                   instance.mediator = {
-                   		bundleId : bundleToStart
-                   }
-                    // quick'n'dirty property injection
-                    for(var key in config) {
-                        instance[key] = config[key];
-                    }
-                    console.log('Starting bundle ' + bundleToStart);
-                    instance.start();
-                    console.log('Started bundle ' + bundleToStart);
-                }
+            	me.startBundle(bundleToStart, config);
                 me.processSequence(sequence, callback);
             });
         });
+    },
+    isBundleLoaded : function(bundleId) {
+        var bundle = Oskari.samiRegistry[bundleId];
+        return !!bundle;
+    },
+    startBundle : function(bundleId, config) {
+        var bundle = Oskari.samiRegistry[bundleId];
+        var instance = bundle.clazz.create();
+        if(!instance) {
+        	throw new Error('Couldnt start bundle with id ' + bundleId);
+        }
+        instance.mediator = {
+       	    bundleId : bundleId
+        }
+        // quick'n'dirty property injection
+        for(var key in config) {
+            instance[key] = config[key];
+        }
+        console.log('Starting bundle ' + bundleId);
+        try {
+        	instance.start();
+        } catch(err) {
+    		throw new Error('Couldnt start bundle with id ' + bundleId);
+        }
     },
     processBundleJS : function(bundles, callback) {
         var me = this;
@@ -2973,8 +2980,6 @@ Oskari = (function () {
 
         };
         // src.locales
-        // src.scripts
-        // src.resources
         if(src.locales) {
             src.locales.forEach(function(file) {
                 if(file.src.endsWith('.js')) {
@@ -2982,6 +2987,7 @@ Oskari = (function () {
                 }
             });
         }
+        // src.resources
         if(src.resources) {
             src.resources.forEach(function(file) {
                 if(file.src.endsWith('.js')) {
@@ -2989,6 +2995,7 @@ Oskari = (function () {
                 }
             });
         }
+        // src.scripts
         if(src.scripts) {
             src.scripts.forEach(function(file) {
 
@@ -3001,6 +3008,7 @@ Oskari = (function () {
             });
         }
 
+        // src.links
         if(src.links) {
             src.links.forEach(function(file) {
             	if(file.rel.toLowerCase() === 'import') {
