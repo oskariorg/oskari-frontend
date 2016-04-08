@@ -52,7 +52,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     //getting transformed coordinate from frontend first
                     var data = coordinateToolPlugin.refresh();
                     //getting precise transformed coordinates from server
-                    me.getTransformedCoordinatesFromServer(data);
+                    me.getTransformedCoordinatesFromServer(data, me._mapmodule.getProjection(), me._projectionSelect.val(), function(newLonLat) {
+                         var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
+                         coordinateToolPlugin._updateLonLat(newLonLat);
+                    });
                 });
             }
             return me._projectionSelect;
@@ -113,11 +116,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {String} srs: projection for given lonlat params like "EPSG:4326"
          * @param {String} targetSRS: projection to transform to like "EPSG:4326"
          */
-        getTransformedCoordinatesFromServer: function (data, srs, targetSRS) {
+        getTransformedCoordinatesFromServer: function (lonlat, srs, targetSRS, callback) {
             var me = this;
-            if(!data) {
+            if(!lonlat) {
                 var map = me._sandbox.getMap();
-                data = {
+                lonlat = {
                     'lonlat': {
                         'lat': parseFloat(map.getY()),
                         'lon': parseFloat(map.getX())
@@ -130,13 +133,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if(!targetSRS && this._projectionSelect) {
                 targetSRS = this._projectionSelect.val();
             }
-            if(me._projectionSelect.val() !== me._mapmodule.getProjection()) {
-
+            if(srs !== targetSRS) {
                 jQuery.ajax({
                     url: me._sandbox.getAjaxUrl('Coordinates'),
                     data: {
-                        lat: data.lonlat.lat,
-                        lon: data.lonlat.lon,
+                        lat: lonlat.lonlat.lat,
+                        lon: lonlat.lonlat.lon,
                         srs: srs,
                         targetSRS: targetSRS
                     },
@@ -149,8 +151,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                 }
                             };
                             me._coordinatesFromServer = true;
-                            var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
-                            coordinateToolPlugin._updateLonLat(newLonLat);
+                            if(typeof callback === 'function') {
+                                callback(newLonLat);
+                            }
                         }
                     },
                     error: function () {
@@ -158,6 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 });
             }
+            return data;
         },
         /**
          * @public @method changeToolStyle

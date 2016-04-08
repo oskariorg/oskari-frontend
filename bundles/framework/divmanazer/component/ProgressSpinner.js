@@ -78,7 +78,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             if(!data) {
                 return;
             }
-
+            if(this.spinning) {
+                return;
+            }
+            this.spinning = true;
             if (data.spinner) {
                 data.spinner.stop();
                 delete data.spinner;
@@ -101,7 +104,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             if (!el) {
                 return;
             }
-
+            this.spinning = false;
             $el = $(el);
             data = $el.data();
 
