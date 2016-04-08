@@ -335,12 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                       lat : transformed[1]
                   };
             }
-
-            return {
-                lon : 0,
-                lat : 0
-            };
-
+            throw new Error('SrsName not supported!');
         },
         /**
          * @method orderLayersByZIndex
@@ -595,7 +590,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var image = {};
             var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
             styleDef.image.size = size;
-
           	var svg = me.getSvg(styleDef.image);
             if(svg) {
                 image = new ol.style.Icon({

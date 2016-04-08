@@ -51,7 +51,7 @@ Oskari.registerLocalization(
                 }
             },
             "coordinatesTransform": {
-                "header": "Vaihda koordinaatisto:",
+                "header": "Koordinaatisto:",
                 "projections": {
                     "EPSG:3067": "ETRS-TM35FIN",
                     "NLSFI:etrs_gk": "ETRS-GKn",

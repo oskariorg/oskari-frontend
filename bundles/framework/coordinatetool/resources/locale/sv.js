@@ -51,14 +51,14 @@ Oskari.registerLocalization(
                 }
             },
             "coordinatesTransform": {
-                "header": "Vaihda koordinaatisto:",
+                "header": "Koordinatsystem:",
                 "projections": {
-                    "EPSG:3067": "ETRS-TM35FIN",
-                    "NLSFI:etrs_gk": "ETRS-GKn",
-                    "NLSFI:kkj": "KKJ:n peruskoordinaatisto",
-                    "NLSFI:ykj": "KKJ:n yhtenäiskoordinaatisto (YKJ)",
-                    "EPSG:4258": "ETRS89 maantieteelliset koordinaatit (~WGS84)",
-                    "LATLON:kkj": "KKJ maantieteelliset koordinaatit",
+                    "EPSG:3067": "ETRS-TM35FIN-plankoordinater",
+                    "NLSFI:etrs_gk": "ETRS-GKn-plankoordinater",
+                    "NLSFI:kkj": "KKS grundkoordinatsystem",
+                    "NLSFI:ykj": "KKS enhetskoordinatsystem",
+                    "EPSG:4258": "ETRS89 geografiska koordinater (~WGS84)",
+                    "LATLON:kkj": "KKS geografiska koordinater",
                     "EPSG:3046": "ETRS-TM34",
                     "EPSG:3048": "ETRS-TM36",
                     "EPSG:3873": "ETRS-GK19",
@@ -74,10 +74,10 @@ Oskari.registerLocalization(
                     "EPSG:3883": "ETRS-GK29",
                     "EPSG:3884": "ETRS-GK30",
                     "EPSG:3885": "ETRS-GK31",
-                    "EPSG:3386": "KKJ kaista 0",
-                    "EPSG:2391": "KKJ kaista 1",
-                    "EPSG:2392": "KKJ kaista 2",
-                    "EPSG:2394": "KKJ kaista 4"
+                    "EPSG:3386": "KKJ zon 0",
+                    "EPSG:2391": "KKJ zon 1",
+                    "EPSG:2392": "KKJ zon 2",
+                    "EPSG:2394": "KKJ zon 4"
                 }
             }
         }
