@@ -1,15 +1,15 @@
 /* English/UK initialisation for the jQuery UI date picker plugin. */
 /* Written by Stuart. */
 ( function( factory ) {
+	/*
 	if ( typeof define === "function" && define.amd ) {
-
 		// AMD. Register as an anonymous module.
 		define( [ "../widgets/datepicker" ], factory );
 	} else {
-
+*/
 		// Browser globals
 		factory( jQuery.datepicker );
-	}
+//	}
 }( function( datepicker ) {
 
 datepicker.regional[ "en-GB" ] = {
