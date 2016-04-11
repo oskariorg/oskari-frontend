@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._mapmodule = mapmodule;
         this._sandbox = sandbox;
         this._instance = instance;
+        this._messageDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         this._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateTransformationExtension';
         this._templates = {
@@ -51,11 +52,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                     //getting transformed coordinate from frontend first
                     var data = coordinateToolPlugin.refresh();
-                    //getting precise transformed coordinates from server
-                    me.getTransformedCoordinatesFromServer(data, me._mapmodule.getProjection(), me._projectionSelect.val(), function(newLonLat) {
+
+                    var successCb = function(newLonLat) {
                          var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                          coordinateToolPlugin._updateLonLat(newLonLat);
-                    });
+                    };
+
+                    var errorCb = function(){
+                        me._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
+                    };
+                    //getting precise transformed coordinates from server
+                    me.getTransformedCoordinatesFromServer(data, me._mapmodule.getProjection(), me._projectionSelect.val(), successCb, errorCb);
                 });
             }
             return me._projectionSelect;
@@ -79,6 +86,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 select.append(option);
             });
          },
+         /**
+         * @method @private _showMessage show message
+         * @param  {String} title   mesage title
+         * @param  {String} message mesage
+         */
+        _showMessage: function(title, message) {
+            var me = this;
+
+            if(!me._messageDialog) {
+                me._messageDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            }
+            me._messageDialog.show(title, message);
+            me._messageDialog.fadeout();
+        },
          /**
          * Transforms the given coordinates
          * @method @public transformCoordinates
@@ -115,8 +136,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Object} lonlat: lat/lon coordinates to be transformed
          * @param {String} srs: projection for given lonlat params like "EPSG:4326"
          * @param {String} targetSRS: projection to transform to like "EPSG:4326"
+         * @param {Function} successCb success callback
+         * @param {Function} errorCb error callback
          */
-        getTransformedCoordinatesFromServer: function (lonlat, srs, targetSRS, callback) {
+        getTransformedCoordinatesFromServer: function (lonlat, srs, targetSRS, successCb, errorCb) {
             var me = this;
             if(!lonlat) {
                 var map = me._sandbox.getMap();
@@ -151,17 +174,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                 }
                             };
                             me._coordinatesFromServer = true;
-                            if(typeof callback === 'function') {
-                                callback(newLonLat);
+                            if(typeof successCb === 'function') {
+                                successCb(newLonLat);
                             }
                         }
                     },
-                    error: function () {
-                        throw new Error('SrsName not supported!');
+                    error: function (jqXHR, textStatus) {
+                        if(typeof errorCb === 'function' && jqXHR.status !== 0) {
+                            errorCb(jqXHR, textStatus);
+                        }
                     }
                 });
+            } else {
+                successCb(lonlat);
             }
-            return data;
         },
         /**
          * @public @method changeToolStyle

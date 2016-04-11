@@ -79,6 +79,10 @@ Oskari.registerLocalization(
                     "EPSG:2392": "KKJ zon 2",
                     "EPSG:2394": "KKJ zon 4"
                 }
+            },
+            "cannotTransformCoordinates" : {
+                "title": "Fel",
+                "message": "Koordinater kan inte omvandlas"
             }
         }
     }

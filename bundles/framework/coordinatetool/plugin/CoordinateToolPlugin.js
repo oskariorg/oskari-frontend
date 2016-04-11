@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._mapmodule = mapmodule;
         this._sandbox = sandbox;
         this._instance = instance;
+        this._messageDialog = null;
         this._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
         this._coordinateTransformationExtension =
@@ -105,14 +106,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             centerToCoordsBtn.setHandler(function () {
                 data = me._getInputsData();
                 if(!me._getPreciseTransform) {
-                  me._centerMapToSelectedCoordinates(data);
+                    me._centerMapToSelectedCoordinates(data);
                 } else {
                     if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, me._projectionSelect.val(), me._mapmodule.getProjection(), function(newLonLat) {
-                            me._centerMapToSelectedCoordinates(newLonLat);
-                        });
+                        me._getTransformedCoordinatesFromServer(data, false,  false, true);
                     }
                 }
             });
@@ -122,6 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             addMarkerBtn.setHandler(function() {
                 data = me._getInputsData();
+
                  if(!me._getPreciseTransform) {
                     me._addMarker(data);
                     me._centerMapToSelectedCoordinates(data);
@@ -130,10 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         me._addMarker(data);
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, me._projectionSelect.val(), me._mapmodule.getProjection(), function(newLonLat) {
-                            me._addMarker(newLonLat);
-                            me._centerMapToSelectedCoordinates(newLonLat);
-                        });
+                        me._getTransformedCoordinatesFromServer(data, true);
                     }
                 }
 
@@ -222,6 +219,57 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
+         * @method @private _showMessage show message
+         * @param  {String} title   mesage title
+         * @param  {String} message mesage
+         */
+        _showMessage: function(title, message) {
+            var me = this;
+
+            if(!me._messageDialog) {
+                me._messageDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            }
+            me._messageDialog.show(title, message);
+            me._messageDialog.fadeout();
+        },
+
+        /**
+         * @method  @private _getTransformedCoordinatesFromServer get transformed coordinates from server
+         * @param  {Object} data       data
+         * @param  {Boolean} showMarker show marker
+         */
+        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap){
+            var me = this,
+                loc = me._locale,
+                fromProj = me._projectionSelect.val(),
+                toProj = me._mapmodule.getProjection(),
+                successCb = function(newLonLat) {
+                    if(showMarker) {
+                        me._addMarker(newLonLat);
+                    } 
+
+                    if(showMarker || centerMap) {
+                        me._centerMapToSelectedCoordinates(newLonLat);
+                    }
+
+                    if(!centerMap) {
+                        me._updateLonLat(newLonLat);
+                    }
+                },
+                errorCb = function() {
+                    me._showMessage(loc.cannotTransformCoordinates.title, loc.cannotTransformCoordinates.message);
+                };
+
+            if(swapProjections) {
+                fromProj = me._mapmodule.getProjection();
+                toProj = me._projectionSelect.val();
+            }
+            
+            me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, fromProj, toProj, successCb, errorCb);
+        },
+
+
+        /**
          * Seet inputs disabled
          * @method  @private _setDisabledInputs
          *
@@ -304,14 +352,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 roundToDecimals = conf.roundToDecimals;
             }
             if (me._latInput && me._lonInput) {
-                if(conf && _.isArray(conf.supportedProjections) && me._projectionSelect.val() !== me.getMapModule().getProjection() && !me._coordinateTransformationExtension._coordinatesFromServer && data.lonlat.lat!=0 && data.lonlat.lon!=0) {
-                     me._latInput.val("~" + data.lonlat.lat.toFixed(roundToDecimals));
-                     me._lonInput.val("~" + data.lonlat.lon.toFixed(roundToDecimals));
-                } else {
-                    me._latInput.val(data.lonlat.lat.toFixed(roundToDecimals));
-                    me._lonInput.val(data.lonlat.lon.toFixed(roundToDecimals));
+                var isSupported = (conf && _.isArray(conf.supportedProjections)) ? true : false;
+                var isValid = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() && data.lonlat.lat!=0 && data.lonlat.lon!=0) ? true : false;
+
+                var lat = data.lonlat.lat.toFixed(roundToDecimals);
+                var lon = data.lonlat.lon.toFixed(roundToDecimals);
+                // from server
+                if(isSupported && isValid && me._coordinateTransformationExtension._coordinatesFromServer) {
+                    lat = '~' + lat;
+                    lot = '~' + lot;
+                } 
+                // not from server
+                else {
                     me._coordinateTransformationExtension._coordinatesFromServer = false;
                 }
+
+                me._latInput.val(lat);
+                me._lonInput.val(lon;
             }
         },
         /**
@@ -416,13 +473,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             }
                         };
                         var dataServer = _.clone(data);
-                        me.refresh(data);
+                        
+                        if(me._mapmodule.getProjection() === me._projectionSelect.val()) {
+                            me.refresh(data);
+                        }
+
                         if (event.isPaused() && me._getPreciseTransform){
-                            me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(dataServer, me._mapmodule.getProjection(), me._projectionSelect.val(), function(newLonlat) {
-                                me._updateLonLat(newLonlat);
-                            });
+                            me._getTransformedCoordinatesFromServer(dataServer, false, true);
                             me._progressSpinner.stop();
                         }
+
                         if (event.isPaused() && me._showReverseGeocode){
                             me._update3words(data);
                         }
@@ -437,9 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(!me._showMouseCoordinates) {
                         me.refresh();
                         if(me._getPreciseTransform){
-                            me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(null, me._mapmodule.getProjection(), me._projectionSelect.val(), function(newLonlat) {
-                                me._updateLonLat(newLonlat);
-                            });
+                            me._getTransformedCoordinatesFromServer(null, false, true);
                         }
                     }
                     if (me._showReverseGeocode){
@@ -461,11 +519,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         },
                         dataServer = _.clone(data);
                     if(!me._showMouseCoordinates) {
-                        me.refresh(data);
                         if(me._getPreciseTransform) {
-                            me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(dataServer, me._mapmodule.getProjection(), me._projectionSelect.val(), function(newLonlat) {
-                                 me._updateLonLat(newLonlat);
-                            });
+                            me._getTransformedCoordinatesFromServer(dataServer, false, true);
+                        } else {
+                            me.refresh(data);
                         }
                     }
                     if (me._showReverseGeocode){

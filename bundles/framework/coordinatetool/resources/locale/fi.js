@@ -79,6 +79,10 @@ Oskari.registerLocalization(
                     "EPSG:2392": "KKJ kaista 2",
                     "EPSG:2394": "KKJ kaista 4"
                 }
+            },
+            "cannotTransformCoordinates" : {
+                "title": "Virhe",
+                "message": "Koordinaatteja ei saatu muunnettua"
             }
         }
     }
