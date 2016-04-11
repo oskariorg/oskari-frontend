@@ -331,7 +331,6 @@ Oskari.clazz.define(
          */
         drawStartEvent: function(options) {
             var me = this;
-
             me._draw[me._id].on('drawstart', function(evt) {
                 // stop modify iteraction while draw-mode is active
                 if(options.modifyControl) {
@@ -831,7 +830,7 @@ Oskari.clazz.define(
                positioning : 'bottom-center',
                id: id
            });
-           tooltip.getElement().style.pointerEvents = 'none';
+           tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
        }

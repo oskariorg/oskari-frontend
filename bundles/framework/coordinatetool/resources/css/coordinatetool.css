@@ -1,3 +1,7 @@
+.projection-transformation {
+    width: 252px;
+}
+
 div.mapplugin.coordinatetool {
   position: relative;
   margin: 0 auto;
@@ -33,7 +37,7 @@ div.coordinatetool__popup {
   div.coordinatetool__popup div.projectionchange {
     margin: 10px; }
     div.coordinatetool__popup div.projectionchange select#projection {
-      width: 170px; }
+      width: 184px; }
   div.coordinatetool__popup div.content .srs {
     color: #b3b3b3;
     font-size: 12px; }

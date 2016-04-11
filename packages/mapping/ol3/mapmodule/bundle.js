@@ -31,7 +31,7 @@ Oskari.clazz.define(
                 
                 {
                     "type": "text/javascript",
-                    "src": "../../../../libraries/ol3/ol-v3.14.2-oskari.js"
+                    "src": "../../../../libraries/ol3/ol-v3.14.2-debug-oskari.js"
                 },
                 /*
                  * Proj4js

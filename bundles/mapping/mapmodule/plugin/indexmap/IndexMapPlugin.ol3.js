@@ -24,7 +24,8 @@ Oskari.clazz.define(
         me._indexMap = null;
         me._indElement = null;
         // FIXME a more generic filename or get it from config...
-        me._indexMapUrl = '/mapping/mapmodule/resources/images/suomi25m_tm35fin.png';
+        //SAMI
+        me._indexMapUrl = '/Oskari/bundles/mapping/mapmodule/resources/images/suomi25m_tm35fin.png';
     },
     {
         /**
@@ -66,6 +67,7 @@ Oskari.clazz.define(
             // initialize control, pass container
             me._indexMap = new ol.control.OverviewMap();
             me._indexMap.setCollapsed(true);
+
             // Ol indexmap target
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
             me.getElement().append(me._indElement);
@@ -95,16 +97,28 @@ Oskari.clazz.define(
                 if (me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
+
+                    var extent = [26783, 6608595, 852783, 7787250];
+
+                    var graphic =  new ol.layer.Image({
+                       source: new ol.source.ImageStatic({
+                            //imageSize: [120, 173],
+                            url: me._indexMapUrl,
+                            //projection: me.getMap().getView().getProjection(),
+                            imageExtent: extent
+                       })
+                    });
                     if (layer) {
                         var controlOptions = {
                             target: me._indElement[0],
-                            layers: [ layer ],
+                            layers: [graphic],
                             view: new ol.View({
-                                center: me.getMap().getView().getCenter(),
+                                center: [423936, 7188480],
                                 projection: me.getMap().getView().getProjection(),
-                                zoom: me.getMap().getView().getZoom()
+                                zoom: 0
                             })
                         };
+                        console.log(me._indexMap);
                         // initialize control, pass container
                         me.getMapModule().removeMapControl(me._name, me._indexMap);
                         me._indexMap = new ol.control.OverviewMap(controlOptions);
