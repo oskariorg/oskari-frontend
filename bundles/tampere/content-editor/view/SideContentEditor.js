@@ -1134,7 +1134,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             var geomDeleteButton = $("<div />").addClass('selection-remove tool');
-            
+
             geomDeleteButton.on('click', function() {
                 me.sendStopDrawRequest(true);
                 me.operationMode = "delete";

@@ -253,7 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 successCb = function(newLonLat) {
                     if(showMarker) {
                         me._addMarker(newLonLat);
-                    } 
+                    }
 
                     if(showMarker || centerMap) {
                         me._centerMapToSelectedCoordinates(newLonLat);
@@ -275,7 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 fromProj = me._mapmodule.getProjection();
                 toProj = me._projectionSelect.val();
             }
-            
+
             me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, fromProj, toProj, successCb, errorCb);
         },
 
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 if(isSupported && isValid && me._coordinateTransformationExtension._coordinatesFromServer) {
                     lat = '~' + lat;
                     lon = '~' + lon;
-                } 
+                }
                 // not from server
                 else {
                     me._coordinateTransformationExtension._coordinatesFromServer = false;
@@ -462,9 +462,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
-         * Check at if spinner need to display. 
+         * Check at if spinner need to display.
          * @method @private _checkSpinnerVisibility
-         */ 
+         */
         _checkSpinnerVisibility: function(){
             var me = this;
             if (me._getPreciseTransform && me._mapmodule.getProjection() !== me._projectionSelect.val()){
@@ -472,7 +472,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._progressSpinner.start();
 
                 // Timer for stopping spinner. Example if mouse moved out of map then spinner need stop.
-                clearTimeout(me.spinnerStopTimer);                
+                clearTimeout(me.spinnerStopTimer);
                 me.spinnerStopTimer = setTimeout(function(){
                     me._progressSpinner.stop();
                 }, 2000);
@@ -499,7 +499,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             }
                         };
                         var dataServer = _.clone(data);
-                        
+
                         if(!me._projectionSelect || (me._projectionSelect && me._mapmodule.getProjection() === me._projectionSelect.val())) {
                             me.refresh(data);
                         }

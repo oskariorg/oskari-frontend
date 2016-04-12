@@ -66,9 +66,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             } else if (toolName === 'map_control_measure_area_tool') {
                 type = 'Polygon';
                 id = 'measurearea';
-                
+
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {showMeasureOnMap: true}]);
-    
+
 //                var geojsonObject = {
 //                        'type': 'FeatureCollection',
 //                        'crs': {
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
 //                            }
 //                          }
 //                        ]
-//                      };        
+//                      };
                 var geojsonObject = {
                 		'id': 'olenPiste',
                 	    'type': 'FeatureCollection',
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 	      }
                 	    ]
                 	  };
-                
+
                   var params = [geojsonObject, {
                 		  layerId: 'layer1',
                           clearPrevious: false,
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                               stroke : {
                                   color: '#ff0000',
                                   width: 5
-                              },          
+                              },
                               image : {
                                   radius: 40,
                                   fill : {
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                                   }
                             	  //,
 //                                  shape: 1,
-//                                  size: 1                                  
+//                                  size: 1
                               },
                               text : {
                                   scale : 1.3,
@@ -144,8 +144,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                                   stroke : {
                                       color : 'rgba(255,255,255,1)',
                                       width : 2
-                                  }                                 
-                              }                            
+                                  }
+                              }
                           }
                   }];
 //                var options = {
@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
 //                              fill : {
 //                                  color : 'rgba(255,0,0,1)'
 //                              }
-//                                                       
+//
 //                          },
 //                	      text : {
 //                	        scale : 2,
@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                   var layers = {layer: ['layer1']};
                   var features = {'id': ['olenPiste']};
 //                  Oskari.getSandbox().postRequestByName('MapModulePlugin.ZoomToFeaturesRequest',[layers, features]);
-                  
+
                   var data = {
                 		    x: 373285,
                 		    y: 6702913,
