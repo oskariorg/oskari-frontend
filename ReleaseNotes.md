@@ -2,6 +2,12 @@
 
 ## 1.36
 
+### tools
+
+The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
+This is in preparation for the core rewrite/restructuring/clarification.
+The build includes requirejs with it's text plugin from under libraries.
+
 ### framework/search
 
 Fixed search result table sorting when columns contains word and numbers.
