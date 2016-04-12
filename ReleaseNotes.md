@@ -11,6 +11,10 @@ If you run into errors the modification is done in the grunt task "compile".
 
 Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
 
+Added a logger implementation that can be accessed with (see src/logger.js for details):
+
+    Oskari.log('LogName').info('My info message');
+
 ### tools
 
 The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
