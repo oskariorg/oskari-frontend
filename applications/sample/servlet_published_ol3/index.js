@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
     var getAppSetupParams = {};
 
+
     // populate getappsetup url with possible control parameters
     if (typeof window.controlParams === 'object') {
         for (key in window.controlParams) {
