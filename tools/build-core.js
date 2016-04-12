@@ -1,3 +1,7 @@
+/**
+ * This script can be used to generate a new version of "Oskari core".
+ * Gathers requirejs and files under src, concatenates filecontents to bundles/bundle.js
+ */
 var fs = require('fs');
 var os = require('os');
 
