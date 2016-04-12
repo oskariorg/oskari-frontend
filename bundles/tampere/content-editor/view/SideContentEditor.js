@@ -387,7 +387,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModule').getPluginInstances('WfsLayerPlugin');
 
             okButton.setTitle(me.loc.buttons.ok);
-            if (me.operationMode == "create") {
+            if (me.operationMode === "create") {
                 url = ajaxUrl + 'action_route=InsertFeature';
             } else {
                 url = ajaxUrl + 'action_route=SaveFeature';
@@ -415,7 +415,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 data : {'featureData':JSON.stringify(requestData)},
                 url : url,
                 success : function(response) {
-                    if (me.operationMode == "create") {
+                    if (me.operationMode === "create") {
                         me.currentData.features[0][0] = response.fid;
                     }
 
@@ -585,14 +585,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _handleInfoResult: function (data, mode, editableFeatureFid) {
             var me = this;
 
-            if (me.operationMode == "delete") {
+            if (me.operationMode === "delete") {
                 me._handleDeleteGeometry();
                 return;
             }
 
-            if (mode == "create") {
+            if (mode === "create") {
                 this.operationMode = "create";
-            } else if (mode == "edit") {
+            } else if (mode === "edit") {
                 this.operationMode = "edit";
             } else {
                 this.operationMode = null;
@@ -605,7 +605,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 this._addDrawTools();
             }
 
-            if (me.processGFIRequest != true) {
+            if (me.processGFIRequest) {
                 if (me.GFIFirstRequestProcessed == true) {
                     me._highlighGeometries(me.highlightFeaturesIds, layer, true);
                     me.getLayerGeometryType();
@@ -1133,13 +1133,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             var geomDeleteButton = $("<div />").addClass('selection-remove tool');
-            
             geomDeleteButton.on('click', function() {
                 me.sendStopDrawRequest(true);
                 me.operationMode = "delete";
             });
 
-            if (me.operationMode == "create")  {
+            if (me.operationMode === "create")  {
                 geomDeleteButton.addClass("disabled");
             }
 
@@ -1207,7 +1206,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.sandbox.notifyAll(evt);
                     okButton.setHandler(function () {
                         setTimeout(function() {
-                            me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
                             var request = visibilityRequestBuilder(me.selectedLayerId, true);
                             me.sandbox.request(me.instance.getName(), request);
