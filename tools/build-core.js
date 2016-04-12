@@ -12,6 +12,7 @@ files.push(fs.readFileSync('../libraries/requirejs/text-plugin-2.0.14.js'));
 files.push(fs.readFileSync('../src/polyfills.js'));
 files.push(fs.readFileSync('../src/oskari.js'));
 files.push(fs.readFileSync('../src/util.js'));
+files.push(fs.readFileSync('../src/logger.js'));
 files.push(fs.readFileSync('../src/loader.js'));
 
 fs.writeFileSync('../bundles/bundle.js', files.join(os.EOL));

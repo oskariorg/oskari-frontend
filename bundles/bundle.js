@@ -4512,6 +4512,108 @@ Oskari.util = (function () {
 
     return util;
 }());
+/**
+ * Provides logger functionality for Oskari
+ * var log = Oskari.log('MyLog');
+ * log.enableDebug(true);
+ * log.debug('my debug message');
+ * log.warn('my warn message');
+ * log.error('my error message');
+ */
+(function() {
+
+    var hasConsole = window.console;
+    // Set to true to enable timestamps in log messages
+    var inclTimestamp = false;
+	/** Utility methods for logger */
+    var _logMsg = function (args) {
+    	var level = args.shift();
+        if (!hasConsole || 
+        	!window.console[level] || 
+        	!window.console[level].apply) {
+            // maybe gather messages and provide a custom debug console?
+            return;
+        }
+        window.console[level].apply(window.console, args);
+    };
+
+    var _unshift = function(addToFirst, list) {
+  		var args = Array.prototype.slice.call(list);
+  		args.unshift(addToFirst);
+    	return args;
+    }
+    var ts = function() {
+    	if(!inclTimestamp) {
+    		return '';
+    	}
+    	var date = new Date();
+    	return date.toLocaleTimeString() + '.' + date.getUTCMilliseconds() + ' ';
+    }
+    var _doLogging = function(logName, logLevel, logMessages, includeCaller, callee) {
+    	var header = ts() + logName + ':';
+    	// prefix messages with logName
+        var newArgs = _unshift(header, logMessages);
+    	// prefix logName + messages with logLevel
+        newArgs = _unshift(logLevel, newArgs);
+        // attach caller info if available and requested
+        if(includeCaller && callee && callee.caller) {
+            newArgs.push(callee.caller);
+        }
+        // write to log
+        _logMsg(newArgs, callee);
+    }
+	/**
+	 * Logger definition
+	 * @param {String} name logger name
+	 */
+    var Logger = function(name, enableDebug, inclCaller) {
+        this.name = name || "Logger";
+        this.isDebug = !!enableDebug;
+        this.includeCaller = !!inclCaller;
+    };
+
+    Logger.prototype.setInclCaller = function(bln) {
+        this.includeCaller = !!bln;
+    }
+
+    Logger.prototype.enableDebug = function(bln) {
+        this.isDebug = !!bln;
+    }
+
+    Logger.prototype.debug = function() {
+        if(!this.isDebug) {
+            return;
+        }
+        _doLogging(this.name, 'debug', arguments, this.includeCaller, arguments.callee);
+    };
+
+    Logger.prototype.info =  function() {
+        _doLogging(this.name, 'log', arguments, this.includeCaller, arguments.callee);
+    };
+
+    Logger.prototype.warn =  function() {
+        _doLogging(this.name, 'warn', arguments, this.includeCaller, arguments.callee);
+    };
+
+    Logger.prototype.error =  function() {
+        _doLogging(this.name, 'error', arguments, this.includeCaller, arguments.callee);
+    };
+
+    // keep track of existing loggers
+	var loggers = {};
+
+	Oskari.log = function(logName) {
+		logName = logName || "Oskari";
+		if(loggers[logName]) {
+			return loggers[logName];
+		}
+		var log = new Logger(logName);
+		loggers[logName] = log;
+	    return log;
+	};
+
+}());
+
 
 Oskari.bundle = function(bundleId, value) {
     if(!Oskari.samiRegistry) {
@@ -4531,6 +4633,7 @@ Oskari.bundle = function(bundleId, value) {
 Oskari.loader = function(startupSequence, config) {
     var sequence = startupSequence.slice(0);
     var appConfig = config;
+    var log = Oskari.log('Loader');
 
     return {
         /**
@@ -4560,14 +4663,16 @@ Oskari.loader = function(startupSequence, config) {
             }
             var seqToLoad = sequence.shift();
             if(typeof seqToLoad !== 'object') {
-                // log error: block not object
+                // log warning: block not object
+                log.warn('StartupSequence item is a ' + typeof seqToLoad + ' instead of object. Skipping');
                 // iterate to next
                 this.processSequence(done);
                 return;
             }
             if(typeof seqToLoad.metadata !== 'object' ||
                 typeof seqToLoad.metadata['Import-Bundle']  !== 'object') {
-                // log error: "Nothing to load"
+                // log warning: "Nothing to load"
+                log.warn('StartupSequence item doesn\'t contain the structure item.metadata["Import-Bundle"]. Skipping ', seqToLoad);
                 // iterate to next
                 this.processSequence(done);
                 return;
@@ -4584,7 +4689,8 @@ Oskari.loader = function(startupSequence, config) {
                 var value = bundlesToBeLoaded[id];
                 if(typeof value !== 'object' ||
                     typeof value.bundlePath !== 'string') {
-                    // log error: bundle object not defined
+                    // log warning: bundlePath not defined
+                    log.warn('StartupSequence import doesn\'t contain bundlePath. Skipping! Item is ' + bundleToStart + ' import is ' + id);
                     continue;
                 }
                 var basepath = value.bundlePath + '/' + id;
@@ -4596,29 +4702,31 @@ Oskari.loader = function(startupSequence, config) {
                 });
             }
             if(Oskari.bundle(bundleToStart)) {
-                console.log('Bundle preloaded ' + bundleToStart);
+                log.debug('Bundle preloaded ' + bundleToStart);
                 me.startBundle(bundleToStart, config);
                 this.processSequence(done);
                 return;
             }
-            console.log('Loading bundles');
             // load all bundlePaths mentioned in sequence-block
             require(paths, function() {
                 // if loaded undefined - find from Oskari.instalBundle register with id
                 for(var i = 0; i < arguments.length; ++i) {
                     if(typeof arguments[i] !== 'undefined') {
                         // this would be a bundle.js with amd support
-                        debugger;
+                        log.warn('Support for AMD-bundles is not yet implemented', arguments[i]);
                     }
                 }
-                console.log('Loaded bundles', bundles);
+                log.debug('Loaded bundles', bundles);
                 // the loaded files have resulted in calls to
                 // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
-                // TODO: loop all bundles and require sources from installs
+                // loop all bundles and require sources from installs
                 me.processBundleJS(bundles, function() {
                     me.startBundle(bundleToStart, config);
                     me.processSequence(done);
                 });
+            }, function (err) {
+                log.error('Error loading bundles for ' +  bundleToStart, err);
+                me.processSequence(done);
             });
         },
         startBundle : function(bundleId, config) {
@@ -4628,7 +4736,7 @@ Oskari.loader = function(startupSequence, config) {
             }
             var instance = bundle.clazz.create();
             if(!instance) {
-                throw new Error('Couldnt start bundle with id ' + bundleId);
+                throw new Error('Couldn\'t create an instance of bundle ' + bundleId);
             }
             instance.mediator = {
                 bundleId : bundleId
@@ -4637,11 +4745,11 @@ Oskari.loader = function(startupSequence, config) {
             for(var key in config) {
                 instance[key] = config[key];
             }
-            console.log('Starting bundle ' + bundleId);
+            log.debug('Starting bundle ' + bundleId);
             try {
                 instance.start();
             } catch(err) {
-                throw new Error('Couldnt start bundle with id ' + bundleId);
+                throw new Error('Couldn\'t start bundle with id ' + bundleId);
             }
         },
         processBundleJS : function(bundles, callback) {
@@ -4737,6 +4845,9 @@ Oskari.loader = function(startupSequence, config) {
                 });
             }
             require(files, function() {
+                callback();
+            }, function (err) {
+                log.error('Error loading files', files, err);
                 callback();
             });
         },
