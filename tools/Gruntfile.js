@@ -329,20 +329,6 @@ module.exports = function (grunt) {
             dest: '../dist/'
         }
         ]);
-        // 'resources/**', , 'sources/**', 'packages/**', 'src/**', 'applications/**'
-        // {
-//            expand: true,
-//            cwd: '../docs/',
-//            src: ['images/**', 'layout/**'],
-//            dest: grunt.config.get('mddocs.options.outdir')
-//        }, 
-//        {
-//            expand: true,
-//            cwd: '../',
-//            src: ['**/resources/images/**/*.{png,jpg,jpeg,svg,gif}'],
-//            dest: dest + '/images/',
-//            flatten: true
-//        }
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {

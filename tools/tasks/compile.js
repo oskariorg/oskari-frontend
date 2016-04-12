@@ -357,9 +357,18 @@ module.exports = function(grunt) {
                     result.code += fs.readFileSync(okFiles[j], 'utf8');
                 }
             }
+            // -----------------------------------------------------------------------------------------------
+            // "custom requirejs optimizer"
+            // replaces all instances of [typeof define] to ["s"]
+            // This way all amd-modules will work ok in minified output since the check
+            //  they use [typeof define === 'function'] will become ["s" === 'function'] and always return false
+            //  This results in define never being called from minified code which results in no "Mismatched anonymous define() module" errors
+            var index = result.code.split('typeof define');
+            var cleanedCode = index.join('"s"');
+            // -----------------------------------------------------------------------------------------------
 
             // write result to disk
-            fs.writeFileSync(outputFile, result.code, 'utf8');
+            fs.writeFileSync(outputFile, cleanedCode, 'utf8');
         }
 
         // validate parsed appsetup

@@ -72,60 +72,20 @@ jQuery(document).ready(function () {
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
-    function start(appSetup, appConfig, cb) {
+    function start(appSetup, appConfig) {
         var app = Oskari.app;
-
-        // Analyse bundle
-        /*
-        appConfig.mapfull.conf.plugins.push({
-            "id" : "Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin"
-        });
-        appSetup.startupSequence[1].metadata["Import-Bundle"]["mapanalysis"] = {
-            bundlePath : '/Oskari/packages/framework/bundle/'
-        };
-*/
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
-        app.startApplication(function (startupInfos) {
-            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-            if (cb) {
-                cb(instance);
-            }
-            /*
-             var ugStartup = {
-                title : 'Analyse',
-                fi : 'Analyysi',
-                sv : 'Analys',
-                en : 'Analyse',
-                bundlename : 'analyse',
-                bundleinstancename : 'analyse',
-                metadata : {
-                    "Import-Bundle" : {
-                        "analyse" : {
-                            bundlePath : '/Oskari/packages/analysis/bundle/'
-                        }
-                    },
-                    "Require-Bundle-Instance" : []
-                },
-                instanceProps : {}
-            };
-
-            Oskari.bundle_facade.playBundle(ugStartup, function() {
-            });
-*/
+        app.startApplication(function () {
+            var sb = Oskari.getSandbox();
+            gfiParamHandler(sb);
         });
-
     }
 
 
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        beforeSend: function (x) {
-            if (x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-            }
-        },
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function (app) {
@@ -133,10 +93,7 @@ jQuery(document).ready(function () {
                 var appSetup = {
                     "startupSequence": app.startupSequence
                 };
-                start(appSetup, app.configuration, function (instance) {
-                    var sb = instance.getSandbox();
-                    gfiParamHandler(sb);
-                });
+                start(appSetup, app.configuration);
             } else {
                 jQuery('#mapdiv').append('Unable to start');
             }
