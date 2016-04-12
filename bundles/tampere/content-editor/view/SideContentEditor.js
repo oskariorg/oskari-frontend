@@ -421,11 +421,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
                     me._clearFeaturesList();
                     var layer = me._getLayerById(me.layerId);
+                    me._highlighGeometries([], layer, true);
                     wfsLayerPlugin.deleteTileCache(me.layerId, layer.getCurrentStyle().getName());
+                    // wfsLayerPlugin.refreshLayer(me.layerId);
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
-                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.layerId, 'update');
-                    me.sandbox.notifyAll(event);
                     me.sendStopDrawRequest(true);
 
                     okButton.setHandler(function () {
@@ -433,7 +433,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                             var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                                 request = visibilityRequestBuilder(me.layerId, true);
                             me.sandbox.request(me.instance.getName(), request);
-							me._highlighGeometries([], layer, true);
                         }, 500);
                         me.closeDialog();
                     });
@@ -1199,13 +1198,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 url : ajaxUrl + 'action_route=DeleteFeature',
                 success : function(response) {
                     me._clearFeaturesList();
-                    // remove old custom tiles
+                    // remove old tiles
                     var layer = me._getLayerById(me.selectedLayerId);
+                    me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
                     wfsLayerPlugin.deleteTileCache(me.selectedLayerId, layer.getCurrentStyle().getName());
+                    //wfsLayerPlugin.refreshLayer(me.selectedLayerId);
                     var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                     me.sandbox.notifyAll(evt);
-                    var event = me.sandbox.getEventBuilder('MapLayerEvent')(me.selectedLayerId, 'update');
-                    me.sandbox.notifyAll(event);
                     okButton.setHandler(function () {
                         setTimeout(function() {
                             me._highlighGeometries([], me._getLayerById(me.selectedLayerId), true);
