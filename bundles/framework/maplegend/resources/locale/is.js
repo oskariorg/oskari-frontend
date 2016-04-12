@@ -4,7 +4,9 @@ Oskari.registerLocalization(
     "key": "maplegend",
     "value": {
         "title": "Skýringar",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "Kortaskýringar eru ekki til.",
+        "invalidLegendUrl": "NOT TRANSLATED"
     }
 }
 );

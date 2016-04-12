@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "it",
     "key": "BackendStatus",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Backend Status",
         "desc": "",
         "feedback": {
             "missing_backendstatus_status": {

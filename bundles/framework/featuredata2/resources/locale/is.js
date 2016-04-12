@@ -12,9 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Ekki er hægt að sýna fitjugögnin á þessu kortalagi í þessum mælikvarða. Breyttu mælikvarðanum á mælistikunni.",
         "errordata": "Fitjugögnin á gagnaþjóninum inniheldur villur. Uppfærðu kortið með því að færa það aðeins til.",
         "columnSelectorTooltip": "Veldu sýnilega dálka.",
+        "featureDataPopup": "Tölfræðileg gildi",
         "selectionTools": {
             "title": "Veldu fitjur á kortinu.",
             "instructions": "NOT TRANSLATED",
+            "selectFromTop": "Frá efsta lagi",
+            "selectAll": "Frá öllum lögum",
             "link": {
                 "title": "Velja fleiri fitjur"
             },
@@ -142,6 +145,12 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Rökvirkjann vantar."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Talning",
+            "differenceMessage": "NOT TRANSLATED",
+            "noDataMessage": "Talning = Fjöldi fitja án óheimilla aðgerða",
+            "noDataCommonMessage": "Það eru óheimil gildi í gögnunum."
         }
     }
 }

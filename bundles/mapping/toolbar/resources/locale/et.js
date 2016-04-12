@@ -5,19 +5,16 @@ Oskari.registerLocalization(
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Link",
+                "tooltip": "Viide kaardile",
                 "ok": "Ok",
-                "title": "Link kaardivaatesse"
-            },
-            "print": {
-                "tooltip": "Prindi"
+                "title": "Genereeri viide kaardist"
             },
             "history": {
-                "reset": "Tagasipöördumine vaikevaatesse",
-                "back": "Tagasi",
-                "next": "Järgmine"
+                "reset": "Algvaade",
+                "back": "Liigu tagasi",
+                "next": "Liigu edasi"
             },
-            "pan": "Liigu kaardivaates",
+            "pan": "Lohista kaarti",
             "zoom": "Suumi sisse",
             "measure": {
                 "line": "Mõõda vahemaa",
@@ -25,7 +22,7 @@ Oskari.registerLocalization(
             }
         },
         "measure": {
-            "title": "Mõõtmised",
+            "title": "Mõõtmustulemused",
             "close": "Tühista",
             "guidance": {
                 "measureline": "Mõõda joon kaardil. Topeltklõps lõpetab mõõtmise.",

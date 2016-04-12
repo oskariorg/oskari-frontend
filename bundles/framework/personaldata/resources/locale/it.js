@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Descrizione",
                     "publish": "Pubblicata",
                     "edit": "Modifica",
-                    "delete": "Cancella"
+                    "delete": "Cancella",
+                    "default": "Predefinito"
                 },
                 "popup": {
                     "edit": "Modifica la vista",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Cancella",
                     "error_noname": "Inserisci il nome della vista",
                     "deletetitle": "Cancella la vista",
-                    "deletemsg": "Vuoi cancellare la vista?"
+                    "deletemsg": "Vuoi cancellare la vista?",
+                    "default": "Vista predefinita"
                 },
                 "save": {
                     "success": "La vista è stata cancellata",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "Ok",
                     "save": "Salva la vista",
                     "cancel": "Cancella",
-                    "toolbarsave": "Salva la vista"
+                    "toolbarsave": "Salva la vista",
+                    "saveCurrent": "Salva vista corrente"
                 },
                 "error": {
                     "title": "Errore!",

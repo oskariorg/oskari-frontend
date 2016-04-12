@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kortalag",
                 "type-wfs": "Vara búin til úr gögnum."
             },
+            "refresh_load": {
+                "tooltip": "Uppfærðu kortalagið. Gögn uppfærast ekki sjálfkrafa á kortinu."
+            },
             "filter": {
                 "title": "Sía",
                 "description": "Veldu fitju af kortalaginu:",

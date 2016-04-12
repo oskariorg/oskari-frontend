@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Standaard stijl",
         "own-style": "Eigen stijl",
+        "refresh": "Refresh",
+        "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
             "title": "MapWfs2"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "WFS laag {layer} configureren mislukt.",
             "wfs_request_failed": "Verzoek om WFS laag {layer} mislukt.",
             "features_parsing_failed": "De feature parsing van de WFS laag {layer} is mislukt."
+        },
+        "information": {
+            "title": "Feature Data Rendering",
+            "info": "Some of data products are not rendered automatically. <br/><br/> Pleace select an area on the map and click the Refresh button. <br/><br/> Click Feature data to see feature data on the data product."
         },
         "button": {
             "cancel": "Annuleren",

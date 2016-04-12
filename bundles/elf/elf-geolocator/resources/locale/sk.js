@@ -1,45 +1,45 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "elf-geolocator",
     "value": {
-        "title": "Geolocator",
-        "desc": "ELF Geolocator",
+        "title": "Geolokátor",
+        "desc": "ELF Geolokátor",
         "tool": {
-            "tooltip": "Search places by clicking the map"
+            "tooltip": "Vyhľadávať miesta kliknutím na mapu"
         },
         "tab": {
-            "title": "Places",
-            "searchTitle": "Search term",
-            "searchPlaceholder": "Search location by place name, address or real estate unit identifier",
-            "regionTitle": "Region filter",
-            "regionPlaceholder": "Filter the search by municipality or administrative unit",
-            "additionalsTitle": "Search options",
-            "normalTitle": "Search",
-            "normalDesc": "Exact search (Case-sensitive)",
-            "restrictedTitle": "Filter by region",
-            "restrictedDesc": "Search filtered with region",
-            "fuzzyTitle": "Fuzzy search",
-            "fuzzyDesc": "Places with similar names to the search term",
-            "exonymTitle": "Exonym mode",
-            "exonymDesc": "Returns also names of places in other languages",
-            "searchButton": "Search",
-            "resultsTitle": "Search results",
-            "fuzzyResultsTitle": "Fuzzy search results",
-            "filterResultsTitle": "Filter by region results",
-            "countryFilter": "Country filter",
-            "backButton": "Back",
-            "geolocButton": "Locate nearest place",
-            "geolocDesc": "Click map for to locate nearest place",
-            "noResults": "No search results",
+            "title": "Miesta",
+            "searchTitle": "Vyhľadávať výraz",
+            "searchPlaceholder": "Vyhľadávať polohu pomocou názvu miesta alebo adresy.",
+            "regionTitle": "Filter rozsahu",
+            "regionPlaceholder": "Filtrovať výsledky vyhľadávania podľa obcí alebo administratívnych jednotiek.",
+            "additionalsTitle": "Možnosti vyhľadávania",
+            "normalTitle": "Vyhľadávanie cez kľúčové slová",
+            "normalDesc": "Vyhľadávať miesta pomocou presného termínu. Upozorňujeme, že vyhľadávač rozoznáva malé a veľké písmená.",
+            "restrictedTitle": "Filter rozsahu",
+            "restrictedDesc": "Vyhľadávať miesta nakreslením rozsahu do mapy",
+            "fuzzyTitle": "Hrubé vyhľadávanie",
+            "fuzzyDesc": "Vyhľadávať miesta pomocou presného termínu a termínov jemu podobných.",
+            "exonymTitle": "Mód exoným",
+            "exonymDesc": "Názvy miest v iných jazykoch sú zobrazené vo výsledkoch vyhľadávania.",
+            "searchButton": "Vyhľadať",
+            "resultsTitle": "Výsledky vyhľadávania",
+            "fuzzyResultsTitle": "Hrubé výsledky vyhľadávania",
+            "filterResultsTitle": "Výsledky filtra rozsahu",
+            "countryFilter": "vybrať krajinu",
+            "backButton": "Späť",
+            "geolocButton": "Nájsť najbližšie miesto",
+            "geolocDesc": "Kliknite na mapu a nájdite najbližší názov miesta k danému miestu",
+            "noResults": "Nenašiel sa výsledok vyhľadávania",
             "errors": {
-                "searchTermMissing": "Search term is required",
-                "searchFailed": "Search has failed. Please try again later."
+                "searchTermMissing": "Vyskytla sa chyba. Hľadaný výraz sa vyžaduje. Napíšte ho a skúste znova.",
+                "searchFailed": "Vyskytla sa chyba. Vyhľadávanie sa nedá uskutočniť."
             },
             "grid": {
-                "name": "Name",
-                "village": "Region",
-                "type": "Type"
+                "name": "Názov",
+                "village": "Rozsah",
+                "type": "Typ"
             }
         }
     }

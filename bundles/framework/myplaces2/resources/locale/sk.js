@@ -1,149 +1,149 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "MyPlaces2",
     "value": {
-        "title": "Umiestnenia",
+        "title": "Miesta",
         "desc": "",
         "category": {
             "defaultName": "Moja mapová vrstva",
-            "organization": "Moje umiestnenia",
-            "inspire": "Umiestnenia"
+            "organization": "Moje miesta",
+            "inspire": "Moje miesta"
         },
         "guest": {
-            "loginShort": "Prihlásiť sa na použitie"
+            "loginShort": "Na pridanie vašich vlastných miest na mapu sa prihláste."
         },
         "tab": {
-            "title": "Places",
-            "nocategories": "You do not have any saved places yet.",
-            "maxFeaturesExceeded": "You have exceeded the maximum amount of the own places. All the places have not been loaded.",
+            "title": "Miesta",
+            "nocategories": "Zatiaľ nemáte uložené žiadne miesta.",
+            "maxFeaturesExceeded": "Máte priveľa vlastných miest. Prosím odstráňte niektoré.",
             "publishCategory": {
-                "privateTooltip": "This map layer is private. Click here to publish it.",
-                "publicTooltip": "This map layer is public. Click here to unpublish it."
+                "privateTooltip": "Táto mapová vrstva je súkromná. Na jej zverejnenie kliknite sem.",
+                "publicTooltip": "Táto mapová vrstva je verejná. Na jej odverejnenie kliknite sem."
             },
-            "addCategory": "Add the map layer",
-            "editCategory": "Edit the map layer",
-            "deleteCategory": "Delete the map layer",
-            "edit": "Edit",
-            "delete": "Delete",
+            "addCategoryFormButton": "Nová mapová vrstva",
+            "addCategory": "Pridať mapovú vrstvu",
+            "editCategory": "Editovať mapovú vrstvu",
+            "deleteCategory": "Zmazať mapovú vrstvu",
+            "edit": "Editovať",
+            "delete": "Odstrániť",
             "grid": {
-                "name": "Place name",
-                "desc": "Place description",
-                "createDate": "Created",
-                "updateDate": "Updated",
-                "measurement": "Size",
-                "edit": "Edit",
-                "delete": "Delete"
+                "name": "Názov miesta",
+                "desc": "Popis miesta",
+                "createDate": "Vytvorené",
+                "updateDate": "Aktualizované",
+                "measurement": "Veľkosť",
+                "edit": "Editovať",
+                "delete": "Odstrániť"
             },
             "notification": {
                 "delete": {
-                    "title": "Delete Place",
-                    "confirm": "Do you want to delete this place?",
-                    "btnDelete": "Delete",
-                    "btnCancel": "Cancel",
-                    "success": "The place has been deleted.",
-                    "error": "The place could not be deleted. Please try gain later.",
-                    "cancel": "The place has not been deleted."
+                    "title": "Odstrániť miesto",
+                    "confirm": "Chcete odstrániť toto miesto?",
+                    "btnDelete": "Odstrániť",
+                    "btnCancel": "Zrušiť",
+                    "success": "Miesto bolo odstránené.",
+                    "error": "Miesto nemohlo byť odstránené. Skúste neskôr prosím.",
+                    "cancel": "Miesto nebolo odstránené."
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "Measure Distance",
-                "tooltip": "Measure Distance",
-                "add": "",
-                "next": "",
-                "edit": "You can edit the line by clicking and dragging its breakpoints.",
+                "title": "Merať vzdialenosť",
+                "tooltip": "Kliknite na lomové body a zmerajte vzdialenosť medzi nimi.",
+                "add": "Pridať líniu",
+                "next": "Ďalej",
+                "edit": "Kliknite na počiatočný bod a lomové body. Nakoniec dvojklik na koncovom bode. Pomocou myši môžete presunúť body na iné miesto . Ak nakreslíte niekoľko línií, vzdialenosti sa sčítajú.",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "Measure Area",
-                "tooltip": "Measure Area",
-                "add": "",
-                "next": "",
-                "edit": "You can edit the area by clicking and dragging its breakpoints on its edge line.",
+                "title": "Merať plochu",
+                "tooltip": "Nakreslite plochu a zmerajte ju.",
+                "add": "Pridať plochu",
+                "next": "Ďalej",
+                "edit": "Kliknite na rohové body. Nakoniec dvojklik na koncovom bode. Pomocou myši môžete presunúť body na iné miesto . Ak nakreslíte niekoľko plôch, plochy sa sčítajú.",
                 "noResult": "0 m²"
             },
             "point": {
-                "title": "Add Point",
-                "tooltip": "Pridať bod",
-                "add": "Draw a point by clicking the map.",
-                "next": "Môžete uložiť alebo nakresliť viac bodov do toho istého výkresu",
-                "edit": "Presuňte bod kliknutím a ťahaním",
-                "save": "Uložiť umiestnenie"
+                "title": "Pridať bod",
+                "tooltip": "Nakreslite bod a pridajte ho ku vašim miestam. Jeden objekt môže obsahovať viacero bodov.",
+                "add": "Vložte bod kliknutím na mapu.",
+                "next": "Môžete nakresliť viac bodov do toho istého objektu.",
+                "edit": "Kliknutím myšou na body ich môžete presunúť na iné miesto .",
+                "save": "Uložiť Moje Miesto"
             },
             "line": {
-                "title": "Add Line",
-                "tooltip": "Pridať líniu",
-                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "Možete uložiť alebo nakresliť viac línií do toho istého výkresu",
-                "edit": "Editovať líniu kliknutím a ťahaním jej lomových bodov",
-                "save": "Uložiť útvar",
+                "title": "Pridať líniu do Vlastných Miest",
+                "tooltip": "Nakreslite líniu a pridajte ju ku vašim miestam.",
+                "add": "Nakreslite líniu do mapy. Kliknite na lomové body. Nakoniec dvojklik na koncový bod a potom kliknite na \"Uložiť Moje Miesto\".",
+                "next": "Kliknutím myšou na lomové body ich môžete presunúť na iné miesto .",
+                "edit": "Kliknutím myšou na lomové body ich môžete presunúť na iné miesto .",
+                "save": "Uložiť Moje Miesto",
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Add Area",
-                "tooltip": "Pridať plochu",
-                "add": "Draw an area by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
-                "next": "Môžete uložiť alebo nakresliť viac polygónov do toho istého výkresu",
-                "edit": "Editovať tvar plochy kliknutím a ťahaním lomových bodov na jej obvodovej línii",
-                "save": "Uložiť útvar",
+                "title": "Pridať plochu do Vlastných Miest",
+                "tooltip": "Nakreslite plochu a pridajte ju ku vašim miestam.",
+                "add": "Nakreslite plochu do mapy. Kliknite na lomové body. Nakoniec dvojklik na koncový bod a potom kliknite na \"Uložiť Moje Miesto\". Môžete nakresliť dieru do plochy držaním klávesy \"Alt\"",
+                "next": "Môžete nakresliť viacero plôch do toho istého objektu.",
+                "edit": "Kliknutím myšou na lomové body ich môžete presunúť na iné miesto .",
+                "save": "Uložiť Moje Miesto",
                 "noResult": "0 m²"
             }
         },
         "buttons": {
             "ok": "OK",
             "cancel": "Zrušiť",
-            "close": "Cancel",
-            "finish": "Ukončiť kreslenie",
+            "close": "Zrušiť",
+            "finish": "Uložiť Moje Miesto",
             "save": "Uložiť",
-            "saveAsMyPlace": "Save as my place",
-            "movePlaces": "Presuňte umiestnenie a vymažte",
+            "saveAsMyPlace": "Uložiť Moje Miesto",
+            "movePlaces": "Presuňte miesta a vymažte",
             "deleteCategory": "Vymazať",
-            "deleteCategoryAndPlaces": "Vymazať kategóriu a umiestnenia",
+            "deleteCategoryAndPlaces": "Vymazať spolu s miestami",
             "changeToPublic": "Zverejniť",
-            "changeToPrivate": "Nezverejňujte"
+            "changeToPrivate": "Odzverejniť"
         },
         "placeform": {
-            "title": "Umiestni údaje",
-            "tooltip": "Umiestnenie na mape bude uložené do Mojich umiestnení. Pomenujte a popíšte dané miesto. Môžete vybrať mapovú vrstvu do ktorej sa uloží dané umiestnie alebo zvoľte novú mapovú vrstvu vybraním “Nová vrstva“ v rozbaľovacom menu mapovej vrstvy.",
+            "title": "Údaje o mieste",
+            "tooltip": "Uložte objekt ako vaše vlastné miesto. Prosím zadajte aspoň názov a popis. Nakoniec vyberte mapovú vrstvu do ktorej sa uloží daný objekt alebo vytvorte novú mapovú vrstvu. Neskôr môžete nájsť vaše vlastné miesta v menu Moje údaje.",
             "placename": {
-                "placeholder": "Pomenujte umiestnenie"
+                "placeholder": "Názov miesta"
             },
             "placelink": {
-                "placeholder": "Zadať URL"
+                "placeholder": "Prepojenie k ďalším informáciám"
             },
             "placedesc": {
-                "placeholder": "Popíšte umiestenie"
+                "placeholder": "Popis miesta"
             },
             "placeAttention": {
-                "placeholder": "Place text on the map"
+                "placeholder": "Text je viditeľný na mape"
             },
             "measurement": {
-                "line": "Line length:",
-                "area": "Area size:"
+                "line": "Dĺžka línie:",
+                "area": "Veľkosť plochy:"
             },
             "category": {
                 "label": "Mapová vrstva",
-                "newLayer": "Create a new map layer",
-                "choose": "or select one of your existing map layers:"
+                "newLayer": "Vytvorte novú vrstvu",
+                "choose": "alebo vyberte jednu z vašich existujúcich mapových vrstiev:"
             },
             "imagelink": {
-                "placeholder": "Link to the image",
-                "previewLabel": "Image preview",
-                "add": "New map layer"
+                "placeholder": "Prepojenie k obrázku objektu",
+                "previewLabel": "Náhľad obrázku"
             },
             "rendering": {
-                "label": "Place style",
+                "label": "Štýly pre miesta v mapovej vrstve",
                 "point": {
-                    "tooltip": "Point"
+                    "tooltip": "Bod"
                 }
             }
         },
         "categoryform": {
             "name": {
                 "label": "Názov",
-                "placeholder": "Pomenovať mapovú vrstvu"
+                "placeholder": "Názov mapovej vrstvy"
             },
             "drawing": {
                 "label": "Štýl",
@@ -160,168 +160,168 @@ Oskari.registerLocalization(
                 "area": {
                     "label": "Plocha",
                     "fillcolor": "Farba výplne",
-                    "linecolor": "Farba línie",
-                    "size": "Hrúbka línie"
+                    "linecolor": "Farba obvodovej línie",
+                    "size": "Hrúbka obvodovej línie"
                 }
             },
             "visibleFields": {
-                "label": "Visible place data",
-                "placename": "Name",
-                "placedesc": "Description",
-                "image": "Image"
+                "label": "Viditeľné údaje o mieste",
+                "placename": "Názov",
+                "placedesc": "Popis",
+                "image": "Obrázok"
             },
             "edit": {
                 "title": "Editovať mapovú vrstvu",
                 "save": "Uložiť",
-                "cancel": "Späť"
+                "cancel": "Zrušiť"
             },
             "rendering": {
-                "label": "Place style",
+                "label": "Štýl miesta",
                 "point": {
-                    "tooltip": "Edit the point style"
+                    "tooltip": "Editovať štýl bodu. Upozornenie! Výber ovplyvní všetky bodové objekty v tejto mapovej vrstve."
                 },
                 "area": {
-                    "tooltip": "Edit the area style"
+                    "tooltip": "Editovať štýl plochy. Upozornenie! Výber ovplyvní všetky plošné objekty v tejto mapovej vrstve."
                 },
                 "line": {
-                    "tooltip": "Edit the line style"
+                    "tooltip": "Editovať štýl línie. Upozornenie! Výber ovplyvní všetky líniové objekty v tejto mapovej vrstve."
                 }
             }
         },
         "pointform": {
-            "title": "Point style",
-            "tooltip": "",
+            "title": "Štýl bodu",
+            "tooltip": "Definovať štýl pre bodové objekty.",
             "symbol": {
-                "label": "Icon"
+                "label": "Ikona"
             },
             "size": {
-                "label": "Size"
+                "label": "Veľkosť"
             },
             "color": {
-                "label": "Colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
+                "label": "Farba",
+                "labelOr": "alebo",
+                "labelCustom": "Valstná RGB farba (0-255)"
             },
             "preview": {
-                "label": "Preview"
+                "label": "Náhľad"
             },
             "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
+                "save": "Uložiť",
+                "cancel": "Zrušiť"
             }
         },
         "lineform": {
-            "title": "Line style",
-            "tooltip": "",
+            "title": "Štýl línie",
+            "tooltip": "Definovať štýl pre líniové objekty.",
             "style": {
-                "label": "Style"
+                "label": "Štýl"
             },
             "cap": {
-                "label": "Endings"
+                "label": "Konce"
             },
             "corner": {
-                "label": "Corners"
+                "label": "Rohy"
             },
             "width": {
-                "label": "Width"
+                "label": "Hrúbka"
             },
             "color": {
-                "label": "Colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
+                "label": "Farba",
+                "labelOr": "alebo",
+                "labelCustom": "Valstná RGB farba (0-255)"
             },
             "preview": {
-                "label": "Preview"
+                "label": "Náhľad"
             },
             "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
+                "save": "Uložiť",
+                "cancel": "Zrušiť"
             }
         },
         "areaform": {
-            "title": "Area Style",
-            "tooltip": "",
+            "title": "Štýl plochy",
+            "tooltip": "Definovať štýl pre plošné objekty.",
             "linestyle": {
-                "label": "Edge line style"
+                "label": "Štýl obvodovej línie"
             },
             "linecap": {
-                "label": "Edge line endings"
+                "label": "Konce obvodovej línie"
             },
             "linecorner": {
-                "label": "Edge line corners"
+                "label": "Rohy obvodovej línie"
             },
             "linewidth": {
-                "label": "Edge line width"
+                "label": "Hrúbka obvodovej línie"
             },
             "linecolor": {
-                "label": "Edge line color",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
+                "label": "Farba obvodovej línie",
+                "labelOr": "alebo",
+                "labelCustom": "Valstná RGB farba (0-255)"
             },
             "color": {
-                "label": "Fill colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
+                "label": "Farba výplne",
+                "labelOr": "alebo",
+                "labelCustom": "Valstná RGB farba (0-255)"
             },
             "fill": {
-                "label": "Fill pattern"
+                "label": "Vzor výplne"
             },
             "preview": {
-                "label": "Preview"
+                "label": "Náhľad"
             },
             "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
+                "save": "Uložiť",
+                "cancel": "Zrušiť"
             }
         },
         "notification": {
             "placeAdded": {
-                "title": "Umiestnenie bolo uložené",
-                "message": "Umiestnenie sa dá nájsť v menu Moje údaje"
+                "title": "Miesto bolo uložené.",
+                "message": "Miesto sa dá nájsť v menu \"Moje údaje\"."
             },
             "categorySaved": {
-                "title": "Mapová vrstva uložená",
-                "message": "Úpravy mapovej vrstvy uložené"
+                "title": "Mapová vrstva je uložená.",
+                "message": "Mapová vrstva je aktualizovaná."
             },
             "categoryDelete": {
                 "title": "Vymazať mapovú vrstvu",
-                "deleteConfirmMove": "Mapová vrstva {0} obsahuje {1} objekty. Chcete vymazať mapovú vrstvu a presunúť umiestnenia z nej na predvolenú mapovú vrstvu {02} ?",
-                "deleteConfirm": "Vymazať mapovú vrstvu {0}?",
-                "deleted": "Mapová vrstva vymazaná"
+                "deleteConfirmMove": "Vymazávate mapovú vrstvu {0}. Mapová vrstva obsahuje {1} miesta. Chcete: <br/> 1. vymazať mapovú vrstvu a jej miesta <br/> 2. presunúť miesta do predvolenej mapovej vrstvy predtým než odstránite tú mapovú vrstvu?",
+                "deleteConfirm": "Chcete vymazať mapovú vrstvu {0}?",
+                "deleted": "Mapová vrstva je vymazaná"
             },
             "categoryToPublic": {
                 "title": "Zverejniť mapovú vrstvu",
-                "message": "Zverejňujete  mapovú vrstvu {0}. Môžete zdieľať linky k zverejnenej mapovej vrstve s ostatnými internetovými používateľmi alebo môžete mapovú vrstvu vložiť ako mapové okno na inú webovú stránku. Mapová vrstva bude viditeľná aj pre ostatných užívateľov."
+                "message": "Zverejňujete  mapovú vrstvu {0}. Potom môžete mapovú vrstvu zdieľať na verejnosti a môžete ju uložiť v inej mapovej službe. Takisto aj iný užívatelia môžu vidieť tú mapovú vrstvu."
             },
             "categoryToPrivate": {
-                "title": "Nezverejňujte mapovú vrstvu",
-                "message": "Nezverejňujete mapovú vrstvu {0}. Po ukončení nebude možné sa o ňu podeliľ s ostatnými používateľmi alebo ju vložiť na inú webovú stránku. Mapová vrstva nebude viditeľná pre ostatných používateľov."
+                "title": "Odzverejnite mapovú vrstvu",
+                "message": "Odzverejňujete mapovú vrstvu {0}. Potom už nebude možné ju zdieľať na verejnosti a nemôžete ju uložiť v inej mapovej službe. Mapová vrstva nebude viditeľná pre ostatných používateľov."
             },
             "error": {
-                "addCategory": "Mapová vrstva sa nedala uložiť. Umiestnenie nebolo uložené.",
+                "addCategory": "Mapová vrstva a jej miesta sa nedali uložiť.",
                 "editCategory": "Mapová vrstva sa nedala uložiť.",
-                "savePlace": "Umiestnenie sa nedalo uložiť.",
-                "title": "Chyba!",
-                "generic": "Chyba systému. Skúste neskôr, prosím.",
-                "deleteCategory": "Počas vymazávania došlo k chybe!",
+                "savePlace": "Miesto sa nedalo uložiť.",
+                "title": "Chyba",
+                "generic": "Vyskytla sa chyba systému.",
+                "deleteCategory": "Mapová vrstva sa nedala vymazať.",
                 "deleteDefault": "Predvolená mapová vrstva sa nedá vymazať."
             }
         },
         "validation": {
-            "title": "Údaj obsahuje chyby:",
-            "placeName": "Chýba názov umiestnenia .",
-            "categoryName": "Názov mapovej vrstvy chýba",
-            "placeNameIllegal": "Názov objektu obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "descIllegal": "Popis objektu obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
-            "dotSize": "Veľkosť bodky nezodpovedá veľkosti limitov (1-5).",
-            "dotColor": "Nesprávna farba bodky.",
-            "dotShape": "The point shape is invalid.",
-            "lineSize": "Veľkosť línie nezodpovedá veľkosti limitov (1-50)",
-            "lineColor": "Nesprávna farba čiary",
-            "areaLineSize": "Veľkosť obvodu plochy nezodpovedá limitom (0-50).",
-            "areaLineColor": "Nesprávna farba obvodovej línie plochy.",
-            "areaFillColor": "Nesprávna farba výplne."
+            "title": "Zadané údaje sú neplatné:",
+            "placeName": "Chýba názov miesta.",
+            "categoryName": "Chýba názov mapovej vrstvy.",
+            "placeNameIllegal": "Názov miesta obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
+            "descIllegal": "Popis miesta obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
+            "categoryNameIllegal": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
+            "dotSize": "Veľkosť bodky je neplatná. Musí byť v rozmedzí 1 a 5.",
+            "dotColor": "Nesprávna farba bodky. Všetky RGB hodnoty musia byť medzi 0 a 255.",
+            "dotShape": "Neplatná ikona bodu.",
+            "lineSize": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50.",
+            "lineColor": "Nesprávna farba línie. Všetky RGB hodnoty musia byť medzi 0 a 255.",
+            "areaLineSize": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50.",
+            "areaLineColor": "Nesprávna farba obvodovej línie. Všetky RGB hodnoty musia byť medzi 0 a 255.",
+            "areaFillColor": "Nesprávna farba výplne. Všetky RGB hodnoty musia byť medzi 0 a 255."
         }
     }
 }

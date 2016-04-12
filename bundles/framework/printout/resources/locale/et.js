@@ -6,13 +6,13 @@ Oskari.registerLocalization(
         "title": "Prindi kaardivaade",
         "flyouttitle": "Prindi kaardivaade",
         "desc": "",
-        "btnTooltip": "Prindi",
+        "btnTooltip": "Prindi kaart png pildiformaadis või pdf dokumendina",
         "BasicView": {
             "title": "Prindi kaardivaade",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "Kaardi nimi",
+                "placeholder": "kohustuslik",
+                "tooltip": "Kirjuta oma trükise nimi. Märgi keel, mida kasutad kaardikihtidel."
             },
             "language": {
                 "label": "Keel",
@@ -24,12 +24,12 @@ Oskari.registerLocalization(
                 "tooltip": "Vali kaardiliidese ja kaardiandmete keel."
             },
             "size": {
-                "label": "Suurus",
-                "tooltip": "Vali trükimall. Vastavalt uuendatakse kaardi eelvaadet.",
+                "label": "Suurus ja  suund",
+                "tooltip": "Vali trükimall.Nätav eelvaates.",
                 "options": [
                     {
                         "id": "A4",
-                        "label": "A4 püstformaat",
+                        "label": "A4-püstformaat",
                         "classForPreview": "preview-portrait",
                         "selected": true
                     },
@@ -52,30 +52,30 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Eelvaade",
-                "tooltip": "Suurema eelvaate avamiseks kliki väiksel eelvaatel",
-                "pending": "Eelvaade uuendatakse kohe",
+                "tooltip": "Suurema eelvaate nägemiseks uues aknas klõpsa pisipildil.",
+                "pending": "Eelvaade värskendatakse",
                 "notes": {
-                    "extent": "Kaardi ulatust väljastuseks saab hinnata eelvaadel",
-                    "restriction": "Eelvaade ei näita kõiki kaardikihte"
+                    "extent": "Kaardiulatust saab kontrollida eelvaate aknas.",
+                    "restriction": "Ainult aluskaart on nähtav eelvaate aknas."
                 }
             },
             "buttons": {
-                "save": "Tee väljatrükk",
+                "save": "Trüki",
                 "ok": "OK",
-                "back": "NOT TRANSLATED",
+                "back": "Eelmine",
                 "cancel": "Tühista"
             },
             "location": {
-                "label": "Asukoht ja suumi tase",
-                "tooltip": "Väljatrüki mõõtkava vastab kaardi mõõtkavale lehitsejas.",
-                "zoomlevel": "Suumi tase"
+                "label": "Asukoht ja suurendusaste",
+                "tooltip": "Väljatrüki mõõtkava vastab eelvaate aknas olevale.",
+                "zoomlevel": "Suurendusaste"
             },
             "settings": {
-                "label": "Veel seadeid",
+                "label": "Lisaseaded",
                 "tooltip": "Määra lisaseaded nagu formaat, pealkiri ja mõõtkava"
             },
             "format": {
-                "label": "Formaat",
+                "label": "Failiformaad",
                 "tooltip": "Vali failiformaat",
                 "options": [
                     {
@@ -93,82 +93,82 @@ Oskari.registerLocalization(
             },
             "mapTitle": {
                 "label": "Lisa pealkiri",
-                "tooltip": "lisa kaardi pealkiri"
+                "tooltip": "Lisa kaardi pealkiri"
             },
             "content": {
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Lisa Oskari logo",
-                        "tooltip": "Vajadusel saab logo peita",
-                        "checked": "checked"
+                        "label": "Lisa Paikkatietokkuna logo väljatrükile",
+                        "tooltip": "Vajadusel saab Paikkatietokkuna logo peita",
+                        "checked": "märgitud"
                     },
                     {
                         "id": "pageScale",
                         "label": "Lisa kaardile mõõtkava",
-                        "tooltip": "Lisa kaardile mõõtkava",
+                        "tooltip": "Soovi korral lisa trükisele mõõtkava.",
                         "checked": "checked"
                     },
                     {
                         "id": "pageDate",
-                        "label": "Lisa kuupäev",
-                        "tooltip": "Võid lisada väljatrükile kuupäeva",
+                        "label": "Näita trükisel kuupäeva",
+                        "tooltip": "Trükisele saab lisada selle kuupäeva",
                         "checked": "checked"
                     }
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "Legend",
+                "tooltip": "Määra legendi asukoht trükisel. Kui asukoht on määramata, siis legendi trükisele ei kuvata.",
                 "options": [
                     {
                         "id": "oskari_legend_NO",
                         "loca": "NO",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED",
+                        "label": "Legendi ei ole",
+                        "tooltip": "Trükisele legendi ei kuvata",
                         "selected": true
                     },
                     {
                         "id": "oskari_legend_LL",
                         "loca": "LL",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "label": "Vasakul alanurgas",
+                        "tooltip": "Legend lisatakse trükise alumisesse vasakusse nurka."
                     },
                     {
                         "id": "oskari_legend_LU",
                         "loca": "LU",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "label": "Vasakul ülanurgas",
+                        "tooltip": "Legend lisatakse trükise ülemisse vasakusse nurka."
                     },
                     {
                         "id": "oskari_legend_RU",
                         "loca": "RU",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "label": "Paremal ülanurgas",
+                        "tooltip": "Legend lisatakse trükise ülemisse paremasse nurka."
                     },
                     {
                         "id": "oskari_legend_RL",
                         "loca": "RL",
-                        "label": "NOT TRANSLATED",
-                        "tooltip": "NOT TRANSLATED"
+                        "label": "Paremal alanurgas",
+                        "tooltip": "Legend lisatakse trükise alumisse paremasse nurka."
                     }
                 ]
             },
             "help": "Abi",
             "error": {
                 "title": "Viga",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "Viga trükise suuruse määrangutes",
+                "name": "Pealkiri on kohustuslik",
                 "nohelp": "Abi pole saadaval",
                 "saveFailed": "Kaardi väljatrükk ebaõnnestus. Proovi hiljem uuesti.",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": "Pealkiri sisaldab lubamatuid tähemärke. Lubatud on tähed a-z,  å, ä ja ö, numbrid, tühikud ja sidekriipsud"
             }
         },
         "StartView": {
-            "text": "Võid just loodud kaardivaate printida.",
+            "text": "Genereeritud trükise võib salvestada ja trükkida kui png-pildi või pdf dokumendi.",
             "info": {
-                "maxLayers": "Võid korraga printida kuni 8 kihti",
-                "printoutProcessingTime": "Väljatrüki tegemine võtab aega kui on valitud mitu kihti."
+                "maxLayers": "Trükisele saab lisada maksimaalselt 8 kaardikihti.",
+                "printoutProcessingTime": "Trükise genereerimine võtab seda rohkem aega, mida rohkem kihte on trükisele lisatud."
             },
             "buttons": {
                 "continue": "Jätka",

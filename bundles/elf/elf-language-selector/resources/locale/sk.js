@@ -1,10 +1,10 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "elf-language-selector",
     "value": {
-        "title": "Change language",
-        "change": "Change"
+        "title": "Zmeniť jazyk",
+        "change": "Zmeniť"
     }
 }
 );

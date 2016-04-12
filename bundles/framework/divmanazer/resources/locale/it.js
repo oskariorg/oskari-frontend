@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Stile dell'elemento puntuale",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento puntuale",
                 "symbol": {
                     "label": "Icona"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Stile dell'elemento lineare",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento lineare",
                 "style": {
                     "label": "Tratteggio"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Stile dell'elemento areale",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento areale",
                 "linestyle": {
                     "label": "Tratteggio bordo"
                 },
