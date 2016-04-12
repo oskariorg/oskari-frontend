@@ -2,6 +2,15 @@
 
 ## 1.36
 
+### Oskari core and require.js
+
+Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
+The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
+ no require.js error about "Mismatched anonymous define() module" should appear when running the minified code.
+If you run into errors the modification is done in the grunt task "compile".
+
+Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
 ### tools
 
 The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 

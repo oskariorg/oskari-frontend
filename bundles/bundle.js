@@ -1,9 +1,7 @@
-// Polyfills
 /*
  RequireJS 2.2.0 Copyright jQuery Foundation and other contributors.
  Released under MIT license, http://github.com/requirejs/requirejs/LICENSE
 */
-/*
 var requirejs,require,define;
 (function(ga){function ka(b,c,d,g){return g||""}function K(b){return"[object Function]"===Q.call(b)}function L(b){return"[object Array]"===Q.call(b)}function y(b,c){if(b){var d;for(d=0;d<b.length&&(!b[d]||!c(b[d],d,b));d+=1);}}function X(b,c){if(b){var d;for(d=b.length-1;-1<d&&(!b[d]||!c(b[d],d,b));--d);}}function x(b,c){return la.call(b,c)}function e(b,c){return x(b,c)&&b[c]}function D(b,c){for(var d in b)if(x(b,d)&&c(b[d],d))break}function Y(b,c,d,g){c&&D(c,function(c,e){if(d||!x(b,e))!g||"object"!==
 typeof c||!c||L(c)||K(c)||c instanceof RegExp?b[e]=c:(b[e]||(b[e]={}),Y(b[e],c,d,g))});return b}function z(b,c){return function(){return c.apply(b,arguments)}}function ha(b){throw b;}function ia(b){if(!b)return b;var c=ga;y(b.split("."),function(b){c=c[b]});return c}function F(b,c,d,g){c=Error(c+"\nhttp://requirejs.org/docs/errors.html#"+b);c.requireType=b;c.requireModules=g;d&&(c.originalError=d);return c}function ma(b){function c(a,n,b){var h,k,f,c,d,l,g,r;n=n&&n.split("/");var q=p.map,m=q&&q["*"];
@@ -36,7 +34,399 @@ K(require)||(w=require,require=void 0);g=requirejs=function(b,c,d,m){var r,q="_"
 {},e;if(E){e=g.createNode(m,c,d);e.setAttribute("data-requirecontext",b.contextName);e.setAttribute("data-requiremodule",c);!e.attachEvent||e.attachEvent.toString&&0>e.attachEvent.toString().indexOf("[native code")||ca?(e.addEventListener("load",b.onScriptLoad,!1),e.addEventListener("error",b.onScriptError,!1)):(S=!0,e.attachEvent("onreadystatechange",b.onScriptLoad));e.src=d;if(m.onNodeCreated)m.onNodeCreated(e,m,c,d);P=e;H?C.insertBefore(e,H):C.appendChild(e);P=null;return e}if(ja)try{setTimeout(function(){},
 0),importScripts(d),b.completeLoad(c)}catch(q){b.onError(F("importscripts","importScripts failed for "+c+" at "+d,q,[c]))}};E&&!w.skipDataMain&&X(document.getElementsByTagName("script"),function(b){C||(C=b.parentNode);if(O=b.getAttribute("data-main"))return u=O,w.baseUrl||-1!==u.indexOf("!")||(I=u.split("/"),u=I.pop(),T=I.length?I.join("/")+"/":"./",w.baseUrl=T),u=u.replace(U,""),g.jsExtRegExp.test(u)&&(u=O),w.deps=w.deps?w.deps.concat(u):[u],!0});define=function(b,c,d){var e,g;"string"!==typeof b&&
 (d=c,c=b,b=null);L(c)||(d=c,c=null);!c&&K(d)&&(c=[],d.length&&(d.toString().replace(qa,ka).replace(ra,function(b,d){c.push(d)}),c=(1===d.length?["require"]:["require","exports","module"]).concat(c)));S&&(e=P||pa())&&(b||(b=e.getAttribute("data-requiremodule")),g=J[e.getAttribute("data-requirecontext")]);g?(g.defQueue.push([b,c,d]),g.defQueueMap[b]=!0):V.push([b,c,d])};define.amd={jQuery:!0};g.exec=function(b){return eval(b)};g(w)}})(this);
-*/
+
+/**
+ * @license RequireJS text 2.0.14 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
+ * Available via the MIT or new BSD license.
+ * see: http://github.com/requirejs/text for details
+ */
+/*jslint regexp: true */
+/*global require, XMLHttpRequest, ActiveXObject,
+  define, window, process, Packages,
+  java, location, Components, FileUtils */
+
+define('text', ['module'], function (module) {
+    'use strict';
+
+    var text, fs, Cc, Ci, xpcIsWindows,
+        progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
+        xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
+        bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
+        hasLocation = typeof location !== 'undefined' && location.href,
+        defaultProtocol = hasLocation && location.protocol && location.protocol.replace(/\:/, ''),
+        defaultHostName = hasLocation && location.hostname,
+        defaultPort = hasLocation && (location.port || undefined),
+        buildMap = {},
+        masterConfig = (module.config && module.config()) || {};
+
+    text = {
+        version: '2.0.14',
+
+        strip: function (content) {
+            //Strips <?xml ...?> declarations so that external SVG and XML
+            //documents can be added to a document without worry. Also, if the string
+            //is an HTML document, only the part inside the body tag is returned.
+            if (content) {
+                content = content.replace(xmlRegExp, "");
+                var matches = content.match(bodyRegExp);
+                if (matches) {
+                    content = matches[1];
+                }
+            } else {
+                content = "";
+            }
+            return content;
+        },
+
+        jsEscape: function (content) {
+            return content.replace(/(['\\])/g, '\\$1')
+                .replace(/[\f]/g, "\\f")
+                .replace(/[\b]/g, "\\b")
+                .replace(/[\n]/g, "\\n")
+                .replace(/[\t]/g, "\\t")
+                .replace(/[\r]/g, "\\r")
+                .replace(/[\u2028]/g, "\\u2028")
+                .replace(/[\u2029]/g, "\\u2029");
+        },
+
+        createXhr: masterConfig.createXhr || function () {
+            //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
+            var xhr, i, progId;
+            if (typeof XMLHttpRequest !== "undefined") {
+                return new XMLHttpRequest();
+            } else if (typeof ActiveXObject !== "undefined") {
+                for (i = 0; i < 3; i += 1) {
+                    progId = progIds[i];
+                    try {
+                        xhr = new ActiveXObject(progId);
+                    } catch (e) {}
+
+                    if (xhr) {
+                        progIds = [progId];  // so faster next time
+                        break;
+                    }
+                }
+            }
+
+            return xhr;
+        },
+
+        /**
+         * Parses a resource name into its component parts. Resource names
+         * look like: module/name.ext!strip, where the !strip part is
+         * optional.
+         * @param {String} name the resource name
+         * @returns {Object} with properties "moduleName", "ext" and "strip"
+         * where strip is a boolean.
+         */
+        parseName: function (name) {
+            var modName, ext, temp,
+                strip = false,
+                index = name.lastIndexOf("."),
+                isRelative = name.indexOf('./') === 0 ||
+                             name.indexOf('../') === 0;
+
+            if (index !== -1 && (!isRelative || index > 1)) {
+                modName = name.substring(0, index);
+                ext = name.substring(index + 1);
+            } else {
+                modName = name;
+            }
+
+            temp = ext || modName;
+            index = temp.indexOf("!");
+            if (index !== -1) {
+                //Pull off the strip arg.
+                strip = temp.substring(index + 1) === "strip";
+                temp = temp.substring(0, index);
+                if (ext) {
+                    ext = temp;
+                } else {
+                    modName = temp;
+                }
+            }
+
+            return {
+                moduleName: modName,
+                ext: ext,
+                strip: strip
+            };
+        },
+
+        xdRegExp: /^((\w+)\:)?\/\/([^\/\\]+)/,
+
+        /**
+         * Is an URL on another domain. Only works for browser use, returns
+         * false in non-browser environments. Only used to know if an
+         * optimized .js version of a text resource should be loaded
+         * instead.
+         * @param {String} url
+         * @returns Boolean
+         */
+        useXhr: function (url, protocol, hostname, port) {
+            var uProtocol, uHostName, uPort,
+                match = text.xdRegExp.exec(url);
+            if (!match) {
+                return true;
+            }
+            uProtocol = match[2];
+            uHostName = match[3];
+
+            uHostName = uHostName.split(':');
+            uPort = uHostName[1];
+            uHostName = uHostName[0];
+
+            return (!uProtocol || uProtocol === protocol) &&
+                   (!uHostName || uHostName.toLowerCase() === hostname.toLowerCase()) &&
+                   ((!uPort && !uHostName) || uPort === port);
+        },
+
+        finishLoad: function (name, strip, content, onLoad) {
+            content = strip ? text.strip(content) : content;
+            if (masterConfig.isBuild) {
+                buildMap[name] = content;
+            }
+            onLoad(content);
+        },
+
+        load: function (name, req, onLoad, config) {
+            //Name has format: some.module.filext!strip
+            //The strip part is optional.
+            //if strip is present, then that means only get the string contents
+            //inside a body tag in an HTML string. For XML/SVG content it means
+            //removing the <?xml ...?> declarations so the content can be inserted
+            //into the current doc without problems.
+
+            // Do not bother with the work if a build and text will
+            // not be inlined.
+            if (config && config.isBuild && !config.inlineText) {
+                onLoad();
+                return;
+            }
+
+            masterConfig.isBuild = config && config.isBuild;
+
+            var parsed = text.parseName(name),
+                nonStripName = parsed.moduleName +
+                    (parsed.ext ? '.' + parsed.ext : ''),
+                url = req.toUrl(nonStripName),
+                useXhr = (masterConfig.useXhr) ||
+                         text.useXhr;
+
+            // Do not load if it is an empty: url
+            if (url.indexOf('empty:') === 0) {
+                onLoad();
+                return;
+            }
+
+            //Load the text. Use XHR if possible and in a browser.
+            if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
+                text.get(url, function (content) {
+                    text.finishLoad(name, parsed.strip, content, onLoad);
+                }, function (err) {
+                    if (onLoad.error) {
+                        onLoad.error(err);
+                    }
+                });
+            } else {
+                //Need to fetch the resource across domains. Assume
+                //the resource has been optimized into a JS module. Fetch
+                //by the module name + extension, but do not include the
+                //!strip part to avoid file system issues.
+                req([nonStripName], function (content) {
+                    text.finishLoad(parsed.moduleName + '.' + parsed.ext,
+                                    parsed.strip, content, onLoad);
+                });
+            }
+        },
+
+        write: function (pluginName, moduleName, write, config) {
+            if (buildMap.hasOwnProperty(moduleName)) {
+                var content = text.jsEscape(buildMap[moduleName]);
+                write.asModule(pluginName + "!" + moduleName,
+                               "define(function () { return '" +
+                                   content +
+                               "';});\n");
+            }
+        },
+
+        writeFile: function (pluginName, moduleName, req, write, config) {
+            var parsed = text.parseName(moduleName),
+                extPart = parsed.ext ? '.' + parsed.ext : '',
+                nonStripName = parsed.moduleName + extPart,
+                //Use a '.js' file name so that it indicates it is a
+                //script that can be loaded across domains.
+                fileName = req.toUrl(parsed.moduleName + extPart) + '.js';
+
+            //Leverage own load() method to load plugin value, but only
+            //write out values that do not have the strip argument,
+            //to avoid any potential issues with ! in file names.
+            text.load(nonStripName, req, function (value) {
+                //Use own write() method to construct full module value.
+                //But need to create shell that translates writeFile's
+                //write() to the right interface.
+                var textWrite = function (contents) {
+                    return write(fileName, contents);
+                };
+                textWrite.asModule = function (moduleName, contents) {
+                    return write.asModule(moduleName, fileName, contents);
+                };
+
+                text.write(pluginName, nonStripName, textWrite, config);
+            }, config);
+        }
+    };
+
+    if (masterConfig.env === 'node' || (!masterConfig.env &&
+            typeof process !== "undefined" &&
+            process.versions &&
+            !!process.versions.node &&
+            !process.versions['node-webkit'] &&
+            !process.versions['atom-shell'])) {
+        //Using special require.nodeRequire, something added by r.js.
+        fs = require.nodeRequire('fs');
+
+        text.get = function (url, callback, errback) {
+            try {
+                var file = fs.readFileSync(url, 'utf8');
+                //Remove BOM (Byte Mark Order) from utf8 files if it is there.
+                if (file[0] === '\uFEFF') {
+                    file = file.substring(1);
+                }
+                callback(file);
+            } catch (e) {
+                if (errback) {
+                    errback(e);
+                }
+            }
+        };
+    } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
+            text.createXhr())) {
+        text.get = function (url, callback, errback, headers) {
+            var xhr = text.createXhr(), header;
+            xhr.open('GET', url, true);
+
+            //Allow plugins direct access to xhr headers
+            if (headers) {
+                for (header in headers) {
+                    if (headers.hasOwnProperty(header)) {
+                        xhr.setRequestHeader(header.toLowerCase(), headers[header]);
+                    }
+                }
+            }
+
+            //Allow overrides specified in config
+            if (masterConfig.onXhr) {
+                masterConfig.onXhr(xhr, url);
+            }
+
+            xhr.onreadystatechange = function (evt) {
+                var status, err;
+                //Do not explicitly handle errors, those should be
+                //visible via console output in the browser.
+                if (xhr.readyState === 4) {
+                    status = xhr.status || 0;
+                    if (status > 399 && status < 600) {
+                        //An http 4xx or 5xx error. Signal an error.
+                        err = new Error(url + ' HTTP status: ' + status);
+                        err.xhr = xhr;
+                        if (errback) {
+                            errback(err);
+                        }
+                    } else {
+                        callback(xhr.responseText);
+                    }
+
+                    if (masterConfig.onXhrComplete) {
+                        masterConfig.onXhrComplete(xhr, url);
+                    }
+                }
+            };
+            xhr.send(null);
+        };
+    } else if (masterConfig.env === 'rhino' || (!masterConfig.env &&
+            typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
+        //Why Java, why is this so awkward?
+        text.get = function (url, callback) {
+            var stringBuffer, line,
+                encoding = "utf-8",
+                file = new java.io.File(url),
+                lineSeparator = java.lang.System.getProperty("line.separator"),
+                input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding)),
+                content = '';
+            try {
+                stringBuffer = new java.lang.StringBuffer();
+                line = input.readLine();
+
+                // Byte Order Mark (BOM) - The Unicode Standard, version 3.0, page 324
+                // http://www.unicode.org/faq/utf_bom.html
+
+                // Note that when we use utf-8, the BOM should appear as "EF BB BF", but it doesn't due to this bug in the JDK:
+                // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4508058
+                if (line && line.length() && line.charAt(0) === 0xfeff) {
+                    // Eat the BOM, since we've already found the encoding on this file,
+                    // and we plan to concatenating this buffer with others; the BOM should
+                    // only appear at the top of a file.
+                    line = line.substring(1);
+                }
+
+                if (line !== null) {
+                    stringBuffer.append(line);
+                }
+
+                while ((line = input.readLine()) !== null) {
+                    stringBuffer.append(lineSeparator);
+                    stringBuffer.append(line);
+                }
+                //Make sure we return a JavaScript string and not a Java string.
+                content = String(stringBuffer.toString()); //String
+            } finally {
+                input.close();
+            }
+            callback(content);
+        };
+    } else if (masterConfig.env === 'xpconnect' || (!masterConfig.env &&
+            typeof Components !== 'undefined' && Components.classes &&
+            Components.interfaces)) {
+        //Avert your gaze!
+        Cc = Components.classes;
+        Ci = Components.interfaces;
+        Components.utils['import']('resource://gre/modules/FileUtils.jsm');
+        xpcIsWindows = ('@mozilla.org/windows-registry-key;1' in Cc);
+
+        text.get = function (url, callback) {
+            var inStream, convertStream, fileObj,
+                readData = {};
+
+            if (xpcIsWindows) {
+                url = url.replace(/\//g, '\\');
+            }
+
+            fileObj = new FileUtils.File(url);
+
+            //XPCOM, you so crazy
+            try {
+                inStream = Cc['@mozilla.org/network/file-input-stream;1']
+                           .createInstance(Ci.nsIFileInputStream);
+                inStream.init(fileObj, 1, 0, false);
+
+                convertStream = Cc['@mozilla.org/intl/converter-input-stream;1']
+                                .createInstance(Ci.nsIConverterInputStream);
+                convertStream.init(inStream, "utf-8", inStream.available(),
+                Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
+
+                convertStream.readString(inStream.available(), readData);
+                convertStream.close();
+                inStream.close();
+                callback(readData.value);
+            } catch (e) {
+                throw new Error((fileObj && fileObj.path || '') + ': ' + e);
+            }
+        };
+    }
+    return text;
+});
+
 if (!String.prototype.endsWith) {
   String.prototype.endsWith = function(searchString, position) {
       var subjectString = this.toString();
@@ -88,7 +478,6 @@ jQuery.fn.outerHTML = function (arg) {
 
     return this;
 };
-
 /**
  * @class Oskari
  *
@@ -1750,15 +2139,13 @@ Oskari = (function () {
          *
          */
         installBundleClass: function (biid, className) {
-            if(!Oskari.samiRegistry) {
-                Oskari.samiRegistry = {};
-            }
             var clazz = Oskari.clazz.create(className);
             if(clazz) {
-                Oskari.samiRegistry[biid] = {
+            	// Oskari.bundle is the new registry for requirejs loader
+                Oskari.bundle(biid, {
                     clazz : clazz,
                     metadata : cs.getMetadata(className).meta
-                };
+                });
                 this.installBundleClassOld(biid, className);
             }
         },
@@ -2808,226 +3195,10 @@ Oskari = (function () {
             return this.appConfig;
         },
 
-    startApplication: function (callback) {
-        var me = this;
-        var appConfig = this.appConfig;
-        var seq = this.appSetup.startupSequence.slice(0);
-        this.processSequence(seq, callback);
-    },
-    /**
-     * {
-            "bundleinstancename": "openlayers-default-theme",
-            "bundlename": "openlayers-default-theme",
-            "metadata": {
-                "Import-Bundle": {
-                    "openlayers-default-theme": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    },
-                    "openlayers-full-map": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    }
-                }
-            }
-        }
-     * @param  {[type]} sequence [description]
-     * @return {[type]}          [description]
-     */
-    processSequence : function(sequence, callback) {
-        var me = this;
-        if(sequence.length === 0) {
-            // everything has been loaded
-            callback();
-            return;
-        }
-        var seqToLoad = sequence.shift();
-        var bundleToStart = seqToLoad.bundlename;
-        var configId = seqToLoad.bundleinstancename;
-        var config = this.appConfig[configId] || {};
-        if(typeof seqToLoad !== 'object') {
-            // log error: block not object
-            // iterate to next
-            this.processSequence(sequence, callback);
-            return;
-        }
-        if(typeof seqToLoad.metadata !== 'object' ||
-            typeof seqToLoad.metadata['Import-Bundle']  !== 'object') {
-            // log error: "Nothing to load"
-            // iterate to next
-            this.processSequence(sequence, callback);
-            return;
-        }
-        var bundlesToBeLoaded = seqToLoad.metadata['Import-Bundle'];
-        var paths = [];
-        var bundles = [];
-        for(var id in bundlesToBeLoaded) {
-            var value = bundlesToBeLoaded[id];
-            if(typeof value !== 'object' ||
-                typeof value.bundlePath !== 'string') {
-                // log error: bundle object not defined
-                continue;
-            }
-            var basepath = value.bundlePath + '/' + id;
-            var path = basepath + '/bundle.js';
-            paths.push(path.split('//').join('/'));
-            bundles.push({
-                id : id,
-                path : basepath
-            });
-        }
-        if(this.isBundleLoaded(bundleToStart)) {
-        	console.log('Bundle preloaded ' + bundleToStart);
-        	me.startBundle(bundleToStart, config);
-            me.processSequence(sequence, callback);
-            return;
-        }
-    	console.log('Loading bundles');
-        // load all bundlePaths mentioned in sequence-block
-        require(paths, function() {
-            // if loaded undefined - find from Oskari.instalBundle register with id
-            for(var i = 0; i < arguments.length; ++i) {
-                if(typeof arguments[i] !== 'undefined') {
-                    // this would be a bundle.js with amd support
-                    debugger;
-                }
-            }
-            console.log('Loaded bundles', bundles);
-            // the loaded files have resulted in calls to
-            // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
-            // TODO: loop all bundles and require sources from installs
-            me.processBundleJS(bundles, function() {
-            	me.startBundle(bundleToStart, config);
-                me.processSequence(sequence, callback);
-            });
-        });
-    },
-    isBundleLoaded : function(bundleId) {
-        var bundle = Oskari.samiRegistry[bundleId];
-        return !!bundle;
-    },
-    startBundle : function(bundleId, config) {
-        var bundle = Oskari.samiRegistry[bundleId];
-        var instance = bundle.clazz.create();
-        if(!instance) {
-        	throw new Error('Couldnt start bundle with id ' + bundleId);
-        }
-        instance.mediator = {
-       	    bundleId : bundleId
-        }
-        // quick'n'dirty property injection
-        for(var key in config) {
-            instance[key] = config[key];
-        }
-        console.log('Starting bundle ' + bundleId);
-        try {
-        	instance.start();
-        } catch(err) {
-    		throw new Error('Couldnt start bundle with id ' + bundleId);
-        }
-    },
-    processBundleJS : function(bundles, callback) {
-        var me = this;
-        var loading = [];
-        var done = function(id) {
-            // remove id from loading array
-            var index = loading.indexOf(id);
-            loading.splice(index, 1);
-            // once loading is empty - call callback
-            if(loading.length === 0) {
-                callback();
-            }
-
-        };
-        bundles.forEach(function(item) {
-            var bundle = Oskari.samiRegistry[item.id];
-            if(!bundle.clazz || !bundle.metadata || !bundle.metadata.source) {
-                return;
-            }
-            loading.push(item.id);
-            me.handleBundleLoad(item.path, bundle.metadata.source, function() {
-                done(item.id);
-            });
-        });
-    },
-    handleBundleLoad : function(basePath, src, callback) {
-        var me = this;
-        var files = [];
-
-		// http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
-		var absolute = function(base, relative) {
-		    var stack = base.split("/"),
-		        parts = relative.split("/");
-		    stack.pop(); // remove current file name (or empty string)
-		                 // (omit if "base" is the current folder without trailing slash)
-		    for (var i=0; i<parts.length; i++) {
-		        if (parts[i] == ".")
-		            continue;
-		        if (parts[i] == "..")
-		            stack.pop();
-		        else
-		            stack.push(parts[i]);
-		    }
-		    return stack.join("/");
-		}
-
-        var getPath = function(base, src) {
-            // handle case where src start with /
-        	var path = src;
-            // handle relative ../../ case with src
-        	if (src.indexOf('/') !== 0) {
-        		path = absolute(base, src);
-        	}
-            return path.split('//').join('/');
-
-        };
-        // src.locales
-        if(src.locales) {
-            src.locales.forEach(function(file) {
-                if(file.src.endsWith('.js')) {
-                    files.push(getPath(basePath, file.src));
-                }
-            });
-        }
-        // src.resources
-        if(src.resources) {
-            src.resources.forEach(function(file) {
-                if(file.src.endsWith('.js')) {
-                    files.push(getPath(basePath, file.src));
-                }
-            });
-        }
-        // src.scripts
-        if(src.scripts) {
-            src.scripts.forEach(function(file) {
-
-                if(file.src.endsWith('.js')) {
-                    files.push(getPath(basePath, file.src));
-                }
-                else if (file.src.endsWith('.css')) {
-                    me.linkFile(getPath(basePath, file.src));
-                }
-            });
-        }
-
-        // src.links
-        if(src.links) {
-            src.links.forEach(function(file) {
-            	if(file.rel.toLowerCase() === 'import') {
-                    me.linkFile(getPath(basePath, file.href), file.rel, 'text/html');
-            	}
-            });
-        }
-        require(files, function() {
-            callback();
-        });
-    },
-    linkFile : function(href, rel, type) {
-        var importParentElement = document.head || document.body;
-        var linkElement = document.createElement('link');
-        linkElement.rel = rel || 'stylesheet';
-        linkElement.type = type || 'text/css';
-        linkElement.href = href;
-        importParentElement.appendChild(linkElement);
-    },
+	    startApplication: function (callback) {
+	        var loader = Oskari.loader(this.appSetup.startupSequence, this.appConfig);
+	        loader.processSequence(callback);
+	    },
 
         /**
          * @public @method startApplication
@@ -4047,6 +4218,7 @@ Oskari = (function () {
 }());
 
 
+
 /*
 * @class Oskari.util
 * Util class instance for static methods what may be used to for checks values.
@@ -4340,3 +4512,243 @@ Oskari.util = (function () {
 
     return util;
 }());
+
+Oskari.bundle = function(bundleId, value) {
+    if(!Oskari.samiRegistry) {
+        Oskari.samiRegistry = {};
+    }
+    if(value) {
+        Oskari.samiRegistry[bundleId] = value;
+    }
+    return Oskari.samiRegistry[bundleId];
+};
+/**
+ * Loader
+ * @param  {[type]} startupSequence [description]
+ * @param  {[type]} config          [description]
+ * @return {[type]}                 [description]
+ */
+Oskari.loader = function(startupSequence, config) {
+    var sequence = startupSequence.slice(0);
+    var appConfig = config;
+
+    return {
+        /**
+         * {
+                "bundleinstancename": "openlayers-default-theme",
+                "bundlename": "openlayers-default-theme",
+                "metadata": {
+                    "Import-Bundle": {
+                        "openlayers-default-theme": {
+                            "bundlePath": "../../../packages/openlayers/bundle/"
+                        },
+                        "openlayers-full-map": {
+                            "bundlePath": "../../../packages/openlayers/bundle/"
+                        }
+                    }
+                }
+            }
+         * @param  {[type]} sequence [description]
+         * @return {[type]}          [description]
+         */
+        processSequence : function(done) {
+            var me = this;
+            if(sequence.length === 0) {
+                // everything has been loaded
+                done();
+                return;
+            }
+            var seqToLoad = sequence.shift();
+            if(typeof seqToLoad !== 'object') {
+                // log error: block not object
+                // iterate to next
+                this.processSequence(done);
+                return;
+            }
+            if(typeof seqToLoad.metadata !== 'object' ||
+                typeof seqToLoad.metadata['Import-Bundle']  !== 'object') {
+                // log error: "Nothing to load"
+                // iterate to next
+                this.processSequence(done);
+                return;
+            }
+
+            var bundleToStart = seqToLoad.bundlename;
+            // if bundleinstancename is missing, use bundlename for config key.
+            var configId = seqToLoad.bundleinstancename || bundleToStart;
+            var config = appConfig[configId] || {};
+            var bundlesToBeLoaded = seqToLoad.metadata['Import-Bundle'];
+            var paths = [];
+            var bundles = [];
+            for(var id in bundlesToBeLoaded) {
+                var value = bundlesToBeLoaded[id];
+                if(typeof value !== 'object' ||
+                    typeof value.bundlePath !== 'string') {
+                    // log error: bundle object not defined
+                    continue;
+                }
+                var basepath = value.bundlePath + '/' + id;
+                var path = basepath + '/bundle.js';
+                paths.push(path.split('//').join('/'));
+                bundles.push({
+                    id : id,
+                    path : basepath
+                });
+            }
+            if(Oskari.bundle(bundleToStart)) {
+                console.log('Bundle preloaded ' + bundleToStart);
+                me.startBundle(bundleToStart, config);
+                this.processSequence(done);
+                return;
+            }
+            console.log('Loading bundles');
+            // load all bundlePaths mentioned in sequence-block
+            require(paths, function() {
+                // if loaded undefined - find from Oskari.instalBundle register with id
+                for(var i = 0; i < arguments.length; ++i) {
+                    if(typeof arguments[i] !== 'undefined') {
+                        // this would be a bundle.js with amd support
+                        debugger;
+                    }
+                }
+                console.log('Loaded bundles', bundles);
+                // the loaded files have resulted in calls to
+                // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
+                // TODO: loop all bundles and require sources from installs
+                me.processBundleJS(bundles, function() {
+                    me.startBundle(bundleToStart, config);
+                    me.processSequence(done);
+                });
+            });
+        },
+        startBundle : function(bundleId, config) {
+            var bundle = Oskari.bundle(bundleId);
+            if(!bundle) {
+                throw new Error('Bundle not loaded ' + bundleId);
+            }
+            var instance = bundle.clazz.create();
+            if(!instance) {
+                throw new Error('Couldnt start bundle with id ' + bundleId);
+            }
+            instance.mediator = {
+                bundleId : bundleId
+            }
+            // quick'n'dirty property injection
+            for(var key in config) {
+                instance[key] = config[key];
+            }
+            console.log('Starting bundle ' + bundleId);
+            try {
+                instance.start();
+            } catch(err) {
+                throw new Error('Couldnt start bundle with id ' + bundleId);
+            }
+        },
+        processBundleJS : function(bundles, callback) {
+            var me = this;
+            var loading = [];
+            var done = function(id) {
+                // remove id from loading array
+                var index = loading.indexOf(id);
+                loading.splice(index, 1);
+                // once loading is empty - call callback
+                if(loading.length === 0) {
+                    callback();
+                }
+
+            };
+            bundles.forEach(function(item) {
+                var bundle = Oskari.bundle(item.id);
+                if(!bundle.clazz || !bundle.metadata || !bundle.metadata.source) {
+                    return;
+                }
+                loading.push(item.id);
+                me.handleBundleLoad(item.path, bundle.metadata.source, function() {
+                    done(item.id);
+                });
+            });
+        },
+        handleBundleLoad : function(basePath, src, callback) {
+            var me = this;
+            var files = [];
+
+            // http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
+            var absolute = function(base, relative) {
+                var stack = base.split("/"),
+                    parts = relative.split("/");
+                stack.pop(); // remove current file name (or empty string)
+                             // (omit if "base" is the current folder without trailing slash)
+                for (var i=0; i<parts.length; i++) {
+                    if (parts[i] == ".")
+                        continue;
+                    if (parts[i] == "..")
+                        stack.pop();
+                    else
+                        stack.push(parts[i]);
+                }
+                return stack.join("/");
+            }
+
+            var getPath = function(base, src) {
+                // handle case where src start with /
+                var path = src;
+                // handle relative ../../ case with src
+                if (src.indexOf('/') !== 0) {
+                    path = absolute(base, src);
+                }
+                return path.split('//').join('/');
+
+            };
+            // src.locales
+            if(src.locales) {
+                src.locales.forEach(function(file) {
+                    if(file.src.endsWith('.js')) {
+                        files.push(getPath(basePath, file.src));
+                    }
+                });
+            }
+            // src.resources
+            if(src.resources) {
+                src.resources.forEach(function(file) {
+                    if(file.src.endsWith('.js')) {
+                        files.push(getPath(basePath, file.src));
+                    }
+                });
+            }
+            // src.scripts
+            if(src.scripts) {
+                src.scripts.forEach(function(file) {
+
+                    if(file.src.endsWith('.js')) {
+                        files.push(getPath(basePath, file.src));
+                    }
+                    else if (file.src.endsWith('.css')) {
+                        me.linkFile(getPath(basePath, file.src));
+                    }
+                });
+            }
+
+            // src.links
+            if(src.links) {
+                src.links.forEach(function(file) {
+                    if(file.rel.toLowerCase() === 'import') {
+                        me.linkFile(getPath(basePath, file.href), file.rel, 'text/html');
+                    }
+                });
+            }
+            require(files, function() {
+                callback();
+            });
+        },
+        linkFile : function(href, rel, type) {
+            var importParentElement = document.head || document.body;
+            var linkElement = document.createElement('link');
+            linkElement.rel = rel || 'stylesheet';
+            linkElement.type = type || 'text/css';
+            linkElement.href = href;
+            importParentElement.appendChild(linkElement);
+        }
+
+    }
+    return loader;
+};
