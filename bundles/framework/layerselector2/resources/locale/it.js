@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Sfondo cartografico",
             "type-wms": "Layer (WMS, WMTS)",
-            "type-wfs": "Dato (WFS)"
+            "type-wfs": "Dato (WFS)",
+            "type-wfs-manual": "Aggiorna i dati degli elementi cliccando su 'Dati Elementi ' o su 'Aggiorna' nella finestra della mappa ."
         },
         "backendStatus": {
             "OK": {

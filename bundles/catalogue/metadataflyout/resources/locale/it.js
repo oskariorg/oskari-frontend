@@ -219,12 +219,12 @@ Oskari.registerLocalization(
                         "description": "L'informazione si applica alla caratteristica dell'elemento"
                     },
                     "collectionHardware": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "NO it TRANSLATION",
+                        "description": "NO it TRANSLATION"
                     },
                     "collectionSession": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "NO it TRANSLATION",
+                        "description": "NO it TRANSLATION"
                     },
                     "dataset": {
                         "label": "Dataset",
@@ -239,8 +239,8 @@ Oskari.registerLocalization(
                         "description": "L'informazione si applica al dataset non geografico"
                     },
                     "dimensionGroup": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "NO it TRANSLATION",
+                        "description": "NO it TRANSLATION"
                     },
                     "feature": {
                         "label": "Elemento",
@@ -255,8 +255,8 @@ Oskari.registerLocalization(
                         "description": "L'informazione si applica al tipo di proprietà"
                     },
                     "fieldSession": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "NO it TRANSLATION",
+                        "description": "NO it TRANSLATION"
                     },
                     "software": {
                         "label": "Software",

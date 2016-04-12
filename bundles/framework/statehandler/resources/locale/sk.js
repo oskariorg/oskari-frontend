@@ -1,17 +1,17 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "StateHandler",
     "value": {
         "session": {
             "expiring": {
-                "title": "Your session is about to expire",
-                "message": "Your session is about to expire. Please click {extend} to stay logged in.",
-                "extend": "Continue session"
+                "title": "Spojenie sa končí",
+                "message": "Vaše spojenie sa končí. Aby ste zostali prihlásený, kliknite prosím na tlačidlo {predĺžiť}.",
+                "extend": "Pokračovať"
             },
             "expired": {
-                "title": "Your session has expired",
-                "message": "Your session has expired. Please reload the page to login again."
+                "title": "Spojenie sa skončilo",
+                "message": "Spojenie sa skončilo. Prosím, obnovte stránku, a prihláste sa."
             }
         }
     }

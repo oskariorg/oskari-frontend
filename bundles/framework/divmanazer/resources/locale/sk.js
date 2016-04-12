@@ -1,22 +1,22 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "Add",
-            "cancel": "Cancel",
-            "close": "Close",
-            "delete": "Delete",
-            "edit": "Edit",
-            "exit": "Exit",
+            "add": "Pridať",
+            "cancel": "Zrušiť",
+            "close": "Zatvoriť",
+            "delete": "Vymazať",
+            "edit": "Editovať",
+            "exit": "Odísť",
             "ok": "OK",
-            "save": "Save",
-            "search": "Search"
+            "save": "Uložiť",
+            "search": "Vyhľadávať"
         },
         "LanguageSelect": {
             "title": "Jazyk",
-            "tooltip": "Select language",
+            "tooltip": "Vybrať jazyk",
             "languages": {
                 "af": "afrikánčina",
                 "ak": "akančina",
@@ -140,126 +140,126 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Edit point feature style",
-                "area": "Edit area feature style",
-                "line": "Edit line feature style"
+                "dot": "Editovať štýl bodového objektu",
+                "area": "Editovať štýl plošného objektu",
+                "line": "Editovať štýl líniového objektu"
             },
             "dot": {
-                "title": "Point feature style",
-                "tooltip": "",
+                "title": "Štýl bodového objektu",
+                "tooltip": "Definovať štýl pre bodové objekty.",
                 "symbol": {
-                    "label": "Icon"
+                    "label": "Ikona"
                 },
                 "size": {
-                    "label": "Size"
+                    "label": "Veľkosť"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             },
             "line": {
-                "title": "Line feature style",
-                "tooltip": "",
+                "title": "Štýl líniového objektu",
+                "tooltip": "Definovať štýl pre líniové objekty.",
                 "style": {
-                    "label": "Dash"
+                    "label": "Čiarkovaná"
                 },
                 "cap": {
-                    "label": "Endings"
+                    "label": "Konce"
                 },
                 "corner": {
-                    "label": "Corners"
+                    "label": "Rohy"
                 },
                 "width": {
-                    "label": "Width"
+                    "label": "Šírka"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             },
             "area": {
-                "title": "Area feature style",
-                "tooltip": "",
+                "title": "Štýl plošného objektu",
+                "tooltip": "Definovať štýl pre plošné objekty.",
                 "linestyle": {
-                    "label": "Line dash"
+                    "label": "Čiarkovaná línia"
                 },
                 "linecap": {
-                    "label": "Line endings"
+                    "label": "Konce línie"
                 },
                 "linecorner": {
-                    "label": "Line corners"
+                    "label": "Rohy línie"
                 },
                 "linewidth": {
-                    "label": "Line width"
+                    "label": "Šírka línie"
                 },
                 "linecolor": {
-                    "label": "Line colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba línie",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "color": {
-                    "label": "Fill colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba výplne",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "fill": {
-                    "label": "Fill pattern"
+                    "label": "Vzor výplne"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             }
         },
         "Grid": {
             "columnSelector": {
-                "title": "Properties",
-                "tooltip": "Show columns"
+                "title": "Vlastnosti",
+                "tooltip": "Zobraziť stĺpce"
             },
             "export": {
-                "title": "Export data",
-                "export": "Export",
+                "title": "Exportovať údaje",
+                "export": "Exportovať",
                 "additional": {
-                    "title": "Additional settings",
-                    "dataSource": "Data source",
-                    "metadata": "Metadata link",
-                    "export_selection": "Export only selected features"
+                    "title": "Ďalšie nastavenia",
+                    "dataSource": "Zdroj údajov",
+                    "metadata": "Metaúdajový link",
+                    "export_selection": "Exportovať iba vybrané objekty"
                 },
                 "columns": {
-                    "title": "Columns",
-                    "all": "All",
-                    "visible": "Opened"
+                    "title": "Stĺpce",
+                    "all": "Všetko",
+                    "visible": "Otvorené"
                 },
                 "format": {
-                    "title": "File format",
+                    "title": "Formát súboru",
                     "xlsx": "Excel",
                     "csv": "CSV"
                 },
                 "delimiter": {
-                    "title": "CSV-file separator",
-                    "comma": "Comma",
-                    "semicolon": "Semicolon",
-                    "tabulator": "Tabulator"
+                    "title": "CSV-oddeľovník súboru",
+                    "comma": "Čiarka",
+                    "semicolon": "Bodkočiarka",
+                    "tabulator": "Tabulátor"
                 }
             }
         }

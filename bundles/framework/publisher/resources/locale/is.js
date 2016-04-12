@@ -3,31 +3,31 @@ Oskari.registerLocalization(
     "lang": "is",
     "key": "Publisher",
     "value": {
-        "title": "NOT TRANSLATED",
-        "flyouttitle": "NOT TRANSLATED",
+        "title": "Kortaútgáfa",
+        "flyouttitle": "Búa til innfellt kort",
         "desc": "",
         "published": {
-            "title": "NOT TRANSLATED",
+            "title": "Búið er að vista innfellt kort",
             "desc": "Kortið þitt er tilbúið. Fella kortið inn í með því að bæta HTML-kóðanum fyrir neðan við heimasíðuna þína."
         },
         "edit": {
             "popup": {
-                "title": "NOT TRANSLATED",
-                "msg": "NOT TRANSLATED"
+                "title": "Opna kort...",
+                "msg": "Uppfæra kort..."
             }
         },
         "BasicView": {
             "title": "Fella kort inn í",
             "titleEdit": "Breyta korti sem hefur verið fellt inn í",
             "domain": {
-                "title": "NOT TRANSLATED",
+                "title": "Grunnstillingar",
                 "label": "Vefsíða þar sem kort verður fellt inn í",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "placeholder": "Heimilisfang vefsíðu",
+                "tooltip": "Sláðu inn URL-heimilisfang heimasíðu án forskeyta eða undirsíða. T.d.: heimasida.com"
             },
             "name": {
                 "label": "Nafn kortsins",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "Nafn korts",
                 "tooltip": "Gefðu kortinu lýsandi nafn. Athugið hvaða tungumál er í notendaviðmótinu."
             },
             "language": {
@@ -41,7 +41,7 @@ Oskari.registerLocalization(
             },
             "size": {
                 "label": "Stærð",
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Veldu kortastærð. Breiddin þarf að vera a.m.k. 30 pixlar og hæðin a.m.k. 20 pixlar. Notaðu punkt til að skilja á milli tugabrota. Athugaðu uppfærslur í forskoðun korts."
             },
             "tools": {
                 "label": "Verkfæri",
@@ -49,106 +49,106 @@ Oskari.registerLocalization(
                 "ScaleBarPlugin": "Mælikvarði",
                 "IndexMapPlugin": "Lykilkort",
                 "PanButtons": "Hliðrunartól",
-                "Portti2Zoombar": "NOT TRANSLATED",
-                "MyLocationPlugin": "NOT TRANSLATED",
-                "ControlsPlugin": "NOT TRANSLATED",
+                "Portti2Zoombar": "Þysjunartól",
+                "MyLocationPlugin": "Miðja staðsetningu",
+                "ControlsPlugin": "Hliðra með mús",
                 "SearchPlugin": "Leit fyrir heimilisföng og örnefni.",
-                "FeaturedataPlugin": "NOT TRANSLATED",
-                "GetInfoPlugin": "NOT TRANSLATED",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "FeaturedataPlugin": "Fitjugögn",
+                "GetInfoPlugin": "Fyrirspurnatól fitja",
+                "PublisherToolbarPlugin": "Kortaverkfæri",
+                "selectDrawLayer": "Velja kortalag"
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "drawTools": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "Fyrri",
+                "history_forward": "Næst",
+                "measureline": "Mæla vegalengd",
+                "measurearea": "Mæla svæði",
+                "drawTools": "Bæta við eigin stöðum",
+                "point": "Leyfa punkta",
+                "line": "Leyfa línur",
+                "area": "Leyfa fláka"
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "Staðsetning tóla",
+                "tooltip": "Velja staðsetningu fyrir kortaverkfæri",
+                "lefthanded": "Vinstra megin",
+                "righthanded": "Hægra megin",
+                "userlayout": "Sérsniðin staðsetning",
+                "usereditmode": "Byrja að breyta",
+                "usereditmodeoff": "Hætta að breyta"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Þemakort",
+                "tooltip": "Sýna þemakort á kortinu.",
+                "grid": "Sýna þemakort í töflu.",
+                "allowClassification": "Leyfa flokkun"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Grafískt skipulag",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Litakerfi",
+                        "placeholder": "Litakerfi",
+                        "buttonLabel": "Velja",
+                        "light_grey": "Ljósgrár",
+                        "dark_grey": "Dökkgrár",
+                        "blue": "Blár",
+                        "red": "Rauður",
+                        "green": "Grænn",
+                        "yellow": "Gulur",
+                        "custom": "Litakerfið mitt",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Auðkennisbakgrunnur",
+                            "titleLabel": "Auðkennistexti",
+                            "headerLabel": "Örnefni",
+                            "iconLabel": "Merki",
+                            "iconCloseLabel": "Dökkur",
+                            "iconCloseWhiteLabel": "Ljós"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Leturgerð"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Verkfæri stíll",
+                        "default": "Sjálfgefinn stíll",
+                        "rounded-dark": "Rúnnaður (dökkur)",
+                        "rounded-light": "Rúnnaður (ljós)",
+                        "sharp-dark": "Hyrndur (dökkur)",
+                        "sharp-light": "Hyrndur (ljós)",
+                        "3d-dark": "Þrívíddar (dökkur)",
+                        "3d-light": "Þrívíddar (ljós)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Velja litakerfi",
+                    "close": "Loka",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Upplýsingar um fitju",
+                        "featureName": "Forskoðun",
+                        "featureDesc": "Valið litakerfi hefur áhrif á grafískt skipulag og upplýsingaglugga um kortalög."
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
+                "add": "Búa til nýtt lag",
                 "label": "Kortalög",
-                "addselect": "NOT TRANSLATED",
+                "addselect": "Bæta teiknilagi við kortalög.",
                 "defaultLayer": "(Sjálfgefið lag)",
                 "useAsDefaultLayer": "Nota sem sjálfgefið lag"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": "Kortalögin mín."
             },
             "sizes": {
                 "small": "Lítið",
                 "medium": "Miðlungs",
                 "large": "Stórt",
-                "fill": "NOT TRANSLATED",
+                "fill": "Space filling",
                 "custom": "Sjálfgefin stærð",
                 "width": "Breidd",
                 "height": "Hæð",
-                "separator": "NOT TRANSLATED"
+                "separator": "x"
             },
             "buttons": {
                 "save": "Vista",
@@ -156,21 +156,20 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "replace": "Skipta út",
                 "cancel": "Hætta við",
-                "add": "NOT TRANSLATED"
+                "add": "Bæta við kortalagi."
             },
             "confirm": {
                 "replace": {
                     "title": "Viltu skipta út kort sem var fellt inn í?",
-                    "msg": "NOT TRANSLATED"
+                    "msg": "Uppfærslur sjást strax á kortinu. Það þarf ekki að uppfæra HTML kóðann."
                 }
             },
             "layerselection": {
                 "label": "Sýna kortalög í valmynd.",
                 "info": "Veldu bakgrunnskort. Hægt er að stilla sjálfgefin bakgrunnskort í forskoðunarglugganum.",
-                "tooltip": "NOT TRANSLATED",
-                "promote": "Sýna loftmyndir?"
+                "tooltip": "Bakgrunnslagið sést neðst á kortinu. Ef þú velur nokkur bakgrunnskort getur einungis eitt þeirra verið sýnilegt í einu. Notandi getur vlið bakgrunnslag í notendaviðmótinu. Veldu sjálfgefið bakgrunnskort í forsýningu korts."
             },
-            "preview": "NOT TRANSLATED",
+            "preview": "Forskoðun korts",
             "location": "Staðsetning og þysjunarstig.",
             "zoomlevel": "Þysjunarstig",
             "help": "Hjálp",
@@ -180,27 +179,25 @@ Oskari.registerLocalization(
                 "domain": "Nauðsynlegt er að hafa upplýsingar um vefsíðu.",
                 "domainStart": "Slepptu því að hafa forskeytin http og www í nafni vefsíðunnar.",
                 "name": "Nauðsynlegt er að hafa upplýsingar um nafn.",
-                "nohelp": "NOT TRANSLATED",
-                "saveFailed": "NOT TRANSLATED",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nohelp": "Notkunarleiðbeiningarnar eru ekki fáanlegar.",
+                "saveFailed": "EKKI ÞÝTT",
+                "nameIllegalCharacters": "Nafn korts inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-ö eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö.",
                 "domainIllegalCharacters": "Nafn vefsíðunnar inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-z eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö."
             }
         },
         "NotLoggedView": {
-            "text": "NOT TRANSLATED",
+            "text": "Þér er velkomið að birta innfellt kort á vefsvæði þínu. Vinsamlegast skráðu þig inn.",
             "signup": "Innskráning",
-            "signupUrl": "NOT TRANSLATED",
-            "register": "Skráning",
-            "registerUrl": "NOT TRANSLATED"
+            "register": "Skráning"
         },
         "StartView": {
             "text": "Þú getur fellt kortið sem þú bjóst til inn í heimasíðu þína eða vinnuveitanda þíns.",
             "touLink": "Sýna notkunarskilmála fyrir kort sem hafa verið felld inn",
             "layerlist_title": "Innfellanleg kortalög",
-            "layerlist_empty": "NOT TRANSLATED",
-            "layerlist_denied": "NOT TRANSLATED",
-            "denied_tooltip": "NOT TRANSLATED",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "layerlist_empty": "Það eru engin kortalög tilbúin til útgáfu opin í kortaglugganum. Vinsamlegast athugaðu kortalög tilbúin til útgáfu í Valin Lög valmyndinni.",
+            "layerlist_denied": "Kortalög sem ekki er hægt að gefa út og eru opin í kortaglugganum:",
+            "denied_tooltip": "Það er ekki hægt að gefa þessi kortalög út sem innfelld kort. Framleiðendur gagnanna hafa ekki veitt leyfi fyrir útgáfu. Vinsamlegast skoðaðu hvað kortalög má gefa út í Valin lög valmyndinni.",
+            "myPlacesDisclaimer": "ATH! Ef þú ert að nota þetta kortalag í innfelldu korti mun kortalagið verða gefið út.",
             "buttons": {
                 "continue": "Halda áfram",
                 "continueAndAccept": "Samþykkja notkunarskilmála og halda áfram",
@@ -214,23 +211,17 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "Sýna",
+            "hide": "Fela",
+            "hidden": "Kortalagið er falið tímabundið.",
+            "selectAsBaselayer": "Bakgrunnskortalag."
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Má gefa út."
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Sýna eingöngu kortalög sem má gefa út."
             }
         }
     }

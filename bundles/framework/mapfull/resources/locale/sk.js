@@ -1,9 +1,9 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "Generic",
     "value": {
-        "default-style": "Default style"
+        "default-style": "Predvolený štýl"
     }
 }
 );

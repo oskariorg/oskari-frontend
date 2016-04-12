@@ -12,12 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Podatki o pojavu na tej karti ne morejo biti prikazani v tem merilu. Prosim spremeni merilo na lestvici za merilo.",
         "errordata": "Podatki o pojavu na strežniku vsebujejo napake. Osveži podatke tako, da karto malenkost premakneš.",
         "columnSelectorTooltip": "Izberi vidne stolpce",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "Statistične vrednosti",
         "selectionTools": {
             "title": "Izberi pojave na karti",
             "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
-            "selectAll": "Izberi iz vseh slojev",
+            "selectFromTop": "Od sloja, ki je na vrhu",
+            "selectAll": "Od vseh slojev",
             "link": {
                 "title": "Izberi več pojavov"
             },
@@ -147,9 +147,10 @@ Oskari.registerLocalization(
             }
         },
         "gridFooter": {
-            "aggregateColumnField": "NOT TRANSLATED",
-            "noDataMessage": "NOT TRANSLATED",
-            "noDataCommonMessage": "NOT TRANSLATED"
+            "aggregateColumnField": "Štej",
+            "differenceMessage": "Z vrednostjo je prikazana razlika do nedovoljenih vrednosti",
+            "noDataMessage": "Število=število pojavov brez nedovoljenih",
+            "noDataCommonMessage": "V podatkih obstajajo nedovoljene vrednosti"
         }
     }
 }

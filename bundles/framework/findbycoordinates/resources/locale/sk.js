@@ -1,18 +1,14 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
-        "desc": "FindByCoordinates",
+        "title": "Nájsť najbližšuiu adresu",
+        "desc": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Kliknite na bod na mape. Výsledkom budú súradnice bodu a k nemu najbližšia adresa."
         },
-        "resultsTitle": "Search results",
-        "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
-        }
+        "resultsTitle": "Výsledky vyhľadávania"
     }
 }
 );

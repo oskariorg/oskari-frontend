@@ -66,6 +66,30 @@ Oskari.clazz.define(
                     "lang": "sv",
                     "type": "text/javascript",
                     "src": "../../../../bundles/integration/admin-layerselector/resources/locale/sv.js"
+                }, {
+                    "lang" : "et",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/et.js"
+                }, {
+                    "lang" : "is",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/is.js"
+                }, {
+                    "lang" : "it",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/it.js"
+                }, {
+                    "lang" : "nl",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/nl.js"
+                }, {
+                    "lang" : "sk",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/sk.js"
+                }, {
+                    "lang" : "sl",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/sl.js"
                 }
             ],
             "resources": []

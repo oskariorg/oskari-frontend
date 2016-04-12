@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Grunnupplýsingar",
             "inspire": "Inspire lýsigögn",
             "jhs": "ISO 19115 lýsigögn",
-            "quality": "NOT TRANSLATED",
+            "quality": "Gæði gagna",
             "xml": "ISO 19139 XML skrá",
             "map": "Landfræðilegt umfang",
             "pdf": "Útprentun",
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Gagnasettið er í samræmi við forskriftina.",
+                "qualityPassFalse": "Gagnasettið er ekki í samræmi við forskriftina."
             },
             "heading": {
                 "abstractTextData": "Hugrænn texti (gögn)",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Tímaháð útmörk",
                 "topicCategory": "Efnisflokkar",
                 "useLimitation": "Notkunartakmarkanir",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Algild nákvæmni á ytri afstöðu",
+                "accuracyOfTimeMeasurement": "Nákvæmni tímamælingar",
+                "completenessCommission": "Heildstæð nefnd",
+                "completenessOmission": "Heildstætt aðgerðaleysi",
+                "conceptualConsistency": "Huglægt samræmi",
+                "domainConsistency": "Samræmi léna",
+                "formatConsistency": "Samræmi sniða",
+                "griddedDataPositionalAccuracy": "Afstöðunákvæmni á gögnum í neti",
+                "nonQuantitativeAttributeAccuracy": "Ómagnbundin eiginleikanákvæmni",
+                "quantitativeAttributeAccuracy": "Magnbundin eiginleikanákvæmni",
+                "relativeInternalPositionalAccuracy": "Hlutfallsleg innri afstöðunákvæmni",
+                "temporalConsistency": "Tímabundið samræmi",
+                "temporalValidity": "Tímabundinn gildistími",
+                "thematicClassificationCorrectness": "Réttleiki á þemaflokkun",
+                "topologicalConsistency": "Grannfræðisamræmi"
             }
         },
         "tile": {

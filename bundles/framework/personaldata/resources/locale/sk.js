@@ -1,42 +1,44 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "PersonalData",
     "value": {
         "title": "Moje údaje",
         "desc": "Moje údaje",
-        "notLoggedIn": "Môžete uložiť zobrazenia mapy a prehliadať mapy, ktoré ste si vložili na iné webové stránky v Mojich údajoch.",
-        "notLoggedInText": "NOT TRANSLATED.",
+        "notLoggedIn": "Ako prihlásený používateľ tu môžete vidieť informácie o vašom účte, vaše uložené miesta, mapové zobrazenia, uložené mapy, indikátory, anylýzy a datasety.",
+        "notLoggedInText": "Prihlásiť sa",
         "tabs": {
             "myviews": {
-                "title": "Moje zobrazenia mapy",
+                "title": "Moje mapové zobrazenia",
                 "edit": "Editovať",
                 "publish": "Zverejniť",
-                "unpublish": "Nezverejňovať",
+                "unpublish": "Odzverejniť",
                 "delete": "Vymazať",
                 "grid": {
                     "name": "Názov",
                     "description": "Popis",
                     "publish": "Zverejnený",
-                    "edit": "Edit",
-                    "delete": "Delete"
+                    "edit": "Editovať",
+                    "delete": "Vymazať",
+                    "default": "Predvolený"
                 },
                 "popup": {
-                    "edit": "Editovať informácie zobrazenia",
-                    "title": "Uložiť zobrazenie mapy",
-                    "label": "Názov zobrazenie mapy:",
-                    "name_placeholder": "Pomenovať zobrazenie mapy",
-                    "description_placeholder": "Popísať zobrazenie mapy",
+                    "edit": "Editovať mapové zobrazenia",
+                    "title": "Uložiť mapové zobrazenie",
+                    "label": "Názov",
+                    "name_placeholder": "Názov",
+                    "description_placeholder": "Popis",
                     "save": "Uložiť",
                     "cancel": "Zrušiť",
-                    "error_noname": "Napísať názov",
-                    "deletetitle": "Potvrdiť vymazanie",
-                    "deletemsg": "Chcete vymazať zobrazenie mapy?"
+                    "error_noname": "Názov mapového zobrazenia sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
+                    "deletetitle": "Vymazať mapové zobrazenie",
+                    "deletemsg": "Chcete vymazať mapové zobrazenie?",
+                    "default": "Predvolené zobrazenie"
                 },
                 "save": {
-                    "success": "Zobrazenie mapy sa uložilo",
-                    "error_noname": "Pole pre názov nesmie zostať prázdne",
-                    "error_illegalchars": "Názov obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
+                    "success": "Mapové zobrazenie sa uložilo",
+                    "error_noname": "Názov mapovej vrstvy sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
+                    "error_illegalchars": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z,å,ä,ö, A-Z,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-). Prosím, opravte názov a skúste znovu.",
                     "msg": {
                         "view_name": "Názov zobrazenia mapy"
                     }
@@ -45,56 +47,57 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Uložiť",
                     "cancel": "Zrušiť",
-                    "toolbarsave": "Uložiť zobrazenie mapy"
+                    "toolbarsave": "Uložiť zobrazenia mapy",
+                    "saveCurrent": "Uložiť aktuálne zobrazenie"
                 },
                 "error": {
-                    "title": "Chyba!",
-                    "generic": "Chyba systému| Skúste neskôr, prosím.",
+                    "title": "Chyba",
+                    "generic": "Vyskytla sa chyba systému. Mapové zobrazenie sa nedalo uložiť.",
                     "notsaved": "Zobrazenie mapy sa nedalo uložiť",
                     "notdeleted": "Zobrazenie mapy sa nedalo vymazať",
-                    "makePublic": "Zobrazenie mapy sa nedalo zverejniť. Skúste neskôr, prosím",
-                    "makePrivate": "Zobrazenie mapy sa nedalo nezverejniť. Skúste neskôr, prosím",
-                    "loadfailed": "Zobrazenia mapy sa nedajú stiahnuť"
+                    "makePublic": "Zobrazenie mapy sa nedalo zverejniť.",
+                    "makePrivate": "Zobrazenie mapy sa nedalo odzverejniť.",
+                    "loadfailed": "Zobrazenia mapy sa nedajú získať."
                 }
             },
             "publishedmaps": {
-                "title": "Vložené mapy",
+                "title": "Uložené mapy",
                 "show": "Zobraziť na mape",
                 "getHTML": "HTML code",
                 "edit": "Editovať",
-                "publish": "Zverejniť mapu",
-                "unpublish": "Nezverejňovať mapu",
+                "publish": "Zverejniť",
+                "unpublish": "Odzverejniť",
                 "delete": "Vymazať",
                 "grid": {
                     "name": "Názov",
-                    "domain": "Mapové nastavenia",
-                    "publish": "Stav",
-                    "show": "Actions",
-                    "html": "HTML code",
-                    "edit": "Edit",
-                    "delete": "Delete"
+                    "domain": "Webstránka",
+                    "publish": "Publikácia",
+                    "show": "Akcie",
+                    "html": "HTML kód",
+                    "edit": "Editovať",
+                    "delete": "Vymazať"
                 },
                 "published": {
-                    "desc": "Embed the map by adding the HTML code below to your website:"
+                    "desc": "Skopírujte HTML kód uvedený nižšie do vášho HTML kódu a mapa bude viditeľná na vašej stránke:"
                 },
                 "popup": {
-                    "edit": "Zmeniť názov mapy",
+                    "edit": "Editovať názov mapy",
                     "title": "Uložiť mapu",
                     "label": "Názov mapy",
-                    "placeholder": "Pomenovať mapu",
+                    "placeholder": "Názov mapy",
                     "save": "Uložiť",
                     "cancel": "Zrušiť",
-                    "error_noname": "Pomenovať mapu",
-                    "deletetitle": "Vymazať mapu?",
-                    "deletemsg": "Chcete vymazať vloženú mapu? Jej ďaľšie zobrazenie nas Vašej webovej stránke už nebude možné",
-                    "showErrorTitle": "Neúplné zobrazenie",
-                    "showConfirmMissing": "Niektoré z uložených mapových vrstiev nie sú k dispozícii. Chcete aj napriek tomu otvoriť toto zobrazenie?",
-                    "showConfirmNotLoaded": "Niektoré mapové vrstvy sa ešte nenačítali, skúste neskôr."
+                    "error_noname": "Názov mapovej vrstvy sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
+                    "deletetitle": "Vymazať uloženú mapu?",
+                    "deletemsg": "Práve vymazávate uloženú mapu. Potom už nebude možné ju vidieť na vašej webovej stránke. Chcete ju vymazať?",
+                    "showErrorTitle": "Chyba",
+                    "showConfirmMissing": "Všetky mapové vrstvy nie sú k dispozícii. Chcete otvoriť uloženú mapu?",
+                    "showConfirmNotLoaded": "Všetky mapové vrstvy sa nedali načítať."
                 },
                 "save": {
-                    "success": "Mapa bola uložená",
-                    "error_noname": "Pole pre názov nesmie zostať prázdne",
-                    "error_illegalchars": "Názov obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky.",
+                    "success": "Uložená mapa bola uložená.",
+                    "error_noname": "Názov mapovej vrstvy sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
+                    "error_illegalchars": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z,å,ä,ö, A-Z,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-). Prosím, opravte názov a skúste znovu.",
                     "msg": {
                         "view_name": "Názov mapy"
                     }
@@ -106,12 +109,12 @@ Oskari.registerLocalization(
                     "toolbarsave": "Uložiť mapu"
                 },
                 "error": {
-                    "title": "Chyba!",
-                    "generic": "Chyba systému| Skúste neskôr, prosím.",
-                    "notsaved": "Mapa sa nedala uložiť",
-                    "notdeleted": "Mapa sa nedala vymazať",
-                    "makePublic": "Mapa sa nedala zverejniť. Skúste neskôr, prosím",
-                    "makePrivate": "Mapa sa nedala nezverejniť. Skúste neskôr, prosím"
+                    "title": "Chyba",
+                    "generic": "Uložená mapa sa nedala uložiť.",
+                    "notsaved": "Uložená mapa sa nedala aktualizovať.",
+                    "notdeleted": "Uložená mapa sa nedala vymazať.",
+                    "makePublic": "Uložená mapa sa nedala zverejniť.",
+                    "makePrivate": "Uložená mapa sa nedala odzverejniť."
                 }
             },
             "account": {
@@ -120,10 +123,10 @@ Oskari.registerLocalization(
                 "lastName": "Priezvisko",
                 "nickName": "Prezývka",
                 "email": "E-mail",
-                "changeInfo": "Zmeňte si informácie o Vašom účte",
-                "changePassword": "Zmeňte si heslo",
-                "removeAccount": "Vymažte si účet",
-                "changeInfoUrl": "/web/sk/profile"
+                "changeInfo": "Aktualizovať údaje o účte",
+                "changePassword": "Zmeniť heslo",
+                "removeAccount": "Vymazať účet",
+                "changeInfoUrl": "/web/aj/profil"
             }
         },
         "button": {

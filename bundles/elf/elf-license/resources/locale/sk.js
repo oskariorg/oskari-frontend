@@ -1,91 +1,80 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "elf-license",
     "value": {
-        "getLicenseText": "License",
+        "getLicenseText": "Licencia",
         "errors": {
             "cannotGetLicenseInformation": {
-                "title": "Error for getting license information",
-                "message": "Cannot get license information"
-            },
-            "failedGetLicenseInformation": {
-                "title": "Failed to get license information",
-                "message": "Cannot connect to license server"
+                "title": "Chyba",
+                "message": "Informácie o licencii sa nedajú získať."
             },
             "cannotGetLicensePrice": {
-                "title": "Failed to get license price",
-                "message": "Cannot get license price"
+                "title": "Chyba",
+                "message": "Cena z licencie sa nedá získať."
             },
             "failedConclude": {
-                "title": "Error for conclude license",
-                "message": "Cannot conclude license."
+                "title": "Chyba",
+                "message": "Licencia nemohla byť uzavretá."
             },
             "concludeNoResponse": {
-                "title": "Cannot conclude license",
-                "message": "Cannot conclude license."
+                "title": "Chyba",
+                "message": "Licencia nemohla byť uzavretá."
             },
             "cannotDeactivateLicense": {
-                "title": "Failed to deactivate license",
-                "message": "Cannot deactivate license"
+                "title": "Chyba",
+                "message": "Licencia nemohla byť deaktivovaná."
             },
             "checkFields": {
-                "title": "Check required values",
-                "message": "Missing values from"
+                "title": "Chyba",
+                "message": "Chýbajú nasledovné požadované informácie:"
             }
         },
         "success": {
             "deactivateLicense": {
-                "title": "License deactivated",
-                "message": "License deactivated successfully"
+                "title": "Licencia deaktivovaná",
+                "message": "Deaktivácia licencie bola úspešná."
             }
         },
         "dialog": {
-            "licenseTitle": "License details",
+            "licenseTitle": "Informácie o licencii",
             "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
             "licenseModelDescriptions": {
                 "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
                 "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
             },
-            "licenseModelsTitle": "Licensemodels:",
-            "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
-            "loginShort": "Log in to show licensemodels.",
-            "licenseSummaryTitle": "License summary",
-            "priceTitle": "Price",
+            "licenseModelsTitle": "Licenčné modely",
+            "noRightToAnyLicenseModels": "Nemáte práva na zobrazenie licenčných modelov.",
+            "loginShort": "Na zobrazenie licenčných modelov sa prihláste.",
+            "licenseSummaryTitle": "Súhrn licencie",
+            "priceTitle": "Cena",
             "priceUnitEuro": "€",
             "help": {
-                "info": "Select a license model by clicking on it.",
-                "details": "Fill license details, all required fields are marked with asterisk (*). Press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
-                "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
-                "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
-            },
-            "concludeSuccessTitle": "License concluded successfully",
-            "conclude": {
-                "title": "License order details",
-                "productid": "Product",
-                "licenseid": "License",
-                "validto": "Valid to"
+                "info": "Vyberte si licenčný model kliknutím na model, ktorý chcete.",
+                "details": "Vyplňte informácie o licencii. Požadované údaje sú označené hviezdičkou (*). Stlačením tlačidla Ďalšie zobrazíte súhrn licencie a cenu. Stlačte tlačidlo Predchádzajúci pre výber iného licenčného modelu. Stlačením tlačidla Zavrieť zastavíte objednávanie licencie.",
+                "summary": "Prečítajte si licenčné podmienky a odsúhlaste ich stlačením Uzatvoriť. Stlačte Predchádzajúci na editovanie informácií o licencii. Stlačte Zatvoriť na zastavenie objednávky licencie.",
+                "orderDetails": "Prečítajte si informácie o licencii uvedené vyššie. Stlačte Deaktivovať licenciu na zastavenie objednávky licencie. Stlačte Zatvoriť na zatvorenie okna."
             },
             "deactivateConfirm": {
-                "title": "License deactivate",
-                "message": "Do you want deactivate your license?"
+                "title": "Deaktivácia licencie",
+                "message": "Chcete deaktivovať licenciu?"
             },
-            "validTo": "Subscription valid for {day}",
-            "licenseId": "License id: {licenseid}",
-            "licenseServiceUrl": "License service URL: {serviceurl}",
+            "validTo": "Licencia je platná do {deň}",
+            "licenseId": "Identifikátor licencie: {licenciaid}",
+            "licenseServiceUrl": "Služba URL licencie: {službaurl}",
             "licenceConcluded": {
-                "message": "License concluded, see below for the license details."
+                "message": "Licencia bola uzavretá. Prosím skontrolujte si informácie o licencii uvedené nižšie."
             }
         },
         "buttons": {
-            "close": "Close",
-            "previous": "Previous",
-            "next": "Next",
-            "conclude": "Conclude",
+            "close": "Zatvoriť",
+            "previous": "Predchádzajúci",
+            "next": "Ďalší",
+            "conclude": "Uzatvoriť",
             "ok": "OK",
-            "deactivate": "Deactivate license",
-            "no": "No",
-            "yes": "Yes"
+            "deactivate": "Deaktivovať licenciu",
+            "no": "Nie",
+            "yes": "Áno"
         }
     }
 }

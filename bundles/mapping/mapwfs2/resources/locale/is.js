@@ -7,12 +7,14 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Sjálfgefinn stíll",
         "own-style": "Eigin stíll",
+        "refresh": "Uppfæra",
+        "refresh_title": "Uppfæra gögn sem flytjast ekki sjálfkrafa á kortið.",
         "tile": {
-            "title": "MapWfs2"
+            "title": "Gagnastjórnun (WFS)"
         },
         "flyout": {
-            "title": "MapWfs2",
-            "message": "MapWfs2"
+            "title": "Gagnastjórnun (WFS)",
+            "message": "Gagnastjórnun (WFS)"
         },
         "error": {
             "title": "Villa",
@@ -21,7 +23,11 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Þú hefur ekki leyfi til að nota WFS lag {lag}.",
             "wfs_configuring_layer_failed": "Stillling á WFS lagi {lag} mistókst.",
             "wfs_request_failed": "Beiðni um WFS lag{lag0 mistókst.",
-            "features_parsing_failed": "Fitjuþáttun WFS-lagsins {layer}) mistókst."
+            "features_parsing_failed": "Fitjuþáttun WFS-lagsins {lag} mistókst."
+        },
+        "information": {
+            "title": "Afhending fitjugagna",
+            "info": "Sum gögn eru ekki afhent sjálfkrafa. <br/><br/> Vinsamlega veldu svæði á kortinu og smelltu á Uppfæra hnappinn. <br/><br/> Smelltu á Fitjugögn til að sjá fitjurnar á gögnunum."
         },
         "button": {
             "cancel": "Hætta við",

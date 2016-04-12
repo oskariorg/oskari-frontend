@@ -1,35 +1,35 @@
 Oskari.registerLocalization(
 {
-    "lang": "sk",
+    "lang": "aj",
     "key": "admin-layerrights",
     "value": {
-        "title": "Layer Rights",
-        "desc": "desc",
+        "title": "Právne vrstvy",
+        "desc": "NOT TRANSLATED",
         "tile": {
-            "title": "Map Layer Rights"
+            "title": "Právne mapové vrstvy"
         },
         "flyout": {
-            "title": "Map Layer Rights Management",
-            "message": "Layer Rights Management"
+            "title": "Právne mapové vrstvy",
+            "message": "Správa právnych vrstiev"
         },
         "rights": {
-            "name": "Map Layer",
-            "rightToPublish": "Publish",
-            "rightToView": "View",
-            "rightToDownload": "Download",
-            "rightToPublishView": "View in Embedded map",
+            "name": "Mapová vrstva",
+            "rightToPublish": "Publikovať",
+            "rightToView": "Zobraziť",
+            "rightToDownload": "Stiahnuť",
+            "rightToPublishView": "Zobraziť v uloženej mape",
             "success": {
-                "title": "Layer rights saved",
-                "message": "Layer rights were saved successfully."
+                "title": "Právne vrstvy uložené",
+                "message": "Právne mapové vrsty boli aktualizované."
             },
             "error": {
-                "title": "Layer rights not saved",
-                "message": "Saving of layer rights failed."
+                "title": "Chyba",
+                "message": "Právne mapové vrsty sa nedali aktualizovať."
             },
-            "selectValue": "Select the value"
+            "selectValue": "Vybrať hodnotu"
         },
-        "save": "Save",
-        "selectRole": "Role"
+        "save": "Uložiť",
+        "selectRole": "Úloha"
     }
 }
 );

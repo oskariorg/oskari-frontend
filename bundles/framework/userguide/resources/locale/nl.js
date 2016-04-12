@@ -22,28 +22,28 @@ Oskari.registerLocalization(
                 "tags": "kaart venster, gebruikershandleiding"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Map Tools",
+                "tags": "guide_tools"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Search",
+                "tags": "guide_search"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Map Layers",
+                "tags": "guide_maplayers"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Map Publishing",
+                "tags": "guide_publishing"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Thematic Maps",
+                "tags": "guide_thematic"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Analysis",
+                "tags": "guide_analysis"
             }
         ],
         "help": {

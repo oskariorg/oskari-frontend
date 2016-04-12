@@ -3,12 +3,12 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "MapMyPlaces",
     "value": {
-        "title": "PrikažiMojeKrajeNaKarti",
+        "title": "PrikažiMojeKraje",
         "desc": "",
-        "object-data": "Objektni podatki",
+        "object-data": "Podatki o objektu",
         "layer": {
             "organization": "Moji kraji",
-            "inspire": "Sloji moje karte"
+            "inspire": "Moji sloji karte"
         }
     }
 }
