@@ -31,7 +31,7 @@ jQuery(document).ready(function() {
             var app = Oskari.app;
             app.setApplicationSetup(setup);
             app.setConfiguration(setup.configuration);
-            app.startApplication(function(startupInfos) {
+            app.startApplication(function() {
                 // all bundles have been loaded
             });
         }

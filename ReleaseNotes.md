@@ -11,6 +11,11 @@ If you run into errors the modification is done in the grunt task "compile".
 
 Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
 
+Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
+Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
+and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
+log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
     Oskari.log('LogName').info('My info message');
