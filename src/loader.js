@@ -200,7 +200,7 @@
                 try {
                     instance.start();
                 } catch(err) {
-                    throw new Error('Couldn\'t start bundle with id ' + bundleId);
+                    throw new Error('Couldn\'t start bundle with id ' + bundleId + '. Error was: ' + err);
                 }
             },
             processBundleJS : function(bundles, callback) {
