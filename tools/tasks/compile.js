@@ -54,7 +54,7 @@ module.exports = function(grunt) {
                 if (!this.localizations[localization.lang]) {
                     this.localizations[localization.lang] = {};
                 }
-                
+
                if(boolParam !== undefined && boolParam !== null && boolParam === true) {
                     this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, localizationObj, this.localizations[localization.lang][localization.key]);
                 } else {
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
                 }
                 languageAllTempHash[localization.lang][localization.key] = {
                     localization: localization,
-                    prefix: 'Oskari.registerLocalization('    
+                    prefix: 'Oskari.registerLocalization('
                 };
                 var suffix = '),'
                 if (boolParam !== undefined && boolParam !== null) {
@@ -133,7 +133,7 @@ module.exports = function(grunt) {
             var result = this.readAndUglifyLocalization(files, languageId);
             if (!result) {
                 return;
-            }            
+            }
             eval(result.code);
 
             var templateJSON = languageAllTempHash[this.templateLanguage];
@@ -150,7 +150,7 @@ module.exports = function(grunt) {
 
             var outputFile = path + 'oskari_lang_all.js'
             var data = '';
-            
+
             for (var id in languageAllTempHash) {
                 for (var key in languageAllTempHash[id]) {
                     data += languageAllTempHash[id][key].prefix+
@@ -308,7 +308,7 @@ module.exports = function(grunt) {
         };
 
         // internal minify JS function
-        this.minifyJS = function(files, outputFile, concat) {
+        this.minifyJS = function(files, outputFile, concat, htmlImports) {
             var okFiles = [],
                 fileMap = {},
                 result = null;
@@ -357,13 +357,21 @@ module.exports = function(grunt) {
                     result.code += fs.readFileSync(okFiles[j], 'utf8');
                 }
             }
+            var code = result.code;
+            htmlImports = htmlImports || [];
+            var links = htmlImports.map(function(href) {
+                ///Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html
+                return "Oskari.loader.linkFile('" + href + "','import','text/html');";
+            });
+            code = code + links.join('');
+        //
             // -----------------------------------------------------------------------------------------------
             // "custom requirejs optimizer"
             // replaces all instances of [typeof define] to ["s"]
             // This way all amd-modules will work ok in minified output since the check
             //  they use [typeof define === 'function'] will become ["s" === 'function'] and always return false
             //  This results in define never being called from minified code which results in no "Mismatched anonymous define() module" errors
-            var index = result.code.split('typeof define');
+            var index = code.split('typeof define');
             var cleanedCode = index.join('"s"');
             // -----------------------------------------------------------------------------------------------
 
@@ -377,11 +385,14 @@ module.exports = function(grunt) {
             fs.mkdirSync(compiledDir);
         }
         var files = [];
+        var vulcanizedImports = [];
         for (var j = 0; j < processedAppSetup.length; ++j) {
             var array = parser.getFilesForComponent(processedAppSetup[j], 'javascript');
             files = files.concat(array);
+            var importArray = parser.getFilesForComponent(processedAppSetup[j], 'vulcanizedHtml');
+            vulcanizedImports = vulcanizedImports.concat(importArray);
         }
-        this.minifyJS(files, compiledDir + 'oskari.min.js', options.concat);
+        this.minifyJS(files, compiledDir + 'oskari.min.js', options.concat, vulcanizedImports);
 
         var langfiles = {};
         for (var j = 0; j < processedAppSetup.length; ++j) {
