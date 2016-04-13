@@ -169,9 +169,6 @@ Oskari.clazz.define(
                 };
 
                 me.getMapModule().getMap().addPopup(popup);
-                if (me.adaptable) {
-                    me._adaptPopupSize(id, refresh);
-                }
 
                 me._panMapToShowPopup(lonlat);
 
@@ -195,6 +192,10 @@ Oskari.clazz.define(
                 if (typeof inputs.placeholder === 'function') {
                     inputs.placeholder();
                 }
+            }
+
+            if (me.adaptable && !isInMobileMode) {
+                me._adaptPopupSize(id, refresh);
             }
             me._popups[id] = {
                 title: title,

@@ -207,9 +207,6 @@ Oskari.clazz.define(
 
                 me.getMapModule().getMap().addOverlay(popup);
                 jQuery('.olPopup').html(popupContentHtml);
-                 if (me.adaptable) {
-                    me._adaptPopupSize(id, refresh);
-                }
 
                 me._panMapToShowPopup(lonlatArray);
 
@@ -232,6 +229,9 @@ Oskari.clazz.define(
                 if (typeof inputs.placeholder === 'function') {
                     inputs.placeholder();
                 }
+            }
+            if (me.adaptable && !isInMobileMode) {
+                me._adaptPopupSize(id, refresh);
             }
 
             me._popups[id] = {
