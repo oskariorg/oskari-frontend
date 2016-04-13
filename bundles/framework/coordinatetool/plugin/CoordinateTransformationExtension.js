@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._projectionSelect.on('change', function(event) {
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                     //getting transformed coordinate from frontend first
-                    var data = coordinateToolPlugin.refresh();
+                    coordinateToolPlugin.refresh();
 
                     var successCb = function(newLonLat) {
                          var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
@@ -62,8 +62,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     var errorCb = function(){
                         me._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
                     };
+
                     //getting precise transformed coordinates from server
-                    me.getTransformedCoordinatesFromServer(data, me._mapmodule.getProjection(), me._projectionSelect.val(), successCb, errorCb);
+                    me.getTransformedCoordinatesFromServer(coordinateToolPlugin.lastLonLat, me._mapmodule.getProjection(), me._projectionSelect.val(), successCb, errorCb);
                 });
             }
             return me._projectionSelect;
@@ -110,6 +111,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {Object} data: transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function(data, srs, targetSRS) {
+            var me = this;
+            me._coordinatesFromServer = false;
              if(!data) {
                 var map = this._sandbox.getMap();
                 data = {
