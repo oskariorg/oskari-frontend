@@ -68,6 +68,12 @@ Oskari.loader = function(startupSequence, config) {
             }
 
             var bundleToStart = seqToLoad.bundlename;
+            if(!bundleToStart) {
+                log.warn('StartupSequence item doesn\'t contain bundlename. Skipping ', seqToLoad);
+                // iterate to next
+                this.processSequence(done);
+                return;
+            }
             // if bundleinstancename is missing, use bundlename for config key.
             var configId = seqToLoad.bundleinstancename || bundleToStart;
             var config = appConfig[configId] || {};
