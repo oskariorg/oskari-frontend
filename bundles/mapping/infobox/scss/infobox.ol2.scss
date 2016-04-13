@@ -54,12 +54,16 @@ div.popupContent {
     position: relative;
     left: 0px;
     top: 0px;
-    height: 250px;
+    max-height: 250px;
     @include border-radius(0px 0px 6px 6px);
     border: 1px solid;
     border-color: #424343;
     overflow: auto;
     padding: 20px 20px 20px 25px;
+
+    div.contentWrapper-infobox {
+        margin-bottom: 10px;
+    }
 
     hr.infoboxLine {
         border: 1px solid;
@@ -69,7 +73,6 @@ div.popupContent {
 
     span.infoboxActionLinks {
         padding-right: 15px;
-        padding-left: 15px;
     } 
 
 }

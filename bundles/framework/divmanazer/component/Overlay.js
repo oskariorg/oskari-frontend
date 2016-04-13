@@ -82,7 +82,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
             }
+            me.__notifyListeners('close');
         },
+        
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
@@ -90,5 +92,58 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
                     me.close();
                 });
             });
-        }
+        },
+
+        /**
+         * Add listener to be called when popup is closed
+         * @param  {Function} callback function to call on close
+         */
+        onClose: function (callback) {
+            this.__getListeners('close').push(callback);
+        },
+        /**
+         * Clears any listeners (registered with onClose(callback)-function).
+         */
+        clearListeners: function () {
+            var key;
+
+            for (key in this.__listeners) {
+                if (this.__listeners.hasOwnProperty(key)) {
+                    this.__listeners[key] = null;
+                    delete this.__listeners[key];
+                }
+            }
+        },
+        /**
+         * Notifies all listeners of given type. Passes optional event object to callback
+         * @param {String} type of listener ('close' for example)
+         * @param {Object} event (optional)
+         */
+        __notifyListeners: function (type, event) {
+            if (!type) {
+                return;
+            }
+            if (!this.__listeners[type]) {
+                return;
+            }
+            _.each(this.__listeners[type], function (cb) {
+                cb(event);
+            });
+        },
+        /**
+         * Returns an array of listeners for given type.
+         * @param {String} type of listener ('close' for example)
+         */
+        __getListeners: function (type) {
+            if (!type) {
+                return [];
+            }
+            if (!this.__listeners) {
+                this.__listeners = {};
+            }
+            if (!this.__listeners[type] || !this.__listeners[type].push) {
+                this.__listeners[type] = [];
+            }
+            return this.__listeners[type];
+        },
     });

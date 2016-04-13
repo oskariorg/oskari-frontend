@@ -128,13 +128,15 @@ function() {
         },
         'Publisher.ColourSchemeChangedEvent': function(evt){
             this._handleColourSchemeChangedEvent(evt);
+        },
+        MapSizeChangedEvent: function (evt) {
+            this.popupPlugin._handleMapSizeChanges(evt.getWidth(), evt.getHeight());
         }
 	},
 
 	_handleColourSchemeChangedEvent: function(evt){
 		this.popupPlugin._changeColourScheme(evt.getColourScheme());
     },
-
 	/**
 	 * @method stop
 	 * implements BundleInstance protocol stop method

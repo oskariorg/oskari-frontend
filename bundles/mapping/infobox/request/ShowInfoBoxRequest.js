@@ -17,34 +17,55 @@ Oskari.clazz
          *        popup title
          * @param {Object[]} contentData
          *        JSON presentation for the popup data
-         * @param {OpenLayers.LonLat} lonlat
+         * @param {OpenLayers.LonLat} position
          *        coordinates where to show the popup
-         * @param {Boolean} hidePrevious
-         *        if true, hides any previous popups when showing this, defaults to false
-         * @param {Object} colourScheme
-         *        the colour scheme object for the popup (optional, uses the default colour scheme if not passed)
-         * @param {String} font
-         *        the id of the font for the popup (optional, uses the default font if not passed)
+         * @param {Object} options
+         *        Additional options for infobox:
+                 * @param {Boolean} hidePrevious
+                 *        if true, hides any previous popups when showing this, defaults to false
+                 * @param {Object} colourScheme
+                 *        the colour scheme object for the popup (optional, uses the default colour scheme if not passed)
+                 * @param {String} font
+                 *        the id of the font for the popup (optional, uses the default font if not passed)
+                 * @param {Object} mobileBreakpoints
+                 *        The size of the screen in pixels to start using mobile mode. {width: 'mobileModeWidth', height: 'mobileModeHeight'}
          *
          * contentData format example:
          * [{
          *    html: "",
-         *  actions : {
-         *       "Tallenna" : callbackFunction,
-         *       "Sulje" : callbackFunction
-         * }
+         *  actions : [
+         *      {
+         *          name: "My link 1",
+         *          type: "link",
+         *          action: {
+         *              info: "action can be function or object"
+         *              info2: "Object is only possibility with RPC. If action is function, the function is called when action element is clicked"
+         *          }
+         *      },
+         *      {
+         *          name: "My button 1",
+         *          type: "button",
+         *          action: myfunction,
+         *          group: 1
+         *      },
+         *      {
+         *          name: "My button 2",
+         *          type: "button",
+         *          action: {
+         *              info: "Button 2 was clicked"
+         *          },
+         *          group: 1
+         *      }
          * }]
          */
 
-        function (id, title, content, position, hidePrevious, colourScheme, font) {
+        function (id, title, contentData, position, options) {
             this._creator = null;
             this._id = id;
             this._title = title;
-            this._content = content;
+            this._content = contentData;
             this._position = position;
-            this._hidePrevious = (hidePrevious === true);
-            this._colourScheme = colourScheme;
-            this._font = font;
+            this._options = options;
             this._additionalTools = [];
         }, {
             /** @static @property __name request name */
@@ -107,11 +128,11 @@ Oskari.clazz
                 return this._colourScheme;
             },
             /**
-             * @method getFont
-             * @return {String} the id of the font for the popup
+             * @method getOptions
+             * @return {Object} additional options for infobox
              */
-            getFont: function () {
-                return this._font;
+            getOptions: function () {
+                return this._options;
             },
             addAdditionalTool: function(toolDefs) {
                 this._additionalTools.push(toolDefs);
