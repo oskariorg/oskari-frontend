@@ -97,7 +97,8 @@ Oskari.clazz.define("Oskari.integration.bundle.backbone.BackBoneBundle", functio
             "Import-Namespace" : ["Oskari"],
             "Import-Bundle" : {}
         }
-    }
+    },
+    "dependencies": ["jquery", "lodash"]
 });
 
 Oskari.bundle_manager.installBundleClass("backbone", "Oskari.integration.bundle.backbone.BackBoneBundle");

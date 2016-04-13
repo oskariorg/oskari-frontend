@@ -7,6 +7,7 @@ div#visualization-form div.renderButton {
 div.renderdialog label {
   padding-top: 5px;
   padding-bottom: 5px; }
+
 div.renderdialog div.icon-button {
   margin: 0 2px 2px;
   width: 32px;
@@ -16,10 +17,12 @@ div.renderdialog div.icon-button {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
+
 div.renderdialog .ui-widget-content {
   background: #AAAAAA repeat-x scroll 50% 50% #FFFFFF;
   border: 1px solid #AAAAAA;
   color: #222222; }
+
 div.renderdialog .ui-slider {
   position: relative;
   text-align: left;
@@ -32,6 +35,7 @@ div.renderdialog .ui-slider {
     z-index: 2;
     margin-top: 2px;
     border: 0 !important; }
+
 div.renderdialog .ui-slider-horizontal {
   height: 0.8em; }
   div.renderdialog .ui-slider-horizontal .ui-slider-handle {
@@ -39,6 +43,7 @@ div.renderdialog .ui-slider-horizontal {
     top: -0.3em;
     background-image: url("../../../oskariui/resources/images/horizontal_handle.png");
     background-repeat: no-repeat; }
+
 div.renderdialog .ui-state-default,
 div.renderdialog .ui-widget-content .ui-state-default,
 div.renderdialog .ui-widget-header .ui-state-default {
@@ -46,13 +51,16 @@ div.renderdialog .ui-widget-header .ui-state-default {
   border: 1px solid #D3D3D3;
   color: #555555;
   font-weight: normal; }
+
 div.renderdialog .preview {
   width: 50px;
   height: 50px;
   border: 1px solid;
   margin: 5px; }
+
 div.renderdialog div.actions input {
   float: right; }
+
 div.renderdialog div.sizer-values {
   position: relative;
   margin-left: 5px;
@@ -60,21 +68,26 @@ div.renderdialog div.sizer-values {
   margin-bottom: 11px;
   width: 110px;
   height: 10px; }
+
 div.renderdialog div.sizer-value {
   position: absolute; }
+
 div.renderdialog div.icon-buttons {
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px; }
+
 div.renderdialog div.color-grid {
   width: 120px;
   height: 40px;
   margin: 5px; }
+
 div.renderdialog div.color-rectangle {
   width: 120px;
   height: 40px;
   border: 1px solid #000000;
   position: absolute; }
+
 div.renderdialog div.color-cell {
   width: 20px;
   height: 20px;
@@ -83,39 +96,49 @@ div.renderdialog div.color-cell {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float: left; }
+
 div.renderdialog div.colorcontainer {
   width: 150px;
   background: #223311; }
+
 div.renderdialog div.colorcolumn1 {
   float: left;
   width: 40px;
   padding: 5px;
   margin-bottom: 5px; }
+
 div.renderdialog div.colorcolumn2 {
   float: right;
   width: 100px;
   margin-bottom: 5px; }
+
 div.renderdialog div.colorcolumn21 {
   float: left;
   width: 40px;
   padding: 5px; }
+
 div.renderdialog div.colorcolumn22 {
   float: right;
   width: 40px;
   padding: 5px; }
+
 div.renderdialog div.color-label {
   margin-top: 10px; }
+
 div.renderdialog input.custom-color {
   width: 25px;
   margin-top: 5px; }
   div.renderdialog input.custom-color:disabled {
     background: #dddddd; }
+
 div.renderdialog input.color-source {
   margin: 5px; }
+
 div.renderdialog input.linewidth {
   width: 50px;
   margin-top: 5px;
   padding: 0; }
+
 div.renderdialog input.message-text {
   width: 120px; }
 
@@ -159,6 +182,7 @@ div.simpleColorChooser {
 div.areaform div.column2 {
   float: right;
   width: 565px; }
+
 div.areaform div.custom-fill {
   width: 155px; }
 
@@ -168,6 +192,7 @@ div.pointform div.column1 {
   height: 225px;
   padding-left: 5px;
   padding-right: 5px; }
+
 div.pointform div.sizer {
   margin-left: 7px;
   margin-top: 6px; }
@@ -179,6 +204,7 @@ div.fill div.icon-button {
 div.areaform .icon-button, div.lineform .icon-button {
   width: 30px !important;
   height: 30px !important; }
+
 div.areaform div.column1, div.lineform div.column1 {
   float: left;
   width: 130px;
@@ -217,5 +243,3 @@ div.linevisualization {
 
 div.areavisualization {
   width: 730px; }
-
-/*# sourceMappingURL=visualizationform.css.map */

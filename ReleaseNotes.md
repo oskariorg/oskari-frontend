@@ -8,6 +8,39 @@ Infobox-functionality is modified to allow displaying infobox in mobile mode as 
 
 ShowInfoBoxRequest is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints mean the size of the screen in pixels to start using mobile mode. It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
 
+### Oskari core and require.js
+
+Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
+The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
+ no require.js error about "Mismatched anonymous define() module" should appear when running the minified code.
+If you run into errors the modification is done in the grunt task "compile".
+
+Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
+Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
+Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
+and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
+log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+
+Added a logger implementation that can be accessed with (see src/logger.js for details):
+
+    Oskari.log('LogName').info('My info message');
+
+### tools
+
+The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
+This is in preparation for the core rewrite/restructuring/clarification.
+The build includes requirejs with it's text plugin from under libraries.
+
+### framework/search
+
+Fixed search result table sorting when columns contains word and numbers.
+
+### divmanazer/grid
+
+Fixed table sorting when columns contains word and numbers.
+>>>>>>> 107e2bd2b10c8bcf27e3220249050b776da43663
+
 ### toolbar and infobox
 
 Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
@@ -24,7 +57,10 @@ Updated openlayers version in published maps from 3.11.2 -> 3.14.2
 
 ### core
 
-Marker icons are now defined markerShapes array in /Oskari/bundles/bundle.js. 
+#### markers
+
+Marker icons are now defined in mappfull conf in svgMarkers property.
+
 Array contains objects which tell following info:
 - x: image center point in pixels (starting left to right)
 - y: image center point in pixels (starting bottom to up)
@@ -37,8 +73,9 @@ For example:
       data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
   };
 
-In the future markers will be transferred to another place.
+#### util.naturalSort
 
+Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
 
 ### divmanazer/ui-components
 
@@ -139,7 +176,7 @@ Increased default animation speed from 2000 ms to 4000 ms. Also made possible to
     }
 ```
 
-###tampere/conter-editor
+### tampere/conter-editor
 
 New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at oskari.org / Adding functionalities 
 
@@ -150,6 +187,12 @@ A modification in the request of describe WFS feature type.
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
+
+## 1.35.2
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol2/ol3
+
+Fixed map move so at this not send twice setLocation request.
 
 ## 1.35.1
 

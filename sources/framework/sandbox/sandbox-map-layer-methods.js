@@ -10,12 +10,13 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * @method findMapLayerFromAllAvailable
      * Finds map layer from all available. Uses Oskari.mapframework.service.MapLayerService.
      *
-     * @param {String} id of the layer to get
+     * @param {String} id of the layer to get. If id is null, name is used to search the layer.
+     * @param {String} name of the layer to get. Only used if id = null.
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
      *  layer domain object if found matching id or null if not found
      */
-    findMapLayerFromAllAvailable: function (id) {
-        var layer = this._core.findMapLayerFromAllAvailable(id);
+    findMapLayerFromAllAvailable: function (id, name) {
+        var layer = this._core.findMapLayerFromAllAvailable(id, name);
         return layer;
     },
 

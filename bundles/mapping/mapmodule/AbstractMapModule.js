@@ -1088,11 +1088,12 @@ Oskari.clazz.define(
                 marker = this._markerTemplate.clone(),
                 svgObject = null;
 
-            // marker shape is number --> find it form Oskari.markers
+            // marker shape is number --> find it from Oskari.getMarkers()
             if(!isNaN(markerStyle.shape)) {
-                svgObject = Oskari.markers[markerStyle.shape];
+                var markers = Oskari.getMarkers();
+                svgObject = markers[markerStyle.shape];
                 if(!svgObject) {
-                    svgObject = Oskari.markers[this._defaultMarker.shape];
+                    svgObject = markers[this._defaultMarker.shape];
                 }
 
                 if(markerStyle.color) {
@@ -1188,6 +1189,15 @@ Oskari.clazz.define(
             var htmlObject = jQuery(svg);
             htmlObject.attr(attr,value);
             return htmlObject.outerHTML();
+        },
+        /**
+         * Converts from abstract marker size to real pixel size
+         * @method  @public getMarkerIconSize
+         * @param size Abstract size
+         * @returns {number} Size in pixels
+         */
+        getMarkerIconSize : function(size) {
+            return 40 + 10 * size;
         },
 /* --------------- /SVG MARKER ------------------------ */
 

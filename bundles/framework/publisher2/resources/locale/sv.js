@@ -192,7 +192,7 @@ Oskari.registerLocalization(
                 "nohelp": "Användarhandledning är inte tillgänglig.",
                 "saveFailed": "Inbäddandet av kartan misslyckades. Försök på nytt senare.",
                 "nameIllegalCharacters": "Namnet på kartan innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck.",
-                "domainIllegalCharacters": "Namnet på webbplatsen innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck."
+                "domainIllegalCharacters": "Namnet på webbplatsen innehåller otillåtna tecken. Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck."
             }
         },
         "NotLoggedView": {

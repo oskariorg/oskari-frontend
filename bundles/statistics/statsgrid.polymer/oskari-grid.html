@@ -1,0 +1,126 @@
+<link rel="import"
+      href="libs/polymer/polymer.html">
+
+<dom-module id="oskari-grid">
+
+  <template>
+    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
+      <thead class="oskari-grid-width" id="oskari-grid-header" style="">
+        <tr class="oskari-grid-width">
+          <template is="dom-if" if="[[selection]]">
+            <th><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
+                id="allSelectedCheckbox"></input></th>
+          </template>
+          <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
+            <th>
+              <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
+              <template is="dom-if" if="[[filtering]]">
+                <template is="dom-if" if="[[header.filter]]">
+                  <div on-tap="onFilter" class="icon-funnel" title="[[onFilterTitle]]"
+                    index="[[index]]" header="[[header]]"></div>
+                </template>
+              </template>
+              <template is="dom-if" if="[[deleting]]">
+                <template is="dom-if" if="[[header.delete]]">
+                  <div on-tap="onDelete" class="icon-close-dark statsgrid-remove-indicator"
+                    title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
+                </template>
+              </template>
+            </th>
+          </template>
+          <th>
+            <div>
+              <div class$="[[indicatorToggleClass]]" on-tap="toggleIndicators"></div>
+              <div>[[locale.addIndicatorButton]]</div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="oskari-grid-width" style="padding: 0px; border: 0px;">
+        <tr class="oskari-grid-width" id="statisticsContainer">
+          <td colspan$="[[numcols]]" class="oskari-grid-width">
+            <span on-tap="toggleStats" class$="[[statsToggleClass]]"></span><span>[[locale.statistic.title]]</span>
+          </td>
+        </tr>
+        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+          <iron-collapse id="statsCollapse">
+            <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block; margin: 0px;">
+              <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
+                <tr class="oskari-grid-width">
+                  <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
+                    <td>
+                      <span>[[datum]]</span>
+                    </td>
+                  </template>
+                  <td></td>
+                </tr>
+              </template>
+            </table>
+          </iron-collapse>
+        </td></tr>
+      </tbody>
+      <template is="dom-if" if="[[selection]]">
+        <tbody class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
+          <tr class="oskari-grid-width" id="unselectedContainer">
+            <td colspan$="[[numcols]]" class="oskari-grid-width">
+              <span on-tap="toggleUnselected" class$="[[unselectedToggleClass]]"></span><span>[[locale.not_included]] ([[numExcluded]])</span>
+            </td>
+          </tr>
+          <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+            <iron-collapse id="unselectedCollapse">
+              <table class="oskari-grid-width" style="margin: 0px;">
+                <tbody id="oskari-grid-unselected" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
+                  <template is="dom-repeat" items="{{unselectedRows}}" as="unselectedRow" id="unselected-rows-template">
+                    <tr class="oskari-grid-width">
+                      <td style="width: 41px;"><input type="checkbox" checked="{{unselectedRow.selected::change}}" on-change="selectionsChanged"></input></td>
+                      <template is="dom-repeat" items="[[unselectedRow.data]]" as="datum">
+                        <td>
+                          <span>[[datum]]</span>
+                        </td>
+                      </template>
+                      <td></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </iron-collapse>
+          </td></tr>
+        </tbody>
+      </template>
+      <tbody class="oskari-grid-width" id="oskari-grid-selected-container" style="display: block; overflow-y: hidden; overflow-x: hidden;">
+        <tr class="oskari-grid-width" id="selectedContainer">
+          <td colspan$="[[numcols]]" class="oskari-grid-width">
+            <span on-tap="toggleSelected" class$="[[selectedToggleClass]]"></span><span>[[locale.included]] ([[numIncluded]])</span>
+          </td>
+        </tr>
+        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+          <iron-collapse id="selectedCollapse" opened="true">
+            <table class="oskari-grid-width" style="margin: 0px;">
+              <tbody id="oskari-grid-body" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
+                <template is="dom-repeat" items="{{selectedRows}}" as="row" id="rowsTemplate">
+                  <tr class="oskari-grid-width">
+                    <template is="dom-if" if="[[selection]]">
+                      <td style="width: 41px;"><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></td>
+                    </template>
+                    <template is="dom-repeat" items="[[row.data]]" as="datum">
+                      <td>
+                        <span>[[datum]]</span>
+                      </td>
+                    </template>
+                    <td></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </iron-collapse>
+        </td></tr>
+      </tbody>
+    </table>
+    <content></content>
+  </template>
+
+  <script src="polymerjs/oskari-grid.js">
+  </script>
+
+</dom-module>
+

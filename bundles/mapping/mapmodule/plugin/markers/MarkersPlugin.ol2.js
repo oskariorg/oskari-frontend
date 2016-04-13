@@ -480,11 +480,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     }
                 } else {
                     // Construct image
-                    size = this._getSizeInPixels(data.size);
+                    //size = this._getSizeInPixels(data.size);
+                    size = data.size;
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
-                size = this._getSizeInPixels(data.size);
+                //size = this._getSizeInPixels(data.size);
+                size = data.size;
             }
             if (typeof data.color === 'string') {
                 if(data.color.charAt(0)!=='#') {
@@ -503,7 +505,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var style = {
                 image : {
                     shape: data.shape,
-                    size: me._getSizeInPixels(data.size),
+                    //size: me._getSizeInPixels(data.size),
+                    size: data.size,
                     color: data.color,
                     stroke: data.stroke,
                     opacity: 1
@@ -588,9 +591,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {number} Size in pixels
          * @private
          */
-        _getSizeInPixels: function(size) {
+         //--> moved to AbstractMapModule.js
+        /*_getSizeInPixels: function(size) {
             return 40 + 10 * size;
-        },
+        },*/
 
         /**
          * Raises the marker layer above the other layers

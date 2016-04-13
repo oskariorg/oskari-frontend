@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
             var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId),
                 i;
             var olLayerList,
+                wfsLayerPlugin,
                 count;
             if (!layer) {
                 return;
