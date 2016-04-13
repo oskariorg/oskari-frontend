@@ -4671,7 +4671,6 @@ Oskari.util = (function () {
         return;
     }
     var log = Oskari.log('Loader');
-    log.enableDebug(true);
     var linkFile = function(href, rel, type) {
         var importParentElement = document.head || document.body;
         var linkElement = document.createElement('link');
