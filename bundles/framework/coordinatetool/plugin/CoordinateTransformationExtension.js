@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             ),
             projectionSelectOption: jQuery('<option></option>')
         };
+        this._ajaxXhr = null;
     }, {
         /**
          * Generates the element for the projection transformation based on config
@@ -157,7 +158,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 targetSRS = this._projectionSelect.val();
             }
             if(srs !== targetSRS) {
-                jQuery.ajax({
+                if(me._ajaxXhr) {
+                    me._ajaxXhr.abort();
+                }
+                me._ajaxXhr = jQuery.ajax({
                     url: me._sandbox.getAjaxUrl('Coordinates'),
                     data: {
                         lat: lonlat.lonlat.lat,

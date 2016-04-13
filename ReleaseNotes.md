@@ -2,6 +2,30 @@
 
 ## 1.36
 
+### Oskari core and require.js
+
+Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
+The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
+ no require.js error about "Mismatched anonymous define() module" should appear when running the minified code.
+If you run into errors the modification is done in the grunt task "compile".
+
+Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
+Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
+Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
+and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
+log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+
+Added a logger implementation that can be accessed with (see src/logger.js for details):
+
+    Oskari.log('LogName').info('My info message');
+
+### tools
+
+The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
+This is in preparation for the core rewrite/restructuring/clarification.
+The build includes requirejs with it's text plugin from under libraries.
+
 ### framework/search
 
 Fixed search result table sorting when columns contains word and numbers.

@@ -46,6 +46,14 @@ Run command:
 
 	npm run trim
 
+## Building the Oskari core
+
+Run command:
+
+	npm run core
+
+Generates a new version of file Oskari/bundles/bundle.js
+
 ## Localization
 
 ### Generate excel-sheets of current bundle-localizations

@@ -64,10 +64,9 @@ jQuery(document).ready(function() {
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
-        app.startApplication(function(startupInfos) {
-          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+        app.startApplication(function() {
           if (cb) {
-              cb(instance);
+              cb();
           }
         });
     }
@@ -87,8 +86,8 @@ jQuery(document).ready(function() {
               var appSetup = {
                 "startupSequence": app.startupSequence
               };
-              start(appSetup, app.configuration, function(instance) {
-                    var sb = instance.getSandbox();
+              start(appSetup, app.configuration, function() {
+                    var sb = Oskari.getSandbox();
                     gfiParamHandler(sb);
                 });
             } else {
