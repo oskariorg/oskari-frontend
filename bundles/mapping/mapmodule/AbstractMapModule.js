@@ -1580,6 +1580,19 @@ Oskari.clazz.define(
             });
 
             this.orderLayersByZIndex();
+        },
+        /**
+         * @method @public isValidGeoJson
+         * checks geoJSON validity
+         * @return {boolean} true: if valid
+         */
+        isValidGeoJson: function(geoJson) {
+            //checking if geoJSON has features
+            if(geoJson.features && geoJson.features.length>0) {
+               return true;
+            }
+            //checkig other things, will be added later...
+            return false;
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {
