@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "elf-geolocator",
     "value": {
         "title": "Geolokátor",

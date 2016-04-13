@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "MapMyPlaces",
     "value": {
         "title": "MojeMiestaNaMape",

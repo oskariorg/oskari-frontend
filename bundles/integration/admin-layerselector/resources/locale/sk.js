@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "admin-layerselector",
     "value": {
         "title": "Administrácia mapových vrstiev",

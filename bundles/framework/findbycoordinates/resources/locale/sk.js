@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "findbycoordinates",
     "value": {
         "title": "Nájsť najbližšuiu adresu",
