@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Metaúdaje",
@@ -17,6 +17,7 @@ Oskari.registerLocalization(
             "inspire": "Inspire metaúdaje",
             "jhs": "ISO 19115 metaúdaje",
             "quality": "Kvalita údajov",
+            "actions": "NOT TRANSLATED",
             "xml": "ISO 19139 XML súbor",
             "map": "Geografický rozsah",
             "pdf": "Vytlačiť",
@@ -430,6 +431,11 @@ Oskari.registerLocalization(
                 "temporalValidity": "Časová platnosť",
                 "thematicClassificationCorrectness": "Správnosť tematickej klasifikácie",
                 "topologicalConsistency": "Topologická konzistencia"
+            },
+            "layerList": {
+                "title": "NOT TRANSLATED",
+                "show": "NOT TRANSLATED",
+                "hide": "NOT TRANSLATED"
             }
         },
         "tile": {

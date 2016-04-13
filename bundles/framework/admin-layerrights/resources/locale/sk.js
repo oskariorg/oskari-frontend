@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "admin-layerrights",
     "value": {
         "title": "Právne vrstvy",

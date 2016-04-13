@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
         "tabTitle": "Vyhľadávanie metaúdajov",

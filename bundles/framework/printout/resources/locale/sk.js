@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "aj",
+    "lang": "sk",
     "key": "Printout",
     "value": {
         "title": "Vytlačiť zobrazenie mapy",
