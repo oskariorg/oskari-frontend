@@ -4614,16 +4614,21 @@ Oskari.util = (function () {
 
 }());
 
+(function(o){
+    if(!o) {
+        // can't add bundle if no Oskari ref
+        return;
+    }
+    var _bundleRegistry = {};
+    // Add the bundle method to Oskari
+    o.bundle = function(bundleId, value) {
+        if(value) {
+            _bundleRegistry[bundleId] = value;
+        }
+        return _bundleRegistry[bundleId];
+    };
+}(Oskari));
 
-Oskari.bundle = function(bundleId, value) {
-    if(!Oskari.samiRegistry) {
-        Oskari.samiRegistry = {};
-    }
-    if(value) {
-        Oskari.samiRegistry[bundleId] = value;
-    }
-    return Oskari.samiRegistry[bundleId];
-};
 /**
  * Loader
  * @param  {[type]} startupSequence [description]
