@@ -23,16 +23,19 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            if (request.getHidePrevious()) {
+            var options = request.getOptions(),
+                hidePrevious = options.hidePrevious,
+                mobileBreakpoints = options.mobileBreakpoints;
+            if (hidePrevious) {
                 this.popupPlugin.close(undefined);
             }
+
             this.popupPlugin.popup(
                 request.getId(),
                 request.getTitle(),
                 request.getContent(),
                 request.getPosition(),
-                request.getColourScheme(),
-                request.getFont(),
+                options,
                 request.getAdditionalTools()
             );
         }

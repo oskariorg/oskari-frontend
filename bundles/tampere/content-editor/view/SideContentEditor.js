@@ -1257,8 +1257,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.sandbox.request(me, request);
                     me._enableGFIRequestProcess();
                 };
-
-                var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), true);
+                var options = {
+                    hidePrevious: true
+                };
+                var request = me.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')("contentEditor", me.loc.deleteGeometryDialog.title, content, new OpenLayers.LonLat(featureGeometry.getCentroid().x, featureGeometry.getCentroid().y), options);
                 me.sandbox.request(me.getName(), request);
                 $("#delete-dialog").parent().parent().css('height', 'auto').css('padding-bottom', '30px');
             }

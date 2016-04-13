@@ -969,6 +969,10 @@ Oskari.clazz.define(
                 sandbox.request(me.getName(), request);
             };
 
+            var options = {
+                hidePrevious: true
+            };
+
             var rN = 'InfoBox.ShowInfoBoxRequest',
                 rB = sandbox.getRequestBuilder(rN),
                 request = rB(
@@ -976,7 +980,7 @@ Oskari.clazz.define(
                     loc.title,
                     content,
                     new OpenLayers.LonLat(result.lon, result.lat),
-                    true
+                    options
                 );
 
             sandbox.request(me.getName(), request);

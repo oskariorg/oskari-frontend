@@ -215,7 +215,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 me._saveForm();
             };
 
-            var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
+            var options = {
+                hidePrevious: true
+            };
+            var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, options);
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[name=placename]').focus();
