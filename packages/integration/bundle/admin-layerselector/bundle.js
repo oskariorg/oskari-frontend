@@ -90,6 +90,10 @@ Oskari.clazz.define(
                     "lang" : "sl",
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/sl.js"
+                }, {
+                    "lang" : "nb",
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/integration/admin-layerselector/resources/locale/nb.js"
                 }
             ],
             "resources": []

@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "Publisher",
     "value": {
         "title": "Publisering av kart",
-        "flyouttitle": "Lag 'embeddede' kart",
+        "flyouttitle": "Lag 'embedded' kart",
         "desc": "",
         "published": {
             "title": "Kart for 'embedding' er laget",
@@ -144,7 +144,7 @@ Oskari.registerLocalization(
                 "small": "Liten",
                 "medium": "Medium",
                 "large": "Stor",
-                "fill": "Fyll mellomrom",
+                "fill": "Fyll område",
                 "custom": "Spesialstørrelse",
                 "width": "bredde",
                 "height": "høyde",
@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Vis kartlag i menyen",
                 "info": "Velg kartlag som bakgrunn.Du kan velge standard bakgrunnslag i vinduet for forhåndsvisning",
-                "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen.",
-                "promote": "Vil du også vise satellitt/flyfoto?"
+                "tooltip": "Bakgrunnen er vist i det nederste kartlaget. Kun ett kartlag kan bli vises om gangen.  Brukeren kan skifte bakgrunn dersom det er valgt flere lag. Standard kartlag kan velges i forhåndsvisningen."
             },
             "preview": "Forhåndsvisning av 'embedded' kart",
             "location": "Posisjon og zoomnivå",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan opprette 'embeddede' kart etter at du har logget inn",
             "signup": "Logg inn",
-            "signupUrl": "/web/en/login",
-            "register": "Registrer",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrer"
         },
         "StartView": {
             "text": "Du kan lage kartet og 'embedde' det inn i ditt eget nettsted",
@@ -217,20 +214,14 @@ Oskari.registerLocalization(
             "show": "Vis",
             "hide": "Skjul",
             "hidden": "Kartlaget er midlertidig skjult",
-            "selectAsBaselayer": "",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Kartlaget kan publiseres i et 'embedded' kart",
-                    "tooltip": "Kartlaget kan publiseres i et 'embedded' kart. Antall brukere per uke kan være begrenset"
-                }
-            }
+            "selectAsBaselayer": "Bakgrunnskartlag"
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Kan publiseres"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Vis kun kartlag som kan publiseres"
             }
         }
     }

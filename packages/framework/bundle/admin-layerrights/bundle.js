@@ -95,6 +95,10 @@ function() {
             "lang" : "sl",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/sl.js"
+        }, {
+            "lang" : "nb",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/nb.js"
         }]
     },
     "bundle" : {
