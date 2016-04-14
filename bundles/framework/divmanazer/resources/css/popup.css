@@ -95,9 +95,9 @@
       margin: 10px; }
   .divmanazerpopup h3.popupHeader {
     background-color: #FDF8D9;
-    border-radius: 5px 5px 0 0;
     padding: 8px 10px; }
-  .divmanazerpopup div.icon-close {
+
+  .divmanazerpopup div.close-icon {
     position: absolute;
     top: 8px;
     right: 5px; }
@@ -108,10 +108,10 @@
     margin-top: -6px !important;
     margin-left: -4px !important;
     overflow: auto; }
-  .divmanazerpopup.mobile-portrait {
-    width: 100%;
-    top: 0% !important;
-    left: 0% !important;
+  div.divmanazerpopup.mobile-portrait {
+    width: 94%;
+    top: 10% !important;
+    left: 3% !important;
     margin-top: -6px !important;
     margin-left: -4px !important;
     overflow: auto; }

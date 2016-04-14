@@ -391,15 +391,21 @@ Oskari.clazz.define(
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
-                    resultActions[name] = action(result);
+                    resultActions['name'] = name;
+                    resultActions['type'] = 'button';
+                    resultActions['action'] = action(result);
                 }
             }
 
             var contentItem = {
                 html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
-                actions: resultActions
+                actions: [resultActions]
             };
             var content = [contentItem];
+
+            var options = {
+                hidePrevious: true
+            };
 
             /* impl smashes action key to UI - we'll have to localize that here */
             contentItem.actions[loc.close] = function () {
@@ -416,7 +422,7 @@ Oskari.clazz.define(
                     loc.title,
                     content,
                     new OpenLayers.LonLat(result.lon, result.lat),
-                    true
+                    options
                 );
 
             sandbox.request(this.instance.getName(), request);

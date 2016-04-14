@@ -17,8 +17,11 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin';
         me._name = 'OpenLayersPopupPlugin';
-
         me._popups = {};
+        me._mobileBreakpoints = {
+            width: 500,
+            height: 480
+        };
     }, {
 
         /**
@@ -44,10 +47,14 @@ Oskari.clazz.define(
             me._actionLink = jQuery(
                 '<span class="infoboxActionLinks"><a href="#"></a></span>'
             );
+            me._actionTemplateWrapper = jQuery('<div class="actionTemplateWrapper"></div>');
             me._actionButton = jQuery(
                 '<span class="infoboxActionLinks">' +
                 '  <input type="button" />' +
                 '</span>'
+            );
+            me._contentSeparator = jQuery(
+                '<div class="infoboxLine">separator</div>'
             );
             me._contentSeparator = jQuery(
                 '<div class="infoboxLine">separator</div>'
@@ -64,10 +71,8 @@ Oskari.clazz.define(
          *      JSON presentation for the popup data
          * @param {OpenLayers.LonLat} lonlat
          *      coordinates where to show the popup
-         * @param {Object} colourScheme
-         *      the colour scheme for the popup (optional, uses the default colour scheme if not provided)
-         * @param {String} font
-         *      the font for the popup (optional, uses the default font if not provided)
+         * @param {Object} options
+         *      additional options for infobox
          *
          * Displays a popup with given title and data in the given coordinates.
          *
@@ -82,11 +87,10 @@ Oskari.clazz.define(
          * }
          * }]
          */
-        popup: function (id, title, contentData, lonlat, colourScheme, font, additionalTools) {
+        popup: function (id, title, contentData, lonlat, options, additionalTools) {
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 refresh = (currPopup &&
@@ -99,22 +103,55 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools);
+            me._renderPopup(id, contentData, title, lonlat, options, refresh, additionalTools);
         },
 
         /**
          * @method _renderPopup
          */
-        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools) {
+        _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
-                popup;
+                popup,
+                colourScheme = options.colourScheme,
+                font = options.font;
+
+            if (!options.mobileBreakpoints) {
+                options.mobileBreakpoints = me._mobileBreakpoints;
+            }
+            var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
 
             if (refresh) {
                 popup = me._popups[id].popup;
-                popup.setContentHTML(popupContent);
+                if (isInMobileMode) {
+                    popup.setContent(contentDiv);
+                } else {
+                    popup.setContentHTML(popupContent);
+                }
+            } else if (isInMobileMode) {
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var popupTitle = title,
+                    popupContent = contentDiv,
+                    popupType = "mobile";
+                popup.createCloseIcon();
+                popup.showInMobileMode();
+
+                if (colourScheme) {
+                    popup.setColourScheme(colourScheme);
+                }
+
+                if (font) {
+                    popup.setFont(font);
+                }
+                popup.show(popupTitle, popupContent);
+                popup.onClose(function () {
+                    if (me._popups[id].type === "mobile") {
+                        delete me._popups[id];
+                    }
+                });
             } else {
+                var popupType = "desktop";
                 popup = new OpenLayers.Popup(
                     id,
                     lonlat,
@@ -122,14 +159,6 @@ Oskari.clazz.define(
                     popupContent,
                     false
                 );
-                me._popups[id] = {
-                    title: title,
-                    contentData: contentData,
-                    lonlat: lonlat,
-                    popup: popup,
-                    colourScheme: colourScheme,
-                    font: font
-                };
 
                 popup.moveTo = function (px) {
                     if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
@@ -140,35 +169,66 @@ Oskari.clazz.define(
                 };
 
                 me.getMapModule().getMap().addPopup(popup);
+
+                me._panMapToShowPopup(lonlat);
+
+                popup.setBackgroundColor('transparent');
+                jQuery(popup.div).css('overflow', 'visible');
+                jQuery(popup.groupDiv).css('overflow', 'visible');
+
+                var popupDOM = jQuery('#' + id);
+                // Set the colour scheme if one provided
+                if (colourScheme) {
+                    me._changeColourScheme(colourScheme, popupDOM, id);
+                }
+                // Set the font if one provided
+                if (font) {
+                    me._changeFont(font, popupDOM, id);
+                }
+                // Fix the HTML5 placeholder for < IE10
+                var inputs = popupDOM.find(
+                    '.contentWrapper input, .contentWrapper textarea'
+                );
+                if (typeof inputs.placeholder === 'function') {
+                    inputs.placeholder();
+                }
             }
 
-            if (me.adaptable) {
+            if (me.adaptable && !isInMobileMode) {
                 me._adaptPopupSize(id, refresh);
             }
+            me._popups[id] = {
+                title: title,
+                contentData: contentData,
+                lonlat: lonlat,
+                popup: popup,
+                colourScheme: colourScheme,
+                font: font,
+                options: options,
+                isInMobileMode: isInMobileMode,
+                type: popupType
+            };
+            me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
+        },
 
-            me._panMapToShowPopup(lonlat);
-            me._setClickEvent(id, popup, contentData, additionalTools);
+        _isInMobileMode: function (mobileBreakpoints) {
+            var screenWidth = window.innerWidth,
+                screenHeight = window.innerHeight;
 
-            popup.setBackgroundColor('transparent');
-            jQuery(popup.div).css('overflow', 'visible');
-            jQuery(popup.groupDiv).css('overflow', 'visible');
-
-            var popupDOM = jQuery('#' + id);
-            // Set the colour scheme if one provided
-            if (colourScheme) {
-                me._changeColourScheme(colourScheme, popupDOM, id);
+            if (mobileBreakpoints.width) {
+                if (screenWidth < mobileBreakpoints.width) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (screenHeight < mobileBreakpoints.height) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-            // Set the font if one provided
-            if (font) {
-                me._changeFont(font, popupDOM, id);
-            }
-            // Fix the HTML5 placeholder for < IE10
-            var inputs = popupDOM.find(
-                '.contentWrapper input, .contentWrapper textarea'
-            );
-            if (typeof inputs.placeholder === 'function') {
-                inputs.placeholder();
-            }
+            
         },
 
         /**
@@ -224,41 +284,48 @@ Oskari.clazz.define(
          */
         _renderContentData: function (id, contentData) {
             var me = this;
-
             return _.foldl(contentData, function (contentDiv, datum, index) {
-                var useButtons = (datum.useButtons === true),
-                    primaryButton = datum.primaryButton,
-                    contentWrapper = me._contentWrapper.clone(),
+                var contentWrapper = me._contentWrapper.clone(),
+                    actions = datum.actions,
                     key,
-                    actionLink,
+                    actionTemplate,
                     btn,
-                    link;
+                    link,
+                    currentGroup
+                    group = -1;
 
                 contentWrapper.append(datum.html);
 
                 contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
-                for (key in datum.actions) {
-                    if (datum.actions.hasOwnProperty(key)) {
-                        if (useButtons) {
-                            actionLink = me._actionButton.clone();
-                            btn = actionLink.find('input');
-                            btn.attr({
-                                contentdata: index,
-                                value: key
-                            });
-                            if (key === primaryButton) {
-                                btn.addClass('primary');
-                            }
-                        } else {
-                            actionLink = me._actionLink.clone();
-                            link = actionLink.find('a');
+                if (actions) {
+                    _.forEach(actions, function (action) {
+                        if (action.type === "link") {
+                            actionTemplate = me._actionLink.clone();
+                            link = actionTemplate.find('a');
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
-                            link.append(key);
+                            link.append(action.name);
+                        } else {
+                            actionTemplate = me._actionButton.clone();
+                            btn = actionTemplate.find('input');
+                            btn.attr({
+                                contentdata: index,
+                                value: action.name
+                            });
                         }
-                        contentWrapper.append(actionLink);
-                    }
+                        
+                        currentGroup = action.group;
+
+                        if (currentGroup && currentGroup === group) {
+                            actionTemplateWrapper.append(actionTemplate);
+                        } else {
+                            actionTemplateWrapper = me._actionTemplateWrapper.clone();
+                            actionTemplateWrapper.append(actionTemplate);
+                            contentWrapper.append(actionTemplateWrapper);
+                        }
+                        group = currentGroup;
+                    });
                 }
 
                 contentDiv.append(contentWrapper);
@@ -266,46 +333,67 @@ Oskari.clazz.define(
             }, me._contentDiv.clone());
         },
 
-        _setClickEvent: function (id, popup, contentData, additionalTools) {
-            var me = this;
-            // override
-            popup.events.un({
-                'click': popup.onclick,
-                scope: popup
-            });
+        _setClickEvent: function (id, popup, contentData, additionalTools, isMobilePopup) {
+            var me = this,
+                sandbox = this.getMapModule().getSandbox(),
+                popupElement;
 
-            popup.events.on({
-                'click': function (evt) {
-                    var link = jQuery(evt.target || evt.srcElement);
+            if (isMobilePopup) {
+                popup.dialog[0].onclick = function (evt) {
+                    me._handleInfoboxClick(evt, id, contentData, additionalTools);
+                }
+            } else {
+                 // override
+                popup.events.un({
+                    'click': popup.onclick,
+                    scope: popup
+                });
 
-                    if (link.hasClass('olPopupCloseBox')) { // Close button
+                popup.events.on({
+                    'click': function (evt) {
+                        me._handleInfoboxClick(evt, id, contentData, additionalTools);
+                    },
+                    scope: popup
+                });
+            }
+        },
+
+        _handleInfoboxClick: function (evt, id, contentData, additionalTools) {
+            var me = this,
+                sandbox = this.getMapModule().getSandbox(),
+                link = jQuery(evt.target || evt.srcElement);
+
+            if (link.hasClass('olPopupCloseBox')) { // Close button
+                me.close(id);
+            } else { // Action links
+                var i = link.attr('contentdata'),
+                    text = link.attr('value');
+                if (!text) {
+                    text = link.html();
+                }
+                if (contentData[i] && contentData[i].actions) {
+                    var actionObject = _.find(contentData[i].actions, {'name': text});
+                    if (typeof actionObject.action === 'function') {
+                        actionObject.action();
+                    } else {
+                        event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
+                        sandbox.notifyAll(event);
+                    }
+                }
+            }
+
+            if(additionalTools.length > 0){
+                jQuery.each( additionalTools, function( index, key ){
+                    if (link.hasClass(key.iconCls)) {
                         me.close(id);
-                    }else { // Action links
-                        var i = link.attr('contentdata'),
-                            text = link.attr('value');
-                        if (!text) {
-                            text = link.html();
-                        }
-                        if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-                            contentData[i].actions[text]();
-                        }
+                        key.callback(key.params);
                     }
+                });
+            }
 
-                    if(additionalTools.length > 0){
-                        jQuery.each( additionalTools, function( index, key ){
-                            if (link.hasClass(key.iconCls)) {
-                                me.close(id);
-                                key.callback(key.params);
-                            }
-                        });
-                    }
-
-                    if(!link.is('a') || link.parents('.getinforesult_table').length) {
-                        evt.stopPropagation();
-                    }
-                },
-                scope: popup
-            });
+            if(!link.is('a') || link.parents('.getinforesult_table').length) {
+                evt.stopPropagation();
+            }
         },
 
         /**
@@ -579,6 +667,30 @@ Oskari.clazz.define(
                 closeButton
                     .removeClass('icon-close-white icon-close')
                     .addClass(colourScheme.iconCls);
+            }
+        },
+
+        _handleMapSizeChanges: function (width, height) {
+            var me = this,
+                pid,
+                popup;
+
+            for (pid in me._popups) {
+                if (latestPopupToMobileMode) {
+                    me.close(pid);
+                }
+                if (me._popups.hasOwnProperty(pid)) {
+                    popup = this._popups[pid];
+                    //close mobile popup and open infobox if screen is wide enough
+                    if (popup.isInMobileMode && width > popup.options.mobileBreakpoints.width || popup.isInMobileMode && height > popup.options.mobileBreakpoints.height) {
+                        popup.popup.close();
+                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                    } else if (!popup.isInMobileMode && width < popup.options.mobileBreakpoints.width || !popup.isInMobileMode && height < popup.options.mobileBreakpoints.height) {
+                        me.close(pid);
+                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        var latestPopupToMobileMode = true;
+                    }
+                }
             }
         },
 

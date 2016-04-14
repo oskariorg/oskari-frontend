@@ -109,6 +109,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
             var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
 
+            var options = {
+                hidePrevious: true,
+                colourScheme: params.colourScheme,
+                font: params.font
+            };
+
             if(flyout.isFlyoutVisible() && content.length > 0){
                     flyout.createUI(content, data);
             }else{
@@ -124,9 +130,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                         params.title,
                         content,
                         data.lonlat,
-                        true,
-                        params.colourScheme,
-                        params.font
+                        options
                     );
 
                 var def = {
