@@ -49,3 +49,24 @@ jQuery.fn.outerHTML = function (arg) {
 
     return this;
 };
+/*
+// Polymer statsgrid needs this for IE, but there are more problems with it so we don't need to add it yet
+// new Event(); polyfill for IE
+(function () {
+  // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+  try {
+    new Event();
+  } catch(err) {
+    function CustomEvent ( event, params ) {
+      params = params || { bubbles: false, cancelable: false, detail: undefined };
+      var evt = document.createEvent( 'CustomEvent' );
+      evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+      return evt;
+     }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
+  }
+})();
+*/
