@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         this.template = jQuery('<div class="oskarioverlay transparent"></div>');
         this._overlays = null;
         this._resizingWorkaround = null;
+        this.__listeners = {};
     }, {
         /**
          * @method overlay
