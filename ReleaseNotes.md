@@ -20,7 +20,20 @@ Any module that previously loaded require.js "manually" should no longer do so (
 Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
 Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
 and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
-log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+Oskari.loader.log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+
+Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js. This 
+will expose the module from that file as a global variable with the name of the expose flag like this:
+
+    {
+        "type": "text/javascript",
+        "expose" : "ol",
+        "src": "../../../../libraries/ol3/ol-v3.14.2-oskari.js"
+    }
+
+The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's AMD-compatible it's assigned to window.ol (as specified in bundle.js "expose" statement).
+Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
+globals.
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 

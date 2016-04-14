@@ -64,6 +64,34 @@
         importParentElement.appendChild(linkElement);
     };
 
+
+    // http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
+    var absolute = function(base, relative) {
+        var stack = base.split("/"),
+            parts = relative.split("/");
+        stack.pop(); // remove current file name (or empty string)
+                     // (omit if "base" is the current folder without trailing slash)
+        for (var i=0; i<parts.length; i++) {
+            if (parts[i] == ".")
+                continue;
+            if (parts[i] == "..")
+                stack.pop();
+            else
+                stack.push(parts[i]);
+        }
+        return stack.join("/");
+    };
+
+    var getPath = function(base, src) {
+        // handle case where src start with /
+        var path = src;
+        // handle relative ../../ case with src
+        if (src.indexOf('/') !== 0) {
+            path = absolute(base, src);
+        }
+        return path.split('//').join('/');
+
+    };
     /**
      * Loader
      * @param  {[type]} startupSequence [description]
@@ -80,6 +108,7 @@
         }
         var appConfig = config || {};
 
+        var globalExpose = {};
         return {
             /**
              * {
@@ -231,38 +260,15 @@
                 var me = this;
                 var files = [];
 
-                // http://stackoverflow.com/questions/14780350/convert-relative-path-to-absolute-using-javascript
-                var absolute = function(base, relative) {
-                    var stack = base.split("/"),
-                        parts = relative.split("/");
-                    stack.pop(); // remove current file name (or empty string)
-                                 // (omit if "base" is the current folder without trailing slash)
-                    for (var i=0; i<parts.length; i++) {
-                        if (parts[i] == ".")
-                            continue;
-                        if (parts[i] == "..")
-                            stack.pop();
-                        else
-                            stack.push(parts[i]);
-                    }
-                    return stack.join("/");
-                }
-
-                var getPath = function(base, src) {
-                    // handle case where src start with /
-                    var path = src;
-                    // handle relative ../../ case with src
-                    if (src.indexOf('/') !== 0) {
-                        path = absolute(base, src);
-                    }
-                    return path.split('//').join('/');
-
-                };
                 // src.locales
                 if(src.locales) {
                     src.locales.forEach(function(file) {
                         if(file.src.endsWith('.js')) {
-                            files.push(getPath(basePath, file.src));
+                            var path = getPath(basePath, file.src);
+                            files.push(path);
+                            if(file.expose) {
+                                globalExpose[path] = file.expose;
+                            }
                         }
                     });
                 }
@@ -277,12 +283,16 @@
                 // src.scripts
                 if(src.scripts) {
                     src.scripts.forEach(function(file) {
+                        var path = getPath(basePath, file.src);
 
                         if(file.src.endsWith('.js')) {
-                            files.push(getPath(basePath, file.src));
+                            files.push(path);
+                            if(file.expose) {
+                                globalExpose[path] = file.expose;
+                            }
                         }
                         else if (file.src.endsWith('.css')) {
-                            linkFile(getPath(basePath, file.src));
+                            linkFile(path);
                         }
                     });
                 }
@@ -296,6 +306,17 @@
                     });
                 }
                 require(files, function() {
+                    for(var i = 0; i < arguments.length; ++i) {
+                        if(typeof arguments[i] !== 'undefined') {
+                            // this would be a linked file.js with amd support
+                            var key = globalExpose[files[i]];
+                            if(key) {
+                                window[key] = arguments[i];
+                            } else {
+                                log.warn('Support for AMD-files is not yet implemented. Bundles need to have an "expose" statement in bundle.js to register libs as globals.', files[i]);
+                            }
+                        }
+                    }
                     callback();
                 }, function (err) {
                     log.error('Error loading files', files, err);
