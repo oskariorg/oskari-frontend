@@ -481,8 +481,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(styleDef.stroke.width) {
                     olStyle.strokeWidth = styleDef.stroke.width;
                 }
+                if(style.stroke.lineDash) {
+                    olStyle.strokeDashstyle = style.stroke.lineDash;
+                }
+                if(style.stroke.lineCap) {
+                    olStyle.strokeLinecap = style.stroke.lineCap;
+                }
             }
-
             if (styleDef.image.radius) {
                 if(styleDef.image.radius) {
                     olStyle.pointRadius = styleDef.image.radius;
