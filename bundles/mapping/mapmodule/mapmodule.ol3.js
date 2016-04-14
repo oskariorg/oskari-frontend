@@ -582,12 +582,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(styleDef.stroke.lineCap) {
                 stroke.lineCap = styleDef.stroke.lineCap;
             }
-            if(styleDef.stroke.lineJoin) {
-                stroke.lineJoin = styleDef.stroke.lineJoin;
-            }
-            if(styleDef.stroke.miterLimit) {
-                stroke.miterLimit = styleDef.stroke.miterLimit;
-            }
             return new ol.style.Stroke(stroke);
         },
         /**
