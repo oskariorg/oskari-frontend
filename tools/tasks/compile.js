@@ -362,7 +362,7 @@ module.exports = function(grunt) {
             var links = htmlImports.map(function(href) {
                 // FIXME: all over the build we have references to statsgrid.polymer
                 // those should be generalized so that any polymer bundle can benefit from this
-                var file = '../bundles/statistics/statsgrid.polymer/vulcanized.html';
+                var file = '../dist/bundles/statistics/statsgrid.polymer/vulcanized.html';
                 var stats = fs.readFileSync(file).toString();
                 var index = stats.split('typeof define');
                 var cleanedCode = index.join('"s"');
