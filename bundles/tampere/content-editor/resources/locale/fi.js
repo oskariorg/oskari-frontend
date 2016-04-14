@@ -7,8 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "ContentEditorView": {
             "title": "Sisältöeditori",
-            "featureModifyInfo": "Valitse kohde kartaltamuokataksesi kohteen ominaisuuksia.",
-            "toolInfo": "Valitse piste, viiva tai aluepiirtotyökalu piirtääksesi uuttageometriaa.",
+            "featureModifyInfo": "Valitse kohde kartalta muokataksesi kohteen ominaisuuksia.",
+            "toolInfo": "Valitse piste-, viiva- tai aluepiirtotyökalu piirtääksesi uutta geometriaa.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "buttons": {
                 "save": "Tallenna",
