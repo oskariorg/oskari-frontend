@@ -195,25 +195,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var formEl = me.form.getForm(categories),
                 content = [{
                     html: formEl,
-                    useButtons: true,
-                    primaryButton: loc.buttons.save,
                     actions: {}
                 }];
 
             if (layerId) {
                 content[0].layerId = layerId;
             }
+
+            var actions = [
+                {
+                    name: loc.buttons.cancel,
+                    type: "button",
+                    group: 1,
+                    action: function () {
+                        debugger;
+                        me.cleanupPopup();
+                        // ask toolbar to select default tool
+                        var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                        me.instance.sandbox.request(me, toolbarRequest);
+                    }
+                }, {
+                    name: loc.buttons.save,
+                    type: "button",
+                    group: 1,
+                    action: function () {
+                        debugger;
+                        me._saveForm();
+                    }
+                }
+            ];
+
             // cancel button
-            content[0].actions[loc.buttons.cancel] = function () {
-                me.cleanupPopup();
-                // ask toolbar to select default tool
-                var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-                me.instance.sandbox.request(me, toolbarRequest);
-            };
-            // save button
-            content[0].actions[loc.buttons.save] = function () {
-                me._saveForm();
-            };
+            content[0].actions = actions;
 
             var options = {
                 hidePrevious: true
