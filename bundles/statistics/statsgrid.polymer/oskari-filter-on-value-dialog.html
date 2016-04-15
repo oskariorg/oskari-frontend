@@ -1,5 +1,7 @@
 <link rel="import"
       href="libs/polymer/polymer.html">
+<link rel="import" href="libs/juicy-table-repeat/juicy-table-repeat.html">
+<link rel="import" href="libs/select-with-options/select-with-options.html">
 <link href="libs/paper-dialog/paper-dialog.html" rel="import">
 
 <dom-module id="oskari-filter-on-value-dialog">
@@ -13,10 +15,9 @@
           <div class="filter-label">[[locale.filterCondition]]</div>
           <div class="filter-value">
             <div>
-              <select class="filter-select" value="{{filterCondition::change}}">
-                <template is="dom-repeat" items="[[filterConditions]]" as="filterCondition">
-                  <option value="[[filterCondition.value]]">[[filterCondition.text]]</option>
-                </template>
+              <select is="select-with-options" options="[[filterConditions]]"
+                option-value="value" option-label="text" 
+                class="filter-select" value="{{filterCondition::change}}">
               </select>
               <div class="filter-inputs-container">
                 <input type="text" class="filter-input filter-input1" value="{{input1::change}}"/>

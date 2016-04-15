@@ -1,4 +1,6 @@
 <link rel="import" href="libs/polymer/polymer.html">
+<link rel="import" href="libs/juicy-table-repeat/juicy-table-repeat.html">
+<link rel="import" href="libs/select-with-options/select-with-options.html">
 <link href="libs/paper-scroll-header-panel/paper-scroll-header-panel.html" rel="import">
 
 <dom-module id="oskari-userindicator">
@@ -23,10 +25,9 @@
         <fieldset class="form-import">
           <legend>[[locale.addDataTitle]]</legend>
           <label for="indicator_reference-layer">[[locale.addDataMetaReferenceLayer]]</label>
-          <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
-            <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
-              <option value="{{item.val}}">{{item.text}}</option>
-            </template>
+          <select is="select-with-options" options="[[getLayerInfoAsArray(layerInfo)]]"
+            option-value="val" option-label="text" 
+            id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
           </select>
           <label for="indicator_text-import">[[locale.dataRows]]</label>
           <textarea class="import-textarea" id="indicator_text-import"
