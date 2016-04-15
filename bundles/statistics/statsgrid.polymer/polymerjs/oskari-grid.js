@@ -296,8 +296,5 @@ Polymer({
     $(window).bind('resize', function(e) {
       me.resize();
     });
-    $(window).bind('resize', function(e) {
-      me.resize();
-    });
   }
 });
