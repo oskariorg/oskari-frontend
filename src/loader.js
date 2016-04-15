@@ -264,6 +264,11 @@
                 // src.locales
                 if(src.locales) {
                     src.locales.forEach(function(file) {
+                        if(file.lang && file.lang !== Oskari.getLang()) {
+                            // dont load locale files that have declared language 
+                            // and are not the language Oskari is started with.
+                            return;
+                        }
                         if(file.src.endsWith('.js')) {
                             var path = getPath(basePath, file.src);
                             files.push(path);
