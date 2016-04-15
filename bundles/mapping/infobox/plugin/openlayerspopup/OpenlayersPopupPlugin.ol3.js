@@ -1,44 +1,3 @@
-// FIXME move this to lib...
-// Define outerHtml method for jQuery since we need to give openlayers plain html
-// http://stackoverflow.com/questions/2419749/get-selected-elements-outer-html
-// Elements outerHtml property only works on IE and chrome
-jQuery.fn.outerHTML = function (arg) {
-    var ret;
-
-    // If no items in the collection, return
-    if (!this.length) {
-        return typeof arg === 'undefined' ? this : null;
-    }
-    // Getter overload (no argument passed)
-    if (!arg) {
-        return this[0].outerHTML || (ret = this.wrap('<div>').parent().html(), this.unwrap(), ret);
-    }
-    // Setter overload
-    jQuery.each(this, function (i, el) {
-        var fnRet,
-            pass = el,
-            inOrOut = el.outerHTML ? 'outerHTML' : 'innerHTML';
-
-        if (!el.outerHTML) {
-            el = jQuery(el).wrap('<div>').parent()[0];
-        }
-
-        if (jQuery.isFunction(arg)) {
-            if ((fnRet = arg.call(pass, i, el[inOrOut])) !== false) {
-                el[inOrOut] = fnRet;
-            }
-        } else {
-            el[inOrOut] = arg;
-        }
-
-        if (!el.outerHTML) {
-            jQuery(el).children().unwrap();
-        }
-    });
-
-    return this;
-};
-
 /**
  * @class Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin
  *
@@ -60,6 +19,9 @@ Oskari.clazz.define(
         me._name = 'OpenLayersPopupPlugin';
 
         me._popups = {};
+
+        me.markers = {};
+        me.markerPopups = {};
     }, {
 
         /**
@@ -106,8 +68,8 @@ Oskari.clazz.define(
          *      popup title
          * @param {Object[]} contentData
          *      JSON presentation for the popup data
-         * @param {OpenLayers.LonLat} lonlat
-         *      coordinates where to show the popup
+         * @param {OpenLayers.LonLat|Object} position
+         *      lonlat coordinates where to show the popup or marker id {marker:'MARKER_ID'}
          * @param {Object} colourScheme
          *      the colour scheme for the popup (optional, uses the default colour scheme if not provided)
          * @param {String} font
@@ -126,15 +88,35 @@ Oskari.clazz.define(
          * }
          * }]
          */
-        popup: function (id, title, contentData, lonlat, colourScheme, font, additionalTools) {
+        popup: function (id, title, contentData, position, colourScheme, font, additionalTools) {
+            var me = this;
             if (_.isEmpty(contentData)) {
                 return;
             }
+
             var me = this,
                 currPopup = me._popups[id],
-                refresh = (currPopup &&
-                    currPopup.lonlat.lon === lonlat.lon &&
-                    currPopup.lonlat.lat === lonlat.lat);
+                lon = null,
+                lat = null;
+
+            if(position.marker && me.markers[position.marker]) {
+                lon = me.markers[position.marker].data.x;
+                lat = me.markers[position.marker].data.y;
+                me.markerPopups[position.marker] = id;
+            } else if(position.lon && position.lat){
+                lon = position.lon;
+                lat = position.lat;
+            } else {
+                // Send a status report of the popup (it is not open)
+                var evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                var evt = evtB(id, false);
+                me.getSandbox().notifyAll(evt);
+                return;
+            }
+
+            var refresh = (currPopup &&
+                    currPopup.lonlat.lon === lon &&
+                    currPopup.lonlat.lat === lat);
 
             if (refresh) {
                 contentData = me._getChangedContentData(
@@ -142,7 +124,7 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh, additionalTools);
+            me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, colourScheme, font, refresh, additionalTools);
         },
 
         /**
