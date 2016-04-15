@@ -51,8 +51,7 @@
         return;
     }
     if(o.loader) {
-        // loader already present, don't add another
-        return;
+        // loader already present, but we might want another?
     }
     var log = Oskari.log('Loader');
     var linkFile = function(href, rel, type) {
@@ -125,14 +124,16 @@
                         }
                     }
                 }
-             * @param  {[type]} sequence [description]
+             * @param  {Object} sequence see above
              * @return {[type]}          [description]
              */
             processSequence : function(done) {
                 var me = this;
                 if(sequence.length === 0) {
                     // everything has been loaded
-                    done();
+                    if(typeof done === 'function') {
+                        done();
+                    }
                     return;
                 }
                 var seqToLoad = sequence.shift();
