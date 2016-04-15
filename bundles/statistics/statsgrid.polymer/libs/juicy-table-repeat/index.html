@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>juicy-table-repeat</title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../polymer/polymer.html" />
+    <link rel="import" href="juicy-table-repeat.html" />
+    <style>
+        body {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h3>juicy-table-repeat</h3>
+    <template is="dom-bind" id="root">
+        <juicy-table-repeat rows="{{model.products}}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <template is="dom-template" class="row-template">
+                <table>
+                    <tr>
+                        <td>{{item.name}}</td>
+                        <td>
+                            <span>{{item.price}}</span>$
+                        </td>
+                    </tr>
+                </table>
+            </template>
+        </juicy-table-repeat>
+    </template>
+    <h4>Polymer implementation, does not work in IE</h4>
+    <p>
+        <a href="https://github.com/Polymer/polymer/issues/1567">Dom-repeat doesn't work in tables in IE (issue #1567)</a>
+    </p>
+    <pre>
+&lt;table>
+    &lt;thead>
+        &lt;tr>
+            &lt;th>Name&lt;/th>
+            &lt;th>Price&lt;/th>
+        &lt;/tr>
+    &lt;/thead>
+    &lt;tbody>
+        &lt;template is="dom-repeat" items="{{model.products}}">
+            &lt;tr>
+                &lt;td>{{item.name}}&lt;/td>
+                &lt;td>
+                    &lt;span>{{item.price}}&lt;/span>$
+                &lt;/td>
+            &lt;/tr>
+        &lt;/template>
+    &lt;/tbody>
+&lt;/table></pre>
+    <br />
+    <h4>Juicy workaround to make same table work in IE</h4>
+    <pre>
+&lt;juicy-table-repeat rows="{{model.products}}">
+    &lt;table class="table">
+        &lt;thead>
+            &lt;tr>
+                &lt;th>Name&lt;/th>
+                &lt;th>Price&lt;/th>
+            &lt;/tr>
+        &lt;/thead>
+        &lt;tbody>&lt;/tbody>
+    &lt;/table>
+    &lt;template is="dom-template" class="row-template">
+        &lt;table>
+            &lt;tr>
+                &lt;td>{{item.name}}&lt;/td>
+                &lt;td>
+                    &lt;span>{{item.price}}&lt;/span>$
+                &lt;/td>
+            &lt;/tr>
+        &lt;/table>
+    &lt;/template>
+&lt;/juicy-table-repeat></pre>
+    <script>
+        (function () {
+            var template = document.querySelector("#root");
+            var model = {
+                products: [{
+                    name: "i7-4770k",
+                    price: 280
+                }, {
+                    name: "i7-4790k",
+                    price: 290
+                }, {
+                    name: "i7-6700k",
+                    price: 330
+                }, {
+                    name: "i7-5820k",
+                    price: 310
+                }]
+            };
+            
+            template.model = model;
+        })();
+    </script>
+</body>
+</html>

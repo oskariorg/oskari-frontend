@@ -1,0 +1,28 @@
+{
+    "name": "juicy-table-repeat",
+    "version": "0.0.0",
+    "homepage": "https://github.com/Juicy/juicy-table-repeat",
+    "authors": [
+        "Konstantin <const.miyang@gmail.com>"
+    ],
+    "description": "A workaround custom element to support dom-repeat inside table under IE",
+    "main": "juicy-table-repeat.html",
+    "moduleType": [ ],
+    "keywords": [
+        "polymer",
+        "dom-repeat",
+        "table",
+        "internet explorer"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "polymer": "Polymer/polymer"
+    }
+}

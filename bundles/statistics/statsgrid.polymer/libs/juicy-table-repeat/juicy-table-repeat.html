@@ -1,0 +1,57 @@
+﻿<!--
+    This is a workaround custom element to support <template is="dom-repeat"> in <table> under IE.
+    Will not be required after this Polymer issue is fixed: https://github.com/Polymer/polymer/issues/1567
+    version: 0.0.0
+-->
+<dom-module id="juicy-table-repeat">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <content></content>
+    </template>
+    <script>
+        Polymer({
+            is: "juicy-table-repeat",
+            properties: {
+                rows: { type: Array, value: [] },
+                item: { type: Object }
+            },
+            attached: function () {
+                this.table = this.querySelector("table");
+                this.tbody = this.querySelector("table tbody")
+                this.rowTemplate = this.querySelector("template.row-template");
+
+                this.generateRows();
+                this.isAttached = true;
+            },
+            observers: ["rowsChanged(rows.length)"],
+            generateRows: function () {
+                this.tbody.innerHTML = "";
+
+                if (!this.rows || !this.rows.length) {
+                    return;
+                }
+
+                for (var i = 0; i < this.rows.length; i++) {
+                    this.rowTemplate._parent_item = this.rows[i];
+
+                    var row = this.rowTemplate.stamp();
+                    var tr = row.root.querySelector("tr");
+
+                    this.tbody.appendChild(tr);
+                    this.rowTemplate._parent_item = undefined;
+                }
+            },
+            rowsChanged: function () {
+                if (!this.isAttached) {
+                    return;
+                }
+
+                this.generateRows();
+            }
+        });
+    </script>
+</dom-module>

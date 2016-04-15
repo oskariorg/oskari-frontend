@@ -1,0 +1,19 @@
+{
+    "name": "juicy-table-repeat",
+    "version": "0.0.0",
+    "description": "A workaround custom element to support dom-repeat inside table under IE",
+    "main": "juicy-table-repeat.html",
+    "directories": { },
+    "dependencies": { },
+    "devDependencies": {
+        "grunt-bump": "^0.5.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Juicy/juicy-table-repeat"
+    },
+    "bugs": {
+        "url": "https://github.com/Juicy/juicy-table-repeat/issues"
+    },
+    "license": "MIT"
+}
