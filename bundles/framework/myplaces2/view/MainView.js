@@ -208,7 +208,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     type: "button",
                     group: 1,
                     action: function () {
-                        debugger;
                         me.cleanupPopup();
                         // ask toolbar to select default tool
                         var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
@@ -219,7 +218,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     type: "button",
                     group: 1,
                     action: function () {
-                        debugger;
                         me._saveForm();
                     }
                 }
