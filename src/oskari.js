@@ -2569,106 +2569,27 @@ Oskari = (function () {
          * @param {function(Object)} callback Callback function
          *
          */
-        playBundle: function (recData, callback) {
-            var metas,
-                bundlename,
-                bundleinstancename,
-                isSingleton,
-                fcd = this,
-                me = this,
-                instanceRequirements,
-                instanceProps,
-                r,
-                implInfo,
-                implInfoIsObj,
-                implid,
-                bundleid,
-                bundle,
-                bundleInstance,
-                configProps,
-                newBundleInstance;
-
-            if (recData === null || recData === undefined) {
-                throw new TypeError('playBundle(): Missing recData');
+        playBundle: function (recData, config, callback) {
+            if(typeof recData !== 'object') {
+                throw new Error('Bundle def is not an object');
+            }
+            if(typeof config === 'function') {
+                callback = config;
+                config = undefined;
             }
 
-            metas = recData.metadata;
-            bundlename = recData.bundlename;
-            bundleinstancename = recData.bundleinstancename;
-            instanceRequirements = metas['Require-Bundle-Instance'] || [];
-            instanceProps = recData.instanceProp;
-            isSingleton = metas.Singleton;
-
-            if (!recData.hasOwnProperty('bundleinstancename')) {
-                // Bundle is missing bundleinstancename, using bundlename in its place.
-                bundleinstancename = bundlename;
+            if(config) {
+                // wrap to acceptable format 
+                var configName = recData.bundleinstancename || recData.bundlename;
+                var tmp = {};
+                tmp[configName] = config;
+                config = tmp;
             }
-
-            me._loadBundleDeps(metas, function (manager) {
-                var ip;
-
-                for (r = 0; r < instanceRequirements.length; r += 1) {
-                    implInfo = instanceRequirements[r];
-                    implInfoIsObj = typeof implInfo === 'object';
-                    /* implname */
-                    implid =
-                        implInfoIsObj ? implInfo.bundlename : implInfo;
-                    /* bundlename */
-                    bundleid =
-                        implInfoIsObj ? implInfo.bundleinstancename :
-                                implInfo + 'Instance';
-                    bundle = me.bundles[implid];
-                    if (!bundle) {
-                        bundle = manager.createBundle(implid, bundleid);
-                        me.bundles[implid] = bundle;
-                    }
-
-                    bundleInstance = me.bundleInstances[bundleid];
-                    if (!bundleInstance || !isSingleton) {
-                        bundleInstance = manager.createInstance(bundleid);
-                        me.bundleInstances[bundleid] = bundleInstance;
-
-                        configProps =
-                            me.getBundleInstanceConfigurationByName(bundleid);
-                        if (configProps) {
-                            for (ip in configProps) {
-                                if (configProps.hasOwnProperty(ip)) {
-                                    bundleInstance[ip] = configProps[ip];
-                                }
-                            }
-                        }
-                        bundleInstance.start();
-                    }
-                }
-
-                fcd.requireBundle(bundlename, bundleinstancename, function () {
-                    var prop;
-                    newBundleInstance =
-                        manager.createInstance(bundleinstancename);
-
-                    for (prop in instanceProps) {
-                        if (instanceProps.hasOwnProperty(prop)) {
-                            newBundleInstance[prop] = instanceProps[prop];
-                        }
-                    }
-
-                    configProps = me.getBundleInstanceConfigurationByName(
-                        bundleinstancename
-                    );
-                    if (configProps) {
-                        for (prop in configProps) {
-                            if (configProps.hasOwnProperty(prop)) {
-                                newBundleInstance[prop] = configProps[prop];
-                            }
-                        }
-                    }
-
-                    newBundleInstance.start();
-                    me.bundleInstances[bundleinstancename] = newBundleInstance;
-
-                    callback(newBundleInstance);
-                });
-            }, fcd.manager, bundlename);
+            else {
+                config = this.appConfig;
+            }
+            var loader = Oskari.loader([recData], config);
+            loader.processSequence(callback);
         },
 
         /**
@@ -2719,81 +2640,6 @@ Oskari = (function () {
 	        var loader = Oskari.loader(this.appSetup.startupSequence, this.appConfig);
 	        loader.processSequence(callback);
 	    },
-
-        /**
-         * @public @method startApplication
-         * Starts JSON setup (set with setApplicationSetup)
-         *
-         * @param {function(Object)} callback Callback function
-         *
-         */
-        startApplicationOld: function (callback) {
-            var me = this,
-                appConfig = this.appConfig,
-                seq = this.appSetup.startupSequence.slice(0),
-                startupInfo = {
-                    bundlesInstanceConfigurations: appConfig,
-                    bundlesInstanceInfos: {}
-                };
-
-            /**
-             * Let's shift and playBundle until all done
-             */
-            var mediator = {
-                facade: me,
-                startupSequence: seq,
-                bundleStartInfo: null,
-                player: null,
-                startupInfo: startupInfo
-            };
-
-            function schedule() {
-                window.setTimeout(mediator.player, 0);
-            }
-
-
-            mediator.player = function () {
-                mediator.bundleStartInfo = mediator.startupSequence.shift();
-                if (!mediator.bundleStartInfo) {
-                    if (callback) {
-                        callback(startupInfo);
-                    }
-                    return;
-                }
-
-                mediator.facade.playBundle(
-                    mediator.bundleStartInfo,
-                    function (bundleInstance) {
-                        var bName = mediator.bundleStartInfo.bundlename,
-                            biName =
-                                mediator.bundleStartInfo.bundleinstancename;
-
-                        mediator.startupInfo.bundlesInstanceInfos[biName] =
-                            {
-                                bundlename: bName,
-                                bundleinstancename: biName,
-                                bundleInstance: bundleInstance
-                            };
-
-                        // TODO apparently none of ours has a callback?
-                        if (mediator.bundleStartInfo.callback) {
-                            if (typeof mediator.bundleStartInfo.callback ===
-                                    'string') {
-                                // FIXME no eval please
-                                eval(mediator.bundleStartInfo.callback);
-                            }
-                            mediator.bndl.callback.apply(
-                                this,
-                                [bundleInstance, mediator.bundleStartInfo]
-                            );
-                        }
-                        schedule();
-                    }
-                );
-            };
-            schedule();
-
-        },
 
         /**
          * @method stopApplication
