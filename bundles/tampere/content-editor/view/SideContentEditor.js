@@ -605,7 +605,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 this._addDrawTools();
             }
 
-            if (me.processGFIRequest) {
+            if (!me.processGFIRequest) {
                 if (me.GFIFirstRequestProcessed == true) {
                     me._highlighGeometries(me.highlightFeaturesIds, layer, true);
                     me.getLayerGeometryType();
