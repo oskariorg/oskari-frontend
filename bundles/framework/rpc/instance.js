@@ -315,10 +315,9 @@ Oskari.clazz.define(
 
                 var scales = mapModule.getScaleArray();
                 scales.forEach(function(sc, index) {
-                var i = index;
                     if ((!nextScale || nextScale > sc) && sc > scalein) {
                         nextScale = sc;
-                        zoomLevel = i;
+                        zoomLevel = index;
                     }
                 });
 
