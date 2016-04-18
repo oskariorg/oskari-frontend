@@ -4,15 +4,15 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <table class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
-      <thead class="oskari-grid-width" id="oskari-grid-header" style="">
-        <tr class="oskari-grid-width">
+    <div class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
+      <div class="oskari-grid-width" id="oskari-grid-header" style="display:table-header-group">
+        <div class="oskari-grid-width" style="display:table;">
           <template is="dom-if" if="[[selection]]">
-            <th><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
-                id="allSelectedCheckbox"></input></th>
+            <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
+                id="allSelectedCheckbox"></input></div>
           </template>
           <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
-            <th>
+            <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
               <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
               <template is="dom-if" if="[[filtering]]">
                 <template is="dom-if" if="[[header.filter]]">
@@ -26,23 +26,23 @@
                     title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
                 </template>
               </template>
-            </th>
+            </div>
           </template>
-          <th>
+          <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
             <div>
               <div class$="[[indicatorToggleClass]]" on-tap="toggleIndicators"></div>
               <div>[[locale.addIndicatorButton]]</div>
             </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="oskari-grid-width" style="padding: 0px; border: 0px;">
-        <tr class="oskari-grid-width" id="statisticsContainer">
-          <td colspan$="[[numcols]]" class="oskari-grid-width">
+          </div>
+        </div>
+      </div>
+      <div class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-row-group">
+        <div class="oskari-grid-width" id="statisticsContainer" style="display:table-row;">
+          <div colspan$="[[numcols]]" class="oskari-grid-width" style="display:table-cell;">
             <span on-tap="toggleStats" class$="[[statsToggleClass]]"></span><span>[[locale.statistic.title]]</span>
-          </td>
-        </tr>
-        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+          </div>
+        </div>
+        <div class="oskari-grid-width" style="display:table-row;"><div colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-cell;">
           <iron-collapse id="statsCollapse">
             <table id="oskari-grid-statistics" class="oskari-grid-width" style="display: block; margin: 0px;">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
@@ -57,16 +57,16 @@
               </template>
             </table>
           </iron-collapse>
-        </td></tr>
-      </tbody>
+        </div></div>
+      </div>
       <template is="dom-if" if="[[selection]]">
-        <tbody class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
-          <tr class="oskari-grid-width" id="unselectedContainer">
-            <td colspan$="[[numcols]]" class="oskari-grid-width">
+        <div class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
+          <div class="oskari-grid-width" id="unselectedContainer" style="display:table-row;">
+            <div colspan$="[[numcols]]" class="oskari-grid-width" style="display:table-cell;">
               <span on-tap="toggleUnselected" class$="[[unselectedToggleClass]]"></span><span>[[locale.not_included]] ([[numExcluded]])</span>
-            </td>
-          </tr>
-          <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+            </div>
+          </div>
+          <div class="oskari-grid-width" style="display:table-row;"><div colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;display:table-cell;">
             <iron-collapse id="unselectedCollapse">
               <table class="oskari-grid-width" style="margin: 0px;">
                 <tbody id="oskari-grid-unselected" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
@@ -84,16 +84,16 @@
                 </tbody>
               </table>
             </iron-collapse>
-          </td></tr>
-        </tbody>
+          </div></div>
+        </div>
       </template>
-      <tbody class="oskari-grid-width" id="oskari-grid-selected-container" style="display: block; overflow-y: hidden; overflow-x: hidden;">
-        <tr class="oskari-grid-width" id="selectedContainer">
-          <td colspan$="[[numcols]]" class="oskari-grid-width">
+      <div class="oskari-grid-width" id="oskari-grid-selected-container" style="display: block; overflow-y: hidden; overflow-x: hidden;">
+        <div class="oskari-grid-width" id="selectedContainer" style="display:table-row;">
+          <div colspan$="[[numcols]]" class="oskari-grid-width" style="display:table-cell;">
             <span on-tap="toggleSelected" class$="[[selectedToggleClass]]"></span><span>[[locale.included]] ([[numIncluded]])</span>
-          </td>
-        </tr>
-        <tr class="oskari-grid-width"><td colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px;">
+          </div>
+        </div>
+        <div class="oskari-grid-width" style="display:table-row;"><div colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-cell;">
           <iron-collapse id="selectedCollapse" opened="true">
             <table class="oskari-grid-width" style="margin: 0px;">
               <tbody id="oskari-grid-body" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
@@ -113,9 +113,9 @@
               </tbody>
             </table>
           </iron-collapse>
-        </td></tr>
-      </tbody>
-    </table>
+        </div></div>
+      </div>
+    </div>
     <content></content>
   </template>
 

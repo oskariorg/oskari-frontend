@@ -239,9 +239,9 @@ Polymer({
         index++;
       }
 
-      jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('max-width', thisColWidth);
-      jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('min-width', thisColWidth);
-      jQuery('thead#oskari-grid-header th:nth-child(' + index + ')').css('width', thisColWidth);
+      jQuery('div#oskari-grid-header > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
+      jQuery('div#oskari-grid-header > div > div:nth-child(' + index + ')').css('min-width', thisColWidth);
+      jQuery('div#oskari-grid-header > div > div:nth-child(' + index + ')').css('width', thisColWidth);
       if (headerIndex == lastColIndex) {
         // We will only set a bit of flex for the last column to make space for the scrollbar.
         var lastColMinWidth = (thisColWidthNum - 20) + 'px';
