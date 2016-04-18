@@ -136,8 +136,8 @@ Polymer({
       }
     });
   },
-  "hideIndicatorSelector": function(embedded, showUserIndicatorView) {
-    return embedded || showUserIndicatorView;
+  "hideIndicatorSelectorClass": function(embedded, showUserIndicatorView) {
+    return (embedded || showUserIndicatorView) ? "hidden" : "";
   },
   "evaluateHideGrid": function(showUserIndicatorView, selectedIndicatorsSplices) {
     this.hideGrid = !!this.showUserIndicatorView;
@@ -257,6 +257,20 @@ Polymer({
         text: sources[sourceId].locale[me.language].name
       };
     }));
+  },
+  "hidden": function(hiddenBool) {
+    if (hiddenBool) {
+      return "hidden";
+    } else {
+      return "";
+    }
+  },
+  "expanded": function(expandedBool) {
+    if (expandedBool) {
+      return "";
+    } else {
+      return "hidden";
+    }
   },
   "getIndicators": function(sources, datasourceId) {
     var me = this,

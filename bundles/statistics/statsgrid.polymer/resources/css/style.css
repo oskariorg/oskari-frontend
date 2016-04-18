@@ -48,6 +48,9 @@
     width: 100%;
     height: 80%; }
 
+.hidden {
+  display: none; }
+
 .statsgrid-csv-button {
   position: absolute;
   left: 10px;
