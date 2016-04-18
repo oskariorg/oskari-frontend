@@ -246,19 +246,19 @@ Polymer({
         // We will only set a bit of flex for the last column to make space for the scrollbar.
         var lastColMinWidth = (thisColWidthNum - 20) + 'px';
         var lastColStdWidth = (thisColWidthNum - 15) + 'px';
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', lastColMinWidth);
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', lastColStdWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('min-width', lastColMinWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('width', lastColStdWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('min-width', lastColMinWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('width', lastColStdWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('min-width', lastColMinWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('width', lastColStdWidth);
       } else {
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('max-width', thisColWidth);
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('min-width', thisColWidth);
-        jQuery('tbody#oskari-grid-body td:nth-child(' + index + ')').css('width', thisColWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('min-width', thisColWidth);
-        jQuery('tbody#oskari-grid-unselected td:nth-child(' + unselectedColumnIndex + ')').css('width', thisColWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('min-width', thisColWidth);
+        jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('width', thisColWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('max-width', thisColWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('min-width', thisColWidth);
+        jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('width', thisColWidth);
       }
     });
     var gridWidth = gridWidthNum + "px";
@@ -282,9 +282,9 @@ Polymer({
         // The last column is static, and is preceded by the column repeating template element.
         index++;
       }
-      jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('max-width', statsColWidth);
-      jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('min-width', statsColWidth);
-      jQuery('#oskari-grid-statistics td:nth-child(' + index + ')').css('width', statsColWidth);
+      jQuery('#oskari-grid-statistics > div > div:nth-child(' + index + ')').css('max-width', statsColWidth);
+      jQuery('#oskari-grid-statistics > div > div:nth-child(' + index + ')').css('min-width', statsColWidth);
+      jQuery('#oskari-grid-statistics > div > div:nth-child(' + index + ')').css('width', statsColWidth);
     });
   },
   "ready": function() {
