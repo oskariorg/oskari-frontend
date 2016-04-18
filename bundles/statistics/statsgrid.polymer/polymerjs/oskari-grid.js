@@ -240,13 +240,14 @@ Polymer({
         index++;
       }
 
+      jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
+      jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('min-width', thisColWidth);
+      jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('width', thisColWidth);
+
       if (headerIndex == lastColIndex) {
         // We will only set a bit of flex for the last column to make space for the scrollbar.
         var lastColMinWidth = (thisColWidthNum - 20) + 'px';
         var lastColStdWidth = (thisColWidthNum - 15) + 'px';
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('min-width', lastColMinWidth);
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('width', lastColStdWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('min-width', lastColMinWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('width', lastColStdWidth);
@@ -254,9 +255,6 @@ Polymer({
         jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('min-width', lastColMinWidth);
         jQuery('div#oskari-grid-unselected > div > div:nth-child(' + unselectedColumnIndex + ')').css('width', lastColStdWidth);
       } else {
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('min-width', thisColWidth);
-        jQuery('div#oskari-grid-header > div > div > div:nth-child(' + index + ')').css('width', thisColWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('max-width', thisColWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('min-width', thisColWidth);
         jQuery('div#oskari-grid-body > div > div:nth-child(' + index + ')').css('width', thisColWidth);
