@@ -433,6 +433,7 @@ Oskari.clazz.define(
             ),
             request;
             var options = {
+                hidePrevious: true,
                 colourScheme: params.colourScheme,
                 font: params.font
             };

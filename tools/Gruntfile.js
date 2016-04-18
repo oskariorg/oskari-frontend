@@ -172,8 +172,7 @@ module.exports = function (grunt) {
                     abspath: '.',
                     inlineScripts: true,
                     inlineCss: true,
-                    stripComments: true,
-                    excludes: ["Oskari/libraries/requirejs/require-2.1.15.js"]
+                    stripComments: true
                 },
                 files: {
                     '../bundles/statistics/statsgrid.polymer/vulcanized.html': [
