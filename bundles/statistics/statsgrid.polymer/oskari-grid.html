@@ -4,7 +4,7 @@
 <dom-module id="oskari-grid">
 
   <template>
-    <div class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
+    <div class="oskari-grid oskari-grid-width" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
       <div class="oskari-grid-width" id="oskari-grid-header" style="display:table-row-group">
         <div class="oskari-grid-width" style="display:table;">
           <div class="oskari-grid-width" style="display:table-row;">
@@ -38,7 +38,8 @@
           </div>
         </div>
       </div>
-      <div class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-row-group">
+      <div class="oskari-grid-width" style="padding: 0px; border: 0px; display:block; overflow-x: hidden;">
+        <div class="oskari-grid-width" style="display:row-group;">
         <div class="oskari-grid-width" id="statisticsContainer" style="display:table-row;">
           <div colspan$="[[numcols]]" class="oskari-grid-width" style="display:table-cell;">
             <span on-tap="toggleStats" class$="[[statsToggleClass]]"></span><span>[[locale.statistic.title]]</span>
@@ -46,22 +47,23 @@
         </div>
         <div class="oskari-grid-width" style="display:table-row;"><div colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-cell;">
           <iron-collapse id="statsCollapse">
-            <div class="oskari-grid-width" style="display: table;">
-            <div id="oskari-grid-statistics" class="oskari-grid-width" style="display: block; margin: 0px;">
-              <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
-                <div class="oskari-grid-width" class="display: table-row;">
-                  <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
-                    <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
-                      <span>[[datum]]</span>
-                    </div>
-                  </template>
-                  <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"></div>
-                </div>
-              </template>
-            </div>
+            <div class="oskari-grid-width" style="display:table;">
+              <div id="oskari-grid-statistics" class="oskari-grid-width" style="display:block; margin: 0px; overflow-x: hidden;">
+                <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
+                  <div class="oskari-grid-width" style="display:table-row;">
+                    <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
+                      <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
+                        <span>[[datum]]</span>
+                      </div>
+                    </template>
+                    <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"></div>
+                  </div>
+                </template>
+              </div>
             </div>
           </iron-collapse>
         </div></div>
+        </div>
       </div>
       <template is="dom-if" if="[[selection]]">
         <div class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
