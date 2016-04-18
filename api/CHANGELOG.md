@@ -7,7 +7,19 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ## 1.36
 
-## mapmodule
+### infobox
+
+#### [mod] [rpc] ShowInfoBoxRequest
+
+Request is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints means the size of the screen in pixels to start using mobile mode.
+
+It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+NOTE! The changes are not backwards compatible!
+
+### mapmodule
 
 #### [mod] [rpc] AddMarkerRequest
 

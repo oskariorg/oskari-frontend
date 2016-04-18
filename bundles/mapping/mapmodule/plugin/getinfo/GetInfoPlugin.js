@@ -432,6 +432,11 @@ Oskari.clazz.define(
             'InfoBox.ShowInfoBoxRequest'
             ),
             request;
+            var options = {
+                hidePrevious: true,
+                colourScheme: params.colourScheme,
+                font: params.font
+            };
 
             if (reqBuilder) {
                 request = reqBuilder(
@@ -439,9 +444,7 @@ Oskari.clazz.define(
                     params.title,
                     content,
                     data.lonlat,
-                    true,
-                    params.colourScheme,
-                    params.font
+                    options
                 );
                 this.getSandbox().request(this, request);
             }

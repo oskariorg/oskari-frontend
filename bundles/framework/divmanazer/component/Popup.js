@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                         focusedButton = i;
                     }
                 }
-            } else {
+            } else if (!this.dialog.find('.close-icon')) {
                 // if no actions, the user can click on popup to close it
                 this.dialog.bind('click', function () {
                     me.close(true);
@@ -98,6 +98,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         addClass: function (pClass) {
             this.dialog.addClass(pClass);
         },
+
+        setColourScheme: function (colourScheme) {
+            if (colourScheme.headerColour) {
+                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.headerColour});
+            }
+
+            if (colourScheme.titleColour) {
+                this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
+            }
+
+            if (colourScheme.bgColour) {
+                this.dialog.css({'background-color': colourScheme.bgColour});
+                this.getJqueryContent().find('.popupContent').css({'background-color': colourScheme.bgColour});
+            }
+
+            if (colourScheme.iconCls) {
+                var div = this.dialog.find('.icon-close');
+                div.removeClass('icon-close icon-close:hover');
+                div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+        },
+
+        setFont: function (font) {
+            this.dialog.find('h3.popupHeader').css({'font-family': font});
+        },
+
         /**
          * @method createCloseButton
          * Convenience method that creates a close button with
@@ -125,10 +151,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             var me = this,
                 header = this.dialog.find('h3');
 
-            jQuery(header).after('<div class="icon-close icon-close:hover"></div>');
-            this.dialog.find('.icon-close').on('click', function() {
+            jQuery(header).after('<div class="icon-close icon-close:hover close-icon"></div>');
+            this.dialog.find('.close-icon').on('click', function() {
                 me.close(true);
             });
+            this.dialog.unbind('click');
 
         },
 
@@ -252,6 +279,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             overlay.overlay('body');
             this.overlay = overlay;
             overlay.followResizing(true);
+        },
+
+        showInMobileMode: function () {
+            var me = this,
+                overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
+            overlay.overlay('body');
+            this.overlay = overlay;
+            overlay._overlays[0].overlay.css({opacity: 0});
+            overlay.followResizing(true);
+            overlay.bindClickToClose();
+            overlay.onClose(function () {
+                me.dialog.remove();
+                me.__notifyListeners('close');
+            });
+            me.dialog.addClass('mobile-portrait');
+
         },
         /**
          * @method stopKeypressPropagation

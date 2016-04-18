@@ -7,9 +7,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoboxActionEvent
  * @method create called automatically on construction
  * @static
  */
-function(id, action, params) {
+function(id, actionName, params) {
     this._id = id;
-    this._action = action;
+    this._action = actionName;
     this._params = params;
 }, {
     /** @static @property __name event name */
@@ -24,7 +24,7 @@ function(id, action, params) {
     getId : function() {
         return this._id;
     },
-    getAction : function() {
+    getActionName : function() {
         return this._action;
     },
     getActionParams : function() {
@@ -38,7 +38,7 @@ function(id, action, params) {
         return {
         	id: this._id,
         	action: this._action,
-        	params: this._params
+        	actionParams: this._params
         };
     }
 }, {

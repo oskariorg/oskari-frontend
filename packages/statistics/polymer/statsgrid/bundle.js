@@ -140,12 +140,12 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "rel": "import",
                 "href": "/Oskari/bundles/statistics/statsgrid.polymer/oskari-statsview.html"
             }],
-            "vulcanizedHtml": {
+            "vulcanizedHtml": [{
                 // In the future when the whole application uses Polymer we can vulcanize the whole app
                 // instead of using these dynamically coded partial imports.
                 "rel": "import",
                 "href": "/Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html"
-            }
+            }]
         },
         "bundle": {
             "manifest": {

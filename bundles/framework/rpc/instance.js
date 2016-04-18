@@ -299,11 +299,11 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
-
             getPixelMeasuresInScale : function(mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
-                    pixelMeasures = [];
+                    pixelMeasures = [],
+                    zoomLevel;
 
                 if(mmMeasures && mmMeasures.constructor === Array){
                     if(!scalein){
@@ -311,9 +311,18 @@ Oskari.clazz.define(
                     }
                     pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
                 }
+
+                var scales = mapModule.getScaleArray();
+                scales.forEach(function(sc) {
+                    if ((!zoomLevel || zoomLevel > sc) && sc > scalein) {
+                        zoomLevel = sc;
+                    }
+                });
+
                 return {
                     pixelMeasures: pixelMeasures,
-                    scale: scalein
+                    scale: scalein,
+                    zoomLevel: zoomLevel
                 };
             },
             resetState : function() {
