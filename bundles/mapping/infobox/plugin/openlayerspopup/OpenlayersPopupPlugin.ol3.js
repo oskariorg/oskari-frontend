@@ -192,7 +192,7 @@ Oskari.clazz.define(
                 }
                 popup.show(popupTitle, popupContent);
                 popup.onClose(function () {
-                     if (me._popups[id].type === "mobile") {
+                    if (me._popups[id] && me._popups[id].type === "mobile") {
                         delete me._popups[id];
                     }
                 });
