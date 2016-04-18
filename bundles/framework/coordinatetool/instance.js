@@ -85,11 +85,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             }
             me.started = true;
 
-            var conf = me.conf,
+            var conf = me.conf || {},
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);
-            this.coordinateToolService = this.createService(sandbox, me.conf);
+            this.coordinateToolService = this.createService(sandbox, conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var locale = this.getLocalization('display');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
@@ -109,7 +109,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         createService: function(sandbox, conf) {
             var coordinateToolService = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
-                this, conf
+                this, conf || {}
             );
             sandbox.registerService(coordinateToolService);
             return coordinateToolService;
