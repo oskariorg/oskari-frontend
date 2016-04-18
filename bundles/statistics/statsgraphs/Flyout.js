@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
             if (this.chart) {
                 return;
             }
-            // init a chart
+            // init a chart - http://c3js.org/gettingstarted.html
             this.chart = c3.generate({
                 bindto: container,
                 data: {
