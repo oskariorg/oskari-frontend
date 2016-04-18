@@ -36,6 +36,7 @@ All the parameters are wrapped inside one array.
 <tr>
   <td> options </td><td> Object </td><td> Additional options for infobox </td><td> </td>
 </tr>
+</table>
 
 Parameters for options-object:
 
