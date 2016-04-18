@@ -34,7 +34,3 @@ try {
         }
     }
 }
-// remove require.js from minified core
-//files.shift();
-//files.shift();
-//fs.writeFileSync('../bundles/bundle.min.js', files.join(os.EOL));

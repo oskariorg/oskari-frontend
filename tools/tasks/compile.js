@@ -367,6 +367,8 @@ module.exports = function(grunt) {
                 var index = stats.split('typeof define');
                 var cleanedCode = index.join('"s"');
                 fs.writeFileSync(file, cleanedCode, 'utf8');
+                // update the one under bundles (not dist/bundles) to make developer life easier
+                fs.writeFileSync('../bundles/statistics/statsgrid.polymer/vulcanized.html', cleanedCode, 'utf8');
                 // /Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html
                 return "Oskari.loader.linkFile('" + href + "','import','text/html');";
             });

@@ -17,8 +17,8 @@ Oskari.clazz
          *        popup title
          * @param {Object[]} contentData
          *        JSON presentation for the popup data
-         * @param {OpenLayers.LonLat} position
-         *        coordinates where to show the popup
+         * @param {OpenLayers.LonLat|object} position
+         *      lonlat coordinates where to show the popup or marker id {marker:'MARKER_ID'}
          * @param {Object} options
          *        Additional options for infobox:
                  * @param {Boolean} hidePrevious

@@ -51,8 +51,7 @@
         return;
     }
     if(o.loader) {
-        // loader already present, don't add another
-        return;
+        // loader already present, but we might want another?
     }
     var log = Oskari.log('Loader');
     var linkFile = function(href, rel, type) {
@@ -125,14 +124,16 @@
                         }
                     }
                 }
-             * @param  {[type]} sequence [description]
+             * @param  {Object} sequence see above
              * @return {[type]}          [description]
              */
             processSequence : function(done) {
                 var me = this;
                 if(sequence.length === 0) {
                     // everything has been loaded
-                    done();
+                    if(typeof done === 'function') {
+                        done();
+                    }
                     return;
                 }
                 var seqToLoad = sequence.shift();
@@ -263,6 +264,11 @@
                 // src.locales
                 if(src.locales) {
                     src.locales.forEach(function(file) {
+                        if(file.lang && file.lang !== Oskari.getLang()) {
+                            // dont load locale files that have declared language 
+                            // and are not the language Oskari is started with.
+                            return;
+                        }
                         if(file.src.endsWith('.js')) {
                             var path = getPath(basePath, file.src);
                             files.push(path);

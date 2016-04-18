@@ -303,7 +303,8 @@ Oskari.clazz.define(
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
                     pixelMeasures = [],
-                    zoomLevel;
+                    zoomLevel = 0,
+                    nextScale;
 
                 if(mmMeasures && mmMeasures.constructor === Array){
                     if(!scalein){
@@ -313,9 +314,10 @@ Oskari.clazz.define(
                 }
 
                 var scales = mapModule.getScaleArray();
-                scales.forEach(function(sc) {
-                    if ((!zoomLevel || zoomLevel > sc) && sc > scalein) {
-                        zoomLevel = sc;
+                scales.forEach(function(sc, index) {
+                    if ((!nextScale || nextScale > sc) && sc > scalein) {
+                        nextScale = sc;
+                        zoomLevel = index;
                     }
                 });
 
