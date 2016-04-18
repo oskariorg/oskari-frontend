@@ -18,10 +18,14 @@ Oskari.clazz.define(
             'Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin';
         me._name = 'OpenLayersPopupPlugin';
         me._popups = {};
+        me.markers = {};
+        me.markerPopups = {};
+
         me._mobileBreakpoints = {
             width: 500,
             height: 480
         };
+
     }, {
 
         /**
@@ -69,8 +73,8 @@ Oskari.clazz.define(
          *      popup title
          * @param {Object[]} contentData
          *      JSON presentation for the popup data
-         * @param {OpenLayers.LonLat} lonlat
-         *      coordinates where to show the popup
+         * @param {OpenLayers.LonLat|Object} position
+         *      lonlat coordinates where to show the popup or marker id {marker:'MARKER_ID'}
          * @param {Object} options
          *      additional options for infobox
          *
@@ -87,35 +91,54 @@ Oskari.clazz.define(
          * }
          * }]
          */
-        popup: function (id, title, contentData, lonlat, options, additionalTools) {
+        popup: function (id, title, contentData, position, options, additionalTools) {
             if (_.isEmpty(contentData)) {
                 return;
             }
             var me = this,
                 currPopup = me._popups[id],
-                refresh = (currPopup &&
-                    currPopup.lonlat.lon === lonlat.lon &&
-                    currPopup.lonlat.lat === lonlat.lat);
+                lon = null,
+                lat = null,
+                marker = null;
+
+            if(position.marker && me.markers[position.marker]) {
+                lon = me.markers[position.marker].data.x;
+                lat = me.markers[position.marker].data.y;
+                marker = me.markers[position.marker];
+                me.markerPopups[position.marker] = id;
+            } else if(position.lon && position.lat){
+                lon = position.lon;
+                lat = position.lat;
+            } else {
+                // Send a status report of the popup (it is not open)
+                var evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                var evt = evtB(id, false);
+                me.getSandbox().notifyAll(evt);
+                return;
+            }
+
+            var refresh = (currPopup &&
+                    currPopup.lonlat.lon === lon &&
+                    currPopup.lonlat.lat === lat);
 
             if (refresh) {
                 contentData = me._getChangedContentData(
                     currPopup.contentData.slice(), contentData.slice());
                 currPopup.contentData = contentData;
             }
-
-            me._renderPopup(id, contentData, title, lonlat, options, refresh, additionalTools);
+            me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, options, refresh, additionalTools, marker);
         },
 
         /**
          * @method _renderPopup
          */
-        _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools) {
+        _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
-                font = options.font;
+                font = options.font;     
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -146,12 +169,13 @@ Oskari.clazz.define(
                 }
                 popup.show(popupTitle, popupContent);
                 popup.onClose(function () {
-                    if (me._popups[id].type === "mobile") {
+                    if (me._popups[id] && me._popups[id].type === "mobile") {
                         delete me._popups[id];
                     }
                 });
             } else {
                 var popupType = "desktop";
+
                 popup = new OpenLayers.Popup(
                     id,
                     lonlat,
@@ -159,11 +183,14 @@ Oskari.clazz.define(
                     popupContent,
                     false
                 );
-
+                
+                var mapModule = me.getMapModule();
+                var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
+                
                 popup.moveTo = function (px) {
                     if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
-                        this.div.style.left = px.x + 'px';
-                        var topy = px.y - 20;
+                        this.div.style.left = (px.x + markerPosition.x) + 'px';
+                        var topy = px.y + markerPosition.y;
                         this.div.style.top = topy + 'px';
                     }
                 };
