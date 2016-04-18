@@ -1,6 +1,7 @@
 <link rel="import"
       href="libs/polymer/polymer.html">
 
+<link rel="import" href="libs/juicy-table-repeat/juicy-table-repeat.html">
 <link rel="import" href="libs/select-with-options/select-with-options.html">
 <link href="libs/promise-polyfill/promise-polyfill.html" rel="import">
 <link href="libs/iron-ajax/iron-ajax.html" rel="import">
@@ -22,8 +23,8 @@
       on-error="ajaxError"></iron-ajax>
     <oskari-spinner visible="[[showSpinner]]" spinner-id="indicatorsMetadataSpinner">
     </oskari-spinner>
-    <div id="indicatorCollapse" class$="[[expanded(indicatorExpanded)]]">
-      <div class$="[[hideIndicatorSelectorClass(embedded, showUserIndicatorView)]]" id="indicatorSelectorDiv">
+    <iron-collapse id="indicatorCollapse" opened="[[indicatorExpanded]]">
+      <div hidden$="{{hideIndicatorSelector(embedded, showUserIndicatorView)}}" id="indicatorSelectorDiv">
         <form class="statsgrid2_indicator_selector">
           <div>
             <label for="datasource-selector">[[locale.tab.grid.organization]]</label>
@@ -40,9 +41,9 @@
               option-value="val" option-label="text"
               style="width: 300px;" value="{{indicatorId::change}}">
           </select>
-          <div class="icon-info" on-click="showIndicatorInfo" class$="[[hidden(!indicatorSelected)]]"></div>
+          <div class="icon-info" on-click="showIndicatorInfo" hidden$="[[!indicatorSelected]]"></div>
           <!-- The optional selectors will be populated here when the above have been selected. -->
-          <div id="indicatorSelectors" class$="[[hidden(!indicatorSelected)]]">
+          <div id="indicatorSelectors" hidden$="[[!indicatorSelected]]">
             <template is="dom-repeat" items="[[selectorItems]]" as="selector">
               <label for="[[selector.name]]">[[selectorOption.label]]</label>
               <select is="select-with-options" id="[[selector.name]]"
@@ -53,18 +54,18 @@
               </select>
             </template>
           </div>
-          <button type="button" on-click="onAddIndicatorToGrid" class$="[[hidden(!indicatorSelected)]]"
+          <button type="button" on-click="onAddIndicatorToGrid" hidden$="[[!indicatorSelected]]"
             disabled$="[[!allSelectorsSelected]]">[[locale.addColumn]]</button>
         </form>
       </div>
-    </div>
+    </iron-collapse>
     <oskari-statsgrid locale="[[locale]]" language="[[language]]" ajax-url="[[ajaxUrl]]"
       sources="{{sources}}" selected-indicators="{{selectedIndicators}}" selected-layer="{{selectedLayer}}"
       layer-info="{{layerInfo}}" region-info="{{regionInfo}}"
       selector-selected-indicator-key="{{selectorSelectedIndicatorKey}}" selected-indicator-key="{{selectedIndicatorKey}}"
-      sandbox="{{sandbox}}" class$="[[hidden(hideGrid)]]"
+      sandbox="{{sandbox}}" hidden$="[[hideGrid]]"
       id="statsgrid" embedded="[[embedded]]" indicator-expanded="{{indicatorExpanded}}"></oskari-statsgrid>
-    <div class$="[[hidden(!showUserIndicatorView)]]" id="userindicatordiv">
+    <div hidden$="[[!showUserIndicatorView]]" id="userindicatordiv">
       <oskari-userindicator ajax-url="[[ajaxUrl]]"
         locale="[[locale]]" language="[[language]]" user="[[user]]"
         sources="{{sources}}" selected-layer="{{selectedLayer}}"
