@@ -5,33 +5,35 @@
 
   <template>
     <div class="oskari-grid" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
-      <div class="oskari-grid-width" id="oskari-grid-header" style="display:table-header-group">
+      <div class="oskari-grid-width" id="oskari-grid-header" style="display:table-row-group">
         <div class="oskari-grid-width" style="display:table;">
-          <template is="dom-if" if="[[selection]]">
-            <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
-                id="allSelectedCheckbox"></input></div>
-          </template>
-          <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
+          <div class="oskari-grid-width" style="display:table-row;">
+            <template is="dom-if" if="[[selection]]">
+              <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
+                  id="allSelectedCheckbox"></input></div>
+            </template>
+            <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
+              <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
+                <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
+                <template is="dom-if" if="[[filtering]]">
+                  <template is="dom-if" if="[[header.filter]]">
+                    <div on-tap="onFilter" class="icon-funnel" title="[[onFilterTitle]]"
+                      index="[[index]]" header="[[header]]"></div>
+                  </template>
+                </template>
+                <template is="dom-if" if="[[deleting]]">
+                  <template is="dom-if" if="[[header.delete]]">
+                    <div on-tap="onDelete" class="icon-close-dark statsgrid-remove-indicator"
+                      title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
+                  </template>
+                </template>
+              </div>
+            </template>
             <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
-              <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
-              <template is="dom-if" if="[[filtering]]">
-                <template is="dom-if" if="[[header.filter]]">
-                  <div on-tap="onFilter" class="icon-funnel" title="[[onFilterTitle]]"
-                    index="[[index]]" header="[[header]]"></div>
-                </template>
-              </template>
-              <template is="dom-if" if="[[deleting]]">
-                <template is="dom-if" if="[[header.delete]]">
-                  <div on-tap="onDelete" class="icon-close-dark statsgrid-remove-indicator"
-                    title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
-                </template>
-              </template>
-            </div>
-          </template>
-          <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
-            <div>
-              <div class$="[[indicatorToggleClass]]" on-tap="toggleIndicators"></div>
-              <div>[[locale.addIndicatorButton]]</div>
+              <div>
+                <div class$="[[indicatorToggleClass]]" on-tap="toggleIndicators"></div>
+                <div>[[locale.addIndicatorButton]]</div>
+              </div>
             </div>
           </div>
         </div>
@@ -44,6 +46,7 @@
         </div>
         <div class="oskari-grid-width" style="display:table-row;"><div colspan$="[[numcols]]" class="oskari-grid-width" style="padding: 0px; border: 0px; display:table-cell;">
           <iron-collapse id="statsCollapse">
+            <div class="oskari-grid-width" style="display: table;">
             <div id="oskari-grid-statistics" class="oskari-grid-width" style="display: block; margin: 0px;">
               <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
                 <div class="oskari-grid-width" class="display: table-row;">
@@ -55,6 +58,7 @@
                   <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"></div>
                 </div>
               </template>
+            </div>
             </div>
           </iron-collapse>
         </div></div>
