@@ -3,26 +3,26 @@
 
 <dom-module id="oskari-grid">
 
-  <template>
+  <template strip-whitespace>
     <div class="oskari-grid oskari-grid-width" id="oskariGrid" style="margin: 0px; overflow-x: auto; overflow-y: hidden; display: block; max-width: 650px;">
       <div class="oskari-grid-width" id="oskari-grid-header" style="display:table-row-group">
         <div class="oskari-grid-width" style="display:table;">
           <div class="oskari-grid-width" style="display:table-row;">
-            <template is="dom-if" if="[[selection]]">
-              <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{allSelected::change}}" on-change="allSelectedChanged"
+            <template is="dom-if" if="[[selection]]" strip-whitespace>
+              <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" disabled$="[[ie]]" checked="{{allSelected::change}}" on-change="allSelectedChanged"
                   id="allSelectedCheckbox"></input></div>
             </template>
-            <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate">
+            <template is="dom-repeat" items="[[headers]]" as="header" id="headersTemplate" strip-whitespace>
               <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
                 <span on-tap="onSort" index="[[index]]" header="[[header]]">[[header.title]]</span>
-                <template is="dom-if" if="[[filtering]]">
-                  <template is="dom-if" if="[[header.filter]]">
+                <template is="dom-if" if="[[filtering]]" strip-whitespace>
+                  <template is="dom-if" if="[[header.filter]]" strip-whitespace>
                     <div on-tap="onFilter" class="icon-funnel" title="[[onFilterTitle]]"
                       index="[[index]]" header="[[header]]"></div>
                   </template>
                 </template>
-                <template is="dom-if" if="[[deleting]]">
-                  <template is="dom-if" if="[[header.delete]]">
+                <template is="dom-if" if="[[deleting]]" strip-whitespace>
+                  <template is="dom-if" if="[[header.delete]]" strip-whitespace>
                     <div on-tap="onDelete" class="icon-close-dark statsgrid-remove-indicator"
                       title="[[onDeleteTitle]]" index="[[index]]" header="[[header]]"></div>
                   </template>
@@ -49,9 +49,9 @@
           <iron-collapse id="statsCollapse">
             <div class="oskari-grid-width" style="display:table;">
               <div id="oskari-grid-statistics" class="oskari-grid-width" style="display:block; margin: 0px; overflow-x: hidden;">
-                <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate">
+                <template is="dom-repeat" items="{{statsrows}}" as="statsrow" id="statsRowsTemplate" strip-whitespace>
                   <div class="oskari-grid-width" style="display:table-row;">
-                    <template is="dom-repeat" items="[[statsrow.data]]" as="datum">
+                    <template is="dom-repeat" items="[[statsrow.data]]" as="datum" strip-whitespace>
                       <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
                         <span>[[datum]]</span>
                       </div>
@@ -65,7 +65,7 @@
         </div></div>
         </div>
       </div>
-      <template is="dom-if" if="[[selection]]">
+      <template is="dom-if" if="[[selection]]" strip-whitespace>
         <div class="oskari-grid-width" id="oskari-grid-unselected-container" style="display: block; overflow-y: scroll; overflow-x: hidden; max-height: 150px;">
           <div class="oskari-grid-width" id="unselectedContainer" style="display:table-row;">
             <div colspan$="[[numcols]]" class="oskari-grid-width" style="display:table-cell;">
@@ -76,10 +76,10 @@
             <iron-collapse id="unselectedCollapse">
               <div class="oskari-grid-width" style="margin: 0px;display:table;">
                 <div id="oskari-grid-unselected" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
-                  <template is="dom-repeat" items="{{unselectedRows}}" as="unselectedRow" id="unselected-rows-template">
+                  <template is="dom-repeat" items="{{unselectedRows}}" as="unselectedRow" id="unselected-rows-template" strip-whitespace>
                     <div class="oskari-grid-width" style="display:table-row;">
-                      <div style="width: 41px;display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{unselectedRow.selected::change}}" on-change="selectionsChanged"></input></div>
-                      <template is="dom-repeat" items="[[unselectedRow.data]]" as="datum">
+                      <div style="width: 41px;display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" disabled$="[[ie]]" checked="{{unselectedRow.selected::change}}" on-change="selectionsChanged"></input></div>
+                      <template is="dom-repeat" items="[[unselectedRow.data]]" as="datum" strip-whitespace>
                         <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
                           <span>[[datum]]</span>
                         </div>
@@ -103,12 +103,12 @@
           <iron-collapse id="selectedCollapse" opened="true">
             <div class="oskari-grid-width" style="margin: 0px;display:table;">
               <div id="oskari-grid-body" class="oskari-grid-width" style="display: block; overflow-y: scroll; overflow-x: hidden;">
-                <template is="dom-repeat" items="{{selectedRows}}" as="row" id="rowsTemplate">
+                <template is="dom-repeat" items="[[selectedRows]]" as="row" id="rowsTemplate" strip-whitespace>
                   <div class="oskari-grid-width" style="display:table-row;">
-                    <template is="dom-if" if="[[selection]]">
-                      <div style="width: 41px;display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></div>
+                    <template is="dom-if" if="[[selection]]" strip-whitespace>
+                      <div style="width: 41px;display:table-cell;padding:5px;border:1px solid #e6e6e6;"><input type="checkbox" disabled$="[[ie]]" checked="{{row.selected::change}}" on-change="selectionsChanged"></input></div>
                     </template>
-                    <template is="dom-repeat" items="[[row.data]]" as="datum">
+                    <template is="dom-repeat" items="[[row.data]]" as="datum" strip-whitespace>
                       <div style="display:table-cell;padding:5px;border:1px solid #e6e6e6;">
                         <span>[[datum]]</span>
                       </div>

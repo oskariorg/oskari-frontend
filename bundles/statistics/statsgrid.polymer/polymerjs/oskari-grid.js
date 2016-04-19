@@ -21,6 +21,11 @@ Polymer({
       "notify": true,
       "value": "toggleCollapsedBig"
     },
+    "ie": {
+      "type": Boolean,
+      "notify": true,
+      "value": false
+    },
     "numIncluded": {
       "type": Number,
       "notify": true,
@@ -147,6 +152,10 @@ Polymer({
     if (this.$$('#unselectedRowsTemplate')) {
       this.$$('#unselectedRowsTemplate').render();
     }
+    // This line causes IE11 to crash.
+    // Edge and all other major browsers work fine.
+    // Related to this: https://github.com/Polymer/polymer/issues/2292
+    // None of the suggested workarounds work.
     this.$.rowsTemplate.render();
     this.fire("onSelectionsChanged", {});
     setTimeout(this.resize.bind(this), 100);
@@ -307,5 +316,14 @@ Polymer({
     $(window).bind('resize', function(e) {
       me.resize();
     });
+    var ua = window.navigator.userAgent;
+    // We detect Internet Explorer lower than 12 (Edge) and disable checkboxes, because they cause the browser to crash.
+    var msie = ua.indexOf('MSIE ');
+    var trident = ua.indexOf('Trident/');
+    if (msie > 0 || trident > 0) {
+      // msie: IE 10 or older
+      // trident: IE 11
+      this.ie = true;
+    }
   }
 });
