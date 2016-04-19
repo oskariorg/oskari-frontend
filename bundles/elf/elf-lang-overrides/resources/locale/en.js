@@ -59,3 +59,40 @@ Oskari.registerLocalization(
         "notLoggedIn": "My data contains your user profile and all your saved features, map views, embedded maps and datasets."
     }
 }, true);
+
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "Publisher2",
+    "value": {
+        "tile": {
+            "title": "Create embedded map"
+        },
+        "layerselection": {
+            "info": "Select the map layers to show on the embedded map"
+        },
+        "NotLoggedView": {
+            "text": "This tool allows you to create embedded maps from available services. Use of these are subject to licensing and requires that you log in."
+        },        
+        "StartView": {
+            "text": "Welcome to create an embedded map on your website."
+        }
+    }
+}, true);
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "LayerSelection",
+    "value": {
+        "layer": {
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "",
+                    "tooltip": ""
+                }
+            }
+        }
+    }
+}, true);
