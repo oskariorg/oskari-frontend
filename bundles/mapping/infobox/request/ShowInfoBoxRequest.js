@@ -114,20 +114,6 @@ Oskari.clazz
                 return this._position;
             },
             /**
-             * @method getHidePrevious
-             * @return {Boolean} if true, hides any previous popups when showing this
-             */
-            getHidePrevious: function () {
-                return this._hidePrevious;
-            },
-            /**
-             * @method getColourScheme
-             * @return {Object} the colour scheme object for the popup
-             */
-            getColourScheme: function () {
-                return this._colourScheme;
-            },
-            /**
              * @method getOptions
              * @return {Object} additional options for infobox
              */
