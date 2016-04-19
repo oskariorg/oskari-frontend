@@ -257,7 +257,7 @@ Oskari.clazz.define(
                 }, 
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/request/MapLayerVisibilityRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequestHandler.ol3.js"
                 }, 
 
                 {
