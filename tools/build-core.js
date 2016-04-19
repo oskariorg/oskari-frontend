@@ -12,6 +12,7 @@ var files = [
 	'../libraries/requirejs/text-plugin-2.0.14.js',
 	'../src/polyfills.js',
 	'../src/oskari.js',
+    '../src/i18n.js',
 	'../src/util.js',
 	'../src/logger.js',
 	'../src/loader.js'
