@@ -23,8 +23,8 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var options = request.getOptions(),
-                hidePrevious = options.hidePrevious,
+            var options = request.getOptions() || {},
+                hidePrevious = options.hidePrevious || false,
                 mobileBreakpoints = options.mobileBreakpoints;
             if (hidePrevious) {
                 this.popupPlugin.close(undefined);
