@@ -46,15 +46,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
 
             // get openlayers layer objects from map
             var module = this.layersPlugin.getMapModule();
-            var layers = module.getOLMapLayers(layer.getId());
-            if(!layers.length) {
+            var layerList = module.getOLMapLayers(layer.getId());
+            if(!layerList.length) {
                 // couldn't find the matching ol layer, maybe a timing issue
                 this.handleWMTStimingIssue(layer, core, request);
                 return;
             }
 
-            layer.forEach(function(ol) {
-                me.setVisible(layers[i], layer.isVisible());
+            layerList.forEach(function(ol) {
+                me.setVisible(ol, layer.isVisible());
             });
 
             // notify other components
