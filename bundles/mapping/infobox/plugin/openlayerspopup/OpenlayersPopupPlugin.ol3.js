@@ -97,7 +97,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 lon = null,
@@ -225,6 +224,7 @@ Oskari.clazz.define(
                     inputs.placeholder();
                 }
             }
+
             if (me.adaptable && !isInMobileMode) {
                 me._adaptPopupSize(id, refresh);
             }
@@ -508,6 +508,10 @@ Oskari.clazz.define(
                 maxWidth = size.width * 0.7,
                 maxHeight = size.height * 0.7;
 
+            if(isNaN(left)) {
+                left = 0;
+            }
+
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -540,6 +544,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'position': 'absolute',
                 'overflow' : 'visible',
                 'z-index': '16000'
             });

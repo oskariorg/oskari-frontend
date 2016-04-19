@@ -547,6 +547,10 @@ Oskari.clazz.define(
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
+
+            if(isNaN(left)) {
+                left = 0;
+            }
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -579,6 +583,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'position': 'absolute',
                 'z-index': '16000'
             });
 
