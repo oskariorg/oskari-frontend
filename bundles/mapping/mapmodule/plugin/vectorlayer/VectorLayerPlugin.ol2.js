@@ -640,8 +640,23 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
-            var me = this;
-            return this.getMap().getLayersByName(me._olLayerPrefix + layer.getId());
+            var ol = this.getLayerById(layer.getId());
+            if(!ol) {
+                return null;
+            }
+            // only single layer/id, wrap it in an array
+            return [ol];
+        },
+        getLayerById : function (id) {
+            if(!id) {
+                return null;
+            }
+            var layers = this.getMap().getLayersByName(this._olLayerPrefix + id);
+            if(!layers || !layers.length) {
+              return null;
+            }
+            // should have only one, return always the first one
+            return layers[0];
         },
         /**
          * @method handleFeaturesAvailableEvent

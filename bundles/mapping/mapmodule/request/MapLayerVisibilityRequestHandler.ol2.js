@@ -34,38 +34,65 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             //should check that the visibility actually has changed.
             if (!layer) {
+                this.tryVectorLayers(layerId, request.getVisible());
+                // no need to notify other components if it was a vector layer
+                return;
+            }
+            if (layer.isVisible() === request.getVisible()) {
+                // already in correct mode, no-op
                 return;
             }
             layer.setVisible(request.getVisible());
-            var map = this.layersPlugin.getMap();
-            var module = this.layersPlugin.getMapModule();
+
             // get openlayers layer objects from map
-            var layers = module.getOLMapLayers(layer.getId()),
-                i;
-
-            //No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
-            if (!layers || layers.length === 0 && layer.isLayerOfType('WMTS')) {
-
-                if (!me.wmtsRetryCounter[layer.getId()]) {
-                    me.wmtsRetryCounter[layer.getId()] = 0;
-                }
-
-                if (me.wmtsRetryCounter[layer.getId()]++ < 10) {
-                    window.setTimeout(function() {
-                        me.handleRequest(core, request);
-                    }, 500);
-                }
-            } else {
-                me.wmtsRetryCounter[layer.getId()] = 0;
+            var module = this.layersPlugin.getMapModule();
+            var layers = module.getOLMapLayers(layer.getId());
+            if(!layers.length) {
+                // couldn't find the matching ol layer, maybe a timing issue
+                this.handleWMTStimingIssue(layer, core, request);
+                return;
             }
 
-            for (i = 0; i < layers.length; i++) {
-                layers[i].setVisibility(layer.isVisible());
-                layers[i].display(layer.isVisible());
-            }
+            layer.forEach(function(ol) {
+                me.setVisible(layers[i], layer.isVisible());
+            });
 
             // notify other components
             this.layersPlugin.notifyLayerVisibilityChanged(layer);
+        },
+        tryVectorLayers : function(id, blnVisible) {
+            var module = this.layersPlugin.getMapModule();
+            var plugin = module.getLayerPlugins('vectorlayer');
+            if(!plugin || typeof plugin.getLayerById !== 'function') {
+                return;
+            }
+            var layer = plugin.getLayerById(id);
+            if(!layer) {
+                return;
+            }
+            this.setVisible(layer, blnVisible);
+        },
+        setVisible : function(layer, bln) {
+            // ol2 specific
+            layer.setVisibility(bln);
+            layer.display(bln);
+        },
+        handleWMTStimingIssue : function(layer, core, request) {
+            var me = this;
+            if (!layer.isLayerOfType('WMTS')) {
+                return;
+            }
+            //No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
+
+            if (!me.wmtsRetryCounter[layer.getId()]) {
+                me.wmtsRetryCounter[layer.getId()] = 0;
+            }
+
+            if (me.wmtsRetryCounter[layer.getId()]++ < 10) {
+                window.setTimeout(function() {
+                    me.handleRequest(core, request);
+                }, 500);
+            }
         }
     }, {
         /**

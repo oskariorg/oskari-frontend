@@ -25,23 +25,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
          *      request to handle
          */
         handleRequest: function (core, request) {
+            var me = this;
             var layerId = request.getMapLayerId();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer || layer.isVisible() === request.getVisible()) {
+            if (!layer) {
+                this.tryVectorLayers(layerId, request.getVisible());
+                // no need to notify other components if it was a vector layer
+                return;
+            }
+            if (layer.isVisible() === request.getVisible()) {
+                // already in correct mode, no-op
                 return;
             }
             layer.setVisible(request.getVisible());
-            var map = this.layersPlugin.getMap();
-            var module = this.layersPlugin.getMapModule();
+
             // get openlayers layer objects from map
-            var layers = module.getOLMapLayers(layer.getId()),
-                i;
-            for (i = 0; i < layers.length; i++) {
-                layers[i].setVisible(layer.isVisible());
+            var module = this.layersPlugin.getMapModule();
+            var layers = module.getOLMapLayers(layer.getId());
+            if(!layers.length) {
+                return;
             }
+            layer.forEach(function(ol) {
+                me.setVisible(layers[i], layer.isVisible());
+            });
 
             // notify other components
             this.layersPlugin.notifyLayerVisibilityChanged(layer);
+        },
+        tryVectorLayers : function(id, blnVisible) {
+            var module = this.layersPlugin.getMapModule();
+            var plugin = module.getLayerPlugins('vectorlayer');
+            if(!plugin || typeof plugin.getLayerById !== 'function') {
+                return;
+            }
+            var layer = plugin.getLayerById(id);
+            if(!layer) {
+                return;
+            }
+            this.setVisible(layer, blnVisible);
+        },
+        setVisible : function(layer, bln) {
+            // ol3 specific
+            layer.setVisible(bln);
         }
     }, {
         /**
