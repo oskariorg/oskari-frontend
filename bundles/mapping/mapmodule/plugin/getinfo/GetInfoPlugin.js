@@ -137,7 +137,11 @@ Oskari.clazz.define(
                 );
             return {
                 'MapModulePlugin.GetFeatureInfoRequest': handler,
-                'MapModulePlugin.GetFeatureInfoActivationRequest': handler
+                'MapModulePlugin.GetFeatureInfoActivationRequest': handler,
+                'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
+                    this
+                )
             };
         },
 
@@ -349,6 +353,11 @@ Oskari.clazz.define(
             });
         },
 
+        addInfoResultHandler: function(callback){
+            var me = this;
+            me._showGfiInfo = callback;
+        },
+
         /**
          * Formats the given data and sends a request to show infobox.
          *
@@ -357,7 +366,8 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [],
+            var me = this,
+                content = [],
                 contentData = {},
                 fragments = [],
                 colourScheme,
@@ -376,7 +386,17 @@ Oskari.clazz.define(
                 content.push(contentData);
             }
 
-            this._showGfiInfo(content, data.lonlat);
+            if (_.isObject(this._config)) {
+                colourScheme = this._config.colourScheme;
+                font = this._config.font;
+            }
+
+            this._showGfiInfo(content, data, this.formatters, {
+                colourScheme: colourScheme,
+                font: font,
+                title: this._loc.title,
+                infoboxId: this.infoboxId
+            });
         },
 
         /**
@@ -403,30 +423,28 @@ Oskari.clazz.define(
          * @method _showGfiInfo
          * @private
          * @param {Object[]} content infobox content array
-         * @param {OpenLayers.LonLat} lonlat location for the GFI data
+         * @param {data} data.lonlat location for the GFI data
+         * @param {formatters} formatter functions
+         * @param {params} params for request
          */
-        _showGfiInfo: function (content, lonlat) {
+        _showGfiInfo: function (content, data, formatters, params) {
             var reqBuilder = this.getSandbox().getRequestBuilder(
-                    'InfoBox.ShowInfoBoxRequest'
-                ),
-                request,
-                colourScheme,
-                font;
-
-            if (_.isObject(this._config)) {
-                colourScheme = this._config.colourScheme;
-                font = this._config.font;
-            }
+            'InfoBox.ShowInfoBoxRequest'
+            ),
+            request;
+            var options = {
+                hidePrevious: true,
+                colourScheme: params.colourScheme,
+                font: params.font
+            };
 
             if (reqBuilder) {
                 request = reqBuilder(
-                    this.infoboxId,
-                    this._loc.title,
+                    params.infoboxId,
+                    params.title,
                     content,
-                    lonlat,
-                    false,
-                    colourScheme,
-                    font
+                    data.lonlat,
+                    options
                 );
                 this.getSandbox().request(this, request);
             }

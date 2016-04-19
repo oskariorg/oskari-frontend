@@ -158,7 +158,7 @@
   height: 14px; }
 
 .oskariui .ui-slider-horizontal .ui-slider-handle {
-  background-image: url('../images/horizontal_handle.png');
+  background-image: url("../images/horizontal_handle.png");
   background-repeat: no-repeat; }
 
 .oskariui .ui-slider-horizontal .ui-slider-range {
@@ -174,12 +174,12 @@
 .oskariui .ui-slider-vertical {
   margin-left: 2px;
   width: 24px;
-  background-image: url('../images/zoombar_part.png');
+  background-image: url("../images/zoombar_part.png");
   background-repeat: repeat-y; }
 
 .oskariui .ui-slider-vertical .ui-slider-handle {
   margin-left: 0;
-  background-image: url('../images/zoombar_cursor.png');
+  background-image: url("../images/zoombar_cursor.png");
   background-repeat: no-repeat; }
 
 .oskariui .ui-slider-vertical .ui-slider-range {
@@ -210,38 +210,20 @@ body .oskariui .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .oskariui .ui-widget {
-  font-family: Segoe UI, Arial, sans-serif;
+  font-family: Segoe UI,Arial,sans-serif;
   font-size: 1.1em; }
 
 .oskariui .ui-widget .ui-widget {
   font-size: 1em; }
 
 .oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button {
-  font-family: Segoe UI, Arial, sans-serif;
+  font-family: Segoe UI,Arial,sans-serif;
   font-size: 1em; }
-
-
-
-
 
 /* Interaction states
 ----------------------------------*/
-
-
-
-
-
-
 /* Interaction Cues
 ----------------------------------*/
-
-
-
-
-
-
-
-
 .oskariui .ui-state-disabled .ui-icon {
   filter: alpha(opacity=35);; }
 
@@ -252,13 +234,6 @@ body .oskariui .ui-tooltip {
 .oskariui .ui-icon {
   width: 16px;
   height: 16px; }
-
-
-
-
-
-
-
 
 /* Misc visuals
 ----------------------------------*/

@@ -1,4 +1,4 @@
-div.divmanazerpopup {
+.divmanazerpopup {
   max-width: 800px;
   min-width: 200px;
   position: fixed;
@@ -26,74 +26,92 @@ div.divmanazerpopup {
   border: 5px solid rgba(0, 0, 0, 0.2);
   border-radius: 7px;
   z-index: 10000; }
-  div.divmanazerpopup.no_resize div.content textarea {
+  .divmanazerpopup.no_resize div.content textarea {
     resize: none; }
-  div.divmanazerpopup.arrow:before, div.divmanazerpopup.arrow:after {
+  .divmanazerpopup.arrow:before, .divmanazerpopup.arrow:after {
     border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
     position: absolute; }
-  div.divmanazerpopup.top:before, div.divmanazerpopup.top:after {
+  .divmanazerpopup.top:before, .divmanazerpopup.top:after {
     top: 100%; }
-  div.divmanazerpopup.top:before {
+  .divmanazerpopup.top:before {
     border-top-color: #000000;
     border-width: 6px;
     margin-left: -6px;
     left: 50%; }
-  div.divmanazerpopup.top:after {
+  .divmanazerpopup.top:after {
     border-top-color: #FFFFFF;
     border-width: 5px;
     margin-left: -5px;
     left: 50%; }
-  div.divmanazerpopup.right:before, div.divmanazerpopup.right:after {
+  .divmanazerpopup.right:before, .divmanazerpopup.right:after {
     right: 100%; }
-  div.divmanazerpopup.right:before {
+  .divmanazerpopup.right:before {
     border-right-color: #000000;
     border-width: 6px;
     margin-top: -6px;
     top: 50%; }
-  div.divmanazerpopup.right:after {
+  .divmanazerpopup.right:after {
     border-right-color: #FDF8D9;
     border-width: 5px;
     margin-top: -5px;
     top: 50%; }
-  div.divmanazerpopup.bottom:before, div.divmanazerpopup.bottom:after {
+  .divmanazerpopup.bottom:before, .divmanazerpopup.bottom:after {
     bottom: 100%; }
-  div.divmanazerpopup.bottom:before {
+  .divmanazerpopup.bottom:before {
     border-bottom-color: #000000;
     border-width: 6px;
     margin-left: -6px;
     left: 50%; }
-  div.divmanazerpopup.bottom:after {
+  .divmanazerpopup.bottom:after {
     border-bottom-color: #FDF8D9;
     border-width: 5px;
     margin-left: -5px;
     left: 50%; }
-  div.divmanazerpopup.left:before, div.divmanazerpopup.left:after {
+  .divmanazerpopup.left:before, .divmanazerpopup.left:after {
     left: 100%; }
-  div.divmanazerpopup.left:before {
+  .divmanazerpopup.left:before {
     border-left-color: #000000;
     border-width: 6px;
     margin-top: -6px;
     top: 50%; }
-  div.divmanazerpopup.left:after {
+  .divmanazerpopup.left:after {
     border-left-color: #FDF8D9;
     border-width: 5px;
     margin-top: -5px;
     top: 50%; }
-  div.divmanazerpopup div.content {
+  .divmanazerpopup div.content {
     margin: 10px; }
-    div.divmanazerpopup div.content textarea {
+    .divmanazerpopup div.content textarea {
       resize: none; }
-    div.divmanazerpopup div.content ul {
+    .divmanazerpopup div.content ul {
       margin: 10px; }
-  div.divmanazerpopup div.actions {
+  .divmanazerpopup div.actions {
     margin: 10px;
     text-align: center; }
-    div.divmanazerpopup div.actions input {
+    .divmanazerpopup div.actions input {
       margin: 10px; }
-  div.divmanazerpopup h3.popupHeader {
+  .divmanazerpopup h3.popupHeader {
     background-color: #FDF8D9;
-    border-radius: 5px 5px 0 0;
     padding: 8px 10px; }
+
+  .divmanazerpopup div.close-icon {
+    position: absolute;
+    top: 8px;
+    right: 5px; }
+  .divmanazerpopup.mobile-landscape {
+    height: 100%;
+    top: 0% !important;
+    left: 0% !important;
+    margin-top: -6px !important;
+    margin-left: -4px !important;
+    overflow: auto; }
+  div.divmanazerpopup.mobile-portrait {
+    width: 94%;
+    top: 10% !important;
+    left: 3% !important;
+    margin-top: -6px !important;
+    margin-left: -4px !important;
+    overflow: auto; }

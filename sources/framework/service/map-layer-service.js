@@ -343,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 dataType: 'json',
                 data : {
                     timestamp : timeStamp,
-                    epsg : epsg
+                    srs : epsg
                 },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
@@ -1046,6 +1046,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // didnt find layer from base level, try sublayers if there are any
             if (subLayers.length > 0) {
                 return this.findMapLayer(id, subLayers);
+            } else {
+                return null;
+            }
+        },
+        /**
+         * @method findMapLayerByName
+         * Tries to find maplayer with given name from given map layer array. Uses
+         * recursion to loop through all layers and its sublayers
+         *
+         * @param {String}
+         *            name layer name we want to find. For example: "oskari:kunnat2013"
+         * @param {Array}
+         *            layerList (optional) array of maplayer objects, defaults to all layers
+         * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+         *  layerModel if found matching name or null if not found
+         */
+        findMapLayerByName: function (name, layerList) {
+            var i,
+                layer,
+                subLayers = [],
+                subLayer = null;
+            if (!layerList) {
+                layerList = this._loadedLayersList;
+            }
+            for (i = 0; i < layerList.length; i++) {
+                layer = layerList[i];
+                if (layer.getLayerName() + '' === name + '') {
+                    return layer;
+                } else {
+                    subLayers = subLayers.concat(layer.getSubLayers());
+                }
+            }
+            // didn't find layer from base level, try sublayers if there are any
+            if (subLayers.length > 0) {
+                return this.findMapLayerByName(name, subLayers);
             } else {
                 return null;
             }

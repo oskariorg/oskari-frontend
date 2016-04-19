@@ -904,7 +904,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @param {Function} failure the failure callback
          */
         _getWFSLayerPropertiesAndTypes: function (layer_id, success, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
+            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&simple=true&layer_id=' + layer_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

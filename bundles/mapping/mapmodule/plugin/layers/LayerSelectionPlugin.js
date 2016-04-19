@@ -545,7 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             icon.addClass('icon-arrow-white-down');
             content.show();
 
-            
+
 
             if(me.isMobile){
                 content.addClass('mobile');
@@ -557,7 +557,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var layersTitle = div.find('.content-header');
             var layersTitleHeight = 0;
-            
+
             if(layersTitle.length==0){
                 layersTitle = div.find('.header');
             }

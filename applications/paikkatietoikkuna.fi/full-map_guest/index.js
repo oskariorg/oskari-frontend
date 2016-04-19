@@ -67,46 +67,34 @@ jQuery(document).ready(function() {
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
-    function start(appSetup, appConfig, cb) {
+    function start(appSetup, appConfig) {
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
-        app.startApplication(function(startupInfos) {
-            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-            if (cb) {
-                cb(instance);
-            }
+        app.startApplication(function () {
+            var sb = Oskari.getSandbox();
+            gfiParamHandler(sb);
         });
-
     }
 
 
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        beforeSend: function(x) {
-            if (x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-            }
-        },
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        success: function(app) {
+        success: function (app) {
             if (app.startupSequence && app.configuration) {
-              var appSetup = {
-                "startupSequence": app.startupSequence
-              };
-              start(appSetup, app.configuration, function(instance) {
-                    var sb = instance.getSandbox();
-                    gfiParamHandler(sb);
-                });
+                var appSetup = {
+                    "startupSequence": app.startupSequence
+                };
+                start(appSetup, app.configuration);
             } else {
                 jQuery('#mapdiv').append('Unable to start');
             }
         },
-        error: function(jqXHR, textStatus) {
-            console.log('error got', jqXHR, textStatus);
-            if (jqXHR.status != 0) {
+        error: function (jqXHR, textStatus) {
+            if (jqXHR.status !== 0) {
                 jQuery('#mapdiv').append('Unable to start');
             }
         }

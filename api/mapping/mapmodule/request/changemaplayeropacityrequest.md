@@ -19,16 +19,14 @@ Requests a map layer opacity to be changed on a map.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* mapLayerId </td><td> String </td><td> id for maplayer to be modified (Oskari.mapframework.service.MapLayerService) </td><td> </td>
+  <td> \* mapLayerId </td><td> String </td><td> id for maplayer to be modified (Oskari.mapframework.service.MapLayerService) </td><td> </td>
 </tr>
 <tr>
-  <td>* opacity </td><td> Number </td><td> desired opacity of the map layer (0-100) </td><td> </td>
+  <td> \* opacity </td><td> Number </td><td> desired opacity of the map layer (0-100) </td><td> </td>
 </tr>
 </table>
 
 ## Examples
-
-[Give here examples of the use of the request. First small description and then code example. For example:]
 
 Change map layer opacity to 50 %.
 ```javascript

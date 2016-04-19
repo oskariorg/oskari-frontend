@@ -87,6 +87,13 @@ Oskari.clazz.define(
 
         // mapcontrols assumes this to be present before init or start
         me._localization = null;
+
+        me._defaultMarker = {
+            shape: 2,
+            size: 64
+        };
+        me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
+
     }, {
         /**
          * @method init
@@ -1068,6 +1075,196 @@ Oskari.clazz.define(
         },
 /* --------------- /PUBLISHER ------------------------ */
 
+
+/* --------------- SVG MARKER ------------------------ */
+        /**
+         * Gets the svg marker to be used draw marker
+         * @method  @public getSvg
+         * @param  {Object} markerStyle marker style
+         * @return {String} marget svg image format
+         */
+        getSvg: function(markerStyle){
+            var sandbox = this.getSandbox(),
+                marker = this._markerTemplate.clone(),
+                svgObject = null;
+
+            // marker shape is number --> find it from Oskari.getMarkers()
+            if(!isNaN(markerStyle.shape)) {
+                var markers = Oskari.getMarkers();
+                svgObject = markers[markerStyle.shape];
+                if(!svgObject) {
+                    svgObject = markers[this._defaultMarker.shape];
+                }
+
+                if(markerStyle.color) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', markerStyle.color);
+                }
+                if(markerStyle.stroke) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', markerStyle.stroke);
+                }
+            }
+            // marker shape is svg
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {
+                svgObject = {
+                    data: markerStyle.shape.data,
+                    x: markerStyle.shape.x,
+                    y: markerStyle.shape.y
+                };
+            }
+            // marker icon not found
+            else {
+                sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
+                return null;
+            }
+
+            svgObject.data = this.__addPositionMarks(svgObject);
+
+            marker.append(svgObject.data);
+
+            var markerHTML = marker.outerHTML();
+            if(markerStyle.size) {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
+            } else {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
+            }
+
+            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+
+            return svgSrc;
+        },
+
+        /**
+         * Gets popup position in pixel for selected marker
+         * @method  @public getSvgMarkerPopupPxPosition
+         * @param  {Integer|Object} marker marker shape number or object if used own markers
+         * @return {Object} object wit popup x and y position in pixel
+         */
+        getSvgMarkerPopupPxPosition: function(marker) {
+            var me = this;
+            var offsetX = 0;
+            var offsetY = -20;
+
+            var isMarker = (marker && marker.data) ? true : false;
+
+            if(!isMarker){
+                return {
+                    x: offsetX,
+                    y: offsetY
+                };
+            }
+
+            var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
+            var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && marker.data.shape.data) ? true : false;
+
+            var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
+            
+
+            var markerDetails = {
+                x: 16,
+                y: 16
+            };
+
+            if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){                
+                markerDetails = Oskari.getMarkers()[marker.data.shape];
+            } else if(isCustomMarker) {
+                markerDetails = marker.data.shape;
+            }
+
+            var dx = !isNaN(markerDetails.x) ? markerDetails.x : 16;
+            var dy = !isNaN(markerDetails.y) ? markerDetails.y : 16;
+            
+            var diff = markerSize/32;
+
+            if(dx === 16) {
+                offsetX = 0;
+            } else if(dx < 16) {
+                offsetX = (32 - dx) / 2;
+            } else {
+                offsetX = -(32 - dx) / 2;
+            }
+
+            if(dy <= 16){
+                offsetY = -(32 - dy) / 2 * diff;
+            } else {
+                offsetY = (32 - dy) / 2 * diff;
+            }
+
+            return {
+                x: offsetX,
+                y: offsetY
+            };
+        },
+
+
+        /**
+         * Add x and y attributes to svg image
+         * @method  @private __addPositionMarks
+         * @param  {Object} svgObject the svg object
+         * @return {String} svg string
+         */
+        __addPositionMarks: function(svgObject) {
+            var htmlObject = jQuery(svgObject.data);
+            var defaultCenter = this._defaultMarker.size / 2;
+
+            var dx = !isNaN(svgObject.x) ? svgObject.x : 16;
+            var dy = !isNaN(svgObject.y) ? svgObject.y : 16;
+
+            var x = defaultCenter - dx;
+            var y = defaultCenter - (defaultCenter - dy);
+
+            if(!isNaN(x) && !isNaN(y)) {
+                htmlObject.attr('x', x);
+                htmlObject.attr('y', y);
+            }
+
+            return htmlObject.outerHTML();
+        },
+        /**
+         * Changes svg path attributes
+         * @method  @private __changePathAttribute description]
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changePathAttribute: function(svg, attr, value){
+           var htmlObject = jQuery(svg);
+           var sandbox = this.getSandbox();
+           htmlObject.find('path').attr(attr,value);
+
+           if(htmlObject.find('path').length>1) {
+              sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+           }
+
+           return htmlObject.outerHTML();
+        },
+        /**
+         * Changes svg attribute
+         * @method  @private __changeSvgAttribute
+         * @param  {String} svg   svg format
+         * @param  {String} attr  attribute name
+         * @param  {String} value attribute value
+         * @return {String} svg string
+         */
+        __changeSvgAttribute: function(svg, attr, value){
+            var htmlObject = jQuery(svg);
+            htmlObject.attr(attr,value);
+            return htmlObject.outerHTML();
+        },
+        /**
+         * Converts from abstract marker size to real pixel size
+         * @method  @public getMarkerIconSize
+         * @param size Abstract size
+         * @returns {number} Size in pixels
+         */
+        getMarkerIconSize : function(size) {
+            return 40 + 10 * size;
+        },
+/* --------------- /SVG MARKER ------------------------ */
+
+
 /* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
          * Removes all the css classes which respond to given regex from all elements
@@ -1163,6 +1360,7 @@ Oskari.clazz.define(
                 return null;
             }
         },
+
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme
@@ -1445,6 +1643,19 @@ Oskari.clazz.define(
             });
 
             this.orderLayersByZIndex();
+        },
+        /**
+         * @method @public isValidGeoJson
+         * checks geoJSON validity
+         * @return {boolean} true: if valid
+         */
+        isValidGeoJson: function(geoJson) {
+            //checking if geoJSON has features
+            if(geoJson.features && geoJson.features.length>0) {
+               return true;
+            }
+            //checkig other things, will be added later...
+            return false;
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

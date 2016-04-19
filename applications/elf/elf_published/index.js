@@ -2,62 +2,58 @@
  * Start when dom ready
  */
 jQuery(document).ready(function() {
-	
-    //TODO: remove the ugly ol3 hack once we have a way to build a working ol3...
-    jQuery.getScript("/Oskari/libraries/ol3/ol-v3.11.2-oskari.js", function() {
-        if(!ajaxUrl) {
-            alert('Ajax URL not set - cannot proceed');
-            return;
-        }
+    if(!ajaxUrl) {
+        alert('Ajax URL not set - cannot proceed');
+        return;
+    }
 
-        // populate url with possible control parameters
-        var getAppSetupParams = {};
-        if( typeof window.controlParams == 'object') {
-            for(var key in controlParams) {
-                getAppSetupParams[key] = controlParams[key];
+    // populate url with possible control parameters
+    var getAppSetupParams = {};
+    if( typeof window.controlParams == 'object') {
+        for(var key in controlParams) {
+            getAppSetupParams[key] = controlParams[key];
+        }
+    }
+
+    if(!language) {
+        // default to english
+        language = 'en';
+    }
+    Oskari.setLang(language);
+
+    Oskari.setLoaderMode('dev');
+    Oskari.setPreloaded(preloaded);
+ 
+    /* let's start the app after config has been loaded successfully */
+    function start(appSetup, appConfig, cb) {
+        var app = Oskari.app;
+
+        app.setApplicationSetup(appSetup);
+        app.setConfiguration(appConfig);
+        app.startApplication();
+    }
+
+
+    /* let's load the appsetup and configurations from database */
+    jQuery.ajax({
+        type : 'POST',
+        dataType : 'json',
+        data : getAppSetupParams,
+        url : ajaxUrl + 'action_route=GetAppSetup',
+        success : function(app) {
+            if(app.startupSequence && app.configuration) {
+                var appSetup = {
+                    "startupSequence" : app.startupSequence
+                };
+                start(appSetup, app.configuration);
+            } else {
+                jQuery('#mapdiv').append('Unable to start');
+            }
+        },
+        error : function(jqXHR, textStatus) {
+            if(jqXHR.status != 0) {
+                jQuery('#mapdiv').append('Unable to start');
             }
         }
-
-        if(!language) {
-            // default to english
-            language = 'en';
-        }
-        Oskari.setLang(language);
-
-        Oskari.setLoaderMode('dev');
-        Oskari.setPreloaded(preloaded);
-     
-        /* let's start the app after config has been loaded successfully */
-        function start(appSetup, appConfig, cb) {
-            var app = Oskari.app;
-
-            app.setApplicationSetup(appSetup);
-            app.setConfiguration(appConfig);
-            app.startApplication();
-        }
-
-
-        /* let's load the appsetup and configurations from database */
-        jQuery.ajax({
-            type : 'POST',
-            dataType : 'json',
-            data : getAppSetupParams,
-            url : ajaxUrl + 'action_route=GetAppSetup',
-            success : function(app) {
-                if(app.startupSequence && app.configuration) {
-                    var appSetup = {
-                        "startupSequence" : app.startupSequence
-                    };
-                    start(appSetup, app.configuration);
-                } else {
-                    jQuery('#mapdiv').append('Unable to start');
-                }
-            },
-            error : function(jqXHR, textStatus) {
-                if(jqXHR.status != 0) {
-                    jQuery('#mapdiv').append('Unable to start');
-                }
-            }
-        });
     });
 });

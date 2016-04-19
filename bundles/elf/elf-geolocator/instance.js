@@ -80,6 +80,10 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 sandbox.request(this, moveReq);
             }
 
+            var options = {
+                hidePrevious: true
+            };
+
             if (infoBoxReqBuilder) {
                 infoBoxContent = {
                     html: this.__getInfoBoxHtml(result),
@@ -87,7 +91,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 };
                 infoBoxReq = infoBoxReqBuilder(
                     popupId, this.getLocalization('tab').resultsTitle,
-                    [infoBoxContent], lonlat, true);
+                    [infoBoxContent], lonlat, options);
                 sandbox.request(this, infoBoxReq);
             }
         },

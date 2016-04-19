@@ -265,14 +265,14 @@ Oskari.clazz.define(
                 /**
                  * @method AfterMapMoveEvent
                  */
-                AfterMapMoveEvent: function () {
+                AfterMapMoveEvent: function (event) {
                     if (me.getConfig() && me.getConfig().deferSetLocation) {
                         me.getSandbox().printDebug(
                             'setLocation deferred (to aftermapmove)'
                         );
                         return;
                     }
-                    me.mapMoveHandler();
+                    me.mapMoveHandler(null, event);
                 },
 
                 /**
@@ -335,12 +335,6 @@ Oskari.clazz.define(
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me.mapLayerVisibilityChangedHandler(event);
-                    if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
-                        me.getSandbox().printDebug(
-                            'sending deferred setLocation'
-                        );
-                        me.mapMoveHandler(event.getMapLayer().getId());
-                    }
                 },
 
                 /**
@@ -435,7 +429,7 @@ Oskari.clazz.define(
         /**
          * @method mapMoveHandler
          */
-        mapMoveHandler: function (reqLayerId) {
+        mapMoveHandler: function (reqLayerId, event) {
             var me = this,
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
@@ -470,9 +464,17 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
+
+                // Clean layer data cache if not in scale
+                if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) ) {
+                    me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
+                    continue;
+                }
+
                 if (!layers[i].hasFeatureData() || !layers[i].isVisible()) {
                     continue;
                 }
+
                 // clean features lists
                 layers[i].setActiveFeatures([]);
                 if (grid === null || grid === undefined) {
@@ -734,7 +736,10 @@ Oskari.clazz.define(
                     event.getMapLayer().isVisible()
                 );
 
-                if(event.getMapLayer().isVisible()){
+                if (event.getMapLayer().isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
+                    this.getSandbox().printDebug(
+                        'sending deferred setLocation'
+                    );
                     this.mapMoveHandler(event.getMapLayer().getId());
                 }
             }
@@ -763,10 +768,33 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         refreshManualLoadLayersHandler: function (event) {
+            var me = this,
+                layers = [];
+
+            if(event.getLayerId()) {
+                layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
+            }
+            else {
+                layers = me.getSandbox().findAllSelectedMapLayers();
+            }
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
+                   me.refreshLayer(layer.getId(), true);
+                }
+            });
+        },
+        /**
+         * @method  refreshLayer
+         * @param {String} layerID
+         * @param {Boolean} noBufferClean  if true
+         */
+        refreshLayer: function (layerID, noBufferClean) {
             var bbox,
                 grid,
-                layerId,
                 layers = [],
+                layerId,
+                layer,
                 me = this,
                 map = me.getSandbox().getMap(),
                 srs,
@@ -779,40 +807,45 @@ Oskari.clazz.define(
             zoom = map.getZoom();
             grid = me.getGrid();
 
-            // update cache
-            me.refreshCaches();
-            if(event.getLayerId()) {
-                layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
-            }
-            else {
-                layers = me.getSandbox().findAllSelectedMapLayers();
+            if (!layerID) {
+                return;
             }
 
-            layers.forEach(function (layer) {
-                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible()) {
-                    // clean features lists
-                    layer.setActiveFeatures([]);
-                    if (grid === null || grid === undefined) {
-                        return;
-                    }
-                    layerId = layer.getId();
-                    tiles = me.getNonCachedGrid(layerId, grid);
-                    me.getIO().setLocation(
-                        layerId,
-                        srs, [
-                            bbox.left,
-                            bbox.bottom,
-                            bbox.right,
-                            bbox.top
-                        ],
-                        zoom,
-                        grid,
-                        tiles,
-                        true
-                    );
-                    me._tilesLayer.redraw();
+
+            // update cache
+            me.refreshCaches();
+
+            layer = me.getSandbox().findMapLayerFromSelectedMapLayers(layerID);
+
+            // Clean OL buffer
+            if (!noBufferClean) {
+                me.getOLMapLayer(layer, me.__typeNormal).removeBackBuffer();
+            }
+
+            if (layer.hasFeatureData() && layer.isVisible()) {
+                // clean features lists
+                layer.setActiveFeatures([]);
+                if (grid === null || grid === undefined) {
+                    return;
                 }
-            });
+                layerId = layer.getId();
+                tiles = me.getNonCachedGrid(layerId, grid);
+                me.getIO().setLocation(
+                    layerId,
+                    srs, [
+                        bbox.left,
+                        bbox.bottom,
+                        bbox.right,
+                        bbox.top
+                    ],
+                    zoom,
+                    grid,
+                    tiles,
+                    true
+                );
+                me._tilesLayer.redraw();
+
+            }
         },
         /**
          * @method mapSizeChangedHandler
@@ -1742,6 +1775,15 @@ Oskari.clazz.define(
                 stripbox[i] = bbox[i].toPrecision(13);
             }
             return stripbox.join(',');
+        },
+        OLlayerVisibility: function (layer) {
+            var    me = this,
+                mapLayers = me.getMapModule().getOLMapLayers(layer.getId()),
+                mapLayer = mapLayers.length ? mapLayers[0] : null;
+            if(mapLayer){
+                return mapLayer.getVisibility();
+            }
+            return layer.isVisible();
         },
         hasUI: function() {
             return false;

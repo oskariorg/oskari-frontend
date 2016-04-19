@@ -29,6 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      */
 
     function (id, imageUrl, options, mapDivId) {
+		this._defaulfMarkerShape = 2;
+		this._preSVGIconUrl = 'data:image/svg+xml;base64,';
     }, {
 
         /**
@@ -40,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _initImpl: function (sandbox, options, map) {
             /*Added to handle pink tiles */
-            var olOpts = options.openLayers || {};
+      	    var olOpts = options.openLayers || {};
             OpenLayers.IMAGE_RELOAD_ATTEMPTS = olOpts.imageReloadAttemps || 5;
             OpenLayers.Util.onImageLoadErrorColor = olOpts.onImageLoadErrorColor || 'transparent';
 
@@ -314,13 +316,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projection.
+         * Transforms coordinates from srs projection to the targerSRS projection.
          * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @param {String} targetSRS projection to transform to like "EPSG:4326" (optional, defaults to map projection)
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
+        transformCoordinates: function (pLonlat, srs, targetSRS) {
+            if(!targetSRS) {
+                targetSRS = this.getProjection();
+            }
+            if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
             var isProjectionDefined = Proj4js.defs[srs];
@@ -328,7 +334,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
             }
             var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
-            var transformed = tmp.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
+            var transformed = tmp.transform(new OpenLayers.Projection(srs), new OpenLayers.Projection(targetSRS));
 
             return {
                 lon : transformed.lon,
@@ -453,11 +459,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             styleDef = styleDef || {};
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
-                olStyle.fill = true;
-                olStyle.fillColor = styleDef.fill.color;
+            var size = (styleDef.image && styleDef.image.size) ? this.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+            styleDef.image.size = size;
+
+            var svg = this.getSvg(styleDef.image);
+            if(svg) {
+                olStyle.externalGraphic = svg;
             }
 
+            if(styleDef.image.size) {
+                olStyle.graphicWidth = size;
+                olStyle.graphicHeight = size;
+            }
+            if(styleDef.image.opacity) {
+                olStyle.fillOpacity = styleDef.image.opacity;
+            }
             if(styleDef.stroke) {
                 if(styleDef.stroke.color) {
                     olStyle.strokeColor = styleDef.stroke.color;
@@ -465,41 +481,65 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(styleDef.stroke.width) {
                     olStyle.strokeWidth = styleDef.stroke.width;
                 }
+                if(style.stroke.lineDash) {
+                    olStyle.strokeDashstyle = style.stroke.lineDash;
+                }
+                if(style.stroke.lineCap) {
+                    olStyle.strokeLinecap = style.stroke.lineCap;
+                }
             }
-
-            if (styleDef.image) {
+            if (styleDef.image.radius) {
                 if(styleDef.image.radius) {
                     olStyle.pointRadius = styleDef.image.radius;
+                    //currently only supporting circle
+                    olStyle.graphicName = "circle";
                 }
-                //currently only supporting circle
-                olStyle.graphicName = "circle";
             }
-            if(styleDef.text) {
-                /*
+            /*
                 TODO: figure out ol2 equivalent to this... "normal" font size * scale?
                 if(styleDef.text.scale) {
                     olStyle.scale = styleDef.text.scale;
                 }
-                */
-                if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
-                    olStyle.fontColor = styleDef.text.fill.color;
-                }
-                if(styleDef.text.stroke) {
-                    if(styleDef.text.stroke.color) {
-                        olStyle.labelOutlineColor = styleDef.text.stroke.color;
-                    }
-                    if(styleDef.text.stroke.width) {
-                        olStyle.labelOutlineWidth = styleDef.text.stroke.width;
-                    }
-                }
-
-                //label
-                if (styleDef.text.labelText) {
-                    olStyle.label = styleDef.text.labelText;
-                } else if (styleDef.text.labelProperty) {
-                    olStyle.label = "${"+styleDef.text.labelProperty+"}";
-                }
+          */
+          if(styleDef.text.font) {
+            var split = styleDef.text.font.split(" ");
+            if(split[1]) {
+               olStyle.fontSize = split[1];
             }
+            if(split[0]) {
+                olStyle.fontWeight = split[0];
+            }
+            if(split[2]) {
+                olStyle.fontFamily = split[2];
+            }
+          }
+          if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
+              olStyle.fontColor = styleDef.text.fill.color;
+          }
+          if(styleDef.text.stroke) {
+              if(styleDef.text.stroke.color) {
+                  olStyle.labelOutlineColor = styleDef.text.stroke.color;
+              }
+              if(styleDef.text.stroke.width) {
+                  olStyle.labelOutlineWidth = styleDef.text.stroke.width;
+              }
+          }
+          if(styleDef.labelAlign) {
+             olStyle.labelAlign = styleDef.text.labelAlign;
+          }
+          if(styleDef.text.offsetX) {
+             olStyle.labelXOffset = styleDef.text.offsetX;
+          }
+          if(styleDef.text.offsetY) {
+             olStyle.labelYOffset = styleDef.text.offsetY;
+          }
+
+          //label
+          if (styleDef.text.labelText) {
+             olStyle.label = styleDef.text.labelText;
+          } else if (styleDef.text.labelProperty) {
+             olStyle.label = "${"+styleDef.text.labelProperty+"}";
+          }
             return olStyle;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */

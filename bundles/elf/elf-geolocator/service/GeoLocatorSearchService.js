@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
                 }
             }
 
-            return url;
+            return encodeURI(url);
         },
         doSearch: function (options, successCb, errorCb) {
             var url = this.getUrl(options);

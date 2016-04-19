@@ -315,12 +315,6 @@ Oskari.clazz.define(
                  */
                 MapLayerVisibilityChangedEvent: function (event) {
                     me.mapLayerVisibilityChangedHandler(event);
-                    if (event.getMapLayer().hasFeatureData() && me.getConfig() && me.getConfig().deferSetLocation) {
-                        me.getSandbox().printDebug(
-                            'sending deferred setLocation'
-                        );
-                        me.mapMoveHandler(event.getMapLayer().getId());
-                    }
                 },
 
                 /**
@@ -705,6 +699,13 @@ Oskari.clazz.define(
                     layer.getId(),
                     layer.isVisible()
                 );
+
+                if (event.getMapLayer().isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
+                    this.getSandbox().printDebug(
+                        'sending deferred setLocation'
+                    );
+                    this.mapMoveHandler(event.getMapLayer().getId());
+                }
             }
         },
 
@@ -763,7 +764,7 @@ Oskari.clazz.define(
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
                         layerId = layer.getId();
-                        var ollayer = this.getOLMapLayer(layerId);
+                        var ollayer = me.getOLMapLayer(layer);
                         tiles = ollayer.getSource().getNonCachedGrid(grid);
                         //tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
@@ -1346,8 +1347,8 @@ Oskari.clazz.define(
                         url: imageUrl,
                         imageExtent: boundsObj,
                         imageSize: ols,
-                        logo: false
-
+                        logo: false,
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     title: layerName
                 });

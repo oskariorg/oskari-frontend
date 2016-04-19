@@ -420,6 +420,10 @@
 			},
 			"instanceProps": {}
 		}, {
+			"title": "Teemakartat",
+			"fi": "Teemakartat",
+			"sv": "Tematiska Kartor",
+			"en": "Thematic Maps",
 			"bundleinstancename": "statsgrid",
 			"bundlename": "statsgrid",
 			"metadata": {
@@ -430,8 +434,10 @@
 					"geostats": {
 						"bundlePath": "../../../packages/libraries/bundle/"
 					}
-				}
-			}
+				},
+				"Require-Bundle-Instance": []
+			},
+			"instanceProps": {}
 		}, {
 			"instanceProps": {},
 			"title": "Karttatasot",
@@ -590,6 +596,21 @@
                     }
                 }
             }
-        }
+        },
+	  {
+		"title": "Tampere",
+		"fi": "Tampere",
+		"sv": "Tampere",
+		"en": "Tampere",
+		"bundlename": "content-editor",
+		"bundleinstancename": "content-editor",
+		"metadata": {
+		  "Import-Bundle": {
+			"content-editor": {
+			  "bundlePath": "../../../packages/tampere/bundle/"
+			}
+		  }
+		}
+	  }
 	]
 }

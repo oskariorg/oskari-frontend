@@ -15,7 +15,9 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatetool.plugin.
 
 ## Bundle configuration
 
-No configuration is required, but there is one possible configuration:
+No configuration is required, but there is few possible configurations:
+
+- Setting roundToDecimals to wanted number will coordinates rounded by wanted decimal plates. 
 
 ```javascript
 {
@@ -23,8 +25,21 @@ No configuration is required, but there is one possible configuration:
 }
 ```
 
-Setting roundToDecimals to wanted number will coordinates rounded by wanted decimal plates. 
+- Option to configure coordinatetool to show reverse geocode for the current position
+  ( bundle config in the view in portti_view_bundle_seq table)
 
+````
+{
+    "isReverseGeocode" : true,
+    "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+}
+````
+    
+- Option to configure XY reference system changing functions  (CRS code and view uuid,..)
+
+````    
+{"supportedProjections":{"EPSG:3035":"482333d1-f0d0-4410-aa65-60db4e45b853","EPSG:3857":"1d65e6cc-4ac7-4dab-8a94-76b3dd632307"}}
+````
 ## Requests the bundle sends out
 
 <table class="table">

@@ -26,20 +26,20 @@ Oskari.clazz.define(
 
             "scripts": [
                 /*
-                 * Openlayers 3
-                 */
-                /*
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../libraries/ol3/ol-v3.11.0-beta.2.simple_optimizations.js"
-                },
-                */
-                /*
                  * Proj4js
                  */
                 {
                     "type": "text/javascript",
+                    "expose" : "proj4",
                     "src": "../../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js"
+                },
+                /*
+                 * Openlayers 3
+                 */
+                {
+                    "type": "text/javascript",
+                    "expose" : "ol",
+                    "src": "../../../../libraries/ol3/ol-v3.14.2-oskari.js"
                 },
                 /*
                  * Abstract base
@@ -112,6 +112,12 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/GetFeatureInfoFormatter.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/request/ResultHandlerRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/getinfo/request/ResultHandlerRequestHandler.js"
                 }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/getinfo.css"

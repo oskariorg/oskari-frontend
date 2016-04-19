@@ -19,3 +19,5 @@ tools/test-results.xml
 *.zip
 *.tgz
 *.tar.gz
+bower_components/*
+

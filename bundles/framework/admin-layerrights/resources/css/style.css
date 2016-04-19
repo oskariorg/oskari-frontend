@@ -15,6 +15,7 @@ table.layer-rights-table thead tr {
     min-width: 380px; }
   table.layer-rights-table thead tr th {
     width: 15%; }
+
 table.layer-rights-table tbody {
   position: relative;
   display: block;

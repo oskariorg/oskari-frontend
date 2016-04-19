@@ -10,7 +10,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Aineiston on oltava jossakin seuraavista tiedostomuodoista: <br/>\r\nShapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPS-siirtotiedosto (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nTarkista, että kaikki tiedot ovat oikeassa koordinaattijärjestelmässä.",
+            "description": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Aineiston on oltava jossakin seuraavista tiedostomuodoista: <br/>\r\nShapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPX-siirtotiedosto (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nTarkista, että kaikki tiedot ovat oikeassa koordinaattijärjestelmässä.",
             "help": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Tarkista, että aineisto on oikeassa tiedostomuodossa ja koordinaattijärjestelmässä.",
             "actions": {
                 "cancel": "Peruuta",

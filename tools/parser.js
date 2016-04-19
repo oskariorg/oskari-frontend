@@ -39,6 +39,7 @@ function OskariParser() {
         var bundleDef = {
             id : id,
             javascript : [],
+            vulcanizedHtml : [],
             css : [],
             locales : {},
             path : undefined,
@@ -116,6 +117,11 @@ function OskariParser() {
                 bundleDef.locales[lang].push(normalizedImplPath);
             }
         }
+        var vulcanizedHtml = this.findArray(content, 'vulcanizedHtml', bundlePath);
+        for (var j = 0; j < vulcanizedHtml.length; ++j) {
+            bundleDef.vulcanizedHtml.push(vulcanizedHtml[j].href);
+        }
+
         return bundleDef;
     }
 

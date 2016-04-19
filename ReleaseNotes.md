@@ -1,5 +1,221 @@
 # Release Notes
 
+## 1.36
+
+### infobox
+
+Infobox-functionality is modified to allow displaying infobox in mobile mode as Oskari.userinterface.component.Popup when screen size is smaller than the defined mobile breakpoints.
+
+ShowInfoBoxRequest is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints mean the size of the screen in pixels to start using mobile mode. It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
+
+### Oskari core and require.js
+
+Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
+The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
+ no require.js error about "Mismatched anonymous define() module" should appear when running the minified code.
+If you run into errors the modification is done in the grunt task "compile".
+
+Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
+Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
+Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
+and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
+Oskari.loader.log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
+
+Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js. This 
+will expose the module from that file as a global variable with the name of the expose flag like this:
+
+    {
+        "type": "text/javascript",
+        "expose" : "ol",
+        "src": "../../../../libraries/ol3/ol-v3.14.2-oskari.js"
+    }
+
+The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's AMD-compatible it's assigned to window.ol (as specified in bundle.js "expose" statement).
+Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
+globals.
+
+Added a logger implementation that can be accessed with (see src/logger.js for details):
+
+    Oskari.log('LogName').info('My info message');
+
+### tools
+
+The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
+This is in preparation for the core rewrite/restructuring/clarification.
+The build includes requirejs with it's text plugin from under libraries.
+
+### framework/search
+
+Fixed search result table sorting when columns contains word and numbers.
+
+### divmanazer/grid
+
+Fixed table sorting when columns contains word and numbers.
+
+### toolbar and infobox
+
+Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
+
+### openlayers 3 custom build configuration files created
+
+Openlayers 3 build configuration files are located under tools/conf/ol3. To create custom build of ol3, use ol-custom.json and ol-custom-debug.json files in build script.
+
+NOTE! ol-custom.json doesn't have support for statistical functionality! 
+
+### openlayers 3 version update
+
+Updated openlayers version in published maps from 3.11.2 -> 3.14.2 
+
+### core
+
+#### markers
+
+Marker icons are now defined in mappfull conf in svgMarkers property.
+
+Array contains objects which tell following info:
+- x: image center point in pixels (starting left to right)
+- y: image center point in pixels (starting bottom to up)
+- data: marker svg. Marker must be 32 x 32 pixel size.
+
+For example:
+  {
+      x: 14.06,
+      y: 5.38,
+      data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
+  };
+
+#### util.naturalSort
+
+Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
+
+### divmanazer/ui-components
+
+Removed Raphael library from package.
+
+### divmanazer/visualization-form
+
+Removed Raphael dependencies from DotForm, AreaForm and LineForm. Make dot, line and area previews without Raphael library.
+
+### coordinatetool
+
+Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.
+
+Display is false by default. 
+
+Configure coordinatetool bundle config in default view in portti_view_bundle_seq table for to get w3w displayed.
+
+    {
+    "isReverseGeocode" : true,
+    "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+    }
+
+
+### statehandler and publishedstatehandler
+
+State management improved, because of bugs in published view / previous state selector and in normal view 
+
+### metadata flyout
+
+New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
+
+### tools
+
+Upgraded build-tools with new dependency versions.
+Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
+Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
+
+### selected-featuredata
+
+*New bundle!* Selected-featuredata allows infobox opening in new flyout.
+
+### core
+
+#### AbstractLayer
+
+getAttribute() now takes an optional param which can be used to get a value from attributes:
+
+    layer.getAttribute('attributeName');
+
+#### maplayer-service
+
+When loading maplayers the service sends the map srs with parameter "srs". Previously used parameter "epsg".
+Most of the other ajax-calls use "srs" so this is a consistency improvement.
+
+### Openlayers 3 layerplugins
+
+Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
+This is required for layers that will need to be used for the new getScreenshot() functionality.
+When using oskari-server add the crossOrigin value to the layers that support it in `oskari_maplayer` tables `attributes` column:
+
+    {
+      "crossOrigin" : "anonymous"
+    }
+
+You should check that the layer tile requests have the `Access-Control-Allow-Origin` header properly configured before configuring the layer.
+If the layer doesn't provide the header the layer tiles will NOT load and the console shows an error message like this:
+
+    Image from origin 'http://where.tiles.are.loaded' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://oskari.instance' is therefore not allowed access.
+
+### Openlayers 3 mapmodule
+
+Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
+The function produces a dataURL for PNG-image from the map contents.
+This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
+The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
+SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
+
+### Openlayers 2 mapmodule
+
+SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
+
+### rpc
+
+Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
+
+New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
+http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
+
+
+### timeseries
+
+Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
+```javascript
+    // Adjust timeseries animation speed to 3000 ms
+    {
+        animationSpeed: 3000
+    }
+```
+
+### tampere/conter-editor
+
+New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at oskari.org / Adding functionalities 
+
+### divmanazer/FilterDialog  & analysis/AnalyseService
+A modification in the request of describe WFS feature type.
+&simpe=true request paramater is added to get similiar response as before.
+
+### mapfull
+
+Fixed map layer opacity change in published maps when resetting map state to published state.
+
+## 1.35.2
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol2/ol3
+
+Fixed map move so at this not send twice setLocation request.
+
+## 1.35.1
+
+### mapwmts
+
+Fixes an issue with wmts-layers when proxying the layer on OL3. Previously used the url from capabilities, the fix is to use the one provided by oskari-server as layer url so we can override the url with a proxied one. With OL2 this works correctly even before this.
+
+### myplaces2
+
+All toolbar buttons were removed if measuretools config was not given. Fix so it only affects the additional measure tools instead of all buttons.
+
 ## 1.35
 
 ### catalogue/metadataflyout
@@ -3077,4 +3293,3 @@ bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler.j
 ## Release notes 1.0
 
 Initial versio for new Oskari
-

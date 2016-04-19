@@ -21,6 +21,7 @@ Oskari.clazz.define(
             "scripts": [{
                 // NOTE! EXTERNAL LIBRARY!
                 "type": "text/javascript",
+                "expose" : "Channel",
                 "src": "../../../../libraries/JSChannel/jschannel.js"
             }, {
                 "type": "text/javascript",

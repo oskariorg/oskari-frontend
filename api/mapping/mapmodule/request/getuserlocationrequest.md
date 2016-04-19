@@ -14,7 +14,6 @@ This request is used to get user's geolocation. After the geolocation is complet
 
 ## Parameters
 
-[List here the parameters that need to (or can be) given to the request]
 (* means the parameter is required)
 
 <table class="table">

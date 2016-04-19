@@ -152,7 +152,7 @@ div.basic_publisher {
     .layer.selected {
         border: 1pt solid #c0d0e0;
         margin: 0 5px 5px 0;
-        height: unquote("70px\9"); /*IE9 */ 
+        height: unquote("70px\\9"); /*IE9 */ 
 
         &.out-of-scale,
         &.out-of-content,
@@ -290,7 +290,7 @@ div.publisher {
 div.basic_publisher div.form div.field input,
 div.field select {
     width : 100%;
-    width: unquote("80%\0/"); /* unquote for libsass bug */
+    width: unquote("80%\\0");
     background-color: #FFF;
 }
 

@@ -31,10 +31,10 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
 
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
-        "scripts" : [{
+        "scripts" : [
+        {
             "type" : "text/javascript",
             "src" : "../../../../libraries/backbone/comp.js"
-
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bb/Flyout.js"
@@ -82,7 +82,8 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
             "Import-Namespace" : ["Oskari"],
             "Import-Bundle" : {}
         }
-    }
+    },
+    "dependencies": ["jquery", "lodash"]
 });
 
 Oskari.bundle_manager.installBundleClass("bb", "Oskari.integration.bundle.bb.BackBoneBundle");
