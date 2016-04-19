@@ -1159,14 +1159,14 @@ Oskari.clazz.define(
             var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && marker.data.shape.data) ? true : false;
 
             var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
-            
+
 
             var markerDetails = {
                 x: 16,
                 y: 16
             };
 
-            if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){                
+            if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){
                 markerDetails = Oskari.getMarkers()[marker.data.shape];
             } else if(isCustomMarker) {
                 markerDetails = marker.data.shape;
@@ -1174,7 +1174,7 @@ Oskari.clazz.define(
 
             var dx = !isNaN(markerDetails.x) ? markerDetails.x : 16;
             var dy = !isNaN(markerDetails.y) ? markerDetails.y : 16;
-            
+
             var diff = markerSize/32;
 
             if(dx === 16) {

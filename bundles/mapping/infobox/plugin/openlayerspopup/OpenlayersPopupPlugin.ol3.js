@@ -152,7 +152,7 @@ Oskari.clazz.define(
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
                 offsetY = markerPosition.y;
-            }            
+            }
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -261,7 +261,7 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-            
+
         },
 
         /**
@@ -347,7 +347,7 @@ Oskari.clazz.define(
                                 value: action.name
                             });
                         }
-                        
+
                         currentGroup = action.group;
 
                         if (currentGroup && currentGroup === group) {

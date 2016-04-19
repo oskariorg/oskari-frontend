@@ -138,7 +138,7 @@ Oskari.clazz.define(
                 popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
-                font = options.font;     
+                font = options.font;
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -183,10 +183,10 @@ Oskari.clazz.define(
                     popupContent,
                     false
                 );
-                
+
                 var mapModule = me.getMapModule();
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
-                
+
                 popup.moveTo = function (px) {
                     if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
                         this.div.style.left = (px.x + markerPosition.x) + 'px';
@@ -255,7 +255,7 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-            
+
         },
 
         /**
@@ -341,7 +341,7 @@ Oskari.clazz.define(
                                 value: action.name
                             });
                         }
-                        
+
                         currentGroup = action.group;
 
                         if (currentGroup && currentGroup === group) {
