@@ -94,6 +94,16 @@ Oskari.clazz.define(
         };
         me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
+        me._mobileDefs = {
+            width: 480,
+            height: 640
+        };
+
+        me._isInMobileMode;
+
+        me._toolbarId = 'mobileToolbar';
+        me._toolbarContent = 'mobileToolbarContent';
+
     }, {
         /**
          * @method init
@@ -130,6 +140,7 @@ Oskari.clazz.define(
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+            this._addMobileDiv();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -199,6 +210,9 @@ Oskari.clazz.define(
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
+            },
+            MapSizeChangedEvent: function (evt) {
+                this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
             }
         },
 
@@ -817,6 +831,98 @@ Oskari.clazz.define(
             sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
+
+/*---------------- MAP MOBILE MODE ------------------- */
+        
+        _addMobileDiv: function () {
+            var mapDiv = this.getMapEl();
+            jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
+        },
+
+        getMobileDiv: function () {
+            var me = this,
+                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv')[0];
+
+            return mobileDiv;
+        },
+
+        getMobileToolbar: function () {
+            var me = this;
+
+            if (!me._mobileToolbar) {
+                me.createMobileToolbar()
+            }
+            return me._toolbarId;
+        },
+
+        createMobileToolbar: function () {
+            return;
+
+            /*TODO: this function to create toolbar
+            var me = this,
+                sandbox = me.getSandbox(),
+                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+
+            if (me._toolbarId && (me._toolbarContent) && builder !== null && builder !== undefined) {
+                // add toolbar when toolbarId and target container is configured
+                // We assume the first container is intended for the toolbar
+                sandbox.requestByName(
+                    me,
+                    'Toolbar.ToolbarRequest',
+                    [
+                        me.toolbarId,
+                        'add',
+                        {
+                            title: 'mobileToolbar',
+                            show: true,
+                            toolbarContainer: me.getElement().find('.' + me.toolbarContent)
+                        }
+                    ]
+                );
+            }
+            */
+        },
+        
+        setMobileMode: function (isInMobileMode) {
+            this._isInMobileMode = isInMobileMode;
+        },
+
+        getMobileMode: function () {
+            return this._isInMobileMode;
+        },
+
+        _handleMapSizeChanges: function (newSize) {
+            var me = this;
+
+            if (me._isInMobileMode === undefined) {
+                if (newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
+                    me.setMobileMode(true);
+                } else {
+                    me.setMobileMode(false);
+                }
+                return;
+            }
+
+            //from mobile to desktop
+            if (me._isInMobileMode && newSize.width > me._mobileDefs.width || me._isInMobileMode && newSize.height > me._mobileDefs.height) {
+                me.setMobileMode(false);
+                _.each(me._pluginInstances, function(plugin) {
+                    if (plugin && plugin._createPluginUI) {
+                        plugin._createPluginUI(me.getMobileMode());
+                    }
+                }); 
+            //from desktop to mobile
+            } else if (!me._isInMobileMode && newSize.width < me._mobileDefs.width || !me._isInMobileMode && newSize.height < me._mobileDefs.height) {
+                me.setMobileMode(true);
+                _.each(me._pluginInstances, function(plugin) {
+                    if (plugin && plugin._createPluginUI) {
+                        plugin._createPluginUI(me.getMobileMode());
+                    }
+                }); 
+            }
+        },
+
+/*---------------- /MAP MOBILE MODE ------------------- */
 
 /* --------------- CONTROLS ------------------------ */
         /**
@@ -1531,15 +1637,20 @@ Oskari.clazz.define(
          * @param  {Object} element Control container (jQuery)
          * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          */
-        removeMapControlPlugin: function (element, keepContainerVisible) {
-            var container = element.parents('.mapplugins'),
+        removeMapControlPlugin: function (element, keepContainerVisible, uiMode) {
+            if (uiMode === "mobile") {
+                element.remove();
+            } else {
+                var container = element.parents('.mapplugins'),
                 content = element.parents('.mappluginsContent');
-            // TODO take this into use in all UI plugins so we can hide unused containers...
-            element.remove();
-            if (!keepContainerVisible && content.children().length === 0) {
-                container.css('display', 'none');
+                // TODO take this into use in all UI plugins so we can hide unused containers...
+                element.remove();
+                if (!keepContainerVisible && content.children().length === 0) {
+                    container.css('display', 'none');
+                }
             }
         },
+
 /* --------------- /PLUGIN CONTAINERS ------------------------ */
 
 /* --------------- MAP LAYERS ------------------------ */

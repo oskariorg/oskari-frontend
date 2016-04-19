@@ -20,6 +20,7 @@ Oskari.clazz.define(
         me._index = 1;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
+        me._uiMode;
     }, {
 
         /**
@@ -152,6 +153,37 @@ Oskari.clazz.define(
                 me._inputField.prop('disabled', false);
                 me._searchButton.prop('disabled', false);
                 me.getElement().find('.search-editmode-overlay').remove();
+            }
+        },
+
+        _createPluginUI: function (mapInMobileMode) {
+            var me = this;
+
+            //remove old element
+            if (me._element) {
+                me.getMapModule().removeMapControlPlugin(
+                    me._element,
+                    me.inLayerToolsEditMode(),
+                    me._uiMode
+                );
+            }
+
+            if (mapInMobileMode) {
+                var mobileDivElement = me.getMapModule().getMobileDiv();
+                mobileDivElement.appendChild(me._element[0]);
+                // TODO handle index/priority
+                me._uiMode = "mobile";
+            } else {
+                me._ctl = me._createControlAdapter(me._element);
+                if (me._ctl) {
+                    me.getMapModule().addMapControl(me._pluginName, me._ctl);
+                }
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+                me._uiMode = "desktop";
             }
         },
 
