@@ -245,13 +245,13 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/request/MapLayerVisibilityRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequestHandler.ol2.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveByLayerContentRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/MapMoveByLayerContentRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/MapLayerVisibilityChangedEvent.js"
@@ -387,7 +387,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/MapLayerUpdateRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/mapmodule-plugin/request/MapLayerUpdateRequestHandler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/MapLayerUpdateRequestHandler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveRequestHandler.js"

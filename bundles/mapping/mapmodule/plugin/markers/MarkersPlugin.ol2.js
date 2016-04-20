@@ -318,7 +318,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 delete me._markerFeatures[optionalMarkerId];
             }
 
-
             if (!suppressEvent) {
                 var removeEvent = sandbox.getEventBuilder(
                     'AfterRemoveMarkersEvent'

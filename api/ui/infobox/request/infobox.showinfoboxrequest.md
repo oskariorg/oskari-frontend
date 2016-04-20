@@ -31,11 +31,12 @@ All the parameters are wrapped inside one array.
   <td> \* contentData </td><td> Object[] </td><td> JSON presentation for the infobox data </td><td> </td>
 </tr>
 <tr>
-  <td> \* position </td><td> Object </td><td> Coordinates where the infobox should be shown. </td><td> </td>
+  <td> \* position </td><td> Object </td><td> Coordinates where the infobox should be shown {lon: 411650, lat: 6751897} or marker id {marker: 'MARKER_TEST'}.  If marker and coordinates (lon,lat) are both given then try to show popup to marker, if wanted marker not found then try to open popup from wanted coordinates. If cannot open popup then sending InfoBox.InfoBoxEvent. </td><td> </td>
 </tr>
 <tr>
   <td> options </td><td> Object </td><td> Additional options for infobox </td><td> </td>
 </tr>
+</table>
 
 Parameters for options-object:
 
@@ -174,6 +175,56 @@ channel.getMapPosition(function(data) {
 
   channel.postRequest('InfoBox.ShowInfoBoxRequest', data);
   channel.log('InfoBox.ShowInfoBoxRequest posted with data', data);
+});
+</code>
+</pre>
+
+
+Add marker to center map and open popup for added marker
+<pre class="event-code-block">
+<code>
+var MARKER_ID = 'MARKER_WITH_POPUP';
+channel.getMapPosition(function(data) {
+    // Add marker to center map
+    var markerData = {
+        x: data.centerX,
+        y: data.centerY,
+        color: "ff0000",
+        msg : '',
+        shape: 1, // icon number (0-6)
+        size: 3
+    };
+    channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, MARKER_ID]);
+    channel.log('MapModulePlugin.AddMarkerRequest posted with data', markerData);
+
+    // Open popup for marker
+    var content = [
+        {
+            'html': '<div>Map position info:</div>'
+        },
+        {
+            'html': '<div>Center: '+parseInt(data.centerX)+', '+parseInt(data.centerY)+'</div>'
+        }
+    ];
+    var infoboxData = [
+        'markerInfoBox',
+        'Marker info box',
+        content,
+        {
+            marker: MARKER_ID
+        },
+        {
+            mobileBreakpoints: {
+                width: 0,
+                height: 0
+            },
+            hidePrevious: true
+        }
+    ];
+
+    channel.postRequest('InfoBox.ShowInfoBoxRequest', infoboxData);
+    channel.log('InfoBox.ShowInfoBoxRequest posted with data', infoboxData);
+
 });
 </code>
 </pre>

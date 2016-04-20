@@ -501,7 +501,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             }
                         };
                         me._lastLonLat = _.clone(data);
-                        var dataServer = _.clone(data);                        
+                        var dataServer = _.clone(data);
                         me.refresh(data);
 
                         if (event.isPaused() && me._getPreciseTransform){
@@ -553,7 +553,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         me.refresh(data);
                         if(me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
-                        } 
+                        }
                     }
                     if (me._showReverseGeocode){
                         me._update3words(data);

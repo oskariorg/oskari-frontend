@@ -8,6 +8,8 @@ Infobox-functionality is modified to allow displaying infobox in mobile mode as 
 
 ShowInfoBoxRequest is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints mean the size of the screen in pixels to start using mobile mode. It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
 
+Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
+
 ### Oskari core and require.js
 
 Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).

@@ -129,6 +129,23 @@ function() {
         'Publisher.ColourSchemeChangedEvent': function(evt){
             this._handleColourSchemeChangedEvent(evt);
         },
+        'AfterAddMarkerEvent': function(evt) {
+        	if(evt.getID()) {
+        		this.popupPlugin.markers[evt.getID()] = {
+        			data: evt.getData(),
+        			params: evt.getParams()
+        		};
+        	}
+        },
+        'AfterRemoveMarkersEvent': function(evt) {
+        	if(evt.getId() && this.popupPlugin.markers[evt.getId()]) {
+        		delete this.popupPlugin.markers[evt.getId()];
+        		this.popupPlugin.close(this.popupPlugin.markerPopups[evt.getId()]);
+        		delete this.popupPlugin.markerPopups[evt.getId()];
+        	} else if (!evt.getId()){
+        		this.popupPlugin.markers = {};
+        	}
+        },
         MapSizeChangedEvent: function (evt) {
             this.popupPlugin._handleMapSizeChanges(evt.getWidth(), evt.getHeight());
         }

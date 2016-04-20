@@ -532,11 +532,18 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType('VECTOR')) {
                 return null;
             }
-            if(!this._layers[layer.getSource().get(id)]) {
+            var ol = this.getLayerById(layer.getId());
+            if(!ol) {
                 return null;
             }
             // only single layer/id, wrap it in an array
-            return [this._layers[layer.getSource().get(id)]];
+            return [ol];
+        },
+        getLayerById : function (id) {
+            if(!id) {
+                return null;
+            }
+            return this._layers[id];
         },
         /**
          * Possible workaround for arranging the feature draw order within a layer
