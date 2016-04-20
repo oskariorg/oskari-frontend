@@ -249,20 +249,15 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "instanceProps": {},
             "title": "Karttajulkaisu",
-            "bundleinstancename": "publisher",
-            "fi": "jquery",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "publisher",
+            "bundleinstancename": "publisher2",
+            "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
-                    "publisher": {
+                    "publisher2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
+                }
             }
         }, {
             "instanceProps": {},
@@ -557,6 +552,16 @@
             "metadata": {
                 "Import-Bundle": {
                     "rpc": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Timeseries",
+            "bundlename": "timeseries",
+            "metadata": {
+                "Import-Bundle": {
+                    "timeseries": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }

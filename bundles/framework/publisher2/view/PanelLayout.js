@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.loc = localization;
         me.instance = instance;
         me.sandbox = sandbox;
+        me.mapModule = mapmodule;
         // The values to be sent to plugins to actually change the style.
         me.initialValues = {
             fonts: [{
@@ -33,6 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 zoombar: {},
                 search: {}
             }, {
+
                 val: 'rounded-dark',
                 zoombar: {
                     widthPlus: '22px',
@@ -167,12 +169,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
-                var me = this,
-                         selectedToolStyleCode = jQuery('select[name=publisher-toolStyles]').val(),
-                         selectedToolStyle = me._getItemByCode(selectedToolStyleCode, me.initialValues.toolStyles),
-                         font = jQuery('select[name=publisher-fonts]').val();
-                me._sendFontChangedEvent(font);
-                me._sendToolStyleChangedEvent(selectedToolStyle);
+                if (event.getTool().state.enabled) {
+                    this._changeMapModuleToolstyle();
+                }
             }
         },
         /**
@@ -212,6 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             // Set the initial values
+
             me.values = {
                 metadata: {
                     style: {
@@ -230,9 +230,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            if (me.data !== null && me.data !== undefined) {
-                me._sendFontChangedEvent(me.values.metadata.style.font);
-                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.metadata.style.toolStyle, me.initialValues.toolStyles));
+            if (me.data.metadata) {
+                me._changeMapModuleToolstyle(me.data.metadata.style);
             }
 
             if (!me.panel) {
@@ -263,17 +262,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         getValues: function () {
             var me = this;
-            var toolStyleCode = jQuery('select[name=publisher-toolStyles]').val();
+
+            //metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
+            //the values stored under mapfull's conf.
             me.values = {
                 metadata: {
                     style: {
-                        font: jQuery('select[name=publisher-fonts]').val(),
-                        toolStyle: toolStyleCode//this._getItemByCode(toolStyleCode, this.initialValues.toolStyles)
+                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null,
+                        toolStyle: jQuery('select[name=publisher-toolStyles]').val() ? jQuery('select[name=publisher-toolStyles]').val() : null
                     }
                 }
             };
-
             return me.values;
+        },
+        _changeMapModuleToolstyle: function(style) {
+            var me = this;
+
+            if (!style) {
+                style = me.getValues().metadata.style;
+            }
+            me.mapModule.changeToolStyle(style);
+
         },
         _populateLayoutPanel: function() {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
@@ -302,8 +311,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 fonts = this.initialValues.fonts,
                 fLen = fonts.length,
                 fontOption,
-                i,
-                selectedFont;
+                i;
             // Set the localization.
             template.find('label').html(fontLabel).after('<br />');
 
@@ -317,9 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the select change handler.
             template.find('select').on('change', function (e) {
-                // Send an event notifying the plugins that the font has changed.
-                selectedFont = jQuery(this).val();
-                me._sendFontChangedEvent(selectedFont);
+                me._changeMapModuleToolstyle();
             });
 
             // Prepopulate data
@@ -342,9 +348,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 tsLen = toolStyles.length,
                 toolStyleOption,
                 toolStyleName,
-                i,
-                selectedToolStyleCode,
-                selectedToolStyle;
+                i;
 
             // Set the localizations.
             template.find('label').html(toolStylesLabel).after('<br />');
@@ -360,10 +364,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // Set the select change handler.
             template.find('select').on('change', function (e) {
-                // Send an event notifying the plugins that the style has changed.
-                selectedToolStyleCode = jQuery(this).val();
-                selectedToolStyle = me._getItemByCode(selectedToolStyleCode, me.initialValues.toolStyles);
-                me._sendToolStyleChangedEvent(selectedToolStyle);
+                me._changeMapModuleToolstyle();
             });
 
             // Prepopulate data
@@ -373,43 +374,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             return template;
         },
-        /**
-         * Sends an event to notify interested parties that the font has changed.
-         *
-         * @method _sendFontChangedEvent
-         * @param {String} font the changed font value
-         */
-        _sendFontChangedEvent: function (font) {
-            this._sendEvent('Publisher2.FontChangedEvent', font);
-        },
-
-        /**
-         * Sends an event to notify interested parties that the tool style has changed.
-         *
-         * @method _sendToolStyleChangedEvent
-         * @param {Object} the changed tool style
-         */
-        _sendToolStyleChangedEvent: function (selectedToolStyle) {
-            this._sendEvent('Publisher2.ToolStyleChangedEvent', selectedToolStyle || {val: 'default', zoombar: {}, search: {}});
-        },
-        /**
-         * "Sends" an event, that is, notifies other components of something.
-         *
-         * @method _sendEvent
-         * @param {String} eventName the name of the event
-         * @param {Whatever} eventData the data we want to send with the event
-         */
-        _sendEvent: function (eventName, eventData) {
-            var me = this,
-                eventBuilder = me.sandbox.getEventBuilder(eventName),
-                evt;
-
-            if (eventBuilder) {
-                evt = eventBuilder(eventData);
-                me.sandbox.notifyAll(evt);
-            }
-        },
-
         /**
          * Retrieves the item from the list which value matches the code given
          * or null if not found on the list.
@@ -428,6 +392,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
             return null;
+        },
+        /**
+        * Stop panel.
+        * @method stop
+        * @public
+        **/
+        stop: function(){
+            var me = this;
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         }
 	}
 );

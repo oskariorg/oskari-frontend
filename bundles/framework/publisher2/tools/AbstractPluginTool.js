@@ -15,6 +15,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     this.__loc = localization[this.group];
     this.__instance = instance;
     this.__plugin = null;
+    this.__tool = null;
     this.__handlers = handlers;
     // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
     // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
@@ -39,11 +40,21 @@ function(sandbox, mapmodule, localization, instance, handlers) {
 
     /**
     * Initialize tool
+    * Override if tool is not mapfull plugin
     * @method init
     * @public
     */
-    init: function(){
-        // override
+    init: function(pdata){
+        var me = this,
+            data = pdata;
+
+        if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+            _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                if (me.getTool().id === plugin.id) {
+                    me.setEnabled(true);
+                }
+            });
+        }
     },
     /**
     * Get tool object.
@@ -86,13 +97,14 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
         }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
-        }
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
     },
+
+    isEnabled: function () {
+        return this.state.enabled;
+    },
+
     /**
     * Get extra options.
     * @method getExtraOptions
@@ -104,14 +116,14 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return null;
     },
     /**
-    * Get name.
-    * @method getName
+    * Get title.
+    * @method getTitle
     * @public
     *
-    * @returns {String} tool name
+    * @returns {String} tool title
     */
-    getName: function() {
-        return this.__loc[this.getTool().name];
+    getTitle: function() {
+        return this.__loc[this.getTool().title];
     },
     /**
     * Is displayed in mode.
@@ -158,7 +170,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     isDefaultTool: function() {
         return false;
     },
-
     /**
     * Whether or not to create a panel and checkbox for the tool in the tools' panel.
     * @method isShownInToolsPanel
@@ -170,21 +181,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return true;
     },
 
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
-
-        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(mode);
-        }
-    },
     /**
     * Get group
     * @method getGroup

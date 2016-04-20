@@ -7,14 +7,14 @@ Oskari.registerLocalization(
         "desc": "",
         "flyout": {
             "title": "Käyttöohje",
-            "loadingtxt": "<p>ladataan sisältöä</p>"
+            "loadingtxt": "<p>Ladataan käyttöohjetta...</p>"
         },
         "tile": {
-            "title": "Käyttöohjeet"
+            "title": "Käyttöohje"
         },
         "error": {
-            "title": "Virhe!",
-            "generic": "Ohjeen lataaminen epäonnistui. Yritä myöhemmin uudelleen."
+            "title": "Virhe",
+            "generic": "Käyttöohjetta ei voida näyttää."
         },
         "tabs": [
             {"title": "Karttaikkuna", "tags": "ohje_karttaikkuna"},

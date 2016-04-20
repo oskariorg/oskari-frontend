@@ -22,7 +22,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-            name: 'IndexMapPlugin',
+            title: 'IndexMapPlugin',
             config: {}
         };
     },

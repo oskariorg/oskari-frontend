@@ -85,7 +85,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
                     }
                 }
                 var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-                var markersPlugin = mapmodule.getPluginInstance('lupakartta.MarkersPlugin');
+                var markersPlugin = mapmodule.getPluginInstances('lupakartta.MarkersPlugin');
                 bounds = markersPlugin.getMapMarkerBounds();
                 bounds = bounds.scale(1.1);
                 //varmistetaan että karttaa ei zoomata liian lähelle pistettä

@@ -301,7 +301,6 @@ Oskari.clazz.define(
             popup.events.on({
                 'click': function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
-
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
                     } else { // Action links
@@ -313,6 +312,9 @@ Oskari.clazz.define(
                         if (contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
                             contentData[i].actions[text]();
                         }
+                    }
+                    if(!(link.is('a') && link.hasClass('functional')) || link.parents('.getinforesult_table').length) {
+                        evt.stopPropagation();
                     }
                 },
                 scope: popup
@@ -331,14 +333,13 @@ Oskari.clazz.define(
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen;
+            var oldData = oldData || [],
+                newData = newData || [],
+                nLen = newData.length,
+                oLen = oldData.length;
 
-            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
+            for (var i = 0; i < oLen; i += 1) {
+                for (var j = 0; j < nLen; j += 1) {
                     if (newData[j].layerId &&
                         newData[j].layerId === oldData[i].layerId) {
                         oldData[i] = newData[j];
@@ -348,7 +349,39 @@ Oskari.clazz.define(
                 }
             }
 
-            retData = oldData.concat(newData);
+            return this._mergeContentData(oldData, newData);
+        },
+
+        /**
+         * Merge content data
+         * @method  @private_mergeContentData
+         * @param  {Object[]} oldData
+         * @param  {Object[]} newData
+         * @return {Object[]}
+         */
+        _mergeContentData: function(oldData, newData){
+            var retData,
+                i,
+                j,
+                nLen,
+                oLen,
+                found,
+                notSameData = [];
+
+            for (j = 0, nLen = newData.length; j < nLen; j += 1) {
+                found = false;
+                for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
+                    if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
+                        found = true;
+                    }
+                }
+
+                if(!found){
+                    notSameData.push(newData[j]);
+                }
+            }
+
+            retData = oldData.concat(notSameData);
 
             return retData;
         },
@@ -408,7 +441,8 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            var viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            //viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
             // popup needs to move 10 pixels to the right
@@ -422,8 +456,8 @@ Oskari.clazz.define(
                 'margin-left': '-10px'
             });
             var header = popup.find('.popupHeader').css('width', '100%'),
-                maxWidth = viewport.width() * 0.7,
-                maxHeight = viewport.height() * 0.7,
+                maxWidth = size.width * 0.7,
+                maxHeight = size.height * 0.7,
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
@@ -618,7 +652,7 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id, position) {
+        close: function (id) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
@@ -627,12 +661,8 @@ Oskari.clazz.define(
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        if (!position ||
-                            position.lon !== popup.lonlat.lon ||
-                            position.lat !== popup.lonlat.lat) {
-                            popup.popup.destroy();
-                            delete this._popups[pid];
-                        }
+                        popup.popup.destroy();
+                        delete this._popups[pid];
                     }
                 }
                 return;

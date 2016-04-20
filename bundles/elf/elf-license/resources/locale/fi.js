@@ -1,85 +1,92 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "elf-license",
     "value": {
         "getLicenseText": "Lisenssi",
         "errors": {
             "cannotGetLicenseInformation": {
-        		"title": "Virhe lisenssitietojen haussa",
-        		"message": "Lisenssitietoja ei saada haettua"
-        	},
-        	"failedGetLicenseInformation": {
-        		"title": "Virhe lisenssitietojen haussa",
-        		"message": "Ei saada lisenssi palvelimeen yhteyttä"
-        	},
+                "title": "Virhe",
+                "message": "Lisenssitietojen haku epäonnistui."
+            },
+            "failedGetLicenseInformation": {
+                "title": "Virhe",
+                "message": "Lisenssipalvelimeen ei saatu yhteyttä."
+            },
             "cannotGetLicensePrice": {
-                "title": "Virhe hinnan haussa",
-                "message": "Hintaa ei saatu haettua"
+                "title": "Virhe",
+                "message": "Lisenssin hintatietojen haku epäonnistui."
             },
             "failedConclude": {
-                "title": "Virhe lisenssin tilauksessa",
-                "message": "Lisenssiä ei saatu tilattua"
+                "title": "Virhe",
+                "message": "Lisenssin tilaus epäonnistui."
             },
             "concludeNoResponse": {
-                "title": "Virhe lisenssin tilauksessa",
-                "message": "Lisenssiä ei saatu tilattua"
+                "title": "Virhe",
+                "message": "Lisenssi tilaus epäonnistui."
             },
             "cannotDeactivateLicense": {
-                "title": "Virhe lisenssin tilauksen lopettamisessa",
-                "message": "Lisenssin tilausta ei saatu lopetettua"
+                "title": "Virhe",
+                "message": "Lisenssin lopettaminen epäonnistui."
             },
             "checkFields": {
-                "title": "Tarkista pakolliset kentät",
-                "message": "Arvo puuttuu seuraavista"
+                "title": "Virhe",
+                "message": "Osa pakollisista tiedoista puuttuu. Anna puuttuvat tiedot:"
             }
         },
         "success": {
             "deactivateLicense": {
-                "title": "Lisenssin tilaus lopetettu",
-                "message": "Lisenssin tilauksen lopetus onnistui"
+                "title": "Tilaus lopetettu",
+                "message": "Lisenssin lopettaminen onnistui."
             }
         },
         "dialog": {
-        	"licenseTitle": "Lisenssitiedot",
-        	"licenseModelsTitle": "Lisenssimallit:",
-            "noRightToAnyLicenseModels": "Sinulla ei ole oikeutta lisenssimalleihin.",
-            "loginShort": "Kirjaudu sisään nähdäksesi lisenssimallit.",
+            "licenseTitle": "Lisenssin tiedot",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
+            "licenseModelsTitle": "Lisenssimallit:",
+            "noRightToAnyLicenseModels": "Sinulla ei ole oikeuksia nähdä lisenssimalleja.",
+            "loginShort": "Jos haluat nähdä lisenssimallit, kirjaudu sisään.",
             "licenseSummaryTitle": "Lisenssin yhteenveto",
             "priceTitle": "Hinta",
             "priceUnitEuro": "€",
             "help": {
-                "info": "Valitse lisenssi malli klikkaamalla sitä.",
-                "details": "Täytä lisenssin tiedot, kaikki pakolliset kentät on merkitty tähdellä (*). Paina 'Seuraava' nähdäksesi lisenssin yhteenvedon ja hinnan. Jos haluat valita eri lisenssimallin niin valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
-                "summary": "Lue ja hyväksy täyttämäsi lisenssi valitsemalla 'Tilaa lisenssi'. Jos haluat muokata syöttämiäsi tietoja valitse 'Edellinen'. Voit myös lopettaa tilauksen painamalla valitsemalla 'Sulje'.",
-                "orderDetails": "Yläpuolella näet tilauksesi tiedot. Sulje dialogi valitsemalla 'Sulje'. Voit peruuttaa tilauksesi valitsemalla 'Peruuta lisenssi'."
+                "info": "Valitse lisenssimalli klikkaamalla haluamaasi mallia.",
+                "details": "Täytä lisenssin tiedot. Pakolliset tiedot on merkitty tähdellä (*). Jos haluat nähdä lisenssin yhteenvedon ja hinnan, klikkaa \"Seuraava\". Jos haluat valita eri lisenssimallin, klikkaa \"Edellinen\". Jos haluat keskeyttää tilauksen, klikkaa \"Sulje\".",
+                "summary": "Lue lisenssiehdot ja hyväksy ne klikkaamalla \"Tilaa lisenssi\". Jos haluat muokata tilauksen tietoja, klikkaa \"Edellinen\". Jos haluat keskeyttää tilauksen, klikkaa \"Sulje\".",
+                "orderDetails": "Tilaamasi lisenssin tiedot näkyvät yläpuolella. Jos haluat sulkea ikkunan, klikkaa \"Sulje\". Jos haluat lopettaa lisenssin, klikkaa \"Keskeytä tilaus\"."
             },
             "concludeSuccessTitle": "Lisenssin tilaus onnistui",
             "conclude": {
-                "title": "Tilauksen tiedot",
+                "title": "Lisenssin tiedot",
                 "productid": "Tuote",
                 "licenseid": "Lisenssi",
                 "validto": "Voimassa"
             },
             "deactivateConfirm": {
-                "title": "Lisenssin peruuttaminen",
+                "title": "Lisenssin lopettaminen",
                 "message": "Haluatko lopettaa lisenssin tilauksen?"
             },
-            "validTo": "Tilaus voimassa {day} asti",
-            "licenseId": "Lisenssi id: {licenseid}",
-            "licenseServiceUrl": "Lisenssin rajapinnan osoite: {serviceurl}",
-            "licenceConcluded" : {
-                "message": "Lisenssin tilaus onnistui, alla lisenssin tiedot."
+            "validTo": "Lisenssi on voimassa {day} asti.",
+            "licenseId": "Lisenssitunniste: {licenseid}",
+            "licenseServiceUrl": "Palvelun URL-osoite: {serviceurl}",
+            "licenceConcluded": {
+                "message": "Lisenssin tilaus onnistui. Tarkista lisenssin tiedot alta:"
             }
         },
         "buttons": {
-        	"close": "Sulje",
-        	"previous": "Edellinen",
-        	"next": "Seuraava",
+            "close": "Sulje",
+            "previous": "Edellinen",
+            "next": "Seuraava",
             "conclude": "Tilaa lisenssi",
             "ok": "OK",
-            "deactivate": "Peruuta lisenssi",
-            "no": "EI",
+            "deactivate": "Lopeta lisenssi",
+            "no": "Ei",
             "yes": "Kyllä"
         }
     }
-});
+}
+);

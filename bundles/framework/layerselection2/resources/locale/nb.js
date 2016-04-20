@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kartlag",
                 "type-wfs": "Dataprodukt"
             },
+            "refresh_load": {
+                "tooltip": "NOT TRANSLATED"
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Velg forekomster fra kartlaget",
@@ -90,7 +93,7 @@ Oskari.registerLocalization(
                     "selectIndicator": "Velg indikator",
                     "selectReadyButton": "Klar",
                     "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
+                    "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
                     "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelpp av analysefunksjonen, og deretter filtrere på verdier."
                 },
                 "validation": {

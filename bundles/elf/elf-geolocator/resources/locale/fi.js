@@ -1,39 +1,40 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "elf-geolocator",
     "value": {
         "title": "Geolocator",
         "desc": "ELF Geolocator",
         "tool": {
-            "tooltip": "Hae paikkaa osoittamalla karttaa"
+            "tooltip": "Hae paikkoja klikkaamalla karttaa."
         },
         "tab": {
             "title": "Paikat",
             "searchTitle": "Hakusana",
-            "searchPlaceholder": "Hae paikannimeä, osoitetta tai kiinteistötunnusta",
+            "searchPlaceholder": "Hae paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella.",
             "regionTitle": "Aluerajaus",
             "regionPlaceholder": "Rajaa haku tietyn kunnan tai hallintoalueen alueelle",
-            "additionalsTitle": "Haun laajentaminen",
-            "normalTitle": "Normaali haku",
-            "normalDesc": "Vain hakusanalla löytyvät kohteet (merkkikokoriippuvainen)",
-            "restrictedTitle": "Alueella rajattu haku",
-            "restrictedDesc": "Normaali haku aluerajauksella",
+            "additionalsTitle": "Lisää hakuehtoja",
+            "normalTitle": "Avainsanahaku",
+            "normalDesc": "Hae paikkoja nimen täsmällisen kirjoitusasun perusteella.  Kirjainkoko vaikuttaa hakutulokseen.",
+            "restrictedTitle": "Aluerajaus",
+            "restrictedDesc": "Hae paikkoja rajaamalla alue kartalta.",
             "fuzzyTitle": "Sumea haku",
-            "fuzzyDesc": "Hakusanankaltaiset kohteet",
-            "exonymTitle": "Eksonyymit haetaan",
-            "exonymDesc": "Haetaan myös paikkojen ulkomaalaiset nimet",
+            "fuzzyDesc": "Hae paikkoja avainsanan ja samaa kirjoitusasua lähellä olevien sanojen perusteella.",
+            "exonymTitle": "Hae myös ulkomaiset nimet",
+            "exonymDesc": "Hae paikkoja myös nimen vieraskielisen kirjoitusasun perusteella.",
             "searchButton": "Hae",
             "resultsTitle": "Hakutulokset",
             "fuzzyResultsTitle": "Sumean haun tulokset",
-            "filterResultsTitle": "Alueella rajatun haun tulokset",
-            "countryFilter": "Maarajaus",
+            "filterResultsTitle": "Aluerajauksen tulokset",
+            "countryFilter": "Valitse maa",
             "backButton": "Takaisin",
             "geolocButton": "Etsi lähin paikka",
-            "geolocDesc": "Osoita kartalta kohta, jolle haetaan lähimmän paikan nimi",
-            "noResults": "Ei hakutuloksia",
+            "geolocDesc": "Etsi pistettä lähimmän paikan nimi klikkaamalla kyseistä pistettä.",
+            "noResults": "Ei hakutuloksia.",
             "errors": {
-                "searchTermMissing": "Hakusana on pakollinen kenttä",
-                "searchFailed": "Haku epäonnistui. Yritä myöhemmin uudelleen."
+                "searchTermMissing": "Hakusana on pakollinen tieto. Anna hakusana ja yritä uudelleen.",
+                "searchFailed": "Haku epäonnistui."
             },
             "grid": {
                 "name": "Nimi",
@@ -42,4 +43,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

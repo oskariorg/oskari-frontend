@@ -2,7 +2,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
     function () {
     }, {
         index: 3,
-        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
+        allowedLocations: ['top left', 'top center', 'top right'],
         lefthanded: 'top right',
         righthanded: 'top left',
         allowedSiblings: ['Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
@@ -32,8 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             'toolbarConfig': {
                 'toolbarId': 'PublisherToolbar',
                 'defaultToolbarContainer': '.publishedToolbarContent',
-                'hasContentContainer': true,
-                'classes': {}
+                'hasContentContainer': true
             },
             'publishedmyplaces2Config': {
                 'toolbarId': 'PublisherToolbar',
@@ -131,11 +130,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             me._storedData = {};//me.__instance.publisher.data || null;
             if (me.__instance.publisher.data) {
                 var data = me.__instance.publisher.data;
+
+                //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
+                //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
+                //toolbar in the first place
+
                 if (data && data.configuration && data.configuration.toolbar) {
                     me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
+                    if (me._hasActiveTools()) {
+                        me.setEnabled(true);
+                    }
                 }
                 if (data && data.configuration && data.configuration.publishedmyplaces2) {
                     me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
+                    if (me._hasSelectedDrawTool()) {
+                        me.setEnabled(true);
+                    }
                 }
             }
         },
@@ -149,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-                name: 'PublisherToolbarPlugin',
+                title: 'PublisherToolbarPlugin',
                 config: {'toolbarId': 'PublisherToolbar'}
             };
         },
@@ -179,7 +189,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
                     retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
                 }
-
                 return retValue;
             } else {
                 return null;
@@ -290,6 +299,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolButton,
                 isChecked;
             if (enabled) {
+                //it might be that a light scheme has been selected prior to adding this tool on the map.
+                //And since no event gets sent in that occasion, we gotta sniff it out manually when enabling the tool to get the toolbar buttons' styling correct
+                me.updateToolbarButtonStyles();
+
                 tool._isPluginStarted = true;
 
                 // toolbar (bundle) needs to be notified
@@ -297,8 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     me._presetDataConfig('toolbarConfig');
                 }
                 tool.__plugin.setToolbarContainer();
-                me.toolbarConfig.classes = tool.__plugin.getToolConfs();
-
                 var _addToolGroup = function (groupName, options, toolOption) {
                     var i,
                         ilen,
@@ -324,10 +335,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             toolButton.selectTool = jQuery(me.templates.toolOption).clone();
                             toolButton.selectTool.find('label')
                                 .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
-
-                            if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
+                            if (!me.toolbarConfig[groupName]) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            } else if (me.toolbarConfig[groupName] && me.toolbarConfig[groupName][toolName] === undefined) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            } else if (me.toolbarConfig[groupName][toolName]) {
                                 toolButton.selectTool.find('input').attr('checked', 'checked');
                             }
+                            _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
+
                             //toggle toolbar tool. i.e. send requests
                             toolElement = toolButton.selectTool.find('input')
                                 .attr('id', 'tool-opt-' + toolName)
@@ -427,6 +443,27 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     _removeOptions('.tool-option-setting', me._toggleToolOption);
 
                     tool._isPluginStarted = false;
+                }
+            }
+
+        },
+        /**
+         * Make sure that the toolbar buttons have the correct dark/light - setting as their iconCls...
+         */
+        updateToolbarButtonStyles: function() {
+            var me = this,
+                style = me.__mapmodule.getToolStyle(),
+                suffix = (style && style.length > 0 && style.indexOf('light') > -1) ? 'light' : 'dark';
+            if (!style || !style.length) {
+                return;
+            }
+
+            for (var i = 0; i < me.buttonGroups.length; i++) {
+                for (var buttonKey in me.buttonGroups[i].buttons) {
+                    var button = me.buttonGroups[i].buttons[buttonKey];
+                    button.iconCls = button.iconCls.replace('dark','');
+                    button.iconCls = button.iconCls.replace('light','');
+                    button.iconCls += suffix;
                 }
             }
 
@@ -705,6 +742,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolName,
                 me = this;
 
+            if (!me.toolbarConfig.toolbarId) {
+                me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
+            }
+
             for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                 buttonGroup = me.buttonGroups[i];
                 for (toolName in buttonGroup.buttons) {
@@ -724,6 +765,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
             }
             return false;
+        },
+        stop: function() {
+            var me = this,
+                sandbox = me.__sandbox;
+            //send remove request per active button
+            if (me.toolbarConfig) {
+                for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
+                    buttonGroup = me.buttonGroups[i];
+                    for (toolName in buttonGroup.buttons) {
+                        if (me.toolbarConfig && me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName] === true) {
+                            sandbox.postRequestByName(
+                                'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, me.toolbarConfig.toolbarId]);
+                        }
+                    }
+                }
+            }
+
+            if(me.__plugin) {
+                if(me.__sandbox){
+                    me.__plugin.stopPlugin(me.__sandbox);
+                }
+                me.__mapmodule.unregisterPlugin(me.__plugin);
+            }
         }
 
     }, {

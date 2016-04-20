@@ -30,6 +30,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         this.pages = {};
 
+        this.additionalTabs = {};
+
     }, {
 
         getName: function () {
@@ -69,23 +71,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         },
 
-        setState: function (state) {
-            this.state = state;
-        },
-
         /**
          * @public @method scheduleShowMetadata
          *
          * this 'schedules' asyncronous loading
          */
         scheduleShowMetadata: function (allMetadata) {
-            var container = this.container,
+            var me = this,
+                container = this.container,
                 p,
                 pageInfo,
                 n,
                 data,
                 page;
-
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -113,8 +111,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     panel: page,
                     data: data
                 };
+                if (me.additionalTabs) {
+                    page.additionalTabs = me.additionalTabs;
+                }
             }
-
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -125,28 +125,17 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
+            me.instance.state = {current:allMetadata};
         },
 
         /**
-         * @method setContentState
-
-         * restore state from store
-         */
-        setContentState: function (contentState) {
-            this.contentState = contentState;
-        },
-
-        /**
-         * @method getContentState
          *
-         * get state for store
+         * Basically a tab template to add to each metadatapanel created.
+         *
+         * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
-        getContentState: function () {
-            return this.contentState;
-        },
-
-        resetContentState: function () {
-            this.contentState = {};
+        addTabs: function (data) {
+            this.additionalTabs = data;
         }
     }, {
         'protocol': ['Oskari.userinterface.Flyout']

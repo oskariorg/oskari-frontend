@@ -495,9 +495,6 @@ Oskari.clazz.define(
             var me = this;
             me.basket = basket;
         },
-        /**
-         * TODO SIIRRÄ BASKET.js
-         */
 
         /**
          * [addToBasket Collects all needed information for basket object]
@@ -594,11 +591,6 @@ Oskari.clazz.define(
                     }
                     event.preventDefault();
                 });
-
-                /*componentClone.find('.basket__content-area-cropped').click(function(event){
-                    me._sandbox.postRequestByName('ShowFeatureRequest', [features]);
-                    event.preventDefault();
-                });*/
 
                 jQuery(".oskari__download-basket-wrapper").append(componentClone);
 

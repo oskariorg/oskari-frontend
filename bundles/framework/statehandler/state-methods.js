@@ -17,22 +17,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             // dont do anything if we dont have a saved state
             return [];
         }
-
-        var newState = jQuery.extend(true, {}, state),
-            components = this.sandbox.getStatefulComponents(),
-            loopedComponents = [],
-            id;
-
-        for (id in newState) {
-            if (newState.hasOwnProperty(id)) {
-                if (components[id] && components[id].setState) {
-                    // safety check that we have the component in current config
-                    components[id].setState(newState[id].state);
-                }
-                loopedComponents.push(id);
-            }
-        }
-        return loopedComponents;
+        this.sandbox.useState(state);
     },
 
     /**
@@ -66,7 +51,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         me._currentViewId = me._defaultViewId;
         startupState = me._getStartupState();
         if (startupState) {
-            me._resetComponentsWithNoStateData(me.useState(startupState));
+            me.useState(startupState);
         } else {
             jQuery.ajax({
                 dataType: "json",
@@ -76,7 +61,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                 success: function (data) {
                     if (data && data.configuration) {
                         me._setStartupState(data.configuration);
-                        me._resetComponentsWithNoStateData(me.useState(me._getStartupState()));
+                        me.useState(me._getStartupState());
                         me._historyEnabled = true;
                     } else {
                         alert('error in getting configuration');
@@ -122,38 +107,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     },
 
     /**
-     * @method _resetComponentsWithNoStateData
-     * Used to return the application to its original state.
-     * Loops through all the stateful components and calls their setState()
-     * with no parameters to reset them. Ignores the components whose IDs are listed in
-     * the parameter array.
-     * @param {String[]}  loopedComponents
-     *      list of component IDs that had state data and should not be resetted
-     *
-     */
-    _resetComponentsWithNoStateData: function (loopedComponents) {
-        // loop all stateful components and reset their state they are not in loopedComponents
-        var components = this.sandbox.getStatefulComponents(),
-            cid,
-            found,
-            i;
-        for (cid in components) {
-            if (components.hasOwnProperty(cid)) {
-                found = false;
-                for (i = 0; i < loopedComponents.length; i += 1) {
-                    if (cid === loopedComponents[i]) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    // set empty state for resetting state
-                    components[cid].setState();
-                }
-            }
-        }
-    },
-    /**
      * @method saveState
      * @param {Object} view
      * @param {String} pluginName (optional)
@@ -183,22 +136,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * the moment.
      */
     getCurrentState: function () {
-        var state = {},
-            components = this.sandbox.getStatefulComponents(),
-            id;
-        for (id in components) {
-            if (components.hasOwnProperty(id)) {
-                if (components[id].getState) {
-                    state[id] = {
-                        // wrap with additional state property so we can use the same json as in startup configuration
-                        'state': components[id].getState()
-                    };
-                } else {
-                    this.sandbox.printWarn('Stateful component ' + id + ' doesnt have getState()');
-                }
-            }
-        }
-        return state;
+        return this.sandbox.getCurrentState();
     },
 
     /**
@@ -211,6 +149,4 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     getSavedState: function (pluginName) {
         return this._pluginInstances[pluginName].getState();
     }
-
-
 });

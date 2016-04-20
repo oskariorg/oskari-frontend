@@ -22,7 +22,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            name: 'PanButtons',
+            title: 'PanButtons',
             config: {}
         };
     },

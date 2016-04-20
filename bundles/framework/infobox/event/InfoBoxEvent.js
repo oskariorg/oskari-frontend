@@ -29,6 +29,17 @@ function(_popupId, _popupOpen, _contentId) {
     },
     getContentId : function() {
         return this._contentId;
+    },
+    /**
+     * Serialization for RPC
+     * @return 
+     */
+    getParams: function () {
+        return {
+        	id: this._popupId,
+        	isOpen: this._isOpen,
+        	contentId: this._contentId
+        };
     }
 }, {
     /**

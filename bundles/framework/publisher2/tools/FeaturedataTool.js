@@ -25,11 +25,25 @@ function() {
         var featureData = this.__sandbox.findRegisteredModuleInstance('FeatureData2') || null;
         return {
             id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            name: 'FeaturedataPlugin',
+            title: 'FeaturedataPlugin',
             config: {
                 instance: featureData
             }
         };
+    },
+    //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+    bundleName: 'featuredata2',
+
+    /**
+     * Initialise tool
+     * @method init
+     */
+    init: function(data) {
+        var me = this;
+
+        if (data.configuration[me.bundleName]) {
+            me.setEnabled(true);
+        }
     },
     /**
     * Get values.
@@ -43,15 +57,14 @@ function() {
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
-            return {
-                configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config:  pluginConfig }]
-                        }
-                    }
-                }
+            var json = {
+                configuration: {}
             };
+            json.configuration[me.bundleName] = {
+                conf: pluginConfig,
+                state: {}
+            }
+            return json;
         } else {
             return null;
         }

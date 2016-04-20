@@ -47,13 +47,18 @@ Oskari.registerLocalization(
         "searching": "Søker…",
         "grid": {
             "name": "Navn",
-            "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "Skjul dekningsområde for data",
+            "showBBOX": "VIs dekningsområde for data",
+            "info": "Vis metadata",
+            "remove": "Fjern fra søkeresultat",
+            "rating": "Rating"
         },
-        "licenseText": "NOT TRANSLATED"
+        "licenseText": "Hent lisens",
+        "identificationCode": {
+            "creation": "creation",
+            "publication": "publication",
+            "revision": "revision"
+        }
     }
 }
 );

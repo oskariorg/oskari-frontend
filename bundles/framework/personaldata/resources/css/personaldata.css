@@ -39,6 +39,9 @@ div.view {
       display: inline-block;
       margin-right: 5px; }
 
+div.tab-content div.myViewsTabButtonContainer {
+  text-align: right; }
+
 div.personaldata a.categoryOp {
   margin: 5px; }
   div.personaldata a.categoryOp div.icon {

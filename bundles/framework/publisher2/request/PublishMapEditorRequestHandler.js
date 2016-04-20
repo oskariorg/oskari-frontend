@@ -12,6 +12,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
     function (instance) {
         this.instance = instance;
     }, {
+
+        __defaultToolsConfig: {
+            configuration: {
+                mapfull: {
+                    conf: {
+                        plugins: [
+                            {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
+                        ]
+                    }
+                }
+            }
+        },
         /**
          * @method handleRequest
          * Shows/hides the maplayer specified in the request in OpenLayers implementation.
@@ -26,21 +40,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                 sandbox = me.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
 
-            //get the uuid from the request
-            var uuid = request._viewData.uuid && request._viewData.uuid ? request._viewData.uuid : null;
-            // make the ajax call
-            jQuery.ajax({
-                url: url + '&action_route=AppSetup&uuid='+uuid,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    data.uuid = uuid;
-                    me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), data);
-                    me._showEditNotification();
-                },
-                error: function(response) {
-                }
-            });
+            if (request._viewData) {
+                //get the uuid from the request
+                var uuid = request._viewData.uuid && request._viewData.uuid ? request._viewData.uuid : null;
+                // make the ajax call
+                jQuery.ajax({
+                    url: url + '&action_route=AppSetup&uuid='+uuid,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        data.uuid = uuid;
+                        me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), data);
+                        me._showEditNotification();
+                    },
+                    error: function(response) {
+                    }
+                });
+            } else {
+                var defaultToolsConfig = me.__defaultToolsConfig;
+                me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), defaultToolsConfig);
+            }
+
         },
         /**
          * @method _showEditNotification

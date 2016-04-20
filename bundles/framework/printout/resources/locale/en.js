@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Printout",
     "value": {
-        "title": "Print the Map view",
-        "flyouttitle": "Print the Map view",
+        "title": "Print Map View",
+        "flyouttitle": "Print Map View",
         "desc": "",
-        "btnTooltip": "Print",
+        "btnTooltip": "Print the current map view to a PNG image or a PDF file.",
         "BasicView": {
-            "title": "Print the Map view",
+            "title": "Print Map View",
             "name": {
-                "label": "The name of the map",
+                "label": "Map name",
                 "placeholder": "required",
-                "tooltip": "Give your map a descriptive name. Please note the language of the user interface."
+                "tooltip": "Type a name for your print-out. Please note the language used in the map layers."
             },
             "language": {
                 "label": "Language",
@@ -21,11 +21,11 @@ Oskari.registerLocalization(
                     "sv": "Swedish",
                     "en": "English"
                 },
-                "tooltip": "Select the language to be used in the print. Please note the language of the the user interface and the data set."
+                "tooltip": "Select a language for your print-out. Please note the language used in the user interface and map layers."
             },
             "size": {
-                "label": "Size",
-                "tooltip": "Choose the print size. Updates are shown in the preview image.",
+                "label": "Size and direction",
+                "tooltip": "Select a print size and direction. You can see updates in the preview image.",
                 "options": [
                     {
                         "id": "A4",
@@ -52,31 +52,31 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Preview",
-                "tooltip": "You can largen the preview image by clicking it.",
-                "pending": "Preview will be updated shortly.",
+                "tooltip": "Click the preview image to open a larger image in another window.",
+                "pending": "The preview image will be updated shortly.",
                 "notes": {
-                    "extent": "You can check the map extent for the printout in the preview image.",
-                    "restriction": "Not all map layers are shown in the preview."
+                    "extent": "Check the map extent area in the preview image.",
+                    "restriction": "Only a background map is shown in the preview image."
                 }
             },
             "buttons": {
-                "save": "Get Printout",
+                "save": "Print",
                 "ok": "OK",
                 "back": "Previous",
                 "cancel": "Cancel"
             },
             "location": {
-                "label": "Location and zoom level",
-                "tooltip": "Printout scale matches the scale of the map in browser.",
-                "zoomlevel": "Printout scale"
+                "label": "Location and scale",
+                "tooltip": "The printout scale matches the scale used in the preview map.",
+                "zoomlevel": "Scale"
             },
             "settings": {
-                "label": "More settings",
-                "tooltip": "Choose a file format, a title, a scale and a date for the map printout."
+                "label": "Additional settings",
+                "tooltip": "Select settings for your print-out."
             },
             "format": {
                 "label": "File format",
-                "tooltip": "Select the file format",
+                "tooltip": "Select a file format for your print-out.",
                 "options": [
                     {
                         "id": "png",

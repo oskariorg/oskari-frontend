@@ -52,6 +52,9 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/statsgrid/request/IndicatorsRequestHandler.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/divmanazer/component/buttons/CloseButton.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/statistics/statsgrid/resources/css/style.css"

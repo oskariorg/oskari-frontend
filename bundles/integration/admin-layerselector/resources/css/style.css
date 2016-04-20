@@ -1,4 +1,11 @@
 /* Mixins */
+/* capabilities popup */
+.admin-layerselector-capabilities-popup {
+  width: 50%; }
+  .admin-layerselector-capabilities-popup textarea {
+    width: 95%;
+    height: 250px; }
+
 /* layer group container */
 div.admin-layerselector {
   /* For long lists, make capabilities list scrollable */

@@ -99,10 +99,11 @@ function () {
             url : getRouteUrl,
             error : this.routeError,
             success : function (response) {
-                var geoJson = response[0].geoJson,
-                    instructions = response[0].instructions;
+                var success = response.success,
+                    requestParameters = response.requestParameters,
+                    plan = response.plan;
 
-                var evt = me.sandbox.getEventBuilder('RouteSuccessEvent')(geoJson, instructions);
+                var evt = me.sandbox.getEventBuilder('RouteResultEvent')(success, requestParameters, plan);
                 me.sandbox.notifyAll(evt);
             }
         });

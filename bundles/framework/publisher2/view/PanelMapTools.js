@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         this.sandbox = sandbox;
         this.instance = instance;
         this.templates = {
-            tool: _.template('<div class="tool"><label><input type="checkbox"/>${name}</label><div class="extraOptions"></div></div>'),
+            tool: _.template('<div class="tool"><label><input type="checkbox"/>${title}</label><div class="extraOptions"></div></div>'),
             help: jQuery('<div class="help icon-info"></div>')
         };
         this.data = null;
@@ -32,9 +32,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         init: function (pData) {
             var me = this;
             me.data = pData;
-            _.each(me.tools, function (tool) {
-                tool.init();
-            });
+
+            if (me.data) {
+              _.each(me.tools, function (tool) {
+                  tool.init(me.data);
+              });
+            }
 
 
             for (var p in me.eventHandlers) {
@@ -112,11 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 tools = this.tools,
-                tooltipCont = me.templates.help.clone(),
-                enabledTools = null;
-            if (me.data) {
-                enabledTools = me._getEnabledTools();
-            }
+                tooltipCont = me.templates.help.clone();
 
             panel.setTitle(me.loc[me.group].label);
             tooltipCont.attr('title', me.loc[me.group].tooltip);
@@ -126,11 +125,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me._sortTools();
             // Add tools to panel
             _.each(tools, function(tool) {
-                var ui = jQuery(me.templates.tool({name : tool.getName() }));
+                var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
                 //setup values when editing an existing map
-                if (enabledTools && enabledTools[tool.getTool().id]) {
-                    ui.find('input').prop('checked','checked');
-                } else if (tool.isDefaultTool()) {
+
+                if (tool.isEnabled()) {
                     ui.find('input').prop('checked','checked');
                 }
 
@@ -172,17 +170,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         _getEnabledTools: function() {
             var me = this,
                 enabledTools = null;
+
             if (me.data) {
                 enabledTools = {};
-                if (me.data.configuration && me.data.configuration.mapfull && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) {
-                    _.each(me.data.configuration.mapfull.conf.plugins, function(plugin) {
-                        enabledTools[plugin.id] = true;
-                    });
-                }
-
+                _.each(me.tools, function(tool) {
+                  if (tool.isEnabled()) {
+                    enabledTools[tool.getTool().id] = true;
+                  }
+                });
                 return enabledTools;
             }
-
             return null;
         },
         /**
@@ -244,12 +241,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(me.tools, function(tool){
                 if(tool.isDisplayedInMode(mode) === true){
                     cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
+                    cont.find('#tool-' + tool.getTool().id).removeAttr('checked');
                 } else {
                     cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
-                }
-
-                if(typeof tool.setMode === 'function'){
-                    tool.setMode(mode);
                 }
             });
         },
@@ -266,5 +260,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(me.tools, function(tool){
                 tool.stop();
             });
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.sandbox.unregisterFromEventByName(me, p);
+                }
+            }
         }
     });

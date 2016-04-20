@@ -77,7 +77,10 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
 
                 // Make sure the function exists and is a function
                 if (component.getStateParameters && typeof component.getStateParameters === "function") {
-                    componentLinkParameterArray.push(component.getStateParameters());
+                    var params = component.getStateParameters();
+                    if(params) {
+                        componentLinkParameterArray.push(params);
+                    }
                 }
             }
         }

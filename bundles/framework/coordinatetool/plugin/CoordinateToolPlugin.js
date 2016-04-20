@@ -28,21 +28,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._dialog = null;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
-            popup: jQuery('<div class="coordinatetool__popup divmanazerpopup">'+
-                '<div>'+
-                '<div><h3 class="popupHeader"></h3></div>'+
-                '<div class="coordinatetool__close icon-close icon-close:hover"></div>'+
-                '</div>'+
-                '<div class="content"></div>'+
-                '<div class="actions">'+
-                '<input class="oskari-button oskari-formcomponent primary primary" type="submit">'+
-                '</div><div class="clear"></div>'+
+            popup: jQuery(
+                '<div class="coordinatetool__popup divmanazerpopup">'+
+                '   <div>'+
+                '       <div>'+
+                '           <h3 class="popupHeader"></h3>'+
+                '       </div>'+
+                '       <div class="coordinatetool__close icon-close icon-close:hover"></div>'+
+                '   </div>'+
+                '   <div class="content"></div>'+
                 '</div>'),
-            popupContent: jQuery('<div><div class="coordinatetool__popup__content"></div>' +
-                '<div class="srs"></div>' +
-                '<div class="margintop"><div class="coordinate-label floatleft lat-label"></div><div class="floatleft"><input type="text" class="lat-input"></input></div><div class="clear"></div></div>' +
-                '<div class="margintop"><div class="coordinate-label floatleft lon-label"></div><div class="floatleft"><input type="text" class="lon-input"></input></div><div class="clear"></div></div>' +
-                '<div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div></div>')
+            popupContent: jQuery(
+                '<div>'+
+                '   <div class="coordinatetool__popup__content"></div>' +
+                '   <div class="srs"></div>' +
+                '   <div class="margintop">'+
+                '       <div class="coordinate-label floatleft lat-label"></div>'+
+                '       <div class="floatleft"><input type="text" class="lat-input"></input></div>'+
+                '       <div class="clear"></div>'+
+                '   </div>' +
+                '   <div class="margintop">'+
+                '       <div class="coordinate-label floatleft lon-label"></div>'+
+                '       <div class="floatleft"><input type="text" class="lon-input"></input></div>'+
+                '       <div class="clear"></div>'+
+                '   </div>' +
+                '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   <div class="actions">'+
+                '       <input class="coordinate-tool-centermap oskari-button oskari-formcomponent primary primary" type="submit">'+
+                '   </div>' +
+                '   <div class="clear"></div>'+
+                '   <div class="projectionchange-placeholder margintop"></div>'+
+                '</div>'),
+            projectionSelect: jQuery(
+                '<div class="coordinatetool-divider"></div>'+
+                '<div class="coordinatetool-projection-change-header"></div>'+
+                '<div class="margintop">'+
+                '   <div class="projection-label coordinate-label floatleft"></div>'+
+                '   <div class="floatleft">'+
+                '       <select id="projection" class="lon-input projection-select"></select>'+
+                '   </div>'+
+                '</div>'+
+                '<div class="clear"/>'+
+                '<div class="coordinate-tool-projection-change-confirmation margintop" style="display:none;">'+
+                '   <div class="projection-change-confirmation-message"></div>'+
+                '   <div>'+
+                '       <div class="floatright">'+
+                '           <button class="projection-change-button-cancel oskari-button oskari-formcomponent"></button>'+
+                '           <button class="projection-change-button-ok oskari-button oskari-formcomponent primary"></button>'+
+                '       </div>'+
+                '   </div>'+
+                '</div>'
+            ),
+            projectionSelectOption: jQuery('<option></option>')
         };
     }, {
         /**
@@ -80,6 +117,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 left: 'auto'
             });
             popup.fadeIn();
+
+            //set the same width for the projection change select as the text inputs.
+            if (me._projectionSelect) {
+                var inputWidth = popup.find('.lon-input').outerWidth();
+                if (inputWidth > 0) {
+                    me._projectionSelect.css('width', inputWidth);
+                }
+            }
 
         },
 
@@ -130,28 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
-         * Validate lon and lat inputs.
-         * @method  @private _isValidLonLat
-         *
-         * @param  {Object} lon lon coordinate
-         * @param  {Object lat lat coordinate
-         *
-         * @return {Boolean} is valid or not
-         */
-        _isValidLonLat: function(lon,lat){
-            var me = this,
-                maxExtent = me._mapmodule.getMaxExtent();
-
-            if(isNaN(lon) || isNaN(lat)) {
-                return false;
-            } else if(lon < maxExtent.left || lon > maxExtent.right || lat < maxExtent.bottom || lat > maxExtent.top) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-
-        /**
          * Center map to selected coordinates.
          * @method  @private _centerMapToSelectedCoordinates
          *
@@ -162,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lonVal = me._lonInput.val(),
                 latVal = me._latInput.val(),
                 loc = me._locale;
-            if(me._isValidLonLat(lonVal,latVal)) {
+            if(this.getMapModule().isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);
                 me._sandbox.request(this, moveReq);
@@ -196,7 +219,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
 
             // Set locales
-            popup.find('.oskari-button').val(loc.popup.searchButton);
+            var submit = popup.find('.coordinate-tool-centermap');
+            popupContent.find('.coordinate-tool-centermap').val(loc.popup.searchButton);
             popup.find('.popupHeader').html(loc.popup.title);
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.srs').html(crsText);
@@ -229,8 +253,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             });
 
             // search button click
-            popup.find('.oskari-button').unbind('click');
-            popup.find('.oskari-button').bind('click', function(){
+            popup.find('.coordinate-tool-centermap').unbind('click');
+            popup.find('.coordinate-tool-centermap').bind('click', function(){
                 me._centerMapToSelectedCoordinates();
             });
 
@@ -239,13 +263,104 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
 
+            if (me._config && me._config.supportedProjections) {
+                me._initProjectionChange();
+            }
 
             jQuery(me.getMapModule().getMapEl()).append(popup);
 
             me._changeToolStyle(null, el);
             return el;
         },
+        _initProjectionChange: function() {
+            var me = this,
+                keys = _.keys(me._config.supportedProjections);
+            if (keys && keys.length > 1) {
+                me._popup.find('.projectionchange-placeholder').append(me._templates.projectionSelect.clone());
+                me._popup.find('.coordinatetool-projection-change-header').html(me._locale.projectionChange.header);
+                me._popup.find('.projection-label').html(me._locale.projectionChange.projection);
+                me._popup.find('.projection-change-confirmation-message').html(me._locale.projectionChange.confirmationMessage);
+                me._popup.find('.projection-change-button-cancel').html(me._locale.projectionChange.buttons.cancel);
+                me._popup.find('.projection-change-button-ok').html(me._locale.projectionChange.buttons.ok);
 
+                me._projectionSelect =  me._popup.find('.projection-select')
+                me._populateProjectionSelect(me._projectionSelect);
+                me._projectionSelect.on('change', function(event) {
+                    me._toggleProjectionSelectionConfirmation(true);
+                });
+
+                me._popup.find('.projection-change-button-ok').unbind('click');
+                me._popup.find('.projection-change-button-ok').bind('click', function() {
+                    me._changeProjection(me._projectionSelect.val());
+                });
+
+                me._popup.find('.projection-change-button-cancel').unbind('click');
+                me._popup.find('.projection-change-button-cancel').bind('click', function() {
+                    me._toggleProjectionSelectionConfirmation(false);
+                });
+
+                //set default value
+                me._resetProjectionSelect();
+            }
+        },
+        /**
+         * Generates the options for the projection change select based on config, or hides control if no options
+         * @method @private _populateProjectionSelect
+         * @param {Object} popupContent
+         */
+        _populateProjectionSelect: function(select) {
+            var me = this,
+                keys = _.keys(me._config.supportedProjections).sort();
+            _.each(keys, function(key) {
+                var option = me._templates.projectionSelectOption.clone();
+                option.val(me._config.supportedProjections[key]);
+                option.html(key);
+                select.append(option);
+            });
+        },
+        /**
+         * Toggles the projections change confirmation panel
+         * @method @private _toggleProjectionSelectionConfirmation
+         */
+        _toggleProjectionSelectionConfirmation: function(display) {
+            var me = this,
+                cssDisplay = display ? "block" : "none";
+            this._popup.find('.coordinate-tool-projection-change-confirmation').css('display', cssDisplay);
+            if (!display) {
+                me._resetProjectionSelect()
+            }
+        },
+        /**
+         * Resets the projection select to current map projection
+         * @method @private _resetProjectionSelect
+         */
+        _resetProjectionSelect: function() {
+            var me = this,
+            currentProjection = me._mapModule.getProjection();
+
+            //select the option with projection text
+            jQuery(this._projectionSelect).find('option').filter(function() {
+                return jQuery(this).text() === currentProjection;
+            }).prop('selected', true);
+        },
+        /**
+         * Loads the view with the uuid corresponding to the selected projection
+         * @param {String} uuid uuid of the view to load
+         * @method @private _changeProjection
+         */
+        _changeProjection: function(uuid) {
+            if (!uuid) {
+                return;
+            }
+            var me = this,
+                url = window.location.origin;
+            if (window.location.pathname && window.location.pathname.length) {
+                url += window.location.pathname;
+            }
+            url += "?uuid="+uuid+"&noSavedState=true";
+
+            window.location.href = url;
+        },
         /**
          * Update lon and lat values to inputs
          * @method  @private _updateLonLat
@@ -266,7 +381,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._lonInput.val(data.lonlat.lon.toFixed(roundToDecimals));
             }
         },
-
         /**
          * Updates the given coordinates to the UI
          * @method @public refresh
@@ -290,7 +404,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 me._updateLonLat(data);
             }
-
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {

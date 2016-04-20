@@ -1,16 +1,4 @@
 
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-matrixSetId" class="add-layer-label" title="<%= instance.getLocalization('admin').matrixSetIdDesc %>"><%= instance.getLocalization('admin').matrixSetId %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-matrixSetId" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').matrixSetIdDesc %>" value="<%= model.getWmtsMatrixSetId() %>" />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div>
-
     <% if(model.getAvailableQueryFormats().length > 0) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">

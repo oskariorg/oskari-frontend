@@ -8,29 +8,29 @@ Oskari.registerLocalization(
         "desc": "",
         "btnTooltip": "Analys",
         "NotLoggedView": {
-            "text": "Endast inloggad användare kan göra analys",
+            "text": "Med häjlp av Analys funktion man kan göra enkla geografiska analys. Analyser kan göras för data produkter. Endast inloggade användare kan göra analys. Logga in <a href=\"/web/sv/login\">här</a>.",
             "signup": "Logga in",
             "signupUrl": "/web/sv/login",
             "register": "Registrera dig",
             "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "AnalyseView": {
-            "title": "Analys",
+            "title": "Analys <font color=red>(BETA)</font>",
             "content": {
                 "label": "Kartlager",
                 "drawToolsLabel": "Objekt verktyg",
-                "tooltip": "Välj ett kartlager för en grund av analys. Du kan söka mera kartlager för sin analys eller plats för att visa sin utvald plats.",
-                "drawToolsTooltip": "Man kan tilllägga tillfälliga objekt för sin analys aller klippa en befintlig objekt till flera objekt.",
+                "tooltip": "Välj ett karlager för en grund av analys. Om något kartlager är inte på listan, klicka \"Mera kartlager\". Om du vill fokusera kartan till en särkild plats, klicka \"Sök platser\". För att flitrera objekt klicka filterknapp. Ta bort kartlager från kartvyn genom att klicka korsknapp.",
+                "drawToolsTooltip": "Tilllägg tillfälliga objekt, klippa befintliga objekt eller välj objekt genom att begränsa dem med geometriska mönster som du ritar.",
                 "features": {
-                    "title": "Tillägg",
+                    "title": "Tillägg objekt",
                     "buttons": {
                         "cancel": "Avbryt",
                         "finish": "Färdig"
                     },
                     "tooltips": {
-                        "point": "Tillägg en tillfällig punkt",
-                        "line": "Tillägg en tillfällig linje",
-                        "area": "Tillägg ett tillfälligt område"
+                        "point": "Tilllägg en tillfällig punkt för en grund av analys.",
+                        "line": "Tilllägg en tillfällig linje för en grund av analys.",
+                        "area": "Tilllägg ett tillfällig område för en grund av analys."
                     },
                     "modes": {
                         "area": "Tillfälligt område",
@@ -40,16 +40,16 @@ Oskari.registerLocalization(
                 },
                 "drawDialog": {
                     "point": {
-                        "title": "Tillägg en punkt",
-                        "add": "Tilllägg en punkt (eller flera punkter) genom att klicka kartan. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny punkt på datalistan med text \"Tillfällig punkt X\" där X är ett ordningstal av punkten."
+                        "title": "Tilllägg tillfällig punkt",
+                        "add": "Rita en punkt (eller punkter). Klicka en position du vill. Tryck \"Färdig\". Punkten visas på \"Kartlager\" listan med namn \"Tillfällig punkt x\". X är punktens ordningstal. Ta punkt(er) bort genom att klicka \"Avbryt\"."
                     },
                     "line": {
-                        "title": "Tillägg linje",
-                        "add": "Tilllägg en linje (eller flera linjer) genom att klicka sina brytpunkter (bl.a. startpunkt) på kartan. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny linje på datalistan med text \"Tillfällig linje X\" där X är ett ordningstal av linjen."
+                        "title": "Tilllägg tillfällig linje",
+                        "add": "Rita en linje (eller linjer). Klicka brytpunkter (bl.a. startpunkt) på kartan. Till slut dubbelklicka en slutpunkt och tryck \"Färdig\". Linjen visas på \"Kartlager\" listan med namn \"Tillfällig linje x\". X är linjens ordningstal. Ta linj(er) bort genom att klicka \"Avbryt\"."
                     },
                     "area": {
-                        "title": "Tillägg område",
-                        "add": "Tilllägg ett område (eller flera område) genom att klicka sina hörnpunkter (bl.a. startpunkt) på kartan. Du kan också göra ett hål till området genom att hålla nere ALT-tangenten. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny linje på datalistan med text \"Tillfällig linje X\" där X är ett ordningstal av linjen."
+                        "title": "Tilllägg tillfällig region",
+                        "add": "Rita en linje (eller linjer). Klicka hörnpunkter (bl.a. startpunkt) på kartan. Du kan också göra ett hål till området genom att hålla nere ALT-tangenten. Till slut dubbelklicka en slutpunkt och tryck \"Färdig\". Linjen visas på \"Kartlager\" listan med namn \"Tillfällig linje x\". X är linjens ordningstal. Ta linj(er) bort genom att klicka \"Avbryt\"."
                     }
                 },
                 "drawFilter": {
@@ -59,107 +59,108 @@ Oskari.registerLocalization(
                         "finish": "Färdig"
                     },
                     "tooltip": {
-                        "point": "Klippa en linje",
-                        "line": "Klippa en region med en linje",
-                        "edit": "Klippa en region",
+                        "point": "Klippa utvalda linjen med en punkt",
+                        "line": "Klippa utvalda regionen med en linje",
+                        "edit": "Klippa utvalda regionen med en annan region",
                         "remove": "Ta bort klippning"
                     },
                     "dialog": {
                         "modes": {
                             "point": {
-                                "title": "Klippa en linje med punkter",
-                                "message": "NOT TRANSLATED"
+                                "title": "Klippa linjen med en punkt",
+                                "message": "Klippa en del av linjen. Klippningspunkter är antecknade med röda snedrutor. Om linjen agerar en cirkel, punkter är på varandra. Flytta punkter genom att dra dem med en datormus. Resultaten har antecknats med en röd linje. Till slut klicka \"Färdig\"."
                             },
                             "line": {
-                                "title": "Klippa en region med en linje.",
-                                "message": "NOT TRANSLATED"
+                                "title": "Klippa regionen med en linje",
+                                "message": "Rita en linje över regionen. Klicka brytpunkter av kantlinjen och slutligen dubbelklicka slutpunkten. Flytta brytpunkter genom att dra dem med en datormus. Resultaten har antecknats med en blå region. Om du vill byta resultatsregionen, klicka en region du vill. Till slut klicka \"Färdig\"."
                             },
                             "edit": {
-                                "title": "Klippa en region med en annan region.",
-                                "message": "NOT TRANSLATED"
+                                "title": "Klicka regionen med en annan region",
+                                "message": "Rita en region ovanpå en klippandes region. Klicka hörnpunkter och till slut dubbelklicka en sista hörnpunkt. Flytta hörnpunkter genom att dra dem med datormus. Resultaten har antecknats med en blå region. Om du vill byta resultatsregionen, klicka en region du vill. Till slut klicka \"Färdig\"."
                             }
                         }
                     }
                 },
                 "selectionTools": {
-                    "title": "NOT TRANSLATED",
-                    "description": "NOT TRANSLATED",
+                    "title": "Välj objekt",
+                    "description": "Välj objekt genom att begränsa dem med geometriska monstret du ritar. Klippande objket väljas. Valet avses endast utvalda kartlagret.",
                     "button": {
-                        "empty": "Ta bort valda objekt"
+                        "empty": "Ta bort valen"
                     }
                 },
                 "search": {
-                    "title": "Sök en plats",
-                    "resultLink": "Importera till en analys"
+                    "title": "Sök platser",
+                    "resultLink": "Använd i analys"
                 }
             },
             "method": {
                 "label": "Metod",
-                "tooltip": "Väljä först material och efter det metods är till hands",
+                "tooltip": "Välj en metod som du anväder i analys funktionen. Klicka i-symbol bredvid metodnamn om du vill läsa mera information om mefoden.",
                 "options": [
                     {
                         "id": "oskari_analyse_buffer",
                         "label": "Zon",
                         "classForMethod": "buffer",
                         "selected": true,
-                        "tooltip": "Man kan skapa en zon omkring sina utvalda objekt. Man kan välja sig zonens storlek. Zonen kan användas senare i andra analys."
+                        "tooltip": "Tilllägg en zon omkring sina utvalda objekt. Du kan använda zoner i andra analys efteråt."
                     },
                     {
                         "id": "oskari_analyse_aggregate",
                         "label": "Statistiska mått",
                         "classForPreview": "aggregate",
-                        "tooltip": "Man kan beräkna lägesmått och spridningsmåt för sina utvalda objekt."
+                        "tooltip": "Beräkna statistiska mått för sina utvalda objekt. Skyddade objekt tas inte med i beräkning."
                     },
                     {
                         "id": "oskari_analyse_union",
                         "label": "Union",
                         "classForPreview": "union",
-                        "tooltip": "Man kan kombinera sin utvalda objekt till en ny objekt."
+                        "tooltip": "Kombinera sina utvalda objekt till en ny objekt."
                     },
                     {
                         "id": "oskari_analyse_clip",
-                        "label": "Leikkaus",
+                        "label": "Klippning",
                         "classForPreview": "clip",
-                        "tooltip": "Leikkaus-menetelmän avulla käyttäjä voi leikata kohteita toisen karttatason kohteilla. Analyysin lopputulokseen otetaan mukaan ne leikattavan tason kohteet, jotka sisältyvät leikkaavan tason kohteiden alueisiin."
+                        "tooltip": "Klippa sina jutvalda objekt med objekt frän ett annat kartlager. Resultaten innehåller objekt som år inom objekt av klippande karlager."
                     },
                     {
                         "id": "oskari_analyse_intersect",
-                        "label": "Klippning",
+                        "label": "Geometrisk filter",
                         "classForPreview": "intersect",
-                        "tooltip": "Man kan klippa objekt med objekt av ett annat kartlager. Resultaten innehåller bara objekt som ingår helt i område av objekt på klippande kartlagret."
+                        "tooltip": "Välj objekt på grund av klippandes kartlagret. Objekt som väljas är delvis eller helt inom klippande objekt."
                     },
                     {
                         "id": "oskari_analyse_layer_union",
-                        "label": "Klippande objekt filtrering",
+                        "label": "Union av analyslager",
                         "classForPreview": "layer_union",
-                        "tooltip": "Man kan välja sig objekt från ett  analyslager genom att klippa dem med ett annat analyslager."
+                        "tooltip": "Kombinera sina utvalda kartlager. Kartlager måste ha samma attribut."
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
-                        "label": "Flera zoner",
+                        "label": "Zoner och sektorer",
                         "classForPreview": "areas_and_sectors",
-                        "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
-                    }, {
+                        "tooltip": "Tilllägg flera zoner och sektorer omkring sina utvalda objekter."
+                    },
+                    {
                         "id": "oskari_analyse_difference",
-                        "label": "Muutoksen laskenta",
+                        "label": "Förändringsberäkning",
                         "classForPreview": "difference",
-                        "tooltip": ""
+                        "tooltip": "Beräkna förandring mellan två kartlager. Kartlager har samma data från olika tider."
                     },
                     {
                         "id": "oskari_analyse_spatial_join",
-                        "label": "NOT TRANSLATED",
+                        "label": "Spatial join",
                         "classForPreview": "spatial_join",
-                        "tooltip": ""
+                        "tooltip": "Kombinera attribut data frå två olika kartlager. Attributer kombineras baserad på geografisk position."
                     }
                 ]
             },
             "aggregate": {
                 "label": "Statistiska mått",
-                "labelTooltip": "Tunnusluvut, jotka lasketaan kohteiden ominaisuustietojen perusteella.",
+                "labelTooltip": "Välj statistiska mått som beräknas på grund av attribut data.",
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Antal",
+                        "label": "Antal objekt",
                         "selected": true
                     },
                     {
@@ -188,75 +189,76 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_NoDataCnt",
-                        "label": "Skyddad objekt"
+                        "label": "Skyddade objekt"
                     }
                 ],
                 "attribute": "Välj en attribut",
-                "footer" : "Skyddad objekt är inte räknad"
+                "footer": "Skyddade objekt tas inte med i beräkning.",
+                "aggregateAdditionalInfo":"Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
             },
             "buffer_size": {
                 "label": "Zon storlek",
-                "labelTooltip": "Vyöhykkeen koko metreinä tai kilometreinä.",
-                "tooltip": "Ge zon storlek."
+                "labelTooltip": "Ge zon storlek som meter eller kilometer.",
+                "tooltip": "Zon storlek"
             },
             "buffer_units": {
-                "m": "Meter",
-                "km": "Kilometer"
+                "m": "meter",
+                "km": "kilometer"
             },
             "analyse_name": {
                 "label": "Analys namn",
-                "labelTooltip": "Analyysiä kuvaava nimi",
-                "tooltip": "Ge analys namn"
+                "labelTooltip": "Ge analys namn som beskriver resultaten.",
+                "tooltip": "Analys namn"
             },
             "settings": {
                 "label": "Parameter",
-                "tooltip": "Ge analys parameter. Parameter beror på utvald filter och metod."
+                "tooltip": "Ge parameter för analys. Parameter beror på sin utvald metod och filter."
             },
-            "showFeatureData" : "Open feature data when analysis is finished",
-            "showValuesCheckbox" : "Show calculated values without saving result",
+            "showFeatureData": "Öppna objekt data efter analys är färdig.",
+            "showValuesCheckbox": "Visa beräknade värde utom att spara resultat.",
             "intersect": {
-                "target": "Klippandes analyslager",
-                "targetLabelTooltip": "Analyysitaso, jonka kohteita leikataan leikkaavan tason kohteilla.",
-                "label": "Klippande analyslager",
-                "labelTooltip": "Analyysitaso, jonka kohteilla leikattavan tason kohteita leikataan."
+                "target": "Lager som klippas",
+                "targetLabelTooltip": "Välj ett kartlager vars objekt klippas på grund av objekt på klippande kartlager.",
+                "label": "Klippande lager",
+                "labelTooltip": "Välj ett kartlager vars objekt klipper objekt på klippandes kartlager."
             },
             "union": {
                 "label": "Kombinerande analyslager"
             },
             "layer_union": {
                 "label": "Kombinerande analyslager",
-                "labelTooltip": "Analyysitasot, joiden kohteet viedään samalle tasolle.",
-                "notAnalyseLayer": "Välj ett av analyslager",
-                "noLayersAvailable": "Analyslager som har samma attribut hittades inte. Du kan hitta mera analyslager genom att klicka \"Mera kartlager\"."
+                "labelTooltip": "Välj kombinerande analyslager. Objekt från dessa lager ska kombineras till ett analyslager.",
+                "notAnalyseLayer": "Vald kartlager kan inte användas i en analys funktion. Välj ett annat lager.",
+                "noLayersAvailable": "Valda analyslager har inte samma attribut. Välj lager som har samma attribut."
             },
             "areas_and_sectors": {
-                "label": "Vyöhykkeet ja sektorit",
-                "labelTooltip": "Vyöhykkeiden koko metreinä tai kilometreinä sekä vyöhykkeiden ja sektorien lukumäärä.",
-                "area_count": "Antal av zoner",
-                "area_size": "Storlek av zoner",
-                "sector_count": "Antal av sektorer",
-                "area_count_tooltip": "Ge zoner antal.",
-                "area_size_tooltip": "Ge zoner storlek.",
-                "sector_count_tooltip": "Ge sektorer antal."
+                "label": "Zoner och sektorer",
+                "labelTooltip": "Ge zon antal och storlek, och sektor storlek.",
+                "area_count": "Zon antal",
+                "area_count_tooltip": "Antal mellan 0-12",
+                "area_size": "Zon storlek",
+                "area_size_tooltip": "Storlek",
+                "sector_count": "Sektor antal",
+                "sector_count_tooltip": "Antal mellan 0-12"
             },
             "difference": {
-                "firstLayer": "Aikaisempi ajankohta",
-                "firstLayerTooltip": "Alkuperäiset tiedot sisältävä analyysitaso.",
-                "firstLayerFieldTooltip": "Vertailtava ominaisuustieto ensimmäiseltä tasolta.",
-                "secondLayer": "Myöhempi ajankohta",
-                "secondLayerTooltip": "Muuttuneet tiedot sisältävä analyysitaso.",
-                "secondLayerFieldTooltip": "Vertailtava ominaisuustieto toiselta tasolta.",
-                "field": "Valitse ominaisuustieto",
-                "keyField": "Yhdistävä ominaisuustieto",
-                "keyFieldTooltip": "Ensimmäisen ja toisen tason kohteet yhdistävä ominaisuustieto, joka on yksikäsitteinen."
+                "firstLayer": "Tidigare tidspunkt",
+                "firstLayerTooltip": "Välj ett kartlager som innehåller ursprunglig data.",
+                "firstLayerFieldTooltip": "Välj en attribut från tidigare kartlager. Data ska jämföras med data från senare kartlager.",
+                "secondLayer": "Senare tidspunkt",
+                "secondLayerTooltip": "Välj ett kartlager som innehåller förändrade data.",
+                "secondLayerFieldTooltip": "Välj en attribut från senare kartlager. Data ska jämföras med data från tidigare kartlager.",
+                "field": "Jämförbar attribut",
+                "keyField": "Kombinerande attribut",
+                "keyFieldTooltip": "Välj en kombinerande attribut. Det bestämmer entydigt vilka objekt ska jämföras."
             },
             "spatial": {
-                "label": "Objekt för analys resultat",
-                "target": "Leikattava taso",
-                "targetTooltip": "Analyysitaso, jolta valitaan kohteita leikkaavan tason kohteiden perusteella.",
-                "intersectingLayer": "Leikkaava taso",
-                "intersectingLayerTooltip": "Analyysitaso, jonka kohteiden perusteella leikattavalta tasolta valitaan kohteita.",
-                "labelTooltipIntersect": 'Analyysiin mukaan otettavat leikattavan tason kohteet. Leikkaavat kohteet ovat ainakin osittain leikkaavan tason kohteiden alueilla, sisältyvät kohteet ovat kokonaan. Den här metoden har designats speciellt för punkt objekt. För område objekt resultaten kan vara felaktig. Använd operator "Ingående" för område objekt.',
+                "label": "Resultat objekt",
+                "target": "Ursprunglig kartlager",
+                "targetTooltip": "Välj ett kartlager som innehåller ursprunglig data. Objekt ska klippas med objekt från klippande kartlager.",
+                "intersectingLayer": "Klippande kartlager",
+                "intersectingLayerTooltip": "Välj ett klippande kartlager. Objekt på ursprunglig kartlager ska klippas på grund av det här kartlagret.",
+                "labelTooltipIntersect": "Välj om resultaten innehåller klippande eller ingående objekt.",
                 "options": [
                     {
                         "id": "oskari_analyse_intersect",
@@ -265,41 +267,67 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "oskari_analyse_contains",
-                        "label": "Ingående objekt"
+                        "label": "Ingående"
                     }
                 ]
             },
             "spatial_join": {
-                "firstLayer": "Ensimmäinen taso",
-                "firstLayerTooltip": "Ensimmäinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
-                "firstLayerFieldTooltip": "Ensimmäisen tason ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
-                "secondLayer": "Toinen taso",
-                "secondLayerTooltip": "Toinen yhdistettävä taso, jolta ominaisuustiedot haetaan.",
-                "secondLayerFieldTooltip": "Toisen tason ominaisuustiedot, jotka otetaan lopputulokseen mukaan. Valitse enintään 10 ominaisuustietoa.",
-                "mode": "Spatial join mode",
-                "modeTooltip": "Choose if you want to use aggregate in spatial join",
+                "firstLayer": "Objektlager",
+                "firstLayerTooltip": "Välj ett kartlager som objektlager. Attribut data ska kombineras med attribut data från källlager.",
+                "firstLayerFieldTooltip": "Resultat attribut från objektlager",
+                "secondLayer": "Källlager",
+                "secondLayerTooltip": "Välj ett kartlager som källlager. Attribut data ska kombineras med attribut data från objektlager.",
+                "secondLayerFieldTooltip": "Resultat attribut från källlager",
+                "mode": "Välj metodstyp",
+                "modeTooltip": "Välj om du vill använda statistiska mått i analys.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Aggregate"
+                "aggregateMode": "Statistiska mått",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Objekt antal"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minsta värde"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Största värde"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Medelvärde"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standardavvikelse"
+                    }
+                ]
             },
             "params": {
-                "label": "Attribut data för analys resultat",
+                "label": "Resultat attribut",
                 "aggreLabel": "Attribut data för statistiska mått",
-                "aggreLabelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
-                "labelTooltip": "Ominaisuustiedot, jotka otetaan analyysiin mukaan. Valitse enintään 10 ominaisuustietoa.",
-                "tooltip": "",
+                "aggreLabelTooltip": "Välj högst 10 attributer. Statistiska mått beräknas till dem.",
+                "labelTooltip": "Välj högst 10 attributer som tas med i resultaten.",
+                "tooltip": "NOT TRANSLATED",
                 "options": [
                     {
                         "id": "oskari_analyse_all",
                         "selected": true,
-                        "label": "Alla attribut"
+                        "label": "Alla"
                     },
                     {
                         "id": "oskari_analyse_none",
-                        "label": "Inga attribut"
+                        "label": "Inga"
                     },
                     {
                         "id": "oskari_analyse_select",
-                        "label": "Välj attribut från listan"
+                        "label": "Välj från listan"
                     }
                 ]
             },
@@ -307,36 +335,37 @@ Oskari.registerLocalization(
                 "label": "Utseende",
                 "color_label": "Välj stil:",
                 "colorset_tooltip": "Välj stil för punkter, linjer och område.",
-                "tooltip": "Välj en passande stil dör punkter, linjer och område.",
+                "tooltip": "Välj en passande stil för punkter, linjer och område.",
                 "random_color_label": "Slumpmässiga färg"
             },
             "buttons": {
-                "save": "Lagra",
-                "analyse": "Fortsätta analys",
+                "save": "Lagra och sluta",
+                "analyse": "Gör analys",
                 "data": "Mera kartlager"
             },
             "filter": {
                 "title": "Filtrering",
-                "description": "Filtrering för analyslager:",
+                "description": "Filtrera objekt från analyslager:",
+                "cancelButton": "Avbryt",
                 "clearButton": "Töm filter",
                 "refreshButton": "Uppdatera filter",
-                "addFilter": "Tilllägg en ny filter.",
-                "removeFilter": "Ta bort en ny filter.",
+                "addFilter": "Tilllägg",
+                "removeFilter": "Ta bort",
                 "content": {
-                    "title": "NOT TRANSLATED"
+                    "title": "Geografisk filter"
                 },
                 "bbox": {
-                    "on": "Ta med endast objekt som syns på kartvyn.",
-                    "off": "Ta med alla objekt."
+                    "on": "Endast objekt som syns på kartan",
+                    "off": "Alla objekt"
                 },
                 "clickedFeatures": {
-                    "clickedFeaturesLabel": "Ta med endast objekt utvalda på kartan.",
-                    "filterByGeometryLabel": "NOT TRANSLATED",
-                    "filterByGeometryIntersect": "NOT TRANSLATED",
-                    "filterByGeometryContains": "NOT TRANSLATED"
+                    "clickedFeaturesLabel": "Endast objekt som utvalda på kartan",
+                    "filterByGeometryLabel": "Endast objekt som:",
+                    "filterByGeometryIntersect": "klipper utvalda objekt",
+                    "filterByGeometryContains": "är inom utvalda objekt"
                 },
                 "values": {
-                    "title": "Filtrera objekt på grund av attribut data",
+                    "title": "På grund av attribut data",
                     "placeholders": {
                         "case-sensitive": "Bokstavsstorlek verkar på val.",
                         "attribute": "Attribut",
@@ -345,8 +374,8 @@ Oskari.registerLocalization(
                         "attribute-value": "Värde"
                     },
                     "info": {
-                        "bboxOff":"NOT TRANSLATED",
-                        "filterByGeometrySelected":"NOT TRANSLATED"
+                        "bboxOff": "Utan geografisk filter analys riktas sig alla objekt. Tillsätt en attributfilter eller välj \"endast objekt som visas på kartan\".",
+                        "filterByGeometrySelected": "Du kan filtrera attributer endast om du använder inte filter för valda objekt."
                     },
                     "equals": "är lika med",
                     "like": "är ungefär lika med",
@@ -358,61 +387,63 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "är mindre än eller lika med"
                 },
                 "validation": {
-                    "title": "Filter kunde inte uppdateras beroende på följande fel:",
-                    "attribute_missing": "Attribut saknas.",
-                    "operator_missing": "Operator saknas.",
-                    "value_missing": "Värde saknas.",
-                    "boolean_operator_missing": "Logisk operator saknas.",
-                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
+                    "title": "Fixa följande fel och försök igen:",
+                    "attribute_missing": "Attribute saknas. Välj en attribut.",
+                    "operator_missing": "Operator saknas. Välj en operator.",
+                    "value_missing": "Värde saknas. Välj ett värde.",
+                    "boolean_operator_missing": "Logisk operator saknas. Välj en logisk operator.",
+                    "bbox_selected_with_no_properties": "Utan geografisk filter alla objekt ska tas med i analys. Tilllägg en attributfilter eller välj \"Endast objekt som syns på kartan\"."
                 }
             },
             "help": "Anvisning",
             "success": {
                 "layerAdded": {
                     "title": "Analys lyckades.",
-                    "message": "Ny analyslager {layer} tilllagt."
+                    "message": "Analys är färdig. Ett nyt analyslager {layer} har tilllagt. Du kan hitta sen på \"Egen data\" menu."
                 }
             },
             "error": {
-                "title": "Fel",
-                "invalidSetup": "Parameter är felaktiga. Rätta parameter.",
-                "noParameters": "Analyslager och parameter för analys saknas. Välj analyslager och ge analys parameter.",
-                "noLayer": "Analyslager saknas. Välj analyslager.",
-                "noAnalyseUnionLayer": "Det behövs åtminstone två kartlager för analys. Välj ett annat analyslager.",
-                "invalidMethod": "Analysmetod fanns inte. Välj en annan metod.",
-                "bufferSize": "Zon storlek är felaktig. Rätta storlek.",
-                "illegalCharacters": "Använd endast nummer, inte bokstäver.",
+                "title": "Fel på analys",
+                "invalidSetup": "Parameter är felaktiga.",
+                "noParameters": "Kartlager eller parameter saknas. Välj ett kartlager för analys och parameter för utvald metod, och försök igen.",
+                "noLayer": "Kartlager saknas. Välj ett kartlager för analys och försök igen.",
+                "noAnalyseUnionLayer": "För att göra union av analyslager du behöver åtminstone två kartlager. Välj ett annat kartlager.",
+                "invalidMethod": "Metod fanns inte. Välj en befintlig metod.",
+                "bufferSize": "Zon storlek är felaktig. Fixa storlek och försök igen.",
+                "illegalCharacters": "Zon storlek innehåller förbjudna symboler. Använd endast nummer, inte bokstäver, och försök igen.",
                 "nohelp": "Anvisning fanns inte.",
-                "saveFailed": "Analys lagring misslyckades. Försök igen senare.",
-                "loadLayersFailed": "Analyslager laddning misslyckades. Försök igen senare.",
-                "loadLayerTypesFailed": "Datatyp sökning misslyckades. Försök igen senare.",
-                "Analyse_parameter_missing": "Parameter saknas. Ge analys parameter.",
-                "Unable_to_parse_analysis": "Parameter är felaktiga. Rätta parameter.",
-                "Unable_to_get_WPS_features": "Objekt data för analys kunde inte hämtas. Försök igen senare.",
-                "WPS_execute_returns_Exception": "Analys utförning misslyckades. Försök igen senare.",
-                "WPS_execute_returns_no_features": "Resultaten har inga objekt.",
-                "Unable_to_process_aggregate_union": "Statistiska mått för unionen kunde inte beräknas. Försök igen senare.",
-                "Unable_to_get_features_for_union": "Objekt data för statiska mått kunde inte hämtas. Försök igen senare.",
-                "Unable_to_store_analysis_data": "Analys lagring misslyckades. Försök igen senare.",
-                "Unable_to_get_analysisLayer_data": "Analys data läsning misslyckades. Försök igen senare.",
-                "timeout": "Analys misslyckades beronde på tidsutlösning. Försök igen senare.",
-                "error": "Analys misslyckades. Försök igen senare.",
+                "saveFailed": "Resultat kunde inte lagras.",
+                "loadLayersFailed": "Kartlager kunde inte laddas.",
+                "loadLayerTypesFailed": "Behövliga objekt data kunde inte laddas.",
+                "Analyse_parameter_missing": "Behövliga parameter saknas. Ge parameter och försök igen.",
+                "Unable_to_parse_analysis": "Givna parameter är felaktiga. Fixa parameter och försök igen.",
+                "Unable_to_get_WPS_features": "Ursprungsdata kunde inte laddas.",
+                "WPS_execute_returns_Exception": "Analys utförning misslyckades.",
+                "WPS_execute_returns_no_features": "Resultat har inga objekt.",
+                "Unable_to_process_aggregate_union": "Statistiska mått kunde inte beräknas för unionen.",
+                "Unable_to_get_features_for_union": "Ursprungsdata kunde inte laddas.",
+                "Unable_to_store_analysis_data": "Resultaten kunde inte lagras.",
+                "Unable_to_get_analysisLayer_data": "Ursprungsdata kunde inte laddas.",
+                "timeout": "Analys misslyckades beroende på tidsutlösning.",
+                "error": "Analys misslyckades.",
                 "parsererror": "Det finns fel i resultaten."
             },
             "infos": {
-                "title": "Info",
+                "title": "För många attributer",
                 "layer": "Analyslager",
-                "over10": "har över 10 attribut. Välj högst 10 attribut för analys. Du hittar en lista av attribut i menu \"Parameter\" när du har valt en analysmetod."
+                "over10": "har över 10 attribut. Välj högst 10 attribut för analys. Du hittar en lista av attribut i meny \"Parameter\" när du har valt en analysmetod."
             },
             "aggregatePopup": {
                 "title": "Analys resultat",
-                "property": "Attribut",
+                "property": "Egenskap",
+                "store": "Lagra",
+                "store_tooltip": "Lagra geometri som tillfällig lager",
                 "close": "Stäng"
             }
         },
         "StartView": {
-            "text": "Man kan göra statistiska analys till kartlager som innehåller objekt data. Genom att lagra analys du kan använda resultat också senare.",
-            "layersWithFeatures": "Analyysissä voi tehdä valintoja vain yhdeltä tasolta kerrallaan. Valitse miltä tasolta haluat tehdä valinnat. Huom! Muut valinnat poistetaan.",
+            "text": "Med hjälp av Analys funktionen du kan göra enkla analys för kartlager som innehåller objekt data. Färdiga analys du kan hitta på \"Egna data\".",
+            "layersWithFeatures": "Du kan göra välja objekt endast från ett kartlager. Välj ett kartlager. Märk att andra valen tas bort.",
             "infoseen": {
                 "label": "Visa inte det här meddelande igen."
             },
@@ -424,7 +455,7 @@ Oskari.registerLocalization(
         "categoryform": {
             "name": {
                 "label": "Namn",
-                "placeholder": "Ge analyslager namn"
+                "placeholder": "Skriv analyslager namn."
             },
             "drawing": {
                 "label": "NOT TRANSLATED",
@@ -469,7 +500,21 @@ Oskari.registerLocalization(
             },
             "error": {
                 "title": "Fel!",
-                "generic": "System fel skedde. Fösök igen senare."
+                "generic": "Systemfel skedde. Analys kunde inte avgöras."
+            }
+        },
+        "layer": {
+            "filter": {
+                "aggregateAnalysisFilter": {
+                    "addAggregateFilter": "Välj det sammanlagda värdet",
+                    "aggregateValueSelectTitle": "Använd det sammanlagda värdet i filtret",
+                    "selectAggregateAnalyse": "Välj den sammanlagda analysen",
+                    "selectIndicator": "Välj indikatorn",
+                    "selectReadyButton": "Färdig",
+                    "getAggregateAnalysisFailed": "De aggregerade uppgifterna kunde inte hittas.",
+                    "noAggregateAnalysisPopupTitle": "Den sammanlagda analysen hittade inte.",
+                    "noAggregateAnalysisPopupContent": "Du har inte gjort en sammanlagd analys. Du kan skapa dina egna aggregerade uppgifter från analysfunktion och sedan använda värdena i filtrering."
+                }
             }
         }
     }

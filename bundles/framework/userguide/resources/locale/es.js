@@ -7,7 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "flyout": {
             "title": "Guía de usuario de Oskari",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": "<p>Cargando la guia</p>"
         },
         "tile": {
             "title": "Guía de usuario del mapa"
@@ -16,9 +16,39 @@ Oskari.registerLocalization(
             "title": "¡Error!",
             "generic": "Fallo al cargar la guía de usuario. Por favor, inténtelo más tarde."
         },
+        "tabs": [
+            {
+                "title": "ventana de mapa",
+                "tags": "Guia de usuario para la ventana de mapa"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            },
+            {
+                "title": "NOT TRANSLATED",
+                "tags": "NOT TRANSLATED"
+            }
+        ],
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "Guia de usuario para la ventana de mapa",
+            "contentPart": "cuerpo"
         }
     }
 }

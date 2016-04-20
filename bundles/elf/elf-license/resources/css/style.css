@@ -22,6 +22,16 @@ div.elf_license_dialog {
     height: 320px; }
     div.elf_license_dialog div.elf_license_dialog_license_data div.elf_license_dialog_description {
       margin-top: 6px; }
+    div.elf_license_dialog div.elf_license_dialog_license_data div.elf_license_dialog_descriptions_title {
+      margin-top: 10px; }
+    div.elf_license_dialog div.elf_license_dialog_license_data ul.elf_license_dialog_descriptions {
+      padding-left: 20px;
+      margin: 0; }
+      div.elf_license_dialog div.elf_license_dialog_license_data ul.elf_license_dialog_descriptions li.description {
+        margin: 4px 0;
+        list-style-type: square;
+        list-style-position: outside;
+        width: 90%; }
     div.elf_license_dialog div.elf_license_dialog_license_data div.elf_license_dialog_licensemodels {
       max-height: 230px;
       overflow: auto;

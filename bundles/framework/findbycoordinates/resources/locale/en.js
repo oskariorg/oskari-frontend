@@ -3,16 +3,12 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
-        "desc": "FindByCoordinates",
+        "title": "Find Nearest Address",
+        "desc": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Click a point on the map. As a result you will get coordinates in the point and the nearest address."
         },
-        "resultsTitle": "Search results",
-        "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
-        }
+        "resultsTitle": "Search results"
     }
 }
 );

@@ -57,9 +57,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 '    </div>' +
                 '  </div>' +
                 '  <br/>' +
-                '  <label>' +
-                '    <input class="baselayer" type="checkbox"/>' + layerLoc.selectAsBaselayer +
-                '  </label>' +
                 '  </div>' +
                 '  <div class="right-tools">' +
                 '    <div class="layer-rights"></div>' +
@@ -209,28 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
         },
         /**
-         * Prepopulates the form/plugin with given data
-         *
-         * @method useConfig
-         * @param {Object} pConfig data to prepopulate the form and plugin
-         */
-         /*
-        useConfig: function (pConfig) {
-            if (pConfig) {
-                if (Object.prototype.toString.call(pConfig.baseLayers) === '[object Array]' &&
-                        pConfig.baseLayers.length > 0) {
-
-                    this.config.layers.preselect = pConfig.baseLayers;
-                } else {
-                    this.config.layers.preselect = [];
-                }
-                this.showLayerSelection = true;
-                this.enablePlugin(true);
-                this._populateMapLayerPanel();
-            }
-        },
-        */
-        /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *
          * @method getPanel
@@ -299,17 +274,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             tooltipCont.attr('title', this.loc.layerselection.tooltip);
             contentPanel.append(tooltipCont);
 
-            contentPanel.append(this.loc.layerselection.info);
-
             var layers = this._getLayersList(),
                 i,
                 listContainer = this.templateList.clone(),
                 layer,
-                input,
-                shouldPreselectLayer = function (layerId) {
-                    var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);
-                    return isFound !== -1;
-                };
+                input;
+
 
             for (i = 0; i < layers.length; i += 1) {
 
@@ -346,16 +316,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 me._appendLayerFooter(layerContainer, layer, layer.selected);
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
-
-                if (shouldPreselectLayer(layer.getId()) && me.showLayerSelection) {
-                    input.attr('checked', 'checked');
-                    layer.selected = true;
-                    // Make sure the layer is added before making it a base layer
-//                    this.plugin.addLayer(layer);
-                    this.getPlugin().addLayer(layer);
-//                    this.plugin.addBaseLayer(layer);
-                    this.getPlugin().addBaseLayer(layer);
-                }
 
                 listContainer.prepend(layerContainer);
             }
@@ -751,9 +711,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     min: 0,
                     max: 100,
                     value: opa,
-                    /*change: function(event,ui) {
-                     me._layerOpacityChanged(layer, ui.value);
-                     },*/
                     slide: function (event, ui) {
                         me._layerOpacityChanged(layer, ui.value);
                     },

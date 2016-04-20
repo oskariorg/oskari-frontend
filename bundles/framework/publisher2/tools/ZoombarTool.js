@@ -22,7 +22,7 @@ function() {
     getTool: function(){
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            name: 'Portti2Zoombar',
+            title: 'Portti2Zoombar',
             config: {}
         };
     },
