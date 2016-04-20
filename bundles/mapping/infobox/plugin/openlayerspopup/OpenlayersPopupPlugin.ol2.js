@@ -567,13 +567,9 @@ Oskari.clazz.define(
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
-                    'max-height': maxHeight - 40 + 'px'
+                    'max-height': maxHeight - 40 + 'px',
+                    'height': '100%'
                 });
-
-            popup.find('.olPopupContent').css({
-                'width': '100%',
-                'height': '100%'
-            });
 
             var wrapper = content.find('.contentWrapper');
             popup.css({
@@ -596,9 +592,13 @@ Oskari.clazz.define(
             } else {
                 var height = wrapper.height();
                 height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+                var isOverThanMax = height > maxHeight ? true : false;
                 content.css({
                     'height': height
                 });
+                if(!isOverThanMax) {
+                    popup.css('min-height', 'inherit');
+                }
             }
         },
 

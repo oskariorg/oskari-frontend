@@ -537,6 +537,7 @@ Oskari.clazz.define(
             });
 
             var wrapper = content.find('.contentWrapper');
+
             popup.css({
                 'height': 'auto',
                 'width': 'auto',
@@ -558,9 +559,14 @@ Oskari.clazz.define(
             } else {
                 var height = wrapper.height();
                 height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+                var isOverThanMax = height > maxHeight ? true : false;
                 content.css({
                     'height': height
                 });
+
+                if(!isOverThanMax) {
+                    popup.css('min-height', 'inherit');
+                }
             }
         },
 
