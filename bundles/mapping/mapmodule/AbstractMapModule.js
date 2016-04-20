@@ -893,27 +893,17 @@ Oskari.clazz.define(
 
         _handleMapSizeChanges: function (newSize) {
             var me = this;
-
-            if (me._isInMobileMode === undefined) {
-                if (newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
-                    me.setMobileMode(true);
-                } else {
-                    me.setMobileMode(false);
-                }
-                return;
-            }
-
-            //from mobile to desktop
-            if (me._isInMobileMode && newSize.width > me._mobileDefs.width || me._isInMobileMode && newSize.height > me._mobileDefs.height) {
-                me.setMobileMode(false);
-                _.each(me._pluginInstances, function(plugin) {
-                    if (plugin && plugin._createPluginUI) {
-                        plugin._createPluginUI(me.getMobileMode());
-                    }
-                }); 
-            //from desktop to mobile
-            } else if (!me._isInMobileMode && newSize.width < me._mobileDefs.width || !me._isInMobileMode && newSize.height < me._mobileDefs.height) {
+            var modeChanged = false;
+            
+            if (newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
+                modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
+            } else {
+                modeChanged = (me.getMobileMode() === false) ? false : true;
+                me.setMobileMode(false);
+            }
+              
+            if (modeChanged) {
                 _.each(me._pluginInstances, function(plugin) {
                     if (plugin && plugin._createPluginUI) {
                         plugin._createPluginUI(me.getMobileMode());

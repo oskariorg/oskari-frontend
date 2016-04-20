@@ -167,7 +167,7 @@ Oskari.clazz.define(
                     me._uiMode
                 );
             }
-
+            
             if (mapInMobileMode) {
                 var mobileDivElement = me.getMapModule().getMobileDiv();
                 mobileDivElement.appendChild(me._element[0]);
