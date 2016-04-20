@@ -82,9 +82,9 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
 
                     jQuery.each(param.selections, function(index, value){
                         var valueEl = readOnlyElement.clone();
-                        value = me.getElementLabel(param, value);
+                        var textValue = me.getElementLabel(param, value);
                         valueEl.attr('data-value', value);
-                        valueEl.html(value);
+                        valueEl.html(textValue);
                         list.append(valueEl);
                         if(param.multi && index < param.selections.length-1) {
                             list.append(', ');
