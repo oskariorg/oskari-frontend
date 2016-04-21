@@ -100,9 +100,9 @@ Oskari.clazz.define(
         };
 
         me._isInMobileMode;
-
-        me._toolbarId = 'mobileToolbar';
-        me._toolbarContent = 'mobileToolbarContent';
+        me._mobileToolbar;
+        me._mobileToolbarId = 'mobileToolbar';
+        me._toolbarContent;
 
     }, {
         /**
@@ -152,6 +152,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         start: function (sandbox) {
+            var me = this;
             if (this.started) {
                 return;
             }
@@ -841,7 +842,7 @@ Oskari.clazz.define(
 
         getMobileDiv: function () {
             var me = this,
-                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv')[0];
+                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
 
             return mobileDiv;
         },
@@ -850,37 +851,35 @@ Oskari.clazz.define(
             var me = this;
 
             if (!me._mobileToolbar) {
-                me.createMobileToolbar()
+                me._toolbarContent = me.getMobileDiv().append('<div class=".mobileToolbarContent"></div>');
+                me.createMobileToolbar();
+
             }
-            return me._toolbarId;
+            return me._mobileToolbarId;
         },
 
         createMobileToolbar: function () {
-            return;
-
-            /*TODO: this function to create toolbar
             var me = this,
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+                debugger;
 
-            if (me._toolbarId && (me._toolbarContent) && builder !== null && builder !== undefined) {
+            if (me._mobileToolbarId && (me._toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
                 sandbox.requestByName(
                     me,
                     'Toolbar.ToolbarRequest',
                     [
-                        me.toolbarId,
+                        me._mobileToolbarId,
                         'add',
                         {
-                            title: 'mobileToolbar',
                             show: true,
-                            toolbarContainer: me.getElement().find('.' + me.toolbarContent)
+                            toolbarContainer: me._toolbarContent
                         }
                     ]
                 );
             }
-            */
         },
         
         setMobileMode: function (isInMobileMode) {
@@ -894,21 +893,33 @@ Oskari.clazz.define(
         _handleMapSizeChanges: function (newSize) {
             var me = this;
             var modeChanged = false;
-            
+            var mobileDiv = this.getMobileDiv();
+
             if (newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
+                mobileDiv.show();
             } else {
                 modeChanged = (me.getMobileMode() === false) ? false : true;
                 me.setMobileMode(false);
+                mobileDiv.hide();
             }
-              
+            
+            for (var pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName)) {
+                    var plugin = this._pluginInstances[pluginName];
+                }
+            }
+
             if (modeChanged) {
+
+                // TODO handle index/priority
                 _.each(me._pluginInstances, function(plugin) {
-                    if (plugin && plugin._createPluginUI) {
-                        plugin._createPluginUI(me.getMobileMode());
+                    if (plugin && typeof plugin.createPluginUI === 'function' && plugin.hasUI()) {
+                        var index = plugin.getPluginIndex();
+                        plugin.createPluginUI(me.getMobileMode());
                     }
-                }); 
+                });
             }
         },
 
@@ -1092,6 +1103,7 @@ Oskari.clazz.define(
                     this.startPlugin(this._pluginInstances[pluginName]);
                 }
             }
+            this._handleMapSizeChanges(this.getSize());
         },
         /**
          * @method stopPlugins
@@ -1578,7 +1590,7 @@ Oskari.clazz.define(
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
                 curr;
-
+                
             if (!element) {
                 throw 'Element is non-existent.';
             }
@@ -1626,6 +1638,7 @@ Oskari.clazz.define(
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
          * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
+         * @param {String} uiMode mobile|desktop
          */
         removeMapControlPlugin: function (element, keepContainerVisible, uiMode) {
             if (uiMode === "mobile") {

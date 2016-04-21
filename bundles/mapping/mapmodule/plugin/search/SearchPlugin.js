@@ -20,7 +20,6 @@ Oskari.clazz.define(
         me._index = 1;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
-        me._uiMode;
     }, {
 
         /**
@@ -156,9 +155,13 @@ Oskari.clazz.define(
             }
         },
 
-        _createPluginUI: function (mapInMobileMode) {
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         */
+        createPluginUI: function (mapInMobileMode) {
             var me = this;
-
             //remove old element
             if (me._element) {
                 me.getMapModule().removeMapControlPlugin(
@@ -167,11 +170,10 @@ Oskari.clazz.define(
                     me._uiMode
                 );
             }
-            
+
             if (mapInMobileMode) {
                 var mobileDivElement = me.getMapModule().getMobileDiv();
-                mobileDivElement.appendChild(me._element[0]);
-                // TODO handle index/priority
+                mobileDivElement.append(me._element[0]);
                 me._uiMode = "mobile";
             } else {
                 me._ctl = me._createControlAdapter(me._element);

@@ -12,6 +12,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._element = null;
         this._enabled = true;
         this._visible = true;
+        // plugin index, override this. Smaller number = first plugin, bigger number = latest
+        this._index = 1000;
+        // Mobile position, top|bottom, override this
+        this._mobilePosition;
+        // ui odes desktop|mobile
+        this._uiMode = 'desktop';
     }, {
         /**
          * @method _startPluginImpl
@@ -38,8 +44,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             me.setVisible(me._visible);
 
             //TODO: when ready, remove me._createPluginUI
-            if (me._element && me._createPluginUI) {
-                me._createPluginUI(isMapInMobileMode);
+            if (me._element && me.createPluginUI) {
+                me.createPluginUI(isMapInMobileMode);
             }
         },
 
@@ -146,6 +152,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if (!me._config.location) {
                 me._config.location = {};
             }
+            
             me._config.location.classes = location;
             if (el) {
                 me.getMapModule().setMapControlPlugin(
@@ -342,6 +349,32 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         */
+        createPluginUI: function(mapInMobileMode) {
+            return;
+        },
+
+        /**
+         * Gets plugin index. Used sorting plugins.
+         * @method  @public getPluginIndex 
+         * @return {Integer} plugin index
+         */
+        getPluginIndex: function(){
+            return this._index;
+        },
+        /**
+         * Gets plugin mobile position.
+         * @method  @public getMobilePosition
+         * @return {String} top|bottom
+         */
+        getMobilePosition: function(){
+            return this._mobilePosition;
         }
     }, {
         /**

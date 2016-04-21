@@ -30,8 +30,8 @@ div.mapplugins {
         background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       /* Note that this must also have a position for IE11:
-                 * https://coderwall.com/p/s8pjpg
-                 */
+       * https://coderwall.com/p/s8pjpg
+       */
       pointer-events: auto;
       position: relative;
       margin: 0 auto;
@@ -116,7 +116,7 @@ div.mapplugins {
     div.mapplugins.left.center {
       height: 100%;
       /* Side centers aren't used ATM
-            display: table;*/
+      display: table;*/
       display: none !important; }
       div.mapplugins.left.center .mappluginsContainer {
         display: table-cell;
@@ -131,7 +131,7 @@ div.mapplugins {
     div.mapplugins.right.center {
       height: 100%;
       /* Side centers aren't used ATM
-            display: table;*/
+      display: table;*/
       display: none !important; }
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
@@ -149,3 +149,11 @@ div.mapplugins {
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
+
+.mobileToolbarDiv {
+  background: #3c3c3c;
+  display: none;
+  padding: 8px;
+  line-height: 10px; }
+  .mobileToolbarDiv input[type=text] {
+    height: 10px; }
