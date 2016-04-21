@@ -275,6 +275,17 @@ if (!Function.prototype.bind) {
                 return false;
             },
             /**
+             * Returns wfs service resolveDepth param
+             * @return {Boolean} true/false
+             */
+            isResolveDepth: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.resolveDepth;
+                }
+                return false;
+            },
+            /**
              * Returns interface url
              * @return {String} url
              */
