@@ -24,8 +24,8 @@ Previously returned an undocumented startupInfo object. The custom script loader
 and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
 Oskari.loader.log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
 
-Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js. This 
-will expose the module from that file as a global variable with the name of the expose flag like this:
+Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js.
+ This will expose the module from that file as a global variable with the name of the expose flag like this:
 
     {
         "type": "text/javascript",
@@ -36,6 +36,9 @@ will expose the module from that file as a global variable with the name of the 
 The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's AMD-compatible it's assigned to window.ol (as specified in bundle.js "expose" statement).
 Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
 globals.
+
+Oskari.setPreloaded([boolean]) no longer does anything. If the loader detects that a bundles code is already in the browser it won't load it again.
+Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files. This will propably change to some more intuitive flag in the future.
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
