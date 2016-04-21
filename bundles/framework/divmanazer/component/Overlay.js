@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             }
             me.__notifyListeners('close');
         },
-        
+
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {

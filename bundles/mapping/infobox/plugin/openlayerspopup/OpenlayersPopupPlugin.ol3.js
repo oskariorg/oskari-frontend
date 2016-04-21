@@ -97,7 +97,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 lon = null,
@@ -153,7 +152,7 @@ Oskari.clazz.define(
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
                 offsetY = markerPosition.y;
-            }            
+            }
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -225,6 +224,7 @@ Oskari.clazz.define(
                     inputs.placeholder();
                 }
             }
+
             if (me.adaptable && !isInMobileMode) {
                 me._adaptPopupSize(id, refresh);
             }
@@ -261,7 +261,7 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-            
+
         },
 
         /**
@@ -347,7 +347,7 @@ Oskari.clazz.define(
                                 value: action.name
                             });
                         }
-                        
+
                         currentGroup = action.group;
 
                         if (currentGroup && currentGroup === group) {
@@ -508,6 +508,10 @@ Oskari.clazz.define(
                 maxWidth = size.width * 0.7,
                 maxHeight = size.height * 0.7;
 
+            if(isNaN(left)) {
+                left = 0;
+            }
+
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -533,6 +537,7 @@ Oskari.clazz.define(
             });
 
             var wrapper = content.find('.contentWrapper');
+
             popup.css({
                 'height': 'auto',
                 'width': 'auto',
@@ -540,6 +545,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'position': 'absolute',
                 'overflow' : 'visible',
                 'z-index': '16000'
             });
@@ -553,9 +559,14 @@ Oskari.clazz.define(
             } else {
                 var height = wrapper.height();
                 height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+                var isOverThanMax = height > maxHeight ? true : false;
                 content.css({
                     'height': height
                 });
+
+                if(!isOverThanMax) {
+                    popup.css('min-height', 'inherit');
+                }
             }
         },
 

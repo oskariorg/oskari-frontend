@@ -138,7 +138,7 @@ Oskari.clazz.define(
                 popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
-                font = options.font;     
+                font = options.font;
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -183,10 +183,10 @@ Oskari.clazz.define(
                     popupContent,
                     false
                 );
-                
+
                 var mapModule = me.getMapModule();
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
-                
+
                 popup.moveTo = function (px) {
                     if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
                         this.div.style.left = (px.x + markerPosition.x) + 'px';
@@ -255,7 +255,7 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-            
+
         },
 
         /**
@@ -341,7 +341,7 @@ Oskari.clazz.define(
                                 value: action.name
                             });
                         }
-                        
+
                         currentGroup = action.group;
 
                         if (currentGroup && currentGroup === group) {
@@ -547,6 +547,10 @@ Oskari.clazz.define(
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
+
+            if(isNaN(left)) {
+                left = 0;
+            }
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
@@ -563,13 +567,9 @@ Oskari.clazz.define(
                 content = popup.find('.popupContent').css({
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
-                    'max-height': maxHeight - 40 + 'px'
+                    'max-height': maxHeight - 40 + 'px',
+                    'height': '100%'
                 });
-
-            popup.find('.olPopupContent').css({
-                'width': '100%',
-                'height': '100%'
-            });
 
             var wrapper = content.find('.contentWrapper');
             popup.css({
@@ -579,6 +579,7 @@ Oskari.clazz.define(
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
                 'left': left + 'px',
+                'position': 'absolute',
                 'z-index': '16000'
             });
 
@@ -591,9 +592,13 @@ Oskari.clazz.define(
             } else {
                 var height = wrapper.height();
                 height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+                var isOverThanMax = height > maxHeight ? true : false;
                 content.css({
                     'height': height
                 });
+                if(!isOverThanMax) {
+                    popup.css('min-height', 'inherit');
+                }
             }
         },
 

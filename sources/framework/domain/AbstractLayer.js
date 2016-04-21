@@ -1011,6 +1011,17 @@ Oskari.clazz.define(
             }
         },
         /**
+         * @method isResolveDepth
+         * @return {Boolean} true/false
+         */
+        isResolveDepth: function () {
+            if (this.getAttributes().resolveDepth){
+                return this.getAttributes().resolveDepth
+            } else {
+                return false;
+            }
+        },
+        /**
          * @method getLayerName
          * @return {String} layer functional (not UI) name
          */

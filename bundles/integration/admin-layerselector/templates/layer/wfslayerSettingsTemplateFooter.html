@@ -41,7 +41,27 @@
 
     </div>
 </div>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-resolveDepth" class="add-class-label"
+               title="<%= instance.getLocalization('admin').resolveDepth %>"><%=
+            instance.getLocalization('admin').resolveDepth %></label>
+    </div>
+    <div class="add-layer-input-area adjacent">
+        <div class="input-controls">
 
+            <input
+                    type="checkbox"
+                    id="add-layer-resolve-depth"
+                    class="add-class-input"
+                    name="resolveDepth"
+                    placeholder="placeholder"
+            <% if (model.isResolveDepth()) { %>checked<% } %>
+            />
+        </div>
+
+    </div>
+</div>
 
 <!-- button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
 
