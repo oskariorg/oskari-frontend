@@ -163,6 +163,17 @@
             }
         }
     }, {
+        "bundlename" : "feedbackService",
+        "bundleinstancename" : "feedbackService",
+        "metadata" : {
+            "Import-Bundle" : {
+                "feedbackService" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    },
+        {
         "bundlename" : "rpc",
         "bundleinstancename" : "rpc",
         "metadata" : {
