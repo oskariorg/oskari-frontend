@@ -367,14 +367,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         getPluginIndex: function(){
             return this._index;
-        },
-        /**
-         * Gets plugin mobile position.
-         * @method  @public getMobilePosition
-         * @return {String} top|bottom
-         */
-        getMobilePosition: function(){
-            return this._mobilePosition;
         }
     }, {
         /**
