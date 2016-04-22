@@ -16,8 +16,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
     addToolButton: function (pId, pGroup, pConfig) {
         var me = this;
-
-
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
             me.sandbox.printDebug("All parameters must be defined in AddToolButtonRequest");

@@ -17,7 +17,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin';
         me._defaultLocation = 'top left';
-        me._index = 1;
+        me._index = 10;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
     }, {
@@ -173,14 +173,15 @@ Oskari.clazz.define(
 
             if (mapInMobileMode) {
                 var mobileDivElement = me.getMapModule().getMobileDiv();
-                mobileDivElement.append(me._element[0]);
+                // FIXME is index is not first then this fails
+                mobileDivElement.prepend(me._element[0]);
                 me._uiMode = "mobile";
             } else {
                 me._ctl = me._createControlAdapter(me._element);
                 if (me._ctl) {
                     me.getMapModule().addMapControl(me._pluginName, me._ctl);
                 }
-                
+
                 me.getMapModule().setMapControlPlugin(
                     me._element,
                     me.getLocation(),

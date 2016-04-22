@@ -183,35 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     'background-image': 'url("' + bgImg + '")'
                 });
             }
-        },
-
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         */
-        createPluginUI: function (mapInMobileMode) {
-            var me = this;
-            /*
-            //remove old element
-            if (me._element) {
-                me.getMapModule().removeMapControlPlugin(
-                    me._element,
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-            }
-
-            if (mapInMobileMode) {
-                var mobileDivElement = me.getMapModule().getMobileDiv();
-                me.getMapModule().getMobileToolbar();
-                me._uiMode = "mobile";
-            } else {
-                
-                me._uiMode = "desktop";
-            }*/
-        },
-        // me.getMapModule().getMobileToolbar();
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

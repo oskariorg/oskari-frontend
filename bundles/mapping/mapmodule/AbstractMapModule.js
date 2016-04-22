@@ -178,7 +178,7 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
 
-            this.startPlugins();
+            me.startPlugins();
             this.updateCurrentState();
             this.started = this._startImpl();
         },
@@ -849,35 +849,35 @@ Oskari.clazz.define(
 
         getMobileToolbar: function () {
             var me = this;
-
             if (!me._mobileToolbar) {
-                me._toolbarContent = me.getMobileDiv().append('<div class=".mobileToolbarContent"></div>');
-                me.createMobileToolbar();
-
+                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+                me._createMobileToolbar();
             }
             return me._mobileToolbarId;
         },
 
-        createMobileToolbar: function () {
+        _createMobileToolbar: function () {
             var me = this,
+                request,
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
 
-            if (me._mobileToolbarId && (me._toolbarContent) && builder !== null && builder !== undefined) {
+            if (me._mobileToolbarId && (me._toolbarContent) && builder) {
+                me._mobileToolbar = true;
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
-                sandbox.requestByName(
-                    me,
-                    'Toolbar.ToolbarRequest',
-                    [
+                request = builder(
                         me._mobileToolbarId,
                         'add',
                         {
+                            title: 'MobileTools',
                             show: true,
                             toolbarContainer: me._toolbarContent
                         }
-                    ]
                 );
+                sandbox.request(me.getName(), request);
+
             }
         },
         
@@ -889,7 +889,7 @@ Oskari.clazz.define(
             return this._isInMobileMode;
         },
 
-        _handleMapSizeChanges: function (newSize) {
+        _handleMapSizeChanges: function (newSize, pluginName) {
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
@@ -903,22 +903,13 @@ Oskari.clazz.define(
                 me.setMobileMode(false);
                 mobileDiv.hide();
             }
-            
-            /*
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    var plugin = this._pluginInstances[pluginName];
-                }
-            }
-            */
 
             if (modeChanged) {
-
-                // TODO handle index/priority
-                _.each(me._pluginInstances, function(plugin) {
+                var sortedList = _.sortBy(me._pluginInstances, '_index');
+                _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.createPluginUI === 'function') {
                         var index = plugin.getIndex();
-                        plugin.createPluginUI(me.getMobileMode());
+                        plugin.createPluginUI(me.getMobileMode());                
                     }
                 });
             }

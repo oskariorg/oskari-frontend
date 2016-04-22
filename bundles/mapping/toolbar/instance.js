@@ -197,7 +197,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         getToolbarContainer: function (ptbid, data) {
             var tbid = ptbid || 'default';
             var c = this.containers[tbid];
-
             if (c === undefined && this.menutoolbarcontainer && !data.toolbarContainer) {
                 c = this.createMenuToolbarContainer(tbid, data);
             } else if ((c === undefined || c.parents('body').length === 0) && data && data.toolbarContainer) {
