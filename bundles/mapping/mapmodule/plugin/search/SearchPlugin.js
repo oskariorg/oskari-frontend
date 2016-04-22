@@ -164,6 +164,7 @@ Oskari.clazz.define(
             var me = this;
             //remove old element
             if (me._element) {
+                // FIXME this remove also handlers so if want search to work then need add search handlers also different way...
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
                     me.inLayerToolsEditMode(),
