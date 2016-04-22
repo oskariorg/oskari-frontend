@@ -862,7 +862,6 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
-                debugger;
 
             if (me._mobileToolbarId && (me._toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured
@@ -905,18 +904,20 @@ Oskari.clazz.define(
                 mobileDiv.hide();
             }
             
+            /*
             for (var pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName)) {
                     var plugin = this._pluginInstances[pluginName];
                 }
             }
+            */
 
             if (modeChanged) {
 
                 // TODO handle index/priority
                 _.each(me._pluginInstances, function(plugin) {
-                    if (plugin && typeof plugin.createPluginUI === 'function' && plugin.hasUI()) {
-                        var index = plugin.getPluginIndex();
+                    if (plugin && typeof plugin.createPluginUI === 'function') {
+                        var index = plugin.getIndex();
                         plugin.createPluginUI(me.getMobileMode());
                     }
                 });

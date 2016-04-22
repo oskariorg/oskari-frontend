@@ -180,6 +180,7 @@ Oskari.clazz.define(
                 if (me._ctl) {
                     me.getMapModule().addMapControl(me._pluginName, me._ctl);
                 }
+                
                 me.getMapModule().setMapControlPlugin(
                     me._element,
                     me.getLocation(),

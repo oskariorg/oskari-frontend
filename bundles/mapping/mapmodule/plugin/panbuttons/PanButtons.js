@@ -192,6 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          */
         createPluginUI: function (mapInMobileMode) {
             var me = this;
+            /*
             //remove old element
             if (me._element) {
                 me.getMapModule().removeMapControlPlugin(
@@ -208,7 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             } else {
                 
                 me._uiMode = "desktop";
-            }
+            }*/
         },
         // me.getMapModule().getMobileToolbar();
     }, {

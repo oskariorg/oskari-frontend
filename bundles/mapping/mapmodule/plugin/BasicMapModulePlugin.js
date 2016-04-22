@@ -14,8 +14,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._visible = true;
         // plugin index, override this. Smaller number = first plugin, bigger number = latest
         this._index = 1000;
-        // Mobile position, top|bottom, override this
-        this._mobilePosition;
         // ui odes desktop|mobile
         this._uiMode = 'desktop';
     }, {
@@ -34,6 +32,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var isMapInMobileMode = me.getMapModule().getMobileMode();
 
             me._element = me._createControlElement();
+            me._ctl = me._createControlAdapter(me._element);
+            if(me._ctl) {
+                me.getMapModule().addMapControl(me._pluginName, me._ctl);
+            }
             if (me._element) {
                 me._element.attr('data-clazz', me.getClazz());
             }
@@ -42,8 +44,15 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             // There's a possibility these were set before plugin was started.
             me.setEnabled(me._enabled);
             me.setVisible(me._visible);
+            if (me._element) {
+                me._element.attr('data-clazz', me.getClazz());
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+            }
 
-            //TODO: when ready, remove me._createPluginUI
             if (me._element && me.createPluginUI) {
                 me.createPluginUI(isMapInMobileMode);
             }
@@ -155,11 +164,15 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             
             me._config.location.classes = location;
             if (el) {
-                me.getMapModule().setMapControlPlugin(
-                    el,
-                    location,
-                    me.getIndex()
-                );
+                try{
+                    me.getMapModule().setMapControlPlugin(
+                        el,
+                        location,
+                        me.getIndex()
+                    );
+                } catch(e){
+                    me.getSandbox().printWarn('"' + me.getName() + '" ', e);
+                }
             }
         },
 
@@ -358,15 +371,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         createPluginUI: function(mapInMobileMode) {
             return;
-        },
-
-        /**
-         * Gets plugin index. Used sorting plugins.
-         * @method  @public getPluginIndex 
-         * @return {Integer} plugin index
-         */
-        getPluginIndex: function(){
-            return this._index;
         }
     }, {
         /**
