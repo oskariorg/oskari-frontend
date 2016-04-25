@@ -886,10 +886,11 @@ define([
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
                 var layerName = current.attr('data-layername'),
-                    additionalId = current.attr('data-additionalId');
+                    additionalId = current.attr('data-additionalId'),
+                    title = current.text();
                 if (layerName) {
                     // actual layer node -> populate model
-                    me.model.setupCapabilities(layerName, null, additionalId);
+                    me.model.setupCapabilities(layerName, null, additionalId, title);
                 } else {
                     // toggle class to hide submenu
                     current.toggleClass('closed');
