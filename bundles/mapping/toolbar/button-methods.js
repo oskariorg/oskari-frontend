@@ -305,10 +305,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
+
         if (this.buttons[prefixedGroup]) {
             var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
                 group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
             if (pId) {
+                if(this.buttons[prefixedGroup][pId].children) {
+                    this.buttons[prefixedGroup][pId].children.remove();
+                }
                 var button = group.find('div.tool[tool=' + pId + ']');
                 button.remove();
                 this.buttons[prefixedGroup][pId] = null;

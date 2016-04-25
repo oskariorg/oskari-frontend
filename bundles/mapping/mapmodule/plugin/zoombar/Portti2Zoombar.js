@@ -46,26 +46,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         if(currentZoom<maxZoomLevel) {
                             me.getMapModule().setZoomLevel(currentZoom+1);
                         }
-                    },
+                    }
                     //toggleChangeIcon: true,
                     //activeColor: '#E6E6E6'
-                    childPosition: 'bottom'
+                    //childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
                     iconCls: 'icon-minimize',
                     tooltip: '',
                     sticky: true,
                     show: true,
-                    callback: function () {
+                    callback: function (el) {
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
                         if(currentZoom>0) {
                             me.getMapModule().setZoomLevel(currentZoom-1);
                         }    
-                    },
+                    }
                     //toggleChangeIcon: true,
                     //activeColor: '#E6E6E6',
-                    childPosition: 'bottom'
+                    //childPosition: 'bottom'
                 }
             },
             buttonGroup: 'mobile-zoombar'
@@ -422,18 +422,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 delete me._element;
                 me._slider.remove();
                 delete me._slider;
+            }
 
-                
-                var toolbar = me.getMapModule().getMobileToolbar();
-                var reqBuilder = sandbox.getRequestBuilder(
-                    'Toolbar.RemoveToolButtonRequest'
-                );
-                if (reqBuilder) {
-                    for (var tool in me._mobileDefs.buttons) {
-                        var buttonConf = me._mobileDefs.buttons[tool];
-                        buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
-                    }
+            var toolbar = me.getMapModule().getMobileToolbar();
+            var reqBuilder = sandbox.getRequestBuilder(
+                'Toolbar.RemoveToolButtonRequest'
+            );
+            if (reqBuilder) {
+                for (var tool in me._mobileDefs.buttons) {
+                    var buttonConf = me._mobileDefs.buttons[tool];
+                    buttonConf.toolbarid = toolbar;
+                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
                 }
             }
 
