@@ -36,6 +36,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
 
         if (me.buttons[prefixedGroup][pId]) {
+            me._checkToolChilderPosition(pId, pGroup, pConfig);
             // button already added, dont add again
             return;
         }
@@ -103,7 +104,57 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (pConfig.enabled === false) {
             button.addClass('disabled');
         }
+
+        if(pConfig.childPosition) {
+            me._createButtonChildren(pId, pGroup, button, pConfig);
+            me._checkToolChilderPosition(pId, pGroup, pConfig);
+        }
+        
     },
+
+    _checkToolChilderPosition: function(pId, pGroup, pConfig){
+        var me = this,
+            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
+            btn = this.buttons[prefixedGroup][pId],
+            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+            toolbarParent = toolbar.parents('.oskariui-center').find('div').first(),
+            offset = toolbarParent.offset(),
+            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']'),
+            button = group.find('div.tool[tool=' + pId + ']');
+
+        if(typeof btn.children === 'undefined' || !pConfig.childPosition) {
+            return;
+        }
+
+        switch(pConfig.childPosition){
+            case 'bottom':
+                btn.children.css({
+                    position: 'absolute',
+                    'background-color': btn.activeColor || '#ffffff',
+                    top: offset.top + toolbarParent.outerHeight() + 'px',
+                    left: button.offset().left
+                });
+                break;
+        }
+    },
+    _createButtonChildren: function(pId, pGroup, button, pConfig){
+        var me = this,
+            buttonChildren = jQuery('<div class="tool-children"></div>'),
+            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+            toolbarTopParent = toolbar.parents('.oskariui-center'),
+            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
+            btn = this.buttons[prefixedGroup][pId],
+            children = buttonChildren.clone();
+
+        children.attr({
+            'data-button-id': pId,
+            'data-group-id': pGroup
+        });        
+        toolbarTopParent.append(children);
+        children.hide();
+        btn.children = children;
+    },
+
     /**
      * @method _clickButton
      * Handles click of a toolbar button and can be used to click a button
@@ -133,9 +184,20 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             toolbar,
             group,
             button;
+
         if (btn.enabled === false) {
             return;
         }
+
+        toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+        group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+        button = group.find('div.tool[tool=' + pId + ']');
+
+
+        if(typeof btn.selected === 'undefined') {
+            btn.selected = button.hasClass('selected');
+        }
+
         // FIXME use ===
         if (btn.sticky === true) {
             // notify components that tool has changed
@@ -145,9 +207,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             this._removeToolSelections(pGroup);
 
             // highlight the button
-            toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-            group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
-            button = group.find('div.tool[tool=' + pId + ']');
             button.addClass('selected');
 
             this.selectedButton = {
@@ -155,21 +214,68 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 group: pGroup
             };
         }
+
         //toggle selection of this button
         if (btn.toggleSelection) {
             // highlight the button
-            toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-            group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
-            button = group.find('div.tool[tool=' + pId + ']');
-
             if (button.hasClass('selected')) {
                 button.removeClass('selected');
+                btn.selected = false; 
             } else {
                 button.addClass('selected');
+                btn.selected = true;
             }
         }
 
-        btn.callback();
+
+        if(btn.activeColor) {
+            var tools = group.find('div.tool');
+            tools.css('background-color', '');
+
+            if(btn.selected) {
+                button.css('background-color', '');
+            }
+            else {
+                button.css('background-color', btn.activeColor);
+            }
+        }
+
+
+        if(btn.toggleChangeIcon) {
+            var tools = group.find('div.tool');
+            this._deactiveTools(pId,pGroup);
+            var isLightColor = Oskari.util.isLightColor(btn.activeColor);
+            if (btn.selected && isLightColor) {
+                button.addClass(btn.iconCls + '-toggle-light');
+            } else {
+                button.addClass(btn.iconCls + '-toggle-dark');
+            }
+        }
+
+        btn.callback(btn.children);
+    },
+
+    _deactiveTools: function(pId,pGroup){
+        //var btn = this.buttons[pGroup][pId];
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+        var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+        var button = group.find('div.tool[tool=' + pId + ']');
+        var tools = group.find('div.tool');
+        for(var id in this.buttons[pGroup]) {
+            var btn = this.buttons[pGroup][id]
+            tools.removeClass(btn.iconCls + '-toggle-light');
+            tools.removeClass(btn.iconCls + '-toggle-dark');
+            
+            if(btn.activeColor && pId !== id) {
+                var otherGroupButton = group.find('div.tool[tool=' + id + ']');
+                var isLightColor = Oskari.util.isLightColor(btn.activeColor);
+                if (isLightColor) {
+                    otherGroupButton.addClass(btn.iconCls + '-toggle-light');
+                } else {
+                    otherGroupButton.addClass(btn.iconCls + '-toggle-dark');
+                }
+            }            
+        }
     },
     /**
      * @method _removeToolSelections

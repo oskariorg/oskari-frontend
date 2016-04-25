@@ -1,41 +1,3 @@
-// FIXME remove this to right place
-if(Oskari && Oskari.util){
-    Oskari.util.getColorBrightness = function(color){
-        var r,g,b,brightness;
-
-        if (color.match(/^rgb/)) {
-          color = color.match(/rgba?\(([^)]+)\)/)[1];
-          color = color.split(/ *, */).map(Number);
-          r = color[0];
-          g = color[1];
-          b = color[2];
-        } else if ('#' == color[0] && 7 == color.length) {
-          r = parseInt(color.slice(1, 3), 16);
-          g = parseInt(color.slice(3, 5), 16);
-          b = parseInt(color.slice(5, 7), 16);
-        } else if ('#' == color[0] && 4 == color.length) {
-          r = parseInt(color[1] + color[1], 16);
-          g = parseInt(color[2] + color[2], 16);
-          b = parseInt(color[3] + color[3], 16);
-        }
-
-        brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-        if (brightness < 125) {
-          return 'dark';
-        } else {
-          return 'light';
-        }
-    };
-    Oskari.util.isDarkColor = function(color){
-        var me = this;
-        return me.getColorBrightness(color) === 'dark';
-    };
-    Oskari.util.isLightColor = function(color){
-        return me.getColorBrightness(color) === 'light';
-    };
-}
-
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
  * Zoombar implementation with jQuery UI and refined graphics. Location can be configured,
@@ -70,21 +32,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._slider = null;
         this._suppressEvents = false;
         
-        this.mobileDefs = {
+        this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
                     iconCls: 'icon-maximize',
                     tooltip: '',
                     sticky: true,
                     show: true,
-                    callback: function () {
+                    callback: function (el) {
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
                         var maxZoomLevel = mapModule.getMaxZoomLevel();
                         if(currentZoom<maxZoomLevel) {
                             me.getMapModule().setZoomLevel(currentZoom+1);
-                        }                        
-                    }
+                        }
+                    },
+                    //toggleChangeIcon: true,
+                    //activeColor: '#E6E6E6'
+                    childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
                     iconCls: 'icon-minimize',
@@ -97,7 +62,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         if(currentZoom>0) {
                             me.getMapModule().setZoomLevel(currentZoom-1);
                         }    
-                    }
+                    },
+                    //toggleChangeIcon: true,
+                    //activeColor: '#E6E6E6',
+                    childPosition: 'bottom'
                 }
             },
             buttonGroup: 'mobile-zoombar'
@@ -310,44 +278,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             };
         },
 
-        /**
-         * @method  @private _handleMapSizeChanges handle map size changes
-         * @param  {Object} size {width:100, height:200}
-         * @param {Object} el jQuery element
-         */
-        _handleMapSizeChanges: function(size, el){
-            return;
-            var me = this,
-                div = el || this.getElement(),
-                plus = div.find('.pzbDiv-plus'),
-                minus = div.find('.pzbDiv-minus'),
-                slider = div.find('div.slider');
-
-            if(size.height < me._mobileDefs.height) {
-                slider.hide();
-                plus.css({
-                    'background-image': 'url("' + this.getImagePath() + 'zoombar_plus_mobile.png")',
-                    'width': 43,
-                    'height': 43
-                });
-
-                minus.css({
-                    'background-image': 'url("' + this.getImagePath() + 'zoombar_minus_mobile.png")',
-                    'width': 43,
-                    'height': 43
-                });
-                div.width(43);
-
-            }
-            else {
-                slider.show();
-                plus.css(me._desktopStyles.plus.css);
-                minus.css(me._desktopStyles.minus.css);
-                div.width(18);
-            }
-
-        },
-
         _setLayerToolsEditModeImpl: function () {
             if (this._uiMode === 'desktop' && this._slider) {
                 this._slider.slider(
@@ -470,8 +400,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'height': sliderHeight + 'px'
                 });
             }
-
-            me._handleMapSizeChanges(mapModule.getSize(), div);
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -494,6 +422,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 delete me._element;
                 me._slider.remove();
                 delete me._slider;
+
+                
+                var toolbar = me.getMapModule().getMobileToolbar();
+                var reqBuilder = sandbox.getRequestBuilder(
+                    'Toolbar.RemoveToolButtonRequest'
+                );
+                if (reqBuilder) {
+                    for (var tool in me._mobileDefs.buttons) {
+                        var buttonConf = me._mobileDefs.buttons[tool];
+                        buttonConf.toolbarid = toolbar;
+                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
+                    }
+                }
             }
 
             if (mapInMobileMode) {                
@@ -503,10 +444,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 );
 
                 if (reqBuilder) {
-                    for (var tool in me.mobileDefs.buttons) {
-                        var buttonConf = me.mobileDefs.buttons[tool];
+                    for (var tool in me._mobileDefs.buttons) {
+                        var buttonConf = me._mobileDefs.buttons[tool];
                         buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me.mobileDefs.buttonGroup, buttonConf));
+                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
                     }
                 }
                 

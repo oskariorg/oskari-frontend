@@ -849,22 +849,23 @@ Oskari.clazz.define(
 
         getMobileToolbar: function () {
             var me = this;
-            if (!me._mobileToolbar) {
-                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
-                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+            if (!me._mobileToolbar) {                
                 me._createMobileToolbar();
             }
             return me._mobileToolbarId;
         },
 
+        // FIXME When calling toolbar first time when map is already mobile mode this not working because toolbar requests and their handler are not ready.
         _createMobileToolbar: function () {
             var me = this,
                 request,
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
 
-            if (me._mobileToolbarId && (me._toolbarContent) && builder) {
+            if (me._mobileToolbarId && builder) {
                 me._mobileToolbar = true;
+                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
                 request = builder(
