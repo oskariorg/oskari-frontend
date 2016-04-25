@@ -310,7 +310,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
                 group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
             if (pId) {
-                if(this.buttons[prefixedGroup][pId].children) {
+                if(this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
                     this.buttons[prefixedGroup][pId].children.remove();
                 }
                 var button = group.find('div.tool[tool=' + pId + ']');
