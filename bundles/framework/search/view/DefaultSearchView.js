@@ -386,33 +386,41 @@ Oskari.clazz.define(
             );
 
             var loc = this.instance.getLocalization('resultBox'),
-                resultActions = {},
+                resultActions = [],
+                resultAction,
                 action;
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
-                    resultActions['name'] = name;
-                    resultActions['type'] = 'button';
-                    resultActions['action'] = action(result);
+                    resultAction = {};
+                    resultAction['name'] = name;
+                    resultAction['type'] = 'link';
+                    resultAction['action'] = action(result);
+                    resultAction['group'] = 1;
+                    resultActions.push(resultAction);
                 }
             }
 
+            var closeAction = {};
+            closeAction['name'] = loc.close;
+            closeAction['type'] = 'link';
+            closeAction['group'] = 1;
+            closeAction['action'] = function () {
+                var rN = 'InfoBox.HideInfoBoxRequest',
+                    rB = sandbox.getRequestBuilder(rN),
+                    request = rB(popupId);
+                sandbox.request(me.instance.getName(), request);
+            };
+            resultActions.push(closeAction);
+
             var contentItem = {
                 html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
-                actions: [resultActions]
+                actions: resultActions
             };
             var content = [contentItem];
 
             var options = {
                 hidePrevious: true
-            };
-
-            /* impl smashes action key to UI - we'll have to localize that here */
-            contentItem.actions[loc.close] = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = sandbox.getRequestBuilder(rN),
-                    request = rB(popupId);
-                sandbox.request(me.instance.getName(), request);
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
