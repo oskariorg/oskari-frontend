@@ -107,12 +107,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         if(pConfig.childPosition) {
             me._createButtonChildren(pId, pGroup, button, pConfig);
-            me._checkToolChilderPosition(pId, pGroup, pConfig);
+            me._checkToolChildrenPosition(pId, pGroup, pConfig);
         }
         
     },
 
-    _checkToolChilderPosition: function(pId, pGroup, pConfig){
+    _checkToolChildrenPosition: function(pId, pGroup, pConfig){
         var me = this,
             prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
             btn = this.buttons[prefixedGroup][pId],

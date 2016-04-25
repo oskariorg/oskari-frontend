@@ -435,7 +435,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
                 }
             }
-            
+
             if (mapInMobileMode) {                
                 var toolbar = me.getMapModule().getMobileToolbar();
                 var reqBuilder = sandbox.getRequestBuilder(
