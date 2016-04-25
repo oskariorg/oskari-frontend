@@ -140,6 +140,9 @@ Oskari.clazz.define(
                 colourScheme = options.colourScheme,
                 font = options.font;
 
+                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+
+
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
@@ -173,6 +176,8 @@ Oskari.clazz.define(
                         delete me._popups[id];
                     }
                 });
+                //clear the ugly backgroundcolor from the popup content
+                jQuery(popup.dialog).css('background-color','inherit');
             } else {
                 var popupType = "desktop";
 
