@@ -706,31 +706,29 @@ Oskari.clazz.define(
                     .addClass(colourScheme.iconCls);
             }
         },
-
         _handleMapSizeChanges: function (width, height) {
             var me = this,
                 pid,
                 popup;
-
             for (pid in me._popups) {
-                if (latestPopupToMobileMode) {
-                    me.close(pid);
-                }
                 if (me._popups.hasOwnProperty(pid)) {
                     popup = this._popups[pid];
-                    //close mobile popup and open infobox if screen is wide enough
-                    if (popup.isInMobileMode && width > popup.options.mobileBreakpoints.width || popup.isInMobileMode && height > popup.options.mobileBreakpoints.height) {
-                        popup.popup.close();
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                    } else if (!popup.isInMobileMode && width < popup.options.mobileBreakpoints.width || !popup.isInMobileMode && height < popup.options.mobileBreakpoints.height) {
-                        me.close(pid);
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                        var latestPopupToMobileMode = true;
+                    if (popup.isInMobileMode) {
+                        //are we moving away from the mobile mode? -> close and rerender.
+                        if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            popup.popup.close();
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
+                    } else {
+                        //are we moving into the mobile mode? -> close old and rerender
+                        if (me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            me.close(pid);
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
                     }
                 }
             }
         },
-
         /**
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
