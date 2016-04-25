@@ -13,11 +13,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
      *
      */
     function (config) {
+        var me = this;
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
         this._defaultLocation = 'top right';
-        this._index = 0;
+        this._index = 20;
         this._name = 'PanButtons';
+
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-reset': {
+                    iconCls: 'tool-reset',
+                    tooltip: '',
+                    sticky: true,
+                    show: true,
+                    callback: function (el) {
+                        if (!me.inLayerToolsEditMode()) {
+                            var requestBuilder = me.getSandbox().getRequestBuilder(
+                                'StateHandler.SetStateRequest'
+                            );
+                            if (requestBuilder) {
+                                me.getSandbox().request(me, requestBuilder());
+                            } else {
+                                me.getSandbox().resetState();
+                            }
+                        }
+                    }
+                }
+            },
+            buttonGroup: 'mobile-zoombar'
+        };
     }, {
         /**
          * @private @method _createControlElement
@@ -182,6 +207,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panButtons.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
+            }
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         */
+        createPluginUI: function (mapInMobileMode) {
+            var me = this,
+                sandbox = me.getSandbox();           
+
+            //remove old element
+            if (me._element) {
+                me.getMapModule().removeMapControlPlugin(
+                    me._element,
+                    me.inLayerToolsEditMode(),
+                    me._uiMode
+                );
+                me._element.remove();
+                delete me._element;
+            }
+
+            var toolbar = me.getMapModule().getMobileToolbar();
+            var reqBuilder = sandbox.getRequestBuilder(
+                'Toolbar.RemoveToolButtonRequest'
+            );
+            if (reqBuilder) {
+                for (var tool in me._mobileDefs.buttons) {
+                    var buttonConf = me._mobileDefs.buttons[tool];
+                    buttonConf.toolbarid = toolbar;
+                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
+                }
+            }
+            
+            if (mapInMobileMode) {                
+                var toolbar = me.getMapModule().getMobileToolbar();
+                var reqBuilder = sandbox.getRequestBuilder(
+                    'Toolbar.AddToolButtonRequest'
+                );
+
+                if (reqBuilder) {
+                    for (var tool in me._mobileDefs.buttons) {
+                        var buttonConf = me._mobileDefs.buttons[tool];
+                        buttonConf.toolbarid = toolbar;
+                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
+                    }
+                }
+                
+                me._uiMode = 'mobile';
+            } else {                                
+                me._element = me._createControlElement();
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+                me._uiMode = 'desktop';
             }
         }
     }, {

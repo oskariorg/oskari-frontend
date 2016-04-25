@@ -18,7 +18,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 30;
+        me._index = 40;
         me._name = 'MyLocationPlugin';
 
         me._mobileDefs = {
@@ -144,8 +144,7 @@ Oskari.clazz.define(
          */
         createPluginUI: function (mapInMobileMode) {
             var me = this,
-                sandbox = me.getSandbox();
-            
+                sandbox = me.getSandbox();           
 
             //remove old element
             if (me._element) {

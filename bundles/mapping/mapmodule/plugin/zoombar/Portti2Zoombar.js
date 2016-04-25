@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar';
         this._defaultLocation = 'top right';
-        this._index = 20;
+        this._index = 30;
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
