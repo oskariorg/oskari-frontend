@@ -184,14 +184,14 @@ Oskari.clazz.define(
                 popup.createCloseIcon();
                 popup.showInMobileMode();
 
-                if (colourScheme) {
-                    popup.setColourScheme(colourScheme);
-                }
-
                 if (font) {
                     popup.setFont(font);
                 }
                 popup.show(popupTitle, popupContent);
+
+                if (colourScheme) {
+                    popup.setColourScheme(colourScheme);
+                }
                 popup.onClose(function () {
                     if (me._popups[id] && me._popups[id].type === "mobile") {
                         delete me._popups[id];
@@ -699,12 +699,25 @@ Oskari.clazz.define(
             featureHeader.css({
                 'color': colourScheme.headerColour
             });
-
             // AH-1075 colourScheme.iconCls might not be set, so check first.
             if (colourScheme.iconCls) {
                 closeButton
                     .removeClass('icon-close-white icon-close')
                     .addClass(colourScheme.iconCls);
+            }
+
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                if (colourScheme.linkColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
             }
         },
         _handleMapSizeChanges: function (width, height) {
