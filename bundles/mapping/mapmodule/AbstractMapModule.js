@@ -910,7 +910,7 @@ Oskari.clazz.define(
                 _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.createPluginUI === 'function') {
                         var index = plugin.getIndex();
-                        plugin.createPluginUI(me.getMobileMode());                
+                        plugin.createPluginUI(me.getMobileMode(), modeChanged);                
                     }
                 });
             }

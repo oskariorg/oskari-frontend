@@ -405,13 +405,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function(mapInMobileMode) {
+        createPluginUI: function(mapInMobileMode, modeChanged) {
             var me = this,
                 sandbox = me.getSandbox();            
 
             //remove old element
-            if (me._element) {
+            if (modeChanged && me._element) {
                 
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
