@@ -24,16 +24,16 @@ Oskari.clazz.define(
         me._mobileDefs = {
             buttons:  {
                 'mobile-my-location': {
-                    iconCls: 'mobile-my-location-light',
+                    iconCls: 'mobile-my-location-light mobiletoolbar',
                     tooltip: '',
-                    sticky: true,
+                    sticky: false,
                     show: true,
                     callback: function (el) {
                         me._setupLocation();
                     }
                 }
             },
-            buttonGroup: 'mobile-zoombar'
+            buttonGroup: 'mobile-toolbar'
         };
     }, {
         /**

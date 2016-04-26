@@ -320,6 +320,14 @@ div.mapplugins {
     padding: 8px;
     line-height: 10px;
 
+    .mobiletoolbar {
+        margin-right: 6px;
+        margin-top: 6px;
+        &:hover {
+            background-color: transparent !important;
+        }
+    }
+
     input[type=text] {
         height:10px;
     }

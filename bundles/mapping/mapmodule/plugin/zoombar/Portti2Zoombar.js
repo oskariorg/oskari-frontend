@@ -35,9 +35,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
-                    iconCls: 'mobile-zoom-in-light',
+                    iconCls: 'mobile-zoom-in-light mobiletoolbar',
                     tooltip: '',
-                    sticky: true,
+                    sticky: false,
                     show: true,
                     callback: function (el) {
                         var mapModule = me.getMapModule();
@@ -52,9 +52,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     //childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
-                    iconCls: 'mobile-zoom-out-light',
+                    iconCls: 'mobile-zoom-out-light mobiletoolbar',
                     tooltip: '',
-                    sticky: true,
+                    sticky: false,
                     show: true,
                     callback: function (el) {
                         var mapModule = me.getMapModule();
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     //childPosition: 'bottom'
                 }
             },
-            buttonGroup: 'mobile-zoombar'
+            buttonGroup: 'mobile-toolbar'
         };
 
 

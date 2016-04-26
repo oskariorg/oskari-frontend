@@ -157,6 +157,12 @@ div.mapplugins {
   display: none;
   padding: 8px;
   line-height: 10px; }
+  .mobileToolbarDiv .mobiletoolbar {
+    margin-top: 6px;
+    margin-right: 6px;
+  }
+  .mobileToolbarDiv .mobiletoolbar:hover {
+      background-color: transparent !important; }
   .mobileToolbarDiv input[type=text] {
     height: 10px; }
 
