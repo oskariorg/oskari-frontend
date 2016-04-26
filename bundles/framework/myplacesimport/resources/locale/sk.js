@@ -3,77 +3,77 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Dataset Import",
-        "desc": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml).",
+        "title": "Import Datasetu",
+        "desc": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "Import your own dataset"
+            "tooltip": "Importujte vaše vlastné datasety."
         },
         "flyout": {
-            "title": "Dataset Import",
-            "description": "You can import your own datasets in shp-, gpx- or mif/mid file format in a zip file or in kmz file format (zipped kml).",
-            "help": "Select a file from your computer or give a link to the file that contains your dataset. The file can be in the shp, zip or kml/kmz format. You can create zip files from shapefiles by zipping the files with suffix shp, shx, dbf and prj to the same zip file. \nAlso kml/kmz files from Google maps can be zipped same way.\nMif/mid data must be in current map CRS - look current CRS under zoombar",
+            "title": "Import Datasetu",
+            "description": "Načítajte dataset z vášho počítača ako zip súbor. Dataset musí byť v jednom z nasledovných súborových formátov: Shapefile (*.shp, *.shx, *dbf, *prj) <br/>\r\nGPS-siirtotiedosto (*.gpx) <br/>\r\nMapInfo (*.mif, *mid) <br/>\r\nGoogle Map (*.kml, *.kmz) <br/>\r\nProsím uistite sa, že všetky súbory sú v správnom referenčnom súradnicovom systéme.",
+            "help": "Načítajte dataset z vášho počítača ako zip súbor. Prosím uistite sa, že všetky súbory sú v správnom súborovom formáte a v správnom referenčnom súradnicovom systéme.",
             "actions": {
-                "cancel": "Cancel",
-                "next": "Next"
+                "cancel": "Zrušiť",
+                "next": "Ďalej"
             },
             "file": {
-                "submit": "Send",
+                "submit": "Import",
                 "fileOverSizeError": {
-                    "title": "Error",
-                    "message": "Your dataset is too large. Maximun size of the imported dataset is <xx> mb.",
-                    "close": "Close"
+                    "title": "Chyba",
+                    "message": "Vybraný súbor je príliš veľký. Môže mať maximálne <xx> mb.",
+                    "close": "Zatvoriť"
                 }
             },
             "layer": {
-                "title": "Save the dataset information:",
-                "name": "Name",
-                "desc": "Description",
-                "source": "Data source",
-                "style": "Dataset style definitions:"
+                "title": "Informácie o datasete",
+                "name": "Názov",
+                "desc": "Popis",
+                "source": "Zdroj údajov",
+                "style": "Definície štýlov"
             },
             "validations": {
                 "error": {
-                    "title": "Error",
-                    "message": "The file has not been selected and the map layer name is missing."
+                    "title": "Chyba",
+                    "message": "Dataset nebol importovaný. Súbor a názov chýba. Opravte ich a skúste to znova."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "The dataset import succeeded.",
-                    "message": "You can find the map layer from the menu \"My Data\"."
+                    "title": "Import datasetu bol úspešný",
+                    "message": "Dataset bol importovaný. Môžete ho nájsť v menu \"Moje údaje\"."
                 },
                 "failure": {
-                    "title": "The dataset import did not succeed. Please try again later."
+                    "title": "Dataset  sa nedal importovať."
                 }
             }
         },
         "tab": {
-            "title": "Datasets",
+            "title": "Datasety",
             "grid": {
-                "name": "Name",
-                "description": "Description",
-                "source": "Data source",
-                "remove": "Delete",
-                "removeButton": "Delete"
+                "name": "Názov",
+                "description": "Popis",
+                "source": "Zdroj údajov",
+                "remove": "Vymazať",
+                "removeButton": "Vymazať"
             },
-            "confirmDeleteMsg": "Do you want to delete:",
+            "confirmDeleteMsg": "Chcete vymazať dataset?",
             "buttons": {
                 "ok": "OK",
-                "cancel": "Cancel",
-                "delete": "Delete"
+                "cancel": "Zrušiť",
+                "delete": "Vymazať"
             },
             "notification": {
-                "deletedTitle": "Dataset Delete",
-                "deletedMsg": "The dataset has been deleted."
+                "deletedTitle": "Vymazať dataset",
+                "deletedMsg": "Dataset bol vymazaný."
             },
             "error": {
-                "title": "Error!",
-                "generic": "System error occurred. Please try again later."
+                "title": "Chyba",
+                "generic": "Vyskytla sa chyba systému."
             }
         },
         "layer": {
-            "organization": "Own Datasets",
-            "inspire": "Own Datasets"
+            "organization": "Vlastné datasety",
+            "inspire": "Vlastné datasety"
         }
     }
 }

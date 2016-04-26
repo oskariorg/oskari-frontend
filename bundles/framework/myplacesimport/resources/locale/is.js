@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Flytja inn gagnasett",
         "desc": "Hægt er að flytja inn eigin gagnasett í shp, gpx eða mif/mid skráarsniði í zip skrá eða kmz skráarsniði (zippað kml).",
-        "help": "Veldu skrá úr tölvunni þinni eða gefðu hlekk á skrána sem inniheldur gagnasettið þitt. Skráin getur verið á shp, zip eða kml/kmz sniði. Þú getur búið  til zip skrá úr shapeskrám með því að zippa skrárnar með viðskeytinu shp, shx, dbf og prj í sömu zip-skrá. Einig er hægt að zippa kml/kmz-skrár úr Google maps á sama hátt.",
         "tool": {
             "tooltip": "Flytja inn eigið gagnasett"
         },
         "flyout": {
             "title": "Flytja inn gagnasett",
             "description": "Hægt er að flytja inn eigin gagnasett í shp, gpx eða mif/mid skráarsniði í zip skrá eða kmz skráarsniði (zippað kml). Hægt er að flytja inn skrár sem innihalda allt að 5000 fitjur.",
+            "help": "Þú getur hlaðið gagnapakka úr tölvunni þinni sem zip-skrá. Vinsamlegast athugaðu að allar skrár séu á réttu skráarsniði og í réttu hnitakerfi.",
             "actions": {
                 "cancel": "Hætta",
                 "next": "Næst"
@@ -19,9 +19,9 @@ Oskari.registerLocalization(
             "file": {
                 "submit": "Senda",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "Villa",
+                    "message": "Valin skrá er of stór. Hún má ekki vera stærri en <xx> mb.",
+                    "close": "Loka"
                 }
             },
             "layer": {
@@ -52,7 +52,7 @@ Oskari.registerLocalization(
             "grid": {
                 "name": "Nafn",
                 "description": "Lýsing",
-                "source": "Gagnalind",
+                "source": "Gagnagjafi",
                 "remove": "Eyða",
                 "removeButton": "Eyða"
             },

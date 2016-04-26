@@ -3,12 +3,12 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "MapMyPlaces",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "MapMyPlaces",
         "desc": "",
-        "object-data": "NOT TRANSLATED",
+        "object-data": "Objekti info",
         "layer": {
-            "organization": "NOT TRANSLATED",
-            "inspire": "NOT TRANSLATED"
+            "organization": "My Places",
+            "inspire": "My Map Layers"
         }
     }
 }

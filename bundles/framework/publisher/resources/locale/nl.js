@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Toon de kaartlagen in het menu",
                 "info": "Selecteer achtergrondkaarten. U kunt de standaard achtergrondkaart instellen in het kaartvoorbeeldvenster.",
-                "tooltip": "De achtergrondkaart wordt getoond als de onderste laag. Wanneer u kaartlagen selecteert om te worden gebruikt als de onderste laag, dan is slechts één laag tegelijk zichtbaar en kunt u schakelen tussen deze lagen U kunt de standaard achtergrondkaart instellen in het kaartvoorbeeldvenster.",
-                "promote": "Luchtfoto's weergeven?"
+                "tooltip": "De achtergrondkaart wordt getoond als de onderste laag. Wanneer u kaartlagen selecteert om te worden gebruikt als de onderste laag, dan is slechts één laag tegelijk zichtbaar en kunt u schakelen tussen deze lagen U kunt de standaard achtergrondkaart instellen in het kaartvoorbeeldvenster."
             },
             "preview": "Voorbeeld van de kaart welke geïntegreerd gaat worden.",
             "location": "Locatie en het zoomniveau",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Je moet inloggen voordat u de functie integreren gebruikt.",
             "signup": "Log in",
-            "signupUrl": "/web/nl/login",
-            "register": "Registreer",
-            "registerUrl": "/web/nl/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registreer"
         },
         "StartView": {
             "text": "Je kunt de kaart die u zojuist hebt gemaakt, integreren op uw eigen website of de website van uw werkgever.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Toon",
             "hide": "Verberg",
             "hidden": "De kaart is tijdelijk verborgen.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publicatie toegestaan",
-                    "tooltip": "De kaartlaag kan in een geïntegreerd kaartvenster worden weergegeven en het aantal gebruikers per week kan worden beperkt."
-                }
-            }
+            "selectAsBaselayer": "Background map layer"
         },
         "layerFilter": {
             "buttons": {

@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "MapModule",
     "value": {
-        "status_update_map": "Kaardi uuendamine",
+        "status_update_map": "Laeb…",
         "zoombar_tooltip": {
             "zoomLvl-0": "Aluskaart",
             "zoomLvl-1": "Riik",
@@ -22,14 +22,14 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Kasutustingimused",
-                "dataSources": "Andmete allikad",
+                "dataSources": "Andmeallikad",
                 "layersHeader": "Kaardikihid",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": "Märksõnad"
             },
             "DataSourcePlugin": {
-                "link": "Andmete allikas",
+                "link": "Andmeallikas",
                 "popup": {
-                    "title": "Andmete allikad",
+                    "title": "Andmeallikad",
                     "content": "NOT TRANSLATED"
                 },
                 "button": {
@@ -37,74 +37,75 @@ Oskari.registerLocalization(
                 }
             },
             "LayerSelectionPlugin": {
-                "title": "Objekti andmed",
-                "chooseDefaultBaseLayer": "Vali aluskaardi kiht"
+                "title": "Kihid",
+                "chooseDefaultBaseLayer": "Vali aluskaart",
+                "chooseOtherLayers": "NOT TRANSLATED"
             },
             "SearchPlugin": {
-                "placeholder": "Leia kohad",
+                "placeholder": "Leia asukoht",
                 "search": "Leia",
                 "title": "Otsingutulemused",
                 "close": "Sulge otsingutulemused",
-                "noresults": "Otsingutulemusi ei leitud",
-                "toomanyresults": "Leiti üle 100 otsingutulemuse. Palun täpsusta otsingut.",
-                "column_name": "Name",
+                "noresults": "Otsing ei andnud tulemusi. Proovi teise otsisõnaga.",
+                "toomanyresults": "Otsing antus rohkem kui 100 vastet. Muuda otsing detailsemaks.",
+                "column_name": "Nimi",
                 "column_village": "Omavalitsus",
                 "column_type": "Tüüp"
             },
             "GetInfoPlugin": {
-                "title": "Kaardikihid",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "link": "NOT TRANSLATED",
+                "title": "Objekti info",
+                "layer": "Kaardikiht",
+                "places": "Objektid",
+                "description": "Kirjeldus",
+                "link": "Lehe aadress",
                 "name": "Nimi"
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "Liigu algvaatesse",
+                    "back": "Liigu eelmisesse vaatesse",
+                    "next": "Liigu järgmisesse vaatesse"
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "Mõõda vahemaa",
+                    "area": "Mõõda pindala"
                 }
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "NOT TRANSLATED",
-                    "clear": "NOT TRANSLATED"
+                    "add": "Marker",
+                    "clear": "Kustuta kõik markerid"
                 },
                 "form": {
-                    "title": "NOT TRANSLATED",
-                    "tooltip": "",
+                    "title": "Markeri stiil",
+                    "tooltip": "Määra markerile stiil",
                     "symbol": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Ikoon"
                     },
                     "size": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Size"
                     },
                     "color": {
-                        "label": "NOT TRANSLATED",
-                        "labelOr": "NOT TRANSLATED",
-                        "labelCustom": "NOT TRANSLATED"
+                        "label": "Colour",
+                        "labelOr": "or",
+                        "labelCustom": "Määra värv(RGB 0-255)"
                     },
                     "preview": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Eelvaade"
                     },
                     "message": {
-                        "label": "NOT TRANSLATED",
-                        "hint": "NOT TRANSLATED"
+                        "label": "Tekst kaardil",
+                        "hint": "Nimi või kirjeldus"
                     }
                 },
                 "dialog": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Marker",
+                    "message": "Määra uus asukoht markerile klikates kaardile"
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Tsentreeri kaart oma asukohale"
             }
         }
     }

@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Staðsetningarleit",
         "invalid_characters": "Leitarorð inniheldur ógilda stafi. Leyfðir stafir eru bókstafir frá a-z, einnig å, ä og ö, tölustafir, undistrik, bil, spurningarmerki og stjörnur.",
         "searchDescription": "Leita eftir örnefni, heimilisfangi eða fasteignanúmeri.",
-        "searchButton": "Leita",
         "searchAssistance": "Skrifaðu leitarorð.",
         "searchResultCount": "Leitin skilaði",
         "searchResultCount2": "niðurstöður.",

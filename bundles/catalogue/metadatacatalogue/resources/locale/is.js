@@ -47,13 +47,13 @@ Oskari.registerLocalization(
         "searching": "Leita...",
         "grid": {
             "name": "Nafn",
-            "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "Fela svæði",
+            "showBBOX": "Sýna svæði",
+            "info": "Sýna lýsigögn",
+            "remove": "Fjarlægja úr leitarniðurstöðum",
+            "rating": "Einkunnagjöf"
         },
-        "licenseText": "NOT TRANSLATED",
+        "licenseText": "Fá leyfi",
         "identificationCode": {
             "creation": "creation",
             "publication": "publication",

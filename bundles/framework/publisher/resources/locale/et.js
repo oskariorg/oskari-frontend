@@ -3,32 +3,32 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "Publisher",
     "value": {
-        "title": "Loo kaart",
-        "flyouttitle": "Loo kaart",
+        "title": "Kaartide avalikustamine",
+        "flyouttitle": "Loo lõimkaart",
         "desc": "",
         "published": {
             "title": "Teie kaart on loodud",
-            "desc": "Põimi kaart lisades alloleva HTML koodi oma veebilehele."
+            "desc": "Lõimitav kaart on salvestatud. Kaardi lisamiseks kodulehele lisage kood oma lehe html koodile."
         },
         "edit": {
             "popup": {
-                "title": "Toimeta põimitud kaarti",
-                "msg": "Eelnevalt põimitud kaardi andmeid uuendatakse"
+                "title": "Lõimkaardi avamine…",
+                "msg": "Lõimkaardi värskendamine…"
             }
         },
         "BasicView": {
-            "title": "Põimi kaart",
-            "titleEdit": "Toimeta põimitud kaarti",
+            "title": "Loo lõimkaart",
+            "titleEdit": "Muuda lõimkaarti",
             "domain": {
-                "title": "Veebileht, millele kaart põimitakse",
-                "label": "Veebikoht, milllele kaart põimitakse",
-                "placeholder": "ilma http- või www-liiteta",
-                "tooltip": "Sisesta veebikoha alguslehe nimi, so domeeninimi ilma http- või www-liiteta, või all-lehe aadress. Näide: minukoduleht.com"
+                "title": "Veebileht, millele lõimkaart lisatakse",
+                "label": "Veebilehe aadress(ilma http ja www eesliideteta)",
+                "placeholder": "Veebiaadress",
+                "tooltip": "Sisesta veebiaadress. Näiteks maaamet.ee"
             },
             "name": {
-                "label": "Kaardi nimi",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "Pane oma kaardile kirjeldav nimi. Palun võta arvesse kasutajaliidese keelt."
+                "label": "Kaardi nimi(kohustuslik väli)",
+                "placeholder": "Kaardi nimi",
+                "tooltip": "Pane oma kaardile kirjeldav nimi. Võta arvesse kasutajaliidese keelt."
             },
             "language": {
                 "label": "Keel",
@@ -41,166 +41,163 @@ Oskari.registerLocalization(
             },
             "size": {
                 "label": "Suurus",
-                "tooltip": "Vali või määra veebikohas põimitava kaardi suurus. Kaardi eelvaade kuvatakse valitud suuruses."
+                "tooltip": "Lõimkaardi suurus"
             },
             "tools": {
                 "label": "Tööriistad",
                 "tooltip": "Vali kaardil näidatavad tööriistad. Nende asukoht kuvatakse kaardi eelvaates.",
                 "ScaleBarPlugin": "Joonmõõtkava",
                 "IndexMapPlugin": "Indekskaart",
-                "PanButtons": "Liikumise tööriist",
-                "Portti2Zoombar": "Mõõtkava kerimisriba",
-                "MyLocationPlugin": "NOT TRANSLATED",
-                "ControlsPlugin": "Liikumine sisselülitatud",
+                "PanButtons": "Lohistamise tööriist",
+                "Portti2Zoombar": "Suurendamise tööriist",
+                "MyLocationPlugin": "Tsentreeri",
+                "ControlsPlugin": "Lohistamise tööriist",
                 "SearchPlugin": "Aadressi ja kohanime otsing",
-                "FeaturedataPlugin": "NOT TRANSLATED",
-                "GetInfoPlugin": "Koha andmete päring",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "FeaturedataPlugin": "Anmdepäring",
+                "GetInfoPlugin": "Päringu tegemise tööriist",
+                "PublisherToolbarPlugin": "Kaardi tööriistad",
+                "selectDrawLayer": "Selekteeri kaardikiht"
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "drawTools": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "Liigu eelmisesse vaatesse",
+                "history_forward": "Liigu järgmisesse vaatesse",
+                "measureline": "Mõõda vahemaa",
+                "measurearea": "Mõõda pindala",
+                "drawTools": "Lisa oma objekte",
+                "point": "Luba punktobjekte",
+                "line": "Luba joonobjekte",
+                "area": "Luba polügoone"
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "Tööriistade asukohad",
+                "tooltip": "Määra tööriistade asukohad",
+                "lefthanded": "Vasakul",
+                "righthanded": "Paremal",
+                "userlayout": "Määratav asukoht",
+                "usereditmode": "Määra asukoht",
+                "usereditmodeoff": "Kinnita määrangud"
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "Teemakaardid",
+                "tooltip": "Näita teemakaarte kaardil",
+                "grid": "Nita teemakaartide andmeid tabelis",
+                "allowClassification": "Luba klassifitseerimine"
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "Määra põimkaardi stiil",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "Määra värv",
+                        "placeholder": "Määra värv",
+                        "buttonLabel": "Määra",
+                        "light_grey": "Helehall",
+                        "dark_grey": "Tumehall",
+                        "blue": "Sinine",
+                        "red": "Punane",
+                        "green": "Roheline",
+                        "yellow": "Kollane",
+                        "custom": "Määra värv ise",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "Määra taust",
+                            "titleLabel": "Määra tekst",
+                            "headerLabel": "Kohanimi",
+                            "iconLabel": "Ikoon",
+                            "iconCloseLabel": "Tume",
+                            "iconCloseWhiteLabel": "Hele"
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Kirjastiil"
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "Tööriista stiil",
+                        "default": "Vaikimisi stiil",
+                        "rounded-dark": "Ümarnurkne(tume)",
+                        "rounded-light": "Ümarnurkne(hele)",
+                        "sharp-dark": "Tavaline(tume)",
+                        "sharp-light": "Tavaline(hele)",
+                        "3d-dark": "Kolmemõõtmeline(tume)",
+                        "3d-light": "Kolmemõõtmeline(hele)"
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "Määra värv",
+                    "close": "Sulge",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "Objekti info",
+                        "featureName": "Eelvaade",
+                        "featureDesc": "Objektiinfo, hüpikakna värv."
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
+                "add": "Tee uus kaardikiht",
                 "label": "Kaardikihid",
-                "addselect": "NOT TRANSLATED",
-                "defaultLayer": "(Vaikimisi kiht)",
-                "useAsDefaultLayer": "Kasuta kui vaikimisi kihti"
+                "addselect": "Lisa muudetav kaardikiht kaardikihtidesse",
+                "defaultLayer": "(Vaikimisi  kaardikiht)",
+                "useAsDefaultLayer": "Kasuta kui vaikimisi kaardikihti"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": "Minu kaardikihid"
             },
             "sizes": {
                 "small": "Väike",
                 "medium": "Keskmine",
                 "large": "Suur",
-                "fill": "NOT TRANSLATED",
-                "custom": "Oma suurus",
+                "fill": "Täitevärv",
+                "custom": "Määra suurus ise",
                 "width": "laius",
                 "height": "kõrgus",
                 "separator": "x"
             },
             "buttons": {
                 "save": "Salvesta",
-                "saveNew": "Salvesta uus",
+                "saveNew": "Tee uus kaardikiht",
                 "ok": "OK",
-                "replace": "Asenda",
+                "replace": "Värskenda",
                 "cancel": "Tühista",
-                "add": "NOT TRANSLATED"
+                "add": "Lisa kaardikiht"
             },
             "confirm": {
                 "replace": {
-                    "title": "Kas soovid põimitud kaardi asendada?",
-                    "msg": "Põimitud kaartidel muudatuste ilma viiteta nägemiseks kasuta asendust. Html-koodi lisamine veebilehele ei ole vajalik."
+                    "title": "Kas soovid lõimkaardi asendada?",
+                    "msg": "Lõimkaardi uuendamiseks pole vaja koodi oma kodulehele uuendada."
                 }
             },
             "layerselection": {
-                "label": "Näita kaardikihte menüüs",
-                "info": "Vali taustakaardid. Võid määrata vaikimisi taustakaardi kaardi eelvaate aknas.",
-                "tooltip": "Taustakaarti kuvatakse kaardil kõige alumise kihina. Kui valid kõige alumiseks kihiks kaardikihte, on ainult üks kiht korraga nähtav ja võid nende vahel valida. Eelvaatele on võimalik valida vaikimisi taustakaardi.",
-                "promote": "Kas näidata aeropilte?"
+                "label": "Näita kaartikihti lõimkaardi menüüs",
+                "info": "Määra kaardikihid, mida näidatakse taustakihtidena.",
+                "tooltip": "Taustakaarti kuvatakse kaardil kõige alumise kihina. Kui valid kõige alumiseks kihiks kaardikihte, on ainult üks kiht korraga nähtav ja võid nende vahel valida. Eelvaatele on võimalik valida vaikimisi taustakaardi."
             },
-            "preview": "Põimitava kaardi eelvaade.",
-            "location": "Koha ja suumi tase",
-            "zoomlevel": "Suumi tase",
+            "preview": "Lõimkaardi eelvaade",
+            "location": "Asukoha ja suumiaste.",
+            "zoomlevel": "Suumiaste",
             "help": "Abi",
             "error": {
                 "title": "Viga!",
-                "size": "Viga suuruse määrangutes",
-                "domain": "Veebikoht on nõutav info",
-                "domainStart": "Jäta http- või www-liide veebikoha nimest välja",
-                "name": "Nimi on nõutav info",
-                "nohelp": "Abi ei ole saadav",
-                "saveFailed": "Kaardi avaldamine ebaõnnestus. Proovi hiljem uuesti.",
-                "nameIllegalCharacters": "NOT TRANSLATED",
-                "domainIllegalCharacters": "Veebikoha nimi sisaldab mittelubatud märke. Lubatud märgid on tähed a-z ja ka ä ja ö, numbrid, tagasijooks ja sidekriips."
+                "size": "Kaardi suurus on vigane. Laisu peaks olema mähemalt 30 pikslt ka kõrgus vähemalt 20 pikslit. Komakohtade eraldamiseks kasuta punkti.",
+                "domain": "Veebisaidi määrang on kohustuslik",
+                "domainStart": "Veebisaidi määrang on vigane. Kirjuta aadress ilma www eesliiteta.",
+                "name": "Nimi on kohustuslik",
+                "nohelp": "Kasutusjuhend ei ole kättesaadav",
+                "saveFailed": "Kaardi avalikustamine ebaõnnestus.",
+                "nameIllegalCharacters": "Kaardi nimi sisaldab lubamatuid tähemärke. Lubatud on a-z, A-Z, å, ä, ö, Å, Ä, Ö, numbrid, tühikud ja sidekriipsud. Korigeeri nimi ja proovi uuesti.",
+                "domainIllegalCharacters": "Veebisaidi aadress sisaldab lubamatuid tähemärke. Lubatud on a-z, A-Z, å, ä, ö, Å, Ä, Ö, numbrid, tühikud ja sidekriipsud. Korigeeri nimi ja proovi uuesti."
             }
         },
         "NotLoggedView": {
-            "text": "Põimimise toimingu kasutamiseks tuleb sisse logida.",
+            "text": "Lõimkaardi loomiseks tuleb sisse logida.",
             "signup": "Logi sisse",
-            "signupUrl": "/web/et/login",
-            "register": "Registreeru",
-            "registerUrl": "/web/et/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registreeru"
         },
         "StartView": {
-            "text": "Võid äsjaloodud kaardivaate põimida enda või tööandja veebikohale.",
-            "touLink": "Näita põimitud kaartide kasutustingimusi",
-            "layerlist_title": "Põimitavad kaardikihid",
-            "layerlist_empty": "Valitud kaardikihte ei saa põimida | Menüü Valitud kaardikihid näitab, kas kaardikihti saab põimida või mitte.",
-            "layerlist_denied": "Ei saa põimida",
-            "denied_tooltip": "Nende kaardiandmete tarnija ei ole andnud luba neid materjale teistes veebikohtades avaldada. Enne põimimist kontrolli õigusi  menüüst Valitud kaardikihid.",
-            "myPlacesDisclaimer": "NB. you are going to publish your own map layer.",
+            "text": "Lõimkaardi saab lisada oma veebisaidile.",
+            "touLink": "Näita lõimkaartide kasutustingimusi",
+            "layerlist_title": "Lõimkaardid avanevad kaardiknas",
+            "layerlist_empty": "Mittelõimitavad kaardikihid on kaardiaknas avatud. Kontrolli määratud kaardikihte.",
+            "layerlist_denied": "Mittelõimitavad kaardikihid on kaardiaknas avatud.",
+            "denied_tooltip": "Antud kaardikihte ei saa lõimkaardil kasutada, kuna nende omanik ei ole selleks luba andnud.",
+            "myPlacesDisclaimer": "NB. Kui kasutad antud kaardikihti lõimkaardina, kaarikiht avalikustatakse.",
             "buttons": {
                 "continue": "Jätka",
                 "continueAndAccept": "Nõustu kasutustingimustega ja jätka",
@@ -216,21 +213,15 @@ Oskari.registerLocalization(
         "layer": {
             "show": "Näita",
             "hide": "Peida",
-            "hidden": "Kaart on ajutiselt peidetud.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Avaldamine lubatud",
-                    "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ja kasutajate arvu nädalas võib piirata."
-                }
-            }
+            "hidden": "Kaardikiht on ajutiselt nähtamatu.",
+            "selectAsBaselayer": "Tasutakaart"
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Avalikustatav"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Näita ainult avalikustatavaid kaarte"
             }
         }
     }

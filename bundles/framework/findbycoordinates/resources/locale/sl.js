@@ -3,16 +3,12 @@ Oskari.registerLocalization(
     "lang": "sl",
     "key": "findbycoordinates",
     "value": {
-        "title": "PoiščiSKoordinatami",
-        "desc": "PoiščiSKoordinatami",
+        "title": "Najdi najbližji naslov",
+        "desc": "NI PREVEDENO",
         "tool": {
-            "tooltip": "Poišči najbližji naslov s klikom na karto"
+            "tooltip": "Poišči najbližji naslov s klikom na karto (izpisane dobiš tudi koordinate)"
         },
-        "resultsTitle": "Rezultati iskanja",
-        "grid": {
-            "address": "Naslov",
-            "coordinates": "Koordinate"
-        }
+        "resultsTitle": "Rezultati iskanja"
     }
 }
 );

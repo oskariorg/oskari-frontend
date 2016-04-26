@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrunnskort",
             "type-wms": "Kortalag (WMS, WMTS)",
-            "type-wfs": "Gögn (WFS)"
+            "type-wfs": "Gögn (WFS)",
+            "type-wfs-manual": "Uppfærðu fitjurnar með því að smella á \"Fitjugögn\" eða \"Uppfæra\" hnappinn í kortaglugganum."
         },
         "backendStatus": {
             "OK": {
@@ -44,11 +45,11 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Kortalagið getur verið ófánlegt í nokkra daga.",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "bakvinnslustaða-viðhald"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "bakvinnslustaða-í lagi"
             }
         },
         "buttons": {
@@ -57,19 +58,19 @@ Oskari.registerLocalization(
         "types": {
             "syn": "Samheiti",
             "lk": "Tengt hugtak",
-            "vk": "Coordinate concept",
+            "vk": "Hnitahugtak",
             "ak": "Víkjandi hugtak",
             "yk": "Ríkjandi hugtak"
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Nýjast",
+                "stats": "Vektorlög"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Sýna ## nýjustu kortalög",
+                "stats": "Sýna einungis vektorlög",
+                "remove": "Fjarlægja síu"
             }
         }
     }

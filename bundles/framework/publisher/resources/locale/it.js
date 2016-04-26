@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Mosra i layer nel menu",
                 "info": "Seleziona il layer da usare come sfondo. Puoi selezionare lo sfondo predefinito nell'anteprima della mappa",
-                "tooltip": "Il layer di sfondo è mostrato come layer inferiore nella mappa. Può essere visualizzato un solo layer di sfondo alla volta. L'utente può cambiare lo sfondo della mappa se ci sono più layer selezionati come sfondo. Il layer di sfondo predefinito può essere selezionato nell'anteprima della mappa",
-                "promote": "Desideri visualizzare anche le immagini aeree?"
+                "tooltip": "Il layer di sfondo è mostrato come layer inferiore nella mappa. Può essere visualizzato un solo layer di sfondo alla volta. L'utente può cambiare lo sfondo della mappa se ci sono più layer selezionati come sfondo. Il layer di sfondo predefinito può essere selezionato nell'anteprima della mappa"
             },
             "preview": "Anteprima della mappa esterna",
             "location": "Posizione e livello di zoom",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Puoi creare mappe incorporate dopo aver effettuato l'accesso al servizio",
             "signup": "Accedi",
-            "signupUrl": "/web/en/login",
-            "register": "Registrati",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrati"
         },
         "StartView": {
             "text": "Puoi creare la mappa e incorporarla sul tuo sito web",
@@ -217,20 +214,14 @@ Oskari.registerLocalization(
             "show": "Mostra",
             "hide": "Nascondi",
             "hidden": "Il layer è temporaneamente nascosto",
-            "selectAsBaselayer": "",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Il layer può essere pubblicato in una mappa esterna",
-                    "tooltip": "Il layer può essere pubblicato in una mappa esterna. Il numero settimanale di utenti potrebbe essere limitato."
-                }
-            }
+            "selectAsBaselayer": "Layer di sfondo cartografico"
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Pubblicabile"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Mostra solo i layers pubblicabili"
             }
         }
     }
