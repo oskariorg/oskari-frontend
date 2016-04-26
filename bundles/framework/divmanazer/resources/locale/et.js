@@ -4,19 +4,19 @@ Oskari.registerLocalization(
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "NOT TRANSLATED",
-            "cancel": "NOT TRANSLATED",
-            "close": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "exit": "NOT TRANSLATED",
-            "ok": "NOT TRANSLATED",
-            "save": "NOT TRANSLATED",
-            "search": "NOT TRANSLATED"
+            "add": "Lisa",
+            "cancel": "Tühista",
+            "close": "Sulge",
+            "delete": "Kustuta",
+            "edit": "Muuda",
+            "exit": "Välju",
+            "ok": "OK",
+            "save": "Salvesta",
+            "search": "Otsi"
         },
         "LanguageSelect": {
             "title": "Keel",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "Vali keel",
             "languages": {
                 "af": "afrikaani",
                 "ak": "akani",
@@ -140,125 +140,126 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED"
+                "dot": "Muuda puntki stiili",
+                "area": "Muuda polügooni stiili",
+                "line": "Muuda joone stiili"
             },
             "dot": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "",
+                "title": "Muuda punktikihi stiili",
+                "tooltip": "Muuda punktikihi stiili",
                 "symbol": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Punkti ikoon"
                 },
                 "size": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Punkti suurus"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Punkti värv",
+                    "labelOr": "või",
+                    "labelCustom": "määra värv manuaalselt(RGB 0-255)"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Eelvaade"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salvesta",
+                    "cancel": "Tühista"
                 }
             },
             "line": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "",
+                "title": "Muuda joone stiili",
+                "tooltip": "Muuda joone stiili",
                 "style": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone stiil"
                 },
                 "cap": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone lõpud"
                 },
                 "corner": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Nurga stiil"
                 },
                 "width": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone laius"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Värvus",
+                    "labelOr": "või",
+                    "labelCustom": "määra värv manuaalselt (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Eelvaade"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salvesta",
+                    "cancel": "Tühista"
                 }
             },
             "area": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "",
+                "title": "Muuda polügooni stiili",
+                "tooltip": "Muuda polügooni stiili",
                 "linestyle": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone stiil"
                 },
                 "linecap": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone lõpud"
                 },
                 "linecorner": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Nurga stiil"
                 },
                 "linewidth": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Joone laius"
                 },
                 "linecolor": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Joone värvus",
+                    "labelOr": "või",
+                    "labelCustom": "määra värv manuaalselt (RGB 0-255)"
                 },
                 "color": {
-                    "label": "NOT TRANSLATED",
-                    "labelOr": "NOT TRANSLATED",
-                    "labelCustom": "NOT TRANSLATED"
+                    "label": "Ala täitevärv",
+                    "labelOr": "või",
+                    "labelCustom": "määra värv manuaalselt (RGB 0-255)"
                 },
                 "fill": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Täitemuster"
                 },
                 "preview": {
-                    "label": "NOT TRANSLATED"
+                    "label": "Eelvaade"
                 },
                 "buttons": {
-                    "save": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "save": "Salvesta",
+                    "cancel": "Tühista"
                 }
             }
         },
         "Grid": {
             "columnSelector": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "title": "Seaded",
+                "tooltip": "Näita veerge"
             },
             "export": {
-                "title": "NOT TRANSLATED",
-                "export": "NOT TRANSLATED",
+                "title": "Ekspordi andmed",
+                "export": "Ekspordi",
                 "additional": {
-                    "title": "NOT TRANSLATED",
-                    "dataSource": "NOT TRANSLATED",
-                    "metadata": "NOT TRANSLATED"
+                    "title": "Lisaseaded",
+                    "dataSource": "Andmeallikas",
+                    "metadata": "Viide metaadnmetele",
+                    "export_selection": "Ekspordi ainult valitud elemendid"
                 },
                 "columns": {
-                    "title": "NOT TRANSLATED",
-                    "all": "NOT TRANSLATED",
-                    "visible": "NOT TRANSLATED"
+                    "title": "Veerud",
+                    "all": "Kõik",
+                    "visible": "Avatud"
                 },
                 "format": {
-                    "title": "NOT TRANSLATED",
-                    "xlsx": "NOT TRANSLATED",
-                    "csv": "NOT TRANSLATED"
+                    "title": "Fail formaat",
+                    "xlsx": "Excel",
+                    "csv": "CSV"
                 },
                 "delimiter": {
-                    "title": "NOT TRANSLATED",
-                    "comma": "NOT TRANSLATED",
-                    "semicolon": "NOT TRANSLATED",
-                    "tabulator": "NOT TRANSLATED"
+                    "title": "CSV-faili laiend",
+                    "comma": "Koma",
+                    "semicolon": "Semikoolon",
+                    "tabulator": "Tabulaator"
                 }
             }
         }

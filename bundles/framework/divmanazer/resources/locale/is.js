@@ -140,13 +140,13 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Breyta stíl á punktafitju",
-                "area": "Breyta stíl á svæðisfitju",
-                "line": "Breyta stíl á línufitju"
+                "dot": "Breyta stíl á punkti",
+                "area": "Breyta stíl á fláka",
+                "line": "Breyta stíl á línu"
             },
             "dot": {
                 "title": "Stíll punktafitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir punkta.",
                 "symbol": {
                     "label": "Tákn"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Stíll línufitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir línur.",
                 "style": {
                     "label": "Dash"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Stíll svæðisfitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir fláka.",
                 "linestyle": {
                     "label": "Brotin lína"
                 },
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Aðrar stillingar",
                     "dataSource": "Gagnaheimild",
-                    "metadata": "Hlekkur á lýsigögn"
+                    "metadata": "Hlekkur á lýsigögn",
+                    "export_selection": "Flytja einungis valdar aðgerðir."
                 },
                 "columns": {
                     "title": "Dálkar",

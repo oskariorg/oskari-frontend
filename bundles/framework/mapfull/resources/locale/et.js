@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "Generic",
     "value": {
-        "default-style": "NOT TRANSLATED"
+        "default-style": "Vaikimisi stiil"
     }
 }
 );

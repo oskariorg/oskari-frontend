@@ -1,0 +1,38 @@
+<script>
+    function createOption(parent, label, value ) {
+        var option = document.createElement('option');
+        option.textContent = label;
+        option.value = value;
+        option.autoAdded = true;
+        parent.appendChild(option);
+    }
+
+    new Polymer({
+        is: 'select-with-options',
+        extends: 'select',
+        properties: {
+            options: { observer: '_renderOptions' },
+            optionValue: { type: String },
+            optionLabel: { type: String }
+        },
+        _renderOptions: function() {
+            var baseOptions = [];
+            while (this.firstChild) {
+                if (!this.firstChild.autoAdded) {
+                    baseOptions.push(this.firstChild);
+                }
+                this.removeChild(this.firstChild);
+            }
+            baseOptions.forEach( function( option ) {
+                this.appendChild( option );
+            }, this );
+            this.options.forEach( function( option ) {
+                var label = this.optionLabel ? option[this.optionLabel] : option;
+                var value = this.optionValue ? option[this.optionValue] : option;
+                createOption( this, label, value);
+            }, this );
+        }
+    });
+
+</script>
+

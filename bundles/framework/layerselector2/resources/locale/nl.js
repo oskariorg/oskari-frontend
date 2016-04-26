@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Achergrondkaart",
             "type-wms": "Kaartlaag (WMS, WMTS)",
-            "type-wfs": "Productgegevens (WFS)"
+            "type-wfs": "Productgegevens (WFS)",
+            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
         },
         "backendStatus": {
             "OK": {

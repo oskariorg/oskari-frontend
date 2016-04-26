@@ -1,3 +1,4 @@
+
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
 function() {
 }, {
@@ -10,6 +11,14 @@ function() {
         'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
     ],
+    templates: {
+        'toolOptions': '<div class="tool-options"></div>',
+        'toolOptionSettingInput': '<div class="tool-option"><input type="checkbox" /><label></label></div>'
+    },
+    supportedProjections: null,
+    noUI: null,
+    projectionTrasformationIsCheckedInModifyMode: false,
+    noUiIsCheckedInModifyMode: false,
 
     /**
     * Get tool object.
@@ -32,6 +41,20 @@ function() {
     bundleName: 'coordinatetool',
 
     /**
+     * Initialise tool
+     * @method init
+     */
+    init: function(data) {
+        var me = this;
+        if (!data || !data.configuration[me.bundleName]) {
+            return;
+        }
+        me.setEnabled(true);
+        var conf = data.configuration[me.bundleName].conf || {};
+        me.projectionTrasformationIsCheckedInModifyMode = !!conf.supportedProjections;
+        me.noUiIsCheckedInModifyMode = !!conf.noUI;
+    },
+    /**
     * Get values.
     * @method getValues
     * @public
@@ -44,6 +67,12 @@ function() {
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
+            if(me.supportedProjections) {
+                pluginConfig.supportedProjections = me.supportedProjections;
+            }
+            if(me.noUI) {
+                pluginConfig.noUI = me.noUI;
+            }
             var json = {
                 configuration: {}
             };
@@ -55,6 +84,53 @@ function() {
         } else {
             return null;
         }
+    },
+     /**
+     * Get extra options.
+     * @method @public getExtraOptions
+     * @param {Object} jQuery element toolContainer
+     * @return {Object} jQuery element template
+     */
+    getExtraOptions: function (toolContainer) {
+        var me = this,
+            template,
+            loc = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage());
+        if(me.toolConfig && me.toolConfig.supportedProjections) {
+            template = jQuery(me.templates.toolOptions).clone(),
+            optionShowTransformationTools = jQuery(me.templates.toolOptionSettingInput).clone(),
+            optionNoUI = jQuery(me.templates.toolOptionSettingInput).clone(),
+            labelShowTransformationTools = loc.display.publisher.showTransformationTools,
+            labelNoUI = loc.display.publisher.noUI;
+
+            optionShowTransformationTools.find('label').html(labelShowTransformationTools);
+            optionShowTransformationTools.find('input').change(function (e) {
+                if(jQuery(this).is(':checked')) {
+                    me.supportedProjections = me.toolConfig.supportedProjections;
+                } else {
+                    me.supportedProjections = null;
+                }
+            });
+
+            optionNoUI.find('label').html(labelNoUI);
+            optionNoUI.find('input').change(function (e) {
+                if(jQuery(this).is(':checked')) {
+                    me.noUI = true;
+                } else {
+                    me.noUI = null;
+                }
+            });
+        };
+         if(me.projectionTrasformationIsCheckedInModifyMode) {
+            optionShowTransformationTools.find('input').attr('checked', 'checked');
+            me.supportedProjections = me.toolConfig.supportedProjections;
+        }
+        if(me.noUiIsCheckedInModifyMode) {
+            optionNoUI.find('input').attr('checked', 'checked');
+            me.noUI = true;
+        }
+        template.append(optionShowTransformationTools);
+        template.append(optionNoUI);
+        return template;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

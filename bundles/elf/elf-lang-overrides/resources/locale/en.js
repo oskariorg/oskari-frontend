@@ -59,3 +59,55 @@ Oskari.registerLocalization(
         "notLoggedIn": "My data contains your user profile and all your saved features, map views, embedded maps and datasets."
     }
 }, true);
+
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "Publisher2",
+    "value": {
+        "tile": {
+            "title": "Create embedded map"
+        },
+        "published": {
+            "desc": "The embedded map has been saved. Embed it on your website by copying this code to the html code on your website:"
+        },
+        "layerselection": {
+            "info": "Select the map layers to show on the embedded map"
+        },
+        "NotLoggedView": {
+            "text": "This tool allows you to create embedded maps from available services. Use of these are subject to licensing and requires that you log in."
+        },        
+        "StartView": {
+            "text": "Welcome to create an embedded map on your website.",
+            "layerlist_title": "Embeddable map layers open in map window:",
+            "layerlist_empty": "No embeddable map layers are open in the map window.",
+            "layerlist_denied": "Non-embeddable map layers open in map window:",
+            "denied_tooltip": "These map layers cannot be included in embedded maps. Data producers have not granted permissions for embedding.",
+        },
+        "layerFilter": {
+            "buttons": {
+                "publishable": "Embeddable"
+            },
+            "tooltips": {
+                "publishable": "Show only embeddable map layers."
+            }
+        }
+    }
+}, true);
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "LayerSelection",
+    "value": {
+        "layer": {
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "",
+                    "tooltip": ""
+                }
+            }
+        }
+    }
+}, true);

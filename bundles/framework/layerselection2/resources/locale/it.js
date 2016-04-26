@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Layer della mappa",
                 "type-wfs": "Prodotti"
             },
+            "refresh_load": {
+                "tooltip": "Aggiorna i dati della mappa. I dati non sono aggiornati automaticamente sulla mappa."
+            },
             "filter": {
                 "title": "Filtro",
                 "description": "Seleziona elementi dal layer:",

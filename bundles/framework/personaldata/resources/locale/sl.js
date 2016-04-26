@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Opis",
                     "publish": "Objavljeno",
                     "edit": "Uredi",
-                    "delete": "Izbriši"
+                    "delete": "Izbriši",
+                    "default": "Privzeto"
                 },
                 "popup": {
                     "edit": "Uredi podatke o pogledu",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Prekliči",
                     "error_noname": "Vnesi ime",
                     "deletetitle": "Izbriši pogled karte",
-                    "deletemsg": "Ali želiš izbrisati kartni pogled?"
+                    "deletemsg": "Ali želiš izbrisati kartni pogled?",
+                    "default": "Privzet pogled"
                 },
                 "save": {
                     "success": "Kartni pogled je shranjen.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "V redu",
                     "save": "Shrani",
                     "cancel": "Prekliči",
-                    "toolbarsave": "Shrani kartni pogled"
+                    "toolbarsave": "Shrani kartni pogled",
+                    "saveCurrent": "Shrani trenutni pogled"
                 },
                 "error": {
                     "title": "Napaka!",

@@ -21,6 +21,43 @@ For more detailed information, see documentation http://oskari.org/api/requests.
 
 NOTE! The changes are not backwards compatible!
 
+### feedbackService (Open311)
+
+#### [add] [rpc] GetFeedbackRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers.
+
+Get posted feedback data out of Open311 service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+#### [add] [rpc] PostFeedbackRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers.
+
+Posts user's feedback data to the Open311 service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+feedback.open331.key=     setup is required in oskari server properties
+(api_key  of Open311 service)
+
+#### [add] [rpc] GetFeedbackServiceRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers
+
+Get Open311 feedback service list.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+#### [add] [rpc] GetFeedbackServiceDefinitionRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers
+
+Get the definition of one feedback service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
 ### mapmodule
 
 #### [mod] [rpc] AddMarkerRequest

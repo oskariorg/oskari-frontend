@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>select-with-options demo</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+    <link rel="import" href="polymer.html">
+    <link rel="import" href="select-with-options.html">
+
+    <dom-module id="demo-1">
+        <template>
+            <div>
+                <select is="select-with-options" options="{{options}}" value="{{value::change}}">
+                </select>
+                <span>{{value}}</span>
+            </div>
+        </template>
+    </dom-module>
+    <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+            new Polymer({
+                is: 'demo-1',
+                properties: {
+                    value : {
+                        type: String
+                    },
+                    options: {
+                        value: [
+                            'one',
+                            'two',
+                            'three'
+                        ]
+                    }
+                }
+            });
+        });
+    </script>
+
+    <dom-module id="demo-2">
+        <template>
+            <div>
+                <select is="select-with-options" options="{{options}}" option-value="id" option-label="name" value="{{value::change}}">
+                </select>
+                <span>{{value}}</span>
+            </div>
+        </template>
+    </dom-module>
+    <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+            new Polymer({
+                is: 'demo-2',
+                properties: {
+                    value : {
+                        type: String,
+                        value: 2
+                    },
+                    options: {
+                        value: [
+                            {id: 1, name: 'One'},
+                            {id: 2, name: 'Two'},
+                            {id: 3, name: 'Three'}
+                        ]
+                    }
+                }
+            });
+        });
+    </script>
+
+    <dom-module id="demo-3">
+        <template>
+            <div>
+                <select is="select-with-options" options="{{options}}" option-value="id" option-label="name" value="{{value::change}}">
+                    <option value="hardcoded_option">Hardcoded Option</option>
+                </select>
+                <span>{{value}}</span>
+            </div>
+        </template>
+    </dom-module>
+    <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+            new Polymer({
+                is: 'demo-3',
+                properties: {
+                    value : {
+                        type: String,
+                        value: 2
+                    },
+                    options: {
+                        value: [
+                            {id: 1, name: 'One'},
+                            {id: 2, name: 'Two'},
+                            {id: 3, name: 'Three'}
+                        ]
+                    }
+                }
+            });
+        });
+    </script>
+
+    <div>Demo with array of String</div>
+    <demo-1></demo-1>
+    <div>Demo with array of Object</div>
+    <demo-2></demo-2>
+    <div>Demo with hardcoded options</div>
+    <demo-3></demo-3>
+</body>
+</html>

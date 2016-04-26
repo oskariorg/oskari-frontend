@@ -13,7 +13,7 @@ Oskari.registerLocalization(
                 "title": "Diagram"
             },
             "statistics": {
-                "tooltip": "Pojdi na tematske karte",
+                "tooltip": "Prehod na tematske karte",
                 "title": "Statistike"
             }
         }

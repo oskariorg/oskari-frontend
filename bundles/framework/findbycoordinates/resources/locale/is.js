@@ -3,16 +3,12 @@ Oskari.registerLocalization(
     "lang": "is",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
-        "desc": "FindByCoordinates",
+        "title": "Finna næsta heimilisfang",
+        "desc": "Ekki búið að þýða",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Smelltu á punkt á kortinu. Þú munt sjá hnit á punktinum og næsta heimilisfangi."
         },
-        "resultsTitle": "Search results",
-        "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
-        }
+        "resultsTitle": "Leitarniðurstöður"
     }
 }
 );

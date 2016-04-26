@@ -12,11 +12,11 @@ Oskari.registerLocalization(
         "errorscale": "Gegevens kunnen niet op dit schaalniveau worden getoond. Wijzig het schaalniveau.",
         "errordata": "Gegevens van de server bevatten fouten. Verschuif de kaart om te actualiseren.",
         "columnSelectorTooltip": "Toon kolommen",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "Statistical values",
         "selectionTools": {
             "title": "Selecteer kenmerken op de kaart",
             "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
+            "selectFromTop": "From topmost layer",
             "selectAll": "Selecteer van alle lagen",
             "link": {
                 "title": "Meer selecteren"
@@ -145,6 +145,12 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "De logische operator ontbreekt."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Count",
+            "differenceMessage": "The difference of unauthorized feature values is presented with value",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
 }

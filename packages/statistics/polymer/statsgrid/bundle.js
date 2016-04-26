@@ -26,6 +26,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
         "source": {
             "scripts": [{
                 "type" : "text/javascript",
+                "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
+            }, {
+                "type" : "text/javascript",
                 "src" : "../../../../libraries/StickyTableHeaders/js/jquery.stickytableheaders.min.js"
             }, {
                 // MODIFIED IN STATSGRID!!!!!
