@@ -91,6 +91,18 @@ For example:
 
 Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
 
+#### util.getColorBrightness
+
+Oskari.util.getColorBrightness has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark or light. Function returns 'dark' or 'light'.
+
+#### util.isDarkColor
+
+Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark. Function returns true/false;
+
+#### util.isLightColor
+
+Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
+
 ### divmanazer/ui-components
 
 Removed Raphael library from package.
