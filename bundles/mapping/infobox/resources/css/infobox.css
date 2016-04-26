@@ -45,7 +45,7 @@ div.popupContent {
   position: relative;
   left: 0px;
   top: 0px;
-  height: 250px;
+  max-height: 250px;
   -webkit-border-radius: 0px 0px 6px 6px;
   -moz-border-radius: 0px 0px 6px 6px;
   -o-border-radius: 0px 0px 6px 6px;
@@ -58,13 +58,14 @@ div.popupContent {
   border-color: #424343;
   overflow: auto;
   padding: 20px 20px 20px 25px; }
+  div.popupContent div.contentWrapper-infobox {
+    margin-bottom: 10px; }
   div.popupContent hr.infoboxLine {
     border: 1px solid;
     width: 90%;
     margin-top: 10px; }
   div.popupContent span.infoboxActionLinks {
-    padding-right: 15px;
-    padding-left: 15px; }
+    padding-right: 15px; }
 
 /*Pop-up width reduced for places search */
 div#searchResultPopup_contentDiv div.popupContent {

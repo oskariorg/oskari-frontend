@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._index = 1000;
         // ui odes desktop|mobile
         this._uiMode = 'desktop';
+
+        this._mobileDefs = {};
     }, {
         /**
          * @method _startPluginImpl
@@ -370,7 +372,57 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          */
         createPluginUI: function(mapInMobileMode) {
-            return;
+            var me = this,
+                sandbox = me.getSandbox();            
+
+            //remove old element
+            if (me._element) {
+                
+                me.getMapModule().removeMapControlPlugin(
+                    me._element,
+                    me.inLayerToolsEditMode(),
+                    me._uiMode
+                );
+                me._element.remove();
+                delete me._element;
+            }
+
+            var toolbar = me.getMapModule().getMobileToolbar();
+            var reqBuilder = sandbox.getRequestBuilder(
+                'Toolbar.RemoveToolButtonRequest'
+            );
+            if (reqBuilder) {
+                for (var tool in me._mobileDefs.buttons) {
+                    var buttonConf = me._mobileDefs.buttons[tool];
+                    buttonConf.toolbarid = toolbar;
+                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
+                }
+            }
+
+            if (mapInMobileMode) {                
+                var toolbar = me.getMapModule().getMobileToolbar();
+                var reqBuilder = sandbox.getRequestBuilder(
+                    'Toolbar.AddToolButtonRequest'
+                );
+
+                if (reqBuilder) {
+                    for (var tool in me._mobileDefs.buttons) {
+                        var buttonConf = me._mobileDefs.buttons[tool];
+                        buttonConf.toolbarid = toolbar;
+                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
+                    }
+                }
+                
+                me._uiMode = 'mobile';
+            } else {                                
+                me._element = me._createControlElement();
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+                me._uiMode = 'desktop';
+            }
         }
     }, {
         /**

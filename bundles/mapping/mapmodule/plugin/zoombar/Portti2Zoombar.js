@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
-                    iconCls: 'icon-maximize',
+                    iconCls: 'mobile-zoom-in-light',
                     tooltip: '',
                     sticky: true,
                     show: true,
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     //childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
-                    iconCls: 'icon-minimize',
+                    iconCls: 'mobile-zoom-out-light',
                     tooltip: '',
                     sticky: true,
                     show: true,
@@ -406,13 +406,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          */
-        createPluginUI: function (mapInMobileMode) {
+        createPluginUI: function(mapInMobileMode) {
             var me = this,
-                sandbox = me.getSandbox();
-            
+                sandbox = me.getSandbox();            
 
             //remove old element
             if (me._element) {
+                
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
                     me.inLayerToolsEditMode(),

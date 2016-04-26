@@ -96,7 +96,6 @@
   .divmanazerpopup h3.popupHeader {
     background-color: #FDF8D9;
     padding: 8px 10px; }
-
   .divmanazerpopup div.close-icon {
     position: absolute;
     top: 8px;
@@ -108,7 +107,7 @@
     margin-top: -6px !important;
     margin-left: -4px !important;
     overflow: auto; }
-  div.divmanazerpopup.mobile-portrait {
+  .divmanazerpopup.mobile-portrait {
     width: 94%;
     top: 10% !important;
     left: 3% !important;
