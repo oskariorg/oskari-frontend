@@ -140,6 +140,9 @@ Oskari.clazz.define(
                 colourScheme = options.colourScheme,
                 font = options.font;
 
+                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+
+
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
@@ -160,19 +163,20 @@ Oskari.clazz.define(
                 popup.createCloseIcon();
                 popup.showInMobileMode();
 
-                if (colourScheme) {
-                    popup.setColourScheme(colourScheme);
-                }
-
                 if (font) {
                     popup.setFont(font);
                 }
                 popup.show(popupTitle, popupContent);
+                if (colourScheme) {
+                    popup.setColourScheme(colourScheme);
+                }
                 popup.onClose(function () {
                     if (me._popups[id] && me._popups[id].type === "mobile") {
                         delete me._popups[id];
                     }
                 });
+                //clear the ugly backgroundcolor from the popup content
+                jQuery(popup.dialog).css('background-color','inherit');
             } else {
                 var popupType = "desktop";
 
@@ -700,32 +704,44 @@ Oskari.clazz.define(
                     .removeClass('icon-close-white icon-close')
                     .addClass(colourScheme.iconCls);
             }
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                debugger;
+                if (colourScheme.linkColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
+            }
         },
-
         _handleMapSizeChanges: function (width, height) {
             var me = this,
                 pid,
                 popup;
-
             for (pid in me._popups) {
-                if (latestPopupToMobileMode) {
-                    me.close(pid);
-                }
                 if (me._popups.hasOwnProperty(pid)) {
                     popup = this._popups[pid];
-                    //close mobile popup and open infobox if screen is wide enough
-                    if (popup.isInMobileMode && width > popup.options.mobileBreakpoints.width || popup.isInMobileMode && height > popup.options.mobileBreakpoints.height) {
-                        popup.popup.close();
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                    } else if (!popup.isInMobileMode && width < popup.options.mobileBreakpoints.width || !popup.isInMobileMode && height < popup.options.mobileBreakpoints.height) {
-                        me.close(pid);
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                        var latestPopupToMobileMode = true;
+                    if (popup.isInMobileMode) {
+                        //are we moving away from the mobile mode? -> close and rerender.
+                        if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            popup.popup.close();
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
+                    } else {
+                        //are we moving into the mobile mode? -> close old and rerender
+                        if (me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            me.close(pid);
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
                     }
                 }
             }
         },
-
         /**
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
