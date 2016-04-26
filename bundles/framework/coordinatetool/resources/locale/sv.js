@@ -85,8 +85,8 @@ Oskari.registerLocalization(
                 "message": "Koordinater kan inte omvandlas"
             },
             "publisher": {
-                "showTransformationTools": "NOT TRANSLATED",
-                "noUI": "NOT TRANSLATED"
+                "showTransformationTools": "",
+                "noUI": ""
             }
         }
     }

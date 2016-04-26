@@ -86,7 +86,7 @@ Oskari.registerLocalization(
             },
             "publisher": {
                 "showTransformationTools": "Näytä muunnostyökalut",
-                "noUI": "Ei käyttöliittymää"
+                "noUI": "Ei käyttöliittymää (RPC toiminnallisuus)"
             }
         }
     }

@@ -85,8 +85,8 @@ Oskari.registerLocalization(
                 "message": "Coordinates cannot transformed"
             },
             "publisher": {
-                "showTransformationTools": "NOT TRANSLATED",
-                "noUI": "NOT TRANSLATED"
+                "showTransformationTools": "Show coordinate transform",
+                "noUI": "Hide user-interface (using RPC to toggle UI)"
             }
         }
     }

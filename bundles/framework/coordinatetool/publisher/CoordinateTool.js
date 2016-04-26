@@ -46,15 +46,13 @@ function() {
      */
     init: function(data) {
         var me = this;
-        if (data && data.configuration[me.bundleName]) {
-            me.setEnabled(true);
-            if(data.configuration[me.bundleName].conf.supportedProjections) {
-                me.projectionTrasformationIsCheckedInModifyMode = true;
-            }
-            if(data.configuration[me.bundleName].conf.noUI) {
-                me.noUiIsCheckedInModifyMode = true;
-            }
+        if (!data || !data.configuration[me.bundleName]) {
+            return;
         }
+        me.setEnabled(true);
+        var conf = data.configuration[me.bundleName].conf || {};
+        me.projectionTrasformationIsCheckedInModifyMode = !!conf.supportedProjections;
+        me.noUiIsCheckedInModifyMode = !!conf.noUI;
     },
     /**
     * Get values.
