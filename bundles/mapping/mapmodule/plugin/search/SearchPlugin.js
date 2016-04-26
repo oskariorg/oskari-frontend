@@ -39,12 +39,12 @@ Oskari.clazz.define(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +
                 '    <input placeholder="' + me._loc.placeholder + '" type="text" /><input type="button" value="' + me._loc.search + '" name="search" />' +
-                '  </div>' +
+                '  </div>'
+            );
+
+            me.resultsContainer = jQuery(
                 '  <div class="results">' +
-                '    <div class="header">' +
-                '      <div class="close icon-close" title="' + me._loc.close + '"></div>' +
-                '    </div>' +
-                '    <div class="content">&nbsp;</div>' +
+                '    <div class="content"></div>' +
                 '  </div>' +
                 '</div>'
             );
@@ -158,18 +158,27 @@ Oskari.clazz.define(
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function (mapInMobileMode) {
+        createPluginUI: function (mapInMobileMode, modeChanged) {
             var me = this;
+            
             //remove old element
-            if (me._element) {
-                // FIXME this remove also handlers so if want search to work then need add search handlers also different way...
+            if (modeChanged && me._element) {
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
                     me.inLayerToolsEditMode(),
                     me._uiMode
                 );
+                me._element.remove();
+                delete me._element;
+
+                if (me.popup) {
+                    me.popup.close();
+                }
+
+                me._createControlElement();
             }
 
             if (mapInMobileMode) {
@@ -398,6 +407,135 @@ Oskari.clazz.define(
             }
         },
 
+        _showResults: function(msg) {
+            var me = this,
+                errorMsg = msg.error,
+                resultsContainer = me.resultsContainer.clone(),
+                content = resultsContainer.find('div.content');
+                popupTitle = me._loc.title;
+
+            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (errorMsg) {
+                content.html(errorMsg);
+            } else {
+                // success
+                var totalCount = msg.totalCount,
+                    lat,
+                    lon,
+                    zoom;
+
+                me.results = msg.locations;
+
+                if (totalCount === 0) {
+                    content.html(this._loc.noresults);
+                } else if (totalCount === 1) {
+                    // only one result, show it immediately
+                    lon = msg.locations[0].lon;
+                    lat = msg.locations[0].lat;
+                    zoom = msg.locations[0].zoomLevel;
+                    if(msg.locations[0].zoomScale) {
+                        zoom = {scale : msg.locations[0].zoomScale};
+                    }
+
+                    me.getSandbox().request(
+                        me.getName(),
+                        me.getSandbox().getRequestBuilder(
+                            'MapMoveRequest'
+                        )(lon, lat, zoom, false)
+                    );
+                    me._setMarker(msg.locations[0]);
+                    return;
+                } else {
+                    // many results, show all
+                    var table = me.templateResultsTable.clone(),
+                        tableBody = table.find('tbody'),
+                        i,
+                        clickFunction = function() {
+                            me._resultClicked(
+                                me.results[parseInt(
+                                    jQuery(this).attr('data-location'),
+                                    10
+                                )]
+                            );
+                            return false;
+                        };
+
+                    for (i = 0; i < totalCount; i += 1) {
+                        if (i >= 100) {
+                            tableBody.append(
+                                '<tr>' +
+                                '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
+                                '</tr>'
+                            );
+                            break;
+                        }
+                        var resultItem = msg.locations[i];
+                        lon = resultItem.lon;
+                        lat = resultItem.lat;
+                        zoom = resultItem.zoomLevel;
+
+                        if(resultItem.zoomScale) {
+                            zoom = {scale : resultItem.zoomScale};
+                        }
+
+                        var row = me.templateResultsRow.clone(),
+                            name = resultItem.name,
+                            municipality = resultItem.village,
+                            type = resultItem.type,
+                            cells = row.find('td'),
+                            xref = jQuery(cells[0]).find('a');
+                        row.attr('data-location', i);
+                        xref.attr('data-location', i);
+                        xref.attr('title', name);
+                        xref.append(name);
+                        xref.click(clickFunction);
+
+                        jQuery(cells[1]).attr('title', municipality).append(municipality);
+                        jQuery(cells[2]).attr('title', type).append(type);
+
+                        // IE hack to get scroll bar on tbody element
+                        if (jQuery.browser.msie) {
+                            row.append(jQuery('<td style="width: 0px;"></td>'));
+                        }
+
+                        tableBody.append(row);
+                    }
+
+                    if (!(me.getConfig() && me.getConfig().toolStyle)) {
+                        tableBody.find(':odd').addClass('odd');
+                    }
+
+                    content.html(table);
+
+                    // Change the font of the rendered table as well
+                    var conf = me.getConfig();
+                    if (conf) {
+                        if (conf.font) {
+                            me.changeFont(conf.font, content);
+                        }
+                        if (conf.toolStyle) {
+                            me.changeResultListStyle(
+                                conf.toolStyle,
+                                resultsContainer
+                            );
+                        }
+                    }
+                }
+            }
+
+            if (me._uiMode === "mobile") {
+                var popupContent = resultsContainer;
+                me.popup.addClass('mobile-popup');
+                me.popup.setColourScheme({"headerColour": "#e6e6e6"});
+                me.popup.show(popupTitle, popupContent);
+                me.popup.createCloseIcon();
+                me.popup.moveTo(me.getElement().parent(), 'bottom', true);
+            } else {
+                resultsContainer.prepend('<div class="header"><div class="close icon-close" title="' + me._loc.close + '"></div></div>');
+                me.getElement().append(resultsContainer);
+                resultsContainer.show();
+            }
+        },
         /**
          * @private @method _showResults
          *
@@ -409,13 +547,19 @@ Oskari.clazz.define(
          * @param {Object} msg
          *          Result JSON returned by search functionality
          */
-        _showResults: function(msg) {
+        _showResults_old: function(msg) {
             // check if there is a problem with search string
             var errorMsg = msg.error,
                 me = this,
-                resultsContainer = me.getElement().find('div.results'),
+                resultsContainer = me.resultsContainer.clone(),
                 header = resultsContainer.find('div.header'),
                 content = resultsContainer.find('div.content');
+
+            if (me._uiMode === "mobile") {
+                me.getElement().parent().parent().append(resultsContainer);
+            } else {
+                me.getElement().append(resultsContainer);
+            }
 
             if (errorMsg) {
                 content.html(errorMsg);

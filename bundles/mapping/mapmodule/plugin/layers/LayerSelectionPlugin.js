@@ -17,15 +17,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
         me._defaultLocation = 'top left';
-        me._index = 3;
+        me._index = 90;
         me._name = 'LayerSelectionPlugin';
 
         me.initialSetup = true;
         me.templates = {};
         me._mobileDefs = {
-            width: 500
+            buttons:  {
+                'mobile-layerselection': {
+                    iconCls: 'mobile-layers-light',
+                    tooltip: '',
+                    sticky: true,
+                    show: true,
+                    callback: function () {
+                        me.openSelection();
+                    }
+                }
+            },
+            buttonGroup: 'mobile-zoombar'
         };
-        me.isMobile = false;
     }, {
         /**
          * @private @method _initImpl
@@ -75,22 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
-        },
-        /**
-         * @method  @private _handleMapSizeChanges handle map size changes
-         * @param  {Object} size {width:100, height:200}
-         * @param {Object} el jQuery element
-         */
-        _handleMapSizeChanges: function(size, el){
-            var me = this,
-                div = el || this.getElement();
-
-            if(size.width < me._mobileDefs.width) {
-                me.isMobile = true;
-
-            } else {
-                me.isMobile = false;
-            }
         },
         /**
          * @method _createEventHandlers
@@ -149,9 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (event._creator !== this.getName()) {
                         this.sortLayers();
                     }
-                },
-                MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
         },
@@ -535,46 +526,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 div = this.getElement(),
                 icon = div.find('div.header div.header-icon'),
                 content = div.find('div.content'),
-                layersContent = div.find('.layers-content'),
                 header = div.find('div.header'),
                 mapmodule = me.getMapModule();
                 size = mapmodule.getSize(),
                 toolStyle = conf.toolStyle || me.getToolStyleFromMapModule();
 
-            icon.removeClass('icon-arrow-white-right');
-            icon.addClass('icon-arrow-white-down');
-            content.show();
-
-
-
-            if(me.isMobile){
-                content.addClass('mobile');
-                header.addClass('mobile');
+            if (me._uiMode === "mobile") {
+                me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var popupTitle = me._loc.title;
+                var popupContent = content;
+                me.popup.addClass('mobile-popup');
+                me.popup.setColourScheme({"headerColour": "#e6e6e6"});
+                me.popup.show(popupTitle, popupContent);
+                me.popup.createCloseIcon();
+                me.popup.moveTo(me.getElement().parent(), 'bottom', true);
             } else {
-                content.removeClass('mobile');
-                header.removeClass('mobile');
-            }
+                icon.removeClass('icon-arrow-white-right');
+                icon.addClass('icon-arrow-white-down');
+                content.show();
 
-            var layersTitle = div.find('.content-header');
-            var layersTitleHeight = 0;
+                var layersTitle = div.find('.content-header');
+                var layersTitleHeight = 0;
 
-            if(layersTitle.length==0){
-                layersTitle = div.find('.header');
-            }
+                if(layersTitle.length==0){
+                    layersTitle = div.find('.header');
+                }
 
-            // Get layers title height
-            if(layersTitle.length>0){
-                layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
-            }
-
-            // use default
-            if(!me.isMobile) {
-                layersContent.css('height', '');
-                layersContent.css('max-height', (size.height - layersTitleHeight) + 'px');
-            }
-            else {
-                layersContent.css('max-height', '');
-                layersContent.css('height', (size.height - layersTitleHeight) + 'px');
+                // Get layers title height
+                if(layersTitle.length>0){
+                    layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
+                }
             }
         },
 
@@ -660,6 +641,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             return el;
         },
 
+
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
@@ -689,7 +671,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.changeColourScheme(conf.colourScheme, element);
                 }
             }
-            me._handleMapSizeChanges(mapModule.getSize(), element);
         },
 
         /**
