@@ -872,7 +872,6 @@ Oskari.clazz.define(
                         me._mobileToolbarId,
                         'add',
                         {
-                            title: 'MobileTools',
                             show: true,
                             toolbarContainer: me._toolbarContent
                         }

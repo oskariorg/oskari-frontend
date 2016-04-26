@@ -173,11 +173,14 @@ Oskari.clazz.define(
             }
 
             if (mapInMobileMode) {
-                var mobileDivElement = me.getMapModule().getMobileDiv();
+                var mobileDivElement = me.getMapModule().getMobileDiv();                
+                me._element.addClass('mobilesearch');
                 // FIXME is index is not first then this fails
                 mobileDivElement.prepend(me._element[0]);
                 me._uiMode = "mobile";
             } else {
+                me._element.removeClass('mobilesearch');
+               
                 me._ctl = me._createControlAdapter(me._element);
                 if (me._ctl) {
                     me.getMapModule().addMapControl(me._pluginName, me._ctl);

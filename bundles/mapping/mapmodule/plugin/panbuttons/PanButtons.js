@@ -23,9 +23,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         me._mobileDefs = {
             buttons:  {
                 'mobile-reset': {
-                    iconCls: 'mobile-reset-map-state-light',
+                    iconCls: 'mobile-reset-map-state-light mobiletoolbar',
                     tooltip: '',
-                    sticky: true,
+                    sticky: false,
                     show: true,
                     callback: function (el) {
                         if (!me.inLayerToolsEditMode()) {
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     }
                 }
             },
-            buttonGroup: 'mobile-zoombar'
+            buttonGroup: 'mobile-toolbar'
         };
     }, {
         /**
