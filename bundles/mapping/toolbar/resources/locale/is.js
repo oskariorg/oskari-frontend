@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Hlekkur í kort"
             },
-            "print": {
-                "tooltip": "Prenta út kortasýn."
-            },
             "history": {
                 "reset": "Til baka í sjálfgefið notendaviðmót",
                 "back": "Til baka í fyrri kortasýn.",

@@ -3,43 +3,43 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "elf-geolocator",
     "value": {
-        "title": "NOT TRANSLATED",
-        "desc": "NOT TRANSLATED",
+        "title": "Geolokatsioon",
+        "desc": "ELF Geolokatsioon",
         "tool": {
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": "Otsi objekte klikates kaardile"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "searchTitle": "NOT TRANSLATED",
-            "searchPlaceholder": "NOT TRANSLATED",
-            "regionTitle": "NOT TRANSLATED",
-            "regionPlaceholder": "NOT TRANSLATED",
-            "additionalsTitle": "NOT TRANSLATED",
-            "normalTitle": "NOT TRANSLATED",
-            "normalDesc": "NOT TRANSLATED",
-            "restrictedTitle": "NOT TRANSLATED",
-            "restrictedDesc": "NOT TRANSLATED",
-            "fuzzyTitle": "NOT TRANSLATED",
-            "fuzzyDesc": "NOT TRANSLATED",
-            "exonymTitle": "NOT TRANSLATED",
-            "exonymDesc": "NOT TRANSLATED",
-            "searchButton": "NOT TRANSLATED",
-            "resultsTitle": "NOT TRANSLATED",
-            "fuzzyResultsTitle": "NOT TRANSLATED",
-            "filterResultsTitle": "NOT TRANSLATED",
-            "countryFilter": "NOT TRANSLATED",
-            "backButton": "NOT TRANSLATED",
-            "geolocButton": "NOT TRANSLATED",
-            "geolocDesc": "NOT TRANSLATED",
-            "noResults": "NOT TRANSLATED",
+            "title": "Kohad",
+            "searchTitle": "Otsingusõna",
+            "searchPlaceholder": "Otsi kohanime või aadressi järgi",
+            "regionTitle": "Asukoha filter",
+            "regionPlaceholder": "Väheda otsingutulemusi maakonna või omavalitsusega.",
+            "additionalsTitle": "Otsinguvõimalused",
+            "normalTitle": "Märksõna otsing",
+            "normalDesc": "Otsi täpse sõna järgi. Otsing on tõusutundlik(suur ja väiketähed on olulised).",
+            "restrictedTitle": "Asukoha filter",
+            "restrictedDesc": "Otsi joonistades Teid huvitav piirkond kaardile.",
+            "fuzzyTitle": "Ebamäärane otsing",
+            "fuzzyDesc": "Otsi kohanimesid täpse otsisõna ja sellele sõnale sarnanevate sõnade alusel.",
+            "exonymTitle": "Eksonüümide meetod.",
+            "exonymDesc": "Otsingutulemused sisaldavad ka teistes keeltes olevad vasteid.",
+            "searchButton": "Otsi",
+            "resultsTitle": "Otsingutulemused",
+            "fuzzyResultsTitle": "Ebamäärase otsingu tulemused",
+            "filterResultsTitle": "Asukohafiltriga otisngutulemused",
+            "countryFilter": "Vali riik",
+            "backButton": "Tagasi",
+            "geolocButton": "Leia lähim aadress",
+            "geolocDesc": "Kaardile klikkides leitakse lähim kohanimi.",
+            "noResults": "Tulemusi pole.",
             "errors": {
-                "searchTermMissing": "NOT TRANSLATED",
-                "searchFailed": "NOT TRANSLATED"
+                "searchTermMissing": "Viga! Otsingusõna on nõutav.  Kirjuta see ja proovi uuesti.",
+                "searchFailed": "Viga! Otsingut ei teostatud."
             },
             "grid": {
-                "name": "NOT TRANSLATED",
-                "village": "NOT TRANSLATED",
-                "type": "NOT TRANSLATED"
+                "name": "Nimi",
+                "village": "Regioon",
+                "type": "Tüüp"
             }
         }
     }

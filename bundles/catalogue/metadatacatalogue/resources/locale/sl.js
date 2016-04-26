@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
         "tabTitle": "Iskanje metapodatkov",
-        "metadataCatalogueDescription": "Iskanje metapodatkov o zbirkah podatkov, skupinah zbirk podatkov ali servisov",
+        "metadataCatalogueDescription": "Iskanje metapodatkov o zbirkah podatkov, skupinah zbirk podatkov ali storitev",
         "metadataCatalogueButton": "Iskanje",
         "assistance": "Vpiši iskalni izraz",
         "showMore": "Pokaži iskalne možnosti",
@@ -34,9 +34,9 @@ Oskari.registerLocalization(
         "modifySearch": "Urejanje iskalnih možnosti",
         "showSearch": "Pokaži vse rezultate iskanja",
         "metadataCatalogueResults": "Išči rezultate",
-        "show": "Prikaži ta sloj na karti.",
-        "hide": "Skrij ta sloj na karti.",
-        "searchservice_search_not_found_anything_text": "Ni rezultatov.",
+        "show": "Prikaži sloj na karti.",
+        "hide": "Skrij sloj na karti.",
+        "searchservice_search_not_found_anything_text": "Ni rezultatov. Preveri iskalni izrazin poskusi znova.",
         "metadataoptionservice_alert_title": "Napaka",
         "metadataoptionservice_not_found_anything_text": "Odgovora ni.",
         "metadatasearchservice_not_found_anything_text": "Iskanih rezultatov ni.",
@@ -47,13 +47,13 @@ Oskari.registerLocalization(
         "searching": "Iskanje…",
         "grid": {
             "name": "Ime",
-            "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "Skrij območje sloja.",
+            "showBBOX": "Prikaži območje sloja.",
+            "info": "Prikaži metapodatke",
+            "remove": "Odstrani iz isklanih rezultatov",
+            "rating": "Ocenjeanje"
         },
-        "licenseText": "NOT TRANSLATED",
+        "licenseText": "Dobi licenvo.",
         "identificationCode": {
             "creation": "creation",
             "publication": "publication",

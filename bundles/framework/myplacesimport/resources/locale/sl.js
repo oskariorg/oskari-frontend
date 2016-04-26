@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Uvoz nabora podatkov",
             "description": "Lahko uvoziš lasten nabor podatkov v shp-, gpx- in mif/mid formatu v zip datoteki ali v kmz formatu (stisnjen kml). Lahko uvoziš podatke, ki vsebujejo največ do 5000 pojavov.",
-            "help": "NOT TRANSLATED",
+            "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "actions": {
                 "cancel": "Prekliči",
                 "next": "Naslednji"
@@ -19,9 +19,9 @@ Oskari.registerLocalization(
             "file": {
                 "submit": "Pošlji",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "Napaka",
+                    "message": "Izbrana datoteka je prevelika. B+velikost je omejena na  <xx> mb.",
+                    "close": "Zapri"
                 }
             },
             "layer": {

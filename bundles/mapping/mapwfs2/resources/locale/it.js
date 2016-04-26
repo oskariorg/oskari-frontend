@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Stile predefinito",
         "own-style": "Stile personalizzato",
+        "refresh": "Aggiorna",
+        "refresh_title": "I dati aggiornati non sono automaticamente rappresentati in mappa",
         "tile": {
             "title": "MapWfs2"
         },
@@ -22,6 +24,10 @@ Oskari.registerLocalization(
             "wfs_configuring_layer_failed": "Configurazione layer {layer} WFS non riuscita",
             "wfs_request_failed": "Richiesta layer {layer} WFS non riuscita",
             "features_parsing_failed": "La funzione di analisi del layer {layer} WFS non è riuscita"
+        },
+        "information": {
+            "title": "Rappresentazione degli elementi",
+            "info": "Alcuni dati non sono rappresentati automaticamente. <br/><br/> Seleziona un'area sulla mappa e fai click sul pulsante 'Aggiorna'. <br/><br/> Clicca 'Dati' per vedere i dati sul layer."
         },
         "button": {
             "cancel": "Cancella",

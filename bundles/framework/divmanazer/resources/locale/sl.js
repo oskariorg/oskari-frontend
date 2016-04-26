@@ -141,12 +141,12 @@ Oskari.registerLocalization(
         "VisualizationForm": {
             "tooltips": {
                 "dot": "Urejaj slog točkovnega pojava",
-                "area": "Urejaj slog območja  pojava",
+                "area": "Urejaj slog za območje pojava",
                 "line": "Urejaj slog linijskega pojava"
             },
             "dot": {
                 "title": "Slog točkovnega pojava",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za točkovne pojave",
                 "symbol": {
                     "label": "Ikona"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Slog linijskega pojava",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za linijske pojave",
                 "style": {
                     "label": "Pomišljaj"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Slog območja",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za območje pojava",
                 "linestyle": {
                     "label": "Oblika linije"
                 },

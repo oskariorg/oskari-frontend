@@ -80,6 +80,30 @@ function() {
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/en.js"
+        }, {
+            "lang" : "et",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/et.js"
+        }, {
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/is.js"
+        }, {
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/it.js"
+        }, {
+            "lang" : "nl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/nl.js"
+        }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/sk.js"
+        }, {
+            "lang" : "sl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/sl.js"
         }]
     },
     "bundle" : {

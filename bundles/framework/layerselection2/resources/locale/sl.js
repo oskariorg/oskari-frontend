@@ -49,7 +49,7 @@ Oskari.registerLocalization(
                 "type-wfs": "Podatki o izdelku"
             },
             "refresh_load": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Osveži podatke o sloju na karti. Podatki se ne osvežujejo avtomatično."
             },
             "filter": {
                 "title": "Filter",
@@ -87,14 +87,14 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "je manjše kot ali enako kot"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Izberi združeno vrednost",
-                    "aggregateValueSelectTitle": "Uporabi združeno vrednost v filtru",
-                    "selectAggregateAnalyse": "Izberi združeno analizo",
+                    "addAggregateFilter": "Uporabi statistično vrednost",
+                    "aggregateValueSelectTitle": "Izberi statistično vrednost",
+                    "selectAggregateAnalyse": "Izberi analitičen sloj",
                     "selectIndicator": "Izberi indikator",
-                    "selectReadyButton": "Pripravljen",
-                    "getAggregateAnalysisFailed": "Združenih podatkov ni bilo mogoče najti",
-                    "noAggregateAnalysisPopupTitle": "Združene analize ni bilo mogoče najti",
-                    "noAggregateAnalysisPopupContent": "Združena analiza ni bila izdelana. Lahko izdelaš lastno združeno analizo podatkov z analitično funkcijo in potem uporabiš te podatke za filtriranje."
+                    "selectReadyButton": "Zapri",
+                    "getAggregateAnalysisFailed": "Statističnih podatkov ni bilo mogoče najti",
+                    "noAggregateAnalysisPopupTitle": "Statistične analize ni bilo mogoče najti",
+                    "noAggregateAnalysisPopupContent": "Statistična analiza ni bila izdelana. Lahko izdelaš lastno združeno analizo podatkov z analitično funkcijo in potem uporabiš te podatke za filtriranje."
                 },
                 "validation": {
                     "title": "Filtra ni mogoče osvežiti zaradi naslednjih napak:",
