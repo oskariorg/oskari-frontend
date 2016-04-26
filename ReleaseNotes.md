@@ -187,9 +187,11 @@ Now makes a new getScreenshot() function available when using mapmodule supporti
 New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
 http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
 
-#### FeedbackResultEvent [rpc]
+### feedbackService [new] 
 
-Notifies that feedback request response has been got from the service. Includes the response data.
+One new event and  4 new requests
+
+FeedbackResultEvent notifies that feedback request response has been got from the service. Includes the response data.
 
 Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successfull 
 and the response data has been got from the service. 
