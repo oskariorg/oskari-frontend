@@ -331,7 +331,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _createControlElement: function () {
             var me = this,
                 el = me._templates.coordinatetool.clone();
-                //me._config.noUI = true;
 
             me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
@@ -343,7 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             el.bind('click', function(event){
                 if (me._sandbox.mapMode !== "mapPublishMode") {
                     me._toggleToolState();
-                    //event.stopPropagation();
+                    event.stopPropagation();
                 }
             });
 
