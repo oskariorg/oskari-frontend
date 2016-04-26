@@ -1,0 +1,206 @@
+div.popupHeaderArrow {
+
+    &.no-position-info {
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #424343;
+      display: inline-block;
+      float: left;
+      margin-top: 10px;
+    }
+
+    &.center-left {
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #424343;
+      display: inline-block;
+      float: none!important;
+      position: absolute;
+      left:0;
+      top: 50%;
+      margin-top: 10px;
+    }
+
+    &.center-right {
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 10px solid #424343;
+      display: inline-block;
+      float: none!important;
+      position: absolute;
+      right:0;
+      top: 50%;
+      margin-top: 10px;
+    }
+    &.bottom-center {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #424343;
+      border-bottom: 10px solid transparent;
+      display: inline-block;
+      float: none!important;
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      margin-left: -10px;
+      margin-top: 10px;
+    }
+    &.top-center {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #424343;
+      display: inline-block;
+      float: none!important;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      margin-top: 15px;
+      margin-left: -10px;
+    }
+}
+
+div.olPopup {
+    margin: 0;
+    padding: 0;
+    overflow: auto/*\0/ !important*/;   
+    /*height: 400px*//*\0/ !important*/;
+    z-index: 16000;
+
+    &.center-left {
+      margin-left:10px;
+      margin-top:10px;
+    }
+    &.center-right {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+
+    &.bottom-center {
+      margin-bottom: -10px;
+    }
+    &.top-center {
+      margin-top: 25px;
+    }
+}
+
+div.infoboxPopupNoMargin {
+  margin: 0!important;
+  border: none!important;
+  /*overflow: hidden!important;*/
+  height: 94%;
+  padding: 0 20px!important;
+}
+
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+div.popupHeader {
+    background-color: #424343;
+    color: #FFFFFF;
+    position: relative;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    @include border-radius(6px 6px 0px 0px);
+    display: inline-block;
+    width: 390px;   
+    float: left;
+    height: 40px;
+
+    div {
+        vertical-align: top;    
+        margin-left: 20px;
+        margin-right: 20px;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        position: absolute;
+        top: 12px;
+    }
+    
+}
+
+div.popupContent {
+    clear: both;
+    background-color: #FFFFFF;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    max-height: 250px;
+    @include border-radius(0px 0px 6px 6px);
+    border: 1px solid;
+    border-color: #424343;
+    overflow: auto;
+    padding: 20px 20px 20px 25px;
+
+    div.contentWrapper-infobox {
+        margin-bottom: 10px;
+    }
+
+    hr.infoboxLine {
+        border: 1px solid;
+        width: 90%;
+        margin-top: 10px;
+    }
+
+    span.infoboxActionLinks {
+        padding-right: 15px;
+    } 
+
+}
+
+/*Pop-up width reduced for places search */
+div#searchResultPopup_contentDiv div.popupContent {
+    height: 150px;
+}
+
+div.olPopupContent {
+    overflow: visible;
+    padding: 0px;
+    margin: 0px;
+    left: 0px;
+    top: 0px;    
+}
+
+.olPopupCloseBox {
+    cursor: pointer;
+    background-attachment: scroll;
+    background-color: transparent;
+    background-origin: padding-box;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    right: 0px;
+    position: absolute;
+    top: 14px;
+}
+
+div.myplaces_place {
+    padding-bottom: 18px;
+
+    img.myplaces_img {
+        padding-bottom: 15px;
+        max-height: 350px;
+        max-width: 350px;
+    }
+
+}
+

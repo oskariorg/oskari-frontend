@@ -100,23 +100,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
 
         setColourScheme: function (colourScheme) {
-            if (colourScheme.headerColour) {
-                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.headerColour});
+            if (colourScheme.bgColour) {
+                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.bgColour});
             }
 
             if (colourScheme.titleColour) {
                 this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
             }
 
-            if (colourScheme.bgColour) {
-                this.dialog.css({'background-color': colourScheme.bgColour});
-                this.getJqueryContent().find('.popupContent').css({'background-color': colourScheme.bgColour});
-            }
-
             if (colourScheme.iconCls) {
                 var div = this.dialog.find('.icon-close');
                 div.removeClass('icon-close icon-close:hover');
                 div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                if (colourScheme.linkColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
             }
         },
 

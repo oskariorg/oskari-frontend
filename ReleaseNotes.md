@@ -10,6 +10,26 @@ ShowInfoBoxRequest is modified to allow giving multiple additional parameters (h
 
 Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
 
+The relative position of the infobox to the coordinates on the map can now be provided in options, so the infobox is displayed either over, under, to the left or to the right of the given position. Note! Only OL3!
+
+```javascript
+    {
+        //display the popup on top of the coordinates given. Possible values: top, bottom, left, right 
+        positioning: 'top'
+    }
+```
+
+Also, the background- and textcolour of buttons and textcolour of action links can now be provided as part of the colourScheme-object in options.
+
+```javascript
+    colourScheme: {
+        buttonBgColour: '#00CCDD',
+        buttonLabelColour: '#00F000',
+        linkColour: '#DD0000'
+    }
+```
+
+
 ### Oskari core and require.js
 
 Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
