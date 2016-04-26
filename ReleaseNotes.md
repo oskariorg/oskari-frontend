@@ -50,6 +50,11 @@ The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multip
 This is in preparation for the core rewrite/restructuring/clarification.
 The build includes requirejs with it's text plugin from under libraries.
 
+### integration/admin-layerselector
+
+"resolveDepth" attribute setup added for WFS 2 layers in admin layer selector. Default is false.
+ResolveDepth solves xlink:href links in GetFeature request.
+
 ### framework/search
 
 Fixed search result table sorting when columns contains word and numbers.
@@ -181,6 +186,15 @@ Now makes a new getScreenshot() function available when using mapmodule supporti
 
 New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
 http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
+
+#### FeedbackResultEvent [rpc]
+
+Notifies that feedback request response has been got from the service. Includes the response data.
+
+Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successfull 
+and the response data has been got from the service. 
+
+Look at http://oskari.org/examples/rpc-api/rpc_example.html and RPC api documentation in details.
 
 
 ### timeseries
