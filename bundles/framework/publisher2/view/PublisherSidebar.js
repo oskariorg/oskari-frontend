@@ -317,6 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     if(!grouping[group]) {
                         grouping[group] = [];
                     }
+                    me.addToolConfig(ignored, tool);
                     grouping[group].push(tool);
                 }
 
@@ -718,5 +719,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          */
         destroy: function () {
             this.mainPanel.remove();
+        },
+        addToolConfig: function(ignored, tool) {
+            var me = this;
+            var toolsConfig = me.instance.conf.toolsConfig;
+            _.each(ignored._category, function(t) {
+                if(toolsConfig[t.bundleName]) {
+                    tool.toolConfig = toolsConfig[t.bundleName];
+                }
+            });
         }
     });

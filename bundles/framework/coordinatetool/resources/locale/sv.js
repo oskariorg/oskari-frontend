@@ -83,6 +83,10 @@ Oskari.registerLocalization(
             "cannotTransformCoordinates" : {
                 "title": "Fel",
                 "message": "Koordinater kan inte omvandlas"
+            },
+            "publisher": {
+                "showTransformationTools": "NOT TRANSLATED",
+                "noUI": "NOT TRANSLATED"
             }
         }
     }

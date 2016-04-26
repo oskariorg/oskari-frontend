@@ -331,6 +331,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _createControlElement: function () {
             var me = this,
                 el = me._templates.coordinatetool.clone();
+                //me._config.noUI = true;
 
             me._locale = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
@@ -342,11 +343,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             el.bind('click', function(event){
                 if (me._sandbox.mapMode !== "mapPublishMode") {
                     me._toggleToolState();
-                    event.stopPropagation();
+                    //event.stopPropagation();
                 }
             });
 
             me._changeToolStyle(null, el);
+
+            if(me._config.noUI) {
+                return null;
+            }
+
             return el;
         },
         /**
@@ -560,18 +566,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 },
                 /**
-                 * @method Publisher2.ColourSchemeChangedEvent
-                 * @param  {Oskari.mapframework.bundle.publisher2.event.ColourSchemeChangedEvent} evt
+                 * @method RPCUIEvent
+                 * will open/close coordinatetool's popup
                  */
-                'Publisher2.ColourSchemeChangedEvent': function(evt){
-                    this._changeToolStyle(evt.getColourScheme());
-                },
-                /**
-                 * @method Publisher.ColourSchemeChangedEvent
-                 * @param  {Oskari.mapframework.bundle.publisher.event.ColourSchemeChangedEvent} evt
-                 */
-                'Publisher.ColourSchemeChangedEvent': function(evt){
-                    this._changeToolStyle(evt.getColourScheme());
+                RPCUIEvent: function (event) {
+                    var me = this;
+                    if(event.getBundleId()==='coordinatetool') {
+                         me._toggleToolState();
+                    }
                 }
             };
         },

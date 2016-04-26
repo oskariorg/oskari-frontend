@@ -1,24 +1,21 @@
 /**
- * @class Oskari.mapframework.bundle.routingService.event.RouteResultEvent
+ * @class Oskari.mapframework.bundle.rpc.event.RPCUIEvent
  *
  * Used to notify routingUI that route has been got successfully from the service
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResultEvent',
+Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Boolean} success succesfully getted route
- * @param {JSON} requestParameters request parameters
- * @param {JSON} plan parameters of route
+ * @param {String} bundle id
+ * @param {Boolean/Object} payload
  */
-function(success, requestParameters, plan) {
-    this._success = success;
-    this._requestParameters = requestParameters;
-    this._plan = plan;
+function(bundleId, payload) {
+    this._bundleId = bundleId;
+    this._payload = payload;
 }, {
     /** @static @property __name event name */
-    __name : "RouteResultEvent",
-
+    __name : "RPCUIEvent",
     /**
      * @method getName
      * Returns event name
@@ -28,35 +25,24 @@ function(success, requestParameters, plan) {
         return this.__name;
     },
     /**
-     * @method getSuccess
-     * Returns the successfully routing info
-     * @return {Boolean}
+     * @method getBundleId
+     * Returns
+     * @return {String}
      */
-    getSuccess : function() {
-        return this._success;
+    getBundleId : function() {
+        return this._bundleId;
     },
     /**
-     * @method getPlan
-     * Returns the plan JSON
-     * @return {JSON}
+     * @method getPayload
+     * Returns
+     * @return {}
      */
-    getPlan : function() {
-        return this._plan;
+    getPayload : function() {
+        return this._payload;
     },
-    /**
-     * @method getRequestParameters
-     * Returns request paremeters
-     * @return {JSON}
-     */
-    getRequestParameters : function() {
-        return this._requestParameters;
-    },
-
     getParams: function () {
         return {
-            success: this._success,
-            plan: this._plan,
-            requestParameters: this._requestParameters
+            bundleId: this._bundleId
         };
     }
 }, {

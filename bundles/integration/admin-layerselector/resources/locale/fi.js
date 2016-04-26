@@ -151,6 +151,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
             "manualRefresh": "Manuaalinen päivitys",
+            "resolveDepth": "xlink:href haku",
             "matrixSetId": "WMTS-tiilimatrisin tunniste",
             "matrixSetIdDesc": "WMTS-tiilimatriisin tunniste (TileMatrixSet id) on tekninen tunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "matrixSet": "WMTS-tason JSON",
