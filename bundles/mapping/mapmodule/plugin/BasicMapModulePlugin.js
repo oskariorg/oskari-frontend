@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
 
             if (me._element && me.createPluginUI) {
-                me.createPluginUI(isMapInMobileMode, true);
+                me.createPluginUI(isMapInMobileMode);
             }
         },
 
@@ -415,8 +415,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 }
                 
                 me._uiMode = 'mobile';
-            } else {                                
-                me._element = me._createControlElement();
+            } else {
+                if (modeChanged) {
+                    me._element = me._createControlElement();
+                }
                 if(me._element && me.getLocation()) {
                     me.getMapModule().setMapControlPlugin(
                         me._element,
