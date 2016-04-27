@@ -161,8 +161,6 @@ div.mapplugins {
     margin-top: 6px;
     margin-right: 6px;
   }
-  .mobileToolbarDiv .mobiletoolbar:hover {
-      background-color: transparent !important; }
   .mobileToolbarDiv input[type=text] {
     height: 10px; }
 
