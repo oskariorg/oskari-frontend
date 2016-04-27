@@ -452,8 +452,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
                 
                 me._uiMode = 'mobile';
-            } else {                                
-                me._element = me._createControlElement();
+            } else {
+                if (modeChanged) {
+                    me._element = me._createControlElement();
+                }
                 me.getMapModule().setMapControlPlugin(
                     me._element,
                     me.getLocation(),
