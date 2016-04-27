@@ -6,6 +6,7 @@ bin/
 dist/
 .idea
 *.iml
+.vscode
 oskari.org/
 !applications/oskari.org/
 node_modules/
