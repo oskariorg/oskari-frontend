@@ -119,17 +119,19 @@ function() {
                     me.noUI = null;
                 }
             });
+
+            if(me.projectionTrasformationIsCheckedInModifyMode) {
+                optionShowTransformationTools.find('input').attr('checked', 'checked');
+                me.supportedProjections = me.toolConfig.supportedProjections;
+            }
+            if(me.noUiIsCheckedInModifyMode) {
+                optionNoUI.find('input').attr('checked', 'checked');
+                me.noUI = true;
+            }
+            template.append(optionShowTransformationTools);
+            template.append(optionNoUI);
         };
-         if(me.projectionTrasformationIsCheckedInModifyMode) {
-            optionShowTransformationTools.find('input').attr('checked', 'checked');
-            me.supportedProjections = me.toolConfig.supportedProjections;
-        }
-        if(me.noUiIsCheckedInModifyMode) {
-            optionNoUI.find('input').attr('checked', 'checked');
-            me.noUI = true;
-        }
-        template.append(optionShowTransformationTools);
-        template.append(optionNoUI);
+
         return template;
     }
 }, {
