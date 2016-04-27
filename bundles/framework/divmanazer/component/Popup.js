@@ -289,22 +289,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this.overlay = overlay;
             overlay.followResizing(true);
         },
-
-        showInMobileMode: function () {
-            var me = this,
-                overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
-            overlay.overlay('body');
-            this.overlay = overlay;
-            overlay._overlays[0].overlay.css({opacity: 0});
-            overlay.followResizing(true);
-            overlay.bindClickToClose();
-            overlay.onClose(function () {
-                me.dialog.remove();
-                me.__notifyListeners('close');
-            });
-            me.dialog.addClass('mobile-portrait');
-
-        },
         /**
          * @method stopKeypressPropagation
          * Stops keypress events from bubbling outside of popup

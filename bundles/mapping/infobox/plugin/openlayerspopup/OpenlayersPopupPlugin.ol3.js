@@ -182,7 +182,7 @@ Oskari.clazz.define(
                     popupType = "mobile";
 
                 popup.createCloseIcon();
-                popup.showInMobileMode();
+                me._showInMobileMode(popup);
 
                 if (font) {
                     popup.setFont(font);
@@ -277,8 +277,17 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-            
-
+        },
+        _showInMobileMode: function (popup) {
+            popup.makeModal();
+            popup.overlay._overlays[0].overlay.css({opacity: 0});
+            popup.overlay.followResizing(true);
+            popup.overlay.bindClickToClose();
+            popup.overlay.onClose(function () {
+                popup.dialog.remove();
+                popup.__notifyListeners('close');
+            });
+            popup.dialog.addClass('mobile-portrait');
         },
 
         /**

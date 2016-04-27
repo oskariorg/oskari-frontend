@@ -161,7 +161,7 @@ Oskari.clazz.define(
                     popupContent = contentDiv,
                     popupType = "mobile";
                 popup.createCloseIcon();
-                popup.showInMobileMode();
+                me._showInMobileMode(popup);
 
                 if (font) {
                     popup.setFont(font);
@@ -260,6 +260,17 @@ Oskari.clazz.define(
                 }
             }
 
+        },
+        _showInMobileMode: function (popup) {
+            popup.makeModal();
+            popup.overlay._overlays[0].overlay.css({opacity: 0});
+            popup.overlay.followResizing(true);
+            popup.overlay.bindClickToClose();
+            popup.overlay.onClose(function () {
+                popup.dialog.remove();
+                popup.__notifyListeners('close');
+            });
+            popup.dialog.addClass('mobile-portrait');
         },
 
         /**
@@ -572,9 +583,13 @@ Oskari.clazz.define(
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
                     'max-height': maxHeight - 40 + 'px',
-                    'height': '100%',
-                    'width': '100%'
+                    'height': '100%'
                 });
+
+            popup.find('.olPopupContent').css({
+                'width': '100%',
+                'height': '100%'
+            });
 
             var wrapper = content.find('.contentWrapper');
             popup.css({
@@ -707,7 +722,6 @@ Oskari.clazz.define(
             }
             /*buttons and actionlinks*/
             if (colourScheme) {
-                debugger;
                 if (colourScheme.linkColour) {
                     jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
                 }
