@@ -143,9 +143,9 @@ Event occurs after above mentioned feedback request has been completed.
 <code>
                              var postdata = {
                              "service_code": "180",
-                             "description": "Kampin bussipysäkillä haisee koiran pissi",
+                             "description": "Kampin bussipysäkillä on roskis täynnä",
                              "first_name" : "Oskari",
-                             "last_name" : "Maanmittaushallitus",
+                             "last_name" : "Olematon",
                              "lat": "6674188.748000",
                              "long": "384717.640000"
                              };
