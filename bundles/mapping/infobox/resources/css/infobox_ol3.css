@@ -146,10 +146,6 @@ div.popupContent {
   div.popupContent span.infoboxActionLinks {
     padding-right: 15px; }
 
-/*Pop-up width reduced for places search */
-div#searchResultPopup_contentDiv div.popupContent {
-  height: 150px; }
-
 div.olPopupContent {
   overflow: visible;
   padding: 0px;
