@@ -572,7 +572,8 @@ Oskari.clazz.define(
                     'margin-left': '0',
                     'padding': '5px 20px 5px 20px',
                     'max-height': maxHeight - 40 + 'px',
-                    'height': '100%'
+                    'height': '100%',
+                    'width': '100%'
                 });
 
             var wrapper = content.find('.contentWrapper');
