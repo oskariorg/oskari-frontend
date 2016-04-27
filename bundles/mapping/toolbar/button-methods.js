@@ -141,7 +141,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if(!pConfig.backgroundColor) {
             pConfig.backgroundColor = button.css('background-color');
         }
-        
+
     },
 
     _checkToolChildrenPosition: function(pId, pGroup, pConfig){
@@ -181,7 +181,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         children.attr({
             'data-button-id': pId,
             'data-group-id': pGroup
-        });        
+        });
         toolbarTopParent.append(children);
         children.hide();
         btn.children = children;
@@ -229,7 +229,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         if(typeof btn.selected === 'undefined') {
             btn.selected = button.hasClass('selected');
-        }        
+        }
 
         if (btn.sticky === true) {
             // notify components that tool has changed
@@ -269,7 +269,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             // highlight the button
             if (button.hasClass('selected')) {
                 button.removeClass('selected');
-                btn.selected = false; 
+                btn.selected = false;
             } else {
                 button.addClass('selected');
                 btn.selected = true;
@@ -290,9 +290,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             var button = group.find('div.tool[tool=' + id + ']');
             // Change default background color back
             if(btn.backgroundColor && btn.activeColor) {
-                button.css('background-color', btn.backgroundColor);    
+                button.css('background-color', btn.backgroundColor);
             }
-            
+
             // Change default icon back
             var isToggledIcon = (btn.iconStyle && btn.iconDarkCls && btn.iconLightCls) ? true : false;
             if(btn.toggleChangeIcon === true && isToggledIcon) {
@@ -342,7 +342,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.remove();
                 this.buttons[prefixedGroup][pId] = null;
                 delete this.buttons[prefixedGroup][pId];
-                
+
                 var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id) ? true : false;
                 if(isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
                     this.selectedButton = null;

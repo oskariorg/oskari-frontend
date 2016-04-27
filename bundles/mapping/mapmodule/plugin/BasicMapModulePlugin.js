@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if (!me._config.location) {
                 me._config.location = {};
             }
-            
+
             me._config.location.classes = location;
             if (el) {
                 try{
@@ -374,11 +374,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         createPluginUI: function(mapInMobileMode, modeChanged) {
             var me = this,
-                sandbox = me.getSandbox();            
+                sandbox = me.getSandbox();
 
             //remove old element
             if (modeChanged && me._element) {
-                
+
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
                     me.inLayerToolsEditMode(),
@@ -400,7 +400,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 }
             }
 
-            if (mapInMobileMode) {                
+            if (mapInMobileMode) {
                 var toolbar = me.getMapModule().getMobileToolbar();
                 var reqBuilder = sandbox.getRequestBuilder(
                     'Toolbar.AddToolButtonRequest'
@@ -413,9 +413,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                         sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
                     }
                 }
-                
+
                 me._uiMode = 'mobile';
-            } else {                                
+            } else {
                 me._element = me._createControlElement();
                 if(me._element && me.getLocation()) {
                     me.getMapModule().setMapControlPlugin(

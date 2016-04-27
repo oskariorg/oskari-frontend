@@ -834,7 +834,7 @@ Oskari.clazz.define(
 /* --------------- /MAP STATE ------------------------ */
 
 /*---------------- MAP MOBILE MODE ------------------- */
-        
+
         _addMobileDiv: function () {
             var mapDiv = this.getMapEl();
             jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
@@ -849,7 +849,7 @@ Oskari.clazz.define(
 
         getMobileToolbar: function () {
             var me = this;
-            if (!me._mobileToolbar) {                
+            if (!me._mobileToolbar) {
                 me._createMobileToolbar();
             }
             return me._mobileToolbarId;
@@ -880,7 +880,7 @@ Oskari.clazz.define(
 
             }
         },
-        
+
         setMobileMode: function (isInMobileMode) {
             this._isInMobileMode = isInMobileMode;
         },
@@ -909,7 +909,7 @@ Oskari.clazz.define(
                 _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.createPluginUI === 'function') {
                         var index = plugin.getIndex();
-                        plugin.createPluginUI(me.getMobileMode(), modeChanged);                
+                        plugin.createPluginUI(me.getMobileMode(), modeChanged);
                     }
                 });
             }
@@ -1582,7 +1582,7 @@ Oskari.clazz.define(
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
                 curr;
-                
+
             if (!element) {
                 throw 'Element is non-existent.';
             }
