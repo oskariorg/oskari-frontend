@@ -340,12 +340,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             };
         },
         _addToolConfig: function(tool) {
-            if (!this.instance.conf || !tool.bundleName) {
+            var conf = this.instance.conf || {};
+            if (!conf.toolsConfig || !tool.bundleName) {
                 return;
             }
-            if(this.instance.conf.toolsConfig) {
-                tool.toolConfig = this.instance.conf.toolsConfig[tool.bundleName];
-            }
+            tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
          * @private @method _filterIndicators
