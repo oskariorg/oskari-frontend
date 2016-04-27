@@ -91,16 +91,16 @@ function() {
      * @param {Object} jQuery element toolContainer
      * @return {Object} jQuery element template
      */
-    getExtraOptions: function (toolContainer) {
+     getExtraOptions: function (toolContainer) {
         var me = this,
-            template,
-            loc = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage());
-        if(me.toolConfig && me.toolConfig.supportedProjections) {
             template = jQuery(me.templates.toolOptions).clone(),
-            optionShowTransformationTools = jQuery(me.templates.toolOptionSettingInput).clone(),
+            loc = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()),
             optionNoUI = jQuery(me.templates.toolOptionSettingInput).clone(),
-            labelShowTransformationTools = loc.display.publisher.showTransformationTools,
             labelNoUI = loc.display.publisher.noUI;
+
+        if(me.toolConfig && me.toolConfig.supportedProjections) {
+            optionShowTransformationTools = jQuery(me.templates.toolOptionSettingInput).clone(),
+            labelShowTransformationTools = loc.display.publisher.showTransformationTools,
 
             optionShowTransformationTools.find('label').html(labelShowTransformationTools);
             optionShowTransformationTools.find('input').change(function (e) {
@@ -111,29 +111,27 @@ function() {
                 }
             });
 
-            optionNoUI.find('label').html(labelNoUI);
-            optionNoUI.find('input').change(function (e) {
-                if(jQuery(this).is(':checked')) {
-                    me.noUI = true;
-                } else {
-                    me.noUI = null;
-                }
-            });
-
             if(me.projectionTrasformationIsCheckedInModifyMode) {
                 optionShowTransformationTools.find('input').attr('checked', 'checked');
                 me.supportedProjections = me.toolConfig.supportedProjections;
             }
-            if(me.noUiIsCheckedInModifyMode) {
-                optionNoUI.find('input').attr('checked', 'checked');
-                me.noUI = true;
-            }
             template.append(optionShowTransformationTools);
-            template.append(optionNoUI);
-        };
-
+        }
+        optionNoUI.find('label').html(labelNoUI);
+        optionNoUI.find('input').change(function (e) {
+            if(jQuery(this).is(':checked')) {
+                me.noUI = true;
+            } else {
+                me.noUI = null;
+            }
+        });
+        if(me.noUiIsCheckedInModifyMode) {
+            optionNoUI.find('input').attr('checked', 'checked');
+            me.noUI = true;
+        }
+        template.append(optionNoUI);
         return template;
-    }
+     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
     'protocol' : ['Oskari.mapframework.publisher.Tool']
