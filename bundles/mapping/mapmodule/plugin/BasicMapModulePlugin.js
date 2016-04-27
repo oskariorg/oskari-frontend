@@ -425,6 +425,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     );
                 }
                 me._uiMode = 'desktop';
+                me.refresh();
             }
         }
     }, {

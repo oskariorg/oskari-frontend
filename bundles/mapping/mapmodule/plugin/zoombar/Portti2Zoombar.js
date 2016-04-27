@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 'mobile-zoom-in': {
                     iconCls: 'mobile-zoom-in-light mobiletoolbar',
                     tooltip: '',
-                    sticky: true,
+                    sticky: false,
                     show: true,
                     callback: function (el) {
                         var mapModule = me.getMapModule();
@@ -47,8 +47,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                             me.getMapModule().setZoomLevel(currentZoom+1);
                         }
                     },
-                    toggleChangeIcon: true,
-                    activeColor: '#E6E6E6'
+                    //toggleChangeIcon: true,
+                    //activeColor: '#E6E6E6'
                     //childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
@@ -459,6 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     me.getLocation(),
                     me.getIndex()
                 );
+                me.refresh();
                 me._uiMode = 'desktop';
             }
         }
