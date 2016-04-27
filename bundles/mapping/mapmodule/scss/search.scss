@@ -319,4 +319,8 @@ div.published-search-div {
   float:left;
   margin-right: 6px;
   margin-top: 6px;
+
+  input[type=button] {
+    vertical-align: top;
+  }
 }
