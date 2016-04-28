@@ -26,7 +26,8 @@ div.coordinatetool__popup {
     div.coordinatetool__popup div.coordinatetool__popup__content .clear {
       clear: both; }
   div.coordinatetool__popup .margintop {
-    margin-top: 10px; }
+    margin-top: 10px;
+    display: inline-block; }
   div.coordinatetool__popup .coordinatetool-divider {
     margin-bottom: 5px;
     height: 1px;
