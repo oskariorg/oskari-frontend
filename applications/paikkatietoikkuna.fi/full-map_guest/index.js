@@ -68,6 +68,49 @@ jQuery(document).ready(function() {
     }
 
     function start(appSetup, appConfig) {
+         // HACK
+        appConfig['routingService']  = {
+            conf: {},
+            state: {}
+        };
+        appConfig['routingUI'] = {
+            conf: {},
+            state: {}
+        };
+        appSetup.startupSequence.push({
+            bundleinstancename: 'routingService',
+            bundlename: 'routingService',
+            en: 'routingService',
+            fi: 'routingService',
+            sv: 'routingService',
+            title: 'routingService',
+            metadata: {
+                'Import-Bundle': {
+                    'routingService' :{
+                        bundlePath: '/Oskari/packages/framework/bundle/'
+                    }
+                }
+            },
+            instanceProps: {}
+        });
+        appSetup.startupSequence.push({
+            bundleinstancename: 'routingUI',
+            bundlename: 'routingUI',
+            en: 'routingUI',
+            fi: 'routingUI',
+            sv: 'routingUI',
+            title: 'routingUI',
+            metadata: {
+                'Import-Bundle': {
+                    'routingUI' :{
+                        bundlePath: '/Oskari/packages/framework/bundle/'
+                    }
+                }
+            },
+            instanceProps: {}
+        });
+        console.log(appSetup);
+        // HACK ENDS
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
