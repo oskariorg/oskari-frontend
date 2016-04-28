@@ -42,7 +42,8 @@ div.mapplugin.search div.results {
 
 table.search-results {
   width: 100%;
-  margin: 0px; }
+  margin: 0px;
+  border: 0px; }
   table.search-results td, table.search-results th {
     text-align: left;
     padding: 2px;
@@ -220,3 +221,7 @@ div.published-search-div {
   margin-top: 6px; }
   .mobilesearch input[type=button] {
     vertical-align: top; }
+
+.divmanazerpopup.searchresult {
+  margin-left: -30px!important;
+}

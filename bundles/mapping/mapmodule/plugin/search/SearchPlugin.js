@@ -175,7 +175,7 @@ Oskari.clazz.define(
                 delete me._element;
 
                 if (me.popup) {
-                    me.popup.close();
+                    me.popup.close(true);
                 }
 
                 me._createControlElement();
@@ -523,17 +523,15 @@ Oskari.clazz.define(
                 }
             }
 
-            if (me._uiMode === "mobile") {
-                var popupContent = resultsContainer;
-                me.popup.addClass('mobile-popup');
-                me.popup.setColourScheme({"headerColour": "#e6e6e6"});
-                me.popup.show(popupTitle, popupContent);
-                me.popup.createCloseIcon();
-                me.popup.moveTo(me.getElement().parent(), 'bottom', true);
-            } else {
-                resultsContainer.prepend('<div class="header"><div class="close icon-close" title="' + me._loc.close + '"></div></div>');
-                me.getElement().append(resultsContainer);
-                resultsContainer.show();
+            var popupContent = resultsContainer;
+            me.popup.addClass('mobile-popup');
+            me.popup.setColourScheme({"headerColour": "#e6e6e6"});
+            me.popup.show(popupTitle, popupContent);
+            me.popup.createCloseIcon();
+            me.popup.moveTo(me.getElement(), 'bottom', true);
+
+            if (me._uiMode === "desktop") {
+                me.popup.addClass('searchresult');
             }
         },
         /**
