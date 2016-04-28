@@ -218,5 +218,5 @@ div.published-search-div {
   float: left;
   margin-right: 6px;
   margin-top: 6px; }
-
-/*# sourceMappingURL=search.css.map */
+  .mobilesearch input[type=button] {
+    vertical-align: top; }

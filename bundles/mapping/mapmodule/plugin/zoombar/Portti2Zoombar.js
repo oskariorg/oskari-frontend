@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
-        
+
         this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         if(currentZoom<maxZoomLevel) {
                             me.getMapModule().setZoomLevel(currentZoom+1);
                         }
-                    }
+                    },
                     //toggleChangeIcon: true,
                     //activeColor: '#E6E6E6'
                     //childPosition: 'bottom'
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         var currentZoom = mapModule.getMapZoom();
                         if(currentZoom>0) {
                             me.getMapModule().setZoomLevel(currentZoom-1);
-                        }    
+                        }
                     }
                     //toggleChangeIcon: true,
                     //activeColor: '#E6E6E6',
@@ -409,11 +409,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         createPluginUI: function(mapInMobileMode, modeChanged) {
             var me = this,
-                sandbox = me.getSandbox();            
+                sandbox = me.getSandbox();
 
             //remove old element
             if (modeChanged && me._element) {
-                
+
                 me.getMapModule().removeMapControlPlugin(
                     me._element,
                     me.inLayerToolsEditMode(),
@@ -437,7 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
             }
 
-            if (mapInMobileMode) {                
+            if (mapInMobileMode) {
                 var toolbar = me.getMapModule().getMobileToolbar();
                 var reqBuilder = sandbox.getRequestBuilder(
                     'Toolbar.AddToolButtonRequest'
@@ -450,17 +450,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
                     }
                 }
-                
+
                 me._uiMode = 'mobile';
             } else {
+
                 if (modeChanged) {
                     me._element = me._createControlElement();
                 }
+
                 me.getMapModule().setMapControlPlugin(
                     me._element,
                     me.getLocation(),
                     me.getIndex()
                 );
+                me.refresh();
                 me._uiMode = 'desktop';
             }
         }
