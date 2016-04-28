@@ -131,6 +131,10 @@ Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used t
 
 Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
 
+#### util.isMobile
+
+Oskari.util.isMobile has been added to /Oskari/bundles/bundle.js. It's used to check at is map in mobile mode.
+
 ### divmanazer/ui-components
 
 Removed Raphael library from package.

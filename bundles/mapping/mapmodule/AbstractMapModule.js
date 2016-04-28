@@ -893,8 +893,8 @@ Oskari.clazz.define(
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
-
-            if (newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
+            
+            if (Oskari.util.isMobile() || newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
                 mobileDiv.show();

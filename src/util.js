@@ -321,5 +321,10 @@ Oskari.util = (function () {
         return this.getColorBrightness(color) === 'light';
     };
 
+    util.isMobile = function() {
+        var md = new MobileDetect(window.navigator.userAgent);
+        return md.mobile() !== null;
+    };
+
     return util;
 }());
