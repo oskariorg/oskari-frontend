@@ -278,6 +278,6 @@
 
 
     O.getDecimalSeparators = function () {
-        return this.decimalSeparators;
+        return decimalSeparators;
     };
 }(Oskari));
