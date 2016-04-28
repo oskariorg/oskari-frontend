@@ -453,8 +453,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 me._uiMode = 'mobile';
             } else {
 
-                if (modeChanged) {
+                if (modeChanged || !me.getElement()) {
                     me._element = me._createControlElement();
+                    me._ctl = me._createControlAdapter(me._element);
+                    if(me._ctl) {
+                        me.getMapModule().addMapControl(me._pluginName, me._ctl);
+                    }
+                    if (me._element) {
+                        me._element.attr('data-clazz', me.getClazz());
+                    }
+                    // Set initial UI values
+                    me.refresh();
+                    // There's a possibility these were set before plugin was started.
+                    me.setEnabled(me._enabled);
+                    me.setVisible(me._visible);
+                    if (me._element) {
+                        me._element.attr('data-clazz', me.getClazz());
+                        me.getMapModule().setMapControlPlugin(
+                            me._element,
+                            me.getLocation(),
+                            me.getIndex()
+                        );
+                    }
                 }
 
                 me.getMapModule().setMapControlPlugin(
