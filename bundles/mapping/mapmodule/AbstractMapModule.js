@@ -103,7 +103,6 @@ Oskari.clazz.define(
         me._mobileToolbar;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent;
-
     }, {
         /**
          * @method init
@@ -893,7 +892,8 @@ Oskari.clazz.define(
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
-            
+            var mapDivHeight = jQuery(window).height();
+
             if (Oskari.util.isMobile() || newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
@@ -902,7 +902,7 @@ Oskari.clazz.define(
                 modeChanged = (me.getMobileMode() === false) ? false : true;
                 me.setMobileMode(false);
                 mobileDiv.hide();
-            }
+            }            
 
             if (modeChanged) {
                 var sortedList = _.sortBy(me._pluginInstances, '_index');
@@ -912,6 +912,13 @@ Oskari.clazz.define(
                         plugin.createPluginUI(me.getMobileMode(), modeChanged);
                     }
                 });
+            }
+
+            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
+            if (me.getMobileMode()) {
+                mapDivHeight -= mobileDiv.outerHeight();
+                jQuery('#' + me.getMapElementId()).css('height', mapDivHeight + 'px');
+                me.updateDomain();
             }
         },
 
