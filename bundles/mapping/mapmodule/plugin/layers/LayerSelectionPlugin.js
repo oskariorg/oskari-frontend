@@ -632,6 +632,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 el  = me.templates.main.clone(),
                 header = el.find('div.header');
 
+            if (!me.layerContent) {
+                me.layerContent = me.templates.layerContent.clone();
+            }
+
             header.append(this._loc.title);
 
             me._bindHeader(header);
@@ -707,7 +711,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         me.getIndex()
                     );
                 }
+
                 me._uiMode = 'desktop';
+                me.refresh();
             }
         },
 
@@ -717,6 +723,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 conf = me.getConfig(),
                 element = me.getElement(),
                 mapModule = me.getMapModule();
+
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);

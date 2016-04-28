@@ -156,55 +156,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
-         * @param {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
-         */
-        createPluginUI: function (mapInMobileMode, modeChanged) {
-            var me = this;
-
-            //remove old element
-            if (modeChanged && me._element) {
-                me.getMapModule().removeMapControlPlugin(
-                    me._element,
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-                me._element.remove();
-                delete me._element;
-
-                if (me.popup) {
-                    me.popup.close();
-                }
-
-                me._createControlElement();
-            }
-
-            if (mapInMobileMode) {
-                var mobileDivElement = me.getMapModule().getMobileDiv();
-                me._element.addClass('mobilesearch');
-                // FIXME is index is not first then this fails
-                mobileDivElement.prepend(me._element[0]);
-                me._uiMode = "mobile";
-            } else {
-                me._element.removeClass('mobilesearch');
-
-                me._ctl = me._createControlAdapter(me._element);
-                if (me._ctl) {
-                    me.getMapModule().addMapControl(me._pluginName, me._ctl);
-                }
-
-                me.getMapModule().setMapControlPlugin(
-                    me._element,
-                    me.getLocation(),
-                    me.getIndex()
-                );
-                me._uiMode = "desktop";
-            }
-        },
-
-        /**
          * @private @method _createControlElement
          * Creates UI for search functionality and places it on the maps
          * div where this plugin registered.
@@ -879,6 +830,62 @@ Oskari.clazz.define(
                 testRegex = /oskari-publisher-search-results-/;
 
             this.changeCssClasses(cssClass, testRegex, [div]);
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        createPluginUI: function (mapInMobileMode, modeChanged) {
+            var me = this;
+
+            //remove old element
+            if (modeChanged && me._element) {
+                me.getMapModule().removeMapControlPlugin(
+                    me._element,
+                    me.inLayerToolsEditMode(),
+                    me._uiMode
+                );
+                me._element.remove();
+                delete me._element;
+
+                if (me.popup) {
+                    me.popup.close();
+                }
+
+                me._createControlElement();
+            }
+
+            if (mapInMobileMode) {
+                var mobileDivElement = me.getMapModule().getMobileDiv();
+                me._element.addClass('mobilesearch');
+                // FIXME is index is not first then this fails
+                mobileDivElement.prepend(me._element[0]);
+                me._uiMode = "mobile";
+                me.changeToolStyle('rounded-light', me._element);
+                me._element.find('div.close-results').remove();
+                me._element.find('input.search-input').css({
+                    'height': '26px',
+                    'margin': 'auto'
+                });
+            } else {
+                me._element.removeClass('mobilesearch');
+
+                me._ctl = me._createControlAdapter(me._element);
+                if (me._ctl) {
+                    me.getMapModule().addMapControl(me._pluginName, me._ctl);
+                }
+
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+                me._uiMode = "desktop";
+                me.refresh();
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
