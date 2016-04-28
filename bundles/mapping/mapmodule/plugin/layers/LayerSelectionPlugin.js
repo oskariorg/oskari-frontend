@@ -632,10 +632,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 el  = me.templates.main.clone(),
                 header = el.find('div.header');
 
-            if (!me.layerContent) {
-                me.layerContent = me.templates.layerContent.clone();
-            }
-
             header.append(this._loc.title);
 
             me._bindHeader(header);
@@ -693,6 +689,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var reqBuilder = sandbox.getRequestBuilder(
                     'Toolbar.AddToolButtonRequest'
                 );
+                if (modeChanged) {
+                    me._element = me._createControlElement();
+                }
+                me.changeToolStyle(null, me._element);
 
                 if (reqBuilder) {
                     for (var tool in me._mobileDefs.buttons) {
