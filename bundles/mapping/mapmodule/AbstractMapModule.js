@@ -176,6 +176,9 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+
+            var size = this.getSize();
+            this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
             me.startPlugins();
             this.updateCurrentState();
             this.started = this._startImpl();
@@ -212,6 +215,9 @@ Oskari.clazz.define(
             },
             MapSizeChangedEvent: function (evt) {
                 this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+            },
+            'Toolbar.ToolbarLoadedEvent': function() {
+                this.startLazyPlugins();
             }
         },
 
@@ -883,6 +889,13 @@ Oskari.clazz.define(
 
         setMobileMode: function (isInMobileMode) {
             this._isInMobileMode = isInMobileMode;
+
+            var mobileDiv = this.getMobileDiv();
+            if (isInMobileMode) {
+                mobileDiv.show();
+            } else {
+                mobileDiv.hide();
+            }
         },
 
         getMobileMode: function () {
@@ -1068,6 +1081,7 @@ Oskari.clazz.define(
             plugin.setMapModule(null);
             delete this._pluginInstances[pluginName];
         },
+        lazyStartPlugins : [],
         /**
          * @method startPlugin
          * Starts the given plugin by calling its startPlugin() method.
@@ -1079,7 +1093,10 @@ Oskari.clazz.define(
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
-                plugin.startPlugin(sandbox);
+                var successfulStart = plugin.startPlugin(sandbox);
+                if(successfulStart === false && typeof plugin.createPluginUI === 'function') {
+                    this.lazyStartPlugins.push(plugin);
+                }
             } catch (e) {
                 // something wrong with plugin (e.g. implementation not imported) -> log a warning
                 sandbox.printWarn(
@@ -1087,6 +1104,16 @@ Oskari.clazz.define(
                     e
                 );
             }
+        },
+        startLazyPlugins : function() {
+            var me = this;
+            var tryStartingThese = this.lazyStartPlugins.slice(0);
+            // reset
+            this.lazyStartPlugins = [];
+
+            tryStartingThese.forEach(function(plugin) {
+                plugin.createPluginUI(me.getMobileMode());
+            });
         },
         /**
          * @method stopPlugin

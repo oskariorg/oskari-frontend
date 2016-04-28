@@ -54,9 +54,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     me.getIndex()
                 );
             }
+            if(!isMapInMobileMode) {
+                debugger;
+            }
 
             if (me._element && me.createPluginUI) {
-                me.createPluginUI(isMapInMobileMode);
+                return me.createPluginUI(isMapInMobileMode);
             }
         },
 
@@ -373,62 +376,60 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
         createPluginUI: function(mapInMobileMode, modeChanged) {
-            var me = this,
-                sandbox = me.getSandbox();
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
 
-            // no different UI for mobile/desktop, returning    
-            if(me._mobileDefs === null) {
-                return;
+            // no different UI for mobile/desktop, returning
+            if(!mobileDefs) {
+                return true;
+            }
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+            if(mobileDefs.buttons && !removeToolButtonBuilder) {
+                return false;
             }
 
             //remove old element
-            if (modeChanged && me._element) {
+            if (modeChanged && me.getElement()) {
 
                 me.getMapModule().removeMapControlPlugin(
-                    me._element,
+                    me.getElement(),
                     me.inLayerToolsEditMode(),
                     me._uiMode
                 );
-                me._element.remove();
+                me.getElement().remove();
                 delete me._element;
             }
 
             var toolbar = me.getMapModule().getMobileToolbar();
-            var reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.RemoveToolButtonRequest'
-            );
-            if (reqBuilder) {
-                for (var tool in me._mobileDefs.buttons) {
-                    var buttonConf = me._mobileDefs.buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
-                }
+            for (var tool in mobileDefs.buttons) {
+                var buttonConf = mobileDefs.buttons[tool];
+                buttonConf.toolbarid = toolbar;
+                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
             }
 
             if (mapInMobileMode) {
-                var toolbar = me.getMapModule().getMobileToolbar();
-                var reqBuilder = sandbox.getRequestBuilder(
-                    'Toolbar.AddToolButtonRequest'
-                );
+                var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
-                if (reqBuilder) {
-                    for (var tool in me._mobileDefs.buttons) {
-                        var buttonConf = me._mobileDefs.buttons[tool];
+                if (addToolButtonBuilder) {
+                    for (var tool in mobileDefs.buttons) {
+                        var buttonConf = mobileDefs.buttons[tool];
                         buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
+                        sandbox.request(me, addToolButtonBuilder(tool, mobileDefs.buttonGroup, buttonConf));
                     }
                 }
 
                 me._uiMode = 'mobile';
             } else {
-                
                 if (modeChanged) {
                     me._element = me._createControlElement();
                 }
 
                 if(me._element && me.getLocation()) {
                     me.getMapModule().setMapControlPlugin(
-                        me._element,
+                        me.getElement(),
                         me.getLocation(),
                         me.getIndex()
                     );
@@ -436,6 +437,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 me._uiMode = 'desktop';
                 me.refresh();
             }
+            return true;
+        },
+        getMobileDefs : function() {
+            return this._mobileDefs;
         }
     }, {
         /**

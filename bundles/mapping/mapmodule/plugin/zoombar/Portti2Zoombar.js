@@ -408,46 +408,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
         createPluginUI: function(mapInMobileMode, modeChanged) {
-            var me = this,
-                sandbox = me.getSandbox();
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
 
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+            if(!removeToolButtonBuilder) {
+                return false;
+            }
             //remove old element
-            if (modeChanged && me._element) {
+            if (modeChanged && me.getElement()) {
 
                 me.getMapModule().removeMapControlPlugin(
-                    me._element,
+                    me.getElement(),
                     me.inLayerToolsEditMode(),
                     me._uiMode
                 );
-                me._element.remove();
+                me.getElement().remove();
                 delete me._element;
                 me._slider.remove();
                 delete me._slider;
             }
 
             var toolbar = me.getMapModule().getMobileToolbar();
-            var reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.RemoveToolButtonRequest'
-            );
-            if (reqBuilder) {
-                for (var tool in me._mobileDefs.buttons) {
-                    var buttonConf = me._mobileDefs.buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
-                }
+            for (var tool in mobileDefs.buttons) {
+                var buttonConf = mobileDefs.buttons[tool];
+                buttonConf.toolbarid = toolbar;
+                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
             }
 
             if (mapInMobileMode) {
-                var toolbar = me.getMapModule().getMobileToolbar();
-                var reqBuilder = sandbox.getRequestBuilder(
-                    'Toolbar.AddToolButtonRequest'
-                );
+                var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
                 if (reqBuilder) {
-                    for (var tool in me._mobileDefs.buttons) {
-                        var buttonConf = me._mobileDefs.buttons[tool];
+                    for (var tool in mobileDefs.buttons) {
+                        var buttonConf = mobileDefs.buttons[tool];
                         buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
+                        sandbox.request(me, reqBuilder(tool, mobileDefs.buttonGroup, buttonConf));
                     }
                 }
 
@@ -459,13 +458,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
 
                 me.getMapModule().setMapControlPlugin(
-                    me._element,
+                    me.getElement(),
                     me.getLocation(),
                     me.getIndex()
                 );
-                me.refresh();
                 me._uiMode = 'desktop';
+                me.refresh();
             }
+            return true;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

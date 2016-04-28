@@ -389,18 +389,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
         createPluginUI: function(mapInMobileMode, modeChanged) {
-            var me = this,
-                sandbox = me.getSandbox();            
-
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+            if(mobileDefs.buttons && !removeToolButtonBuilder) {
+                return false;
+            }
             //remove old element
-            if (modeChanged && me._element) {
-                
+            if (modeChanged && me.getElement()) {
+
                 me.getMapModule().removeMapControlPlugin(
-                    me._element,
+                    me.getElement(),
                     me.inLayerToolsEditMode(),
                     me._uiMode
                 );
-                me._element.remove();
+                me.getElement().remove();
                 delete me._element;
             }
 
@@ -409,31 +415,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             var toolbar = me.getMapModule().getMobileToolbar();
-            var reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.RemoveToolButtonRequest'
-            );
-            if (reqBuilder) {
-                for (var tool in me._mobileDefs.buttons) {
-                    var buttonConf = me._mobileDefs.buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
-                }
+            for (var tool in mobileDefs.buttons) {
+                var buttonConf = mobileDefs.buttons[tool];
+                buttonConf.toolbarid = toolbar;
+                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
             }
 
-            if (mapInMobileMode) {                
-                var toolbar = me.getMapModule().getMobileToolbar();
-                var reqBuilder = sandbox.getRequestBuilder(
-                    'Toolbar.AddToolButtonRequest'
-                );
+            if (mapInMobileMode) {
+                var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
                 if (reqBuilder) {
-                    for (var tool in me._mobileDefs.buttons) {
-                        var buttonConf = me._mobileDefs.buttons[tool];
+                    for (var tool in mobileDefs.buttons) {
+                        var buttonConf = mobileDefs.buttons[tool];
                         buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
+                        sandbox.request(me, reqBuilder(tool, mobileDefs.buttonGroup, buttonConf));
                     }
                 }
-                
+
                 me._uiMode = 'mobile';
             } else {
                 if (modeChanged) {
@@ -441,13 +439,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 if(me._element && me.getLocation()) {
                     me.getMapModule().setMapControlPlugin(
-                        me._element,
+                        me.getElement(),
                         me.getLocation(),
                         me.getIndex()
                     );
                 }
                 me._uiMode = 'desktop';
             }
+            return true;
         },
 
         /**
