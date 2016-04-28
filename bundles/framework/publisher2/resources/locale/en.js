@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "Swedish",
                     "en": "English"
                 },
-                "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
+                "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map.",
+                "languageChangedDisclaimer":"* Changes to the language selection will only affect the final embedded map."
             },
             "size": {
                 "label": "Map Size",

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
             "name": {
                 "label": "Kartans namn",
                 "placeholder": "obligatorisk uppgift",
-                "tooltip": "Ge din karta ett beskrivande namn. Observera att namnet ska vara samma språk som kartan användargränssnitt."
+                "tooltip": "Ge din karta ett beskrivande namn. Observera att namnet ska vara samma språk som kartan användargränssnitt.",
+                "languageChangedDisclaimer":"* Changes to the language selection will only have effect on the finalised embedded map."
             },
             "language": {
                 "label": "Språk",

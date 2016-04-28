@@ -2,6 +2,10 @@
 
 ## 1.36
 
+### publisher 2
+
+Language selection in publisher no longer affects the map preview, but the preview will be displayed using the application's default language.
+
 ### infobox
 
 Infobox-functionality is modified to allow displaying infobox in mobile mode as Oskari.userinterface.component.Popup when screen size is smaller than the defined mobile breakpoints.

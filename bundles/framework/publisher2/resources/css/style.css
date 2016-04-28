@@ -178,6 +178,9 @@ div.field select {
     */
   background-color: #FFF; }
 
+div.field div.info-label {
+  font-style: italic; }
+
 /* Buttons */
 div.basic_publisher div.buttons,
 div.publisher div.startview div.buttons {

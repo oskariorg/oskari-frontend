@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "ruotsi",
                     "en": "englanti"
                 },
-                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja teksteihin kartalla."
+                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja teksteihin julkaistulla kartalla.",
+                "languageChangedDisclaimer": "* Kielivalinnan muuttaminen vaikuttaa vain valmiiseen julkaistuun karttaan."
             },
             "size": {
                 "label": "Kartan koko",
