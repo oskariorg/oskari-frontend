@@ -257,6 +257,10 @@ A modification in the request of describe WFS feature type.
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
 
+### statistics/statsgrid.polymer (experimental)
+
+New bundle thats having a poc for using Polymer (https://www.polymer-project.org/1.0/) based functionality for statsgrid/thematic maps. It's work in progress and lacks errorhandling and ui-tuning. Not production ready and subject to change or removal in the future.
+
 ## 1.35.2
 
 ### mapping/mapwfs2 - WfsLayerPlugin for ol2/ol3
