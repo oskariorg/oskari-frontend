@@ -689,6 +689,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var reqBuilder = sandbox.getRequestBuilder(
                     'Toolbar.AddToolButtonRequest'
                 );
+                if (modeChanged) {
+                    me._element = me._createControlElement();
+                }
+                me.changeToolStyle(null, me._element);
 
                 if (reqBuilder) {
                     for (var tool in me._mobileDefs.buttons) {
@@ -710,7 +714,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         me.getIndex()
                     );
                 }
+
                 me._uiMode = 'desktop';
+                me.refresh();
             }
         },
 
@@ -720,6 +726,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 conf = me.getConfig(),
                 element = me.getElement(),
                 mapModule = me.getMapModule();
+
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);

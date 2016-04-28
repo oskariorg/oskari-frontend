@@ -218,7 +218,7 @@ div.published-search-div {
 .mobilesearch {
   float: left;
   margin-right: 6px;
-  margin-top: 6px; }
+  }
   .mobilesearch input[type=button] {
     vertical-align: top; }
 
