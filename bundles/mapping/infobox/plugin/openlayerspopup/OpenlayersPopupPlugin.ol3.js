@@ -287,7 +287,7 @@ Oskari.clazz.define(
                 popup.dialog.remove();
                 popup.__notifyListeners('close');
             });
-            popup.dialog.addClass('mobile-portrait');
+            popup.dialog.addClass('mobile-infobox');
         },
 
         /**

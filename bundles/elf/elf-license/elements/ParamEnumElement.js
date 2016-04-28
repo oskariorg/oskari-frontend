@@ -123,14 +123,14 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                     return value;
                 }
                 if (duration && unit) {
-                    durationLocalisation = me.instance._locale.dialog.licenseDurations[unit.toUpperCase()]; 
+                    durationLocalisation = me.instance._locale.dialog.licenseDurations[unit.toUpperCase()];
                     if (durationLocalisation) {
                         return duration + ' ' + durationLocalisation;
                     } else {
                         return value;
                     }
                 }
-            } 
+            }
             return value;
         }
     }, {

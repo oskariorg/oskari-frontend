@@ -828,6 +828,7 @@ define([
                 }, {
                     silent: true
                 });
+                me.model.setVersion(version);
                 me.model.set({_admin:{
                     username: user,
                     password: pw,
