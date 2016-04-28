@@ -535,7 +535,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var popupTitle = me._loc.title;
                 me.popup.addClass('mobile-popup');
-                me.popup.setColourScheme({"headerColour": "#e6e6e6"});
+                me.popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me.popup.show(popupTitle, me.layerContent);
                 me.popup.createCloseIcon();
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection');

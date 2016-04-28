@@ -6,26 +6,26 @@ Oskari.registerLocalization(
         "title": "Vytlačiť zobrazenie mapy",
         "flyouttitle": "Vytlačiť zobrazenie mapy",
         "desc": "",
-        "btnTooltip": "Print",
+        "btnTooltip": "Vytlačiť aktuálne mapové zobrazenie ako PNG obrázok alebo PDF súbor.",
         "BasicView": {
             "title": "Vytlačiť zobrazenie mapy",
             "name": {
-                "label": "The name of the map",
-                "placeholder": "required",
-                "tooltip": "Give your map a descriptive name. Please note the language of the user interface."
+                "label": "Názov mapy",
+                "placeholder": "Požadovaný",
+                "tooltip": "Zadajte názov pre váš výtlačok. Prosím, všimnite si, aký jazyk bol použitý v mapových vrstvách."
             },
             "language": {
-                "label": "Language",
+                "label": "Jazyk",
                 "options": {
-                    "fi": "Finnish",
-                    "sv": "Swedish",
-                    "en": "English"
+                    "fi": "Fínčina",
+                    "sv": "Švédčina",
+                    "en": "Angličtina"
                 },
-                "tooltip": "Select the language to be used in the print. Please note the language of the the user interface and the data set."
+                "tooltip": "Zvoľte jazyk pre váš výtlačok. Prosím, všimnite si, aký jazyk bol použitý v používateľskom rozhraní a v mapových vrstvách."
             },
             "size": {
-                "label": "Veľkosť",
-                "tooltip": "Vybrať rozvrhnutie tlače| Náhľad mapy sa priebežne aktualizuje",
+                "label": "Veľkosť a smer",
+                "tooltip": "Vybrať veľkosť tlače a smer. Aktualizácie je možné vidieť v náhľade.",
                 "options": [
                     {
                         "id": "A4",
@@ -34,7 +34,7 @@ Oskari.registerLocalization(
                         "selected": true
                     },
                     {
-                        "id": "A4_Landscape",
+                        "id": "A4_na šírku",
                         "label": "A4 na šírku",
                         "classForPreview": "náhľad-na šírku"
                     },
@@ -44,7 +44,7 @@ Oskari.registerLocalization(
                         "classForPreview": "náhľad-na výšku"
                     },
                     {
-                        "id": "A3_Landscape",
+                        "id": "A3_na šírku",
                         "label": "A3 na šírku",
                         "classForPreview": "náhľad-na šírku"
                     }
@@ -52,31 +52,31 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Náhľad",
-                "tooltip": "Kliknite na malý náhľad aby sa otvoril väčší náhľad",
-                "pending": "Náhľad sa o chvíľu aktualizuje",
+                "tooltip": "Kliknite na náhľad, aby sa otvoril väčší obrázok v samostatnom okne.",
+                "pending": "Náhľad sa o chvíľu aktualizuje.",
                 "notes": {
-                    "extent": "Náhľad sa môže použiť na vypočítanie rozsahu mapy pre tlač",
-                    "restriction": "Nie všetky mapové vrstvy sú v náhľade zobrazené"
+                    "extent": "Skontrolujte oblasť mapového rozsahu v náhľade.",
+                    "restriction": "Iba podkladová mapa je zobrazená v náhľade."
                 }
             },
             "buttons": {
-                "save": "Vytlačte to",
+                "save": "Vytlačiť",
                 "ok": "OK",
-                "back": "Previous",
+                "back": "Predchádzajúci",
                 "cancel": "Zrušiť"
             },
             "location": {
-                "label": "Úroveň umiestnenia a priblíženia",
-                "tooltip": "Mierka výtlačku sa zhoduje s mierkou mapy v prehliadači",
-                "zoomlevel": "Úroveň priblíženia"
+                "label": "Umiestnenie a mierka",
+                "tooltip": "Mierka výtlačku sa zhoduje s mierkou v náhľade mapy.",
+                "zoomlevel": "Mierka"
             },
             "settings": {
                 "label": "Viac nastavení",
-                "tooltip": "Vytvoriť dodatočné nastavenia ako formát, názov a mierka"
+                "tooltip": "Vybrať nastevenia pre váš výtlačok."
             },
             "format": {
-                "label": "Formát",
-                "tooltip": "Vyberte formát súboru",
+                "label": "Formát súboru",
+                "tooltip": "Vyberte formát súboru pre váš výtlačok.",
                 "options": [
                     {
                         "id": "png",
@@ -92,83 +92,83 @@ Oskari.registerLocalization(
                 ]
             },
             "mapTitle": {
-                "label": "Pridať názov",
-                "tooltip": "pridať názov k mape"
+                "label": "Názov mapy",
+                "tooltip": "Pridať názov k mape"
             },
             "content": {
                 "options": [
                     {
                         "id": "logoStránky",
-                        "label": "Pridať logo Oskari",
-                        "tooltip": "Ak je to nutné, môžete skryť logo",
+                        "label": "Ukázať logo fínskeho geoportálu Paikkatietoikkuna vo výtlačku.",
+                        "tooltip": "Ak je to nutné, môžete skryť logo fínskeho geoportálu Paikkatietoikkuna.",
                         "checked": "skontrolované"
                     },
                     {
                         "id": "stránkaMierka",
-                        "label": "Pridať mierku k mape",
-                        "tooltip": "Pridať mierku k mape",
+                        "label": "Pridať mierku k výtlačku mapy.",
+                        "tooltip": "Ak chcete, môžete pridať mierku k mape.",
                         "checked": "skontrolované"
                     },
                     {
                         "id": "stránkaDátum",
-                        "label": "Pridať dátum",
-                        "tooltip": "Môžete pridať dátum k výtlačku",
+                        "label": "Zobraziť dátum vo výtlačku mapy.",
+                        "tooltip": "Môžete pridať dátum k výtlačku.",
                         "checked": "skontrolované"
                     }
                 ]
             },
             "legend": {
-                "label": "Map legend",
-                "tooltip": "Select a position for the map legend. If any position is not selected, a map legend is not shown in the map printout.",
+                "label": "Legenda mapy",
+                "tooltip": "Vybrať umiestnenie pre legendu mapy. Pokiaľ nevyberiete umiestnenie, legenda mypy sa nezobrazí na mapovom výtlačku.",
                 "options": [
                     {
-                        "id": "oskari_legend_NO",
-                        "loca": "NO",
-                        "label": "No map legend",
-                        "tooltip": "The map legend is not shown in the map printout.",
+                        "id": "oskari_legenda_Nie",
+                        "loca": "Nie",
+                        "label": "Bez legendy mapy",
+                        "tooltip": "Legenda mapy nie je zobrazená na výtlačku mapy.",
                         "selected": true
                     },
                     {
-                        "id": "oskari_legend_LL",
-                        "loca": "LL",
-                        "label": "Left lower corner",
-                        "tooltip": "The map legend is shown in the left lower corner of the printout."
+                        "id": "oskari_legenda_ĽD",
+                        "loca": "ĽD",
+                        "label": "Ľavý dolný roh",
+                        "tooltip": "Legenda mypy je zobrazená v ľavom dolnom rohu výtlačku."
                     },
                     {
-                        "id": "oskari_legend_LU",
-                        "loca": "LU",
-                        "label": "Left upper corner",
-                        "tooltip": "The map legend is shown in the left upper corner of the printout."
+                        "id": "oskari_legenda_ĽH",
+                        "loca": "ĽH",
+                        "label": "Ľavý horný roh",
+                        "tooltip": "Legenda mypy je zobrazená v ľavom hornom rohu výtlačku."
                     },
                     {
-                        "id": "oskari_legend_RU",
-                        "loca": "RU",
-                        "label": "Right upper corner",
-                        "tooltip": "The map legend is shown in the right upper corner of the printout."
+                        "id": "oskari_legenda_PH",
+                        "loca": "PH",
+                        "label": "Pravý horný roh",
+                        "tooltip": "Legenda mypy je zobrazená v pravom hornom rohu výtlačku."
                     },
                     {
-                        "id": "oskari_legend_RL",
-                        "loca": "RL",
-                        "label": "Right lower corner",
-                        "tooltip": "The map legend is shown in the right upper corner of the printout."
+                        "id": "oskari_legenda_PD",
+                        "loca": "PD",
+                        "label": "Pravý dolný roh",
+                        "tooltip": "Legenda mypy je zobrazená v pravom dolnom rohu výtlačku."
                     }
                 ]
             },
             "help": "Pomoc",
             "error": {
                 "title": "Chyba",
-                "size": "Error in size definitions",
-                "name": "Name is required information",
+                "size": "Chyba v definíciách veľkosti",
+                "name": "Názov je požadovaná informácia",
                 "nohelp": "Pomoc nie je k dispozícii",
-                "saveFailed": "Tlačenie mapy zlyhalo| Skúste neskôr",
-                "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
+                "saveFailed": "Tlačenie mapového zobrazenia zlyhalo. Skúste neskôr, prosím.",
+                "nameIllegalCharacters": "Názov obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzerníky a spojovníky."
             }
         },
         "StartView": {
-            "text": "Môžete vytlačiť Zobrazenie mapy, ktoré ste práve vytvorili",
+            "text": "Môžete vytlačiť Zobrazenie mapy, ktoré ste práve vytvorili ako PNG obrázok alebo PDF súbor.",
             "info": {
-                "maxLayers": "Môžete vytlačiť maximálne 8 vrstiev naraz",
-                "printoutProcessingTime": "Proces tlačenia trvá dlhšie ak sa vybralo viacero vrstiev"
+                "maxLayers": "Môžete použiť maximálne 8 mapových vrstiev vo výtlačku.",
+                "printoutProcessingTime": "Proces tlačenia mapového zobrazenia trvá dlhšie ak sa vybralo viacero vrstiev."
             },
             "buttons": {
                 "continue": "Pokračovať",

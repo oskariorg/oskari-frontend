@@ -465,9 +465,6 @@ function () {
         }
 
         metadataTitle = metadata.name;
-        if(metadata.organization && metadata.organization !== null && metadata.organization !== ''){
-            metadataTitle += ', ' + metadata.organization;
-        }
 
         me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [cancelBtn, deactivateBtn]);
         if(!infoForUser) {
@@ -688,10 +685,6 @@ function () {
 
 
         metadataTitle = metadata.name;
-        if(metadata.organization && metadata.organization !== null && metadata.organization !== ''){
-            metadataTitle += ', ' + metadata.organization;
-        }
-
         me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [me.prevBtn, cancelBtn, me.nextBtn]);
         me._dialog.makeModal();
 
@@ -965,7 +958,6 @@ function () {
             modelDetails = me._templates.licenceModelDetails.clone(),
             licenseDetails = jQuery('.divmanazerpopup.elf_license_dialog').find('.elf_license_dialog_license_details'),
             basicData = modelDetails.find('.license_basic_data');
-
         me._showLicenseDetails();
         licenseDetails.empty();
 

@@ -38,6 +38,13 @@ div.popupHeaderArrow {
   float: left;
   margin-top: 10px; }
 
+div.infoboxPopupNoMargin {
+  margin: 0 !important;
+  border: none !important;
+  /*overflow: hidden!important;*/
+  height: 94%;
+  padding: 0 20px !important; }
+
 div.popupContent {
   clear: both;
   margin-left: 10px;
@@ -58,9 +65,8 @@ div.popupContent {
   border-color: #424343;
   overflow: auto;
   padding: 20px 20px 20px 25px; }
-  div.contentWrapper-infobox {
-    margin-bottom: 10px;
-  }
+  div.popupContent div.contentWrapper-infobox {
+    margin-bottom: 10px; }
   div.popupContent hr.infoboxLine {
     border: 1px solid;
     width: 90%;
@@ -68,16 +74,13 @@ div.popupContent {
   div.popupContent span.infoboxActionLinks {
     padding-right: 15px; }
 
-/*Pop-up width reduced for places search */
-div#searchResultPopup_contentDiv div.popupContent {
-  height: 150px; }
-
 div.olPopup {
   margin: 0;
   padding: 0;
   background-color: #ffffff;
   overflow: auto;
-  height: 400px;
+  /*height: 400px*/
+  /*\0/ !important*/
   z-index: 16000; }
 
 div.olPopupContent {

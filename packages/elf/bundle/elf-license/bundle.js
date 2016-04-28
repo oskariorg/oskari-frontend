@@ -75,6 +75,30 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
                 "lang": "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-license/resources/locale/es.js"
+            }, {
+                "lang" : "et",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/et.js"
+            }, {
+                "lang" : "is",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/is.js"
+            }, {
+                "lang" : "it",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/it.js"
+            }, {
+                "lang" : "nl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/nl.js"
+            }, {
+                "lang" : "sk",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/sk.js"
+            }, {
+                "lang" : "sl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/sl.js"
             }
         ]
     },

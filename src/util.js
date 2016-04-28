@@ -15,8 +15,6 @@ Oskari.util = (function () {
     * @param {Object} value checked value
     */
     function isLeadingZero(value){
-        var i;
-
         if(typeof value === 'string' && value.length>0 && value[0] === '0') {
             if(util.isDecimal(value) && value.length>1 && value[1] === '.') {
                 return false;

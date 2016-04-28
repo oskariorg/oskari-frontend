@@ -481,11 +481,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 if(styleDef.stroke.width) {
                     olStyle.strokeWidth = styleDef.stroke.width;
                 }
-                if(style.stroke.lineDash) {
-                    olStyle.strokeDashstyle = style.stroke.lineDash;
+                if(styleDef.stroke.lineDash) {
+                    olStyle.strokeDashstyle = styleDef.stroke.lineDash;
                 }
-                if(style.stroke.lineCap) {
-                    olStyle.strokeLinecap = style.stroke.lineCap;
+                if(styleDef.stroke.lineCap) {
+                    olStyle.strokeLinecap = styleDef.stroke.lineCap;
                 }
             }
             if (styleDef.image.radius) {

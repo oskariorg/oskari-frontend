@@ -7,8 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Privzeti stil",
         "own-style": "Lastni stil",
-        "refresh": "NOT TRANSLATED",
-        "refresh_title": "NOT TRANSLATED",
+        "refresh": "Osveži",
+        "refresh_title": "Posodobljeni podatkovni izdelki niso samodejno prikazani na karti",
         "tile": {
             "title": "KartaWfs2"
         },
@@ -18,20 +18,20 @@ Oskari.registerLocalization(
         },
         "error": {
             "title": "Napaka",
-            "connection_not_available": "Povezava do WFS storitve ozadja ni na voljo.",
-            "connection_broken": "Povezava do WFS storitve ozadja ne deluje",
-            "wfs_no_permissions": "Nimaš ustreznih pravic za uporabo WFS storitve sloja.",
-            "wfs_configuring_layer_failed": "Konfiguriranje WFS sloja {layerj} ni bilo uspešno.",
-            "wfs_request_failed": "Zahteva za WFS sloj {layer} je bila neuspešna.",
-            "features_parsing_failed": "Razčlenjevanje storitve WFS sloja {layer} ni uspelo."
+            "connection_not_available": "Podatkovni izdelek ni na voljo. Povezava do WFS storitve v ozadju ni na voljo.",
+            "connection_broken": "Podatkovni izdelek ni na voljo. Povezava do WFS storitve v ozadju je prekinjena.",
+            "wfs_no_permissions": "Nimaš ustreznih pravic za uporabo podatkovnega  izdelka (sloja).",
+            "wfs_configuring_layer_failed": "Konfiguriranje podatkovnega  izdelka (sloja) ni bilo uspešno.",
+            "wfs_request_failed": "Zahteva za podatkovni izdelek (sloj) ni bila uspešna.",
+            "features_parsing_failed": "Razčlenjevanje podatkovnega izdelka (sloja) ni uspelo."
         },
         "information": {
-            "title": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED"
+            "title": "Prikazovanje podatkov",
+            "info": "nekateri podatkovni izdelki se ne prikazujeja samodejno. Izberi območje na karti in pritisni gumb \"Osveži\"."
         },
         "button": {
             "cancel": "Prekliči",
-            "show": "Prikaži mesta",
+            "show": "Prikaži kraje",
             "close": "Zapri",
             "edit": "Urejaj"
         },

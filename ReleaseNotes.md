@@ -10,6 +10,26 @@ ShowInfoBoxRequest is modified to allow giving multiple additional parameters (h
 
 Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
 
+The relative position of the infobox to the coordinates on the map can now be provided in options, so the infobox is displayed either over, under, to the left or to the right of the given position. Note! Only OL3!
+
+```javascript
+    {
+        //display the popup on top of the coordinates given. Possible values: top, bottom, left, right 
+        positioning: 'top'
+    }
+```
+
+Also, the background- and textcolour of buttons and textcolour of action links can now be provided as part of the colourScheme-object in options.
+
+```javascript
+    colourScheme: {
+        buttonBgColour: '#00CCDD',
+        buttonLabelColour: '#00F000',
+        linkColour: '#DD0000'
+    }
+```
+
+
 ### Oskari core and require.js
 
 Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
@@ -24,8 +44,8 @@ Previously returned an undocumented startupInfo object. The custom script loader
 and any problems loading the scripts will be logged to the developer console. The loader can be found in the file src/loader.js and debug logging can be enabled by calling 
 Oskari.loader.log.enableDebug(true) for the logger initialized by the loader. Debug-logging includes messages about loaded bundles with paths and started bundles.
 
-Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js. This 
-will expose the module from that file as a global variable with the name of the expose flag like this:
+Any files linked to bundles with packages/.../bundle.js that provide AMD functionality (check for existance of define function) should be flagged with "expose" on bundle.js.
+ This will expose the module from that file as a global variable with the name of the expose flag like this:
 
     {
         "type": "text/javascript",
@@ -37,6 +57,9 @@ The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's
 Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
 globals.
 
+Oskari.setPreloaded([boolean]) no longer does anything. If the loader detects that a bundles code is already in the browser it won't load it again.
+Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files. This will propably change to some more intuitive flag in the future.
+
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
     Oskari.log('LogName').info('My info message');
@@ -46,6 +69,11 @@ Added a logger implementation that can be accessed with (see src/logger.js for d
 The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
 This is in preparation for the core rewrite/restructuring/clarification.
 The build includes requirejs with it's text plugin from under libraries.
+
+### integration/admin-layerselector
+
+"resolveDepth" attribute setup added for WFS 2 layers in admin layer selector. Default is false.
+ResolveDepth solves xlink:href links in GetFeature request.
 
 ### framework/search
 
@@ -190,6 +218,17 @@ Now makes a new getScreenshot() function available when using mapmodule supporti
 
 New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
 http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
+
+### feedbackService [new, this is POC for time being and will be develop future on]] 
+
+One new event and  4 new requests
+
+FeedbackResultEvent notifies that feedback request response has been got from the service. Includes the response data.
+
+Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successfull 
+and the response data has been got from the service. 
+
+Look at http://oskari.org/examples/rpc-api/rpc_example.html and RPC api documentation in details.
 
 
 ### timeseries

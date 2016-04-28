@@ -57,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.infobox.InfoBoxBundle",
                 "src": "../../../../bundles/mapping/infobox/event/InfoboxActionEvent.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/infobox/resources/css/infobox.ol3.css"
+                "src": "../../../../bundles/mapping/infobox/resources/css/infobox_ol3.css"
             }]
         },
         "bundle": {

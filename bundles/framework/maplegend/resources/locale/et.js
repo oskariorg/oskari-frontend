@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Legendid",
         "desc": "",
-        "noLegendsText": "No map legends available"
+        "noLegendsText": "Nähtaval kaardil legend puudub",
+        "invalidLegendUrl": "NOT TRANSLATED"
     }
 }
 );

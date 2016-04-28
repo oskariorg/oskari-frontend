@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Pokaži sloje karte v meniju",
                 "info": "Izberi slog karte za ozadje. V oknu Predogled lahko določiš privzet sloj karte za ozadje.",
-                "tooltip": "Karta za ozadje je prikazana kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi. Privzeto karto za ozadje lahko nastaviš v predogledu karte.",
-                "promote": "Prikaži aeroposnetke?"
+                "tooltip": "Karta za ozadje je prikazana kot spodnji sloj karte. Ko izbiraš sloje karte, ki bodo uporabljeni kot spodnji sloj, bo od teh viden samo en sloj naenkrat in lahko preklapljaš med njimi. Privzeto karto za ozadje lahko nastaviš v predogledu karte."
             },
             "preview": "Predogled vstavljene karte",
             "location": "Lokacija in stopnja povečave",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Za izdelavo vstavljene karte se moraš naprej prijaviti.",
             "signup": "Prijavi se",
-            "signupUrl": "/web/sl/prijava",
-            "register": "Registriraj se",
-            "registerUrl": "/web/si/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registriraj se"
         },
         "StartView": {
             "text": "Izdelano karto lahko vstaviš na svoje spletno mesto.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Pokaži",
             "hide": "Skrij",
             "hidden": "Sloj je trenutno neviden.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Sloj je lahko objavljen v vstavljeni karti.",
-                    "tooltip": "Sloj je lahko objavljen v vstavljeni karti. Tedensko število uporabnikov je lahko omejeno."
-                }
-            }
+            "selectAsBaselayer": "Sloj karte v ozadju"
         },
         "layerFilter": {
             "buttons": {

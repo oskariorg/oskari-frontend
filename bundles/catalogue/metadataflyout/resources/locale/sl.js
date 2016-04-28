@@ -16,18 +16,18 @@ Oskari.registerLocalization(
             "abstract": "Osnovna informacija",
             "inspire": "Metapodatki INSPIRE",
             "jhs": "Metapodatki ISO 19115",
-            "quality": "NOT TRANSLATED",
+            "quality": "Ksakovost podatkov",
             "xml": "Datoteka ISO 19139XML",
             "map": "Geografski okvir",
-            "pdf": "Izris",
+            "pdf": "Izpis",
             "select_metadata_prompt": "Izberi metapodatke s klikom na ikone.",
-            "metadata_printout_title": "Izris metapodatkov",
+            "metadata_printout_title": "Izpis metapodatkov",
             "linkto": "Povezava do metapodatkov",
             "notFound": "Metapodatek ni bil najden",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
-                        "label": "UCS2 (Universal Charactr Set)",
+                        "label": "UCS2",
                         "description": "Splošni nabor znakov fiksne velikosti 16-bitov, ki temelji na standardu ISO/IEC 10646"
                     },
                     "ucs4": {
@@ -381,8 +381,8 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "Dataset is conformant to the specification.",
+                "qualityPassFalse": "Dataset is not conformant to the specification."
             },
             "heading": {
                 "abstractTextData": "Abstraktno besedilo (podatki)",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Časovni obseg",
                 "topicCategory": "Kategorije teme",
                 "useLimitation": "Omejitve uporabe",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "Absolutna zunanj položajna natančnost",
+                "accuracyOfTimeMeasurement": "Natančnost merjenja časa",
+                "completenessCommission": "Popolnost - presežek",
+                "completenessOmission": "Popolnost - primanjkljaj",
+                "conceptualConsistency": "Pomenska usklajenost",
+                "domainConsistency": "Domenska usklajenost",
+                "formatConsistency": "Formatna usklajenost",
+                "griddedDataPositionalAccuracy": "Grid - položajna natančnost",
+                "nonQuantitativeAttributeAccuracy": "Pravilnost nekoličinskih atributov",
+                "quantitativeAttributeAccuracy": "Pravilnost količinskih atributov",
+                "relativeInternalPositionalAccuracy": "Relativna nitranja položajna natančnost",
+                "temporalConsistency": "Časovna usklajenost",
+                "temporalValidity": "Časovna veljavnost",
+                "thematicClassificationCorrectness": "Pravilnost tematske razvrstitve",
+                "topologicalConsistency": "Topološka usklajenost"
             }
         },
         "tile": {

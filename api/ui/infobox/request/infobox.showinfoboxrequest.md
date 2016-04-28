@@ -56,6 +56,10 @@ Parameters for options-object:
 <tr>
   <td> mobileBreakpoints </td><td> Object </td><td> The size of the screen in pixels to start using mobile mode {width: 'mobileModeWidth', height: 'mobileModeHight'}. Both values are not necessary. </td><td> If not given, uses values {width:?, height:?} </td>
 </tr>
+<tr>
+  <td> positioning </td><td> String </td><td> <b><i style="color:#FF0000;">NOTE! OPENLAYERS 3 ONLY!</i></b> Optional parameter, tells the relative position of the popup to the coordinates. Possible values: top, bottom, left, right</td><td> If not provided, the default bottom-right positioning is used. Only affects the popup in desktop-mode. </td>
+</tr>
+
 </table>
 
 Parameters for colourScheme-object:
@@ -68,16 +72,24 @@ Parameters for colourScheme-object:
   <td> titleColour </td><td> String </td><td> Popup title colour as hexadecimal </td><td></td>
 </tr>
 <tr>
-  <td> headerColour </td><td> String </td><td> Header colour as hexadecimal</td><td></td>
+  <td> headerColour </td><td> String </td><td> Feature header colour as hexadecimal </td><td></td>
 </tr>
 <tr>
-  <td> bgColour </td><td> String </td><td> Popup content background color as hexadecimal </td><td></td>
+  <td> bgColour </td><td> String </td><td> Popup header background color as hexadecimal </td><td></td>
 </tr>
 <tr>
   <td> iconCls </td><td> String </td><td> Class of the close-button, for example 'icon-close-white'</td><td></td>
 </tr>
+<tr>
+  <td> buttonBgColour </td><td> String </td><td> Background color of action buttons in popup as hexadecimal</td><td></td>
+</tr>
+<tr>
+  <td> buttonLabelColour </td><td> String </td><td> Text color of action buttons in popup as hexadecimal</td><td></td>
+</tr>
+<tr>
+  <td> linkColour </td><td> String </td><td> Text color of action links in popup as hexadecimal</td><td></td>
+</tr>
 </table>
-
 ## Examples
 
 Get map center and then show an infobox at that location:
@@ -168,8 +180,12 @@ channel.getMapPosition(function(data) {
                 titleColour: '#FFFFFF',
                 headerColour: '#0091FF',
                 iconCls: 'icon-close-white'
+                buttonBgColour: '#0091FF',
+                buttonLabelColour: '#FFFFFF',
+                linkColour: '#000000'
             },
-            font: 'georgia'
+            font: 'georgia',
+
         }
     ];
 

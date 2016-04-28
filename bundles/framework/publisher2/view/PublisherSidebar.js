@@ -317,6 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     if(!grouping[group]) {
                         grouping[group] = [];
                     }
+                    me._addToolConfig(tool);
                     grouping[group].push(tool);
                 }
 
@@ -337,6 +338,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 panels: panels,
                 tools: allTools
             };
+        },
+        _addToolConfig: function(tool) {
+            var conf = this.instance.conf || {};
+            if (!conf.toolsConfig || !tool.bundleName) {
+                return;
+            }
+            tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
          * @private @method _filterIndicators

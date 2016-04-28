@@ -148,6 +148,10 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sl.js"
         }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sk.js"
+        }, {
             "lang" : "de",
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/de.js"

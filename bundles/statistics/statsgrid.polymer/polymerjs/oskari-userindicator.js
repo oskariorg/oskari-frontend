@@ -33,7 +33,8 @@ Polymer({
   },
   "observers": [
     "getRegionItems(regionInfo)",
-    "show(showUserIndicatorView)"
+    "show(showUserIndicatorView)",
+    "placeholder(locale)"
     ],
     "getLayerName": function(locale, layerKey) {
       var layer = this.sandbox.findMapLayerFromAllAvailable(layerKey);
@@ -235,5 +236,9 @@ Polymer({
      */
     "stopWindowEvents": function(e) {
       e.stopPropagation();
+    },
+    "placeholder": function(locale) {
+      var textField = this.$$("#indicator_text-import");
+      textField.setAttribute("placeholder", locale.importDataDescription)
     }
 });

@@ -477,7 +477,7 @@ Oskari.clazz.define(
             if (me._uiMode === "mobile") {
                 var popupContent = resultsContainer;
                 me.popup.addClass('mobile-popup');
-                me.popup.setColourScheme({"headerColour": "#e6e6e6"});
+                me.popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me.popup.show(popupTitle, popupContent);
                 me.popup.createCloseIcon();
                 me.popup.moveTo(me.getElement().parent(), 'bottom', true);

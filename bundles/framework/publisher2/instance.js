@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
-
         this.publisher = null;
     }, {
         /**

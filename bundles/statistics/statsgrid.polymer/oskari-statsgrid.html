@@ -1,4 +1,5 @@
 <link href="libs/polymer/polymer.html" rel="import">
+<link rel="import" href="libs/select-with-options/select-with-options.html">
 <link href="requirejs.html" rel="import">
 <!-- TODO: If you start using the libs here in other bundles as well, they must be moved to a shared location. -->
 <link href="libs/iron-ajax/iron-ajax.html" rel="import">
@@ -15,7 +16,7 @@
     <iron-ajax
       auto
       url="{{ajaxUrl}}"
-      params='{"action_route": "GetLayerInfo"}'
+      params='{"action_route": "GetRegionSets"}'
       handle-as="json"
       last-response="{{layerInfo}}"
       debounce-duration="300"
@@ -26,10 +27,9 @@
       </oskari-spinner>
       <div id="region-category-selector">
         <label for="selectRegionCategory">[[locale.selectRegionCategory]]</label>
-        <select id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
-          <template is="dom-repeat" items="[[getLayerInfoAsArray(layerInfo)]]">
-            <option value="[[item.val]]">[[item.text]]</option>
-          </template>
+        <select is="select-with-options" options="[[getLayerInfoAsArray(layerInfo)]]"
+          option-value="val" option-label="text" 
+          id="selectRegionCategory" style="width: 300px;" value="{{selectedLayer::change}}">
         </select>
       </div>
       <oskari-grid id="indicator-data-grid" statsrows="[[statsrows]]" rows="{{rows}}" headers="[[rowHeaders]]" selection="1"
