@@ -177,11 +177,11 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
 
+            this.started = this._startImpl();
             var size = this.getSize();
             this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
             me.startPlugins();
             this.updateCurrentState();
-            this.started = this._startImpl();
         },
 
         /**
