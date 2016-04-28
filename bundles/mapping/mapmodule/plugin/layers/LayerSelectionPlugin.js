@@ -639,6 +639,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             me.closeSelection(el);
 
             if (!me.layerContent) {
+                me.layerContent = me.templates.layerContent.clone();
                 me.setupLayers(undefined, el);
             }
 
