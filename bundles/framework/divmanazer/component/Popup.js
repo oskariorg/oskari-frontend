@@ -14,11 +14,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
-        this.isMobile = false;
-        this._mobileDefs = {
-            width: 320,
-            height: 480
-        };
         this.__listeners = {
 
         };
@@ -423,8 +418,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         adaptToMapSize: function (sandbox, popupName) {
             this.sandbox = sandbox;
             this.setName(popupName);
-            //check if the map is allready in mobile mode and adapt dialog size
-            this._handleMapSizeChanges();
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
@@ -467,46 +460,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         /**
          * @method  @private _handleMapSizeChanges handle map size changes
          * @param  {Object} size {width:100, height:200} (optional, if not given gets the map size from ???)
-         * @param {Object} el jQuery element
          */
         _handleMapSizeChanges: function(size) {
             var me = this,
                 popup = me.dialog;
-                popupOffScreen = window.innerWidth - popup.width - popup[0].style['left'];
 
             // if dialog ends up offscreen, move it back to the screen
-            if (parseInt(popup[0].style['left']) > (window.innerWidth - popup.width())) {
+            if (parseInt(popup[0].style['left']) > (size.width - popup.width())) {
                 popup.css({
-                    'left': (window.innerWidth - popup.width() - 10) + 'px'
+                    'left': (size.width - popup.width() - 10) + 'px'
                 });
             }
-            if (parseInt(popup[0].style['top']) > (window.innerHeight - popup.height())) {
+            if (parseInt(popup[0].style['top']) > (size.width - popup.height())) {
                 popup.css({
-                    'top': (window.innerHeight - popup.height() - 10) + 'px'
+                    'top': (size.width - popup.height() - 10) + 'px'
                 });
-            }
-
-            // when dialog is opened check the size of  the screen
-            if (!size) {
-                size = {
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                };
-            }
-
-            if (me.popupClass) {
-                popup.removeClass(me.popupClass);
-                me.popupClass = undefined;
-            }
-            // if screen is in mobile mode, change the size of the popup
-            if (size.width < me._mobileDefs.width || size.height < me._mobileDefs.height) {
-                if (size.width > size.height) {
-                    popup.addClass('mobile-landscape');
-                    me.popupClass = 'mobile-landscape';
-                } else {
-                    popup.addClass('mobile-portrait');
-                    me.popupClass = 'mobile-portrait';
-                }
             }
         }
     });

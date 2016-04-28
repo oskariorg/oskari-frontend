@@ -100,17 +100,11 @@
     position: absolute;
     top: 8px;
     right: 5px; }
-  .divmanazerpopup.mobile-landscape {
-    height: 100%;
-    top: 0% !important;
-    left: 0% !important;
-    margin-top: -6px !important;
-    margin-left: -4px !important;
-    overflow: auto; }
-  .divmanazerpopup.mobile-portrait {
-    width: 94%;
-    top: 10% !important;
-    left: 3% !important;
-    margin-top: -6px !important;
-    margin-left: -4px !important;
-    overflow: auto; }
+  .divmanazerpopup.mobile-popup {
+    border: 2px solid rgb(192,192,192);
+    border-radius: 0px;
+    left: 0px !important;
+    margin-top: 2px !important;
+    width: 100%;
+    max-width: 600px; }
+
