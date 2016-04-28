@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         // ui odes desktop|mobile
         this._uiMode = 'desktop';
 
-        this._mobileDefs = {};
+        this._mobileDefs = null;
     }, {
         /**
          * @method _startPluginImpl
@@ -375,6 +375,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         createPluginUI: function(mapInMobileMode, modeChanged) {
             var me = this,
                 sandbox = me.getSandbox();
+
+            // no different UI for mobile/desktop, returning
+            if(me._mobileDefs === null) {
+                return;
+            }
 
             //remove old element
             if (modeChanged && me._element) {
