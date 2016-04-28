@@ -376,7 +376,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var me = this,
                 sandbox = me.getSandbox();
 
-            // no different UI for mobile/desktop, returning
+            // no different UI for mobile/desktop, returning    
             if(me._mobileDefs === null) {
                 return;
             }
