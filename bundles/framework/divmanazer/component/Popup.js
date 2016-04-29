@@ -201,8 +201,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {jQuery} target - target element which the popup should point
          * @param {String} alignment - one of #alignment (optional, defaults to right)
          * @param {Boolean} noArrow - if true, arrow is not diplayed (optional, defaults to false)
+         * @param {jQuery} topOffsetElement - if set, the popup top is set according to this element (optional, used with mobile popups when adjusting to container instead of the tool)
          */
-        moveTo: function (target, alignment, noArrow) {
+        moveTo: function (target, alignment, noArrow, topOffsetElement) {
             var me = this,
                 align = 'right',
                 //get the position of the target element
@@ -260,6 +261,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 'margin-left': 0,
                 'margin-top': 0
             });
+
+            if (topOffsetElement) {
+                me._adjustPopupTop(topOffsetElement);
+            }
+
+        },
+        /**
+         * @method @private _adjustPopupTop
+         * Adjusts the top position of this popup according to the element provided
+         * @param {jQuery} topOffsetElement
+         *
+         */
+        _adjustPopupTop: function(topOffsetElement) {
+            if (topOffsetElement) {
+                var top = jQuery(topOffsetElement).offset().top,
+                    height = jQuery(topOffsetElement).outerHeight(true),
+                    popupTop = parseInt(top)+parseInt(height);
+                this.dialog.css('top',popupTop+'px');
+            }
         },
         /**
          * @method resetPosition

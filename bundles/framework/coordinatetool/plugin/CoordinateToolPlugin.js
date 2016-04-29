@@ -188,12 +188,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             if (me._uiMode === 'mobile') {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
+                var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me._popup.createCloseIcon();
-                var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection');
-                me._popup.moveTo(el, 'bottom', true);
+                me._popup.moveTo(el, 'bottom', true, topOffsetElement);
             } else {
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
