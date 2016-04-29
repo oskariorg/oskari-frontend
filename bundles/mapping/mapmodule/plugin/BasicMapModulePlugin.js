@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 this.getSandbox().printWarn('"' + this.getName() + '" ', e);
             }
         },
-        removeFromPluginContainer : function(element) {
+        removeFromPluginContainer : function(element, preserve) {
             if(!element) {
                 // no element to remove, log a warning
                 return;
@@ -113,10 +113,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var mapModule = this.getMapModule();
             mapModule.removeMapControlPlugin(
                 element,
-                this.inLayerToolsEditMode()
+                this.inLayerToolsEditMode(),
+                !!preserve
             );
-            element.remove();
-            this._element = null;
+            if(!preserve) {
+                this._element = null;
+            }
         },
 
         teardownUI : function() {
