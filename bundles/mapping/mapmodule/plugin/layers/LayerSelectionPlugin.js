@@ -30,7 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     sticky: true,
                     show: true,
                     callback: function () {
-                        me.openSelection();
+                        if (me.popup) {
+                            me.popup.close(true);
+                        } else {
+                            me.openSelection();
+                        }
                     }
                 }
             },
