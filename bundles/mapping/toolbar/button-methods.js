@@ -24,6 +24,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
             group = null,
             prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
+
         if (!me.buttons[prefixedGroup]) {
             // create group if not existing
             me.buttons[prefixedGroup] = {};
@@ -329,46 +330,59 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (!pGroup) {
             return;
         }
-        var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
+        var toolbarId = pToolbarId || 'default';
+        var prefixedGroup = toolbarId + '-' + pGroup;
 
-        if (this.buttons[prefixedGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
-            if (pId) {
-                if(this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
-                    this.buttons[prefixedGroup][pId].children.remove();
-                }
-                var button = group.find('div.tool[tool=' + pId + ']');
-                button.remove();
-                this.buttons[prefixedGroup][pId] = null;
-                delete this.buttons[prefixedGroup][pId];
+        if (!this.buttons[prefixedGroup]) {
+            return;
+        }
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
+            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+        if (!pId) {
+            // delete whole group
+            group.remove();
+            this.buttons[prefixedGroup] = null;
+            delete this.buttons[prefixedGroup];
+            // nothing to do after this
+            return;
+        }
+        // remove individual button
+        if(this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
+            this.buttons[prefixedGroup][pId].children.remove();
+        }
+        var button = group.find('div.tool[tool=' + pId + ']');
+        button.remove();
+        this.buttons[prefixedGroup][pId] = null;
+        delete this.buttons[prefixedGroup][pId];
 
-                var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id) ? true : false;
-                if(isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
-                    this.selectedButton = null;
-                    delete this.selectedButton;
-                }
+        var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id) ? true : false;
+        if(isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
+            this.selectedButton = null;
+            delete this.selectedButton;
+        }
 
-                // check if no buttons left -> delete group also?
-                var count = 0,
-                    key;
-                for (key in this.buttons[prefixedGroup]) {
-                    if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
-                        count++;
-                    }
-                }
-                if (count === 0) {
-                    group.remove();
-                    this.buttons[prefixedGroup] = null;
-                    delete this.buttons[prefixedGroup];
-                }
-            } else {
-                // delete whole group
-                group.remove();
-                this.buttons[prefixedGroup] = null;
-                delete this.buttons[prefixedGroup];
+        // check if no buttons left -> delete group also?
+        var count = 0,
+            key;
+        for (key in this.buttons[prefixedGroup]) {
+            if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
+                count++;
             }
         }
+        if (count === 0) {
+            group.remove();
+            this.buttons[prefixedGroup] = null;
+            delete this.buttons[prefixedGroup];
+        }
+    },
+    isToolbarEmpty : function(toolbarId) {
+        for (var key in this.buttons) {
+            if(key.indexOf(toolbarId) === 0) {
+                // if any of the groups startwith toolbarId -> not empty
+                return false;
+            }
+        }
+        return true;
     },
     /**
      * @method changeToolButtonState
