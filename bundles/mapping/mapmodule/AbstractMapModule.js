@@ -177,9 +177,11 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
 
+            this.started = this._startImpl();
+            var size = this.getSize();
+            this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
             me.startPlugins();
             this.updateCurrentState();
-            this.started = this._startImpl();
         },
 
         /**
@@ -213,6 +215,9 @@ Oskari.clazz.define(
             },
             MapSizeChangedEvent: function (evt) {
                 this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+            },
+            'Toolbar.ToolbarLoadedEvent': function() {
+                this.startLazyPlugins();
             }
         },
 
@@ -745,7 +750,9 @@ Oskari.clazz.define(
             for (p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
-
+                    if(typeof layersPlugin.preselectLayers !== 'function') {
+                        continue;
+                    }
                     sandbox.printDebug('preselecting ' + p);
                     layersPlugin.preselectLayers(layers);
                 }
@@ -882,6 +889,13 @@ Oskari.clazz.define(
 
         setMobileMode: function (isInMobileMode) {
             this._isInMobileMode = isInMobileMode;
+
+            var mobileDiv = this.getMobileDiv();
+            if (isInMobileMode) {
+                mobileDiv.show();
+            } else {
+                mobileDiv.hide();
+            }
         },
 
         getMobileMode: function () {
@@ -902,7 +916,7 @@ Oskari.clazz.define(
                 modeChanged = (me.getMobileMode() === false) ? false : true;
                 me.setMobileMode(false);
                 mobileDiv.hide();
-            }            
+            }
 
             if (modeChanged) {
                 var sortedList = _.sortBy(me._pluginInstances, '_index');
@@ -1067,6 +1081,7 @@ Oskari.clazz.define(
             plugin.setMapModule(null);
             delete this._pluginInstances[pluginName];
         },
+        lazyStartPlugins : [],
         /**
          * @method startPlugin
          * Starts the given plugin by calling its startPlugin() method.
@@ -1077,7 +1092,28 @@ Oskari.clazz.define(
                 pluginName = plugin.getName();
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-            plugin.startPlugin(sandbox);
+            try {
+                var successfulStart = plugin.startPlugin(sandbox);
+                if(successfulStart === false && typeof plugin.createPluginUI === 'function') {
+                    this.lazyStartPlugins.push(plugin);
+                }
+            } catch (e) {
+                // something wrong with plugin (e.g. implementation not imported) -> log a warning
+                sandbox.printWarn(
+                    'Unable to start plugin: ' + pluginName + ': ' +
+                    e
+                );
+            }
+        },
+        startLazyPlugins : function() {
+            var me = this;
+            var tryStartingThese = this.lazyStartPlugins.slice(0);
+            // reset
+            this.lazyStartPlugins = [];
+
+            tryStartingThese.forEach(function(plugin) {
+                plugin.createPluginUI(me.getMobileMode());
+            });
         },
         /**
          * @method stopPlugin
@@ -1097,12 +1133,13 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    this.startPlugin(this._pluginInstances[pluginName]);
+            var me = this;
+            var sortedList = _.sortBy(me._pluginInstances, '_index');
+            _.each(sortedList, function(plugin) {
+                if (plugin && typeof plugin.startPlugin === 'function') {
+                    me.startPlugin(plugin);
                 }
-            }
-            this._handleMapSizeChanges(this.getSize());
+            });
         },
         /**
          * @method stopPlugins

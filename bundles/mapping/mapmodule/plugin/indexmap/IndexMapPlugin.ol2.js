@@ -45,18 +45,19 @@ Oskari.clazz.define(
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-
+            me._indexMap = this._createOLIndexMap(el);
+            this.getMap().addControl(this._indexMap);
             return el;
         },
 
         /**
-         * @private @method _createControlAdapter
+         * @private @method _createOLIndexMap
          * Constructs/initializes the control adapter for the plugin
          *
          * @param {jQuery} el
          *
          */
-        _createControlAdapter: function (el) {
+        _createOLIndexMap: function (el) {
             // FIXME this seems to be completely FI-specific?
             /*
              * create an overview map control with non-default
