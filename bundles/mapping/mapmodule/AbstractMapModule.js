@@ -1116,7 +1116,10 @@ Oskari.clazz.define(
             this.lazyStartPlugins = [];
 
             tryStartingThese.forEach(function(plugin) {
-                plugin.redrawUI(me.getMobileMode());
+                var tryAgainLater = plugin.redrawUI(me.getMobileMode());
+                if(tryAgainLater) {
+                    me.lazyStartPlugins.push(plugin);
+                }
             });
             var mobileDiv = this.getMobileDiv();
             if(mobileDiv.children().length === 0) {
