@@ -208,6 +208,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     'background-image': 'url("' + bgImg + '")'
                 });
             }
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        redrawUI: function(mapInMobileMode, modeChanged) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                this.addToPluginContainer(me._element);
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
