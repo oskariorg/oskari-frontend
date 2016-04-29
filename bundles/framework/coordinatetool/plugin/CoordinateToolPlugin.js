@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me.refresh();
 
             if (this._showReverseGeocode){
-                this._update3words();
+                this._updateReverseGeocode();
             }
         },
         /**
@@ -453,12 +453,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
         },
         /**
-         * Update 3words value to inputs
-         * @method  @private _update3words
+         * Update reverse geocode value to inputs
+         * @method  @private _updateReverseGeocode
          * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
-         * @return {[type]}      [description]
          */
-        _update3words: function(data){
+        _updateReverseGeocode: function(data){
             var me = this,
                 locale = me._locale.reversegeocode,
                 service = me._instance.getService(),
@@ -578,7 +577,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
 
                         if (event.isPaused() && me._showReverseGeocode){
-                            me._update3words(data);
+                            me._updateReverseGeocode(data);
                         }
                     }
                 },
@@ -599,7 +598,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }
                     if (me._showReverseGeocode){
-                        me._update3words();
+                        me._updateReverseGeocode();
                     }
                 },
                 /**
@@ -625,7 +624,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }
                     if (me._showReverseGeocode){
-                        me._update3words(data);
+                        me._updateReverseGeocode(data);
                     }
                 },
                 /**
