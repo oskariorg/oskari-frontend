@@ -455,10 +455,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
                 if (modeChanged || !me.getElement()) {
                     me._element = me._createControlElement();
-                    me._ctl = me._createControlAdapter(me._element);
-                    if(me._ctl) {
-                        me.getMapModule().addMapControl(me._pluginName, me._ctl);
-                    }
                     if (me._element) {
                         me._element.attr('data-clazz', me.getClazz());
                     }

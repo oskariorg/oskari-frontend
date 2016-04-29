@@ -872,11 +872,6 @@ Oskari.clazz.define(
             } else {
                 me._element.removeClass('mobilesearch');
 
-                me._ctl = me._createControlAdapter(me._element);
-                if (me._ctl) {
-                    me.getMapModule().addMapControl(me._pluginName, me._ctl);
-                }
-
                 me.getMapModule().setMapControlPlugin(
                     me._element,
                     me.getLocation(),

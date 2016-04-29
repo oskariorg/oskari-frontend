@@ -32,7 +32,23 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var me = this;
 
             var isMapInMobileMode = me.getMapModule().getMobileMode();
-
+            me._element = me._createControlElement();
+            if (me._element) {
+                me._element.attr('data-clazz', me.getClazz());
+            }
+            // Set initial UI values
+            me.refresh();
+            // There's a possibility these were set before plugin was started.
+            me.setEnabled(me._enabled);
+            me.setVisible(me._visible);
+            if (me._element) {
+                me._element.attr('data-clazz', me.getClazz());
+                me.getMapModule().setMapControlPlugin(
+                    me._element,
+                    me.getLocation(),
+                    me.getIndex()
+                );
+            }
             return me.createPluginUI(isMapInMobileMode);
         },
 
@@ -213,16 +229,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         _destroyControlElement: function () {},
 
         /**
-         * @method _createControlAdapter
-         *
-         *
-         * @return {Object} Control adapter object or null if none
-         */
-        _createControlAdapter: function (el) {
-            /* this._el.get()[0] */
-        },
-
-        /**
          * @method _toggleControls
          * Enable/disable plugin controls. Used in map layout edit mode.
          *
@@ -398,10 +404,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             } else {
                 if (modeChanged || !me.getElement()) {
                     me._element = me._createControlElement();
-                    me._ctl = me._createControlAdapter(me._element);
-                    if(me._ctl) {
-                        me.getMapModule().addMapControl(me._pluginName, me._ctl);
-                    }
                     if (me._element) {
                         me._element.attr('data-clazz', me.getClazz());
                     }

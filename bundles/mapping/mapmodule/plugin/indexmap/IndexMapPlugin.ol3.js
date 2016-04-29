@@ -45,32 +45,27 @@ Oskari.clazz.define(
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-
+            this._createOLIndexMap(el);
             return el;
         },
 
         /**
-         * @private @method _createControlAdapter
+         * @private @method _createOLIndexMap
          * Constructs/initializes the control adapter for the plugin
          *
          * @param {jQuery} el
          *
          */
-        _createControlAdapter: function (el) {
+        _createOLIndexMap: function (el) {
             // FIXME this seems to be completely FI-specific?
             /*
              * create an overview map control with non-default
              * options
              */
             var me = this;
-            // initialize control, pass container
-            me._indexMap = new ol.control.OverviewMap();
-            me._indexMap.setCollapsed(true);
             // Ol indexmap target
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
-            me.getElement().append(me._indElement);
-
-            return me._indexMap;
+            el.append(me._indElement);
         },
 
         refresh: function () {
@@ -92,7 +87,7 @@ Oskari.clazz.define(
             icon.bind('click', function (event) {
 
                 //Add index map control - remove old one
-                if (me._indexMap.getCollapsed()) {
+                if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
                     if (layer) {
@@ -106,10 +101,12 @@ Oskari.clazz.define(
                             })
                         };
                         // initialize control, pass container
-                        me.getMapModule().removeMapControl(me._name, me._indexMap);
+                        if(me._indexMap) {
+                            me.getMap().removeControl(me._indexMap);
+                        }
                         me._indexMap = new ol.control.OverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
-                        me.getMapModule().addMapControl(me._name, me._indexMap);
+                        me.getMap().addControl(me._indexMap);
 
                     }
                     me._indexMap.setCollapsed(false);
