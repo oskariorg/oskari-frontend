@@ -814,7 +814,6 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var me = this,
                 el;
-debugger;
             el = jQuery('<div class="mapplugin manageClassificationPlugin" />');
             el.toggle(me.isVisible());
             me.refresh(el);
