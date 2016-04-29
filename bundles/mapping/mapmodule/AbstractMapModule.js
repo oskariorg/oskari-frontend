@@ -921,9 +921,9 @@ Oskari.clazz.define(
             if (modeChanged) {
                 var sortedList = _.sortBy(me._pluginInstances, '_index');
                 _.each(sortedList, function(plugin) {
-                    if (plugin && typeof plugin.createPluginUI === 'function') {
+                    if (plugin && typeof plugin.redrawUI === 'function') {
                         var index = plugin.getIndex();
-                        plugin.createPluginUI(me.getMobileMode(), modeChanged);
+                        plugin.redrawUI(me.getMobileMode(), modeChanged);
                     }
                 });
             }
@@ -1093,8 +1093,8 @@ Oskari.clazz.define(
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
-                var successfulStart = plugin.startPlugin(sandbox);
-                if(successfulStart === false && typeof plugin.createPluginUI === 'function') {
+                var tryAgainLater = plugin.startPlugin(sandbox);
+                if(tryAgainLater && typeof plugin.redrawUI === 'function') {
                     this.lazyStartPlugins.push(plugin);
                 }
             } catch (e) {
@@ -1112,7 +1112,7 @@ Oskari.clazz.define(
             this.lazyStartPlugins = [];
 
             tryStartingThese.forEach(function(plugin) {
-                plugin.createPluginUI(me.getMobileMode());
+                plugin.redrawUI(me.getMobileMode());
             });
         },
         /**

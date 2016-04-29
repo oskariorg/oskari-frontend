@@ -14,8 +14,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._visible = true;
         // plugin index, override this. Smaller number = first plugin, bigger number = latest
         this._index = 1000;
-        // ui odes desktop|mobile
-        this._uiMode = 'desktop';
 
         this._mobileDefs = null;
     }, {
@@ -30,26 +28,106 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         _startPluginImpl: function (sandbox) {
             var me = this;
-
-            var isMapInMobileMode = me.getMapModule().getMobileMode();
-            me._element = me._createControlElement();
-            if (me._element) {
-                me._element.attr('data-clazz', me.getClazz());
-            }
-            // Set initial UI values
-            me.refresh();
-            // There's a possibility these were set before plugin was started.
             me.setEnabled(me._enabled);
-            me.setVisible(me._visible);
-            if (me._element) {
-                me._element.attr('data-clazz', me.getClazz());
-                me.getMapModule().setMapControlPlugin(
-                    me._element,
-                    me.getLocation(),
-                    me.getIndex()
-                );
+            return me.setVisible(me._visible);
+        },
+        /**
+         * @public @method setVisible
+         * Set the plugin UI's visibility
+         *
+         * @param {Boolean} visible
+         * Whether the UI should be visible or hidden
+         *
+         */
+        setVisible: function (visible) {
+            var toolbarNotReady = false;
+            var wasVisible = this._visible;
+            this._visible = visible;
+            if(!this.getElement() && visible) {
+                toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
             }
-            return me.createPluginUI(isMapInMobileMode);
+            // toggle element
+            if (this.getElement() && wasVisible !== visible) {
+                this.getElement().toggle(visible);
+            }
+            return toolbarNotReady;
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        redrawUI: function(mapInMobileMode) {
+            if(this._clazz =='Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
+                debugger;
+            }
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            if(this.getElement()) {
+                // ui already in place no need to do anything, override in plugins to do responsive
+                return;
+            }
+            me._element = me._createControlElement();
+            this.addToPluginContainer(me._element);
+                /*
+            var mobileDefs = this.getMobileDefs();
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
+            }
+
+
+            if (mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+            }
+            */
+        },
+        addToPluginContainer : function(element) {
+            //var element = this.getElement();
+            if(!element) {
+                // no element to place, log a warning
+                return;
+            }
+            this._element = element;
+            element.attr('data-clazz', this.getClazz());
+            try{
+                this.getMapModule().setMapControlPlugin(
+                    element,
+                    this.getLocation(),
+                    this.getIndex()
+                );
+            } catch(e){
+                this.getSandbox().printWarn('"' + this.getName() + '" ', e);
+            }
+        },
+        removeFromPluginContainer : function(element) {
+            if(!element) {
+                // no element to remove, log a warning
+                return;
+            }
+            var mapModule = this.getMapModule();
+            mapModule.removeMapControlPlugin(
+                element,
+                this.inLayerToolsEditMode()
+            );
+            element.remove();
+            this._element = null;
+        },
+
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+        },
+        getMobileDefs : function() {
+            return this._mobileDefs || {};
         },
 
         /**
@@ -61,24 +139,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         _stopPluginImpl: function (sandbox) {
-            var me = this,
-                mapModule = me.getMapModule();
-            // Destroy control adapter if it exists
-            if (me._ctl) {
-                mapModule.removeMapControl(me._pluginName, me._ctl);
-                me._ctl = null;
-            }
-
-            me._destroyControlElement();
-
-            if (me.getElement()) {
-                mapModule.removeMapControlPlugin(
-                    me.getElement(),
-                    me.inLayerToolsEditMode()
-                );
-                me.getElement().remove();
-                me._element = null;
-            }
+            this.removeFromPluginContainer(this.getElement());
         },
 
         /**
@@ -157,17 +218,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
 
             me._config.location.classes = location;
-            if (el) {
-                try{
-                    me.getMapModule().setMapControlPlugin(
-                        el,
-                        location,
-                        me.getIndex()
-                    );
-                } catch(e){
-                    me.getSandbox().printWarn('"' + me.getName() + '" ', e);
-                }
-            }
+            this.addToPluginContainer(el);
         },
 
         /**
@@ -267,22 +318,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         },
 
         /**
-         * @public @method setVisible
-         * Set the plugin UI's visibility
-         *
-         * @param {Boolean} visible
-         * Whether the UI should be visible or hidden
-         *
-         */
-        setVisible: function (visible) {
-            // toggle element
-            if (this._element && this._visible !== visible) {
-                    this._element.toggle(visible);
-            }
-            this._visible = visible;
-        },
-
-        /**
          * @public @method isVisible
          * Is the plugin's UI visible
          *
@@ -347,95 +382,36 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 el.addClass(classToAdd);
             }
         },
-
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
-         */
-        createPluginUI: function(mapInMobileMode, modeChanged) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mobileDefs = this.getMobileDefs();
-
-            // no different UI for mobile/desktop, returning
-            if(!mobileDefs) {
+        addToolbarButtons : function(buttons, group) {
+            var sandbox = this.getSandbox();
+            var toolbar = this.getMapModule().getMobileToolbar();
+            var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            if(buttons && !addToolButtonBuilder) {
                 return true;
             }
+
+            if (addToolButtonBuilder) {
+                for (var tool in buttons) {
+                    var buttonConf = buttons[tool];
+                    buttonConf.toolbarid = toolbar;
+                    sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
+                }
+            }
+        },
+        removeToolbarButtons : function(buttons, group) {
+            var sandbox = this.getSandbox();
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-            if(mobileDefs.buttons && !removeToolButtonBuilder) {
-                return false;
+            if(buttons && !removeToolButtonBuilder) {
+                return true;
             }
-
-            //remove old element
-            if (modeChanged && me.getElement()) {
-
-                me.getMapModule().removeMapControlPlugin(
-                    me.getElement(),
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-                me.getElement().remove();
-                delete me._element;
-            }
-
-            var toolbar = me.getMapModule().getMobileToolbar();
-            for (var tool in mobileDefs.buttons) {
-                var buttonConf = mobileDefs.buttons[tool];
+            var toolbar = this.getMapModule().getMobileToolbar();
+            for (var tool in buttons) {
+                var buttonConf = buttons[tool];
                 buttonConf.toolbarid = toolbar;
-                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
+                sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }
-
-            if (mapInMobileMode) {
-                var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-
-                if (addToolButtonBuilder) {
-                    for (var tool in mobileDefs.buttons) {
-                        var buttonConf = mobileDefs.buttons[tool];
-                        buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, addToolButtonBuilder(tool, mobileDefs.buttonGroup, buttonConf));
-                    }
-                }
-
-                me._uiMode = 'mobile';
-            } else {
-                if (modeChanged || !me.getElement()) {
-                    me._element = me._createControlElement();
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                    }
-                    // Set initial UI values
-                    me.refresh();
-                    // There's a possibility these were set before plugin was started.
-                    me.setEnabled(me._enabled);
-                    me.setVisible(me._visible);
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                        me.getMapModule().setMapControlPlugin(
-                            me._element,
-                            me.getLocation(),
-                            me.getIndex()
-                        );
-                    }
-                }
-
-                if(me._element && me.getLocation()) {
-                    me.getMapModule().setMapControlPlugin(
-                        me.getElement(),
-                        me.getLocation(),
-                        me.getIndex()
-                    );
-                }
-                me._uiMode = 'desktop';
-                me.refresh();
-            }
-            return true;
-        },
-        getMobileDefs : function() {
-            return this._mobileDefs;
         }
     }, {
         /**

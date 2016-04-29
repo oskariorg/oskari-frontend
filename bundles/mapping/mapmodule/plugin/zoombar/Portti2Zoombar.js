@@ -401,85 +401,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 });
             }
         },
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            if(this._slider) {
+                this._slider.remove();
+                delete this._slider;
+            }
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, modeChanged) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-            if(!removeToolButtonBuilder) {
-                return false;
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
             }
-            //remove old element
-            if (modeChanged && me.getElement()) {
-
-                me.getMapModule().removeMapControlPlugin(
-                    me.getElement(),
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-                me.getElement().remove();
-                delete me._element;
-                me._slider.remove();
-                delete me._slider;
-            }
-
-            var toolbar = me.getMapModule().getMobileToolbar();
-            for (var tool in mobileDefs.buttons) {
-                var buttonConf = mobileDefs.buttons[tool];
-                buttonConf.toolbarid = toolbar;
-                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
-            }
+            this.teardownUI();
 
             if (mapInMobileMode) {
-                var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-
-                if (reqBuilder) {
-                    for (var tool in mobileDefs.buttons) {
-                        var buttonConf = mobileDefs.buttons[tool];
-                        buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, mobileDefs.buttonGroup, buttonConf));
-                    }
-                }
-
-                me._uiMode = 'mobile';
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-
-                if (modeChanged || !me.getElement()) {
-                    me._element = me._createControlElement();
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                    }
-                    // Set initial UI values
-                    me.refresh();
-                    // There's a possibility these were set before plugin was started.
-                    me.setEnabled(me._enabled);
-                    me.setVisible(me._visible);
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                        me.getMapModule().setMapControlPlugin(
-                            me._element,
-                            me.getLocation(),
-                            me.getIndex()
-                        );
-                    }
-                }
-
-                me.getMapModule().setMapControlPlugin(
-                    me.getElement(),
-                    me.getLocation(),
-                    me.getIndex()
-                );
-                me._uiMode = 'desktop';
-                me.refresh();
+                me._element = me._createControlElement();
+                this.addToPluginContainer(me._element);
             }
             return true;
         }

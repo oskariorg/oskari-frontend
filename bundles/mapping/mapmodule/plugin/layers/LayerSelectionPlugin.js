@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     sticky: true,
                     show: true,
                     callback: function () {
-                        me.openSelection();
+                        me.openSelection(true);
                     }
                 }
             },
@@ -87,6 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
+            this.setupLayers();
         },
         /**
          * @method _createEventHandlers
@@ -150,6 +151,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
 
         _setLayerToolsEditModeImpl: function () {
+            if(!this.getElement()) {
+                return;
+            }
             var header = this.getElement().find('div.header');
             header.unbind('click');
             if (this.inLayerToolsEditMode()) {
@@ -191,6 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         addLayer: function (layer, el) {
             if (this.layerRefs[layer.getId()]) {
+                // already added
                 return;
             }
 
@@ -199,7 +204,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.layerContent) {
                 me.layerContent = me.templates.layerContent.clone();
             }
-            
+
             var layersDiv = me.layerContent.find('div.layers'),
                 div = this.templates.layer.clone(),
                 input = this.templates.checkbox.clone();
@@ -239,9 +244,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var div = this.layerRefs[layer.getId()],
                 blnVisible = layer.isVisible(),
                 input;
-            /*if (!div) {
+            if (!div) {
                 return;
-            }*/
+            }
             input = div.find('input');
             if (blnVisible) {
                 if (!input.is(':checked')) {
@@ -318,9 +323,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (div.parent().hasClass('baselayers')) {
                 return;
             }
-            /*if (!div) {
+            if (!div) {
                 return;
-            }*/
+            }
             div.remove();
 
             var input = div.find('input');
@@ -525,13 +530,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function () {
+        openSelection: function (isMobile) {
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
                 div = this.getElement();
 
-            if (me._uiMode === "mobile") {
+            if (isMobile) {
                 me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var popupTitle = me._loc.title;
                 me.popup.addClass('mobile-popup');
@@ -543,7 +548,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             } else {
                 var icon = div.find('div.header div.header-icon'),
                     header = div.find('div.header');
-                
+
                 icon.removeClass('icon-arrow-white-right');
                 icon.addClass('icon-arrow-white-down');
                 div.append(me.layerContent);
@@ -567,9 +572,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * Programmatically closes the plugins interface as if user had clicked it close
          */
         closeSelection: function (el) {
-            var element = el || this.getElement(),
-                icon = element.find('div.header div.header-icon'),
-                header = element.find('div.header');
+            var element = el || this.getElement();
+            if(!element) {
+                return;
+            }
+            var icon = element.find('div.header div.header-icon');
+            var header = element.find('div.header');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
@@ -646,77 +654,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             return el;
         },
 
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            this.closeSelection();
+                if (this.popup) {
+                    this.popup.close(true);
+                }
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function(mapInMobileMode, modeChanged) {
-            var me = this,
-                sandbox = me.getSandbox();
-
-            //remove old element
-            if (modeChanged && me._element) {
-                me.closeSelection();
-
-                me.getMapModule().removeMapControlPlugin(
-                    me._element,
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-
-                if (me.popup) {
-                    me.popup.close(true);
-                }
-
+        redrawUI: function(mapInMobileMode, modeChanged) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
             }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
 
-            var toolbar = me.getMapModule().getMobileToolbar();
-            var reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.RemoveToolButtonRequest'
-            );
-            if (reqBuilder) {
-                for (var tool in me._mobileDefs.buttons) {
-                    var buttonConf = me._mobileDefs.buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, toolbar));
-                }
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
             }
+            this.teardownUI();
 
-            if (mapInMobileMode) {                
-                var toolbar = me.getMapModule().getMobileToolbar();
-                var reqBuilder = sandbox.getRequestBuilder(
-                    'Toolbar.AddToolButtonRequest'
-                );
-                if (modeChanged) {
-                    me._element = me._createControlElement();
-                }
+            me._element = me._createControlElement();
+            if (mapInMobileMode) {
                 me.changeToolStyle(null, me._element);
-
-                if (reqBuilder) {
-                    for (var tool in me._mobileDefs.buttons) {
-                        var buttonConf = me._mobileDefs.buttons[tool];
-                        buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, me._mobileDefs.buttonGroup, buttonConf));
-                    }
-                }
-                
-                me._uiMode = 'mobile';
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-                if (modeChanged) {
-                    me._element = me._createControlElement();
-                }
-                if(me._element && me.getLocation()) {
-                    me.getMapModule().setMapControlPlugin(
-                        me._element,
-                        me.getLocation(),
-                        me.getIndex()
-                    );
-                }
-
-                me._uiMode = 'desktop';
-                me.refresh();
+                this.addToPluginContainer(me._element);
+                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
+                //me.refresh();
             }
         },
 
