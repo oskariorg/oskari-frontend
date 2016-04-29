@@ -50,7 +50,7 @@
     <div class="add-layer-input-area">
         <select id="add-layer-interface-version">
             <option value="1.1.1" <% if(model.getVersion() == '1.1.1' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_1_1 %></option>
-            <option value="1.3.0" <% if(model.getVersion() == '1.3.0' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_3_0 %></option>
+            <option value="1.3.0" <% if(model.getVersion() == '1.3.0' || !model.getVersion() ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_3_0 %></option>
         </select>
     </div>
 </div>

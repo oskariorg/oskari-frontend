@@ -84,8 +84,7 @@ feedback.open311.key=      --> http://wiki.open311.org/GeoReport_v2/#post-servic
                               "lat": "6674188.748000",
                               "long": "384717.640000"
                               };
-                              var data = {
-                              "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+                              var data = {                              
                               "srs":"EPSG:3067",
                               "postServiceRequest": JSON.stringify(postdata)
                               };

@@ -48,12 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         //additional bundles (=not map plugins) that were stopped when entering publisher
         me.stoppedBundles = [];
 
-        if (data) {
-            if (data.lang) {
-                Oskari.setLang(data.lang);
-            }
-        }
-
         me.loc = localization;
         me.accordion = null;
 
@@ -181,9 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setPluginLanguage(value);
-            });
+            form.init(me.data);
 
             // open generic info by default
             form.getPanel().open();
@@ -261,22 +253,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             form.init(me.data, function(value) {});
 
             return form;
-        },
-
-        setPluginLanguage : function(lang) {
-            var me = this;
-            if (lang === null || lang === undefined) {
-                throw new TypeError(
-                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
-                    '.setPluginLanguage: missing language'
-                );
-            }
-            Oskari.setLang(lang);
-            _.each(me.panels, function(panel) {
-                if (panel._restartActivePlugins && typeof panel._restartActivePlugins === 'function') {
-                    panel._restartActivePlugins();
-                }
-            });
         },
         /**
         * Get panel/tool handlers
