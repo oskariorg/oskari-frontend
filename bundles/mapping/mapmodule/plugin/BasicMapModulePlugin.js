@@ -59,9 +59,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
         redrawUI: function(mapInMobileMode) {
-            if(this._clazz =='Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                debugger;
-            }
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;

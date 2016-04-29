@@ -45,39 +45,16 @@ Oskari.clazz.define(
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-            this._createOLIndexMap(el);
-            return el;
-        },
-
-        /**
-         * @private @method _createOLIndexMap
-         * Constructs/initializes the control adapter for the plugin
-         *
-         * @param {jQuery} el
-         *
-         */
-        _createOLIndexMap: function (el) {
-            // FIXME this seems to be completely FI-specific?
-            /*
-             * create an overview map control with non-default
-             * options
-             */
-            var me = this;
             // Ol indexmap target
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
             el.append(me._indElement);
-        },
 
-        refresh: function () {
-            var me = this,
-                toggleButton = me.getElement().find('.indexmapToggle');
-            if (!toggleButton.length) {
-                toggleButton = jQuery('<div class="indexmapToggle"></div>');
-                // button has to be added separately so the element order is correct...
-                me.getElement().append(toggleButton);
-            }
+            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
+            // button has to be added separately so the element order is correct...
+            el.append(toggleButton);
             // add toggle functionality to button
             me._bindIcon(toggleButton);
+            return el;
         },
 
         _bindIcon: function (icon) {
