@@ -476,11 +476,12 @@ Oskari.clazz.define(
 
 
             var popupContent = resultsContainer;
+            var topOffsetElement = (me._uiMode === 'mobile') ? jQuery('div.mobileToolbarDiv') : undefined;
             me.popup.addClass('mobile-popup');
             me.popup.setColourScheme({"bgColour": "#e6e6e6"});
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();
-            me.popup.moveTo(me.getElement(), 'bottom', true);
+            me.popup.moveTo(me.getElement(), 'bottom', true, topOffsetElement);
 
             if (me._uiMode === "desktop") {
                 me.popup.addClass('searchresult');

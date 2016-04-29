@@ -30,7 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     sticky: true,
                     show: true,
                     callback: function () {
-                        me.openSelection(true);
+                        if (me.popup) {
+                            me.popup.close(true);
+                        } else {
+                            me.openSelection(true);
+                        }
                     }
                 }
             },
@@ -544,7 +548,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.show(popupTitle, me.layerContent);
                 me.popup.createCloseIcon();
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection');
-                me.popup.moveTo(el, 'bottom', true);
+                var topOffsetElement = jQuery('div.mobileToolbarDiv');
+                me.popup.moveTo(el, 'bottom', true, topOffsetElement);
             } else {
                 var icon = div.find('div.header div.header-icon'),
                     header = div.find('div.header');
