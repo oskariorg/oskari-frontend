@@ -438,7 +438,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
             }
-            return true;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
