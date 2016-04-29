@@ -70,7 +70,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     tooltip: '',
                     show: true,
                     callback: function () {
-                        me._showPopup();
+                        if (me._popup) {
+                            me._popup.close(true);
+                        } else {
+                            me._showPopup(true);
+                        }
                     }
                 }
             },
@@ -84,15 +88,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {Object} jQuery popup object
          */
         _getPopup: function(){
-            var me = this,
-                popup = me._popup;
-            return popup;
+            return this._popup;
         },
         /**
          * Show popup.
          * @method @private _showPopup
          */
-        _showPopup: function() {
+        _showPopup: function(isMobile) {
             var me = this,
                 loc = me._locale,
                 popupTitle = loc.popup.title,
@@ -186,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
 
-            if (me._uiMode === 'mobile') {
+            if (isMobile) {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
@@ -206,7 +208,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
             }
-            
+
             me.refresh();
 
             if (this._showReverseGeocode){
@@ -381,88 +383,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             return el;
         },
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            if (this._popup) {
+                this._popup.close(true);
+            }
+        },
 
         /**
          * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
+         * @method  @public redrawUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, modeChanged) {
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
+
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-            if(mobileDefs.buttons && !removeToolButtonBuilder) {
-                return false;
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
             }
-            //remove old element
-            if (modeChanged && me.getElement()) {
-
-                me.getMapModule().removeMapControlPlugin(
-                    me.getElement(),
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-                me.getElement().remove();
-                delete me._element;
-            }
-
-            if (modeChanged && me._popup) {
-                me._popup.close(true);
-            }
-
-            var toolbar = me.getMapModule().getMobileToolbar();
-            for (var tool in mobileDefs.buttons) {
-                var buttonConf = mobileDefs.buttons[tool];
-                buttonConf.toolbarid = toolbar;
-                sandbox.request(me, removeToolButtonBuilder(tool, mobileDefs.buttonGroup, toolbar));
-            }
+            this.teardownUI();
 
             if (mapInMobileMode) {
-                var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-
-                if (reqBuilder) {
-                    for (var tool in mobileDefs.buttons) {
-                        var buttonConf = mobileDefs.buttons[tool];
-                        buttonConf.toolbarid = toolbar;
-                        sandbox.request(me, reqBuilder(tool, mobileDefs.buttonGroup, buttonConf));
-                    }
-                }
-
-                me._uiMode = 'mobile';
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-                if (modeChanged || !me._element) {
-                    me._element = me._createControlElement();
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                    }
-                    // Set initial UI values
-                    me.refresh();
-                    // There's a possibility these were set before plugin was started.
-                    me.setEnabled(me._enabled);
-                    me.setVisible(me._visible);
-                    if (me._element) {
-                        me._element.attr('data-clazz', me.getClazz());
-                        me.getMapModule().setMapControlPlugin(
-                            me._element,
-                            me.getLocation(),
-                            me.getIndex()
-                        );
-                    }
-                }
-                if(me._element && me.getLocation()) {
-                    me.getMapModule().setMapControlPlugin(
-                        me.getElement(),
-                        me.getLocation(),
-                        me.getIndex()
-                    );
-                }
-                me._uiMode = 'desktop';
+                me._element = me._createControlElement();
+                this.addToPluginContainer(me._element);
             }
-            return true;
         },
 
         /**
@@ -576,7 +529,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method @public getElement
          */
         getElement: function(){
-            return jQuery('.mapplugin.coordinatetool');
+            return this._element;//jQuery('.mapplugin.coordinatetool');
         },
 
         /**
