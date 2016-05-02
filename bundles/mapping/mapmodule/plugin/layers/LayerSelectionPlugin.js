@@ -83,9 +83,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '<div class="layerHeader"></div>'
             );
 
-            me.templates.headerArrow = jQuery(
-                '<div class="styled-header-arrow"></div>'
-            );
             me.templates.contentHeader = jQuery(
                 '<div class="content-header">' +
                 '  <div class="content-header-title"></div>' +
@@ -541,7 +538,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 mapmodule = me.getMapModule(),
                 div = this.getElement();
 
-            if (isMobile) {
+            if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
                     topOffsetElement = jQuery('div.mobileToolbarDiv');
@@ -550,7 +547,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me.popup.createCloseIcon();
                 me.popup.show(popupTitle, me.layerContent);
-                me.popup.moveTo(el, 'bottom', true, topOffsetElement);
+                if (isMobile) {
+                    me.popup.moveTo(el, 'bottom', true, topOffsetElement);
+                } else {
+                    me.popup.moveTo(me.getElement(), 'bottom', true);
+                }
+                me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
                 var icon = div.find('div.header div.header-icon'),
                     header = div.find('div.header');
@@ -623,6 +625,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         _bindHeader: function (header) {
             var me = this;
             header.bind('click', function () {
+                if (me.popup && me.popup.isVisible()) {
+                    me.popup.close(true);
+                    me.popup = null;
+                    return;
+                }
                 var content = me.getElement().find('.content');
                 if (!content[0]) {
                     me.openSelection();
@@ -729,10 +736,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         me.changeFont(font, element);
                     }
                 }
-
-                if (conf.colourScheme) {
-                    me.changeColourScheme(conf.colourScheme, element);
-                }
             }
         },
 
@@ -752,8 +755,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var self = this,
                 header = div.find('div.header'),
-                headerArrow = this.templates.headerArrow.clone(),
-                content = me.layerContent,
                 contentHeader = this.templates.contentHeader.clone(),
                 resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',
@@ -762,15 +763,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             header.empty();
             if (styleName !== null) {
                 div.addClass('published-styled-layerselector');
-                content.addClass('published-styled-layerselector-content');
-                content.addClass('layerselection-styled-content');
+
                 header.addClass('published-styled-layerselector-header');
 
-                // Set the styling to the content div based on the tool style.
-                this.changeCssClasses(
-                    'oskari-publisher-layers-' + styleName,
-                    /oskari-publisher-layers-/, [content]
-                );
                 // Set the styling of the header as well since the border rounding affects them
                 this.changeCssClasses(
                     'oskari-publisher-layers-header-' + styleName,
@@ -781,30 +776,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': 'url("' + bgImg + '")'
                 });
 
-                content.find('div.content-header').remove();
-                content.find('div.styled-header-arrow').remove();
-                contentHeader.find('div.content-header-title').append(
-                    this._loc.title
-                );
-                content.prepend(contentHeader);
-                content.prepend(headerArrow);
             } else {
                 header.append(me.templates.defaultArrow.clone());
                 header.append(me._loc.title);
 
                 div.removeClass('published-styled-layerselector');
-                content.removeClass('published-styled-layerselector-content');
-                content.removeClass('layerselection-styled-content');
+
                 header.removeClass('published-styled-layerselector-header');
 
-                content.find('div.content-header').remove();
-                content.find('div.styled-header-arrow').remove();
-
-                // Set the styling to the content div based on the tool style.
-                this.changeCssClasses(
-                    '',
-                    /oskari-publisher-layers-/, [content]
-                );
                 // Set the styling of the header as well since the border rounding affects them
                 this.changeCssClasses(
                     '',
@@ -815,60 +794,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': ''
                 });
             }
-            contentHeader.find('div.content-close').on('click', function () {
-                self.closeSelection();
-            });
-            // Pretty fugly, but needed here since we're modifying the DOM and
-            // all the style changes disappear like Clint Eastwood rides into the sunset.
-            var conf = this.getConfig();
-            if (conf && conf.colourScheme) {
-                this.changeColourScheme(conf.colourScheme, this.getElement());
-            }
 
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
             );
-        },
-
-        /**
-         * Changes the colour scheme of the plugin
-         *
-         * @method changeColourScheme
-         * @param {Object} colourScheme object containing the colour settings for the plugin
-         *      {
-         *          bgColour: <the background color of the gfi header>,
-         *          titleColour: <the colour of the gfi title>,
-         *          headerColour: <the colour of the feature name>,
-         *          iconCls: <the icon class of the gfi close icon>
-         *      }
-         * @param {jQuery} div
-         */
-        changeColourScheme: function (colourScheme, div) {
-            div = div || this.getElement();
-
-            if (!div || !colourScheme) {
-                return;
-            }
-
-            // Change the colour of the header background
-            div.find('div.content-header').css({
-                'background-color': colourScheme.bgColour
-            });
-
-            // Change the colour of the arrow
-            div.find('div.styled-header-arrow').css({
-                'border-bottom-color': colourScheme.bgColour
-            });
-
-            // Change the icon class
-            var closeIcon = div.find('div.content-header div.content-close');
-            closeIcon.removeClass('icon-close').removeClass('icon-close-white');
-            closeIcon.addClass(colourScheme.iconCls);
-
-            // Change the colour of the header font
-            div.find('div.content-header div.content-header-title').css({
-                'color': colourScheme.titleColour
-            });
         },
 
         /**
