@@ -155,5 +155,8 @@ div.mapplugins {
   display: none;
   padding: 8px;
   line-height: 10px; }
+  .mobileToolbarDiv .mobiletoolbar {
+    margin-right: 6px;
+    margin-top: 6px; }
   .mobileToolbarDiv input[type=text] {
     height: 10px; }

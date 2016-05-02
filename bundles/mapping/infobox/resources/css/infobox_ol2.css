@@ -109,9 +109,9 @@ div.myplaces_place {
     max-width: 350px; }
 
 div.divmanazerpopup.mobile-infobox {
-    width: 94%;
-    top: 10% !important;
-    left: 3% !important;
-    margin-top: -6px !important;
-    margin-left: -4px !important;
-    overflow: auto; }
+  width: 94%;
+  top: 10% !important;
+  left: 3% !important;
+  margin-top: -6px !important;
+  margin-left: -4px !important;
+  overflow: auto; }
