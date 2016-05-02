@@ -10,12 +10,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
      *      JSON config with params needed to run the plugin
      */
     function (config) {
-        this._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
-        this._defaultLocation = 'top right';
-        this._instance = config.instance;
-        this._index = 8;
-        this._name = 'FeaturedataPlugin';
-        this._mapStatusChanged = true;
+        var me = this;
+        me._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
+        me._defaultLocation = 'top right';
+        me._instance = config.instance;
+        me._index = 90;
+        me._name = 'FeaturedataPlugin';
+        me._mapStatusChanged = true;
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-featuredata': {
+                    iconCls: 'mobile-info-marker-light mobiletoolbar',
+                    tooltip: '',
+                    sticky: true,
+                    show: true,
+                    callback: function () {
+                        me._openFeatureDataFlyout();
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
     }, {
         /**
          * @method _createControlElement
@@ -38,6 +53,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 event.stopPropagation();
             });
             return el;
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public redrawUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        redrawUI: function(mapInMobileMode, modeChanged) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                this.addToPluginContainer(me._element);
+            }
+        },
+
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
         },
 
         /**
@@ -139,6 +187,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     this.refresh();
                 }
             };
+        },
+
+        _openFeatureDataFlyout: function () {
+            this._instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
+
+            //set style to mobile flyout
+            var flyout = this._instance.plugins['Oskari.userinterface.Flyout'];
+            jQuery(flyout.container.parentElement.parentElement).addClass('mobile');
+            var mapModule = this._instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                mobileDiv = mapModule.getMobileDiv(),
+                top = jQuery(mobileDiv).offset().top,
+                height = jQuery(mobileDiv).outerHeight(true),
+                flyoutTop = parseInt(top)+parseInt(height);
+            
+            flyout.container.parentElement.parentElement.style['top'] = flyoutTop + 'px';
+            jQuery(flyout.container.parentElement.parentElement).find('.oskari-flyoutheading').remove();
+
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
