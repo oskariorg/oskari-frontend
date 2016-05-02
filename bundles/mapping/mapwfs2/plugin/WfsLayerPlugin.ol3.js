@@ -173,20 +173,80 @@ Oskari.clazz.define(
                 sandbox = me.getMapModule().getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
                 i,
-                isVisible = false;
+                loc = me.getLocalization(),
+                isVisible = false,
+                isInvisible = false,
+                countManu = 0,
+                countInvisi = 0,
+                countInscale = 0,
+                refresh_status1 = "all_invisible",
+                refresh_status2 = "all_not_in_scale",
+                scale = sandbox.getMap().getScale();
+
             if(this.getElement()) {
                 this.getElement().hide();
             }
-            // see if there's any wfs layers, show element if so
+            // Check, if there's any manual refresh wfs layers, show element if so
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                if (layers[i].hasFeatureData() && layers[i].isManualRefresh()) {
+                    countManu++;
                     isVisible = true;
                 }
             }
-            if(isVisible && this.getElement()){
+
+            // Check, if all invisible
+            if (isVisible && this.getElement()) {
+
+                for (i = 0; i < layers.length; i++) {
+                    if (layers[i].hasFeatureData() && layers[i].isManualRefresh() && !layers[i].isVisible()) {
+                        countInvisi++;
+                    }
+                    if (layers[i].hasFeatureData() && layers[i].isManualRefresh() && !layers[i].isInScale(scale)) {
+                        countInscale++;
+                    }
+                }
+
+                if (countInscale === countManu && loc.refresh_alert ) {
+                    this.getElement().attr('refresh_status', refresh_status2);
+                    this.getElement().css({'background-color': '#FF007F'});
+                    this.getElement().attr('title', loc.refresh_alert[refresh_status2]);
+                } else {
+                    if (countInvisi === countManu && loc.refresh_alert ) {
+                        this.getElement().attr('refresh_status', refresh_status1);
+                        this.getElement().css({'background-color': '#FF007F'});
+                        this.getElement().attr('title', loc.refresh_alert[refresh_status1]);
+                    } else {
+                        this.getElement().removeAttr('refresh_status');
+                        this.getElement().css({'background-color': ''});
+                        this.getElement().attr('title', loc.refresh_title);
+                    }
+                }
+
+            }
+            if(isVisible && this.getElement()) {
                 this.getElement().show();
             }
             me.setVisible(isVisible);
+
+        },
+        /**
+         * @method checkManualRefreshState
+         * Updates the plugins interface (hides if no manual load wfs layers selected)
+         */
+        checkManualRefreshState: function () {
+            var me = this,
+                refresh_status,
+                loc = me.getLocalization();
+
+            if(me.getElement()) {
+                refresh_status = me.getElement().attr("refresh_status");
+            }
+            if(refresh_status && loc.refresh_alert){
+                //  refresh_status values = "all_invisible", "all_not_in_scale",
+                me.showMessage(loc.refresh_alert.title, loc.refresh_alert[refresh_status]);
+                return true;
+            }
+            return false;
 
         },
         /**
@@ -437,6 +497,7 @@ Oskari.clazz.define(
                 srs = map.getSrsName(),
                 bbox = me.ol2ExtentOl3Transform(map.getExtent()),
                 zoom = map.getZoom(),
+                scale = map.getScale(),
                 layers = this._getLayers();
 
             // clean tiles for printing
@@ -445,7 +506,7 @@ Oskari.clazz.define(
             // update location
             var grid = this.getGrid();
             layers.forEach(function (layer) {
-                if (!layer.hasFeatureData() || !layer.isVisible()) {
+                if (!layer.hasFeatureData() || !layer.isVisible() || !layer.isInScale(scale)) {
                     return;
                 }
                 // clean features lists
@@ -706,6 +767,8 @@ Oskari.clazz.define(
                     );
                     this.mapMoveHandler(event.getMapLayer().getId());
                 }
+                // Update manual refresh button visibility
+                this.refresh();
             }
         },
 
@@ -739,6 +802,7 @@ Oskari.clazz.define(
                 layers = [],
                 me = this,
                 map = me.getSandbox().getMap(),
+                scale = map.getScale(),
                 srs,
                 tiles,
                 zoom;
@@ -750,6 +814,11 @@ Oskari.clazz.define(
 
             grid = me.getGrid();
 
+            // inform user, if no manual refresh wfs layer visible or  not in scale --> return
+            if (me.checkManualRefreshState()){
+                return;
+            }
+
             if(event.getLayerId()){
 
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
@@ -759,7 +828,7 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (layer) {
-                if (layer.hasFeatureData() && layer.isManualRefresh()) {
+                if (layer.hasFeatureData() && layer.isManualRefresh() && layer.isVisible() && layer.isInScale(scale)) {
                     // clean features lists
                     layer.setActiveFeatures([]);
                     if (grid !== null && grid !== undefined) {
@@ -1175,16 +1244,23 @@ Oskari.clazz.define(
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 me = this,
                 sandbox = me.getSandbox();
-            okBtn.setTitle(ok);
-            okBtn.addClass('primary');
-            okBtn.setHandler(function () {
-                if(render){
-                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
-                    sandbox.notifyAll(event);
-                }
-                dialog.close(true);
-            });
-            dialog.show(title, message, [okBtn]);
+            if(ok) {
+                okBtn.setTitle(ok);
+                okBtn.addClass('primary');
+                okBtn.setHandler(function () {
+                    if (render) {
+                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                        sandbox.notifyAll(event);
+                    }
+                    dialog.close(true);
+                });
+                dialog.show(title, message, [okBtn]);
+            }
+            else{
+                dialog.show(title, message);
+                dialog.fadeout(5000);
+            }
+
         },
 
         /**
