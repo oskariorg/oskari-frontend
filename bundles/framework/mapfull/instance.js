@@ -161,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            module.start(me.getSandbox());
 
             me.adjustMapSize();
 
@@ -178,16 +177,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             plugins[i].state
                         );
                         module.registerPlugin(plugins[i].instance);
-                        module.startPlugin(plugins[i].instance);
                     } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
                         me.getSandbox().printWarn(
-                            'Unable to start plugin: ' + plugins[i].id + ': ' +
+                            'Unable to register plugin: ' + plugins[i].id + ': ' +
                             e
                         );
                     }
                 }
             }
+            module.start(me.getSandbox());
         },
         /**
          * @method start

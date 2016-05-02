@@ -59,7 +59,8 @@ div.mapplugin.search {
 
 table.search-results {
   width: 100%;
-  margin: 0px; 
+  margin: 0px;
+  border: 0px;
 
   td, th {
       text-align: left;
@@ -312,4 +313,18 @@ div.published-search-div {
 
 .mappluginsContent.ui-sortable div.mapplugin.search {
   right: 0px; 
+}
+
+
+.mobilesearch {
+  float:left;
+  margin-right: 6px;
+
+  input[type=button] {
+    vertical-align: top;
+  }
+}
+
+.divmanazerpopup.searchresult {
+  margin-left: -30px!important;
 }

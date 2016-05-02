@@ -1,9 +1,7 @@
 div.mapplugin.search div.close {
   float: right; }
-
 div.mapplugin.search input:disabled {
   opacity: 1; }
-
 div.mapplugin.search input[type=text] {
   -webkit-border-radius: 4px 0 0 4px;
   -moz-border-radius: 4px 0 0 4px;
@@ -15,7 +13,6 @@ div.mapplugin.search input[type=text] {
   background-clip: padding-box;
   border-right: 0;
   width: 140px; }
-
 div.mapplugin.search input[type=button] {
   -webkit-border-radius: 0 4px 4px 0;
   -moz-border-radius: 0 4px 4px 0;
@@ -26,7 +23,6 @@ div.mapplugin.search input[type=button] {
   -moz-background-clip: padding-box;
   background-clip: padding-box;
   width: 60px; }
-
 div.mapplugin.search div.results {
   border: 1px solid #f3f3f3;
   background: white;
@@ -46,7 +42,8 @@ div.mapplugin.search div.results {
 
 table.search-results {
   width: 100%;
-  margin: 0px; }
+  margin: 0px;
+  border: 0px; }
   table.search-results td, table.search-results th {
     text-align: left;
     padding: 2px;
@@ -217,3 +214,14 @@ div.published-search-div {
 
 .mappluginsContent.ui-sortable div.mapplugin.search {
   right: 0px; }
+
+.mobilesearch {
+  float: left;
+  margin-right: 6px;
+  }
+  .mobilesearch input[type=button] {
+    vertical-align: top; }
+
+.divmanazerpopup.searchresult {
+  margin-left: -30px!important;
+}

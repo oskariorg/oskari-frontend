@@ -17,7 +17,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin';
         me._defaultLocation = 'top left';
-        me._index = 1;
+        me._index = 10;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
     }, {
@@ -39,12 +39,12 @@ Oskari.clazz.define(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +
                 '    <input placeholder="' + me._loc.placeholder + '" type="text" /><input type="button" value="' + me._loc.search + '" name="search" />' +
-                '  </div>' +
+                '  </div>'
+            );
+
+            me.resultsContainer = jQuery(
                 '  <div class="results">' +
-                '    <div class="header">' +
-                '      <div class="close icon-close" title="' + me._loc.close + '"></div>' +
-                '    </div>' +
-                '    <div class="content">&nbsp;</div>' +
+                '    <div class="content"></div>' +
                 '  </div>' +
                 '</div>'
             );
@@ -134,6 +134,9 @@ Oskari.clazz.define(
             var me = this,
                 el = me.getElement(),
                 overlay;
+            if(!el) {
+                return;
+            }
             if (me.inLayerToolsEditMode()) {
                 me._inputField.prop('disabled', true);
                 me._searchButton.prop('disabled', true);
@@ -358,6 +361,140 @@ Oskari.clazz.define(
             }
         },
 
+        _showResults: function(msg) {
+            var me = this,
+                errorMsg = msg.error,
+                resultsContainer = me.resultsContainer.clone(),
+                content = resultsContainer.find('div.content');
+                popupTitle = me._loc.title;
+
+            /*clear the existing search results*/
+            if (me.popup) {
+                me.popup.close();
+                me.popup = null;
+            }
+            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (errorMsg) {
+                content.html(errorMsg);
+            } else {
+                // success
+                var totalCount = msg.totalCount,
+                    lat,
+                    lon,
+                    zoom;
+
+                me.results = msg.locations;
+
+                if (totalCount === 0) {
+                    content.html(this._loc.noresults);
+                } else if (totalCount === 1) {
+                    // only one result, show it immediately
+                    lon = msg.locations[0].lon;
+                    lat = msg.locations[0].lat;
+                    zoom = msg.locations[0].zoomLevel;
+                    if(msg.locations[0].zoomScale) {
+                        zoom = {scale : msg.locations[0].zoomScale};
+                    }
+
+                    me.getSandbox().request(
+                        me.getName(),
+                        me.getSandbox().getRequestBuilder(
+                            'MapMoveRequest'
+                        )(lon, lat, zoom, false)
+                    );
+                    me._setMarker(msg.locations[0]);
+                    return;
+                } else {
+                    // many results, show all
+                    var table = me.templateResultsTable.clone(),
+                        tableBody = table.find('tbody'),
+                        i,
+                        clickFunction = function() {
+                            me._resultClicked(
+                                me.results[parseInt(
+                                    jQuery(this).attr('data-location'),
+                                    10
+                                )]
+                            );
+                            return false;
+                        };
+
+                    for (i = 0; i < totalCount; i += 1) {
+                        if (i >= 100) {
+                            tableBody.append(
+                                '<tr>' +
+                                '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
+                                '</tr>'
+                            );
+                            break;
+                        }
+                        var resultItem = msg.locations[i];
+                        lon = resultItem.lon;
+                        lat = resultItem.lat;
+                        zoom = resultItem.zoomLevel;
+
+                        if(resultItem.zoomScale) {
+                            zoom = {scale : resultItem.zoomScale};
+                        }
+
+                        var row = me.templateResultsRow.clone(),
+                            name = resultItem.name,
+                            municipality = resultItem.village,
+                            type = resultItem.type,
+                            cells = row.find('td'),
+                            xref = jQuery(cells[0]).find('a');
+                        row.attr('data-location', i);
+                        xref.attr('data-location', i);
+                        xref.attr('title', name);
+                        xref.append(name);
+                        xref.click(clickFunction);
+
+                        jQuery(cells[1]).attr('title', municipality).append(municipality);
+                        jQuery(cells[2]).attr('title', type).append(type);
+
+                        // IE hack to get scroll bar on tbody element
+                        if (jQuery.browser.msie) {
+                            row.append(jQuery('<td style="width: 0px;"></td>'));
+                        }
+
+                        tableBody.append(row);
+                    }
+
+                    if (!(me.getConfig() && me.getConfig().toolStyle)) {
+                        tableBody.find(':odd').addClass('odd');
+                    }
+
+                    content.html(table);
+
+                    // Change the font of the rendered table as well
+                    var conf = me.getConfig();
+                    if (conf) {
+                        if (conf.font) {
+                            me.changeFont(conf.font, content);
+                        }
+                        if (conf.toolStyle) {
+                            me.changeResultListStyle(
+                                conf.toolStyle,
+                                resultsContainer
+                            );
+                        }
+                    }
+                }
+            }
+
+
+            var popupContent = resultsContainer;
+            var topOffsetElement = (me._uiMode === 'mobile') ? jQuery('div.mobileToolbarDiv') : undefined;
+            me.popup.addClass('mobile-popup');
+            me.popup.setColourScheme({"bgColour": "#e6e6e6"});
+            me.popup.show(popupTitle, popupContent);
+            me.popup.createCloseIcon();
+            me.popup.moveTo(me.getElement(), 'bottom', true, topOffsetElement);
+
+            if (me._uiMode === "desktop") {
+                me.popup.addClass('searchresult');
+            }
+        },
         /**
          * @private @method _showResults
          *
@@ -369,13 +506,19 @@ Oskari.clazz.define(
          * @param {Object} msg
          *          Result JSON returned by search functionality
          */
-        _showResults: function(msg) {
+        _showResults_old: function(msg) {
             // check if there is a problem with search string
             var errorMsg = msg.error,
                 me = this,
-                resultsContainer = me.getElement().find('div.results'),
+                resultsContainer = me.resultsContainer.clone(),
                 header = resultsContainer.find('div.header'),
                 content = resultsContainer.find('div.content');
+
+            if (me._uiMode === "mobile") {
+                me.getElement().parent().parent().append(resultsContainer);
+            } else {
+                me.getElement().append(resultsContainer);
+            }
 
             if (errorMsg) {
                 content.html(errorMsg);
@@ -695,6 +838,53 @@ Oskari.clazz.define(
                 testRegex = /oskari-publisher-search-results-/;
 
             this.changeCssClasses(cssClass, testRegex, [div]);
+        },
+
+        teardownUI : function() {
+            if (this.popup) {
+                this.popup.close();
+            }
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public redrawUI
+         * @param {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        redrawUI: function (mapInMobileMode, modeChanged) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            if(!me.getElement()) {
+                me._element = me._createControlElement();
+            }
+
+            //remove old element
+            this.teardownUI();
+
+            if (mapInMobileMode) {
+                //remove old element
+                this.removeFromPluginContainer(this.getElement(), true);
+
+                var mobileDivElement = me.getMapModule().getMobileDiv();
+                me._element.addClass('mobilesearch');
+                // FIXME is index is not first then this fails
+                mobileDivElement.prepend(me._element[0]);
+                me._uiMode = "mobile";
+                me.changeToolStyle('rounded-light', me._element);
+                me._element.find('div.close-results').remove();
+                me._element.find('input.search-input').css({
+                    'height': '26px',
+                    'margin': 'auto'
+                });
+            } else {
+                me._element.removeClass('mobilesearch');
+
+                this.addToPluginContainer(me._element);
+                me.refresh();
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

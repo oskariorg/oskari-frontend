@@ -149,3 +149,11 @@ div.mapplugins {
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
+
+.mobileToolbarDiv {
+  background: #3c3c3c;
+  display: none;
+  padding: 8px;
+  line-height: 10px; }
+  .mobileToolbarDiv input[type=text] {
+    height: 10px; }

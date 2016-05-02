@@ -16,8 +16,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
     addToolButton: function (pId, pGroup, pConfig) {
         var me = this;
-
-
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
             me.sandbox.printDebug("All parameters must be defined in AddToolButtonRequest");
@@ -26,6 +24,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
             group = null,
             prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
+
         if (!me.buttons[prefixedGroup]) {
             // create group if not existing
             me.buttons[prefixedGroup] = {};
@@ -38,6 +37,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
 
         if (me.buttons[prefixedGroup][pId]) {
+            me._checkToolChilderPosition(pId, pGroup, pConfig);
             // button already added, dont add again
             return;
         }
@@ -105,7 +105,89 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (pConfig.enabled === false) {
             button.addClass('disabled');
         }
+
+        if(pConfig.childPosition) {
+            me._createButtonChildren(pId, pGroup, button, pConfig);
+            me._checkToolChildrenPosition(pId, pGroup, pConfig);
+        }
+
+        // Find icon style
+        var iconClasses = pConfig.iconCls.split(' ');
+        for(var i in iconClasses) {
+            var iconClass = iconClasses[i];
+            var indexStyle = iconClass.indexOf('-light');
+            if(indexStyle===-1) {
+                indexStyle = iconClass.indexOf('-dark');
+            }
+
+            if(indexStyle>-1){
+                pConfig.iconStyle = iconClass;
+                break;
+            }
+        }
+        // Find button dark and light icons if not already defined
+        if(pConfig.iconStyle && !pConfig.iconLightCls && !pConfig.iconDarkCls) {
+            var indexLight = pConfig.iconStyle.indexOf('-light');
+            var indexDark = pConfig.iconStyle.indexOf('-dark');
+            if(indexLight>-1) {
+                pConfig.iconLightCls = pConfig.iconStyle;
+                pConfig.iconDarkCls = pConfig.iconStyle.substring(0, indexLight) + '-dark';
+            } else if(indexDark>-1) {
+                pConfig.iconDarkCls = pConfig.iconStyle;
+                pConfig.iconLightCls = pConfig.iconStyle.substring(0, indexDark) + '-light';
+            }
+        }
+
+        // Find default background color
+        if(!pConfig.backgroundColor) {
+            pConfig.backgroundColor = button.css('background-color');
+        }
+
     },
+
+    _checkToolChildrenPosition: function(pId, pGroup, pConfig){
+        var me = this,
+            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
+            btn = this.buttons[prefixedGroup][pId],
+            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+            toolbarParent = toolbar.parents('.oskariui-center').find('div').first(),
+            offset = toolbarParent.offset(),
+            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']'),
+            button = group.find('div.tool[tool=' + pId + ']');
+
+        if(typeof btn.children === 'undefined' || !pConfig.childPosition) {
+            return;
+        }
+
+        switch(pConfig.childPosition){
+            case 'bottom':
+                btn.children.css({
+                    position: 'absolute',
+                    'background-color': btn.activeColor || '#ffffff',
+                    top: offset.top + toolbarParent.outerHeight() + 'px',
+                    left: button.offset().left
+                });
+                break;
+        }
+    },
+    _createButtonChildren: function(pId, pGroup, button, pConfig){
+        var me = this,
+            buttonChildren = jQuery('<div class="tool-children"></div>'),
+            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+            toolbarTopParent = toolbar.parents('.oskariui-center'),
+            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
+            btn = this.buttons[prefixedGroup][pId],
+            children = buttonChildren.clone();
+
+        children.attr({
+            'data-button-id': pId,
+            'data-group-id': pGroup
+        });
+        toolbarTopParent.append(children);
+        children.hide();
+        btn.children = children;
+    },
+
     /**
      * @method _clickButton
      * Handles click of a toolbar button and can be used to click a button
@@ -135,43 +217,91 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             toolbar,
             group,
             button;
+
         if (btn.enabled === false) {
             return;
         }
-        // FIXME use ===
+
+        this._deactiveTools(pId,pGroup);
+
+        toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+        group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+        button = group.find('div.tool[tool=' + pId + ']');
+
+        if(typeof btn.selected === 'undefined') {
+            btn.selected = button.hasClass('selected');
+        }
+
         if (btn.sticky === true) {
             // notify components that tool has changed
             e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
             this.sandbox.notifyAll(e);
+
             // button stays on (==sticky) -> remove previous "sticky"
             this._removeToolSelections(pGroup);
-
-            // highlight the button
-            toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-            group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
-            button = group.find('div.tool[tool=' + pId + ']');
-            button.addClass('selected');
-
             this.selectedButton = {
                 id: pId,
                 group: pGroup
             };
-        }
-        //toggle selection of this button
-        if (btn.toggleSelection) {
-            // highlight the button
-            toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-            group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
-            button = group.find('div.tool[tool=' + pId + ']');
 
-            if (button.hasClass('selected')) {
-                button.removeClass('selected');
-            } else {
-                button.addClass('selected');
+            // highlight the button
+            button.addClass('selected');
+
+            if(btn.activeColor) {
+                button.css('background-color', btn.activeColor);
+
+                if(btn.toggleChangeIcon === true) {
+                    // Remove button light and dark icons
+                    button.removeClass(btn.iconLightCls);
+                    button.removeClass(btn.iconDarkCls);
+
+                    // Toggle button icons
+                    if(Oskari.util.isLightColor(btn.activeColor) && btn.iconDarkCls) {
+                        button.addClass(btn.iconDarkCls);
+                    } else if(btn.iconLightCls){
+                        button.addClass(btn.iconLightCls);
+                    }
+                }
             }
         }
 
-        btn.callback();
+        //toggle selection of this button
+        if (btn.toggleSelection) {
+            // highlight the button
+            if (button.hasClass('selected')) {
+                button.removeClass('selected');
+                btn.selected = false;
+            } else {
+                button.addClass('selected');
+                btn.selected = true;
+            }
+        }
+
+        btn.callback(btn.children);
+    },
+
+    _deactiveTools: function(pId,pGroup){
+        //var btn = this.buttons[pGroup][pId];
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+        var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+        var button = group.find('div.tool[tool=' + pId + ']');
+        var tools = group.find('div.tool');
+        for(var id in this.buttons[pGroup]) {
+            var btn = this.buttons[pGroup][id];
+            var button = group.find('div.tool[tool=' + id + ']');
+            // Change default background color back
+            if(btn.backgroundColor && btn.activeColor) {
+                button.css('background-color', btn.backgroundColor);
+            }
+
+            // Change default icon back
+            var isToggledIcon = (btn.iconStyle && btn.iconDarkCls && btn.iconLightCls) ? true : false;
+            if(btn.toggleChangeIcon === true && isToggledIcon) {
+                button.removeClass(btn.iconDarkCls);
+                button.removeClass(btn.iconLightCls);
+                button.addClass(btn.iconStyle);
+            }
+        }
     },
     /**
      * @method _removeToolSelections
@@ -200,35 +330,59 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (!pGroup) {
             return;
         }
-        var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
-        if (this.buttons[prefixedGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
-            if (pId) {
-                var button = group.find('div.tool[tool=' + pId + ']');
-                button.remove();
-                this.buttons[prefixedGroup][pId] = null;
-                delete this.buttons[prefixedGroup][pId];
-                // TODO: check if no buttons left -> delete group also?
-                var count = 0,
-                    key;
-                for (key in this.buttons[prefixedGroup]) {
-                    if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
-                        count++;
-                    }
-                }
-                if (count === 0) {
-                    group.remove();
-                    this.buttons[prefixedGroup] = null;
-                    delete this.buttons[prefixedGroup];
-                }
-            } else {
-                // delete whole group
-                group.remove();
-                this.buttons[prefixedGroup] = null;
-                delete this.buttons[prefixedGroup];
+        var toolbarId = pToolbarId || 'default';
+        var prefixedGroup = toolbarId + '-' + pGroup;
+
+        if (!this.buttons[prefixedGroup]) {
+            return;
+        }
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
+            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+        if (!pId) {
+            // delete whole group
+            group.remove();
+            this.buttons[prefixedGroup] = null;
+            delete this.buttons[prefixedGroup];
+            // nothing to do after this
+            return;
+        }
+        // remove individual button
+        if(this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
+            this.buttons[prefixedGroup][pId].children.remove();
+        }
+        var button = group.find('div.tool[tool=' + pId + ']');
+        button.remove();
+        this.buttons[prefixedGroup][pId] = null;
+        delete this.buttons[prefixedGroup][pId];
+
+        var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id) ? true : false;
+        if(isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
+            this.selectedButton = null;
+            delete this.selectedButton;
+        }
+
+        // check if no buttons left -> delete group also?
+        var count = 0,
+            key;
+        for (key in this.buttons[prefixedGroup]) {
+            if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
+                count++;
             }
         }
+        if (count === 0) {
+            group.remove();
+            this.buttons[prefixedGroup] = null;
+            delete this.buttons[prefixedGroup];
+        }
+    },
+    isToolbarEmpty : function(toolbarId) {
+        for (var key in this.buttons) {
+            if(key.indexOf(toolbarId) === 0) {
+                // if any of the groups startwith toolbarId -> not empty
+                return false;
+            }
+        }
+        return true;
     },
     /**
      * @method changeToolButtonState
