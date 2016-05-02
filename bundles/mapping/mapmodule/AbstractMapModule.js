@@ -181,6 +181,11 @@ Oskari.clazz.define(
             var size = this.getSize();
             this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
             me.startPlugins();
+            var mobileDiv = this.getMobileDiv();
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            }
             this.updateCurrentState();
         },
 
