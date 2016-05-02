@@ -166,6 +166,7 @@ Oskari.clazz.define(
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 me._element = me._createControlElement();
+                me.refresh();
                 this.addToPluginContainer(me._element);
             }
         }
