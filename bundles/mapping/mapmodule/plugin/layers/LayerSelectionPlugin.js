@@ -325,10 +325,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var div = me.layerRefs[layer.getId()];
-            if (div.parent().hasClass('baselayers')) {
+            if (!div) {
                 return;
             }
-            if (!div) {
+            if (div.parent().hasClass('baselayers')) {
                 return;
             }
             div.remove();
