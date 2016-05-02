@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     tooltip: '',
                     show: true,
                     callback: function () {
-                        me._toggleToolState()
+                        me._toggleToolState(true);
                     }
                 }
             },
@@ -237,8 +237,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Toggle tool state.
          * @method @private _toggleToolState
+         * @param isMobile are we in mobile mode
          */
-        _toggleToolState: function(){
+        _toggleToolState: function(isMobile){
             var me = this,
                 el = me.getElement();
 
@@ -253,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     el.addClass('active');
                 }
                 me._toolOpen = true;
-                me._showPopup();
+                me._showPopup(isMobile);
             }
         },
 
@@ -636,7 +637,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 RPCUIEvent: function (event) {
                     var me = this;
                     if(event.getBundleId()==='coordinatetool') {
-                         me._toggleToolState();
+                         me._toggleToolState(me.getMapModule().getMobileMode());
                     }
                 }
             };
