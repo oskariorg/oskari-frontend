@@ -178,7 +178,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popup.createCloseIcon();
             me._popup.onClose(function () {
                 var el = me.getElement();
-                el.removeClass('active');
+                if(el) {
+                    el.removeClass('active');
+                }
                 me._toolOpen = false;
             });
 
@@ -241,11 +243,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 el = me.getElement();
 
             if(me._toolOpen) {
-                el.removeClass('active');
+                if(el) {
+                    el.removeClass('active');
+                }
                 me._toolOpen = false;
                 me._popup.close(true);
             } else {
-                el.addClass('active');
+                if(el) {
+                    el.addClass('active');
+                }
                 me._toolOpen = true;
                 me._showPopup();
             }
