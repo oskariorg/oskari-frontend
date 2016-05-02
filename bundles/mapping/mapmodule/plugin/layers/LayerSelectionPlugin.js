@@ -177,6 +177,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
+            if(!this.getElement()) {
+                return;
+            }
             var baseLayersDiv = this.getElement().find(
                     'div.content div.baselayers'
                 ),
