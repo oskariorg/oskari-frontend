@@ -696,6 +696,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
+                me.refresh();
                 this.addToPluginContainer(me._element);
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
                 //me.refresh();
