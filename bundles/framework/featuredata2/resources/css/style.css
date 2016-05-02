@@ -108,10 +108,8 @@ label.selectFeaturesOptions {
   display: block; }
 
 div.oskari-flyout.ui-draggable.mobile.oskari-detached {
-  left: 0px!important;
-  border: 2px solid rgb(192,192,192); }
-  
-  div.oskari-flyout.ui-draggable.mobile.oskari-detached  div.oskari-flyouttoolbar {
-    background-color: rgb(230, 230, 230);
-    height: 41px;
-  }
+  left: 0px !important;
+  border: 2px solid silver; }
+  div.oskari-flyout.ui-draggable.mobile.oskari-detached div.oskari-flyouttoolbar {
+    background-color: #e6e6e6;
+    height: 41px; }
