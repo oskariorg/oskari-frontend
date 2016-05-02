@@ -37,7 +37,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
 
         if (me.buttons[prefixedGroup][pId]) {
-            me._checkToolChilderPosition(pId, pGroup, pConfig);
+            me._checkToolChildrenPosition(pId, pGroup, pConfig);
             // button already added, dont add again
             return;
         }
