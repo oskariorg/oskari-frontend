@@ -15,8 +15,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.dialog = this.template.clone();
         this.overlay = null;
         this.__listeners = {
-
         };
+        this._isVisible = false;
     }, {
         /**
          * @method show
@@ -33,7 +33,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentHeight,
                 reasonableHeight,
                 focusedButton = -1;
-
             this.setTitle(title);
             this.setContent(message);
 
@@ -69,6 +68,31 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             // make popup to visible
             me.dialog.css('opacity', 1);
+
+            this._isVisible = true;
+
+            this._bringMobilePopupToTop();
+        },
+
+        /**
+         * @method _mobileBringToTop
+         * Adjusts the zIndex of this popup, in case there are other (mobile) popups open at the moment
+         * TODO: get rid of this, once we have a mechanism of identifying and killing all other open popups reliably
+         */
+        _bringMobilePopupToTop: function() {
+            var zIndex = 0;
+            if (jQuery(this.dialog).hasClass('mobile-popup')) {
+                var openPopups = jQuery('.mobile-popup');
+
+                _.each(openPopups, function(openPopup) {
+                    if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
+                        zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
+                    }
+                });
+            }
+            if (zIndex && zIndex > 0) {
+                this.dialog.css('z-index',zIndex);
+            }
         },
         /**
          * @method fadeout
@@ -188,6 +212,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     me.__notifyListeners('close');
                 }, 500);
             }
+            this._isVisible = false;
+        },
+        isVisible: function() {
+            return this._isVisible;
         },
         /**
          * @property alignment

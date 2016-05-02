@@ -70,7 +70,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     tooltip: '',
                     show: true,
                     callback: function () {
-                        me._showPopup();
+                        //me._showPopup();
+                        me._toggleToolState()
                     }
                 }
             },
@@ -184,8 +185,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._toolOpen = false;
             });
 
-            me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
-
             if (me._uiMode === 'mobile') {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
@@ -193,6 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me._popup.createCloseIcon();
+                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(el, 'bottom', true, topOffsetElement);
             } else {
                 me._popup.makeDraggable();
@@ -203,6 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 } else {
                     popupLocation = "left";
                 }
+                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
             }

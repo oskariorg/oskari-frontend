@@ -365,6 +365,11 @@ Oskari.clazz.define(
                 content = resultsContainer.find('div.content');
                 popupTitle = me._loc.title;
 
+            /*clear the existing search results*/
+            if (me.popup) {
+                me.popup.close();
+                me.popup = null;
+            }
             me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             if (errorMsg) {
                 content.html(errorMsg);

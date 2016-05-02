@@ -30,8 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     sticky: true,
                     show: true,
                     callback: function () {
-                        if (me.popup) {
+                        if (me.popup && me.popup.isVisible()) {
                             me.popup.close(true);
+                            me.popup = null;
                         } else {
                             me.openSelection();
                         }
@@ -534,16 +535,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
                 div = this.getElement();
-
             if (me._uiMode === "mobile") {
+                var popupTitle = me._loc.title,
+                    el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
+                    topOffsetElement = jQuery('div.mobileToolbarDiv');
+
                 me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var popupTitle = me._loc.title;
                 me.popup.addClass('mobile-popup');
                 me.popup.setColourScheme({"bgColour": "#e6e6e6"});
-                me.popup.show(popupTitle, me.layerContent);
                 me.popup.createCloseIcon();
-                var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection');
-                var topOffsetElement = jQuery('div.mobileToolbarDiv');
+                me.popup.show(popupTitle, me.layerContent);
                 me.popup.moveTo(el, 'bottom', true, topOffsetElement);
             } else {
                 var icon = div.find('div.header div.header-icon'),
