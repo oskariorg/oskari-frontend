@@ -186,6 +186,10 @@ Oskari.clazz.define(
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
             }
+            else if (mobileDiv.height() < mobileDiv.children().height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(mobileDiv.children().height());
+            }
             this.updateCurrentState();
         },
 
@@ -935,6 +939,10 @@ Oskari.clazz.define(
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
+            }
+            else if (mobileDiv.height() < mobileDiv.children().height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(mobileDiv.children().height());
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
