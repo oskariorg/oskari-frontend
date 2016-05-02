@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
         me._defaultLocation = 'top left';
-        me._index = 90;
+        me._index = 70;
         me._name = 'LayerSelectionPlugin';
 
         me.initialSetup = true;
