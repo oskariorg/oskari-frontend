@@ -47,6 +47,12 @@ Oskari.clazz.define(
             }
             me._indexMap = this._createOLIndexMap(el);
             this.getMap().addControl(this._indexMap);
+
+            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
+            // button has to be added separately so the element order is correct...
+            el.append(toggleButton);
+            // add toggle functionality to button
+            me._bindIcon(toggleButton);
             return el;
         },
 
@@ -113,19 +119,6 @@ Oskari.clazz.define(
             });
 
             return me._indexMap;
-        },
-
-        refresh: function () {
-            var me = this,
-                toggleButton = me.getElement().find('.indexmapToggle');
-
-            if (!toggleButton.length) {
-                toggleButton = jQuery('<div class="indexmapToggle"></div>');
-                // button has to be added separately so the element order is correct...
-                me.getElement().append(toggleButton);
-            }
-            // add toggle functionality to button
-            me._bindIcon(toggleButton);
         },
 
         _bindIcon: function (icon) {

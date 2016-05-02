@@ -921,11 +921,15 @@ Oskari.clazz.define(
             if (modeChanged) {
                 var sortedList = _.sortBy(me._pluginInstances, '_index');
                 _.each(sortedList, function(plugin) {
-                    if (plugin && typeof plugin.createPluginUI === 'function') {
+                    if (plugin && typeof plugin.redrawUI === 'function') {
                         var index = plugin.getIndex();
-                        plugin.createPluginUI(me.getMobileMode(), modeChanged);
+                        plugin.redrawUI(me.getMobileMode(), modeChanged);
                     }
                 });
+            }
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
@@ -1093,8 +1097,8 @@ Oskari.clazz.define(
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
-                var successfulStart = plugin.startPlugin(sandbox);
-                if(successfulStart === false && typeof plugin.createPluginUI === 'function') {
+                var tryAgainLater = plugin.startPlugin(sandbox);
+                if(tryAgainLater && typeof plugin.redrawUI === 'function') {
                     this.lazyStartPlugins.push(plugin);
                 }
             } catch (e) {
@@ -1112,8 +1116,16 @@ Oskari.clazz.define(
             this.lazyStartPlugins = [];
 
             tryStartingThese.forEach(function(plugin) {
-                plugin.createPluginUI(me.getMobileMode());
+                var tryAgainLater = plugin.redrawUI(me.getMobileMode());
+                if(tryAgainLater) {
+                    me.lazyStartPlugins.push(plugin);
+                }
             });
+            var mobileDiv = this.getMobileDiv();
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            }
         },
         /**
          * @method stopPlugin
@@ -1674,19 +1686,19 @@ Oskari.clazz.define(
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
          * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
-         * @param {String} uiMode mobile|desktop
+         * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible, uiMode) {
-            if (uiMode === "mobile") {
-                element.remove();
+        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
+            var container = element.parents('.mapplugins'),
+            content = element.parents('.mappluginsContent');
+            // TODO take this into use in all UI plugins so we can hide unused containers...
+            if(detachOnly) {
+                element.detach();
             } else {
-                var container = element.parents('.mapplugins'),
-                content = element.parents('.mappluginsContent');
-                // TODO take this into use in all UI plugins so we can hide unused containers...
                 element.remove();
-                if (!keepContainerVisible && content.children().length === 0) {
-                    container.css('display', 'none');
-                }
+            }
+            if (!keepContainerVisible && content.children().length === 0) {
+                container.css('display', 'none');
             }
         },
 

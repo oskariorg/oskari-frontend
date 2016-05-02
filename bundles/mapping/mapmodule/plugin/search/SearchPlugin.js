@@ -134,6 +134,9 @@ Oskari.clazz.define(
             var me = this,
                 el = me.getElement(),
                 overlay;
+            if(!el) {
+                return;
+            }
             if (me.inLayerToolsEditMode()) {
                 me._inputField.prop('disabled', true);
                 me._searchButton.prop('disabled', true);
@@ -837,33 +840,34 @@ Oskari.clazz.define(
             this.changeCssClasses(cssClass, testRegex, [div]);
         },
 
+        teardownUI : function() {
+            if (this.popup) {
+                this.popup.close();
+            }
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
+         * @method  @public redrawUI
          * @param {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
          */
-        createPluginUI: function (mapInMobileMode, modeChanged) {
+        redrawUI: function (mapInMobileMode, modeChanged) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
             var me = this;
-
-            //remove old element
-            if (modeChanged && me._element) {
-                me.getMapModule().removeMapControlPlugin(
-                    me._element,
-                    me.inLayerToolsEditMode(),
-                    me._uiMode
-                );
-                me._element.remove();
-                delete me._element;
-
-                if (me.popup) {
-                    me.popup.close();
-                }
-
-                me._createControlElement();
+            if(!me.getElement()) {
+                me._element = me._createControlElement();
             }
 
+            //remove old element
+            this.teardownUI();
+
             if (mapInMobileMode) {
+                //remove old element
+                this.removeFromPluginContainer(this.getElement(), true);
+
                 var mobileDivElement = me.getMapModule().getMobileDiv();
                 me._element.addClass('mobilesearch');
                 // FIXME is index is not first then this fails
@@ -878,12 +882,7 @@ Oskari.clazz.define(
             } else {
                 me._element.removeClass('mobilesearch');
 
-                me.getMapModule().setMapControlPlugin(
-                    me._element,
-                    me.getLocation(),
-                    me.getIndex()
-                );
-                me._uiMode = "desktop";
+                this.addToPluginContainer(me._element);
                 me.refresh();
             }
         }

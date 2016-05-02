@@ -17,9 +17,6 @@ http://wiki.open311.org/GeoReport_v2/#get-service-requests
   <th> Name</th><th> Type</th><th> Description</th><th> Example</th><th> Details</th>
 </tr>
 <tr>
-  <td>/* baseUrl </td><td> String </td><td> Open311 service base url</td><td>https://asiointi.hel.fi/palautews/rest/v1 </td><td> </td>
-</tr>
-<tr>
   <td>/* srs </td><td> String </td><td> Coordinate system of front end map</td><td>EPSG:3067 </td><td> </td>
 </tr>
 <tr>

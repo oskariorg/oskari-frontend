@@ -296,6 +296,13 @@ div.field select {
     It was removed.  
     */
     background-color: #FFF;
+
+}
+
+div.field {
+    div.info-label {
+        font-style: italic;
+    }
 }
 
 /* Buttons */

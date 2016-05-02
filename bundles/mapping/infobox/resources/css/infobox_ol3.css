@@ -170,3 +170,11 @@ div.myplaces_place {
     padding-bottom: 15px;
     max-height: 350px;
     max-width: 350px; }
+
+div.divmanazerpopup.mobile-infobox {
+    width: 94%;
+    top: 10% !important;
+    left: 3% !important;
+    margin-top: -6px !important;
+    margin-left: -4px !important;
+    overflow: auto; }
