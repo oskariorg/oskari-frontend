@@ -95,7 +95,15 @@ Oskari.clazz.define(
         me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
         me._wellknownStyles = {};
+        me._mobileDefs = {
+            width: 480,
+            height: 640
+        };
 
+        me._isInMobileMode;
+        me._mobileToolbar;
+        me._mobileToolbarId = 'mobileToolbar';
+        me._toolbarContent;
     }, {
         /**
          * @method init
@@ -132,6 +140,7 @@ Oskari.clazz.define(
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+            this._addMobileDiv();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -143,6 +152,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         start: function (sandbox) {
+            var me = this;
             if (this.started) {
                 return;
             }
@@ -171,9 +181,20 @@ Oskari.clazz.define(
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
             sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
 
-            this.startPlugins();
-            this.updateCurrentState();
             this.started = this._startImpl();
+            var size = this.getSize();
+            this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
+            me.startPlugins();
+            var mobileDiv = this.getMobileDiv();
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            }
+            else if (mobileDiv.height() < mobileDiv.children().height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(mobileDiv.children().height());
+            }
+            this.updateCurrentState();
         },
 
         /**
@@ -204,6 +225,12 @@ Oskari.clazz.define(
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
+            },
+            MapSizeChangedEvent: function (evt) {
+                this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+            },
+            'Toolbar.ToolbarLoadedEvent': function() {
+                this.startLazyPlugins();
             }
         },
 
@@ -736,7 +763,9 @@ Oskari.clazz.define(
             for (p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
-
+                    if(typeof layersPlugin.preselectLayers !== 'function') {
+                        continue;
+                    }
                     sandbox.printDebug('preselecting ' + p);
                     layersPlugin.preselectLayers(layers);
                 }
@@ -822,6 +851,113 @@ Oskari.clazz.define(
             sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
+
+/*---------------- MAP MOBILE MODE ------------------- */
+
+        _addMobileDiv: function () {
+            var mapDiv = this.getMapEl();
+            jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
+        },
+
+        getMobileDiv: function () {
+            var me = this,
+                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
+
+            return mobileDiv;
+        },
+
+        getMobileToolbar: function () {
+            var me = this;
+            if (!me._mobileToolbar) {
+                me._createMobileToolbar();
+            }
+            return me._mobileToolbarId;
+        },
+
+        // FIXME When calling toolbar first time when map is already mobile mode this not working because toolbar requests and their handler are not ready.
+        _createMobileToolbar: function () {
+            var me = this,
+                request,
+                sandbox = me.getSandbox(),
+                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+
+            if (me._mobileToolbarId && builder) {
+                me._mobileToolbar = true;
+                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+                // add toolbar when toolbarId and target container is configured
+                // We assume the first container is intended for the toolbar
+                request = builder(
+                        me._mobileToolbarId,
+                        'add',
+                        {
+                            show: true,
+                            toolbarContainer: me._toolbarContent
+                        }
+                );
+                sandbox.request(me.getName(), request);
+
+            }
+        },
+
+        setMobileMode: function (isInMobileMode) {
+            this._isInMobileMode = isInMobileMode;
+
+            var mobileDiv = this.getMobileDiv();
+            if (isInMobileMode) {
+                mobileDiv.show();
+            } else {
+                mobileDiv.hide();
+            }
+        },
+
+        getMobileMode: function () {
+            return this._isInMobileMode;
+        },
+
+        _handleMapSizeChanges: function (newSize, pluginName) {
+            var me = this;
+            var modeChanged = false;
+            var mobileDiv = this.getMobileDiv();
+            var mapDivHeight = jQuery(window).height();
+
+            if (Oskari.util.isMobile() || newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
+                modeChanged = (me.getMobileMode() === true) ? false : true;
+                me.setMobileMode(true);
+                mobileDiv.show();
+            } else {
+                modeChanged = (me.getMobileMode() === false) ? false : true;
+                me.setMobileMode(false);
+                mobileDiv.hide();
+            }
+
+            if (modeChanged) {
+                var sortedList = _.sortBy(me._pluginInstances, '_index');
+                _.each(sortedList, function(plugin) {
+                    if (plugin && typeof plugin.redrawUI === 'function') {
+                        var index = plugin.getIndex();
+                        plugin.redrawUI(me.getMobileMode(), modeChanged);
+                    }
+                });
+            }
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            }
+            else if (mobileDiv.height() < mobileDiv.children().height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(mobileDiv.children().height());
+            }
+
+            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
+            if (me.getMobileMode()) {
+                mapDivHeight -= mobileDiv.outerHeight();
+                jQuery('#' + me.getMapElementId()).css('height', mapDivHeight + 'px');
+                me.updateDomain();
+            }
+        },
+
+/*---------------- /MAP MOBILE MODE ------------------- */
 
 /* --------------- CONTROLS ------------------------ */
         /**
@@ -966,6 +1102,7 @@ Oskari.clazz.define(
             plugin.setMapModule(null);
             delete this._pluginInstances[pluginName];
         },
+        lazyStartPlugins : [],
         /**
          * @method startPlugin
          * Starts the given plugin by calling its startPlugin() method.
@@ -976,7 +1113,36 @@ Oskari.clazz.define(
                 pluginName = plugin.getName();
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-            plugin.startPlugin(sandbox);
+            try {
+                var tryAgainLater = plugin.startPlugin(sandbox);
+                if(tryAgainLater && typeof plugin.redrawUI === 'function') {
+                    this.lazyStartPlugins.push(plugin);
+                }
+            } catch (e) {
+                // something wrong with plugin (e.g. implementation not imported) -> log a warning
+                sandbox.printWarn(
+                    'Unable to start plugin: ' + pluginName + ': ' +
+                    e
+                );
+            }
+        },
+        startLazyPlugins : function() {
+            var me = this;
+            var tryStartingThese = this.lazyStartPlugins.slice(0);
+            // reset
+            this.lazyStartPlugins = [];
+
+            tryStartingThese.forEach(function(plugin) {
+                var tryAgainLater = plugin.redrawUI(me.getMobileMode());
+                if(tryAgainLater) {
+                    me.lazyStartPlugins.push(plugin);
+                }
+            });
+            var mobileDiv = this.getMobileDiv();
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            }
         },
         /**
          * @method stopPlugin
@@ -996,11 +1162,13 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    this.startPlugin(this._pluginInstances[pluginName]);
+            var me = this;
+            var sortedList = _.sortBy(me._pluginInstances, '_index');
+            _.each(sortedList, function(plugin) {
+                if (plugin && typeof plugin.startPlugin === 'function') {
+                    me.startPlugin(plugin);
                 }
-            }
+            });
         },
         /**
          * @method stopPlugins
@@ -1606,16 +1774,22 @@ Oskari.clazz.define(
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
          * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
+         * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible) {
+        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
             var container = element.parents('.mapplugins'),
-                content = element.parents('.mappluginsContent');
+            content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
-            element.remove();
+            if(detachOnly) {
+                element.detach();
+            } else {
+                element.remove();
+            }
             if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
+
 /* --------------- /PLUGIN CONTAINERS ------------------------ */
 
 /* --------------- MAP LAYERS ------------------------ */

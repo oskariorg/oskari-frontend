@@ -433,120 +433,119 @@ Oskari.clazz.define(
                 }
             ],
             "locales": [{
-                // when lang is undefined, loader loads each language file, publisher needs localization for each
-                //"lang" : "hy",
+                "lang" : "hy",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/hy.js"
             }, {
-                //"lang" : "bg",
+                "lang" : "bg",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/bg.js"
             }, {
-                //"lang" : "cs",
+                "lang" : "cs",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/cs.js"
             }, {
-                //"lang" : "da",
+                "lang" : "da",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/da.js"
             }, {
-                //"lang" : "de",
+                "lang" : "de",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/de.js"
             }, {
-                //"lang" : "en",
+                "lang" : "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/en.js"
             }, {
-                //"lang" : "es",
+                "lang" : "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/es.js"
             }, {
-                //"lang" : "et",
+                "lang" : "et",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/et.js"
             }, {
-                //"lang" : "fi",
+                "lang" : "fi",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/fi.js"
             }, {
-                //"lang" : "fr",
+                "lang" : "fr",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/fr.js"
             }, {
-                //"lang" : "ka",
+                "lang" : "ka",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/ka.js"
             }, {
-                //"lang" : "el",
+                "lang" : "el",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/el.js"
             }, {
-                //"lang" : "hr",
+                "lang" : "hr",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/hr.js"
             }, {
-                //"lang" : "hu",
+                "lang" : "hu",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/hu.js"
             }, {
-                //"lang" : "is",
+                "lang" : "is",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/is.js"
             }, {
-                //"lang" : "it",
+                "lang" : "it",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/it.js"
             }, {
-                //"lang" : "lv",
+                "lang" : "lv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/lv.js"
             }, {
-                //"lang" : "nl",
+                "lang" : "nl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/nl.js"
             }, {
-                //"lang" : "nb",
+                "lang" : "nb",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/nb.js"
             }, {
-                //"lang" : "nn",
+                "lang" : "nn",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/nn.js"
             }, {
-                //"lang" : "pl",
+                "lang" : "pl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/pl.js"
             }, {
-                //"lang" : "pt",
+                "lang" : "pt",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/pt.js"
             }, {
-                //"lang" : "ro",
+                "lang" : "ro",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/ro.js"
             }, {
-                //"lang" : "sr",
+                "lang" : "sr",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/sr.js"
             }, {
-                //"lang" : "sl",
+                "lang" : "sl",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/sl.js"
             }, {
-                //"lang" : "sk",
+                "lang" : "sk",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/sk.js"
             }, {
-                //"lang" : "sq",
+                "lang" : "sq",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/sq.js"
             }, {
-                //"lang" : "sv",
+                "lang" : "sv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/sv.js"
             }, {
-                //"lang" : "uk",
+                "lang" : "uk",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/uk.js"
             }]

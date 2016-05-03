@@ -87,6 +87,10 @@ Fixed search result table sorting when columns contains word and numbers.
 
 Fixed table sorting when columns contains word and numbers.
 
+### mapwfs2 / manual refresh
+
+Extra warning added to the user, when there is no manual refresh wfs layers visible or not in scale.
+
 ### toolbar and infobox
 
 Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
@@ -122,6 +126,22 @@ For example:
 #### util.naturalSort
 
 Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
+
+#### util.getColorBrightness
+
+Oskari.util.getColorBrightness has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark or light. Function returns 'dark' or 'light'.
+
+#### util.isDarkColor
+
+Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark. Function returns true/false;
+
+#### util.isLightColor
+
+Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
+
+#### util.isMobile
+
+Oskari.util.isMobile has been added to /Oskari/bundles/bundle.js. It's used to check at is map in mobile mode.
 
 ### divmanazer/ui-components
 

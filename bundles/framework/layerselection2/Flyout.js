@@ -234,6 +234,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var opa = layerDiv.find('div.layer-opacity input.opacity'),
                 slider = this._addSlider(layer, layerDiv, opa);
         },
+        /**
+         * @private @method _switchRefreshIcon
+         * - not show refresh button, if layer is invisible or not in scale
+         *
+         * @param {jQuery} layerDiv
+         * @param {Object} layer
+         * @param {Boolean} isInScale
+         *
+         */
+        _switchRefreshIcon: function (layerDiv, layer, isInScale) {
+            var refreshDiv = layerDiv.find('div.layer-tool-refresh');
+
+            if (!isInScale || !layer.isVisible()) {
+                refreshDiv.css('display', 'none');
+            } else {
+                refreshDiv.css('display', '');
+            }
+
+        },
 
         /**
          * @private @method _addSlider
@@ -536,6 +555,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this._sliders[layer.getId()] = null;
 
             this._appendLayerFooter(layerDiv, layer, isInScale, isGeometryMatch);
+
+            this._switchRefreshIcon(layerDiv, layer, isInScale);
         },
 
         /**
