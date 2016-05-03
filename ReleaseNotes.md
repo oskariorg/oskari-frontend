@@ -2,6 +2,14 @@
 
 ## 1.36
 
+### routingService
+
+Added default routing markers/icons. See /framework/routingService/instance.js.
+
+### mapmodule ol2/ol3
+
+Fixed getStyle function size handling. When adding featurecollection then svgmarker size is not calculated right.
+
 ### publisher 2
 
 Language selection in publisher no longer affects the map preview, but the preview will be displayed using the application's default language.
@@ -67,6 +75,14 @@ Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
     Oskari.log('LogName').info('My info message');
+
+### core/abstractmapmodule
+
+New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions can register wellknown svg markers to mapmodule and get wellknowed marker.
+
+New ``MapModulePlugin.RegisterStyleRequest`` request, it's used when adding new wellknown style to mapmodule. See example /framework/routingService/instance.js.
+
+``GetSvg```function now handles also wellknown markers. Shape object must then include key/name attributes. Key is wellknown markers name and name is marker name. Optional shape object can contains color attribute, which is used change colors of these svg classes 'normal-color' or 'shading-color'. Shading color is calculated from color (darkened).
 
 ### tools
 
