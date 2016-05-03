@@ -928,7 +928,7 @@ Oskari.clazz.define(
             }
 
             if (modeChanged) {
-                var sortedList = _.sortBy(me._pluginInstances, '_index');
+                var sortedList = this._getSortedPlugins();
                 _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.redrawUI === 'function') {
                         var index = plugin.getIndex();
@@ -951,6 +951,21 @@ Oskari.clazz.define(
                 jQuery('#' + me.getMapElementId()).css('height', mapDivHeight + 'px');
                 me.updateDomain();
             }
+        },
+        /**
+         * Get a sorted list of plugins. This is used to control order of elements in the UI.
+         * Functionality shouldn't assume order.
+         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
+         */
+        _getSortedPlugins : function() {
+            return _.sortBy(this._pluginInstances, function(plugin) {
+                if(typeof plugin.getIndex === 'function') {
+                    return plugin.getIndex();
+                }
+                // index not defined, start after ones that have indexes
+                // This is just for the UI order, functionality shouldn't assume order
+                return 99999999999;
+            });
         },
 
 /*---------------- /MAP MOBILE MODE ------------------- */
@@ -1159,7 +1174,7 @@ Oskari.clazz.define(
          */
         startPlugins: function () {
             var me = this;
-            var sortedList = _.sortBy(me._pluginInstances, '_index');
+            var sortedList = this._getSortedPlugins();
             _.each(sortedList, function(plugin) {
                 if (plugin && typeof plugin.startPlugin === 'function') {
                     me.startPlugin(plugin);
