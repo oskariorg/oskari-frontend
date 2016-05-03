@@ -76,6 +76,16 @@ Added a logger implementation that can be accessed with (see src/logger.js for d
 
     Oskari.log('LogName').info('My info message');
 
+Added sanitize function to Oskari.util for escaping html or specific tags. Usage:
+
+     // handles content as text content
+     var element = sanitize('<script>alert("testing")</script>');
+     // handles content as html, but removes script-tags
+     var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
+     // handles content as html, but removes script and style tags
+     var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
+     jQuery('body').append(element).append(anotherElement).append(stylishElement);
+
 ### core/abstractmapmodule
 
 New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions can register wellknown svg markers to mapmodule and get wellknowed marker.
