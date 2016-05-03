@@ -94,6 +94,8 @@ Oskari.clazz.define(
         };
         me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
+        me._wellknownStyles = {};
+
     }, {
         /**
          * @method init
@@ -159,12 +161,15 @@ Oskari.clazz.define(
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
-                userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this)
+                userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
+                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this)
             };
+
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
 
             this.startPlugins();
             this.updateCurrentState();
@@ -1076,6 +1081,44 @@ Oskari.clazz.define(
 /* --------------- /PUBLISHER ------------------------ */
 
 
+/* --------------- STYLES --------------------------- */
+    
+        /**
+         * Register wellknown style
+         * @method  @public registerStyle
+         * @param  {String} key    style key
+         * @param  {Object} styles styles object
+         */
+        registerWellknownStyle: function(key, styles) {
+            var me = this;
+            if(key && styles){
+                me._wellknownStyles[key] = styles;
+            }
+        },
+
+        /**
+         * Get wellknown style object
+         * @method  @public getWellknownStyle
+         * @param  {String} key   style key
+         * @param  {String} style style name
+         * @return {Object} returns styles for wanted key or if defined also style name return only wanted style
+         */
+        getWellknownStyle: function(key, style) {
+            var me = this;
+            if(!me._wellknownStyles[key]) {
+                return null;
+            }
+
+            if(key && style){
+                return me._wellknownStyles[key][style]
+            } else {
+                return me._wellknownStyles[key];
+            }   
+        },
+
+/* --------------- /STYLES --------------------------- */
+
+
 /* --------------- SVG MARKER ------------------------ */
         /**
          * Gets the svg marker to be used draw marker
@@ -1086,7 +1129,8 @@ Oskari.clazz.define(
         getSvg: function(markerStyle){
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
-                svgObject = null;
+                svgObject = null,
+                isWellknownMarker = false;
 
             // marker shape is number --> find it from Oskari.getMarkers()
             if(!isNaN(markerStyle.shape)) {
@@ -1104,12 +1148,22 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+                markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
                 svgObject = {
                     data: markerStyle.shape.data,
                     x: markerStyle.shape.x,
                     y: markerStyle.shape.y
                 };
+            }
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+                markerStyle.shape.key && markerStyle.shape.name) {
+                svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
+                if(svgObject === null) {
+                    sandbox.printWarn('Not identified wellknown marker shape. Not handled getSvg.');
+                    return null;
+                }
+                isWellknownMarker = true;
             }
             // marker icon not found
             else {
@@ -1121,7 +1175,29 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
+            if(isWellknownMarker && markerStyle.shape.color) {
+                marker.find('.normal-color').attr('fill', markerStyle.shape.color);
+                var shadowRgb = Oskari.util.hexToRgb(markerStyle.shape.color);
+                shadowRgb.r -= 30;
+                shadowRgb.g -= 30;
+                shadowRgb.b -= 30;
+                if(shadowRgb.r<0){
+                    shadowRgb.r = 0;
+                }
+                if(shadowRgb.g<0){
+                    shadowRgb.g = 0;
+                }
+                if(shadowRgb.b<0){
+                    shadowRgb.b = 0;
+                }
+                var rgbColor = 'rgb('+shadowRgb.r+','+shadowRgb.g+','+shadowRgb.b+')';
+                marker.find('.shading-color').attr('fill', rgbColor);
+            }
+
             var markerHTML = marker.outerHTML();
+
+
+
             if(markerStyle.size) {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
