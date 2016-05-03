@@ -87,6 +87,10 @@ Fixed search result table sorting when columns contains word and numbers.
 
 Fixed table sorting when columns contains word and numbers.
 
+### mapwfs2 / manual refresh
+
+Extra warning added to the user, when there is no manual refresh wfs layers visible or not in scale.
+
 ### toolbar and infobox
 
 Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
