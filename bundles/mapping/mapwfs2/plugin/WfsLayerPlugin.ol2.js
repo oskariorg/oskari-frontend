@@ -20,6 +20,7 @@ Oskari.clazz.define(
         // connection and communication
         me._connection = null;
         me._io = null;
+        me._index = 95;
 
         // state
         me.tileSize = null;
