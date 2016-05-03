@@ -68,46 +68,6 @@ jQuery(document).ready(function() {
     }
 
     function start(appSetup, appConfig) {
-        appConfig['routingService']  = {
-            conf: {},
-            state: {}
-        };
-        appSetup.startupSequence.push({
-            bundleinstancename: 'routingService',
-            bundlename: 'routingService',
-            en: 'routingService',
-            fi: 'routingService',
-            sv: 'routingService',
-            title: 'routingService',
-            metadata: {
-                'Import-Bundle': {
-                    'routingService' :{
-                        bundlePath: '/Oskari/packages/framework/bundle/'
-                    }
-                }
-            },
-            instanceProps: {}
-        });
-        appConfig['feedbackService']  = {
-            conf: {},
-            state: {}
-        };
-        appSetup.startupSequence.push({
-            bundleinstancename: 'feedbackService',
-            bundlename: 'feedbackService',
-            en: 'feedbackService',
-            fi: 'feedbackService',
-            sv: 'feedbackService',
-            title: 'feedbackService',
-            metadata: {
-                'Import-Bundle': {
-                    'feedbackService' :{
-                        bundlePath: '/Oskari/packages/framework/bundle/'
-                    }
-                }
-            },
-            instanceProps: {}
-        });
         var app = Oskari.app;
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
