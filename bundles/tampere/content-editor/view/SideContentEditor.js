@@ -663,16 +663,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             $('.content-draw-tools').removeClass('hide');
             fragments = this._formatWFSFeaturesForInfoBox(data, editableFeatureFid);
 
+            $(".properties-container").empty();
             if (fragments != null && fragments.length) {
                 contentData.html = this._renderFragments(fragments, editableFeatureFid);
                 contentData.layerId = fragments[0].layerId;
                 contentData.layerName = fragments[0].layerName;
                 contentData.featureId = data.features[0][0];
                 content.push(contentData);
-                $(".properties-container").empty().append(contentData.html);
+                $(".properties-container").append(contentData.html);
                 me._setDatepickerLanguage();
                 $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
-
             }
         },
         /**
@@ -1169,6 +1169,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         },
         setClickCoords: function (coords) {
             this.clickCoords = coords;
+            this._handleInfoResult({layerId:this.layerId, features: [] });
         },
         _highlighGeometries: function (featuresIds, layer, keepPrevious) {
             if (this.selectedLayerId == layer.getId())
