@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._mobileDefs = {
             buttons:  {
                 'mobile-coordinatetool': {
-                    iconCls: 'mobile-xy-light mobiletoolbar',
+                    iconCls: 'mobile-xy mobiletoolbar',
                     tooltip: '',
                     show: true,
                     callback: function () {

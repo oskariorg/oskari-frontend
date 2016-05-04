@@ -24,7 +24,7 @@ Oskari.clazz.define(
         me._mobileDefs = {
             buttons:  {
                 'mobile-my-location': {
-                    iconCls: 'mobile-my-location-light mobiletoolbar',
+                    iconCls: 'mobile-my-location mobiletoolbar',
                     tooltip: '',
                     sticky: false,
                     show: true,

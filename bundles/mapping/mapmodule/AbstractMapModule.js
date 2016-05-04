@@ -192,7 +192,7 @@ Oskari.clazz.define(
             }
             else if (mobileDiv.height() < mobileDiv.children().height()) {
                 // any floated plugins might require manual height setting
-                mobileDiv.height(mobileDiv.children().height());
+                //mobileDiv.height(mobileDiv.children().height());
             }
             this.updateCurrentState();
         },
@@ -896,7 +896,6 @@ Oskari.clazz.define(
                         }
                 );
                 sandbox.request(me.getName(), request);
-
             }
         },
 
@@ -906,6 +905,7 @@ Oskari.clazz.define(
             var mobileDiv = this.getMobileDiv();
             if (isInMobileMode) {
                 mobileDiv.show();
+                mobileDiv.css('backgroundColor', this.getThemeColors().backgroundColor);
             } else {
                 mobileDiv.hide();
             }
@@ -973,6 +973,52 @@ Oskari.clazz.define(
         },
 
 /*---------------- /MAP MOBILE MODE ------------------- */
+
+/*---------------- THEME ------------------- */
+        getTheme: function(){
+            var me = this;
+            var toolStyle = me.getToolStyle();
+            if(toolStyle === null || toolStyle.indexOf('-dark') > 0 || toolStyle === 'default') {
+                return 'dark';
+            } else {
+                return 'light';
+            }
+        },
+
+        getReverseTheme: function(){
+            var me = this;
+            if(me.getTheme() === 'light') {
+                return 'dark';
+            } else {
+                return 'light';
+            }
+        },
+
+        getThemeColors: function(){
+            var me = this;
+            var theme = me.getTheme();
+
+            var darkTheme =  {
+                textColor: "#ffffff",
+                backgroundColor: '#3c3c3c',
+                activeColor: '#E6E6E6'
+            };
+
+            var lightTheme =  {
+                textColor: "#000000",
+                backgroundColor: '#ffffff',
+                activeColor: '#3c3c3c'
+            };
+
+            if(theme === 'dark') {
+                return darkTheme;
+            } else {
+                return lightTheme;
+            }
+            
+        },
+
+/*---------------- /THEME ------------------- */
 
 /* --------------- CONTROLS ------------------------ */
         /**

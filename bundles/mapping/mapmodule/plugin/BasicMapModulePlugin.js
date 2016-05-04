@@ -382,8 +382,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
         },
         addToolbarButtons : function(buttons, group) {
+            var me  =this;
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
+            var themeColors = this.getMapModule().getThemeColors();
             var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             if(buttons && !addToolButtonBuilder) {
                 return true;
@@ -393,6 +395,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 for (var tool in buttons) {
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
+                    // add active color if sticky and toggleChangeIcon
+                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true) {
+                        buttonConf.activeColor =  themeColors.activeColor;
+                    }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
             }
@@ -407,7 +413,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
-                var buttonConf = buttons[tool];
+                var buttonConf = buttons[tool]; 
                 buttonConf.toolbarid = toolbar;
                 sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }
