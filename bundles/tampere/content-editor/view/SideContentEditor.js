@@ -297,6 +297,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append($("<div>" + me.loc.featureModifyInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.toolInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.geometryModifyInfo + "</div>"));
+            content.find('.content').append($("<div>" + me.loc.geometryDeleteInfo + "</div>"));
             var addFeatureButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addFeatureButton.setTitle(me.loc.buttons.addFeature);
             addFeatureButton.setHandler(function () {
@@ -1078,7 +1079,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         _addDrawTools: function () {
             var me = this;
             $(".content-draw-tools").empty();
-            var pointButton = $("<div />").addClass('add-point tool');
+            var pointButton = $("<div />").addClass('add-point tool').attr('title', me.loc.tools.point);
             if (me.layerGeometryType == "MultiPoint" || me.layerGeometryType == "Point" || me.layerGeometryType == "GeometryPropertyType") {
                 pointButton.on('click', function() {
                         me.drawingActive = true;
@@ -1090,7 +1091,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 pointButton.addClass("disabled");
             }
 
-            var lineButton = $("<div />").addClass('add-line tool');
+            var lineButton = $("<div />").addClass('add-line tool').attr('title', me.loc.tools.line);
             if (me.layerGeometryType == "MultiLineString" || me.layerGeometryType == "GeometryPropertyType") {
                 lineButton.on('click', function() {
                         me.drawingActive = true;
@@ -1102,7 +1103,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 lineButton.addClass("disabled");
             }
 
-            var areaButton = $("<div />").addClass('add-area tool');
+            var areaButton = $("<div />").addClass('add-area tool').attr('title', me.loc.tools.area);
             if (me.layerGeometryType == "MultiPolygon" || me.layerGeometryType == "Polygon" || me.layerGeometryType == "GeometryPropertyType") {
                 areaButton.on('click', function() {
                         me.drawingActive = true;
@@ -1114,7 +1115,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 areaButton.addClass("disabled");
             }
 
-            var geomEditButton = $("<div />").addClass('selection-area tool');
+            var geomEditButton = $("<div />").addClass('selection-area tool').attr('title', me.loc.tools.geometryEdit);
             if (me.layerGeometryType != null) {
 
                 geomEditButton.on('click', function() {
@@ -1147,7 +1148,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 geomEditButton.addClass("disabled");
             }
 
-            var geomDeleteButton = $("<div />").addClass('selection-remove tool');
+            var geomDeleteButton = $("<div />").addClass('selection-remove tool').attr('title', me.loc.tools.remove);
 
             if (me.operationMode === "create")  {
                 geomDeleteButton.addClass("disabled");
