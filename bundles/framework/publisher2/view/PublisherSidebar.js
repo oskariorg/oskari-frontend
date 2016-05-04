@@ -48,12 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         //additional bundles (=not map plugins) that were stopped when entering publisher
         me.stoppedBundles = [];
 
-        if (data) {
-            if (data.lang) {
-                Oskari.setLang(data.lang);
-            }
-        }
-
         me.loc = localization;
         me.accordion = null;
 
@@ -181,9 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setPluginLanguage(value);
-            });
+            form.init(me.data);
 
             // open generic info by default
             form.getPanel().open();
@@ -262,22 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
-
-        setPluginLanguage : function(lang) {
-            var me = this;
-            if (lang === null || lang === undefined) {
-                throw new TypeError(
-                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
-                    '.setPluginLanguage: missing language'
-                );
-            }
-            Oskari.setLang(lang);
-            _.each(me.panels, function(panel) {
-                if (panel._restartActivePlugins && typeof panel._restartActivePlugins === 'function') {
-                    panel._restartActivePlugins();
-                }
-            });
-        },
         /**
         * Get panel/tool handlers
         * @method getHandlers
@@ -317,6 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     if(!grouping[group]) {
                         grouping[group] = [];
                     }
+                    me._addToolConfig(tool);
                     grouping[group].push(tool);
                 }
 
@@ -337,6 +314,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 panels: panels,
                 tools: allTools
             };
+        },
+        _addToolConfig: function(tool) {
+            var conf = this.instance.conf || {};
+            if (!conf.toolsConfig || !tool.bundleName) {
+                return;
+            }
+            tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
          * @private @method _filterIndicators

@@ -143,7 +143,8 @@ Oskari.clazz.define(
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent'];
+                'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+                'RPCUIEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -179,6 +180,10 @@ Oskari.clazz.define(
                     'MapMoveRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
+                    'GetFeedbackServiceRequest',
+                    'GetFeedbackServiceDefinitionRequest',
+                    'GetFeedbackRequest',
+                    'PostFeedbackRequest',
                     'SearchRequest',
                     'ChangeMapLayerOpacityRequest',
                     'MyLocationPlugin.GetUserLocationRequest',
@@ -353,6 +358,11 @@ Oskari.clazz.define(
                     }
                 });
                 return features;
+            },
+            sendUIEvent: function(bundleId, payload) {
+                var me = this,
+                    event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
+                me.sandbox.notifyAll(event);
             }
         },
 

@@ -5,13 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "session": {
             "expiring": {
-                "title": "NOT TRANSLATED",
-                "message": "NOT TRANSLATED",
-                "extend": "NOT TRANSLATED"
+                "title": "Sessioon aegub",
+                "message": "Teie sessioon on aegumas. Palun vajutage {extend} et jätkata sessiooni.",
+                "extend": "Jätka"
             },
             "expired": {
-                "title": "NOT TRANSLATED",
-                "message": "NOT TRANSLATED"
+                "title": "Sessioon on aegunud",
+                "message": "Teie sessioon on aegunud. Värskendage leht ja logige taas sisse."
             }
         }
     }

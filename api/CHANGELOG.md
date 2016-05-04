@@ -15,9 +15,48 @@ Request is modified to allow giving multiple additional parameters (hidePrevious
 
 It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
 
+Request modified also so at infobox can be showed at the marker. If marker and lon/lat is defined then first try show popup for marker, if marker not found then show popup for defined coordinates. If popup cannot be shown then inform it for InfoBox.InfoBoxEvent.
+
 For more detailed information, see documentation http://oskari.org/api/requests.
 
 NOTE! The changes are not backwards compatible!
+
+### feedbackService (Open311)
+
+#### [add] [rpc] GetFeedbackRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers.
+
+Get posted feedback data out of Open311 service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+#### [add] [rpc] PostFeedbackRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers.
+
+Posts user's feedback data to the Open311 service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+feedback.open331.key=     setup is required in oskari server properties
+(api_key  of Open311 service)
+
+#### [add] [rpc] GetFeedbackServiceRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers
+
+Get Open311 feedback service list.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+#### [add] [rpc] GetFeedbackServiceDefinitionRequest
+
+NOTE! Under construction, this is a POC solution for testing Open311 servers
+
+Get the definition of one feedback service.
+
+For more detailed information, see documentation http://oskari.org/api/requests.
 
 ### mapmodule
 

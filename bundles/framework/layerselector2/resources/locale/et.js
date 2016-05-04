@@ -9,20 +9,20 @@ Oskari.registerLocalization(
             "title": "Viga!",
             "generic": "Süsteemi viga! Palun proovi hiljem uuesti.",
             "loadFailed": "Viga kaardikihtide laadimisel. Laadi lehekülg oma brauseris uuesti ning vali kaardikihid.",
-            "noResults": "Otsingutulemusi ei leitud.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResults": "Otsingutulemusi ei leitud. Kontrollige otsisõnu.",
+            "noResultsForKeyword": "Antud otsisõnale vastavat kaarti ei leitud.  Muutke otsisõna.",
+            "minChars": "Otsisõna on liiga lühike, nõuta vähemalt 4 tähemärki."
         },
-        "loading": "NOT TRANSLATED",
+        "loading": "Otsin…",
         "filter": {
             "text": "Otsi kaardikihte",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "Märksõnad",
+            "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
+            "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
             "inspire": "Teemade järgi",
             "organization": "Andmete tarnijate järgi",
             "published": "Kasutajad",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": "Kas mõtlesid:"
         },
         "published": {
             "organization": "Avaldatud kaardikiht",
@@ -30,8 +30,9 @@ Oskari.registerLocalization(
         },
         "tooltip": {
             "type-base": "Aluskaart",
-            "type-wms": "Kaardikiht",
-            "type-wfs": "Andmetoode"
+            "type-wms": "Kaardikiht(WMS, WMTS)",
+            "type-wfs": "Atribuutandmetega kaardikiht(WFS)",
+            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
         },
         "backendStatus": {
             "OK": {
@@ -55,11 +56,11 @@ Oskari.registerLocalization(
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "Synonym",
+            "lk": "Related concept",
+            "vk": "Coordinate concept",
+            "ak": "Subordinate concept",
+            "yk": "Superordinate concept"
         },
         "layerFilter": {
             "buttons": {

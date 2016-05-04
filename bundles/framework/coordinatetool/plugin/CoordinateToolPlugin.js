@@ -10,35 +10,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
      *      JSON config with params needed to run the plugin
      */
     function (instance, config, locale, mapmodule, sandbox) {
-        this._locale = locale;
-        this._config = config || {};
-        this._mapmodule = mapmodule;
-        this._sandbox = sandbox;
-        this._instance = instance;
-        this._messageDialog = null;
-        this._clazz =
+        var me = this;
+        me._locale = locale;
+        me._config = config || {};
+        me._mapmodule = mapmodule;
+        me._sandbox = sandbox;
+        me._instance = instance;
+        me._messageDialog = null;
+        me._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
-        this._coordinateTransformationExtension =
+        me._coordinateTransformationExtension =
                     Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateTransformationExtension',
                     instance, config, locale, mapmodule, sandbox);
-        this._viewChangerExtension =
+        me._viewChangerExtension =
                     Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChangerExtension',
                     instance, config, locale, mapmodule, sandbox);
-        this._defaultLocation = 'top right';
-        this._index = 6;
-        this._name = 'CoordinateToolPlugin';
-        this._toolOpen = false;
-        this._showMouseCoordinates = false;
-        this._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
-        this._popup = null;
-        this._latInput = null;
-        this._lonInput = null;
-        this._reverseGeocodeLabel = null;
-        this._dialog = null;
-        this._projectionSelect = null;
-        this._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-        this._reverseGeocodeNotImplementedError = false;
-        this._templates = {
+        me._defaultLocation = 'top right';
+        me._index = 60;
+        me._name = 'CoordinateToolPlugin';
+        me._toolOpen = false;
+        me._showMouseCoordinates = false;
+        me._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
+        me._popup = null;
+        me._latInput = null;
+        me._lonInput = null;
+        me._reverseGeocodeLabel = null;
+        me._dialog = null;
+        me._projectionSelect = null;
+        me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        me._reverseGeocodeNotImplementedError = false;
+        me._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popupContent: jQuery(
                 '<div>'+
@@ -54,14 +55,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <div class="floatleft"><input type="text" class="lon-input"></input></div>'+
                 '       <div class="clear"></div>'+
                 '   </div>' +
-                '   <div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   <div class="margintop "><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   <div class="margintop">'+
                 '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
                 '   </div>' +
                 '</div>')
         };
-        this.spinnerStopTimer = null;
-        this.lastLonLat = null;
+        me.spinnerStopTimer = null;
+        me.lastLonLat = null;
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-coordinatetool': {
+                    iconCls: 'mobile-xy-light mobiletoolbar',
+                    tooltip: '',
+                    show: true,
+                    callback: function () {
+                        me._toggleToolState(true);
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
     }, {
         /**
          * Get popup-
@@ -70,15 +84,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {Object} jQuery popup object
          */
         _getPopup: function(){
-            var me = this,
-                popup = me._popup;
-            return popup;
+            return this._popup;
         },
         /**
          * Show popup.
          * @method @private _showPopup
          */
-        _showPopup: function() {
+        _showPopup: function(isMobile) {
             var me = this,
                 loc = me._locale,
                 popupTitle = loc.popup.title,
@@ -152,38 +164,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._progressSpinner.stop();
             });
 
-            me._popup.makeDraggable();
-
             if(_.isArray(me._config.supportedProjections)) {
                 me._getPreciseTransform = true;
                 me._projectionSelect = me._coordinateTransformationExtension.initCoordinatesTransformChange(popupContent);
             } else if (typeof me._config.supportedProjections === 'object') {
                me._viewChangerExtension.initProjectionChange(me._popup);
             }
+
             if(!me._getPreciseTransform) {
               popupContent.find('.srs').html(crsText);
             }
-            me._popup.addClass('coordinatetool__popup');
+
             me._popup.createCloseIcon();
             me._popup.onClose(function () {
                 var el = me.getElement();
-                el.removeClass('active');
+                if(el) {
+                    el.removeClass('active');
+                }
                 me._toolOpen = false;
             });
-            me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
-            me._popup.adaptToMapSize(me._sandbox, popupName);
 
-            //check location of the tool and open popup according to it
-            if (me._config.location && me._config.location.classes === "top left") {
-                popupLocation = "right";
+            if (isMobile) {
+                var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
+                var topOffsetElement = jQuery('div.mobileToolbarDiv');
+                me._popup.addClass('coordinatetool__popup');
+                me._popup.addClass('mobile-popup');
+                me._popup.setColourScheme({"bgColour": "#e6e6e6"});
+                me._popup.createCloseIcon();
+                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
+                me._popup.moveTo(el, 'bottom', true, topOffsetElement);
             } else {
-                popupLocation = "left";
+                me._popup.makeDraggable();
+                me._popup.addClass('coordinatetool__popup');
+                //check location of the tool and open popup according to it
+                if (me._config.location && me._config.location.classes === "top left") {
+                    popupLocation = "right";
+                } else {
+                    popupLocation = "left";
+                }
+                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
+                me._popup.moveTo(me.getElement(), popupLocation, true);
+                me._popup.adaptToMapSize(me._sandbox, popupName);
             }
-            me._popup.moveTo(me.getElement(), popupLocation, true);
+
             me.refresh();
 
             if (this._showReverseGeocode){
-                this._update3words();
+                this._updateReverseGeocode();
             }
         },
         /**
@@ -210,19 +237,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Toggle tool state.
          * @method @private _toggleToolState
+         * @param isMobile are we in mobile mode
          */
-        _toggleToolState: function(){
+        _toggleToolState: function(isMobile){
             var me = this,
                 el = me.getElement();
 
             if(me._toolOpen) {
-                el.removeClass('active');
+                if(el) {
+                    el.removeClass('active');
+                }
                 me._toolOpen = false;
                 me._popup.close(true);
             } else {
-                el.addClass('active');
+                if(el) {
+                    el.addClass('active');
+                }
                 me._toolOpen = true;
-                me._showPopup();
+                me._showPopup(isMobile);
             }
         },
 
@@ -347,8 +379,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             });
 
             me._changeToolStyle(null, el);
+
+            if(me._config.noUI) {
+                return null;
+            }
+
             return el;
         },
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            if (this._popup) {
+                this._popup.close(true);
+            }
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public redrawUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         */
+        redrawUI: function(mapInMobileMode, modeChanged) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                this.addToPluginContainer(me._element);
+            }
+        },
+
         /**
          * Update lon and lat values to inputs
          * @method  @private _updateLonLat
@@ -384,12 +456,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
         },
         /**
-         * Update 3words value to inputs
-         * @method  @private _update3words
+         * Update reverse geocode value to inputs
+         * @method  @private _updateReverseGeocode
          * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
-         * @return {[type]}      [description]
          */
-        _update3words: function(data){
+        _updateReverseGeocode: function(data){
             var me = this,
                 locale = me._locale.reversegeocode,
                 service = me._instance.getService(),
@@ -460,7 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method @public getElement
          */
         getElement: function(){
-            return jQuery('.mapplugin.coordinatetool');
+            return this._element;//jQuery('.mapplugin.coordinatetool');
         },
 
         /**
@@ -501,7 +572,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             }
                         };
                         me._lastLonLat = _.clone(data);
-                        var dataServer = _.clone(data);                        
+                        var dataServer = _.clone(data);
                         me.refresh(data);
 
                         if (event.isPaused() && me._getPreciseTransform){
@@ -509,7 +580,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
 
                         if (event.isPaused() && me._showReverseGeocode){
-                            me._update3words(data);
+                            me._updateReverseGeocode(data);
                         }
                     }
                 },
@@ -530,7 +601,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }
                     if (me._showReverseGeocode){
-                        me._update3words();
+                        me._updateReverseGeocode();
                     }
                 },
                 /**
@@ -553,25 +624,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         me.refresh(data);
                         if(me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
-                        } 
+                        }
                     }
                     if (me._showReverseGeocode){
-                        me._update3words(data);
+                        me._updateReverseGeocode(data);
                     }
                 },
                 /**
-                 * @method Publisher2.ColourSchemeChangedEvent
-                 * @param  {Oskari.mapframework.bundle.publisher2.event.ColourSchemeChangedEvent} evt
+                 * @method RPCUIEvent
+                 * will open/close coordinatetool's popup
                  */
-                'Publisher2.ColourSchemeChangedEvent': function(evt){
-                    this._changeToolStyle(evt.getColourScheme());
-                },
-                /**
-                 * @method Publisher.ColourSchemeChangedEvent
-                 * @param  {Oskari.mapframework.bundle.publisher.event.ColourSchemeChangedEvent} evt
-                 */
-                'Publisher.ColourSchemeChangedEvent': function(evt){
-                    this._changeToolStyle(evt.getColourScheme());
+                RPCUIEvent: function (event) {
+                    var me = this;
+                    if(event.getBundleId()==='coordinatetool') {
+                         me._toggleToolState(me.getMapModule().getMobileMode());
+                    }
                 }
             };
         },

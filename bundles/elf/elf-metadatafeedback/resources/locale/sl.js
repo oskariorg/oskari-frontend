@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Uporabniške povratne informacije",
-            "subject": "Predmet",
-            "subjectPlaceholder": "Naslov za tvojo povratno informacijo",
             "ratingScore": "Vrednost ocene",
             "ratingJustification": "Utemeljitev ocene"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Ciljna specifikacija",
-            "targetIdentification": "Ciljna identifikacija",
-            "targetCode": "Ciljna koda",
-            "targetCodeNotDefined": "Ni definirano",
-            "targetCodespace": "Ciljni kodni prostor",
-            "primaryTargetCodeSpaceNotDefined": "Ni definirano",
-            "natureOfTarget": "Značaj cilja"
+            "tabTitle": "Povratne informacije",
+            "average": "Povprečna ocena"
         },
         "userInformation": {
             "userInformation": "Uporabniška informacija",

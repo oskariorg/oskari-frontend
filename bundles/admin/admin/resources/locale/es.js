@@ -1,15 +1,15 @@
 Oskari.registerLocalization(
 {
-    "lang": "es",
+    "lang": "is",
     "key": "GenericAdmin",
     "value": {
-        "title": "Nombre de Usuario o Contraseña no válido",
-        "desc": "Usuario",
+        "title": "Ógilt lykilorð eða notandanafn!!",
+        "desc": "Notandanafn",
         "tile": {
-            "title": "Contraseña"
+            "title": "Lykilorð"
         },
         "flyout": {
-            "title": "Acceso",
+            "title": "Skrá inn",
             "defaultviews": {
                 "title": "NOT TRANSLATED",
                 "desc": "NOT TRANSLATED",

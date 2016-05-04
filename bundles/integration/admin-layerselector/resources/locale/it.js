@@ -45,19 +45,19 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Il layer è attualmente disponibile",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Il layer non è attualmente disponibile",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-down"
             },
             "MAINTENANCE": {
                 "tooltip": "Si verificheranno delle brevi interruzioni della disponibilità dei layers durante i prossimi giorni.",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
+                "iconClass": "backendstatus-ok"
             }
         },
         "admin": {
@@ -114,6 +114,8 @@ Oskari.registerLocalization(
             "username": "Nome utente",
             "password": "Password",
             "attributes": "Attributi",
+            "selectedTime": "Tempo selezionato",
+            "time": "Tempo supportato",
             "addInspireName": "Nome del tema",
             "addInspireNameTitle": "Nome del tema Inspire",
             "addOrganizationName": "Organizzazione",
@@ -142,13 +144,13 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Fornire l'indirizzo URL della legenda.",
             "legendUrl": "Legend URL selection",
             "legendUrlDesc": "Select default legend via legend url selection",
-            "noServiceLegendUrl":"Legend URL is not in wms service legends",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Contenuti aggiuntivi per la finestra \"Get Feature Info\"",
             "gfiResponseType": "Tipo di risposta GFI",
             "gfiResponseTypeDesc": "Tipo di risposta per Get Feature Info (GFI)",
             "gfiStyle": "Stile GFI  (XSLT)",
             "gfiStyleDesc": "Stile GFI  (XSLT)",
-            "manualRefresh": "NOT TRANSLATED",
+            "manualRefresh": "Aggiornamento manuale",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "Nome del WMTS TileMatrixSet",
             "matrixSet": "JSON per layer WMTS",

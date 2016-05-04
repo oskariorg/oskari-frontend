@@ -155,7 +155,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             this.toolbars[tbid] = tbcontainer;
             var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
             this.containers[tbid] = c;
-
             if (data.title) {
                 tbcontainer.find(".oskariui-menutoolbar-title p").append(data.title);
             }
@@ -181,6 +180,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
             if (pdata.title) {
                 tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
+            } else {
+                tbcontainer.find(".oskariui-toolbar-title").remove();
             }
             return c;
         },

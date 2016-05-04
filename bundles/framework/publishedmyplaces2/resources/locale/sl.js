@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Meri razdaljo",
                 "tooltip": "Meri razdaljo",
-                "add": "",
-                "next": "",
+                "add": "Dodaj črto",
+                "next": "Naslednji",
                 "edit": "Črto lahko urejaš s klikom in vlečenjem lomnih točk",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Meri območje",
                 "tooltip": "Meri območje",
-                "add": "",
-                "next": "",
+                "add": "Dodaj območje",
+                "next": "Naslednji",
                 "edit": "Območje lahko urejaš s klikom in vlečenjem lomnih točk na robni črti.",
                 "noResult": "0 m2"
             },
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Slog točke",
-            "tooltip": "",
+            "tooltip": "Določi slog za točkovne elemente",
             "symbol": {
                 "label": "Ikona"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Slog črte",
-            "tooltip": "",
+            "tooltip": "Določi slog za linijske elemente.",
             "style": {
                 "label": "Slog"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Slog območja",
-            "tooltip": "",
+            "tooltip": "Določi slog za površinske elemente",
             "linestyle": {
                 "label": "Slog robne črte"
             },

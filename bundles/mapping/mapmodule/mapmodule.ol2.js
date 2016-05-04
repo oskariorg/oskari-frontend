@@ -456,30 +456,30 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
-            styleDef = styleDef || {};
+            var style = jQuery.extend(true, {}, styleDef);
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            var size = (styleDef.image && styleDef.image.size) ? this.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
-            styleDef.image.size = size;
+            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
+            style.image.size = size;
 
-            var svg = this.getSvg(styleDef.image);
+            var svg = this.getSvg(style.image);
             if(svg) {
                 olStyle.externalGraphic = svg;
             }
 
-            if(styleDef.image.size) {
+            if(style.image.size) {
                 olStyle.graphicWidth = size;
                 olStyle.graphicHeight = size;
             }
-            if(styleDef.image.opacity) {
-                olStyle.fillOpacity = styleDef.image.opacity;
+            if(style.image.opacity) {
+                olStyle.fillOpacity = style.image.opacity;
             }
-            if(styleDef.stroke) {
-                if(styleDef.stroke.color) {
-                    olStyle.strokeColor = styleDef.stroke.color;
+            if(style.stroke) {
+                if(style.stroke.color) {
+                    olStyle.strokeColor = style.stroke.color;
                 }
-                if(styleDef.stroke.width) {
-                    olStyle.strokeWidth = styleDef.stroke.width;
+                if(style.stroke.width) {
+                    olStyle.strokeWidth = style.stroke.width;
                 }
                 if(style.stroke.lineDash) {
                     olStyle.strokeDashstyle = style.stroke.lineDash;
@@ -488,21 +488,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.strokeLinecap = style.stroke.lineCap;
                 }
             }
-            if (styleDef.image.radius) {
-                if(styleDef.image.radius) {
-                    olStyle.pointRadius = styleDef.image.radius;
+            if (style.image.radius) {
+                if(style.image.radius) {
+                    olStyle.pointRadius = style.image.radius;
                     //currently only supporting circle
                     olStyle.graphicName = "circle";
                 }
             }
             /*
                 TODO: figure out ol2 equivalent to this... "normal" font size * scale?
-                if(styleDef.text.scale) {
-                    olStyle.scale = styleDef.text.scale;
+                if(style.text.scale) {
+                    olStyle.scale = style.text.scale;
                 }
           */
-          if(styleDef.text.font) {
-            var split = styleDef.text.font.split(" ");
+          if(style.text.font) {
+            var split = style.text.font.split(" ");
             if(split[1]) {
                olStyle.fontSize = split[1];
             }
@@ -513,32 +513,32 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 olStyle.fontFamily = split[2];
             }
           }
-          if(Oskari.util.keyExists(styleDef.text, 'fill.color')) {
-              olStyle.fontColor = styleDef.text.fill.color;
+          if(Oskari.util.keyExists(style.text, 'fill.color')) {
+              olStyle.fontColor = style.text.fill.color;
           }
-          if(styleDef.text.stroke) {
-              if(styleDef.text.stroke.color) {
-                  olStyle.labelOutlineColor = styleDef.text.stroke.color;
+          if(style.text.stroke) {
+              if(style.text.stroke.color) {
+                  olStyle.labelOutlineColor = style.text.stroke.color;
               }
-              if(styleDef.text.stroke.width) {
-                  olStyle.labelOutlineWidth = styleDef.text.stroke.width;
+              if(style.text.stroke.width) {
+                  olStyle.labelOutlineWidth = style.text.stroke.width;
               }
           }
-          if(styleDef.labelAlign) {
-             olStyle.labelAlign = styleDef.text.labelAlign;
+          if(style.labelAlign) {
+             olStyle.labelAlign = style.text.labelAlign;
           }
-          if(styleDef.text.offsetX) {
-             olStyle.labelXOffset = styleDef.text.offsetX;
+          if(style.text.offsetX) {
+             olStyle.labelXOffset = style.text.offsetX;
           }
-          if(styleDef.text.offsetY) {
-             olStyle.labelYOffset = styleDef.text.offsetY;
+          if(style.text.offsetY) {
+             olStyle.labelYOffset = style.text.offsetY;
           }
 
           //label
-          if (styleDef.text.labelText) {
-             olStyle.label = styleDef.text.labelText;
-          } else if (styleDef.text.labelProperty) {
-             olStyle.label = "${"+styleDef.text.labelProperty+"}";
+          if (style.text.labelText) {
+             olStyle.label = style.text.labelText;
+          } else if (style.text.labelProperty) {
+             olStyle.label = "${"+style.text.labelProperty+"}";
           }
             return olStyle;
         }

@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "admin-layerrights",
     "value": {
         "title": "Condizioni d'uso del layer",
-        "desc": "NOT TRANSLATED",
+        "desc": "NON TRADOTTO",
         "tile": {
             "title": "Condizioni d'uso dei layers della mappa"
         },

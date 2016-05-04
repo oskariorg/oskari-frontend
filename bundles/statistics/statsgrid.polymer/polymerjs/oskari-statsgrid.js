@@ -439,6 +439,8 @@ Polymer.require(["/Oskari/libraries/mathjs/math.2.4.1.min.js"], function(math) {
       //        so that it will not be an indicator that was deleted.
       this.splice("rowHeaders", index + 1, 1);
       this.splice("selectedIndicators", index, 1);
+      // Refreshing the rows for the case where all the indicators were removed.
+      this.handleResponse();
     },
     "onDeleteIndicator": function(event) {
       var me = this,

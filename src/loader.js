@@ -93,9 +93,8 @@
     };
     /**
      * Loader
-     * @param  {[type]} startupSequence [description]
-     * @param  {[type]} config          [description]
-     * @return {[type]}                 [description]
+     * @param  {Object[]} startupSequence sequence of bundles to load/start
+     * @param  {Object}   config          configuration for bundles
      */
     var loader = function(startupSequence, config) {
         var sequence = [];
@@ -108,6 +107,13 @@
         var appConfig = config || {};
 
         var globalExpose = {};
+
+        if(o.getLoaderMode() === 'dev') {
+            // config for dev mode
+            require.config({
+                urlArgs: "ts=" + (new Date()).getTime()
+            });
+        }
         return {
             /**
              * {
@@ -258,7 +264,6 @@
                 });
             },
             handleBundleLoad : function(basePath, src, callback) {
-                var me = this;
                 var files = [];
 
                 // src.locales
@@ -329,9 +334,7 @@
                     callback();
                 });
             }
-
         }
-        return loader;
     };
 
     // setup additional members

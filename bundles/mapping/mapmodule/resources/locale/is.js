@@ -38,7 +38,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kortalög",
-                "chooseDefaultBaseLayer": "Veldu kortalag fyrir bakgrunninn"
+                "chooseDefaultBaseLayer": "Veldu kortalag fyrir bakgrunninn",
+                "chooseOtherLayers": "NOT TRANSLATED"
             },
             "SearchPlugin": {
                 "placeholder": "Leita að staðsetningu",
@@ -78,7 +79,7 @@ Oskari.registerLocalization(
                 },
                 "form": {
                     "title": "Punktaþekja",
-                    "tooltip": "",
+                    "tooltip": "Skilgreina stíl fyrir kortamerki.",
                     "symbol": {
                         "label": "Merki"
                     },

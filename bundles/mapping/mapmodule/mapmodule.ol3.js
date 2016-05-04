@@ -537,21 +537,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         getStyle: function(styleDef) {
             var me = this;
-            styleDef = styleDef || {};
+            style = jQuery.extend(true, {}, styleDef);
             var olStyle = {};
-            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
+            if(Oskari.util.keyExists(style, 'fill.color')) {
                 olStyle.fill = new ol.style.Fill({
-                  color: styleDef.fill.color
+                  color: style.fill.color
                 });
             }
-            if(styleDef.stroke) {
-            	olStyle.stroke = me.__getStrokeStyle(styleDef);
+            if(style.stroke) {
+            	olStyle.stroke = me.__getStrokeStyle(style);
             }
-            if(styleDef.image) {
-                olStyle.image = me.__getImageStyle(styleDef)
+            if(style.image) {
+                olStyle.image = me.__getImageStyle(style);
             }
-            if (styleDef.text) {
-                var textStyle = me.__getTextStyle(styleDef.text);
+            if (style.text) {
+                var textStyle = me.__getTextStyle(style.text);
                 if (textStyle) {
                     olStyle.text = textStyle;
                 }

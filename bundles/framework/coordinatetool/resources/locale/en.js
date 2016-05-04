@@ -83,6 +83,10 @@ Oskari.registerLocalization(
             "cannotTransformCoordinates" : {
                 "title": "Error",
                 "message": "Coordinates cannot transformed"
+            },
+            "publisher": {
+                "showTransformationTools": "Show coordinate transformation tools",
+                "noUI": "Hide user interface (Use RPC interface)"
             }
         }
     }
