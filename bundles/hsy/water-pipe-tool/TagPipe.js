@@ -11,7 +11,7 @@ Oskari.clazz.define(
         this.sandbox = parent.getSandbox();
         this._localization = localization;
         this.templates = {};
-
+        this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
         this.state = {};
@@ -404,6 +404,73 @@ Oskari.clazz.define(
             });
             return fragment;
         },*/
+
+        /**
+         * [croppingLayersHighlight Highlights clicked cropping area/areas]
+         * @param  {[string]} x      [Clicked on map X]
+         * @param  {[string]} y      [Clicked on map Y]
+         * @return {[none]}
+         */
+        findPipesRequest: function(x, y){
+            console.info("TULEEE X - "+x)
+            var me = this,
+            mapVO = me.sandbox.getMap(),
+            ajaxUrl = me.sandbox.getAjaxUrl(),
+            map = me.mapModule.getMap(),
+            layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
+            layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
+            layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
+            layerName = jQuery('.cropping-btn.selected').data('layerName'),
+            layerUrl = jQuery('.cropping-btn.selected').data('layerUrl'),
+            layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
+            layerNameLang = jQuery('.cropping-btn.selected').val();
+
+            jQuery.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: ajaxUrl + 'action_route=GetFeatureForCropping',
+                data : {
+                    layers: layerName,
+                    url: layerUrl,
+                    x : x,
+                    y : y,
+                    bbox : mapVO.getBboxAsString(),
+                    width : mapVO.getWidth(),
+                    height : mapVO.getHeight(),
+                    srs : mapVO.getSrsName()
+                },
+                success: function (data) {
+                    var geojson_format = new OpenLayers.Format.GeoJSON();
+                    var features = geojson_format.read(data.features[0]);
+                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",data.features[0].id);
+
+                        if(founded !== null && founded.length>0){
+                            me.croppingVectorLayer.removeFeatures(founded);
+                        }else{
+                            features[0].attributes['cropid'] = data.features[0].id;
+                            features[0].attributes['layerName'] = layerName;
+                            features[0].attributes['layerUrl'] = layerUrl;
+                            features[0].attributes['uniqueKey'] = layerUniqueKey;
+                            features[0].attributes['geometryColumn'] = layerGeometryColumn;
+                            features[0].attributes['geometryName'] = layerGeometry;
+                            features[0].attributes['croppingMode'] = layerCroppingMode;
+                            features[0].attributes['layerNameLang'] = layerNameLang;
+
+                            me.croppingVectorLayer.addFeatures(features);
+                            map.setLayerIndex(me.croppingVectorLayer, 1000000);
+                        }
+                        me.addToTempBasket(me.croppingVectorLayer.features.length);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                    me._openPopup(
+                        me._getLocalization('error-in-getfeatureforcropping'),
+                        error
+                    );
+                }
+            });
+        },
 
         /**
          * @method _openPopup

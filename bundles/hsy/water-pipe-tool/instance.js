@@ -149,6 +149,14 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
                     }
 
                 }
+            },
+            'MapClickedEvent' : function(evt) {
+                var me = this,
+                x = evt.getMouseX(),
+                y = evt.getMouseY();
+                //if(me.cropping.isCroppingToolActive()){
+                   this.plugins['Oskari.userinterface.Flyout'].tabsContainer.panels[0].findPipesRequest(x,y);
+                //}
             }
         },
 
