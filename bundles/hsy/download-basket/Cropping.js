@@ -269,6 +269,7 @@ Oskari.clazz.define(
          * @return {[none]}
          */
         croppingLayersHighlight: function(x, y){
+
             var me = this,
             mapVO = me._sandbox.getMap(),
             ajaxUrl = me._sandbox.getAjaxUrl(),
@@ -290,7 +291,7 @@ Oskari.clazz.define(
                     url: layerUrl,
                     x : x,
                     y : y,
-                    bbox : mapVO.getBbox().toBBOX(),
+                    bbox : mapVO.getBboxAsString(),
                     width : mapVO.getWidth(),
                     height : mapVO.getHeight(),
                     srs : mapVO.getSrsName()
