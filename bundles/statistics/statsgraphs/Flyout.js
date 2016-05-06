@@ -54,7 +54,9 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
             this.chart = c3.generate({
                 bindto: container,
                 data: {
-                    columns: []
+                    columns: [],
+                    type:'bar',
+
                 }
             });
         },
@@ -64,15 +66,21 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
                 return;
             }
             Oskari.log('StatsGraph').info('TODO: graph for indicator ' + name);
+            Oskari.log('StatsGraph').info(data);
             this.chart.load({
               columns: [
-                [name].concat(data)
+                [name].concat(data),
+
               ],
                keys: {
                   // this doesn't seem to work really
                  value: regions,
                }
             });
+            
+
+
+
 
         }
     }, {

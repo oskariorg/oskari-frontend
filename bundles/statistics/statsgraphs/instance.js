@@ -44,6 +44,33 @@ Oskari.clazz.define(
                 this._handleDataChangeEvent(event);
             }
         },
+
+        /**
+         * @method registerMapClickHandler
+         * Registers the map click handler so we can pass the clicks to flyout.
+         */
+        registerMapClickHandler: function () {
+            if (this.eventHandlers.MapClickedEvent) {
+                return;
+            }
+            this.eventHandlers.MapClickedEvent = function (event) {
+                alert("map clicked");
+                this.plugins['Oskari.userinterface.Flyout'].onMapClick(
+                    event.getLonLat()
+                );
+            };
+            this.sandbox.registerForEventByName(this, 'MapClickedEvent');
+        },
+
+        /**
+         * @method unregisterMapClickHandler
+         * Unregisters the map click handler
+         */
+        unregisterMapClickHandler: function () {
+            delete this.eventHandlers.MapClickedEvent;
+            this.sandbox.unregisterFromEventByName(this, 'MapClickedEvent');
+        },
+
         /*
         // FOR DEBUGGING
         onEvent: function(event) {

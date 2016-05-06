@@ -33,6 +33,17 @@ jQuery(document).ready(function() {
             app.setConfiguration(setup.configuration);
             app.startApplication(function() {
                 // all bundles have been loaded
+
+                Oskari.app.playBundle({
+                    "bundlename" : "statsgraphs",
+                    "metadata" : {
+                        "Import-Bundle": {
+                            "statsgraphs": {
+                                "bundlePath": "/Oskari/packages/statistics/"
+                            }
+                        }
+                    }
+                });
             });
         }
     });
