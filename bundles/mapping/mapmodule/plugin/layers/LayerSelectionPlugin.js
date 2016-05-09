@@ -181,10 +181,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
-            if(!this.getElement()) {
+            if(!this.layerContent) {
                 return;
             }
-            var baseLayersDiv = this.getElement().find(
+            var baseLayersDiv = this.layerContent.find(
                     'div.content div.baselayers'
                 ),
                 input;
@@ -325,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         addBaseLayer: function (layer) {
             var me = this;
-            if (!layer || !layer.getId || !me.getElement()) {
+            if (!layer || !layer.getId) {
                 return;
             }
             var div = me.layerRefs[layer.getId()];
@@ -459,9 +459,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         sortLayers: function () {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
-                layersDiv = this.getElement().find('div.content div.layers'),
+                layersDiv = this.layerContent.find('div.content div.layers'),
                 layers = layersDiv.find('div.layer').detach(),
-                baseLayersDiv = this.getElement().find(
+                baseLayersDiv = this.layerContent.find(
                     'div.content div.baselayers'
                 ),
                 baseLayers = baseLayersDiv.find('div.layer').detach(),
@@ -570,7 +570,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         'iconCls': popupCloseIcon
                     });
 
-                    me.popup.addClass('mobile-popup');                   
+                    me.popup.addClass('mobile-popup');
                 } else {
                     me.popup.moveTo(me.getElement(), 'bottom', true);
                     var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
@@ -629,7 +629,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * {String} defaultBase as the selected base layers id
          */
         getBaseLayers: function () {
-            var inputs = this.getElement().find(
+            var inputs = this.layerContent.find(
                     'div.content div.baselayers div.layer input'
                 ),
                 layers = [],
@@ -725,16 +725,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-
             me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
                 me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
+                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
                 me.refresh();
                 this.addToPluginContainer(me._element);
-                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                //me.refresh();
             }
         },
 
