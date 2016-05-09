@@ -95,10 +95,6 @@ Oskari.clazz.define(
         me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
         me._wellknownStyles = {};
-        me._mobileDefs = {
-            width: 480,
-            height: 640
-        };
 
         me._isInMobileMode;
         me._mobileToolbar;
@@ -183,7 +179,7 @@ Oskari.clazz.define(
 
             this.started = this._startImpl();
             var size = this.getSize();
-            this.setMobileMode(Oskari.util.isMobile() || size.width < me._mobileDefs.width || size.height < me._mobileDefs.height);
+            this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
             var mobileDiv = this.getMobileDiv();
             if(mobileDiv.children().length === 0) {
@@ -874,7 +870,6 @@ Oskari.clazz.define(
             return me._mobileToolbarId;
         },
 
-        // FIXME When calling toolbar first time when map is already mobile mode this not working because toolbar requests and their handler are not ready.
         _createMobileToolbar: function () {
             var me = this,
                 request,
@@ -921,7 +916,7 @@ Oskari.clazz.define(
             var mobileDiv = this.getMobileDiv();
             var mapDivHeight = jQuery(window).height();
 
-            if (Oskari.util.isMobile() || newSize.width < me._mobileDefs.width || newSize.height < me._mobileDefs.height) {
+            if (Oskari.util.isMobile()) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
                 mobileDiv.show();
