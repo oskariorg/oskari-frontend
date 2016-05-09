@@ -20,6 +20,8 @@ function(layerId) {
     this._layerId = layerId;
     this._type = undefined;
     this._status = undefined;
+    this._nop = false;  // no operations needed in success case (e.g. keep featuredata content)
+
 }, {
     /** @static @property __name event name */
     __name : "WFSStatusChangedEvent",
@@ -64,7 +66,20 @@ function(layerId) {
     getStatus : function() {
         return this._status;
     },
-
+    /**
+    * @method setNop
+    * @param {Boolean} nop
+    */
+     setNop : function(nop) {
+         this._nop = nop;
+     },
+     /**
+     * @method getNop
+     * @return {Boolean} nop
+     */
+     getNop : function() {
+         return Boolean(this._nop);
+     },
     /**
      * @method getFeature
      * @return {Number} typeCode

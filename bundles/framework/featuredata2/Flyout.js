@@ -329,6 +329,9 @@ Oskari.clazz.define(
                     panel.grid.select(selectedFeatures[i], true);
                 }
             }
+
+            // Grid opacity
+            this.setGridOpacity(layer, 1.0);
         },
 
         /**
@@ -591,6 +594,20 @@ Oskari.clazz.define(
                 // Extra header message on top of grid
                 this._appendHeaderMessage(panel, locales, layer);
 
+            }
+        },
+        setGridOpacity: function (layer, opacity) {
+            if (!this.active || !layer || isNaN(opacity)) {
+                return;
+            }
+            var me = this,
+                panel = this.layers['' + layer.getId()],
+                tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content');
+                isOk = this.tabsContainer.isSelected(panel);
+
+
+            if (isOk && panel.grid) {
+                tabContent.css({ 'opacity': opacity });
             }
         },
 
