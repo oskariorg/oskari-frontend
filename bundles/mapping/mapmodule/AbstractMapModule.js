@@ -914,7 +914,6 @@ Oskari.clazz.define(
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
-            var mapDivHeight = jQuery(window).height();
 
             if (Oskari.util.isMobile()) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
@@ -944,12 +943,7 @@ Oskari.clazz.define(
                 mobileDiv.height(mobileDiv.children().height());
             }
 
-            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
-            if (me.getMobileMode()) {
-                mapDivHeight -= mobileDiv.outerHeight();
-                jQuery('#' + me.getMapElementId()).css('height', mapDivHeight + 'px');
-                me.updateDomain();
-            }
+            me._adjustMobileMapSize();            
         },
         /**
          * Get a sorted list of plugins. This is used to control order of elements in the UI.
@@ -965,6 +959,18 @@ Oskari.clazz.define(
                 // This is just for the UI order, functionality shouldn't assume order
                 return 99999999999;
             });
+        },
+
+        _adjustMobileMapSize: function(){
+            var mapDivHeight = jQuery(window).height();
+            var mobileDiv = this.getMobileDiv();
+            
+            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
+            if (Oskari.util.isMobile()) {
+                mapDivHeight -= mobileDiv.outerHeight();
+                jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
+                this.updateDomain();
+            }
         },
 
 /*---------------- /MAP MOBILE MODE ------------------- */
@@ -994,15 +1000,17 @@ Oskari.clazz.define(
             var theme = me.getTheme();
 
             var darkTheme =  {
-                textColour: "#ffffff",
+                textColour: '#ffffff',
                 backgroundColour: '#3c3c3c',
-                activeColour: '#E6E6E6'
+                activeColour: '#E6E6E6',
+                activeTextColour: '#000000'
             };
 
             var lightTheme =  {
-                textColour: "#000000",
+                textColour: '#000000',
                 backgroundColour: '#ffffff',
-                activeColour: '#3c3c3c'
+                activeColour: '#3c3c3c',
+                activeTextColour: '#ffffff'
             };
 
             if(theme === 'dark') {
@@ -1198,6 +1206,8 @@ Oskari.clazz.define(
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
+            } else {
+                me._adjustMobileMapSize();
             }
         },
         /**
