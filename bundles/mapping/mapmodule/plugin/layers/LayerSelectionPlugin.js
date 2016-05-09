@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                             me.popup.close(true);
                             me.popup = null;
                         } else {
-                            me.openSelection(true);
+                            me.openSelection();
                         }
                     },
                     toggleChangeIcon: true
@@ -536,25 +536,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function (isMobile) {
+        openSelection: function () {
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement();
+                div = this.getElement(),
+                isMobile = Oskari.util.isMobile();
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
-                    topOffsetElement = jQuery('div.mobileToolbarDiv');
+                    topOffsetElement = jQuery('div.mobileToolbarDiv'),
+                    themeColours = mapmodule.getThemeColours();
                 me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                me.popup.addClass('mobile-popup');
-                me.popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me.popup.createCloseIcon();
+
                 me.popup.show(popupTitle, me.layerContent);
                 if (isMobile) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
+
+                    var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.activeColour,
+                        'titleColour': themeColours.activeTextColour,
+                        'iconCls': popupCloseIcon
+                    });
+
+                    me.popup.addClass('mobile-popup');                   
                 } else {
                     me.popup.moveTo(me.getElement(), 'bottom', true);
+                    var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.backgroundColour,
+                        'titleColour': themeColours.textColour,
+                        'iconCls': popupCloseIcon
+                    });
                 }
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {

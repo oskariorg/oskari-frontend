@@ -486,13 +486,16 @@ Oskari.clazz.define(
 
 
             var popupContent = resultsContainer;
-            
-            me.popup.setColourScheme({
-                'bgColour': themeColours.backgroundColour,
-                'titleColour': themeColours.textColour
-            });
+            var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();
+
+            me.popup.setColourScheme({
+                'bgColour': themeColours.backgroundColour,
+                'titleColour': themeColours.textColour,
+                'iconCls': popupCloseIcon
+            });
 
             if (!Oskari.util.isMobile()) {
                 me.popup.addClass('searchresult');
