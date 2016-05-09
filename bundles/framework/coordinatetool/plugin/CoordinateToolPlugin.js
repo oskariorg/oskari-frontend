@@ -207,6 +207,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     'iconCls': popupCloseIcon
                 });
                 me._popup.addClass('mobile-popup');
+                me._popup.onClose(function(){
+                    var sandbox = me.getSandbox();
+                    var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                    sandbox.request(me, toolbarRequest);
+                });
             } else {
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
@@ -268,6 +273,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
                 me._popup.close(true);
+                var sandbox = me.getSandbox();
+                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                sandbox.request(me, toolbarRequest);
             } else {
                 if(el) {
                     el.addClass('active');
