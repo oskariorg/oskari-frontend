@@ -155,6 +155,14 @@ Oskari.clazz.define(
 
             sandbox.printDebug('Starting ' + this.getName());
 
+            // listen to application started and trigger a forced update on any remaining lazy plugins
+            Oskari.on('app.start', function(details) {
+                // force update on lazy plugins
+                // this means tell plugins to render UI with the means available
+                // if toolbar for example isn't present, most plugins should display "desktop-ui" instead of using the "mobile-ui" toolbar
+                me.startLazyPlugins(true);
+            });
+
             // register events handlers
             for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -181,15 +189,7 @@ Oskari.clazz.define(
             var size = this.getSize();
             this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
-            var mobileDiv = this.getMobileDiv();
-            if(mobileDiv.children().length === 0) {
-                // plugins didn't add any content -> hide it so the empty bar is not visible
-                mobileDiv.hide();
-            }
-            else if (mobileDiv.height() < mobileDiv.children().height()) {
-                // any floated plugins might require manual height setting
-                //mobileDiv.height(mobileDiv.children().height());
-            }
+            me._adjustMobileMapSize();
             this.updateCurrentState();
         },
 
@@ -934,16 +934,7 @@ Oskari.clazz.define(
                     }
                 });
             }
-            if(mobileDiv.children().length === 0) {
-                // plugins didn't add any content -> hide it so the empty bar is not visible
-                mobileDiv.hide();
-            }
-            else if (mobileDiv.height() < mobileDiv.children().height()) {
-                // any floated plugins might require manual height setting
-                mobileDiv.height(mobileDiv.children().height());
-            }
-
-            me._adjustMobileMapSize();            
+            me._adjustMobileMapSize();
         },
         /**
          * Get a sorted list of plugins. This is used to control order of elements in the UI.
@@ -964,7 +955,14 @@ Oskari.clazz.define(
         _adjustMobileMapSize: function(){
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
-            
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            } else if (mobileDiv.height() < mobileDiv.children().height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(mobileDiv.children().height());
+            }
+
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
             if (Oskari.util.isMobile()) {
                 mapDivHeight -= mobileDiv.outerHeight();
@@ -1190,25 +1188,27 @@ Oskari.clazz.define(
                 );
             }
         },
-        startLazyPlugins : function() {
+        /**
+         * Starts any plugins that reported 
+         * @param  {[type]} force [description]
+         * @return {[type]}       [description]
+         */
+        startLazyPlugins : function(force) {
             var me = this;
             var tryStartingThese = this.lazyStartPlugins.slice(0);
             // reset
             this.lazyStartPlugins = [];
 
             tryStartingThese.forEach(function(plugin) {
-                var tryAgainLater = plugin.redrawUI(me.getMobileMode());
+                var tryAgainLater = plugin.redrawUI(me.getMobileMode(), !!force);
                 if(tryAgainLater) {
+                    if(force) {
+                        me.getSandbox().printWarn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
+                    }
                     me.lazyStartPlugins.push(plugin);
                 }
             });
-            var mobileDiv = this.getMobileDiv();
-            if(mobileDiv.children().length === 0) {
-                // plugins didn't add any content -> hide it so the empty bar is not visible
-                mobileDiv.hide();
-            } else {
-                me._adjustMobileMapSize();
-            }
+            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin
