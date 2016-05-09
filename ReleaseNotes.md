@@ -142,6 +142,11 @@ Fixed table sorting when columns contains word and numbers.
 
 Extra warning added to the user, when there is no manual refresh wfs layers visible or not in scale.
 
+### featuredata2 / manual refresh
+
+Feature data is not emptied for the manual refresh layer, when map is moved. 
+In this case grid opacity is changed to 0.5 for to see that the user must push refresh-button for to get valid values. 
+
 ### toolbar and infobox
 
 Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
