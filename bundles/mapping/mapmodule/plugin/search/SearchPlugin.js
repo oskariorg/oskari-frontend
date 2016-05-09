@@ -366,7 +366,9 @@ Oskari.clazz.define(
                 errorMsg = msg.error,
                 resultsContainer = me.resultsContainer.clone(),
                 content = resultsContainer.find('div.content');
-                popupTitle = me._loc.title;
+                popupTitle = me._loc.title,
+                mapmodule = me.getMapModule(),
+                themeColours = mapmodule.getThemeColours();
 
             /*clear the existing search results*/
             if (me.popup) {
@@ -484,15 +486,21 @@ Oskari.clazz.define(
 
 
             var popupContent = resultsContainer;
-            var topOffsetElement = (me._uiMode === 'mobile') ? jQuery('div.mobileToolbarDiv') : undefined;
-            me.popup.addClass('mobile-popup');
-            me.popup.setColourScheme({"bgColour": "#e6e6e6"});
+            
+            me.popup.setColourScheme({
+                'bgColour': themeColours.backgroundColour,
+                'titleColour': themeColours.textColour
+            });
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();
-            me.popup.moveTo(me.getElement(), 'bottom', true, topOffsetElement);
 
-            if (me._uiMode === "desktop") {
+            if (!Oskari.util.isMobile()) {
                 me.popup.addClass('searchresult');
+                me.popup.moveTo(me.getElement(), 'bottom', true);
+            } else {
+                me.popup.addClass('mobile-popup');
+                me.popup.moveTo(me.getElement(), 'bottom', true, mapmodule.getMobileDiv());
+                me.popup.getJqueryContent().parent().parent().css('left', 0);
             }
         },
         /**
