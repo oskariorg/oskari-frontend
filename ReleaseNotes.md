@@ -86,6 +86,8 @@ Added sanitize function to Oskari.util for escaping html or specific tags. Usage
      var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
      jQuery('body').append(element).append(anotherElement).append(stylishElement);
 
+Oskari.setPreloaded() is now deprecated and has no effect. Remove references to it as it will be removed in the future.
+
 ### core/abstractmapmodule
 
 New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions can register wellknown svg markers to mapmodule and get wellknowed marker.
