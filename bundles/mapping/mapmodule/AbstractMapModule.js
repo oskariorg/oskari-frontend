@@ -155,7 +155,7 @@ Oskari.clazz.define(
 
             sandbox.printDebug('Starting ' + this.getName());
 
-            // listen to application started and trigger a forced update on any remaining lazy plugins
+            // listen to application started event and trigger a forced update on any remaining lazy plugins
             Oskari.on('app.start', function(details) {
                 // force update on lazy plugins
                 // this means tell plugins to render UI with the means available
