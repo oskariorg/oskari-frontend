@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                             me.popup.close(true);
                             me.popup = null;
                         } else {
-                            me.openSelection();
+                            me.openSelection(true);
                         }
                     },
                     toggleChangeIcon: true
@@ -538,12 +538,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function () {
+        openSelection: function (isMobile) {
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement(),
-                isMobile = Oskari.util.isMobile();
+                div = this.getElement();
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
@@ -554,7 +553,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.createCloseIcon();
 
                 me.popup.show(popupTitle, me.layerContent);
-                if (isMobile) {
+                if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function(){
                         var sandbox = me.getSandbox();
