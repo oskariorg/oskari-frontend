@@ -105,8 +105,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         _bindLinkClick: function (link) {
             var me = this,
-                linkElement = link || me.getElement().find('a'),
+                element = me.getElement(),
+                linkElement = link || (element ? element.find('a') : null),
                 sandbox = me.getSandbox();
+
+            if(!element) {
+                return;
+            }
 
             linkElement.bind('click', function () {
                 if(me._mapStatusChanged) {
