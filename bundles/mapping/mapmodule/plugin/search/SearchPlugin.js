@@ -893,6 +893,20 @@ Oskari.clazz.define(
             } else {
                 me._element.removeClass('mobilesearch');
 
+                var conf = me.getConfig();                
+                if (conf) {
+                    if (conf.toolStyle) {
+                        me.changeToolStyle(conf.toolStyle, element);
+                    } else {
+                        var toolStyle = me.getToolStyleFromMapModule();
+                        if (toolStyle !== null && toolStyle !== undefined) {
+                            me.changeToolStyle(me.toolStyles[toolStyle], me._element);
+                        } else {
+                            me.changeToolStyle(me.toolStyles['default'], me._element);
+                        }
+                    }
+                }
+
                 this.addToPluginContainer(me._element);
                 me.refresh();
             }
