@@ -1,7 +1,6 @@
 jQuery(document).ready(function() {
 	Oskari.setLang('en');
-	Oskari.setLoaderMode('');	
-	Oskari.setPreloaded(true);
+	Oskari.setLoaderMode('');
 	var appSetup;
 	var appConfig;
 
