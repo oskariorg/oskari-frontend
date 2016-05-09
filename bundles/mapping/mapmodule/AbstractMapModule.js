@@ -905,7 +905,7 @@ Oskari.clazz.define(
             var mobileDiv = this.getMobileDiv();
             if (isInMobileMode) {
                 mobileDiv.show();
-                mobileDiv.css('backgroundColor', this.getThemeColors().backgroundColor);
+                mobileDiv.css('backgroundColor', this.getThemeColours().backgroundColour);
             } else {
                 mobileDiv.hide();
             }
@@ -994,20 +994,20 @@ Oskari.clazz.define(
             }
         },
 
-        getThemeColors: function(){
+        getThemeColours: function(){
             var me = this;
             var theme = me.getTheme();
 
             var darkTheme =  {
-                textColor: "#ffffff",
-                backgroundColor: '#3c3c3c',
-                activeColor: '#E6E6E6'
+                textColour: "#ffffff",
+                backgroundColour: '#3c3c3c',
+                activeColour: '#E6E6E6'
             };
 
             var lightTheme =  {
-                textColor: "#000000",
-                backgroundColor: '#ffffff',
-                activeColor: '#3c3c3c'
+                textColour: "#000000",
+                backgroundColour: '#ffffff',
+                activeColour: '#3c3c3c'
             };
 
             if(theme === 'dark') {

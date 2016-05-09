@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var me  =this;
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
-            var themeColors = this.getMapModule().getThemeColors();
+            var themeColors = this.getMapModule().getThemeColours();
             var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             if(buttons && !addToolButtonBuilder) {
                 return true;
@@ -397,7 +397,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     buttonConf.toolbarid = toolbar;
                     // add active color if sticky and toggleChangeIcon
                     if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true) {
-                        buttonConf.activeColor =  themeColors.activeColor;
+                        buttonConf.activeColor =  themeColors.activeColour;
                     }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
