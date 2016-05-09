@@ -68,7 +68,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             if (me.selectedButton.id === pId &&
                     me.selectedButton.group === prefixedGroup) {
                 button.addClass('selected');
-                pConfig.callback();
+                pConfig.callback(null);
             }
         } else {
             if (pConfig.selected) {
@@ -195,7 +195,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             } else {
                 e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
                 this.sandbox.notifyAll(e);
-                this.container.find('.tool.selected').removeClass('selected');
+
+                if(pGroup){
+                    var btnGroup = this.buttons[pGroup];
+                    for(var pId in btnGroup) {
+                        this._deactiveTools(pId,pGroup);
+                    }
+                }
+
+                this.container.find('.selected').removeClass('selected');
                 return;
             }
         }
@@ -235,7 +243,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             button.addClass('selected');
 
             if(btn.activeColor) {
-                button.css('background-color', btn.activeColor);
+                button.css('background-color', btn.activeColor);                
 
                 if(btn.toggleChangeIcon === true) {
                     // Remove button light and dark icons
@@ -272,13 +280,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
         var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
         var button = group.find('div.tool[tool=' + pId + ']');
+        button.removeClass('selected');
         var tools = group.find('div.tool');
         for(var id in this.buttons[pGroup]) {
             var btn = this.buttons[pGroup][id];
             var button = group.find('div.tool[tool=' + id + ']');
             // Change default background color back
-            if(btn.backgroundColor && btn.activeColor) {
-                button.css('background-color', btn.backgroundColor);
+            if(btn.activeColor) {
+                button.css('background-color', '');
+                button.removeClass(btn.mobileIconStyle + '-light');
+                button.removeClass(btn.mobileIconStyle + '-dark');
+                if(Oskari.util.isLightColor(btn.activeColor)) {
+                    button.addClass(btn.mobileIconStyle + '-light');
+                } else {
+                    button.addClass(btn.mobileIconStyle + '-dark');
+                }
             }
 
             // Change default icon back
