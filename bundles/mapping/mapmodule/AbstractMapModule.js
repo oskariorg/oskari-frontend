@@ -955,12 +955,16 @@ Oskari.clazz.define(
         _adjustMobileMapSize: function(){
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
+            var toolbar = mobileDiv.find('.mobileToolbarContent');
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
-            } else if (mobileDiv.height() < mobileDiv.children().height()) {
+            } else if (mobileDiv.height() < mobileDiv.children().height() && toolbar.length === 0) {
                 // any floated plugins might require manual height setting
                 mobileDiv.height(mobileDiv.children().height());
+            } else if(toolbar.length > 0 && mobileDiv.height() < toolbar.height()) {
+                // any floated plugins might require manual height setting
+                mobileDiv.height(toolbar.height());
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen

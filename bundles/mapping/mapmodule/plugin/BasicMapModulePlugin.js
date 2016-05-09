@@ -390,6 +390,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         },
         removeToolbarButtons : function(buttons, group) {
             var sandbox = this.getSandbox();
+            if(!sandbox) {
+                return true;
+            }
+
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
