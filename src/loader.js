@@ -114,6 +114,18 @@
                 urlArgs: "ts=" + (new Date()).getTime()
             });
         }
+        // Listen to started bundles
+        var result = {
+            bundles : [],
+            errors : []
+        };
+        o.on('bundle.start', function(details) {
+            result.bundles.push(details.id);
+        });
+        o.on('bundle.err', function(details) {
+            result.errors.push(details);
+        });
+
         return {
             /**
              * {
@@ -140,6 +152,7 @@
                     if(typeof done === 'function') {
                         done();
                     }
+                    o.trigger('app.start', result);
                     return;
                 }
                 var seqToLoad = sequence.shift();
@@ -235,7 +248,9 @@
                 log.debug('Starting bundle ' + bundleId);
                 try {
                     instance.start();
+                    Oskari.trigger('bundle.start', { id : bundleId });
                 } catch(err) {
+                    Oskari.trigger('bundle.err', { id : bundleId, error : err });
                     throw new Error('Couldn\'t start bundle with id ' + bundleId + '. Error was: ' + err);
                 }
             },
