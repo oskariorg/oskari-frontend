@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 linkElement = link || (element ? element.find('a') : null),
                 sandbox = me.getSandbox();
 
-            if(!element) {
+            if(!linkElement) {
                 return;
             }
 
