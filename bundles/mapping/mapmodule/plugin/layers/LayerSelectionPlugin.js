@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var baseLayersDiv = this.layerContent.find(
-                    'div.content div.baselayers'
+                    'div.baselayers'
                 ),
                 input;
 
@@ -458,10 +458,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         sortLayers: function () {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
-                layersDiv = this.layerContent.find('div.content div.layers'),
+                layersDiv = this.layerContent.find('div.layers'),
                 layers = layersDiv.find('div.layer').detach(),
                 baseLayersDiv = this.layerContent.find(
-                    'div.content div.baselayers'
+                    'div.baselayers'
                 ),
                 baseLayers = baseLayersDiv.find('div.layer').detach(),
                 i,
@@ -628,7 +628,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         getBaseLayers: function () {
             var inputs = this.layerContent.find(
-                    'div.content div.baselayers div.layer input'
+                    'div.baselayers div.layer input'
                 ),
                 layers = [],
                 checkedLayer = null,
