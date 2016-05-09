@@ -32,8 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     callback: function () {
                         if (me.popup && me.popup.isVisible()) {
                             var sandbox = me.getSandbox();
-                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
+                            sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                             me.popup.close(true);
                             me.popup = null;
                         } else {
@@ -559,8 +558,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function(){
                         var sandbox = me.getSandbox();
-                        var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                        sandbox.request(me, toolbarRequest);
+                        sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                     });
 
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
