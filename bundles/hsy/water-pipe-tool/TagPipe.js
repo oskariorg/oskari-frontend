@@ -14,6 +14,7 @@ Oskari.clazz.define(
         this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
+        this.highlightVectorLayer = null;
         this.state = {};
     },{
 
@@ -267,7 +268,7 @@ Oskari.clazz.define(
          * that password field values match.
          */
         _formIsValid: function (form, me) {
-            console.info("UUUUU");
+
             var errors = [],
                 pass;
             // check that required fields have values
@@ -412,23 +413,18 @@ Oskari.clazz.define(
          * @return {[none]}
          */
         findPipesRequest: function(x, y){
-            console.info("TULEEE X - "+x)
+
             var me = this,
             mapVO = me.sandbox.getMap(),
             ajaxUrl = me.sandbox.getAjaxUrl(),
-            map = me.mapModule.getMap(),
-            layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
-            layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
-            layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
-            layerName = jQuery('.cropping-btn.selected').data('layerName'),
-            layerUrl = jQuery('.cropping-btn.selected').data('layerUrl'),
-            layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
-            layerNameLang = jQuery('.cropping-btn.selected').val();
+            _map = me.mapModule.getMap(),
+            layerName = "jatevesijohdot,paavesijohdot",
+            layerUrl = "http://10.144.96.52:8080/geoserver/wms";
 
             jQuery.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: ajaxUrl + 'action_route=GetFeatureForCropping',
+                url: ajaxUrl + 'action_route=GetPipesWithParams',
                 data : {
                     layers: layerName,
                     url: layerUrl,
@@ -440,26 +436,12 @@ Oskari.clazz.define(
                     srs : mapVO.getSrsName()
                 },
                 success: function (data) {
+                    console.dir(data);
                     var geojson_format = new OpenLayers.Format.GeoJSON();
                     var features = geojson_format.read(data.features[0]);
-                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",data.features[0].id);
 
-                        if(founded !== null && founded.length>0){
-                            me.croppingVectorLayer.removeFeatures(founded);
-                        }else{
-                            features[0].attributes['cropid'] = data.features[0].id;
-                            features[0].attributes['layerName'] = layerName;
-                            features[0].attributes['layerUrl'] = layerUrl;
-                            features[0].attributes['uniqueKey'] = layerUniqueKey;
-                            features[0].attributes['geometryColumn'] = layerGeometryColumn;
-                            features[0].attributes['geometryName'] = layerGeometry;
-                            features[0].attributes['croppingMode'] = layerCroppingMode;
-                            features[0].attributes['layerNameLang'] = layerNameLang;
-
-                            me.croppingVectorLayer.addFeatures(features);
-                            map.setLayerIndex(me.croppingVectorLayer, 1000000);
-                        }
-                        me.addToTempBasket(me.croppingVectorLayer.features.length);
+                    me.highlightVectorLayer.addFeatures(features);
+                    _map.setLayerIndex(me.highlightVectorLayer, 1000000);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
@@ -471,7 +453,34 @@ Oskari.clazz.define(
                 }
             });
         },
+         /**
+         * [disableNormalGFI disables normal GFI cause using mapclick in cropping]
+         * @param  {[type]} state [true/false]
+         * @return {[none]}
+         */
+        activateNormalGFI: function(state){
+            var me = this,
+            reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
+            if (reqBuilder) {
+                var request = reqBuilder(state); 
+                me.sandbox.request(me.instance, request);
+            }
+        },
+        /**
+         * [activateNormalWFSReq disables normal WFS click cause using mapclick in cropping]
+         * @param  {[type]} state [true/false]
+         * @return {[none]}
+         */
+        activateNormalWFSReq: function(state){
+            var me = this,
+            reqBuilder = me.sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
+
+            if (reqBuilder) {
+                var request = reqBuilder(state); 
+                me.sandbox.request(me.instance, request);
+            }
+        },
         /**
          * @method _openPopup
          * opens a modal popup, no buttons or anything.
@@ -491,7 +500,29 @@ Oskari.clazz.define(
             dialog.show(title, content, [okBtn]);
             dialog.makeModal();
         },
+        /**
+         * [createHighlightVectorLayer creates highlight vector layer to map]
+         * @return {[none]}
+         */
+        createHighlightVectorLayer: function(){
+            var me = this,
+            _map = me.mapModule.getMap();
 
+            me.highlightVectorLayer = new OpenLayers.Layer.Vector("highlight-vector-layer", {
+            eventListeners : {
+                "featuresadded" : function(layer) {
+                    console.dir(layer);
+                    /*var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
+                    var index = me.croppingVectorLayer.features.length-1;
+                    me.croppingVectorLayer.features[index].attributes['croppingMode'] = layerCroppingMode;
+                    me.addToTempBasket(me.croppingVectorLayer.features.length);*/
+                    }
+                }
+            });
+
+            _map.addLayers([me.highlightVectorLayer]);
+
+        },
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -508,6 +539,12 @@ Oskari.clazz.define(
 
             btn.setHandler(function (event) {
                 me._openForm(event, me);
+                me.activateNormalGFI(false);
+                me.activateNormalWFSReq(false);
+
+                if(me.highlightVectorLayer === null){
+                    me.createHighlightVectorLayer();
+                }
             });
             btn.setTitle(me._getLocalization('add_tag'));
             btn.insertTo(me.container);
