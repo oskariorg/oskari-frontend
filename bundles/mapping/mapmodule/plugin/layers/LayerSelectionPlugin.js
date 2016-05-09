@@ -25,18 +25,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._mobileDefs = {
             buttons:  {
                 'mobile-layerselection': {
-                    iconCls: 'mobile-layers-light mobiletoolbar',
+                    iconCls: 'mobile-layers mobiletoolbar',
                     tooltip: '',
                     sticky: true,
                     show: true,
                     callback: function () {
                         if (me.popup && me.popup.isVisible()) {
+                            var sandbox = me.getSandbox();
+                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                            sandbox.request(me, toolbarRequest);
                             me.popup.close(true);
                             me.popup = null;
                         } else {
-                            me.openSelection(true);
+                            me.openSelection();
                         }
-                    }
+                    },
+                    toggleChangeIcon: true
                 }
             },
             buttonGroup: 'mobile-toolbar'
@@ -177,6 +181,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
+            if(!this.getElement()) {
+                return;
+            }
             var baseLayersDiv = this.getElement().find(
                     'div.content div.baselayers'
                 ),
@@ -322,10 +329,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
             var div = me.layerRefs[layer.getId()];
-            if (div.parent().hasClass('baselayers')) {
+            if (!div) {
                 return;
             }
-            if (!div) {
+            if (div.parent().hasClass('baselayers')) {
                 return;
             }
             div.remove();
@@ -532,25 +539,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function (isMobile) {
+        openSelection: function () {
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement();
+                div = this.getElement(),
+                isMobile = Oskari.util.isMobile();
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
-                    topOffsetElement = jQuery('div.mobileToolbarDiv');
+                    topOffsetElement = jQuery('div.mobileToolbarDiv'),
+                    themeColours = mapmodule.getThemeColours();
                 me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                me.popup.addClass('mobile-popup');
-                me.popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me.popup.createCloseIcon();
+
                 me.popup.show(popupTitle, me.layerContent);
                 if (isMobile) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
+                    me.popup.onClose(function(){
+                        var sandbox = me.getSandbox();
+                        var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                        sandbox.request(me, toolbarRequest);
+                    });
+
+                    var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.activeColour,
+                        'titleColour': themeColours.activeTextColour,
+                        'iconCls': popupCloseIcon
+                    });
+
+                    me.popup.addClass('mobile-popup');                   
                 } else {
                     me.popup.moveTo(me.getElement(), 'bottom', true);
+                    var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.backgroundColour,
+                        'titleColour': themeColours.textColour,
+                        'iconCls': popupCloseIcon
+                    });
                 }
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
@@ -679,9 +707,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, forced) {
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -693,13 +721,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
+            if(!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
 
             me._element = me._createControlElement();
-            if (mapInMobileMode) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {

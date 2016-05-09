@@ -153,15 +153,14 @@ div.mapplugins {
   font-family: Georgia, serif !important; }
 
 .mobileToolbarDiv {
-  background: #3c3c3c;
   display: none;
   padding: 8px;
   line-height: 10px; }
   .mobileToolbarDiv .mobiletoolbar {
-    margin-top: 6px;
     margin-right: 6px;
-  }
+    margin-top: 6px; }
   .mobileToolbarDiv input[type=text] {
     height: 10px; }
-
+  .mobileToolbarDiv .toolrow {
+    border-top: 0; }
 /*# sourceMappingURL=mapmodule.ol3.css.map */

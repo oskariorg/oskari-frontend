@@ -323,8 +323,60 @@ Oskari.util = (function () {
 
     util.isMobile = function() {
         var md = new MobileDetect(window.navigator.userAgent);
-        return md.mobile() !== null;
+        var mobileDefs = {
+            width: 480,
+            height: 640
+        };
+        var size = {
+            height: jQuery(window).height(),
+            width: jQuery(window).width()
+        };
+
+        var isMobile = (md.mobile() !== null) ? true : ( size.width < mobileDefs.width || size.height < mobileDefs.height);
+
+        return isMobile;
     };
+
+    /**
+     * Sanitizes input and returns a DOM element containing the sanitized content that can be injected to document and shown to user.
+     * Usage:
+     * // handles content as text content
+     * var element = sanitize('<script>alert("testing")</script>');
+     * // handles content as html, but removes script-tags
+     * var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
+     * // handles content as html, but removes script and style tags
+     * var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
+     * jQuery('body').append(element).append(anotherElement).append(stylishElement);
+     * @return Element
+     */
+    util.sanitize = function(content, tagsToRemove) {
+        if(!content) {
+            // no content
+            return;
+        }
+        if(!tagsToRemove) {
+            // treat as text only
+            return document.createTextNode(content);
+        }
+        if(typeof tagsToRemove === boolean) {
+            // truthy check before so this must be boolean true
+            // by default remove script tags
+            tagsToRemove = ['script'];
+        }
+
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(content, "text/xml");
+        tagsToRemove.forEach(function(tag) {
+            var scripts = doc.getElementsByTagName(tag);
+            for(var i = 0; i < scripts.length; ++i ) {
+                var node = scripts.item(i);
+                node.textContent = '';
+            }
+        });
+
+        // return as is as Element structure
+        return doc.documentElement;
+    }
 
     return util;
 }());

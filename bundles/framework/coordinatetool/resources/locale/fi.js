@@ -85,8 +85,8 @@ Oskari.registerLocalization(
                 "message": "Koordinaatteja ei saatu muunnettua"
             },
             "publisher": {
-                "showTransformationTools": "Näytä muunnostyökalut",
-                "noUI": "Ei käyttöliittymää (RPC toiminnallisuus)"
+                "showTransformationTools": "Näytä koordinaattimuunnostyökalut",
+                "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }
         }
     }

@@ -56,9 +56,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode) {
+        redrawUI: function(mapInMobileMode, forced) {
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -71,21 +71,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
-                /*
-            var mobileDefs = this.getMobileDefs();
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
-                return true;
-            }
-
-
-            if (mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-            }
-            */
         },
         addToPluginContainer : function(element) {
             //var element = this.getElement();
@@ -382,8 +367,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
         },
         addToolbarButtons : function(buttons, group) {
+            var me  =this;
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
+            var themeColors = this.getMapModule().getThemeColours();
             var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             if(buttons && !addToolButtonBuilder) {
                 return true;
@@ -393,6 +380,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 for (var tool in buttons) {
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
+                    // add active color if sticky and toggleChangeIcon
+                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true) {
+                        buttonConf.activeColor =  themeColors.activeColour;
+                    }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
             }
@@ -407,7 +398,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
-                var buttonConf = buttons[tool];
+                var buttonConf = buttons[tool]; 
                 buttonConf.toolbarid = toolbar;
                 sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }

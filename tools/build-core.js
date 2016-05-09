@@ -13,9 +13,11 @@ var files = [
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
 	'../src/polyfills.js',
 	'../src/oskari.js',
+    '../src/logger.js',
+    '../src/store.js',
+    '../src/events.js',
     '../src/i18n.js',
 	'../src/util.js',
-	'../src/logger.js',
 	'../src/loader.js'
 ];
 
@@ -24,6 +26,11 @@ try {
         //outSourceMap : "out.js.map",
         warnings : true,
         compress : true
+        /*,
+        mangle: false,
+        output: {
+          beautify: true
+        }*/
     });
 	fs.writeFileSync('../bundles/bundle.js', result.code);
 } catch (e) {

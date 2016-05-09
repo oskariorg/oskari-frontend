@@ -235,13 +235,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 }
             }
 
-            var createdUI = me._startPluginImpl(sandbox);
+            var waitingForToolbar = me._startPluginImpl(sandbox);
             // Make sure plugin's edit mode is set correctly
             // (we might already be in edit mode)
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
             );
-            return createdUI;
+            return waitingForToolbar;
         },
 
         _startPluginImpl: function (sandbox) { },

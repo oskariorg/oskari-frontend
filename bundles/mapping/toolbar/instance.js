@@ -69,19 +69,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 return;
             }
             me.started = true;
+            me.conf = me.conf || {};
             // Should this not come as a param?
             var conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandboxName = conf.sandbox || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             sandbox.register(me);
             me.setSandbox(sandbox);
 
-            var defaultContainerId = (conf ? conf.defaultToolbarContainer : null) || '#toolbar';
+            var defaultContainerId = conf.defaultToolbarContainer || '#toolbar';
             this.container = jQuery(defaultContainerId);
             this.containers['default'] = this.container;
             this.toolbars['default'] = this.container;
 
-            var defaultMenuToolbarContainer = (conf ? conf.defaultMenuToolbarContainer : null) || '#menutoolbar',
+            var defaultMenuToolbarContainer = conf.defaultMenuToolbarContainer || '#menutoolbar',
                 p;
             this.menutoolbarcontainer = jQuery(defaultMenuToolbarContainer);
 
