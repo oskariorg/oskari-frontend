@@ -436,16 +436,17 @@ Returns information about map zoom range.
     If scale is not defined and there are two measurements, then function computes fit scale so that paper size area covers the whole map. 
     In case of two measurements: if 1st measure is longer than 2nd measure, then the orientation is landscape.
     Pixel values could be used for to plot  e.g. A4 size area on the map.
-    input: [[210,297], 100000] returns below data
+    input: [[210,297], 100000] returns below data (zoomLevel tells nearest zoom level where pixel measures fit the map viewport)
     
         {
           "pixelMeasures": [
             82,
             116
           ],
-          "scale": "100000"
+          "scale": "100000",
+          "zoomLevel": "5"
         }
-        
+
 
 
 **resetState()**

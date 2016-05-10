@@ -19,11 +19,10 @@ var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
 this.sandbox.postRequestByName(rn, []);
 ```
 
-Remove everything from a specific layer
+Remove everything from a specific layer. The 'layer' parameter can be either layer_id (String) or layer-object (Openlayers).
 ```javascript
 this.sandbox.postRequestByName(rn, [null, null, myLayer);
 ```
-
 
 Remove all feature's whose 'test_property' === 1 from myLayer
 ```javascript

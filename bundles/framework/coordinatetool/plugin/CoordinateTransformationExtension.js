@@ -51,11 +51,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._populateCoordinatesTransformSelect(me._projectionSelect);
                 me._projectionSelect.on('change', function(event) {
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
+
                     //getting transformed coordinate from frontend first
-                    coordinateToolPlugin.refresh();
+                    var data = coordinateToolPlugin._getInputsData();
+                    var usersInputs = _.clone(data);
+                    coordinateToolPlugin.refresh(data);
 
                     var successCb = function(newLonLat) {
-                         var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                          coordinateToolPlugin._updateLonLat(newLonLat);
                     };
 
@@ -64,7 +66,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     };
 
                     //getting precise transformed coordinates from server
-                    me.getTransformedCoordinatesFromServer(coordinateToolPlugin.lastLonLat, me._mapmodule.getProjection(), me._projectionSelect.val(), successCb, errorCb);
+                    me.getTransformedCoordinatesFromServer(usersInputs, coordinateToolPlugin._previousProjection, me._projectionSelect.val(), successCb, errorCb);
+                    coordinateToolPlugin._previousProjection = jQuery("#projection option:selected").val();
+
                 });
             }
             return me._projectionSelect;
