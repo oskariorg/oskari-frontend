@@ -51,7 +51,6 @@ jQuery(document).ready(function() {
     Oskari.setLang(language);
 
     Oskari.setLoaderMode('dev');
-    Oskari.setPreloaded(preloaded);
 
     function gfiParamHandler(sandbox) {
         if (getURLParameter('showGetFeatureInfo') != 'true') {
