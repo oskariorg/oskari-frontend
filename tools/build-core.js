@@ -13,19 +13,30 @@ var files = [
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
 	'../src/polyfills.js',
 	'../src/oskari.js',
+    '../src/logger.js',
+    '../src/store.js',
+    '../src/events.js',
     '../src/i18n.js',
 	'../src/util.js',
-	'../src/logger.js',
 	'../src/loader.js'
 ];
 
 try {
-    var result = UglifyJS.minify(files, {
-        //outSourceMap : "out.js.map",
+    var FILENAME = '../bundles/bundle.js';
+    var concatOnly = false;
+    var opts = {
+        //outSourceMap : FILENAME + ".map",
         warnings : true,
         compress : true
-    });
-	fs.writeFileSync('../bundles/bundle.js', result.code);
+    };
+    if(concatOnly) {
+        opts.mangle = false;
+        opts.output = {
+          beautify: true
+        };
+    }
+    var result = UglifyJS.minify(files, opts);
+	fs.writeFileSync(FILENAME, result.code);
 } catch (e) {
     console.log(e);
     var err = new Error('Uglification failed.');

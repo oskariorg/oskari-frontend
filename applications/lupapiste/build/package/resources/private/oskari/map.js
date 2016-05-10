@@ -4,7 +4,6 @@
 ;(function() {
 Oskari.setLang('en');
 Oskari.setLoaderMode('');
-Oskari.setPreloaded(true);
 var appSetup;
 var appConfig;
 

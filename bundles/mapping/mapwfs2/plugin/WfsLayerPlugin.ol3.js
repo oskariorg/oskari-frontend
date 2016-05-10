@@ -151,6 +151,7 @@ Oskari.clazz.define(
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
+            el.hide();
             return el;
         },
 

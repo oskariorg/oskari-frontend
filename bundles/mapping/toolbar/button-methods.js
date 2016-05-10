@@ -68,7 +68,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             if (me.selectedButton.id === pId &&
                     me.selectedButton.group === prefixedGroup) {
                 button.addClass('selected');
-                pConfig.callback();
+                pConfig.callback(null);
             }
         } else {
             if (pConfig.selected) {
@@ -111,39 +111,26 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._checkToolChildrenPosition(pId, pGroup, pConfig);
         }
 
-        // Find icon style
+        // Find mobile icon style
         var iconClasses = pConfig.iconCls.split(' ');
         for(var i in iconClasses) {
             var iconClass = iconClasses[i];
-            var indexStyle = iconClass.indexOf('-light');
-            if(indexStyle===-1) {
-                indexStyle = iconClass.indexOf('-dark');
-            }
-
+            var indexStyle = iconClass.indexOf('mobile-');
+            
             if(indexStyle>-1){
-                pConfig.iconStyle = iconClass;
+                pConfig.mobileIconStyle = iconClass;
                 break;
             }
         }
-        // Find button dark and light icons if not already defined
-        if(pConfig.iconStyle && !pConfig.iconLightCls && !pConfig.iconDarkCls) {
-            var indexLight = pConfig.iconStyle.indexOf('-light');
-            var indexDark = pConfig.iconStyle.indexOf('-dark');
-            if(indexLight>-1) {
-                pConfig.iconLightCls = pConfig.iconStyle;
-                pConfig.iconDarkCls = pConfig.iconStyle.substring(0, indexLight) + '-dark';
-            } else if(indexDark>-1) {
-                pConfig.iconDarkCls = pConfig.iconStyle;
-                pConfig.iconLightCls = pConfig.iconStyle.substring(0, indexDark) + '-light';
-            }
+        if(pConfig.mobileIconStyle) {
+            button.removeClass(pConfig.mobileIconStyle);
+            button.addClass(pConfig.mobileIconStyle + '-' + this.getMapModule().getReverseTheme());
         }
-
-        // Find default background color
-        if(!pConfig.backgroundColor) {
-            pConfig.backgroundColor = button.css('background-color');
-        }
-
     },
+
+    getMapModule: function(){
+         return Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+     },
 
     _checkToolChildrenPosition: function(pId, pGroup, pConfig){
         var me = this,
@@ -208,7 +195,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             } else {
                 e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
                 this.sandbox.notifyAll(e);
-                this.container.find('.tool.selected').removeClass('selected');
+
+                if(pGroup){
+                    var btnGroup = this.buttons[pGroup];
+                    for(var pId in btnGroup) {
+                        this._deactiveTools(pId,pGroup);
+                    }
+                }
+
+                this.container.find('.selected').removeClass('selected');
                 return;
             }
         }
@@ -248,18 +243,18 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             button.addClass('selected');
 
             if(btn.activeColor) {
-                button.css('background-color', btn.activeColor);
+                button.css('background-color', btn.activeColor);                
 
                 if(btn.toggleChangeIcon === true) {
                     // Remove button light and dark icons
-                    button.removeClass(btn.iconLightCls);
-                    button.removeClass(btn.iconDarkCls);
+                    button.removeClass(btn.mobileIconStyle + '-light');
+                    button.removeClass(btn.mobileIconStyle + '-dark');
 
                     // Toggle button icons
-                    if(Oskari.util.isLightColor(btn.activeColor) && btn.iconDarkCls) {
-                        button.addClass(btn.iconDarkCls);
-                    } else if(btn.iconLightCls){
-                        button.addClass(btn.iconLightCls);
+                    if(Oskari.util.isLightColor(btn.activeColor)) {
+                        button.addClass(btn.mobileIconStyle + '-dark');
+                    } else {
+                        button.addClass(btn.mobileIconStyle + '-light');
                     }
                 }
             }
@@ -285,21 +280,29 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
         var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
         var button = group.find('div.tool[tool=' + pId + ']');
+        button.removeClass('selected');
         var tools = group.find('div.tool');
         for(var id in this.buttons[pGroup]) {
             var btn = this.buttons[pGroup][id];
             var button = group.find('div.tool[tool=' + id + ']');
             // Change default background color back
-            if(btn.backgroundColor && btn.activeColor) {
-                button.css('background-color', btn.backgroundColor);
+            if(btn.activeColor) {
+                button.css('background-color', '');
+                button.removeClass(btn.mobileIconStyle + '-light');
+                button.removeClass(btn.mobileIconStyle + '-dark');
+                if(Oskari.util.isLightColor(btn.activeColor)) {
+                    button.addClass(btn.mobileIconStyle + '-light');
+                } else {
+                    button.addClass(btn.mobileIconStyle + '-dark');
+                }
             }
 
             // Change default icon back
-            var isToggledIcon = (btn.iconStyle && btn.iconDarkCls && btn.iconLightCls) ? true : false;
+            var isToggledIcon = (btn.iconStyle && btn.mobileIconStyle) ? true : false;
             if(btn.toggleChangeIcon === true && isToggledIcon) {
-                button.removeClass(btn.iconDarkCls);
-                button.removeClass(btn.iconLightCls);
-                button.addClass(btn.iconStyle);
+                button.removeClass(btn.mobileIconStyle + '-dark');
+                button.removeClass(btn.mobileIconStyle + '-light');
+                button.addClass(btn.mobileIconStyle + '-' + this.getMapModule().getReverseTheme());
             }
         }
     },

@@ -171,6 +171,7 @@ Oskari.clazz.define(
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
+            el.hide();
             return el;
         },
 
@@ -202,7 +203,6 @@ Oskari.clazz.define(
                 refresh_status1 = "all_invisible",
                 refresh_status2 = "all_not_in_scale",
                 scale = sandbox.getMap().getScale();
-
             if(this.getElement()) {
                 this.getElement().hide();
             }

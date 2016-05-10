@@ -44,12 +44,16 @@ Also, the background- and textcolour of buttons and textcolour of action links c
 
 ### Oskari core and require.js
 
+#### Require.js
+
 Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
 The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
  no require.js error about "Mismatched anonymous define() module" should appear when running the minified code.
 If you run into errors the modification is done in the grunt task "compile".
 
 Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
+#### Oskari application loading
 
 Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
 Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
@@ -69,12 +73,18 @@ The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's
 Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
 globals.
 
-Oskari.setPreloaded([boolean]) no longer does anything. If the loader detects that a bundles code is already in the browser it won't load it again.
-Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files. This will propably change to some more intuitive flag in the future.
+Oskari.setPreloaded([boolean]) is now deprecated and has no effect. Remove references to it as it will be removed in the future.
+If the loader detects that a bundles code is already in the browser it won't load it again.
+Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files.
+This will propably change to some more intuitive flag in the future.
+
+#### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
     Oskari.log('LogName').info('My info message');
+
+#### Oskari util functions
 
 Added sanitize function to Oskari.util for escaping html or specific tags. Usage:
 
@@ -85,6 +95,21 @@ Added sanitize function to Oskari.util for escaping html or specific tags. Usage
      // handles content as html, but removes script and style tags
      var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
      jQuery('body').append(element).append(anotherElement).append(stylishElement);
+
+#### Application lifecycle events
+
+Oskari now has on(name, function), off(name, function) and trigger(name, payload) functions for application events:
+
+        Oskari.on('bundle.start', function(details) {
+            // started bundle with bundleid "details.id"
+        });
+        Oskari.on('bundle.err', function(details) {
+            // error starting bundle
+        });
+        Oskari.on('app.start', function(details) {
+            // details contain started bundleids and possible errors that happened
+        });
+
 
 ### core/abstractmapmodule
 
@@ -116,6 +141,11 @@ Fixed table sorting when columns contains word and numbers.
 ### mapwfs2 / manual refresh
 
 Extra warning added to the user, when there is no manual refresh wfs layers visible or not in scale.
+
+### featuredata2 / manual refresh
+
+Feature data is not emptied for the manual refresh layer, when map is moved. 
+In this case grid opacity is changed to 0.5 for to see that the user must push refresh-button for to get valid values. 
 
 ### toolbar and infobox
 

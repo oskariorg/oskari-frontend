@@ -66,12 +66,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._mobileDefs = {
             buttons:  {
                 'mobile-coordinatetool': {
-                    iconCls: 'mobile-xy-light mobiletoolbar',
+                    iconCls: 'mobile-xy mobiletoolbar',
                     tooltip: '',
                     show: true,
                     callback: function () {
-                        me._toggleToolState(true);
-                    }
+                        me._toggleToolState();
+                    },
+                    sticky: true,
+                    toggleChangeIcon: true
                 }
             },
             buttonGroup: 'mobile-toolbar'
@@ -90,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * Show popup.
          * @method @private _showPopup
          */
-        _showPopup: function(isMobile) {
+        _showPopup: function() {
             var me = this,
                 loc = me._locale,
                 popupTitle = loc.popup.title,
@@ -99,7 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crsDefaultText = loc.crs.default,
                 popupName = 'xytoolpopup',
                 crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
-                popupLocation;
+                popupLocation,
+                isMobile = Oskari.util.isMobile(),
+                mapmodule = me.getMapModule();
 
             me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var popupEl = me._popup.getJqueryContent().parent().parent();
@@ -183,6 +187,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
             });
+            
+            var themeColours = mapmodule.getThemeColours();
 
             if (isMobile) {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
@@ -193,6 +199,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.createCloseIcon();
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(el, 'bottom', true, topOffsetElement);
+
+                var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                me._popup.setColourScheme({
+                    'bgColour': themeColours.activeColour,
+                    'titleColour': themeColours.activeTextColour,
+                    'iconCls': popupCloseIcon
+                });
+                me._popup.addClass('mobile-popup');
+                me._popup.onClose(function(){
+                    var sandbox = me.getSandbox();
+                    var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                    sandbox.request(me, toolbarRequest);
+                });
             } else {
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
@@ -205,6 +224,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
+                var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                me._popup.setColourScheme({
+                    'bgColour': themeColours.backgroundColour,
+                    'titleColour': themeColours.textColour,
+                    'iconCls': popupCloseIcon
+                });
             }
 
             me.refresh();
@@ -243,9 +268,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * Toggle tool state.
          * @method @private _toggleToolState
-         * @param isMobile are we in mobile mode
          */
-        _toggleToolState: function(isMobile){
+        _toggleToolState: function(){
             var me = this,
                 el = me.getElement();
 
@@ -255,12 +279,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
                 me._popup.close(true);
+                var sandbox = me.getSandbox();
+                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                sandbox.request(me, toolbarRequest);
             } else {
                 if(el) {
                     el.addClass('active');
                 }
                 me._toolOpen = true;
-                me._showPopup(isMobile);
+                me._showPopup();
             }
         },
 
@@ -646,7 +673,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 RPCUIEvent: function (event) {
                     var me = this;
                     if(event.getBundleId()==='coordinatetool') {
-                         me._toggleToolState(me.getMapModule().getMobileMode());
+                         me._toggleToolState();
                     }
                 }
             };
