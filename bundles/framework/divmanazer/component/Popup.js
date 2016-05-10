@@ -283,8 +283,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 top = 0;
             }
 
-            // Check at if popup is outside screen from right
-            if(jQuery(window).width() < (me.dialog.width() + me.dialog.position().left)) {
+            // Check at if popup is outside screen from right            
+            if(jQuery(window).width() < (me.dialog.width() + left)) {
                 left = jQuery(window).width() - me.dialog.width();
             }
 
