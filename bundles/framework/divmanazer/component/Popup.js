@@ -50,6 +50,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.dialog.bind('click', function () {
                     me.close(true);
                 });
+            } else {
+                actionDiv.remove();
             }
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
@@ -131,6 +133,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 var div = this.dialog.find('.icon-close');
                 div.removeClass('icon-close icon-close:hover');
                 div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+
+            if (colourScheme.bodyBgColour) {
+                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
             }
 
             /*buttons and actionlinks*/
@@ -344,7 +350,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             e.stopPropagation();
         },
         setTitle: function (title) {
-            this.dialog.find('h3').html(title);
+            if (title) {
+                this.dialog.find('h3').html(title);
+            } else {
+                jQuery(this.dialog).find('h3').remove();
+            }
         },
         getTitle: function () {
             return this.dialog.find('h3')[0].textContent;

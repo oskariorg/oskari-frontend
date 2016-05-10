@@ -208,3 +208,22 @@ $darkToolBackground: #212121;
 	}
 
 }
+
+.oskariui-toolbar-container .oskariui-toolbarbuttongroup .toolrow {
+  border-top: none;
+  padding: 0px;
+}
+
+.divmanazerpopup.toolbar-popup.bottom {
+  background-color: #e6e6e6;
+  min-width: 50px;
+
+  .mobile {
+    border: 2px solid silver;
+    border-radius: 0px; 
+  }
+  
+  .popup-body .content {
+    margin: 0px; 
+  }
+}

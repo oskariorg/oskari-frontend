@@ -61,14 +61,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 type = 'LineString';
                 id = 'measureline';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                                allowMultipleDrawing: 'single'}]);
+                                allowMultipleDrawing: 'single',
+                                showMeasureOnMap: true}]);
 //                me.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', ['PolygonDrawLayer', false]);
             } else if (toolName === 'map_control_measure_area_tool') {
                 type = 'Polygon';
                 id = 'measurearea';
 
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                                allowMultipleDrawing: 'single'}]);
+                                allowMultipleDrawing: 'single',
+                                showMeasureOnMap: true}]);
             }
         }
     }, {
