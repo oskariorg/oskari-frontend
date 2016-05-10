@@ -123,6 +123,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             }
         }
         if(pConfig.mobileIconStyle) {
+            button.removeClass(pConfig.mobileIconStyle + '-dark');
+            button.removeClass(pConfig.mobileIconStyle + '-light');
             button.removeClass(pConfig.mobileIconStyle);
             button.addClass(pConfig.mobileIconStyle + '-' + this.getMapModule().getReverseTheme());
         }
