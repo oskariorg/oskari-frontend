@@ -710,7 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if(!me._lonInput || me._latInput) {
                 return;
             }
-                lon = me._lonInput.val(),
+            var lon = me._lonInput.val(),
                 lat = me._latInput.val();
             if(lon.indexOf('~') >= 0) {
                 lon = lon.replace('~', '');
