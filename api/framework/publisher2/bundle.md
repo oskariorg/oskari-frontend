@@ -48,6 +48,19 @@ Some configuration is needed for URLs:
 }
 ```
 
+If coordinate transformation must to be added to the coordinatetool, the database will needed the following sql-script:
+
+```javascript
+update portti_view_bundle_seq set config = '{toolsConfig :  {
+      "coordinatetool" : {
+          "supportedProjections": ["EPSG:3067", "NLSFI:etrs_gk", "NLSFI:ykj", "EPSG:4258", "LATLON:kkj", "EPSG:3046", "EPSG:3048", "EPSG:3873", "EPSG:3874", "EPSG:3875", "EPSG:3876", "EPSG:3877", "EPSG:3878", "EPSG:3879", "EPSG:3880", "EPSG:3881", "EPSG:3882", "EPSG:3883", "EPSG:3884", "EPSG:3885"]
+          "roundToDecimals": 6,
+          "isReverseGeocode" : true,
+          "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
+      }
+}}' WHERE bundle_id = (select id from portti_bundle where name = 'publisher2' and view_id = ?)
+```
+
 ## Bundle Panels
 
 All panels needs implement following functions:
