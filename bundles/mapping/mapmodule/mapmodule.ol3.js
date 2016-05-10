@@ -599,7 +599,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(svg) {
                 image = new ol.style.Icon({
               	    src: svg,
-                    size: [size, size]
+                    size: [size, size],
+                    imgSize: [size, size]
                 });
                 return image;
             }
