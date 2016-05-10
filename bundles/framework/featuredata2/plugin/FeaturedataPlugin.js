@@ -32,6 +32,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                             var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
                             sandbox.request(me, toolbarRequest);
                             me._flyoutOpen = undefined;
+                            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+                            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
                         } else {
                             me._openFeatureDataFlyout();
                             me._flyoutOpen = true;
