@@ -209,14 +209,12 @@ Oskari.clazz.define(
                 olLayer,
                 layerId;
             if(layer && layer !== null){
-                if(layer && layer !== null){
-                    if(layer instanceof OpenLayers.Layer.Vector) {
-                        layerId = layer.id;
-                    } else if(_.isString(layer)) {
-                        layerId = layer;
-                    }
-                    olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
-                }
+                  if(layer instanceof OpenLayers.Layer.Vector) {
+                      layerId = layer.id;
+                  } else if(_.isString(layer)) {
+                      layerId = layer;
+                  }
+                  olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
             }
             // Removes only wanted features from the given maplayer
             if (olLayer) {
