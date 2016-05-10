@@ -706,7 +706,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             el.addClass(styleClass);
         },
         _getInputsData: function() {
-            var me = this,
+            var me = this;
+            if(!me._lonInput || me._latInput) {
+                return;
+            }
                 lon = me._lonInput.val(),
                 lat = me._latInput.val();
             if(lon.indexOf('~') >= 0) {
