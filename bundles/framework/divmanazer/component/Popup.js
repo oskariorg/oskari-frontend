@@ -283,17 +283,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 top = 0;
             }
 
-            // Check at if popup is outside screen from right            
-            if(jQuery(window).width() < (me.dialog.width() + left)) {
-                left = jQuery(window).width() - me.dialog.width();
-            }
-
             // TODO: check for right and bottom as well
 
             if (!noArrow) {
                 me.dialog.addClass('arrow');
             }
             me.dialog.addClass(alignment);
+
+            // Check at if popup is outside screen from right            
+            if(jQuery(window).width() < (me.dialog.width() + left)) {
+                left = jQuery(window).width() - me.dialog.width();
+            }
+
             //move dialog to correct location
             me.dialog.css({
                 'left': left + 'px',
