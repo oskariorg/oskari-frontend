@@ -71,3 +71,11 @@
 	top: 11px;
 }
 
+.tag-pipe-help{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.tag-pipe-list-element span{
+	padding-right: 10px;
+}

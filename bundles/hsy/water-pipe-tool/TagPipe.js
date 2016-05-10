@@ -53,24 +53,31 @@ Oskari.clazz.define(
                 '        <span></span>' +
                 '        <input type="text" name="details-topic-4" class="details-topic" language="details-name-4" required="required" />' +
                 '    </label>' +
-                //'               <div class="details--wrapper"></div>' +
                 '</fieldset>' +
                 '<fieldset></fieldset>' +
                 '</form>'
             );
 
-/*            jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
-                me.templates.form.detailinputs = jQuery(
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" name="details-topic-1" class="details-topic" language="details-name-1" required="required" />' +
-                '    </label>' +
-                '    <label>' +
-                '        <input type="text" name="details-desc-'+item+'" class="no-span-text details-desc" language="details-desc-'+item+'" required="required" />' +
-                '    </label>'
-                );
-                me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
-            });*/
+            //help body
+            me.templates.help = jQuery(
+                '<div class="tag-pipe-help hidden">' +
+                    '<p></p>' +
+                '</div>'
+            );
+
+            //pipe list body
+            me.templates.pipeList = jQuery(
+                '<ul class="tag-pipe-list">' +
+                '</ul>'
+            );
+
+            //pipe list item
+            me.templates.pipeListElement = jQuery(
+                '<li class="tag-pipe-list-element">' +
+                    '<span></span>' +
+                    '<a href="#"></a>' +
+                '</li>'
+            );
 
             //add localization to inputs
             me.templates.form.find('input,select').each(function (index) {
@@ -115,33 +122,91 @@ Oskari.clazz.define(
             );
             btn.insertTo(buttonFieldset);
         },
+        
         /**
-         * [fetchChannels fetchChannels]
-         * @param  {[type]}
-         * @return {[type]}
+         * @method createUi
+         * Creates the UI for a fresh start
          */
-/*         fetchChannels: function (container) {
-            // Remove old list from container
-            container.find('ul').remove();
-            // get channels with ajax
-            var me = this;
-            
-            jQuery.ajax({
-                type: 'GET',
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
-                success: function (data) {
-                    me._createList(me, data.channels, me.state.filter);
-                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+        createUi: function () {
+            var me = this,
+                btn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                );
 
-                     me._openPopup(
-                         me._getLocalization('fetch_failed'),
-                         error
-                     );
-                 }
+            me._initTemplates();
+            me.container = me.templates.main.clone(true);
+
+            //add tag button
+            btn.addClass('add-tag-btn primary');
+            btn.setHandler(function (event) {
+                //me._openForm(event, me);
+                me.container.find(".add-tag-btn").addClass("hidden");
+                me.container.find(".cancel-tag-btn").removeClass("hidden");
+                me._activateNormalGFI(false);
+                me._activateNormalWFSReq(false);
+                me._activateTagPipeLayers();
+
+                if(me.highlightVectorLayer === null){
+                    me._createHighlightVectorLayer();
+                }
+
+                me._manageHelp(true, me._getLocalization('help_start'));
             });
-        },*/
+
+            btn.setTitle(me._getLocalization('add_tag'));
+            btn.insertTo(me.container);
+
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
+
+            //cancel tag button
+            btn.addClass('cancel-tag-btn primary hidden');
+            btn.setHandler(function (event) {
+                me.container.find(".cancel-tag-btn").addClass("hidden");
+                me.container.find(".add-tag-btn").removeClass("hidden");
+                me.container.find(".tag-pipe-list").remove();
+                me._activateNormalGFI(true);
+                me._activateNormalWFSReq(true);
+                me._clearHighlightVectorLayer();
+
+                me._manageHelp(false);
+            });
+
+            btn.setTitle(me._getLocalization('cancel_tag'));
+            btn.insertTo(me.container);
+
+            //add help div
+            me.container.append(me.templates.help.clone());
+
+            return me.container;
+        },
+
+        /**
+         * [isToolEnabled check is pipe tag tool activated]
+         */
+        isToolEnabled: function(){
+            var me = this;
+            return me.container.find(".add-tag-btn").hasClass("hidden");
+        },
+
+        /**
+         * [_manageHelp show/hide help dialog and add text]
+         * @param  {[boolena]} show [show or hide]
+         * @param  {[String]} text [text you want to show]
+         */
+        _manageHelp: function(show, text){
+            var me = this,
+            help = jQuery("."+me.templates.help.attr("class").split(' ')[0]);
+
+            if(show){
+                help.removeClass("hidden");
+                help.find("p").text(text);
+            }else{
+                help.addClass("hidden");
+                help.find("p").text("");
+            }
+        },
 
         /**
          * @method _getLocalization
@@ -149,7 +214,13 @@ Oskari.clazz.define(
         _getLocalization: function (key) {
             return this._localization[key];
         },
-
+        /**
+         * [_getErrorText description]
+         * @param  {[type]} jqXHR       [jqXHR]
+         * @param  {[type]} textStatus  [textStatus]
+         * @param  {[type]} errorThrown [errorThrown]
+         * @return {[error]}
+         */
         _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown;
             try {
@@ -210,10 +281,53 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _getChannel
+         * [_createTagPipeList creates list based on user click to pipes]
+         * @param  {[array]} data [features]
+         */
+        _createTagPipeList: function(data){
+            var me = this, 
+            list = me.templates.pipeList.clone();
+
+            me.container.find("."+me.templates.pipeList.attr("class")).remove();
+
+            for(var i in data){
+                var listEl = me.templates.pipeListElement.clone(),
+                listElspan = listEl.find("span"),
+                listEla = listEl.find("a");
+
+                listElspan.text(data[i].id);
+                listEla.text(me._getLocalization("show_on_map"));
+                listEla.bind("click", {feature: data[i]}, function(e){
+                    e.preventDefault();
+                    me._showHighlightedPipe(e.data.feature);
+                });
+
+                list.append(listEl);
+            }
+
+            me.container.append(list);
+        },
+
+        /**
+         * [_showHighlightedPipe highlights certain geometry]
+         * @param  {[object]} feature [feature]
+         */
+        _showHighlightedPipe: function(feature){
+            var me = this, 
+            _map = me.mapModule.getMap();
+
+            me._clearHighlightVectorLayer();
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var features = geojson_format.read(feature);
+
+            me.highlightVectorLayer.addFeatures(features);
+            _map.setLayerIndex(me.highlightVectorLayer, 1000000);
+        },
+        /**
+         * @method _getTagPipe
          * Gets channel by id
          */
-        _getChannel: function (uid) {
+/*        _getTagPipe: function (uid) {
             var i;
             for (i = 0; i < this.channels.length; i += 1) {
                 if (this.channels[i].id === uid) {
@@ -221,7 +335,7 @@ Oskari.clazz.define(
                 }
             }
             return null;
-        },
+        },*/
 
         /**
          * @method _openForm
@@ -417,9 +531,10 @@ Oskari.clazz.define(
             var me = this,
             mapVO = me.sandbox.getMap(),
             ajaxUrl = me.sandbox.getAjaxUrl(),
-            _map = me.mapModule.getMap(),
             layerName = "jatevesijohdot,paavesijohdot",
             layerUrl = "http://10.144.96.52:8080/geoserver/wms";
+
+            me._clearHighlightVectorLayer();
 
             jQuery.ajax({
                 type: "POST",
@@ -436,12 +551,12 @@ Oskari.clazz.define(
                     srs : mapVO.getSrsName()
                 },
                 success: function (data) {
-                    console.dir(data);
-                    var geojson_format = new OpenLayers.Format.GeoJSON();
-                    var features = geojson_format.read(data.features[0]);
-
-                    me.highlightVectorLayer.addFeatures(features);
-                    _map.setLayerIndex(me.highlightVectorLayer, 1000000);
+                    me._createTagPipeList(data.features);
+                    if(data.features.length == 0){
+                        me._manageHelp(true, me._getLocalization('no_pipes_in_click'));
+                        return false;
+                    }
+                    me._manageHelp(true, me._getLocalization('help_choose'));
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
@@ -453,12 +568,54 @@ Oskari.clazz.define(
                 }
             });
         },
+
+        /**
+         * [activateTagPipeLayers: Puts tagpipe layers on]
+         */
+        _activateTagPipeLayers: function(){
+            var me = this;
+            var layers = me._getTagPipeLayers();
+
+            for (var i in layers) {
+                me._addLayerToMapById(layers[i].getId());
+            }
+        },
+
+        /**
+         * [getTagPipeLayers: Gets layers that has attribute tagpipe: true]
+         * @return {[array]} [Layers that has attribute tagpipe: true]
+         */
+        _getTagPipeLayers: function(){
+            var me = this;
+
+            var mapService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var allLayers = mapService.getAllLayers();
+            var tagPipeLayers = jQuery.grep(allLayers, function(n) {
+            var attributes = n.getAttributes();
+              if(attributes.tagpipe){
+                return n;
+              }
+            });
+
+            return tagPipeLayers;
+        },
+
+        /**
+         * [addLayerToMapById add layer back to map by layer id]
+         * @param {[Integer]} layerId [layerId]
+         */
+        _addLayerToMapById: function(layerId){
+            var me = this,
+            request = me.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+            me.sandbox.request(me.instance, request);
+        },
+
          /**
          * [disableNormalGFI disables normal GFI cause using mapclick in cropping]
          * @param  {[type]} state [true/false]
          * @return {[none]}
          */
-        activateNormalGFI: function(state){
+        _activateNormalGFI: function(state){
             var me = this,
             reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
@@ -467,12 +624,13 @@ Oskari.clazz.define(
                 me.sandbox.request(me.instance, request);
             }
         },
+
         /**
          * [activateNormalWFSReq disables normal WFS click cause using mapclick in cropping]
          * @param  {[type]} state [true/false]
          * @return {[none]}
          */
-        activateNormalWFSReq: function(state){
+        _activateNormalWFSReq: function(state){
             var me = this,
             reqBuilder = me.sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
@@ -481,6 +639,7 @@ Oskari.clazz.define(
                 me.sandbox.request(me.instance, request);
             }
         },
+
         /**
          * @method _openPopup
          * opens a modal popup, no buttons or anything.
@@ -500,22 +659,25 @@ Oskari.clazz.define(
             dialog.show(title, content, [okBtn]);
             dialog.makeModal();
         },
+
         /**
          * [createHighlightVectorLayer creates highlight vector layer to map]
          * @return {[none]}
          */
-        createHighlightVectorLayer: function(){
+        _createHighlightVectorLayer: function(){
             var me = this,
             _map = me.mapModule.getMap();
 
             me.highlightVectorLayer = new OpenLayers.Layer.Vector("highlight-vector-layer", {
-            eventListeners : {
-                "featuresadded" : function(layer) {
-                    console.dir(layer);
-                    /*var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
-                    var index = me.croppingVectorLayer.features.length-1;
-                    me.croppingVectorLayer.features[index].attributes['croppingMode'] = layerCroppingMode;
-                    me.addToTempBasket(me.croppingVectorLayer.features.length);*/
+                 style: {
+                     strokeColor: "#00ff7f",
+                     strokeWidth: 3,
+                     fillOpacity: 1,
+                     fillColor: "#00ff7f",
+                     pointRadius: 2
+                 },
+                eventListeners : {
+                    "featuresadded" : function(layer) {
                     }
                 }
             });
@@ -523,32 +685,13 @@ Oskari.clazz.define(
             _map.addLayers([me.highlightVectorLayer]);
 
         },
+
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
+         * [clearHighlightVectorLayer removes all features from highlight layer]
          */
-        createUi: function () {
-            var me = this,
-                btn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                );
-
-            me._initTemplates();
-            me.container = me.templates.main.clone(true);
-            //me.fetchChannels(me.container);
-
-            btn.setHandler(function (event) {
-                me._openForm(event, me);
-                me.activateNormalGFI(false);
-                me.activateNormalWFSReq(false);
-
-                if(me.highlightVectorLayer === null){
-                    me.createHighlightVectorLayer();
-                }
-            });
-            btn.setTitle(me._getLocalization('add_tag'));
-            btn.insertTo(me.container);
-            return me.container;
+        _clearHighlightVectorLayer: function(){
+            var me = this;
+            me.highlightVectorLayer.removeAllFeatures();
         }
 
     }, {

@@ -13,6 +13,7 @@
                 "title" : "A: Merkinnät",
                 "tag-pipe-details-header" : "Merkinnän tiedot",
                 "add_tag" : "Lisää merkintä",
+                "cancel_tag": "Peruuta",
                 "details-topic-1" : "Tieto 1",
                 "details-name-1" : "Tieto 1",
                 "details-topic-2" : "Tieto 2",
@@ -23,12 +24,13 @@
                 "details-name-4" : "Tieto 4",
                 "form_invalid": "Puuttuvia/vääräarvoisia kenttiä",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen",
-                "confirm_delete": "Haluatko varmasti poistaa kanavan {channel}?",
+                "confirm_delete": "Haluatko varmasti poistaa liitynnän {pipetag}?",
                 "delete_failed": "Poistaminen epäonnistui",
-                "layers_failed": "Tasojen hakeminen epäonnistui",
-                "columns_failed": "Ominaisuustietojen haku epäonnistui",
                 "save_failed": "Tallennus epäonnistui",
-                "noMatch": "Haulla ei löytynyt tuloksia"
+                "show_on_map": "Näytä kartalla",
+                "help_start": "Klikkaa kartalta haluamaasi liittymiskohtaa",
+                "help_choose": "Valitse liittymiskohta listauksesta tai klikkaa kartalta uudestaan",
+                "no_pipes_in_click": "Klikkaus kohdasta ei löytynyt liittymiskohtia, klikkaa uutta kohtaa"
             }
         },
         "save": "tallenna"
