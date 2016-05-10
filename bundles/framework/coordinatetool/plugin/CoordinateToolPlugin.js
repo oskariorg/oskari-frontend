@@ -709,7 +709,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
         _getInputsData: function() {
             var me = this;
-            if(!me._lonInput || me._latInput) {
+            if(!me._lonInput || !me._latInput) {
                 return;
             }
             var lon = me._lonInput.val(),
