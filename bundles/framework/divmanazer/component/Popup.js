@@ -135,6 +135,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 div.addClass(colourScheme.iconCls + ' close-icon');
             }
 
+            if (colourScheme.bodyBgColour) {
+                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
+            }
+
             /*buttons and actionlinks*/
             if (colourScheme) {
                 if (colourScheme.linkColour) {
