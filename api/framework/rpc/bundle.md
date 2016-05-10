@@ -428,16 +428,20 @@ Returns information about map zoom range.
         "max": 13,
         "current": 4
     }
-    
+
+**zoomIn(), zoomOut(), zoomTo()**
+
+Returns current zoom level after zooming.
+
 **getPixelMeasuresInScale([mm_measure1, mm_measure2,..], scale)**
-    
+
     Returns pixel mesurements for mm measurements in requested scale.
     Scale is optional. If scale is not defined, current map scale or fit scale is used.
     If scale is not defined and there are two measurements, then function computes fit scale so that paper size area covers the whole map. 
     In case of two measurements: if 1st measure is longer than 2nd measure, then the orientation is landscape.
     Pixel values could be used for to plot  e.g. A4 size area on the map.
     input: [[210,297], 100000] returns below data (zoomLevel tells nearest zoom level where pixel measures fit the map viewport)
-    
+
         {
           "pixelMeasures": [
             82,
