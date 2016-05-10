@@ -447,7 +447,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             this.teardownUI();
 
             if (mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                if (!me._config.noUI) {
+                    this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                }
             } else {
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
