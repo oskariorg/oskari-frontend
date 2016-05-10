@@ -10,6 +10,7 @@ Oskari.registerLocalization(
             "featureModifyInfo": "Choose feature from map to modify it.",
             "toolInfo": "Choose point, line or polygon tool to draw new geometries.",
             "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
+            "geometryDeleteInfo": "With geometry delete tool you can remove one geometry from feature with multiple geometries.",
             "buttons": {
                 "save": "Save",
                 "cancel": "Cancel",
@@ -18,6 +19,13 @@ Oskari.registerLocalization(
                 "addFeature": "Add feature",
                 "editFeature": "Edit feature",
                 "deleteFeature": "Delete feature"
+            },
+            "tools": {
+              "point": "Add point geometry",
+              "line": "Add line geometry",
+              "area": "Add area geometry",
+              "geometryEdit": "Edit selected geometry",
+              "remove": "Remove one geometry"
             },
             "featureUpdate": {
                 "header": "Feature update",

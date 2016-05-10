@@ -25,19 +25,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._mobileDefs = {
             buttons:  {
                 'mobile-layerselection': {
-                    iconCls: 'mobile-layers mobiletoolbar',
+                    iconCls: 'mobile-layers',
                     tooltip: '',
                     sticky: true,
                     show: true,
                     callback: function () {
                         if (me.popup && me.popup.isVisible()) {
                             var sandbox = me.getSandbox();
-                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
+                            sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                             me.popup.close(true);
                             me.popup = null;
                         } else {
-                            me.openSelection();
+                            me.openSelection(true);
                         }
                     },
                     toggleChangeIcon: true
@@ -181,11 +180,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
-            if(!this.getElement()) {
+            if(!this.layerContent) {
                 return;
             }
-            var baseLayersDiv = this.getElement().find(
-                    'div.content div.baselayers'
+            var baseLayersDiv = this.layerContent.find(
+                    'div.baselayers'
                 ),
                 input;
 
@@ -325,7 +324,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         addBaseLayer: function (layer) {
             var me = this;
-            if (!layer || !layer.getId || !me.getElement()) {
+            if (!layer || !layer.getId) {
                 return;
             }
             var div = me.layerRefs[layer.getId()];
@@ -459,10 +458,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         sortLayers: function () {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
-                layersDiv = this.getElement().find('div.content div.layers'),
+                layersDiv = this.layerContent.find('div.layers'),
                 layers = layersDiv.find('div.layer').detach(),
-                baseLayersDiv = this.getElement().find(
-                    'div.content div.baselayers'
+                baseLayersDiv = this.layerContent.find(
+                    'div.baselayers'
                 ),
                 baseLayers = baseLayersDiv.find('div.layer').detach(),
                 i,
@@ -539,12 +538,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function () {
+        openSelection: function (isMobile) {
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement(),
-                isMobile = Oskari.util.isMobile();
+                div = this.getElement();
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
@@ -555,12 +553,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.createCloseIcon();
 
                 me.popup.show(popupTitle, me.layerContent);
-                if (isMobile) {
+                if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function(){
                         var sandbox = me.getSandbox();
-                        var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                        sandbox.request(me, toolbarRequest);
+                        sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                     });
 
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
@@ -570,7 +567,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         'iconCls': popupCloseIcon
                     });
 
-                    me.popup.addClass('mobile-popup');                   
+                    me.popup.addClass('mobile-popup');
                 } else {
                     me.popup.moveTo(me.getElement(), 'bottom', true);
                     var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
@@ -629,8 +626,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * {String} defaultBase as the selected base layers id
          */
         getBaseLayers: function () {
-            var inputs = this.getElement().find(
-                    'div.content div.baselayers div.layer input'
+            var inputs = this.layerContent.find(
+                    'div.baselayers div.layer input'
                 ),
                 layers = [],
                 checkedLayer = null,
@@ -725,16 +722,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return true;
             }
             this.teardownUI();
-
             me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
                 me.changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
+                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
                 me.refresh();
                 this.addToPluginContainer(me._element);
-                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                //me.refresh();
             }
         },
 

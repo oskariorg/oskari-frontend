@@ -22,17 +22,21 @@ var files = [
 ];
 
 try {
-    var result = UglifyJS.minify(files, {
-        //outSourceMap : "out.js.map",
+    var FILENAME = '../bundles/bundle.js';
+    var concatOnly = false;
+    var opts = {
+        //outSourceMap : FILENAME + ".map",
         warnings : true,
         compress : true
-        /*,
-        mangle: false,
-        output: {
+    };
+    if(concatOnly) {
+        opts.mangle = false;
+        opts.output = {
           beautify: true
-        }*/
-    });
-	fs.writeFileSync('../bundles/bundle.js', result.code);
+        };
+    }
+    var result = UglifyJS.minify(files, opts);
+	fs.writeFileSync(FILENAME, result.code);
 } catch (e) {
     console.log(e);
     var err = new Error('Uglification failed.');

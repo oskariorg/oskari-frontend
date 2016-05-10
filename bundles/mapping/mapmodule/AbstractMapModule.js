@@ -155,7 +155,7 @@ Oskari.clazz.define(
 
             sandbox.printDebug('Starting ' + this.getName());
 
-            // listen to application started and trigger a forced update on any remaining lazy plugins
+            // listen to application started event and trigger a forced update on any remaining lazy plugins
             Oskari.on('app.start', function(details) {
                 // force update on lazy plugins
                 // this means tell plugins to render UI with the means available
@@ -918,11 +918,9 @@ Oskari.clazz.define(
             if (Oskari.util.isMobile()) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
-                mobileDiv.show();
             } else {
                 modeChanged = (me.getMobileMode() === false) ? false : true;
                 me.setMobileMode(false);
-                mobileDiv.hide();
             }
 
             if (modeChanged) {
@@ -953,19 +951,35 @@ Oskari.clazz.define(
         },
 
         _adjustMobileMapSize: function(){
+            // TODO: should use mapdiv height, not window since publisher can force the size to smaller than fullscreen
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
+            var toolbar = mobileDiv.find('.mobileToolbarContent');
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
-            } else if (mobileDiv.height() < mobileDiv.children().height()) {
-                // any floated plugins might require manual height setting
-                mobileDiv.height(mobileDiv.children().height());
+            } else {
+                // case: tools in toolbar, show the div as it might be hidden and remove explicit size
+                if(toolbar.find('.tool').length) {
+                    // if only lazy plugins on startup -> mobilediv is hidden on startup -> need to make it visible here
+                    mobileDiv.show();
+                    // if there are a tools, make sure we don't restrict it's height by setting specific size
+                    // tools may flow to multiple rows
+                    mobileDiv.height('');
+                }
+                // case: no tools in toolbar or no toolbar -> force height
+                else if (mobileDiv.height() < mobileDiv.children().height()) {
+                    // any floated plugins might require manual height setting if there is no toolbar
+                    mobileDiv.height(mobileDiv.children().height())
+                }
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
             if (Oskari.util.isMobile()) {
-                mapDivHeight -= mobileDiv.outerHeight();
+                if(mobileDiv.is(':visible')) {
+                    // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
+                    mapDivHeight -= mobileDiv.outerHeight();
+                }
                 jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
                 this.updateDomain();
             }

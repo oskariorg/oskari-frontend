@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         me._mobileDefs = {
             buttons:  {
                 'mobile-reset': {
-                    iconCls: 'mobile-reset-map-state mobiletoolbar',
+                    iconCls: 'mobile-reset-map-state',
                     tooltip: '',
                     sticky: false,
                     show: true,

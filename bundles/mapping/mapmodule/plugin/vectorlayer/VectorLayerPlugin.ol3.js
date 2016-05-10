@@ -193,15 +193,19 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
+         * @param {Oskari.mapframework.domain.VectorLayer} layer object OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
                 olLayer,
                 layerId;
-
+            layer = me._layers[layer];
             if(layer && layer !== null){
-                layerId = layer.getId();
+                if(layer instanceof ol.layer.Vector) {
+                    layerId = layer.get('id');
+                } else if(_.isString(layer)) {
+                    layerId = layer;
+                }
                 olLayer = me._layers[layerId];
             }
             if (olLayer) {

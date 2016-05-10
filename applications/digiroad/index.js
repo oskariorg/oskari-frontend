@@ -2,8 +2,6 @@ jQuery(document).ready(function() {
   var oskari_lang = 'fi';
   Oskari.setLang(oskari_lang);
   Oskari.setLoaderMode('dev');
-  // This is used with compiled js and css files.
-  // Oskari.setPreloaded(true);
   
   var appSetup;
   var appConfig;

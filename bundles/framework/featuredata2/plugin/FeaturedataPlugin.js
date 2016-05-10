@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._mobileDefs = {
             buttons:  {
                 'mobile-featuredata': {
-                    iconCls: 'mobile-info-marker-light mobiletoolbar',
+                    iconCls: 'mobile-info-marker',
                     tooltip: '',
                     sticky: true,
                     show: true,
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 linkElement = link || (element ? element.find('a') : null),
                 sandbox = me.getSandbox();
 
-            if(!element) {
+            if(!linkElement) {
                 return;
             }
 
