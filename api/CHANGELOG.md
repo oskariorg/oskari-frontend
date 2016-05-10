@@ -98,6 +98,8 @@ Returns pixel mesurements for mm measurements in requested scale.
 Use case: Plot paper size area on a map. See plotPlotArea-function in rpc_example.html.
 If scale is not entered, function computes fit scale so that paper size area covers the whole map. 
 
+New functions to zoom map: zoomIn, zoomOut, zoomTo. All return the current zoomlevel after zooming.
+
 ## 1.35
 
 ### RPC

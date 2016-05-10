@@ -896,7 +896,7 @@ Oskari.clazz.define(
                 var conf = me.getConfig();                
                 if (conf) {
                     if (conf.toolStyle) {
-                        me.changeToolStyle(conf.toolStyle, element);
+                        me.changeToolStyle(conf.toolStyle, me._element);
                     } else {
                         var toolStyle = me.getToolStyleFromMapModule();
                         if (toolStyle !== null && toolStyle !== undefined) {

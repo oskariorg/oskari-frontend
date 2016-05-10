@@ -287,6 +287,8 @@ Now makes a new getScreenshot() function available when using mapmodule supporti
 New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
 http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
 
+New functions to zoom map: zoomIn, zoomOut, zoomTo. All return the current zoomlevel after zooming.
+
 ### feedbackService [new, this is POC for time being and will be develop future on]] 
 
 One new event and  4 new requests
