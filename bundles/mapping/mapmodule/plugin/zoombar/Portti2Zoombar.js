@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
-                    iconCls: 'mobile-zoom-in mobiletoolbar',
+                    iconCls: 'mobile-zoom-in',
                     tooltip: '',
                     sticky: false,
                     show: true,
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     //childPosition: 'bottom'
                 },
                 'mobile-zoom-out': {
-                    iconCls: 'mobile-zoom-out mobiletoolbar',
+                    iconCls: 'mobile-zoom-out',
                     tooltip: '',
                     sticky: false,
                     show: true,
