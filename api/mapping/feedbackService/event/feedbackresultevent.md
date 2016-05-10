@@ -33,8 +33,7 @@ Event occurs after above mentioned feedback request has been completed.
 
 <pre class="event-code-block">
 <code>
-               var data = {
-                "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1"
+               var data = {          
                 };
                 channel.postRequest('GetFeedbackServiceRequest', [data]);
                 
@@ -72,8 +71,7 @@ Event occurs after above mentioned feedback request has been completed.
 
 <pre class="event-code-block">
 <code>
-                           var data = {
-                               "baseUrl": "http://test311api.cityofchicago.org/open311/v2/services"
+                           var data = {                             
                                "serviceId":"4ffa4c69601827691b000018"
                                };
                                channel.postRequest('GetFeedbackServiceDefinitionRequest', [data]);
@@ -123,8 +121,7 @@ Event occurs after above mentioned feedback request has been completed.
                   "start_date": "2016-04-01T00:00:00Z",
                   "status": "open,closed"
                 };
-                var data = {
-                "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+                var data = {                
                 "srs":"EPSG:3067",
                 "getServiceRequests": JSON.stringify(filterdata)
                 };
@@ -143,14 +140,13 @@ Event occurs after above mentioned feedback request has been completed.
 <code>
                              var postdata = {
                              "service_code": "180",
-                             "description": "Kampin bussipysäkillä haisee koiran pissi",
+                             "description": "Kampin bussipysäkillä on roskis täynnä",
                              "first_name" : "Oskari",
-                             "last_name" : "Maanmittaushallitus",
+                             "last_name" : "Olematon",
                              "lat": "6674188.748000",
                              "long": "384717.640000"
                              };
-                             var data = {
-                             "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+                             var data = {                     
                              "srs":"EPSG:3067",
                              "postServiceRequest": JSON.stringify(postdata)
                              };

@@ -94,6 +94,12 @@ Oskari.clazz.define(
         };
         me._markerTemplate = jQuery('<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"></svg>');
 
+        me._wellknownStyles = {};
+
+        me._isInMobileMode;
+        me._mobileToolbar;
+        me._mobileToolbarId = 'mobileToolbar';
+        me._toolbarContent;
     }, {
         /**
          * @method init
@@ -130,6 +136,7 @@ Oskari.clazz.define(
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
+            this._addMobileDiv();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -141,11 +148,20 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         start: function (sandbox) {
+            var me = this;
             if (this.started) {
                 return;
             }
 
             sandbox.printDebug('Starting ' + this.getName());
+
+            // listen to application started event and trigger a forced update on any remaining lazy plugins
+            Oskari.on('app.start', function(details) {
+                // force update on lazy plugins
+                // this means tell plugins to render UI with the means available
+                // if toolbar for example isn't present, most plugins should display "desktop-ui" instead of using the "mobile-ui" toolbar
+                me.startLazyPlugins(true);
+            });
 
             // register events handlers
             for (var p in this.eventHandlers) {
@@ -159,16 +175,22 @@ Oskari.clazz.define(
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
-                userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this)
+                userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
+                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this)
             };
+
             sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
 
-            this.startPlugins();
-            this.updateCurrentState();
             this.started = this._startImpl();
+            var size = this.getSize();
+            this.setMobileMode(Oskari.util.isMobile());
+            me.startPlugins();
+            me._adjustMobileMapSize();
+            this.updateCurrentState();
         },
 
         /**
@@ -199,6 +221,12 @@ Oskari.clazz.define(
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
+            },
+            MapSizeChangedEvent: function (evt) {
+                this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+            },
+            'Toolbar.ToolbarLoadedEvent': function() {
+                this.startLazyPlugins();
             }
         },
 
@@ -731,7 +759,9 @@ Oskari.clazz.define(
             for (p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
-
+                    if(typeof layersPlugin.preselectLayers !== 'function') {
+                        continue;
+                    }
                     sandbox.printDebug('preselecting ' + p);
                     layersPlugin.preselectLayers(layers);
                 }
@@ -817,6 +847,189 @@ Oskari.clazz.define(
             sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
+
+/*---------------- MAP MOBILE MODE ------------------- */
+
+        _addMobileDiv: function () {
+            var mapDiv = this.getMapEl();
+            jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
+        },
+
+        getMobileDiv: function () {
+            var me = this,
+                mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
+
+            return mobileDiv;
+        },
+
+        getMobileToolbar: function () {
+            var me = this;
+            if (!me._mobileToolbar) {
+                me._createMobileToolbar();
+            }
+            return me._mobileToolbarId;
+        },
+
+        _createMobileToolbar: function () {
+            var me = this,
+                request,
+                sandbox = me.getSandbox(),
+                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+
+            if (me._mobileToolbarId && builder) {
+                me._mobileToolbar = true;
+                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+                // add toolbar when toolbarId and target container is configured
+                // We assume the first container is intended for the toolbar
+                request = builder(
+                        me._mobileToolbarId,
+                        'add',
+                        {
+                            show: true,
+                            toolbarContainer: me._toolbarContent
+                        }
+                );
+                sandbox.request(me.getName(), request);
+            }
+        },
+
+        setMobileMode: function (isInMobileMode) {
+            this._isInMobileMode = isInMobileMode;
+
+            var mobileDiv = this.getMobileDiv();
+            if (isInMobileMode) {
+                mobileDiv.show();
+                mobileDiv.css('backgroundColor', this.getThemeColours().backgroundColour);
+            } else {
+                mobileDiv.hide();
+            }
+        },
+
+        getMobileMode: function () {
+            return this._isInMobileMode;
+        },
+
+        _handleMapSizeChanges: function (newSize, pluginName) {
+            var me = this;
+            var modeChanged = false;
+            var mobileDiv = this.getMobileDiv();
+
+            if (Oskari.util.isMobile()) {
+                modeChanged = (me.getMobileMode() === true) ? false : true;
+                me.setMobileMode(true);
+            } else {
+                modeChanged = (me.getMobileMode() === false) ? false : true;
+                me.setMobileMode(false);
+            }
+
+            if (modeChanged) {
+                var sortedList = this._getSortedPlugins();
+                _.each(sortedList, function(plugin) {
+                    if (plugin && typeof plugin.redrawUI === 'function') {
+                        var index = plugin.getIndex();
+                        plugin.redrawUI(me.getMobileMode(), modeChanged);
+                    }
+                });
+            }
+            me._adjustMobileMapSize();
+        },
+        /**
+         * Get a sorted list of plugins. This is used to control order of elements in the UI.
+         * Functionality shouldn't assume order.
+         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
+         */
+        _getSortedPlugins : function() {
+            return _.sortBy(this._pluginInstances, function(plugin) {
+                if(typeof plugin.getIndex === 'function') {
+                    return plugin.getIndex();
+                }
+                // index not defined, start after ones that have indexes
+                // This is just for the UI order, functionality shouldn't assume order
+                return 99999999999;
+            });
+        },
+
+        _adjustMobileMapSize: function(){
+            var mapDivHeight = jQuery(window).height();
+            var mobileDiv = this.getMobileDiv();
+            var toolbar = mobileDiv.find('.mobileToolbarContent');
+            if(mobileDiv.children().length === 0) {
+                // plugins didn't add any content -> hide it so the empty bar is not visible
+                mobileDiv.hide();
+            } else {
+                // case: tools in toolbar, show the div as it might be hidden and remove explicit size
+                if(toolbar.find('.tool').length) {
+                    // if only lazy plugins on startup -> mobilediv is hidden on startup -> need to make it visible here
+                    mobileDiv.show();
+                    // if there are a tools, make sure we don't restrict it's height by setting specific size
+                    // tools may flow to multiple rows
+                    mobileDiv.height('');
+                }
+                // case: no tools in toolbar or no toolbar -> force height
+                else if (mobileDiv.height() < mobileDiv.children().height()) {
+                    // any floated plugins might require manual height setting if there is no toolbar
+                    mobileDiv.height(mobileDiv.children().height())
+                }
+            }
+
+            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
+            if (Oskari.util.isMobile()) {
+                mapDivHeight -= mobileDiv.outerHeight();
+                jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
+                this.updateDomain();
+            }
+        },
+
+/*---------------- /MAP MOBILE MODE ------------------- */
+
+/*---------------- THEME ------------------- */
+        getTheme: function(){
+            var me = this;
+            var toolStyle = me.getToolStyle();
+            if(toolStyle === null || toolStyle.indexOf('-dark') > 0 || toolStyle === 'default') {
+                return 'dark';
+            } else {
+                return 'light';
+            }
+        },
+
+        getReverseTheme: function(){
+            var me = this;
+            if(me.getTheme() === 'light') {
+                return 'dark';
+            } else {
+                return 'light';
+            }
+        },
+
+        getThemeColours: function(){
+            var me = this;
+            var theme = me.getTheme();
+
+            var darkTheme =  {
+                textColour: '#ffffff',
+                backgroundColour: '#3c3c3c',
+                activeColour: '#E6E6E6',
+                activeTextColour: '#000000'
+            };
+
+            var lightTheme =  {
+                textColour: '#000000',
+                backgroundColour: '#ffffff',
+                activeColour: '#3c3c3c',
+                activeTextColour: '#ffffff'
+            };
+
+            if(theme === 'dark') {
+                return darkTheme;
+            } else {
+                return lightTheme;
+            }
+            
+        },
+
+/*---------------- /THEME ------------------- */
 
 /* --------------- CONTROLS ------------------------ */
         /**
@@ -961,6 +1174,7 @@ Oskari.clazz.define(
             plugin.setMapModule(null);
             delete this._pluginInstances[pluginName];
         },
+        lazyStartPlugins : [],
         /**
          * @method startPlugin
          * Starts the given plugin by calling its startPlugin() method.
@@ -971,7 +1185,40 @@ Oskari.clazz.define(
                 pluginName = plugin.getName();
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-            plugin.startPlugin(sandbox);
+            try {
+                var tryAgainLater = plugin.startPlugin(sandbox);
+                if(tryAgainLater && typeof plugin.redrawUI === 'function') {
+                    this.lazyStartPlugins.push(plugin);
+                }
+            } catch (e) {
+                // something wrong with plugin (e.g. implementation not imported) -> log a warning
+                sandbox.printWarn(
+                    'Unable to start plugin: ' + pluginName + ': ' +
+                    e
+                );
+            }
+        },
+        /**
+         * Starts any plugins that reported 
+         * @param  {[type]} force [description]
+         * @return {[type]}       [description]
+         */
+        startLazyPlugins : function(force) {
+            var me = this;
+            var tryStartingThese = this.lazyStartPlugins.slice(0);
+            // reset
+            this.lazyStartPlugins = [];
+
+            tryStartingThese.forEach(function(plugin) {
+                var tryAgainLater = plugin.redrawUI(me.getMobileMode(), !!force);
+                if(tryAgainLater) {
+                    if(force) {
+                        me.getSandbox().printWarn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
+                    }
+                    me.lazyStartPlugins.push(plugin);
+                }
+            });
+            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin
@@ -991,11 +1238,13 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    this.startPlugin(this._pluginInstances[pluginName]);
+            var me = this;
+            var sortedList = this._getSortedPlugins();
+            _.each(sortedList, function(plugin) {
+                if (plugin && typeof plugin.startPlugin === 'function') {
+                    me.startPlugin(plugin);
                 }
-            }
+            });
         },
         /**
          * @method stopPlugins
@@ -1076,6 +1325,44 @@ Oskari.clazz.define(
 /* --------------- /PUBLISHER ------------------------ */
 
 
+/* --------------- STYLES --------------------------- */
+    
+        /**
+         * Register wellknown style
+         * @method  @public registerStyle
+         * @param  {String} key    style key
+         * @param  {Object} styles styles object
+         */
+        registerWellknownStyle: function(key, styles) {
+            var me = this;
+            if(key && styles){
+                me._wellknownStyles[key] = styles;
+            }
+        },
+
+        /**
+         * Get wellknown style object
+         * @method  @public getWellknownStyle
+         * @param  {String} key   style key
+         * @param  {String} style style name
+         * @return {Object} returns styles for wanted key or if defined also style name return only wanted style
+         */
+        getWellknownStyle: function(key, style) {
+            var me = this;
+            if(!me._wellknownStyles[key]) {
+                return null;
+            }
+
+            if(key && style){
+                return me._wellknownStyles[key][style]
+            } else {
+                return me._wellknownStyles[key];
+            }   
+        },
+
+/* --------------- /STYLES --------------------------- */
+
+
 /* --------------- SVG MARKER ------------------------ */
         /**
          * Gets the svg marker to be used draw marker
@@ -1086,7 +1373,8 @@ Oskari.clazz.define(
         getSvg: function(markerStyle){
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
-                svgObject = null;
+                svgObject = null,
+                isWellknownMarker = false;
 
             // marker shape is number --> find it from Oskari.getMarkers()
             if(!isNaN(markerStyle.shape)) {
@@ -1104,12 +1392,22 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null) {
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+                markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
                 svgObject = {
                     data: markerStyle.shape.data,
                     x: markerStyle.shape.x,
                     y: markerStyle.shape.y
                 };
+            }
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+                markerStyle.shape.key && markerStyle.shape.name) {
+                svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
+                if(svgObject === null) {
+                    sandbox.printWarn('Not identified wellknown marker shape. Not handled getSvg.');
+                    return null;
+                }
+                isWellknownMarker = true;
             }
             // marker icon not found
             else {
@@ -1121,7 +1419,29 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
+            if(isWellknownMarker && markerStyle.shape.color) {
+                marker.find('.normal-color').attr('fill', markerStyle.shape.color);
+                var shadowRgb = Oskari.util.hexToRgb(markerStyle.shape.color);
+                shadowRgb.r -= 30;
+                shadowRgb.g -= 30;
+                shadowRgb.b -= 30;
+                if(shadowRgb.r<0){
+                    shadowRgb.r = 0;
+                }
+                if(shadowRgb.g<0){
+                    shadowRgb.g = 0;
+                }
+                if(shadowRgb.b<0){
+                    shadowRgb.b = 0;
+                }
+                var rgbColor = 'rgb('+shadowRgb.r+','+shadowRgb.g+','+shadowRgb.b+')';
+                marker.find('.shading-color').attr('fill', rgbColor);
+            }
+
             var markerHTML = marker.outerHTML();
+
+
+
             if(markerStyle.size) {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
@@ -1530,16 +1850,22 @@ Oskari.clazz.define(
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
          * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
+         * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible) {
+        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
             var container = element.parents('.mapplugins'),
-                content = element.parents('.mappluginsContent');
+            content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
-            element.remove();
+            if(detachOnly) {
+                element.detach();
+            } else {
+                element.remove();
+            }
             if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
+
 /* --------------- /PLUGIN CONTAINERS ------------------------ */
 
 /* --------------- MAP LAYERS ------------------------ */

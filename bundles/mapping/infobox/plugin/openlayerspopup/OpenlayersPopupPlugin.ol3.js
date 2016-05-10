@@ -27,6 +27,12 @@ Oskari.clazz.define(
             height: 480
         };
 
+        me._positionClasses = {
+            'left': 'center-right',
+            'right': 'center-left',
+            'top':'bottom-center',
+            'bottom':'top-center'
+        };
     }, {
 
         /**
@@ -113,7 +119,7 @@ Oskari.clazz.define(
                 lat = position.lat;
             } else {
                 // Send a status report of the popup (it is not open)
-                var evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                var evtB = me.getSandbox().getEventBuilder('InfoBox.InfoBoxEvent');
                 var evt = evtB(id, false);
                 me.getSandbox().notifyAll(evt);
                 return;
@@ -146,8 +152,9 @@ Oskari.clazz.define(
                 offsetX = 0,
                 offsetY = -20,
                 mapModule = me.getMapModule(),
-                isMarker = (marker && marker.data) ? true : false;
-
+                isMarker = (marker && marker.data) ? true : false,
+                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info";
+                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
             if(isMarker){
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
@@ -158,7 +165,6 @@ Oskari.clazz.define(
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
             var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
-
             popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
@@ -174,40 +180,48 @@ Oskari.clazz.define(
                 var popupTitle = title,
                     popupContent = contentDiv,
                     popupType = "mobile";
-                popup.createCloseIcon();
-                popup.showInMobileMode();
 
-                if (colourScheme) {
-                    popup.setColourScheme(colourScheme);
-                }
+                popup.createCloseIcon();
+                me._showInMobileMode(popup);
 
                 if (font) {
                     popup.setFont(font);
                 }
                 popup.show(popupTitle, popupContent);
+
+                if (colourScheme) {
+                    popup.setColourScheme(colourScheme);
+                }
                 popup.onClose(function () {
                     if (me._popups[id] && me._popups[id].type === "mobile") {
                         delete me._popups[id];
                     }
                 });
+                //clear the ugly backgroundcolor from the popup content
+                jQuery(popup.dialog).css('background-color','inherit');
             } else {
                 var popupType = "desktop";
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
+                    positioning: positioning,
                     offset: [offsetX, offsetY],
                     autoPan: true
                 });
 
                 mapModule.getMap().addOverlay(popup);
-                jQuery('.olPopup').html(popupContentHtml);
-
+                jQuery(popup.getElement()).html(popupContentHtml);
                 me._panMapToShowPopup(lonlatArray);
 
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
 
                 var popupDOM = jQuery('#' + id);
+                if (positioning) {
+                    popupDOM.addClass(positioning);
+                    popupDOM.find('.popupHeaderArrow').addClass(positioning);
+                };
+
                 // Set the colour scheme if one provided
                 if (colourScheme) {
                     me._changeColourScheme(colourScheme, popupDOM, id);
@@ -224,11 +238,6 @@ Oskari.clazz.define(
                     inputs.placeholder();
                 }
             }
-
-            if (me.adaptable && !isInMobileMode) {
-                me._adaptPopupSize(id, refresh);
-            }
-
             me._popups[id] = {
                 title: title,
                 contentData: contentData,
@@ -241,13 +250,20 @@ Oskari.clazz.define(
                 type: popupType
             };
 
+            if (me.adaptable && !isInMobileMode) {
+                if (positioning && positioning !== 'no-position-info') {
+                    me._adaptPopupSizeWithPositioning(id, refresh);
+                } else {
+                    me._adaptPopupSize(id, refresh);
+                }
+            }
+
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
         _isInMobileMode: function (mobileBreakpoints) {
             var screenWidth = window.innerWidth,
                 screenHeight = window.innerHeight;
-
             if (mobileBreakpoints.width) {
                 if (screenWidth < mobileBreakpoints.width) {
                     return true;
@@ -261,7 +277,17 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-
+        },
+        _showInMobileMode: function (popup) {
+            popup.makeModal();
+            popup.overlay._overlays[0].overlay.css({opacity: 0});
+            popup.overlay.followResizing(true);
+            popup.overlay.bindClickToClose();
+            popup.overlay.onClose(function () {
+                popup.dialog.remove();
+                popup.__notifyListeners('close');
+            });
+            popup.dialog.addClass('mobile-infobox');
         },
 
         /**
@@ -501,7 +527,7 @@ Oskari.clazz.define(
             this.adaptable = isAdaptable;
         },
 
-        _adaptPopupSize: function (olPopupId, isOld) {
+        _adaptPopupSize: function(olPopupId, isOld) {
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left')),
@@ -518,11 +544,9 @@ Oskari.clazz.define(
             if (!isOld) {
                 left = left + 10;
             }
-
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
-
             popup.find('.popupHeader').css('width', '100%');
 
             var content = popup.find('.popupContent').css({
@@ -537,7 +561,6 @@ Oskari.clazz.define(
             });
 
             var wrapper = content.find('.contentWrapper');
-
             popup.css({
                 'height': 'auto',
                 'width': 'auto',
@@ -568,6 +591,24 @@ Oskari.clazz.define(
                     popup.css('min-height', 'inherit');
                 }
             }
+        },
+        _adaptPopupSizeWithPositioning: function (olPopupId, isOld) {
+            var size = this.getMapModule().getSize(),
+                popup = jQuery('#' + olPopupId),
+                maxWidth = size.width * 0.7,
+                maxHeight = size.height * 0.7;
+            popup.find('.popupHeader').css('width', '100%');
+
+            var content = popup.find('.popupContent').css({
+                'margin-left': '0',
+                'padding': '5px 20px 5px 20px',
+                'max-height': maxHeight - 40 + 'px'
+            });
+
+            popup.find('.olPopupContent').css({
+                'width': '100%',
+                'height': '100%'
+            });
         },
 
         /**
@@ -621,11 +662,10 @@ Oskari.clazz.define(
          */
         _changeColourScheme: function (colourScheme, div, id) {
             if (id) {
-                div = div || jQuery('div#' + id) || jQuery('.olPopup:visible');
+                div = div || jQuery('div#' + id);// || jQuery('.olPopup:visible');
             } else {
-                div = div || jQuery('.olPopup:visible');
+                div = div;// || jQuery('.olPopup:visible');
             }
-
             if (!colourScheme || !div) {
                 return;
             }
@@ -637,9 +677,16 @@ Oskari.clazz.define(
                 featureHeader = div.find('h3.myplaces_header'),
                 closeButton = div.find('div.olPopupCloseBox');
 
-            gfiHeaderArrow.css({
-                'border-right-color': colourScheme.bgColour
-            });
+            /*top arrow needs to be the same color as the header, when it's pointing out of the header (bottom and no positioning (=default))*/
+            if (jQuery(gfiHeaderArrow).hasClass('top-center')) {
+                gfiHeaderArrow.css({
+                    'border-bottom-color': colourScheme.bgColour
+                });
+            } else if (jQuery(gfiHeaderArrow).hasClass('no-position-info')) {
+                gfiHeaderArrow.css({
+                    'border-right-color': colourScheme.bgColour
+                });
+            }
 
             gfiHeader.css({
                 'background-color': colourScheme.bgColour,
@@ -661,39 +708,50 @@ Oskari.clazz.define(
             featureHeader.css({
                 'color': colourScheme.headerColour
             });
-
             // AH-1075 colourScheme.iconCls might not be set, so check first.
             if (colourScheme.iconCls) {
                 closeButton
                     .removeClass('icon-close-white icon-close')
                     .addClass(colourScheme.iconCls);
             }
-        },
 
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                if (colourScheme.linkColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
+            }
+        },
         _handleMapSizeChanges: function (width, height) {
             var me = this,
                 pid,
                 popup;
-
             for (pid in me._popups) {
-                if (latestPopupToMobileMode) {
-                    me.close(pid);
-                }
                 if (me._popups.hasOwnProperty(pid)) {
                     popup = this._popups[pid];
-                    //close mobile popup and open infobox if screen is wide enough
-                    if (popup.isInMobileMode && width > popup.options.mobileBreakpoints.width || popup.isInMobileMode && height > popup.options.mobileBreakpoints.height) {
-                        popup.popup.close();
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                    } else if (!popup.isInMobileMode && width < popup.options.mobileBreakpoints.width || !popup.isInMobileMode && height < popup.options.mobileBreakpoints.height) {
-                        me.close(pid);
-                        me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
-                        var latestPopupToMobileMode = true;
+                    if (popup.isInMobileMode) {
+                        //are we moving away from the mobile mode? -> close and rerender.
+                        if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            popup.popup.close();
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
+                    } else {
+                        //are we moving into the mobile mode? -> close old and rerender
+                        if (me._isInMobileMode(popup.options.mobileBreakpoints)) {
+                            me.close(pid);
+                            me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
+                        }
                     }
                 }
             }
         },
-
         /**
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *

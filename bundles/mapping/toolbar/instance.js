@@ -69,19 +69,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 return;
             }
             me.started = true;
+            me.conf = me.conf || {};
             // Should this not come as a param?
             var conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandboxName = conf.sandbox || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             sandbox.register(me);
             me.setSandbox(sandbox);
 
-            var defaultContainerId = (conf ? conf.defaultToolbarContainer : null) || '#toolbar';
+            var defaultContainerId = conf.defaultToolbarContainer || '#toolbar';
             this.container = jQuery(defaultContainerId);
             this.containers['default'] = this.container;
             this.toolbars['default'] = this.container;
 
-            var defaultMenuToolbarContainer = (conf ? conf.defaultMenuToolbarContainer : null) || '#menutoolbar',
+            var defaultMenuToolbarContainer = conf.defaultMenuToolbarContainer || '#menutoolbar',
                 p;
             this.menutoolbarcontainer = jQuery(defaultMenuToolbarContainer);
 
@@ -155,7 +156,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             this.toolbars[tbid] = tbcontainer;
             var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
             this.containers[tbid] = c;
-
             if (data.title) {
                 tbcontainer.find(".oskariui-menutoolbar-title p").append(data.title);
             }
@@ -181,6 +181,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
             if (pdata.title) {
                 tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
+            } else {
+                tbcontainer.find(".oskariui-toolbar-title").remove();
             }
             return c;
         },

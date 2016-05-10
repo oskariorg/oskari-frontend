@@ -77,7 +77,7 @@ Oskari.registerLocalization(
         },
         "NotLoggedView": {
             "text": "This tool allows you to create embedded maps from available services. Use of these are subject to licensing and requires that you log in."
-        },        
+        },
         "StartView": {
             "text": "Welcome to create an embedded map on your website.",
             "layerlist_title": "Embeddable map layers open in map window:",

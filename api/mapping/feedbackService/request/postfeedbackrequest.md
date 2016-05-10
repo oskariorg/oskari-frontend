@@ -73,23 +73,25 @@ feedback.open311.key=      --> http://wiki.open311.org/GeoReport_v2/#post-servic
 
 ## Examples
 
-```javascript
+<pre class="event-code-block">
+<code>
+   javascript
    var postdata = {
                               "service_code": "180",
-                              "description": "Kampin bussipysäkillä haisee koiran pissi",
+                              "description": "Kampin bussipysäkillä on roskis täynnä",
                               "first_name" : "Oskari",
-                              "last_name" : "Maanmittaushallitus",
+                              "last_name" : "Olematon",
                               "lat": "6674188.748000",
                               "long": "384717.640000"
                               };
-                              var data = {
-                              "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+                              var data = {                              
                               "srs":"EPSG:3067",
                               "postServiceRequest": JSON.stringify(postdata)
                               };
                               channel.postRequest('PostFeedbackRequest', [data]);
             
-```
+</code>
+</pre>
 
 ## Related api
 

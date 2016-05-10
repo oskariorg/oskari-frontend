@@ -10,6 +10,7 @@ Oskari.registerLocalization(
             "featureModifyInfo": "Valitse kohde kartalta muokataksesi kohteen ominaisuuksia.",
             "toolInfo": "Valitse piste-, viiva- tai aluepiirtotyökalu piirtääksesi uutta geometriaa.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
+            "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
             "buttons": {
                 "save": "Tallenna",
                 "cancel": "Peruuta",
@@ -19,6 +20,13 @@ Oskari.registerLocalization(
                 "editFeature": "Muokkaa kohdetta",
                 "deleteFeature": "Poista kohde"
             },
+            "tools": {
+                "point": "Lisää piste",
+                "line": "Lisää viiva",
+                "area": "Lisää alue",
+                "geometryEdit": "Muokkaa geometriaa",
+                "remove": "Poista yksittäinen geometria"
+              },
             "featureUpdate": {
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",

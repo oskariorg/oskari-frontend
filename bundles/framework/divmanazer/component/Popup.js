@@ -14,14 +14,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
-        this.isMobile = false;
-        this._mobileDefs = {
-            width: 320,
-            height: 480
-        };
         this.__listeners = {
-
         };
+        this._isVisible = false;
     }, {
         /**
          * @method show
@@ -38,7 +33,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentHeight,
                 reasonableHeight,
                 focusedButton = -1;
-
             this.setTitle(title);
             this.setContent(message);
 
@@ -74,6 +68,31 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             // make popup to visible
             me.dialog.css('opacity', 1);
+
+            this._isVisible = true;
+
+            this._bringMobilePopupToTop();
+        },
+
+        /**
+         * @method _mobileBringToTop
+         * Adjusts the zIndex of this popup, in case there are other (mobile) popups open at the moment
+         * TODO: get rid of this, once we have a mechanism of identifying and killing all other open popups reliably
+         */
+        _bringMobilePopupToTop: function() {
+            var zIndex = 0;
+            if (jQuery(this.dialog).hasClass('mobile-popup')) {
+                var openPopups = jQuery('.mobile-popup');
+
+                _.each(openPopups, function(openPopup) {
+                    if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
+                        zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
+                    }
+                });
+            }
+            if (zIndex && zIndex > 0) {
+                this.dialog.css('z-index',zIndex);
+            }
         },
         /**
          * @method fadeout
@@ -100,23 +119,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
 
         setColourScheme: function (colourScheme) {
-            if (colourScheme.headerColour) {
-                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.headerColour});
+            if (colourScheme.bgColour) {
+                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.bgColour});
             }
 
             if (colourScheme.titleColour) {
                 this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
             }
 
-            if (colourScheme.bgColour) {
-                this.dialog.css({'background-color': colourScheme.bgColour});
-                this.getJqueryContent().find('.popupContent').css({'background-color': colourScheme.bgColour});
-            }
-
             if (colourScheme.iconCls) {
                 var div = this.dialog.find('.icon-close');
                 div.removeClass('icon-close icon-close:hover');
                 div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                if (colourScheme.linkColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
             }
         },
 
@@ -184,6 +212,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     me.__notifyListeners('close');
                 }, 500);
             }
+            this._isVisible = false;
+        },
+        isVisible: function() {
+            return this._isVisible;
         },
         /**
          * @property alignment
@@ -197,8 +229,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {jQuery} target - target element which the popup should point
          * @param {String} alignment - one of #alignment (optional, defaults to right)
          * @param {Boolean} noArrow - if true, arrow is not diplayed (optional, defaults to false)
+         * @param {jQuery} topOffsetElement - if set, the popup top is set according to this element (optional, used with mobile popups when adjusting to container instead of the tool)
          */
-        moveTo: function (target, alignment, noArrow) {
+        moveTo: function (target, alignment, noArrow, topOffsetElement) {
             var me = this,
                 align = 'right',
                 //get the position of the target element
@@ -256,6 +289,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 'margin-left': 0,
                 'margin-top': 0
             });
+
+            if (topOffsetElement) {
+                me._adjustPopupTop(topOffsetElement);
+            }
+
+        },
+        /**
+         * @method @private _adjustPopupTop
+         * Adjusts the top position of this popup according to the element provided
+         * @param {jQuery} topOffsetElement
+         *
+         */
+        _adjustPopupTop: function(topOffsetElement) {
+            if (topOffsetElement) {
+                var top = jQuery(topOffsetElement).offset().top,
+                    height = jQuery(topOffsetElement).outerHeight(true),
+                    popupTop = parseInt(top)+parseInt(height);
+                this.dialog.css('top',popupTop+'px');
+            }
         },
         /**
          * @method resetPosition
@@ -279,22 +331,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             overlay.overlay('body');
             this.overlay = overlay;
             overlay.followResizing(true);
-        },
-
-        showInMobileMode: function () {
-            var me = this,
-                overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
-            overlay.overlay('body');
-            this.overlay = overlay;
-            overlay._overlays[0].overlay.css({opacity: 0});
-            overlay.followResizing(true);
-            overlay.bindClickToClose();
-            overlay.onClose(function () {
-                me.dialog.remove();
-                me.__notifyListeners('close');
-            });
-            me.dialog.addClass('mobile-portrait');
-
         },
         /**
          * @method stopKeypressPropagation
@@ -423,8 +459,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         adaptToMapSize: function (sandbox, popupName) {
             this.sandbox = sandbox;
             this.setName(popupName);
-            //check if the map is allready in mobile mode and adapt dialog size
-            this._handleMapSizeChanges();
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
@@ -467,46 +501,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         /**
          * @method  @private _handleMapSizeChanges handle map size changes
          * @param  {Object} size {width:100, height:200} (optional, if not given gets the map size from ???)
-         * @param {Object} el jQuery element
          */
         _handleMapSizeChanges: function(size) {
             var me = this,
                 popup = me.dialog;
-                popupOffScreen = window.innerWidth - popup.width - popup[0].style['left'];
 
             // if dialog ends up offscreen, move it back to the screen
-            if (parseInt(popup[0].style['left']) > (window.innerWidth - popup.width())) {
+            if (parseInt(popup[0].style['left']) > (size.width - popup.width())) {
                 popup.css({
-                    'left': (window.innerWidth - popup.width() - 10) + 'px'
+                    'left': (size.width - popup.width() - 10) + 'px'
                 });
             }
-            if (parseInt(popup[0].style['top']) > (window.innerHeight - popup.height())) {
+            if (parseInt(popup[0].style['top']) > (size.width - popup.height())) {
                 popup.css({
-                    'top': (window.innerHeight - popup.height() - 10) + 'px'
+                    'top': (size.width - popup.height() - 10) + 'px'
                 });
-            }
-
-            // when dialog is opened check the size of  the screen
-            if (!size) {
-                size = {
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                };
-            }
-
-            if (me.popupClass) {
-                popup.removeClass(me.popupClass);
-                me.popupClass = undefined;
-            }
-            // if screen is in mobile mode, change the size of the popup
-            if (size.width < me._mobileDefs.width || size.height < me._mobileDefs.height) {
-                if (size.width > size.height) {
-                    popup.addClass('mobile-landscape');
-                    me.popupClass = 'mobile-landscape';
-                } else {
-                    popup.addClass('mobile-portrait');
-                    me.popupClass = 'mobile-portrait';
-                }
             }
         }
     });

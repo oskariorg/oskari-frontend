@@ -51,21 +51,6 @@ Oskari = (function () {
     //mode has no effect since require loader
     var mode = 'default';
 
-    // _preloaded has no effect since require loader
-    var _preloaded = false;
-
-
-    /**
-     * @private @method _isPreloaded
-     *
-     *
-     * @return {boolean}
-     */
-    function _isPreloaded() {
-        return _preloaded;
-    }
-
-
     /**
      *
      */
@@ -969,8 +954,7 @@ Oskari = (function () {
          */
         _install: function (biid, bundleDefinition, srcFiles, bundleMetadata) {
             var me = this,
-                defState = me.bundleDefinitionStates[biid],
-                srcState;
+                defState = me.bundleDefinitionStates[biid];
 
             if (defState) {
                 defState.state = 1;
@@ -1578,17 +1562,12 @@ Oskari = (function () {
 
         /**
          * @public @method Oskari.setPreloaded
-         *
-         * @param {boolean} usep Preloaded on/off
-         *
+         * @deprecated No longer has any effect. Remove calls to it. Will be removed in 1.38 or later.
          */
-        setPreloaded: function (usep) {
-            if (typeof usep !== 'boolean') {
-                throw new TypeError(
-                    'setPreloaded(): usep is not a boolean'
-                );
+        setPreloaded: function () {
+            if(window.console && typeof console.log === 'function') {
+                console.log('Oskari.setPreloaded() now longer has any effect. Remove calls to it.');
             }
-            _preloaded = usep;
         },
 
         /**

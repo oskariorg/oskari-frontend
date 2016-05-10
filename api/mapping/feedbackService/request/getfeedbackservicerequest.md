@@ -32,8 +32,7 @@ http://wiki.open311.org/GeoReport_v2/
 ## Examples
 
 ```javascript
-   var data = {
-                  "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1"
+   var data = {                 
                   };
                   channel.postRequest('GetFeedbackServiceRequest', [data]);
                   

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
             "name": {
                 "label": "Kartans namn",
                 "placeholder": "obligatorisk uppgift",
-                "tooltip": "Ge din karta ett beskrivande namn. Observera att namnet ska vara samma språk som kartan användargränssnitt."
+                "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
+                "languageChangedDisclaimer":"Obs! Valt språk visas inte på förhandsvisningskartan."
             },
             "language": {
                 "label": "Språk",
@@ -43,8 +44,8 @@ Oskari.registerLocalization(
                 "tooltip": "Välj språk för kartmaterial och användargränssnitt."
             },
             "size": {
-                "label": "Map preview",
-                "tooltip": "Select mode where you want to preview map. You can see changes in the map preview"
+                "label": "Kart storlek",
+                "tooltip": "Välj en kart storlek. Bredd måste vara minst 20 pixel och höjd minst 30 pixel. Skilj av decimal med ett komma. Du ka se uppdateringar på förvisningskartan."
             },
             "maptools": {
                 "label": "Verktyg",

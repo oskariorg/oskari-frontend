@@ -96,22 +96,14 @@
   .divmanazerpopup h3.popupHeader {
     background-color: #FDF8D9;
     padding: 8px 10px; }
-
   .divmanazerpopup div.close-icon {
     position: absolute;
     top: 8px;
     right: 5px; }
-  .divmanazerpopup.mobile-landscape {
-    height: 100%;
-    top: 0% !important;
-    left: 0% !important;
-    margin-top: -6px !important;
-    margin-left: -4px !important;
-    overflow: auto; }
-  div.divmanazerpopup.mobile-portrait {
-    width: 94%;
-    top: 10% !important;
-    left: 3% !important;
-    margin-top: -6px !important;
-    margin-left: -4px !important;
-    overflow: auto; }
+  .divmanazerpopup.mobile-popup {
+    border: 2px solid silver;
+    border-radius: 0px;
+    max-width: 600px;
+    margin-left: 0 !important; }
+
+/*# sourceMappingURL=popup.css.map */

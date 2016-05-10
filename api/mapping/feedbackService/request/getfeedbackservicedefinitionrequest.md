@@ -38,8 +38,7 @@ http://wiki.open311.org/GeoReport_v2/
 ## Examples
 
 ```javascript
-   var data = {
-                                "baseUrl": "http://test311api.cityofchicago.org/open311/v2/services"
+   var data = {                                
                                 "serviceId":"4ffa4c69601827691b000018"
                                 };
                                 channel.postRequest('GetFeedbackServiceDefinitionRequest', [data]);

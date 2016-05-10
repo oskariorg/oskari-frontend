@@ -21,7 +21,6 @@ jQuery(document).ready(function() {
     }
     Oskari.setLang(language);
     Oskari.setLoaderMode('dev');
-    Oskari.setPreloaded(preloaded);
  
     /* let's start the app after config has been loaded successfully */
     function start(appSetup, appConfig, cb) {

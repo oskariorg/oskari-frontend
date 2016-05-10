@@ -16,12 +16,6 @@ jQuery(document).ready(function() {
     }
     Oskari.setLang(window.language);
 
-    if (typeof window.preloaded !== 'boolean') {
-        // default to false
-        window.preloaded = false;
-    }
-    Oskari.setPreloaded(window.preloaded);
-
     jQuery.ajax({
         type : 'GET',
         dataType : 'json',

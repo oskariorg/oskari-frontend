@@ -2,6 +2,18 @@
 
 ## 1.36
 
+### routingService
+
+Added default routing markers/icons. See /framework/routingService/instance.js.
+
+### mapmodule ol2/ol3
+
+Fixed getStyle function size handling. When adding featurecollection then svgmarker size is not calculated right.
+
+### publisher 2
+
+Language selection in publisher no longer affects the map preview, but the preview will be displayed using the application's default language.
+
 ### infobox
 
 Infobox-functionality is modified to allow displaying infobox in mobile mode as Oskari.userinterface.component.Popup when screen size is smaller than the defined mobile breakpoints.
@@ -10,7 +22,29 @@ ShowInfoBoxRequest is modified to allow giving multiple additional parameters (h
 
 Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
 
+The relative position of the infobox to the coordinates on the map can now be provided in options, so the infobox is displayed either over, under, to the left or to the right of the given position. Note! Only OL3!
+
+```javascript
+    {
+        //display the popup on top of the coordinates given. Possible values: top, bottom, left, right 
+        positioning: 'top'
+    }
+```
+
+Also, the background- and textcolour of buttons and textcolour of action links can now be provided as part of the colourScheme-object in options.
+
+```javascript
+    colourScheme: {
+        buttonBgColour: '#00CCDD',
+        buttonLabelColour: '#00F000',
+        linkColour: '#DD0000'
+    }
+```
+
+
 ### Oskari core and require.js
+
+#### Require.js
 
 Oskari/bundles/bundle.js now includes require.js (2.2.0) with the text-plugin (2.0.14).
 The minifier build script changes any file checking `typeof define === 'function'` so that the minified version doesn't evaluate define to be present and as a result
@@ -18,6 +52,8 @@ The minifier build script changes any file checking `typeof define === 'function
 If you run into errors the modification is done in the grunt task "compile".
 
 Any module that previously loaded require.js "manually" should no longer do so (namely the admin-layerselector in Oskari).
+
+#### Oskari application loading
 
 Oskari.app.startApplication() takes an optional callback to be called when application has been started, but no longer provides any parameters for the callback. 
 Previously returned an undocumented startupInfo object. The custom script loader has been replaced with require.js. Error handling has been improved for startApplication()
@@ -37,12 +73,51 @@ The loader loads the file from libraries/ol3/ol-v3.14.2-oskari.js and since it's
 Most of Oskari files just register through the Oskari global so this is something that's required mostly for libs. Most of the files also expect libraries to be present as 
 globals.
 
-Oskari.setPreloaded([boolean]) no longer does anything. If the loader detects that a bundles code is already in the browser it won't load it again.
-Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files. This will propably change to some more intuitive flag in the future.
+Oskari.setPreloaded([boolean]) is now deprecated and has no effect. Remove references to it as it will be removed in the future.
+If the loader detects that a bundles code is already in the browser it won't load it again.
+Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files.
+This will propably change to some more intuitive flag in the future.
+
+#### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
 
     Oskari.log('LogName').info('My info message');
+
+#### Oskari util functions
+
+Added sanitize function to Oskari.util for escaping html or specific tags. Usage:
+
+     // handles content as text content
+     var element = sanitize('<script>alert("testing")</script>');
+     // handles content as html, but removes script-tags
+     var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
+     // handles content as html, but removes script and style tags
+     var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
+     jQuery('body').append(element).append(anotherElement).append(stylishElement);
+
+#### Application lifecycle events
+
+Oskari now has on(name, function), off(name, function) and trigger(name, payload) functions for application events:
+
+        Oskari.on('bundle.start', function(details) {
+            // started bundle with bundleid "details.id"
+        });
+        Oskari.on('bundle.err', function(details) {
+            // error starting bundle
+        });
+        Oskari.on('app.start', function(details) {
+            // details contain started bundleids and possible errors that happened
+        });
+
+
+### core/abstractmapmodule
+
+New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions can register wellknown svg markers to mapmodule and get wellknowed marker.
+
+New ``MapModulePlugin.RegisterStyleRequest`` request, it's used when adding new wellknown style to mapmodule. See example /framework/routingService/instance.js.
+
+``GetSvg```function now handles also wellknown markers. Shape object must then include key/name attributes. Key is wellknown markers name and name is marker name. Optional shape object can contains color attribute, which is used change colors of these svg classes 'normal-color' or 'shading-color'. Shading color is calculated from color (darkened).
 
 ### tools
 
@@ -62,6 +137,15 @@ Fixed search result table sorting when columns contains word and numbers.
 ### divmanazer/grid
 
 Fixed table sorting when columns contains word and numbers.
+
+### mapwfs2 / manual refresh
+
+Extra warning added to the user, when there is no manual refresh wfs layers visible or not in scale.
+
+### featuredata2 / manual refresh
+
+Feature data is not emptied for the manual refresh layer, when map is moved. 
+In this case grid opacity is changed to 0.5 for to see that the user must push refresh-button for to get valid values. 
 
 ### toolbar and infobox
 
@@ -98,6 +182,22 @@ For example:
 #### util.naturalSort
 
 Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
+
+#### util.getColorBrightness
+
+Oskari.util.getColorBrightness has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark or light. Function returns 'dark' or 'light'.
+
+#### util.isDarkColor
+
+Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark. Function returns true/false;
+
+#### util.isLightColor
+
+Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
+
+#### util.isMobile
+
+Oskari.util.isMobile has been added to /Oskari/bundles/bundle.js. It's used to check at is map in mobile mode.
 
 ### divmanazer/ui-components
 
@@ -220,6 +320,10 @@ A modification in the request of describe WFS feature type.
 ### mapfull
 
 Fixed map layer opacity change in published maps when resetting map state to published state.
+
+### statistics/statsgrid.polymer (experimental)
+
+New bundle thats having a poc for using Polymer (https://www.polymer-project.org/1.0/) based functionality for statsgrid/thematic maps. It's work in progress and lacks errorhandling and ui-tuning. Not production ready and subject to change or removal in the future.
 
 ## 1.35.2
 
