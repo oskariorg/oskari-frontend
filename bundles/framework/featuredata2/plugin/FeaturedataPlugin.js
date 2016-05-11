@@ -137,6 +137,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return false;
             });
         },
+
+        handleCloseFlyout: function () {
+            var me = this,
+                sandbox = me.getSandbox();
+
+            if (!me._flyoutOpen) {
+                return;
+            }
+
+            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+            sandbox.request(me, toolbarRequest);
+            me._flyoutOpen = undefined;
+            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
+        },
+        
         /**
          * @method _refresh
          * Updates the plugins interface (hides if no featuredata layer selected)
