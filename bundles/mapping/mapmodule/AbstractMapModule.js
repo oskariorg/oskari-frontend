@@ -927,7 +927,6 @@ Oskari.clazz.define(
                 var sortedList = this._getSortedPlugins();
                 _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.redrawUI === 'function') {
-                        var index = plugin.getIndex();
                         plugin.redrawUI(me.getMobileMode(), modeChanged);
                     }
                 });
@@ -1244,6 +1243,7 @@ Oskari.clazz.define(
         startPlugins: function () {
             var me = this;
             var sortedList = this._getSortedPlugins();
+
             _.each(sortedList, function(plugin) {
                 if (plugin && typeof plugin.startPlugin === 'function') {
                     me.startPlugin(plugin);
