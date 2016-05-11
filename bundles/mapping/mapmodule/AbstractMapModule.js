@@ -1029,7 +1029,7 @@ Oskari.clazz.define(
             } else {
                 return lightTheme;
             }
-            
+
         },
 
 /*---------------- /THEME ------------------- */
@@ -1202,7 +1202,7 @@ Oskari.clazz.define(
             }
         },
         /**
-         * Starts any plugins that reported 
+         * Starts any plugins that reported
          * @param  {[type]} force [description]
          * @return {[type]}       [description]
          */
@@ -1330,7 +1330,7 @@ Oskari.clazz.define(
 
 
 /* --------------- STYLES --------------------------- */
-    
+
         /**
          * Register wellknown style
          * @method  @public registerStyle
@@ -1361,7 +1361,7 @@ Oskari.clazz.define(
                 return me._wellknownStyles[key][style]
             } else {
                 return me._wellknownStyles[key];
-            }   
+            }
         },
 
 /* --------------- /STYLES --------------------------- */
@@ -1396,7 +1396,7 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
                 markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
                 svgObject = {
                     data: markerStyle.shape.data,
@@ -1404,7 +1404,7 @@ Oskari.clazz.define(
                     y: markerStyle.shape.y
                 };
             }
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
                 markerStyle.shape.key && markerStyle.shape.name) {
                 svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
                 if(svgObject === null) {

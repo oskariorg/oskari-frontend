@@ -893,7 +893,7 @@ Oskari.clazz.define(
             } else {
                 me._element.removeClass('mobilesearch');
 
-                var conf = me.getConfig();                
+                var conf = me.getConfig();
                 if (conf) {
                     if (conf.toolStyle) {
                         me.changeToolStyle(conf.toolStyle, me._element);

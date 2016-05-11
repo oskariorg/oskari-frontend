@@ -187,7 +187,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
             });
-            
+
             var themeColours = mapmodule.getThemeColours();
 
             if (isMobile) {

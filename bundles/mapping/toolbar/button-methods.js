@@ -116,7 +116,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         for(var i in iconClasses) {
             var iconClass = iconClasses[i];
             var indexStyle = iconClass.indexOf('mobile-');
-            
+
             if(indexStyle>-1){
                 pConfig.mobileIconStyle = iconClass;
                 break;
@@ -245,7 +245,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             button.addClass('selected');
 
             if(btn.activeColor) {
-                button.css('background-color', btn.activeColor);                
+                button.css('background-color', btn.activeColor);
 
                 if(btn.toggleChangeIcon === true) {
                     // Remove button light and dark icons
