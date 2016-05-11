@@ -1566,7 +1566,7 @@ Oskari = (function () {
          */
         setPreloaded: function () {
             if(window.console && typeof console.log === 'function') {
-                console.log('Oskari.setPreloaded() now longer has any effect. Remove calls to it.');
+                console.log('Oskari.setPreloaded() no longer has any effect and will be removed in future release. Remove calls to it.');
             }
         },
 
