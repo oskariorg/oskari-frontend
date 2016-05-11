@@ -31,7 +31,7 @@
  *
  */
 Oskari = (function () {
-    var oskariVersion = "1.36.0";
+    var oskariVersion = "1.37.0";
 
     var isDebug = false,
         isConsole = window.console && window.console.debug,
