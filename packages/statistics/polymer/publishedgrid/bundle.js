@@ -27,7 +27,7 @@ function() {
             "src" : "../../../../libraries/webcomponentsjs/webcomponents-lite.min.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/publishedgrid/instance.js"
+            "src" : "../../../../bundles/statistics/publishedgrid.polymer/instance.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/statistics/statsgrid.polymer/view/MainPanel.js"
@@ -68,7 +68,7 @@ function() {
             "type" : "text/css",
             "src" : "../../../../bundles/statistics/statsgrid.polymer/resources/css/classifyplugin.css"
         }, {
-            "src" : "../../../../bundles/statistics/publishedgrid/resources/css/publishedgrid.css",
+            "src" : "../../../../bundles/statistics/publishedgrid.polymer/resources/css/publishedgrid.css",
             "type" : "text/css"
         }, {
             "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
