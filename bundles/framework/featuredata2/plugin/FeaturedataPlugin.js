@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     iconCls: 'mobile-info-marker',
                     tooltip: '',
                     sticky: true,
+                    toggleChangeIcon: true,
                     show: true,
                     callback: function () {
                         if (me._flyoutOpen) {
