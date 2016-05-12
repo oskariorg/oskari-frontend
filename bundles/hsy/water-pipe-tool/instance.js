@@ -155,9 +155,13 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
                 x = evt.getMouseX(),
                 y = evt.getMouseY(),
                 tagPipe = me.plugins['Oskari.userinterface.Flyout'].tabsContainer.panels[0];
-                
-                if(tagPipe.isToolEnabled()){
+
+                if(tagPipe.getStateTagPipe()){
                    tagPipe.findPipesRequest(x,y);
+                   tagPipe.state.tagPipeClickLonLat = evt.getLonLat();
+                }
+                if(tagPipe.getStateMustache()){
+                    tagPipe.mustachePointOnMap(evt.getLonLat());
                 }
             }
         },

@@ -15,7 +15,17 @@ Oskari.clazz.define(
         this.setTitle(localization.title);
         this.setContent(this.createUi());
         this.highlightVectorLayer = null;
-        this.state = {};
+        this.mustacheVectorLayer = null;
+        this.state = {
+            tagPipeClickLonLat: null,
+            tagPipeActive: false,
+            mustacheActive: false,
+            paavesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
+            jatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
+            jatevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
+            hulevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
+            hulevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight']
+        };
     },{
 
         /**
@@ -37,22 +47,9 @@ Oskari.clazz.define(
                 '<fieldset>' +
                 '    <input type="hidden" name="id" />' +
                 '       <h4></h4>' +
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" name="details-topic-1" class="details-topic" language="details-name-1" required="required" />' +
-                '    </label>' +
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" name="details-topic-2" class="details-topic" language="details-name-2" required="required" />' +
-                '    </label>' +
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" name="details-topic-3" class="details-topic" language="details-name-3" required="required" />' +
-                '    </label>' +
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" name="details-topic-4" class="details-topic" language="details-name-4" required="required" />' +
-                '    </label>' +
+                '    <fieldset></fieldset>' +
+                '    <div class="tag-pipe-form-inner-wrapper">' +
+                '    </div>' +
                 '</fieldset>' +
                 '<fieldset></fieldset>' +
                 '</form>'
@@ -60,7 +57,7 @@ Oskari.clazz.define(
 
             //help body
             me.templates.help = jQuery(
-                '<div class="tag-pipe-help hidden">' +
+                '<div class="tag-pipe-help">' +
                     '<p></p>' +
                 '</div>'
             );
@@ -75,54 +72,12 @@ Oskari.clazz.define(
             me.templates.pipeListElement = jQuery(
                 '<li class="tag-pipe-list-element">' +
                     '<span></span>' +
-                    '<a href="#"></a>' +
+                    '<a class="tag-pipe-show-onmap" href="#"></a>' +
+                    '<a class="tag-pipe-select" href="#"></a>' +
                 '</li>'
             );
-
-            //add localization to inputs
-            me.templates.form.find('input,select').each(function (index) {
-                var el = jQuery(this);
-                el.prev('span').html(me._getLocalization(el.attr('name')));
-                if(el.attr("language") != null){
-                   el.attr("placeholder", me._getLocalization(el.attr("language")));
-                }
-            });
-
-            me.templates.form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
-
-/*            var firstFieldset = me.templates.form.find(
-                'fieldset:nth-of-type(1)'
-            );*/
-
-            //add buttons to fieldset of form
-            var buttonFieldset = me.templates.form.find(
-                'fieldset:nth-of-type(2)'
-            );
-            btn = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.SaveButton'
-            );
-            btn.insertTo(buttonFieldset);
-            btn = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.DeleteButton'
-            );
-            btn.addClass('delete--tagpipe');
-            jQuery(btn.getElement()).click(
-                function (event) {
-                    me._deleteTagPipe(event, me);
-                }
-            );
-            btn.insertTo(buttonFieldset);
-            btn = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.CancelButton'
-            );
-            jQuery(btn.getElement()).click(
-                function (event) {
-                    me._closeForm(jQuery(event.target).parents('form'));
-                }
-            );
-            btn.insertTo(buttonFieldset);
         },
-        
+
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -139,9 +94,9 @@ Oskari.clazz.define(
             //add tag button
             btn.addClass('add-tag-btn primary');
             btn.setHandler(function (event) {
-                //me._openForm(event, me);
-                me.container.find(".add-tag-btn").addClass("hidden");
-                me.container.find(".cancel-tag-btn").removeClass("hidden");
+                me.container.find(".add-tag-btn").hide();
+                me.container.find(".cancel-tag-btn").show();
+                me.state.tagPipeActive = true;
                 me._activateNormalGFI(false);
                 me._activateNormalWFSReq(false);
                 me._activateTagPipeLayers();
@@ -150,21 +105,26 @@ Oskari.clazz.define(
                     me._createHighlightVectorLayer();
                 }
 
+                if(me.mustacheVectorLayer === null){
+                    me._createMustacheVectorLayer();
+                }
+
                 me._manageHelp(true, me._getLocalization('help_start'));
             });
 
             btn.setTitle(me._getLocalization('add_tag'));
             btn.insertTo(me.container);
 
+            //cancel tag button
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
 
-            //cancel tag button
-            btn.addClass('cancel-tag-btn primary hidden');
+            btn.addClass('cancel-tag-btn primary');
             btn.setHandler(function (event) {
-                me.container.find(".cancel-tag-btn").addClass("hidden");
-                me.container.find(".add-tag-btn").removeClass("hidden");
+                me.container.find(".cancel-tag-btn").hide();
+                me.state.tagPipeActive = false;
+                me.container.find(".add-tag-btn").show();
                 me.container.find(".tag-pipe-list").remove();
                 me._activateNormalGFI(true);
                 me._activateNormalWFSReq(true);
@@ -175,19 +135,31 @@ Oskari.clazz.define(
 
             btn.setTitle(me._getLocalization('cancel_tag'));
             btn.insertTo(me.container);
+            me.container.find(".cancel-tag-btn").hide();
 
             //add help div
-            me.container.append(me.templates.help.clone());
+            var help = me.templates.help.clone()
+            help.hide();
+            me.container.append(help);
 
             return me.container;
         },
 
         /**
-         * [isToolEnabled check is pipe tag tool activated]
+         * [getStateTagPipe get tools state value]
+         * @return {[type]} [description]
          */
-        isToolEnabled: function(){
+        getStateTagPipe: function(){
             var me = this;
-            return me.container.find(".add-tag-btn").hasClass("hidden");
+            return me.state.tagPipeActive;
+        },
+        /**
+         * [getStateMustache get tools state value]
+         * @return {[type]} [description]
+         */
+        getStateMustache: function(){
+            var me = this;
+            return me.state.mustacheActive;
         },
 
         /**
@@ -200,10 +172,10 @@ Oskari.clazz.define(
             help = jQuery("."+me.templates.help.attr("class").split(' ')[0]);
 
             if(show){
-                help.removeClass("hidden");
+                help.show();
                 help.find("p").text(text);
             }else{
-                help.addClass("hidden");
+                help.hide();
                 help.find("p").text("");
             }
         },
@@ -267,20 +239,6 @@ Oskari.clazz.define(
         },*/
 
         /**
-         * @method _populateItem
-         * Populates an item fragment
-         */
-        _populateItem: function (item, channel) {
-            var me = this;
-
-            item.attr('data-id', channel.id);
-            item.find('h3').html(
-                channel.topic[Oskari.getLang()]
-            );
-            return item;
-        },
-
-        /**
          * [_createTagPipeList creates list based on user click to pipes]
          * @param  {[array]} data [features]
          */
@@ -293,12 +251,19 @@ Oskari.clazz.define(
             for(var i in data){
                 var listEl = me.templates.pipeListElement.clone(),
                 listElspan = listEl.find("span"),
-                listEla = listEl.find("a");
+                listElaOnMap = listEl.find("a.tag-pipe-show-onmap"),
+                listElaSelect = listEl.find("a.tag-pipe-select");
 
                 listElspan.text(data[i].id);
-                listEla.text(me._getLocalization("show_on_map"));
-                listEla.bind("click", {feature: data[i]}, function(e){
+                listElaOnMap.text(me._getLocalization("show_on_map"));
+                listElaOnMap.bind("click", {feature: data[i]}, function(e){
                     e.preventDefault();
+                    me._showHighlightedPipe(e.data.feature);
+                });
+                listElaSelect.text(me._getLocalization("select_tag_pipe"));
+                listElaSelect.bind("click", {feature: data[i]}, function(e){
+                    e.preventDefault();
+                    me._openForm(e, me, e.data.feature);
                     me._showHighlightedPipe(e.data.feature);
                 });
 
@@ -336,42 +301,114 @@ Oskari.clazz.define(
             }
             return null;
         },*/
+        /**
+         * [_initForm creates form with state params]
+         * @param  {[array]} data [feature]
+         * @return {[jquery object]}      [html]
+         */
+        _initForm: function(data){
+            var me = this,
+            form = me.templates.form.clone(true),
+            type = data.id.replace("_",".").split(".");
 
+            //loop states and find right form input names
+            jQuery.each(me.state[type[0]], function(index, item) {
+                me.templates.form.detailinputs = jQuery(
+                '    <label>' +
+                '        <span></span>' +
+                '        <input type="text" tagtype="'+type[0]+'" name="'+item+'" class="details-topic" language="'+item+'" required="required" />' +
+                '    </label>'
+                );
+                form.find('.tag-pipe-form-inner-wrapper').append(me.templates.form.detailinputs);
+            });
+            
+            //add localization to inputs
+            form.find('input,select').each(function (index) {
+                var el = jQuery(this);
+                el.prev('span').html(me._getLocalization(el.attr('name')));
+                if(el.attr("language") != null){
+                   el.attr("placeholder", me._getLocalization(el.attr("language")));
+                   if(el.attr("name") == "tagtype"){
+                        el.val(me._getLocalization("tagtype-"+el.attr("tagtype")));
+                   }
+                }
+            });
+
+            //add topic for form
+            form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
+
+            //add buttons to fieldset of form
+            var firstFieldset = form.find('fieldset:nth-of-type(1)');
+            var innerFieldset = firstFieldset.find('fieldset:nth-of-type(1)');
+
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
+            btn.setTitle(me._getLocalization('add_mustache_to_map'));
+            jQuery(btn.getElement()).click(
+                function (event) {
+                   me.state.mustacheActive = true;
+                }
+            );
+            btn.insertTo(innerFieldset);
+
+            var buttonFieldset = form.find('fieldset:nth-of-type(2)');
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SaveButton'
+            );
+            btn.insertTo(buttonFieldset);
+/*            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.DeleteButton'
+            );
+            btn.addClass('delete--tagpipe');
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._deleteTagPipe(event, me);
+                }
+            );
+            btn.insertTo(buttonFieldset);*/
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.CancelButton'
+            );
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._closeForm(jQuery(event.target).parents('form'));
+                    me.state.mustacheActive = false;
+                }
+            );
+            btn.insertTo(buttonFieldset);
+
+            return form;
+        },
         /**
          * @method _openForm
          * Opens edit/create form depending on event target location
          */
-        _openForm: function (event, instance) {
+        _openForm: function (event, instance, data) {
             // Semi deep clone
             var me = instance,
-                form = me.templates.form.clone(true),
-                target = jQuery(event.target),
-                item = target.parents('li'),
-                uid = item.attr('data-id');
+                form = me._initForm(data),
+                target = jQuery(event.target);
 
-            if (uid && uid.length) {
-                target.hide();
                 //me._populateForm(form, me._getChannel(parseInt(uid, 10)));
-                item.append(form);
-                form.find('.delete--tagpipe').removeClass('hidden');
-            } else {
-                target.hide();
                 //me._populateForm(form, null);
-                me.container.prepend(form);
-            }
+                me._manageHelp(true, me._getLocalization('help_insert'));
+                me.container.find(".tag-pipe-list").remove();
+                me.container.find(".cancel-tag-btn").hide();
+                me.state.tagPipeActive = false;
+                me.container.append(form);
         },
-
         /**
          * @method _closeForm
          * Closes given form and shows the button that opens it
          */
         _closeForm: function (form) {
-            if (form.parent().is('li')) {
-                // show edit button
-                form.parent().find('.header input').show();
-            } else {
-                form.parent().find('> input').show();
-            }
+            var me = this;
+            form.parent().find('.add-tag-btn').show();
+            me._activateNormalGFI(true);
+            me._activateNormalWFSReq(true);
+            me._clearHighlightVectorLayer();
+            me._manageHelp(false);
             // destroy form
             form.remove();
         },
@@ -382,7 +419,6 @@ Oskari.clazz.define(
          * that password field values match.
          */
         _formIsValid: function (form, me) {
-
             var errors = [],
                 pass;
             // check that required fields have values
@@ -529,11 +565,22 @@ Oskari.clazz.define(
         findPipesRequest: function(x, y){
 
             var me = this,
+            layers = me._getTagPipeLayers(),
             mapVO = me.sandbox.getMap(),
             ajaxUrl = me.sandbox.getAjaxUrl(),
-            layerName = "jatevesijohdot,paavesijohdot",
-            layerUrl = "http://10.144.96.52:8080/geoserver/wms";
+            layerName = "",
+            layerUrl = "";
 
+            //collect layernames and url
+            for (var i in layers) {
+                layerName += layers[i].getLayerName();
+                if(i < layers.length-1){
+                    layerName += ",";
+                }
+                layerUrl = layers[i].getLayerUrl();
+            }
+
+            //clear all highlight vectors
             me._clearHighlightVectorLayer();
 
             jQuery.ajax({
@@ -568,15 +615,51 @@ Oskari.clazz.define(
                 }
             });
         },
+        mustachePointOnMap: function(lonlat){
+            var me = this, 
+            _map = me.mapModule.getMap();
 
+            me._clearMustacheVectorLayer();
+
+            var points = [ 
+                new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
+                new OpenLayers.Geometry.Point(me.state.tagPipeClickLonLat.lon, me.state.tagPipeClickLonLat.lat)
+            ];
+            
+            var feature = new OpenLayers.Feature.Vector(
+                    new OpenLayers.Geometry.LineString(points)
+            );
+
+            feature.attributes = {
+                nimi: "testi",
+                arvo: 21,
+                favColor: 'purple',
+                align: 'lb'
+            };
+
+             me.mustacheVectorLayer.addFeatures(feature);
+            _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
+
+        },
+/*        _updateLayer: function(){
+            console.info("tulee");
+            var me = this;
+            var updateRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                    updateRequest;
+                var params = {};
+                params['id'] = "paavesijohdot.7884466";
+                updateRequest = updateRequestBuilder(37, true, params);
+                me.sandbox.request(me.instance, updateRequest);
+        },*/
         /**
          * [activateTagPipeLayers: Puts tagpipe layers on]
          */
         _activateTagPipeLayers: function(){
             var me = this;
             var layers = me._getTagPipeLayers();
-
+        
             for (var i in layers) {
+                /*console.info(layers[i].getLegendImage());*/
                 me._addLayerToMapById(layers[i].getId());
             }
         },
@@ -675,23 +758,59 @@ Oskari.clazz.define(
                      fillOpacity: 1,
                      fillColor: "#00ff7f",
                      pointRadius: 2
-                 },
-                eventListeners : {
-                    "featuresadded" : function(layer) {
-                    }
-                }
+                 }
             });
 
             _map.addLayers([me.highlightVectorLayer]);
 
         },
+         /**
+         * [createHighlightVectorLayer creates highlight vector layer to map]
+         * @return {[none]}
+         */
+        _createMustacheVectorLayer: function(){
+            var me = this,
+            _map = me.mapModule.getMap();
 
+            me.mustacheVectorLayer = new OpenLayers.Layer.Vector("mustache-vector-layer", {
+                styleMap: new OpenLayers.StyleMap({'default':{
+                    strokeColor: "#00FF00",
+                    strokeOpacity: 1,
+                    strokeWidth: 3,
+                    fillColor: "#FF5500",
+                    fillOpacity: 0.5,
+                    pointRadius: 6,
+                    pointerEvents: "visiblePainted",
+                    // label with \n linebreaks
+                    label : "${nimi}\n\narvo: ${arvo}",
+                    
+                    fontColor: "${favColor}",
+                    fontSize: "12px",
+                    fontFamily: "Courier New, monospace",
+                    fontWeight: "bold",
+                    labelAlign: "${align}",
+                    labelXOffset: "${xOffset}",
+                    labelYOffset: "${yOffset}",
+                    labelOutlineColor: "white",
+                    labelOutlineWidth: 3
+                }})});
+
+            _map.addLayers([me.mustacheVectorLayer]);
+
+        },
         /**
          * [clearHighlightVectorLayer removes all features from highlight layer]
          */
         _clearHighlightVectorLayer: function(){
             var me = this;
             me.highlightVectorLayer.removeAllFeatures();
+        },
+         /**
+         * [clearHighlightVectorLayer removes all features from highlight layer]
+         */
+        _clearMustacheVectorLayer: function(){
+            var me = this;
+            me.mustacheVectorLayer.removeAllFeatures();
         }
 
     }, {
