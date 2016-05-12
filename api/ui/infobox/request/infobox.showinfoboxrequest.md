@@ -31,7 +31,7 @@ All the parameters are wrapped inside one array.
   <td> \* contentData </td><td> Object[] </td><td> JSON presentation for the infobox data </td><td> </td>
 </tr>
 <tr>
-  <td> \* position </td><td> Object </td><td> Coordinates where the infobox should be shown {lon: 411650, lat: 6751897} or marker id {marker: 'MARKER_TEST'}.  If marker and coordinates (lon,lat) are both given then try to show popup to marker, if wanted marker not found then try to open popup from wanted coordinates. If cannot open popup then sending InfoBox.InfoBoxEvent. </td><td> </td>
+  <td> \* position </td><td> Object </td><td> Coordinates where the infobox should be shown {lon: 411650, lat: 6751897} or marker id {marker: 'MARKER_TEST'}.  If marker and coordinates (lon,lat) are both given then try to show infobox to marker, if wanted marker not found then try to open infobox from wanted coordinates. If cannot open infobox then sending InfoBox.InfoBoxEvent. </td><td> </td>
 </tr>
 <tr>
   <td> options </td><td> Object </td><td> Additional options for infobox </td><td> </td>
@@ -45,16 +45,16 @@ Parameters for options-object:
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td> hidePrevious </td><td> Boolean </td><td> if true, hides any previous popups when showing this </td><td> false </td>
+  <td> hidePrevious </td><td> Boolean </td><td> if true, hides any previous infoboxes when showing this </td><td> false </td>
 </tr>
 <tr>
-  <td> colourScheme </td><td> Object </td><td> the colour scheme object for the popup </td><td> default colour scheme </td>
+  <td> colourScheme </td><td> Object </td><td> the colour scheme object for the infobox </td><td> default colour scheme </td>
 </tr>
 <tr>
-  <td> font </td><td> String </td><td> the id of the font for the popup </td><td> default font </td>
+  <td> font </td><td> String </td><td> the id of the font for the infobox </td><td> default font </td>
 </tr>
 <tr>
-  <td> mobileBreakpoints </td><td> Object </td><td> The size of the screen in pixels to start using mobile mode {width: 'mobileModeWidth', height: 'mobileModeHight'}. Both values are not necessary. </td><td> If not given, uses values {width:?, height:?} </td>
+  <td> mobileBreakpoints </td><td> Object </td><td> The size of the screen in pixels to start showing infobox in mobile mode {width: 'mobileModeWidth', height: 'mobileModeHight'}. Both values are not necessary. </td><td> If not given, uses values {width:500, height:480} </td>
 </tr>
 <tr>
   <td> positioning </td><td> String </td><td> <b><i style="color:#FF0000;">NOTE! OPENLAYERS 3 ONLY!</i></b> Optional parameter, tells the relative position of the popup to the coordinates. Possible values: top, bottom, left, right</td><td> If not provided, the default bottom-right positioning is used. Only affects the popup in desktop-mode. </td>
@@ -69,25 +69,25 @@ Parameters for colourScheme-object:
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td> titleColour </td><td> String </td><td> Popup title colour as hexadecimal </td><td></td>
+  <td> titleColour </td><td> String </td><td> Infobox title colour as hexadecimal </td><td></td>
 </tr>
 <tr>
   <td> headerColour </td><td> String </td><td> Feature header colour as hexadecimal </td><td></td>
 </tr>
 <tr>
-  <td> bgColour </td><td> String </td><td> Popup header background color as hexadecimal </td><td></td>
+  <td> bgColour </td><td> String </td><td> Infobox header background color as hexadecimal </td><td></td>
 </tr>
 <tr>
   <td> iconCls </td><td> String </td><td> Class of the close-button, for example 'icon-close-white'</td><td></td>
 </tr>
 <tr>
-  <td> buttonBgColour </td><td> String </td><td> Background color of action buttons in popup as hexadecimal</td><td></td>
+  <td> buttonBgColour </td><td> String </td><td> Background color of action buttons in infobox as hexadecimal</td><td></td>
 </tr>
 <tr>
-  <td> buttonLabelColour </td><td> String </td><td> Text color of action buttons in popup as hexadecimal</td><td></td>
+  <td> buttonLabelColour </td><td> String </td><td> Text color of action buttons in infobox as hexadecimal</td><td></td>
 </tr>
 <tr>
-  <td> linkColour </td><td> String </td><td> Text color of action links in popup as hexadecimal</td><td></td>
+  <td> linkColour </td><td> String </td><td> Text color of action links in infobox as hexadecimal</td><td></td>
 </tr>
 </table>
 ## Examples
@@ -196,7 +196,7 @@ channel.getMapPosition(function(data) {
 </pre>
 
 
-Add marker to center map and open popup for added marker
+Add marker to center map and open infobox for added marker
 <pre class="event-code-block">
 <code>
 var MARKER_ID = 'MARKER_WITH_POPUP';
@@ -213,7 +213,7 @@ channel.getMapPosition(function(data) {
     channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, MARKER_ID]);
     channel.log('MapModulePlugin.AddMarkerRequest posted with data', markerData);
 
-    // Open popup for marker
+    // Open infobox for marker
     var content = [
         {
             'html': '<div>Map position info:</div>'
