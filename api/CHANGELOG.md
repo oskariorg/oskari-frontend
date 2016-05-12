@@ -9,7 +9,9 @@ Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature
 
 ### infobox
 
-#### [mod] [rpc] ShowInfoBoxRequest (changes not backwards compatible!)
+#### [mod] [rpc] ShowInfoBoxRequest
+
+**Changes not backwards compatible!**
 
 Request is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints means the size of the screen in pixels to start showing infobox in mobile mode.
 
