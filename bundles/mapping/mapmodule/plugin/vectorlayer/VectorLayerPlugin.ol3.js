@@ -199,14 +199,17 @@ Oskari.clazz.define(
             var me = this,
                 olLayer,
                 layerId;
-            layer = me._layers[layer];
             if(layer && layer !== null){
                 if(layer instanceof ol.layer.Vector) {
                     layerId = layer.get('id');
-                } else if(_.isString(layer)) {
+                } else if(_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
                 }
                 olLayer = me._layers[layerId];
+
+                if(!olLayer) {
+                    return;
+                }
             }
             if (olLayer) {
                 // Removes only wanted features from the given maplayer
