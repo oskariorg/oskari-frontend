@@ -187,7 +187,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
             });
-            
+
             var themeColours = mapmodule.getThemeColours();
 
             if (isMobile) {
@@ -709,10 +709,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
         _getInputsData: function() {
             var me = this;
-            if(!me._lonInput || me._latInput) {
+            if(!me._lonInput || !me._latInput) {
                 return;
             }
-                lon = me._lonInput.val(),
+            var lon = me._lonInput.val(),
                 lat = me._latInput.val();
             if(lon.indexOf('~') >= 0) {
                 lon = lon.replace('~', '');

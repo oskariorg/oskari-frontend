@@ -477,6 +477,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             requestData.featureId = (me.operationMode == "edit" && me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
             requestData.layerId = me.selectedLayerId;
+            requestData.srsName = this.sandbox.getMap().getSrsName();
             requestData.geometries = {};
             requestData.geometries.data = [];
             if (me.operationMode == "edit" || deleteFeature == true) {
@@ -691,13 +692,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (data.features === 'empty' || layer === null || layer === undefined) {
                 return;
             }
-            
+
             if(fields.length === 0) { //layer view is empty, get fields from DescribeFeatureType
                 fields = ["__fid"];
                 $.each(me.fieldsTypes, function(key, value) {
                    if(!value.startsWith("gml:")) { //skip geometry
-                       fields.push(key);   
-                   }                       
+                       fields.push(key);
+                   }
                 });
                 fields = fields.concat(['__centerX', '__centerY']);
             }

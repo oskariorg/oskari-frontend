@@ -29,12 +29,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     iconCls: 'mobile-menu',
                     tooltip: '',
                     sticky: true,
+                    toggleChangeIcon: true,
                     show: true,
                     callback: function () {
                         if (me.popup && me.popup.isVisible()) {
                             me.popup.getJqueryContent().detach();
                             me.popup.close(true);
                             me.popup = null;
+                            var sandbox = me.getSandbox();
+                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                            sandbox.request(me, toolbarRequest);
                         } else {
                             me._openToolsPopup(true);
                         }
@@ -311,8 +315,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 me.changeToolStyle();
                 me._bindIcon();
             }
-            
-            
+
+
 
         },
 

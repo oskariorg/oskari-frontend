@@ -376,6 +376,12 @@ Oskari.clazz.define(
                 });
                 return features;
             },
+            setCursorStyle: function(cursorStyle) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var element = mapModule.getMapEl();
+                jQuery(element).css('cursor',cursorStyle);
+                return cursorStyle;
+            },
             sendUIEvent: function(bundleId, payload) {
                 var me = this,
                     event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);

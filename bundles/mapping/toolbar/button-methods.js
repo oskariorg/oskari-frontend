@@ -116,13 +116,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         for(var i in iconClasses) {
             var iconClass = iconClasses[i];
             var indexStyle = iconClass.indexOf('mobile-');
-            
+
             if(indexStyle>-1){
                 pConfig.mobileIconStyle = iconClass;
                 break;
             }
         }
         if(pConfig.mobileIconStyle) {
+            button.removeClass(pConfig.mobileIconStyle + '-dark');
+            button.removeClass(pConfig.mobileIconStyle + '-light');
             button.removeClass(pConfig.mobileIconStyle);
             button.addClass(pConfig.mobileIconStyle + '-' + this.getMapModule().getReverseTheme());
         }
@@ -243,7 +245,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             button.addClass('selected');
 
             if(btn.activeColor) {
-                button.css('background-color', btn.activeColor);                
+                button.css('background-color', btn.activeColor);
 
                 if(btn.toggleChangeIcon === true) {
                     // Remove button light and dark icons

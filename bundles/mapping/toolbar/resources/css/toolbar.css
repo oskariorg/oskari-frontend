@@ -53,3 +53,16 @@ div.tool.disabled {
     right: 10px; }
     .oskariui-menutoolbar .oskariui-menutoolbar-closebox div {
       cursor: pointer; }
+
+/* MOBILE */
+.mobileToolbarDiv {
+  display: none;
+  padding: 8px;
+  line-height: 10px; }
+  .mobileToolbarDiv div.toolrow div.tool {
+    margin-right: 6px;
+    margin-top: 6px; }
+    .mobileToolbarDiv div.toolrow div.tool:hover:not(.selected) {
+      background-color: transparent !important; }
+  .mobileToolbarDiv .toolrow {
+    border-top: 0; }

@@ -402,7 +402,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
-                var buttonConf = buttons[tool]; 
+                var buttonConf = buttons[tool];
                 buttonConf.toolbarid = toolbar;
                 sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }
