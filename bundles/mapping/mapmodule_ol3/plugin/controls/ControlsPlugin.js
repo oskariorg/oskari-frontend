@@ -56,12 +56,17 @@ Oskari.clazz.define(
                         // this isn't about measurements, stop processing it
                         return;
                     }
+
                     var me = this,
                         measureValue,
                         data = event.getData(),
                         finished = event.getIsFinished(),
                         geoJson = event.getGeoJson(),
                         geomMimeType = 'application/json';
+
+                    if (data.showMeasureOnMap) {
+                        return;
+                    }
 
                     // FIXME! Does StopDrawingRequest need to send drawingEvent?
                     if (finished) {
