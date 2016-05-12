@@ -19,7 +19,7 @@ It is now also possible to define links and buttons to infobox content and give 
 
 Request is modified also so that infobox can be shown for the marker. This can done by giving marker id instead of lonlat in position-object. If marker id and lon/lat is defined, then infobox is tried to show for marker, if marker is not found then infobox is shown for defined coordinates. If infobox cannot be shown, then it is informed in InfoBox.InfoBoxEvent.
 
-For more detailed information, see documentation http://oskari.org/api/requests and example 
+For more detailed information, see [documentation](http://oskari.org/api/requests) and [RPC example](http://oskari.org/examples/rpc-api/rpc_example.html).
 
 NOTE! The changes are not backwards compatible! The basic change that should be done in most use cases is to remove hidePrevious-value (true/false) from parameterlist to the options-object. Other changes may also be required. See the updated request-documentation for getting advice to update your requests.
 
