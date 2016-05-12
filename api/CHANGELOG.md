@@ -85,6 +85,8 @@ Improved request to allow add custom svg markers. Custom marker is defined shape
 
 #### [add] [rpc] New functions
 
+setCursorStyle(cursorStyle) - function added. Functionality to change the mouse cursor on the map to any valid cursor css declaration ('crosshair','progress' etc.) supported by the browser. 
+
 An experimental **getScreenshot()** function is now available when the Oskari instance uses Openlayers 3 based mapmodule.
 The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
 

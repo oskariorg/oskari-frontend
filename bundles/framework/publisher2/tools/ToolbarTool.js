@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
         // defaultStateConfigs stores the default state values, which is used when reset configs
         defaultStateConfigs: {
-            'toolbarConfig': {},
             'publishedmyplaces2Config': {
                 'toolbarId': 'PublisherToolbar',
                 'layer': null,
@@ -29,11 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
         // presetStateConfigs stores the preselected values which are different from the default values
         presetStateConfigs: {
-            'toolbarConfig': {
-                'toolbarId': 'PublisherToolbar',
-                'defaultToolbarContainer': '.publishedToolbarContent',
-                'hasContentContainer': true
-            },
             'publishedmyplaces2Config': {
                 'toolbarId': 'PublisherToolbar',
                 'layer': null, // cannot be selected in advance, so it is selected in _updateDrawLayerSelection
@@ -125,29 +119,56 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * Initialise tool
          * @method init
          */
-        init: function() {
+        init: function(data) {
             var me = this;
-            me._storedData = {};//me.__instance.publisher.data || null;
-            if (me.__instance.publisher.data) {
-                var data = me.__instance.publisher.data;
+            me._storedData = {};
+            if (!data || !data.configuration) {
+                return;
+            }
+            var conf = data.configuration;
+            var pluginConf = null || {};
 
-                //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
-                //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
-                //toolbar in the first place
+            if (conf.mapfull.conf && conf.mapfull.conf.plugins) {
+                _.each(conf.mapfull.conf.plugins, function(plugin) {
+                    if (me.getTool().id === plugin.id) {
+                        me.setEnabled(true);
+                        pluginConf = plugin.config || {};
+                    }
+                });
+            }
+            var selectedOptions = {
+                history_back : false,
+                history_forward : false,
+                measureline : false,
+                measurearea : false
+            };
+            if(pluginConf.buttons) {
+                pluginConf.buttons.forEach(function(btn) {
+                    selectedOptions[btn] = true;
+                });
+            }
+            // TODO: myplaces stuff
+            var configurableOptions = {
 
-                if (data && data.configuration && data.configuration.toolbar) {
-                    me._storedData.toolbarConfig = _.cloneDeep(data.configuration.toolbar.conf);
-                    if (me._hasActiveTools()) {
-                        me.setEnabled(true);
-                    }
-                }
-                if (data && data.configuration && data.configuration.publishedmyplaces2) {
-                    me._storedData.publishedmyplaces2Config = _.cloneDeep(data.configuration.publishedmyplaces2.conf);
-                    if (me._hasSelectedDrawTool()) {
-                        me.setEnabled(true);
-                    }
+            };
+            // previous myplaces
+            if (data.configuration.publishedmyplaces2) {
+                me._storedData.publishedmyplaces2Config = _.cloneDeep(conf.publishedmyplaces2.conf);
+                if (me._hasSelectedDrawTool()) {
+                    me.setEnabled(true);
                 }
             }
+            //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
+            //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
+            //toolbar in the first place
+            /*
+            if (conf.toolbar) {
+                me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
+                if (me._hasActiveTools()) {
+                    me.setEnabled(true);
+                }
+            }
+            */
         },
 
         /**
@@ -160,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                 title: 'PublisherToolbarPlugin',
-                config: {'toolbarId': 'PublisherToolbar'}
+                config: {'toolbarId': 'PublisherToolbar', buttons : []}
             };
         },
         /**
@@ -172,27 +193,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          */
         getValues: function () {
             var me = this;
-            if(me.state.enabled) {
-
-                var retValue = {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
-                };
-                if (me.toolbarConfig && !_.isEmpty(me.toolbarConfig)) {
-                    retValue.configuration.toolbar = { conf : me.toolbarConfig };
-                }
-                if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
-                    retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
-                }
-                return retValue;
-            } else {
+            if(!me.state.enabled) {
                 return null;
             }
+
+            var retValue = {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    }
+                }
+            };
+            // we want toolbar always with no default tools
+            retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
+            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
+                retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
+            }
+            return retValue;
         },
         /**
          * Get extra options.

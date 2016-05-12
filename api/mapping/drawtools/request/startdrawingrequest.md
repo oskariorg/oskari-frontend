@@ -95,8 +95,8 @@ Parameters for options-object:
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', [
-		id: 'bufferedLineSelection', 
-		shape: 'LineString', 
+		'bufferedLineSelection', 
+		'LineString']
 		{
         	buffer: 200,
             allowMultipleDrawing: 'single',

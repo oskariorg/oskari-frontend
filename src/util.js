@@ -324,15 +324,20 @@ Oskari.util = (function () {
     util.isMobile = function() {
         var md = new MobileDetect(window.navigator.userAgent);
         var mobileDefs = {
-            width: 480,
-            height: 640
+            width: 500,
+            height: 400
         };
         var size = {
             height: jQuery(window).height(),
             width: jQuery(window).width()
         };
 
-        var isMobile = (md.mobile() !== null) ? true : ( size.width < mobileDefs.width || size.height < mobileDefs.height);
+        var isSizeMobile = false;
+        if(size.width <= mobileDefs.width || size.height <= mobileDefs.height) {
+            isSizeMobile = true;
+        }
+
+        var isMobile = (md.mobile() !== null) ? true : isSizeMobile;
 
         return isMobile;
     };

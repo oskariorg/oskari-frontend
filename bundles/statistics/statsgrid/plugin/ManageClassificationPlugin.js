@@ -794,9 +794,6 @@ Oskari.clazz.define(
             // Toggle content HTML
             me._toggleHeaderClickBind(false, el);
 
-            // Hide Classify dialog
-            //me.setVisible(me._isStatsLayerVisible());
-            me.setVisible(me.isVisible());
             // Setup Colors
             me.setColors();
         },

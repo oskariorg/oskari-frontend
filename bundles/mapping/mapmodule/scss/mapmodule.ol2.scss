@@ -313,29 +313,3 @@ div.mapplugins {
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important;
 }
-
-
-.mobileToolbarDiv {
-    display: none;
-    padding: 8px;
-    line-height: 10px;
-
-    div.toolrow {
-        div.tool {
-            margin-right: 6px;
-            margin-top: 6px;
-
-            &:hover:not(.selected) {
-                background-color: transparent !important;
-            }
-        }
-    }
-
-    input[type=text] {
-        height:10px;
-    }
-
-    .toolrow {
-        border-top: 0;
-    }
-}

@@ -127,7 +127,7 @@ function () {
         var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RegisterStyleRequest');
         if(reqBuilder) {
             var request = reqBuilder('routing', me._defaultStyles);
-            sandbox.request(this, request); 
+            sandbox.request(this, request);
         }
     },
 

@@ -692,13 +692,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             if (data.features === 'empty' || layer === null || layer === undefined) {
                 return;
             }
-            
+
             if(fields.length === 0) { //layer view is empty, get fields from DescribeFeatureType
                 fields = ["__fid"];
                 $.each(me.fieldsTypes, function(key, value) {
                    if(!value.startsWith("gml:")) { //skip geometry
-                       fields.push(key);   
-                   }                       
+                       fields.push(key);
+                   }
                 });
                 fields = fields.concat(['__centerX', '__centerY']);
             }

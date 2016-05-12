@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     iconCls: 'mobile-info-marker',
                     tooltip: '',
                     sticky: true,
+                    toggleChangeIcon: true,
                     show: true,
                     callback: function () {
                         if (me._flyoutOpen) {
@@ -152,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
         },
-        
+
         /**
          * @method _refresh
          * Updates the plugins interface (hides if no featuredata layer selected)
@@ -233,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 top = jQuery(mobileDiv).offset().top,
                 height = jQuery(mobileDiv).outerHeight(true),
                 flyoutTop = parseInt(top)+parseInt(height);
-            
+
             flyout.container.parentElement.parentElement.style['top'] = flyoutTop + 'px';
             jQuery(flyout.container.parentElement.parentElement).find('.oskari-flyoutheading').remove();
 
