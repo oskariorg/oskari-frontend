@@ -381,8 +381,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
                     // add active color if sticky and toggleChangeIcon
-                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true) {
-                        buttonConf.activeColor =  themeColors.activeColour;
+                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
+                        buttonConf.activeColour =  themeColors.activeColour;
                     }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
