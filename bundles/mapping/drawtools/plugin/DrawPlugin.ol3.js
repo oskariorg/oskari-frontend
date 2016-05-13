@@ -207,6 +207,11 @@ Oskari.clazz.define(
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me._shape
             };
+
+            if (me._options.showMeasureOnMap) {
+                data['showMeasureOnMap'] = me._options.showMeasureOnMap;
+            }
+
             if(options.clearCurrent) {
                 // TODO: clear the drawing matching the id from map
                 me.clearDrawing();

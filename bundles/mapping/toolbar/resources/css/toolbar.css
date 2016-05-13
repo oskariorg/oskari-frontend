@@ -10,7 +10,7 @@ div.toolrow {
   div.toolrow div.tool {
     display: inline-block;
     cursor: pointer; }
-    div.toolrow div.tool.selected, div.toolrow div.tool:hover:not(.disabled):not(.mobiletoolbar), div.toolrow div.tool:active:not(.disabled):not(.mobiletoolbar) {
+    div.toolrow div.tool.selected, div.toolrow div.tool:active:not(.disabled) {
       background-color: #212121; }
 
 div.linkcontent {
