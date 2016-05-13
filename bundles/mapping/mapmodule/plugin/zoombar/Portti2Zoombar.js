@@ -46,10 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         if(currentZoom<maxZoomLevel) {
                             me.getMapModule().setZoomLevel(currentZoom+1);
                         }
-                    },
-                    //toggleChangeIcon: true,
-                    //activeColor: '#E6E6E6'
-                    //childPosition: 'bottom'
+                    }
                 },
                 'mobile-zoom-out': {
                     iconCls: 'mobile-zoom-out',
@@ -63,9 +60,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                             me.getMapModule().setZoomLevel(currentZoom-1);
                         }
                     }
-                    //toggleChangeIcon: true,
-                    //activeColor: '#E6E6E6',
-                    //childPosition: 'bottom'
                 }
             },
             buttonGroup: 'mobile-toolbar'

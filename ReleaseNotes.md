@@ -147,9 +147,27 @@ Extra warning added to the user, when there is no manual refresh wfs layers visi
 Feature data is not emptied for the manual refresh layer, when map is moved. 
 In this case grid opacity is changed to 0.5 for to see that the user must push refresh-button for to get valid values. 
 
-### toolbar and infobox
+### toolbar 
 
-Openlayers 2 and openlayers 3 code unified: toolbar and infobox bundles are now located under mapping including code for both ol2 and ol3.
+Openlayers 2 and openlayers 3 code unified: toolbar bundle is now located under mapping including code for both ol2 and ol3.
+
+#### Toolbar.AddToolButtonRequest
+
+New configuration params:
+- activeColour: button active background colour
+- toggleChangeIcon: toggle change button icon. Is this setted true, icon class is calculated for added activeColour
+
+
+#### Toolbar.ToolbarRequest / add
+
+New configuration params:
+- disableHover: disable or not  toolbar buttons hover
+- colours, this can be used to configure toolbar colours. Now only supported hover colour. 
+
+
+### infobox
+
+Openlayers 2 and openlayers 3 code unified: infobox bundle is now located under mapping including code for both ol2 and ol3.
 
 ### openlayers 3 custom build configuration files created
 
