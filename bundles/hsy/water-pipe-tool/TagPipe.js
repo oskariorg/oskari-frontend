@@ -20,7 +20,10 @@ Oskari.clazz.define(
             tagPipeClickLonLat: null,
             tagPipeActive: false,
             mustacheActive: false,
+            mustacheType: null,
             paavesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
+            jakeluvesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
+            tonttivesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
             jatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
             jatevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
             hulevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
@@ -47,9 +50,9 @@ Oskari.clazz.define(
                 '<fieldset>' +
                 '    <input type="hidden" name="id" />' +
                 '       <h4></h4>' +
-                '    <fieldset></fieldset>' +
                 '    <div class="tag-pipe-form-inner-wrapper">' +
                 '    </div>' +
+                '    <fieldset></fieldset>' +
                 '</fieldset>' +
                 '<fieldset></fieldset>' +
                 '</form>'
@@ -105,14 +108,10 @@ Oskari.clazz.define(
                     me._createHighlightVectorLayer();
                 }
 
-                if(me.mustacheVectorLayer === null){
-                    me._createMustacheVectorLayer();
-                }
-
                 me._manageHelp(true, me._getLocalization('help_start'));
             });
 
-            btn.setTitle(me._getLocalization('add_tag'));
+            btn.setTitle(me._getLocalization('add-tag'));
             btn.insertTo(me.container);
 
             //cancel tag button
@@ -133,7 +132,7 @@ Oskari.clazz.define(
                 me._manageHelp(false);
             });
 
-            btn.setTitle(me._getLocalization('cancel_tag'));
+            btn.setTitle(me._getLocalization('cancel-tag'));
             btn.insertTo(me.container);
             me.container.find(".cancel-tag-btn").hide();
 
@@ -310,13 +309,14 @@ Oskari.clazz.define(
             var me = this,
             form = me.templates.form.clone(true),
             type = data.id.replace("_",".").split(".");
+            me.state.mustacheType = type[0];
 
             //loop states and find right form input names
-            jQuery.each(me.state[type[0]], function(index, item) {
+            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
                 me.templates.form.detailinputs = jQuery(
                 '    <label>' +
                 '        <span></span>' +
-                '        <input type="text" tagtype="'+type[0]+'" name="'+item+'" class="details-topic" language="'+item+'" required="required" />' +
+                '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="details-topic" language="'+item+'" required="required" />' +
                 '    </label>'
                 );
                 form.find('.tag-pipe-form-inner-wrapper').append(me.templates.form.detailinputs);
@@ -344,10 +344,22 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
+
             btn.setTitle(me._getLocalization('add_mustache_to_map'));
-            jQuery(btn.getElement()).click(
-                function (event) {
-                   me.state.mustacheActive = true;
+            btn.addClass("add-mustache-to-map");
+            jQuery(btn.getElement()).click(function (e) {
+                    var el = jQuery(this);
+                    e.preventDefault();
+
+                    if(el.hasClass('active')){
+                        el.removeClass("active primary");
+                        el.val(me._getLocalization("add_mustache_to_map"));
+                        me.state.mustacheActive = false; 
+                    }else{
+                        el.addClass("active primary");
+                        el.val(me._getLocalization("cancel_mustache_to_map"));
+                        me.state.mustacheActive = true;
+                    }
                 }
             );
             btn.insertTo(innerFieldset);
@@ -409,6 +421,11 @@ Oskari.clazz.define(
             me._activateNormalWFSReq(true);
             me._clearHighlightVectorLayer();
             me._manageHelp(false);
+            me.state.mustacheType = null;
+            if(me.mustacheVectorLayer !== null){
+                me.mustacheVectorLayer.destroy();
+                me.mustacheVectorLayer = null;
+            }
             // destroy form
             form.remove();
         },
@@ -615,11 +632,25 @@ Oskari.clazz.define(
                 }
             });
         },
+        /**
+         * [mustachePointOnMap users click adds point to map and then creates line between this and first clicked point]
+         * @param  {[object]} lonlat [openlayers lonlat]
+         */
         mustachePointOnMap: function(lonlat){
             var me = this, 
-            _map = me.mapModule.getMap();
+            _map = me.mapModule.getMap(),
+            mustacheInfo = me._populateMustacheInfo();
 
-            me._clearMustacheVectorLayer();
+            if(me.mustacheVectorLayer !== null){
+                me.mustacheVectorLayer.destroy();
+                me.mustacheVectorLayer = null;
+            }
+
+            if(me.mustacheVectorLayer === null){
+                me._createMustacheVectorLayer(mustacheInfo);
+            }
+
+            //me._clearMustacheVectorLayer();
 
             var points = [ 
                 new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
@@ -630,16 +661,26 @@ Oskari.clazz.define(
                     new OpenLayers.Geometry.LineString(points)
             );
 
-            feature.attributes = {
-                nimi: "testi",
-                arvo: 21,
-                favColor: 'purple',
-                align: 'lb'
-            };
+            feature.attributes = mustacheInfo;
 
              me.mustacheVectorLayer.addFeatures(feature);
             _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
 
+        },
+        /**
+         * [_populateMustacheInfo gets certain values from form]
+         * @return {[object]} [output data]
+         */
+        _populateMustacheInfo: function(){
+            var me = this,
+            output = {},
+            form = me.container.find("form");
+
+            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+                output[item] = form.find("input[name='"+item+"']").val();
+            });
+
+            return output;
         },
 /*        _updateLayer: function(){
             console.info("tulee");
@@ -768,9 +809,18 @@ Oskari.clazz.define(
          * [createHighlightVectorLayer creates highlight vector layer to map]
          * @return {[none]}
          */
-        _createMustacheVectorLayer: function(){
+        _createMustacheVectorLayer: function(mustacheInfo){
             var me = this,
             _map = me.mapModule.getMap();
+
+            var label = "";
+
+            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+                if(index !== 0){
+                    label += me._getLocalization(item)+":";
+                }
+                label += mustacheInfo[item]+"\n";
+            });
 
             me.mustacheVectorLayer = new OpenLayers.Layer.Vector("mustache-vector-layer", {
                 styleMap: new OpenLayers.StyleMap({'default':{
@@ -782,13 +832,13 @@ Oskari.clazz.define(
                     pointRadius: 6,
                     pointerEvents: "visiblePainted",
                     // label with \n linebreaks
-                    label : "${nimi}\n\narvo: ${arvo}",
+                    label : label,
                     
-                    fontColor: "${favColor}",
+                    fontColor: "black",
                     fontSize: "12px",
                     fontFamily: "Courier New, monospace",
                     fontWeight: "bold",
-                    labelAlign: "${align}",
+                    labelAlign: "lb",
                     labelXOffset: "${xOffset}",
                     labelYOffset: "${yOffset}",
                     labelOutlineColor: "white",

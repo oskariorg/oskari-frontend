@@ -83,3 +83,9 @@
 .tag-pipe-list-element a{
 	padding-right: 10px;
 }
+
+.add-mustache-to-map{
+	float: right;
+	margin-right: 20px !important;
+	width: 97% !important;
+}
