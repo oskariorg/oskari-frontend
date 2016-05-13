@@ -891,7 +891,7 @@ Oskari.clazz.define(
                             colours: {
                                 hover: this.getThemeColours().hoverColour
                             },
-                            disableHover: false
+                            disableHover: true
                         }
                 );
                 sandbox.request(me.getName(), request);
