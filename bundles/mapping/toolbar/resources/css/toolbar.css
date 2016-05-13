@@ -62,7 +62,7 @@ div.tool.disabled {
   .mobileToolbarDiv div.toolrow div.tool {
     margin-right: 6px;
     margin-top: 6px; }
+    .mobileToolbarDiv div.toolrow div.tool:hover:not(.selected) {
+      background-color: transparent !important; }
   .mobileToolbarDiv .toolrow {
     border-top: 0; }
-
-/*# sourceMappingURL=toolbar.css.map */

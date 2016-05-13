@@ -287,17 +287,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        // FIXME When using same -light/-dark definations on mobile/desktop icons this if/else can be fixed
-        // Mobile icons definations
-        if(btnConfig.iconCls.indexOf('mobile-')>-1) {
-            var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'light' : 'dark';
-            buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
-        } 
-        // Desktop icons definations
-        else {
-            var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
-            buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
-        }
+        
+        var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
+        buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
     },
     /**
      * Add button theme
@@ -311,15 +303,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        // FIXME When using same -light/-dark definations on mobile/desktop icons this if/else can be fixed
-        // Mobile icons definations
-        if(btnConfig.iconCls.indexOf('mobile-')>-1) {
-            buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getReverseTheme());
-        } 
-        // Desktop icons definations
-        else {
-            buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
-        }
+        buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
     },
 
     /**
@@ -333,23 +317,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
 
-        // FIXME When using same -light/-dark definations on mobile/desktop icons this if/else can be fixed
-        // Toggle button icons                    
-        // Mobile icons definations
-        if(btnConfig.iconCls.indexOf('mobile-')>-1) {
-            if(Oskari.util.isLightColor(btnConfig.activeColour)) {
-                buttonEl.addClass(btnConfig.iconCls + '-dark');
-            } else {
-                buttonEl.addClass(btnConfig.iconCls + '-light');
-            }
-        } 
-        // Desktop icons definations
-        else {
-            if(Oskari.util.isLightColor(btnConfig.activeColour)) {
-                buttonEl.addClass(btnConfig.iconCls + '-light');
-            } else {
-                buttonEl.addClass(btnConfig.iconCls + '-dark');
-            }
+        if(Oskari.util.isLightColor(btnConfig.activeColour)) {
+            buttonEl.addClass(btnConfig.iconCls + '-light');
+        } else {
+            buttonEl.addClass(btnConfig.iconCls + '-dark');
         }
     },
 
