@@ -890,7 +890,8 @@ Oskari.clazz.define(
                             toolbarContainer: me._toolbarContent,
                             colours: {
                                 hover: this.getThemeColours().hoverColour
-                            }
+                            },
+                            disableHover: false
                         }
                 );
                 sandbox.request(me.getName(), request);

@@ -282,7 +282,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
     },
 
     _addHoverIcon: function(btnConfig,toolbarConfig,buttonEl){
-        if(!btnConfig || !btnConfig.iconCls || !toolbarConfig || !buttonEl) {
+        if(!btnConfig || !btnConfig.iconCls || !toolbarConfig || !buttonEl || toolbarConfig.createdHover === false) {
             return;
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');

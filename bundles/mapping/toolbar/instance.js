@@ -220,23 +220,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 createHoverStyle = true;
             }
 
-            
+            if(!data) {
+                data = {};
+            }
+            data.colours = data.colours || {
+                hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
+            };
 
-            if(createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) {
-                if(!data) {
-                    data = {};
-                }
-                data.colours = data.colours || {
-                    hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
-                };
+            var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
+
+            if(addHoverStyle) {
                 c.addClass('toolbar_' + tbid);
                 jQuery('<style type="text/css">'+
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
                         '</style>').appendTo('head');
+                
+            }
+            if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
-                    createdHover: createHoverStyle,
+                    createdHover: (addHoverStyle && showHover) ? true : false,
                     colours: data.colours
                 };
             }
