@@ -110,7 +110,7 @@ label.selectFeaturesOptions {
 div.oskari-flyout.ui-draggable.mobile.oskari-detached {
   left: 0px !important;
   border: 2px solid silver;
-  min-width: 200px!important;
+  min-width: 200px !important;
   max-width: 800px; }
   div.oskari-flyout.ui-draggable.mobile.oskari-detached div.oskari-flyouttoolbar {
     background-color: #e6e6e6;

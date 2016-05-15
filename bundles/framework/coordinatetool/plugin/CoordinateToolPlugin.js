@@ -186,6 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     el.removeClass('active');
                 }
                 me._toolOpen = false;
+                me._showMouseCoordinates = false;
             });
 
             var themeColours = mapmodule.getThemeColours();
