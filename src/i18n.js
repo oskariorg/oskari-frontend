@@ -60,7 +60,7 @@
      * @return {string} Language
      */
     O.getLang = function () {
-        return oskariLang;
+        return oskariLang || 'en';
     };
 
     /**
@@ -99,14 +99,14 @@
                     'Supported locales not set, using current language ' + this.getLang()
                 );
             }
-            return oskariLang;
+            return this.getLang();
         }
         var locale = supported[0];
 
         if (locale.indexOf('_') !== -1) {
             return locale.substring(0, locale.indexOf('_'));
         }
-        return oskariLang;
+        return this.getLang();
     };
 
 
