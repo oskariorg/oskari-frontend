@@ -5,7 +5,7 @@ jQuery(document).ready(function() {
     if(!ajaxUrl) {
         jQuery('#mapdiv').append('Unable to start');
         return;
-    } 
+    }
 
     function getURLParameter(name) {
     	var value = (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1];
@@ -36,12 +36,6 @@ jQuery(document).ready(function() {
             getAppSetupParams[key] = controlParams[key];
         }
     }
-
-    if(!language) {
-        // default to finnish
-        language = 'fi';
-    }
-    Oskari.setLang(language);
 
     function gfiParamHandler(sandbox) {
         if(getURLParameter('showGetFeatureInfo') != 'true') {

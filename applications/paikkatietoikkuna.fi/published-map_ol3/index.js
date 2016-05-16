@@ -37,12 +37,6 @@ jQuery(document).ready(function() {
         }
     }
 
-    if(!language) {
-        // default to finnish
-        language = 'fi';
-    }
-    Oskari.setLang(language);
-
     function gfiParamHandler(sandbox) {
         if(getURLParameter('showGetFeatureInfo') != 'true') {
             return;
