@@ -35,7 +35,7 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
-    
+
     // populate url with possible control parameters
     var getAppSetupParams = {};
     if(typeof window.controlParams == 'object') {
@@ -49,8 +49,6 @@ jQuery(document).ready(function() {
         language = 'fi';
     }
     Oskari.setLang(language);
-
-    Oskari.setLoaderMode('dev');
 
     function gfiParamHandler(sandbox) {
         if (getURLParameter('showGetFeatureInfo') != 'true') {
@@ -66,31 +64,22 @@ jQuery(document).ready(function() {
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
-    function start(appSetup, appConfig) {
-        var app = Oskari.app;
-        app.setApplicationSetup(appSetup);
-        app.setConfiguration(appConfig);
-        app.startApplication(function () {
-            var sb = Oskari.getSandbox();
-            gfiParamHandler(sb);
-        });
-    }
-
-
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        success: function (app) {
-            if (app.startupSequence && app.configuration) {
-                var appSetup = {
-                    "startupSequence": app.startupSequence
-                };
-                start(appSetup, app.configuration);
-            } else {
+        success: function (appSetup) {
+            var app = Oskari.app;
+            if (!app.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
+                return;
             }
+            app.setApplicationSetup(appSetup);
+            app.startApplication(function () {
+                var sb = Oskari.getSandbox();
+                gfiParamHandler(sb);
+            });
         },
         error: function (jqXHR, textStatus) {
             if (jqXHR.status !== 0) {
