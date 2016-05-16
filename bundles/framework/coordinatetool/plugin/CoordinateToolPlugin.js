@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lat = parseFloat(me._latInput.val()),
                 lon = parseFloat(me._lonInput.val());
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
-            if(me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
+            if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
                 lat = lat.toFixed(0);
                 lon = lon.toFixed(0);
             }
@@ -432,9 +432,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, forced) {
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
@@ -442,12 +442,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
+            if(!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
 
-            if (mapInMobileMode) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 if (!me._config.noUI) {
                     this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
                 }

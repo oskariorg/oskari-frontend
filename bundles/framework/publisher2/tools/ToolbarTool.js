@@ -43,6 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         // publishedmyplaces2Config stores the current state
         publishedmyplaces2Config: undefined,
 
+        /*
+
         buttonGroups: [{
             'name': 'history',
             'buttons': {
@@ -105,6 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             }
         }],
+        */
         templates: {
             'toolOptions': '<div class="tool-options"></div>',
             'toolOption': '<div class="tool-option"><label><input type="checkbox" /></label></div>',
@@ -121,6 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          */
         init: function(data) {
             var me = this;
+            me.selectedOptions = {};
             me._storedData = {};
             if (!data || !data.configuration) {
                 return;
@@ -136,17 +140,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 });
             }
-            var selectedOptions = {
-                history_back : false,
-                history_forward : false,
-                measureline : false,
-                measurearea : false
+            me.selectedOptions = {
+                history_back : true,
+                history_forward : true,
+                measureline : true,
+                measurearea : true
             };
+
             if(pluginConf.buttons) {
-                pluginConf.buttons.forEach(function(btn) {
-                    selectedOptions[btn] = true;
-                });
+                //if there are no selected tools in configuration, select them all when tools are selected
+                for (toolName in me.selectedOptions) {
+                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                        if (pluginConf.buttons.indexOf(toolName) === -1) {
+                            me.selectedOptions[toolName] = false;
+                        }
+                    }
+                }
             }
+
             // TODO: myplaces stuff
             var configurableOptions = {
 
@@ -161,14 +172,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             //TODO: there shouldn't be a toolbar in the config at all when there wasn't one when we were saving.
             //this is what screws up toggling on the default buttons on the toolbar, when modifying a published map that didn't have
             //toolbar in the first place
-            /*
-            if (conf.toolbar) {
+            
+            if (pluginConf.id) {
                 me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
                 if (me._hasActiveTools()) {
                     me.setEnabled(true);
                 }
             }
-            */
+            
         },
 
         /**
@@ -192,16 +203,28 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            var me = this;
+            var me = this,
+                buttons = [];
             if(!me.state.enabled) {
                 return null;
             }
+
+            for (toolName in me.selectedOptions) {
+                if (me.selectedOptions.hasOwnProperty(toolName)) {
+                    if (me.selectedOptions[toolName]) {
+                        buttons.push(toolName);
+                    }
+                }
+            }
+
+            var pluginConfig = me.getPlugin().getConfig();
+            pluginConfig.buttons = buttons;
 
             var retValue = {
                 configuration: {
                     mapfull: {
                         conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                            plugins: [{ id: this.getTool().id, config: pluginConfig }]
                         }
                     }
                 }
@@ -270,41 +293,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 return;
             }
 
-            var _toggleToolOption = function (toolName, groupName, toolOption, configName, cbox) {
+            var _toggleToolOption = function (toolName) {
                 return function () {
-                    var checkbox = cbox ? cbox : jQuery(this),
-                        isChecked = checkbox.is(':checked'),
-                        reqBuilder;
+                    //check if tool was selected or unselected
+                    var toolState = me.selectedOptions[toolName];
 
-                    if (me._hasActiveTools() || me._hasSelectedDrawTool()) {
-                        tool.selected = true;
+                    // if tool was selected, unselect tool and send removeToolButtonRequest
+                    if (toolState) {
+                        me.selectedOptions[toolName] = false;
+                        tool.__plugin.removeToolButton(toolName);
                     } else {
-                        tool.selected = false;
-                    }
-
-                    var requester = tool.__plugin;
-                    if (isChecked) {
-                        reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
-                        if (!me[configName][groupName]) {
-                            me[configName][groupName] = {};
-                        }
-                        me[configName][groupName][toolName] = true;
-
-                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
-                            me.toolbarConfig[groupName] = {};
-                        }
-                        me.toolbarConfig[groupName][toolName] = true;
-                    } else {
-                        sandbox.postRequestByName(
-                            'Toolbar.RemoveToolButtonRequest', [toolName, groupName, toolOption.toolbarid]);
-                        if (me[configName][groupName]) {
-                            me[configName][groupName][toolName] = false;
-                        }
-                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
-                            me.toolbarConfig[groupName] = {};
-                        }
-                        me.toolbarConfig[groupName][toolName] = false;
+                        me.selectedOptions[toolName] = true;
+                        tool.__plugin.addToolButton(toolName);
                     }
                 };
             };
@@ -312,10 +312,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var options,
                 i,
                 ilen,
-                configName,
-                buttonGroup,
                 toolName,
-                toolButton,
                 isChecked;
             if (enabled) {
                 //it might be that a light scheme has been selected prior to adding this tool on the map.
@@ -328,64 +325,37 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 if (_.isEmpty(me.toolbarConfig)) {
                     me._presetDataConfig('toolbarConfig');
                 }
-                tool.__plugin.setToolbarContainer();
-                var _addToolGroup = function (groupName, options, toolOption) {
-                    var i,
-                        ilen,
-                        buttonGroup,
-                        toolName,
-                        toolButton,
-                        toolElement;
 
-                    // retrieve groupName button configs
-                    for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                        if (groupName === me.buttonGroups[i].name) {
-                            buttonGroup = me.buttonGroups[i];
-                            break;
-                        }
-                    }
-
-                    for (toolName in buttonGroup.buttons) {
-                        if (buttonGroup.buttons.hasOwnProperty(toolName)) {
-                            toolButton = buttonGroup.buttons[toolName];
-                            toolButton.toolbarid = toolOption.toolbarId;
-
-                            // create checkbox
-                            toolButton.selectTool = jQuery(me.templates.toolOption).clone();
-                            toolButton.selectTool.find('label')
-                                .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
-                            if (!me.toolbarConfig[groupName]) {
-                                toolButton.selectTool.find('input').attr('checked', 'checked');
-                            } else if (me.toolbarConfig[groupName] && me.toolbarConfig[groupName][toolName] === undefined) {
-                                toolButton.selectTool.find('input').attr('checked', 'checked');
-                            } else if (me.toolbarConfig[groupName][toolName]) {
-                                toolButton.selectTool.find('input').attr('checked', 'checked');
-                            }
-                            _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
-
-                            //toggle toolbar tool. i.e. send requests
-                            toolElement = toolButton.selectTool.find('input')
-                                .attr('id', 'tool-opt-' + toolName)
-                                .change(_toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig'));
-                            options.append(toolButton.selectTool);
-                            // trigger click & change to send events
-                            if (me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName]) {
-                                // FIXME use _toggleToolOption.apply or .call instead of passing the checkbox as an extra arg...
-                                _toggleToolOption(toolName, buttonGroup.name, toolButton, 'toolbarConfig', toolButton.selectTool.find('input'))();
-                            }
-                        }
-                    }
-
-                    return options;
-                };
-
-                // append after all buttons have been added
                 options = jQuery(me.templates.toolOptions).clone();
-                options = _addToolGroup('history', options, me.toolbarConfig, _toggleToolOption);
-                options = _addToolGroup('basictools', options, me.toolbarConfig, _toggleToolOption);
+
+                for (toolName in me.selectedOptions) {
+                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                        //toolButton = me.selectedOptions[toolName];
+                        // create checkbox
+                        var selectTool = jQuery(me.templates.toolOption).clone();
+                        selectTool.find('label')
+                            .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
+
+                        //set selected values checked
+                        if (me.selectedOptions[toolName]) {
+                            selectTool.find('input').attr('checked', 'checked');
+                            tool.__plugin.addToolButton(toolName);
+                        }
+
+                        //add button to div
+                        options.append(selectTool);
+
+                        //toggle tool
+                        selectTool.find('input').attr('id', 'tool-opt-' + toolName).change(_toggleToolOption(toolName));
+                    }
+                }
+
                 tool.toolContainer.find(".extraOptions").append(options);
 
+
                 // show for admin users
+                //TODO: drawTools handling is not yet ready
+                /*
                 if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
                     // create option for adding drawing tools
                     options = jQuery(me.templates.toolOptions).clone();
@@ -417,31 +387,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                     options.append(selectTool);
                 }
+                */
 
             } else {
-                // toolbar (bundle) needs to be notified
-
-                //the following block probably has never worked properly if toolbarconfig has been reset here...?
-//                if (!localeChange) {
-//                    me.toolbarConfig = {};
-//                }
-
                 // remove buttons, handlers and toolbar toolbar tools
-                for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                    buttonGroup = me.buttonGroups[i];
-                    for (toolName in buttonGroup.buttons) {
-                        if (buttonGroup.buttons.hasOwnProperty(toolName)) {
-                            configName = (buttonGroup.name === 'myplaces' ? 'publishedmyplaces2Config' : 'toolbarConfig');
-                            if (me[configName] && me[configName][buttonGroup.name] && me[configName][buttonGroup.name][toolName] === true) {
-                                // toolbar tool exists and needs to be removed
-                                toolButton = buttonGroup.buttons[toolName];
-                                sandbox.postRequestByName(
-                                    'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, toolButton.toolbarid]);
-                            }
-                        }
+                for (toolName in me.selectedOptions) {
+                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                        tool.__plugin.removeToolButton(toolName);
                     }
                 }
-
 
                 if (!localeChange) {
                     me.toolbarConfig = {};
@@ -755,26 +709,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
         },
         _hasActiveTools: function () {
-            var i,
-                ilen,
-                buttonGroup,
-                toolName,
-                me = this;
+            var me = this;
 
-            if (!me.toolbarConfig.toolbarId) {
-                me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
-            }
-
-            for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                buttonGroup = me.buttonGroups[i];
-                for (toolName in buttonGroup.buttons) {
-                    if (me.toolbarConfig && me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName] === true) {
+            for (toolName in me.selectedOptions) {
+                if (me.selectedOptions.hasOwnProperty(toolName)) {
+                    if (me.selectedOptions[toolName]) {
                         return true;
                     }
                 }
             }
+
             return false;
         },
+
         _hasSelectedDrawTool: function () {
             var me = this,
                 buttons = me.publishedmyplaces2Config.myplaces;
@@ -788,20 +735,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         stop: function() {
             var me = this,
                 sandbox = me.__sandbox;
-            //send remove request per active button
-            if (me.toolbarConfig) {
-                for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
-                    buttonGroup = me.buttonGroups[i];
-                    for (toolName in buttonGroup.buttons) {
-                        if (me.toolbarConfig && me.toolbarConfig[buttonGroup.name] && me.toolbarConfig[buttonGroup.name][toolName] === true) {
-                            sandbox.postRequestByName(
-                                'Toolbar.RemoveToolButtonRequest', [toolName, buttonGroup.name, me.toolbarConfig.toolbarId]);
+
+            if(me.__plugin) {
+                //send remove request per active button
+                for (toolName in me.selectedOptions) {
+                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                        if (toolName) {
+                            me.__plugin.removeToolButton(toolName);
                         }
                     }
                 }
-            }
-
-            if(me.__plugin) {
                 if(me.__sandbox){
                     me.__plugin.stopPlugin(me.__sandbox);
                 }
