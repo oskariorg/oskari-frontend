@@ -103,6 +103,12 @@ This will propably change to some more intuitive flag in the future.
 Oskari.app.setApplicationSetup() now tries to setup configuration and environmental information like language, supported locales and decimal separators. They are part of the 
 response from GetAppSetup action handler. This means that it's no longer needed to call setLang() setConfiguration() etc manually.
 
+Added an experimental function to directly load appsetup and start the application from an url with parameters:
+
+    Oskari.app.loadAppSetup(ajaxUrl + 'action_route=GetAppSetup', { uuid : 'qwer-qtweqt-asdf-htr' });
+
+You can also provide a function as third parameter that is an error handler. It will be called if there is a problem loading the appsetup.
+
 #### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
