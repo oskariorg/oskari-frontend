@@ -11,10 +11,13 @@ The default set is located in Oskari/resources/icons and precompiled sprite/css 
 The following cleanup can be done for applications using the default base-styles and iconset:
 
 1) remove Oskari/applications/xxx/yyyy/icons folder
+
 2) remove Oskari/applications/xxx/yyyy/images folder
+
 3) remove forms.css and portal.css from Oskari/applications/xxx/yyyy/css folder
 - move any application specific css from for forms.css/portal.css to overwritten.css if any
 - forms.css and portal.css styles can be linked from Oskari/resources/css
+
 4) copy icons.css and icons.png from Oskari/resources to Oskari/applications/xxx/yyyy/
 - you can also not copy them and link css from Oskari/resources/icons.css if you don't have any icons to add/override
 - `npm run sprite` can be executed under tools to create new default iconset
