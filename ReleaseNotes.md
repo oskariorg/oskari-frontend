@@ -11,15 +11,18 @@ The default set is located in Oskari/resources/icons and precompiled sprite/css 
 The following cleanup can be done for applications using the default base-styles and iconset:
 
 1) remove Oskari/applications/xxx/yyyy/icons folder
+
 2) remove Oskari/applications/xxx/yyyy/images folder
+
 3) remove forms.css and portal.css from Oskari/applications/xxx/yyyy/css folder
 - move any application specific css from for forms.css/portal.css to overwritten.css if any
 - forms.css and portal.css styles can be linked from Oskari/resources/css
+
 4) copy icons.css and icons.png from Oskari/resources to Oskari/applications/xxx/yyyy/
 - you can also not copy them and link css from Oskari/resources/icons.css if you don't have any icons to add/override
 - `npm run sprite` can be executed under tools to create new default iconset
 
-See https://github.com/nls-oskari/oskari-server/blob/master/MigrationGuide.md for more info about JSP/html changes.
+See https://github.com/nls-oskari/oskari-server/blob/develop/MigrationGuide.md#application-changes-to-jsp-files for more info about JSP/html changes.
 
 ### routingService
 
@@ -97,6 +100,15 @@ If the loader detects that a bundles code is already in the browser it won't loa
 Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files.
 This will propably change to some more intuitive flag in the future.
 
+Oskari.app.setApplicationSetup() now tries to setup configuration and environmental information like language, supported locales and decimal separators. They are part of the 
+response from GetAppSetup action handler. This means that it's no longer needed to call setLang() setConfiguration() etc manually.
+
+Added an experimental function to directly load appsetup and start the application from an url with parameters:
+
+    Oskari.app.loadAppSetup(ajaxUrl + 'action_route=GetAppSetup', { uuid : 'qwer-qtweqt-asdf-htr' });
+
+You can also provide a function as third parameter that is an error handler. It will be called if there is a problem loading the appsetup.
+
 #### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
@@ -128,7 +140,6 @@ Oskari now has on(name, function), off(name, function) and trigger(name, payload
         Oskari.on('app.start', function(details) {
             // details contain started bundleids and possible errors that happened
         });
-
 
 ### core/abstractmapmodule
 
