@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         this.templateLanguage = "en";
 
         var _ = require('lodash');
-        _.defaultsDeep = require('lodash.defaultsdeep');
+        _ = require('lodash');
 
         // Hackhack, easy way to read/load the localization files
         var Oskari = {

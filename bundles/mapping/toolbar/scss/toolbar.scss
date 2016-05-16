@@ -12,7 +12,7 @@ div.toolrow {
         display : inline-block;
         cursor: pointer;
 
-        &.selected, &:hover:not(.disabled):not(.mobiletoolbar), &:active:not(.disabled):not(.mobiletoolbar) {
+        &.selected, &:active:not(.disabled) {
             background-color: #212121;
         }
 
