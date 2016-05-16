@@ -41,6 +41,7 @@
                 "tagtype-tonttivesijohdot": "VJ-liitoskohta",
                 "tagtype-jatevesijohdot": "JV-liitoskohta",
                 "tagtype-jatevesikaivot": "JV-liitoskaivo",
+                "tagtype-tonttijatevesijohdot": "JV-liitoskohta",
                 "tagtype-hulevesijohdot": "HV-liitoskohta",
                 "tagtype-hulevesikaivot": "HV-liitoskaivo",
                 "tag-low-pressure-level": "Alin painetaso",

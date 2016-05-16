@@ -24,6 +24,7 @@ Oskari.clazz.define(
             paavesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
             jakeluvesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
             tonttivesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
+            tonttijatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
             jatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
             jatevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
             hulevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
@@ -586,8 +587,9 @@ Oskari.clazz.define(
             mapVO = me.sandbox.getMap(),
             ajaxUrl = me.sandbox.getAjaxUrl(),
             layerName = "",
-            layerUrl = "";
-
+            layerUrl = "",
+            inactiveLayers = [];
+            
             //collect layernames and url
             for (var i in layers) {
                 layerName += layers[i].getLayerName();
@@ -595,6 +597,10 @@ Oskari.clazz.define(
                     layerName += ",";
                 }
                 layerUrl = layers[i].getLayerUrl();
+                var attributes = layers[i].getAttributes();
+                if(typeof attributes.inactive_layers !== 'undefined'){
+                    inactiveLayers = inactiveLayers.concat(attributes.inactive_layers);
+                }
             }
 
             //clear all highlight vectors
@@ -615,7 +621,7 @@ Oskari.clazz.define(
                     srs : mapVO.getSrsName()
                 },
                 success: function (data) {
-                    me._createTagPipeList(data.features);
+                    me._createTagPipeList(me._getActiveTagPipeLayers(data.features,inactiveLayers));
                     if(data.features.length == 0){
                         me._manageHelp(true, me._getLocalization('no_pipes_in_click'));
                         return false;
@@ -682,16 +688,16 @@ Oskari.clazz.define(
 
             return output;
         },
-/*        _updateLayer: function(){
-            console.info("tulee");
+        _updateLayer: function(){
+            console.info("Updates WMS layer");
             var me = this;
             var updateRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                     updateRequest;
                 var params = {};
-                params['id'] = "paavesijohdot.7884466";
-                updateRequest = updateRequestBuilder(37, true, params);
+                params['viewparams'] = "id:1";
+                updateRequest = updateRequestBuilder(40, true, params);
                 me.sandbox.request(me.instance, updateRequest);
-        },*/
+        },
         /**
          * [activateTagPipeLayers: Puts tagpipe layers on]
          */
@@ -722,6 +728,24 @@ Oskari.clazz.define(
             });
 
             return tagPipeLayers;
+        },
+        /**
+         * [_getActiveTagPipeLayers gets layers that are wanted for the tag pipe tool]
+         * @param  {[object]} features   [op features]
+         * @param  {[array]} attributes [attributes of inactive layer]
+         * @return {[object]}            [op features]
+         */
+        _getActiveTagPipeLayers: function(features, attributes){
+            var me = this;
+
+            var activeLayers = jQuery.grep(features, function(n) {
+                var finalId = n.id.split(".");
+                if (attributes.indexOf(finalId[0]) === -1) {
+                    return n;
+                }
+            });
+
+            return activeLayers;
         },
 
         /**
