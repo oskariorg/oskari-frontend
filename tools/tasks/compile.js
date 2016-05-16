@@ -33,7 +33,6 @@ module.exports = function(grunt) {
         this.templateLanguage = "en";
 
         var _ = require('lodash');
-        _.defaultsDeep = require('lodash.defaultsdeep');
 
         // Hackhack, easy way to read/load the localization files
         var Oskari = {
@@ -83,7 +82,8 @@ module.exports = function(grunt) {
                     this.minifyLanguageJS(langfiles[id], id);
                 }
             }
-
+            // TODO: 'all' languages content should be added to all the language specific data
+            //  this way the file doesn't need additional link in jsp since it rarely exists
             //after looping all languages write all to disk.
             for (var id in Oskari.localizations) {
                 var outputFile = path + 'oskari_lang_' + id + '.js'

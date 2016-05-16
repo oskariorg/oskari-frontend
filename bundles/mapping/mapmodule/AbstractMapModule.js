@@ -887,7 +887,11 @@ Oskari.clazz.define(
                         'add',
                         {
                             show: true,
-                            toolbarContainer: me._toolbarContent
+                            toolbarContainer: me._toolbarContent,
+                            colours: {
+                                hover: this.getThemeColours().hoverColour
+                            },
+                            disableHover: true
                         }
                 );
                 sandbox.request(me.getName(), request);
@@ -1014,14 +1018,16 @@ Oskari.clazz.define(
                 textColour: '#ffffff',
                 backgroundColour: '#3c3c3c',
                 activeColour: '#E6E6E6',
-                activeTextColour: '#000000'
+                activeTextColour: '#000000',
+                hoverColour: '#E6E6E6'
             };
 
             var lightTheme =  {
                 textColour: '#000000',
                 backgroundColour: '#ffffff',
                 activeColour: '#3c3c3c',
-                activeTextColour: '#ffffff'
+                activeTextColour: '#ffffff',
+                hoverColour: '#3c3c3c'
             };
 
             if(theme === 'dark') {

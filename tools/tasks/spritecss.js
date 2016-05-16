@@ -1,18 +1,16 @@
 /*
  * grunt-generate-sprite
  */
+var fs = require('fs-extra');
+var path = require('path');
+var _ = require('lodash');
+var gm = require('gm');
+var async = require('async');
+// constants
+var HOVERPOSTFIX = "_hover";
+var COMBINEDPOSTFIX = "_combined";
 
-module.exports = function(grunt) {
-
-    grunt.registerMultiTask('sprite', 'Generate CSS Sprite', function() {
-        var done = this.async();
-        var starttime = (new Date()).getTime();
-
-        var options = this.data.options;
-
-        // Run some sync stuff.
-        grunt.log.writeln('Generating CSS Sprite...');
-
+function validateOptions(grunt, options) {
         // Catch if required fields are not provided.
         if ( !options.iconDirectoryPath ) {
             grunt.fail.warn('No path provided for CSS Sprite to scan.');
@@ -26,225 +24,235 @@ module.exports = function(grunt) {
         if ( !options.spritePathInCSS ) {
             grunt.fail.warn('You must specify a path to the sprite from CSS.');
         }
-
-        var fs = require('fs'),
-            gm = require('gm'),
-            async = require('async'),
-            HOVERPOSTFIX = "_hover",
-            COMBINEDPOSTFIX = "_combined",
-            tmpDirectory = "tmp_sprite_dir_remove_it_" + Math.random().toString(36).substring(7);
-
-        var iconDirectoryPath = options.iconDirectoryPath,
-            resultImageName = options.resultImageName,
-            resultCSSName = options.resultCSSName,
-            spritePathInCSS = options.spritePathInCSS;
-
-        function normalizePath(path) {
-            // add missing / to directory path
-            if (path.lastIndexOf("/") !== path.length-1) {
-                return path + "/";
-            } else {
-                return path;
-            }
+}
+function validateIconDirectories(grunt, cfg) {
+    //iconDirectoryPath = normalizePath(iconDirectoryPath);
+    var stats;
+    var appOverrideDirStats;
+    try {
+        var stats = fs.statSync(cfg.baseIconsDir);
+    } catch(e) {
+        grunt.fail.warn('Default icons directory ('  + cfg.baseIconsDir + ') was NOT found. Please provide a proper baseIconsDir!');
+        return;
+    }
+    if(stats && !stats.isDirectory()) {
+        grunt.fail.warn('Default icons directory ('  + cfg.baseIconsDir + ') is NOT a directory. Please provide a proper baseIconsDir!');
+    }
+    // check application overrides
+    if(!cfg.appIconsDir) {
+        // no override
+        return;
+    }
+    try {
+        appOverrideDirStats = fs.statSync(cfg.appIconsDir);
+    } catch(e) {
+        // doesn't exist -> act as not given 
+        grunt.log.warn('Application icons override directory ('  + cfg.appIconsDir + ') was NOT found. Please provide a proper appIconsDir!');
+        delete cfg.appIconsDir;
+        return;
+    }
+    if(!appOverrideDirStats) {
+        // no app overrides
+        return;
+    }
+    if(appOverrideDirStats && !appOverrideDirStats.isDirectory()) {
+        grunt.fail.warn('Application icons override directory ('  + cfg.appIconsDir + ') is NOT a directory. Please provide a proper appIconsDir!');
+        return;
+    }
+}
+function removeOldIconsPng(path) {
+    try {
+        var iconDirStats = fs.statSync(path);
+        var iconExists = iconDirStats.isFile();
+        if (iconExists) {
+            fs.unlinkSync(path);
         }
+    } catch(ignored) { }
+}
 
-        iconDirectoryPath = normalizePath(iconDirectoryPath);
+function normalizePath(path) {
+    // add missing / to directory path
+    if (path && path.lastIndexOf("/") !== path.length-1) {
+        return path + "/";
+    }
+    return path;
+}
 
-        // verify the sprite path in css includes the sprite name
-        if (spritePathInCSS.indexOf(resultImageName) === -1) {
-            spritePathInCSS = normalizePath(spritePathInCSS);
-            spritePathInCSS += resultImageName.substring(resultImageName.lastIndexOf("/")+1);
-        }
-
-        function checkIconDirectoriesExists(callback) {
-            if (options.defaultIconDirectoryPath) {
-                fs.exists(options.defaultIconDirectoryPath, function (defaultExists) {
-                    if (defaultExists) {
-                        fs.exists(iconDirectoryPath, function (iconExists) {
-                            if (iconExists) {
-                                // both exist, we'll handle that later
-                                callback();
-                            } else {
-                                iconDirectoryPath = options.defaultIconDirectoryPath;
-                                options.defaultIconDirectoryPath = null;
-                                callback();
-                            }
-                        });
-                    } else {
-                        console.log('Default icons directory was NOT found. Please provide a proper defaultIconDirectoryPath!');
-                        process.exit(0);                                
-                    }
-                });
-            } else {
-                fs.exists(iconDirectoryPath, function (iconExists) {
-                    if (iconExists) {
-                        callback();
-                    } else {
-                        console.log(path,' was NOT found. Please provide a proper defaultIconDirectoryPath or application icons folder!');
-                        process.exit(0);
-                    }
-                });
+function copyPngIcons(src, dest) {
+    try {
+        fs.copySync(src, dest, {
+            // overwrite any existing file
+            clobber : true,
+            // dereference symlinks
+            dereference : true,
+            // only include png files
+            filter : function(file) {
+                return file.endsWith('.png');
             }
+        }); 
+    } catch(e) {
+        console.log('Error copying icon files from ' + src);
+    }
+}
+
+function getIconArrays(files) {
+    var hoverIcons = [],
+        icons = [],
+        current,
+        next;
+    for(var i = 0, j = 1, ilen = files.length; i < ilen; i++, j++) {
+        current = files[i];
+        next = files[j];
+        if (next && (next.indexOf(HOVERPOSTFIX) > 0)) {
+            // separate images with _hover images to separate array
+            hoverIcons.push(next);
+            // remove path so that only the filename remains
+            next = next.substring(next.lastIndexOf('/') + 1);
+            // add the future generated combined icon
+            icons.push(next.replace(HOVERPOSTFIX, COMBINEDPOSTFIX));
+        } else if (current.indexOf(HOVERPOSTFIX) > 0) {
+            // skip _hover images as these have already been handled
+        } else {
+            icons.push(current);
         }
+    }
+    return {
+        icons : icons,
+        hover : hoverIcons
+    };
+}
 
-        function createTemporaryDirectory() {
-            fs.mkdir(tmpDirectory, 0755, readIconDirectory);
+function getConfig(opts) {
+    var defaultOptions = {
+        baseIconsDir : '../resources/icons',
+        targetDir : '../resources',
+        result : {
+            css : "icons.css",
+            img : "icons.png"
         }
+    };
+    //defaultOptions.appIconsDir = defaultOptions.targetFolder + '/icons'; 
+    var options = _.cloneDeep(defaultOptions);
+    _.assignIn(options, opts);
+    // force temp dir
+    options.tmpDir = "tmp_sprite_dir_remove_it_" + Math.random().toString(36).substring(7);
+    var relative = path.relative(path.dirname(options.result.css), path.dirname(options.result.img));
+    if(relative.length) {
+        // force / separator instead of os specific
+        relative = relative.split(path.sep).join('/');
+        // add final / since we will append the filename
+        relative = relative + '/';
+    }
+    options.result.pathToSprite = relative + path.basename(options.result.img);
+    return options;
+}
 
-        function removeDuplicateAndResultIcons(iconsArray) {
-            // assumes icons are arranged in importance order, first being the most important
-            var i,
-                ilen,
-                j,
-                jlen,
-                array,
-                icon,
-                icons = {},
-                result,
-                results = [];
+module.exports = function(grunt) {
 
-            // filter resultImage
-            // assume there is a "/" in the resultImageName
-            icons[resultImageName.substring(resultImageName.lastIndexOf('/') + 1)] = true;
+    grunt.registerMultiTask('sprite', 'Generate CSS Sprite', function() {
+        var done = this.async();
+        var starttime = (new Date()).getTime();
+        var cfg = getConfig(this.data.options);
 
-            // travers arrays and add to hashmap for fast comparison
-            // non duplicate values are added to the results array
-            for (i = 0, ilen = iconsArray.length; i < ilen; i++) {
-                array = iconsArray[i];
-                result = [];
-                for (j = 0, jlen = array.length; j < jlen; j++) {
-                    icon = array[j];
-                    if (!icons[icon]) {
-                        icons[icon] = true;
-                        result.push(icon);
-                    }
-                }
-                results.push(result);
+        // Run some sync stuff.
+        grunt.log.writeln('Generating CSS Sprite...');
+        //validateOptions(grunt, options);
+
+        // remove sprite if exists and then create temporary directory where generated sprite stuff goes
+        //removeOldIconsPng(resultImageName);
+        validateIconDirectories(grunt, cfg);
+        fs.mkdirSync(cfg.tmpDir, "755");
+        try {
+            // default icons
+            copyPngIcons(cfg.baseIconsDir, cfg.tmpDir);
+            // application overrides if configured
+            if(cfg.appIconsDir) {
+                copyPngIcons(cfg.appIconsDir, cfg.tmpDir);
             }
-            return results;
+        } catch(e) {
+            cleanUp(cfg.tmpDir);
+            grunt.fail.warn('Couldn\'t copy icons to temp dir "Oskari/tools/' + cfg.tmpDir + '"!');
         }
-
-        function addIconPaths(paths, iconsArray) {
-            var i,
-                ilen = paths.length,
-                iconslen = iconsArray.length,
-                j,
-                jlen,
-                path,
-                array,
-                results = [];
-
-            if (ilen !== iconslen) {
-                console.log('addIconPaths was provided with different sized arguments', ilen, iconslen);
-                console.log("You probably need to manually remove the temporary directory ", tmpDirectory);
-                process.exit(0);
-            }
-
-            for (i = 0, ilen = paths.length; i < ilen; i++) {
-                path = paths[i];
-                array = iconsArray[i];
-                for (j = 0, jlen = array.length; j < jlen; j++) {
-                    results.push(path + array[j]);
-                }
-            }
-
-            return results;
-        }
-
-        function readIconDirectory() {
-            var paths = [iconDirectoryPath];
-            if (options.defaultIconDirectoryPath) {
-                paths.push(options.defaultIconDirectoryPath);
-            }
-            async.map(paths, fs.readdir, function (err, files) {
-                if (!err) {
-                    filterHoverIcons(addIconPaths(paths, removeDuplicateAndResultIcons(files)));
-                } else {
-                    console.log('Directory could not be read.', err);
-                    process.exit(0);
-                }
+        // read all the icons that we have for the sprite, the are now in the tmpDir
+        var files = fs.readdirSync(cfg.tmpDir);
+        // icons include any non-hover icons and generated hover-combined filenames
+        var filtered = getIconArrays(files);
+        /*
+        { icons : icons,
+          hover : hoverIcons }
+        */
+        // create an image with normal + hover icon as "combined icon" for any icon having hover support
+        createHoverCombinedIcons(cfg.tmpDir, filtered.hover, function() {
+            // attach image sizes for any icons that will be included in sprite (non-hover and combined)
+            detectImageSizes(cfg.tmpDir, filtered.icons, function(icons) {
+                // write the actual sprite and css
+                writeSpriteImage(cfg, icons, function() {
+                    // remove tmp dir
+                    cleanUp(cfg.tmpDir);
+                })
             });
-        }
+        });
 
-        function filterHoverIcons(files) {
-            var hoverIcons = [],
-                icons = [],
-                current,
-                next,
-                outputDirectory = tmpDirectory + "/";
-            for(var i = 0, j = 1, ilen = files.length; i < ilen; i++, j++) {
-                current = files[i];
-                next = files[j];
-                if (next && (next.indexOf(HOVERPOSTFIX) > 0)) {
-                    // separate images with _hover images to separate array
-                    hoverIcons.push(next);
-                    // remove path so that only the filename remains
-                    next = next.substring(next.lastIndexOf('/') + 1);
-                    // add the future generated combined icon
-                    icons.push(outputDirectory + next.replace(HOVERPOSTFIX, COMBINEDPOSTFIX));
-                } else if (current.indexOf(HOVERPOSTFIX) > 0) {
-                    // skip _hover images as these have already been handled
-                } else {
-                    icons.push(current);
-                }
-            }
 
-            generateHoverIcons(hoverIcons, function() {
-                readIconData(icons, function() {
-                    cleanUp(hoverIcons);
-                });
-            });
-        }
-
-        function generateHoverIcons(files, next) {
+        function createHoverCombinedIcons(tmpDirectory, files, next) {
             var combined,
                 current,
                 original,
                 outputDirectory = tmpDirectory + "/";
             async.map(files, function (current, callback) {
                 var icon = current.substring(current.lastIndexOf('/') + 1),
-                    original = current.replace(HOVERPOSTFIX, ""),
+                    original = outputDirectory + current.replace(HOVERPOSTFIX, ""),
                     combined = outputDirectory + icon.replace(HOVERPOSTFIX, COMBINEDPOSTFIX);
 
                 // appends another.jpg to img.png from top-to-bottom
-                gm(original).append(current, false).write(combined, callback);
+                gm(original).append(outputDirectory + current, false).write(combined, callback);
             }, function (err, results) {
                 if (!err && results) {
                     next();
                 } else {
-                    console.log("generateHoverIcons didn't work. Error", err);
+                    console.log("createHoverCombinedIcons didn't work. Error", err);
                 }
             });
         }
 
-        function readIconData(icons, next) {
+        function detectImageSizes(tmpDirectory, icons, next) {
             async.map(icons, function (icon, callback) {
-                gm(icon).size(callback);
+                // get sizes for all icons
+                gm(tmpDirectory + "/" + icon).size(callback);
             }, function (err, results) {
+                // results are objects with sizes of images
                 if (!err) {
                     for(var i = 0, ilen = results.length; i < ilen; i++) {
                         results[i].file = icons[i];
                     }
-                    writeSpriteImage(results, next);
+                    next(results);
                 } else {
-                    console.log("readIconData didn't work.");
+                    console.log("detectImageSizes didn't work.");
                     next();
                 }
             });
         }
 
-        function writeSpriteImage(iconImages, next) {
+        function writeSpriteImage(config, iconImages, next) {
+            var tmpDirectory = config.tmpDir;
+            var spritePath = path.normalize([config.targetDir, config.result.img].join('/'));
+            var cssFile = path.normalize([config.targetDir, config.result.css].join('/'));
+            var relativeUrlToSprite = config.result.pathToSprite;
+            if(!iconImages) {
+                next();
+                return;
+            }
             var sprite = null,
                 offsetX = 0;
 
             for(var i = 0, ilen = iconImages.length; i < ilen; i++) {
-                var currentIcon = iconImages[i].file;
+                var currentIcon = tmpDirectory + '/' + iconImages[i].file;
 
                 // calculate offset for sprite
                 iconImages[i].offsetX = offsetX;
                 // Note negative on purpose
                 offsetX -= iconImages[i].width;
-                if (currentIcon.indexOf(tmpDirectory) == 0) {
+                if (currentIcon.indexOf(COMBINEDPOSTFIX) > -1) {
                     // the icon has a hover state
                     // Note negative on purpose
                     iconImages[i].offsetY = -(iconImages[i].height/2);
@@ -260,24 +268,17 @@ module.exports = function(grunt) {
                 }
             }
 
-            // create parent folder as there the parent folder should not exist
-            fs.mkdir(resultImageName.substring(0, resultImageName.lastIndexOf("/")), 0755, function (err) {
-                if (!err || (err && err.code === 'EEXIST')){
-                    // write sprite if directory has been created or exists
-                    sprite.write(resultImageName, function (err) {
-                        if (!err) {
-                            writeSpriteCSS(iconImages, next);
-                        } else {
-                            console.log("writeSpriteImage didn't work. Error", err);
-                        }
-                    });
+            // write sprite if directory has been created or exists
+            sprite.write(spritePath, function (err) {
+                if (!err) {
+                    writeSpriteCSS(iconImages, cssFile, relativeUrlToSprite, next);
                 } else {
-                    console.log("writeSpriteImage create folder didn't work. Error", err);
+                    console.log("writeSpriteImage didn't work. Error", err);
                 }
             });
         }
 
-        function writeSpriteCSS(iconImages, next) {
+        function writeSpriteCSS(iconImages, cssPath, relativeUrlToSprite, next) {
             var file,
                 className,
                 css = "";
@@ -288,20 +289,20 @@ module.exports = function(grunt) {
                 className = file.substring(file.lastIndexOf("/") + 1, file.lastIndexOf(".")).replace(COMBINEDPOSTFIX, "");
 
 
-                if (file.indexOf(tmpDirectory) != 0) {
+                if (file.indexOf(COMBINEDPOSTFIX) === -1) {
                     // generate CSS style declarations
-                    css += generateCSS(className, icon.width, icon.height, icon.offsetX, 0);
+                    css += generateCSS(relativeUrlToSprite, className, icon.width, icon.height, icon.offsetX, 0);
                 } else {
                     // generate CSS style declarations
-                    css += generateCSS(className, icon.width, icon.height/2, icon.offsetX, 0);
+                    css += generateCSS(relativeUrlToSprite, className, icon.width, icon.height/2, icon.offsetX, 0);
 
                     // add hover style
-                    css += generateCSS(className + ":hover", icon.width, icon.height/2, icon.offsetX, icon.offsetY);
+                    css += generateCSS(relativeUrlToSprite, className + ":hover", icon.width, icon.height/2, icon.offsetX, icon.offsetY);
                 }
             }
 
             // write CSS
-            fs.writeFile(resultCSSName, css, function(err) {
+            fs.writeFile(cssPath, css, function(err) {
                 if (!err) {
                     next();
                 } else {
@@ -311,8 +312,8 @@ module.exports = function(grunt) {
             });
         }
 
-        function generateCSS(className, width, height, offsetX, offsetY) {
-            var spriteBackgroundImage = "    background-image: url('" + spritePathInCSS + "') !important;\n",
+        function generateCSS(relativeUrlToSprite, className, width, height, offsetX, offsetY) {
+            var spriteBackgroundImage = "    background-image: url('" + relativeUrlToSprite + "') !important;\n",
                 backgroundRepeat = "    background-repeat: no-repeat !important;\n",
                 css = "";
 
@@ -327,38 +328,19 @@ module.exports = function(grunt) {
             return css;
         }
 
-        function cleanUp(files) {
-            async.map(files, function (current, callback) {
-                var icon = current.substring(current.lastIndexOf('/') + 1),
-                    outputDirectory = tmpDirectory + "/",
-                    combined = outputDirectory + icon.replace(HOVERPOSTFIX, COMBINEDPOSTFIX);
-
-                fs.unlink(combined, callback);
-            }, function (err, results) {
-                if (!err && results) {
-                    fs.rmdir(tmpDirectory, function(err, result) {
-                        if (!err) {
-                            var endtime = (new Date()).getTime();
-                            grunt.log.writeln('CSS Sprite completed in ' + ((endtime - starttime) / 1000) + ' seconds');
-                            done();
-                        } else {
-                            console.log("cleanUp didn't work. ", err);
-                            console.log("You probably need to manually remove the temporary directory ", tmpDirectory);
-                        }
-                    });
+        function cleanUp(tmpDirectory) {
+            fs.remove(tmpDirectory, function(err, result) {
+                if (!err) {
+                    var endtime = (new Date()).getTime();
+                    grunt.log.writeln('CSS Sprite completed in ' + ((endtime - starttime) / 1000) + ' seconds');
+                    done();
                 } else {
-                    console.log("cleanUp didn't work. Error", err);
+                    console.log("cleanUp didn't work. ", err);
                     console.log("You probably need to manually remove the temporary directory ", tmpDirectory);
                 }
             });
         }
 
-        // remove sprite if exists and then create temporary directory where generated sprite stuff goes
-        fs.unlink(resultImageName, function (err, result) {
-            checkIconDirectoriesExists(function () {
-                fs.mkdir(tmpDirectory, 0755, createTemporaryDirectory);
-            });
-        });
     });
 
 };
