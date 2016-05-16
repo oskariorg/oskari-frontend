@@ -652,6 +652,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             }
             return confs;
+        },
+
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
+
         }
 
     }, {
