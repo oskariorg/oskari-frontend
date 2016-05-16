@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
+            el.hide();
             return el;
         },
 

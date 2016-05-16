@@ -973,18 +973,19 @@ Oskari.clazz.define(
                 // case: no tools in toolbar or no toolbar -> force height
                 else if (mobileDiv.height() < mobileDiv.children().height()) {
                     // any floated plugins might require manual height setting if there is no toolbar
-                    mobileDiv.height(mobileDiv.children().height())
+                    mobileDiv.height(mobileDiv.children().height());
                 }
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
-            if (Oskari.util.isMobile()) {
-                if(mobileDiv.is(':visible')) {
-                    // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
-                    mapDivHeight -= mobileDiv.outerHeight();
+            // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
+            if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
+                mapDivHeight -= mobileDiv.outerHeight();
+                if((mobileDiv.attr('data-height') + '') !== mapDivHeight) {
+                    jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
+                    this.updateDomain();
+                    mobileDiv.attr('data-height', mapDivHeight);
                 }
-                jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                this.updateDomain();
             }
         },
 
