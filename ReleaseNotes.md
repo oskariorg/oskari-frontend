@@ -22,7 +22,7 @@ The following cleanup can be done for applications using the default base-styles
 - you can also not copy them and link css from Oskari/resources/icons.css if you don't have any icons to add/override
 - `npm run sprite` can be executed under tools to create new default iconset
 
-See https://github.com/nls-oskari/oskari-server/blob/master/MigrationGuide.md for more info about JSP/html changes.
+See https://github.com/nls-oskari/oskari-server/blob/develop/MigrationGuide.md#application-changes-to-jsp-files for more info about JSP/html changes.
 
 ### routingService
 
