@@ -1350,6 +1350,19 @@ Oskari = (function () {
          */
         setApplicationSetup: function (setup) {
             this.appSetup = setup;
+            if(setup.configuration) {
+                this.setConfiguration(setup.configuration);
+            }
+            setup.env = setup.env || {};
+            if(typeof Oskari.setLang === 'function') {
+                Oskari.setLang(setup.env.lang || window.language);
+            }
+            if(typeof Oskari.setSupportedLocales === 'function') {
+                Oskari.setSupportedLocales(setup.env.locales || []);
+            }
+            if(typeof Oskari.setDecimalSeparators === 'function') {
+                Oskari.setDecimalSeparators(setup.env.decimalSeparators || []);
+            }
         },
 
         /**

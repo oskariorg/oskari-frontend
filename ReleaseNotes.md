@@ -100,6 +100,9 @@ If the loader detects that a bundles code is already in the browser it won't loa
 Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files.
 This will propably change to some more intuitive flag in the future.
 
+Oskari.app.setApplicationSetup() now tries to setup configuration and environmental information like language, supported locales and decimal separators. They are part of the 
+response from GetAppSetup action handler. This means that it's no longer needed to call setLang() setConfiguration() etc manually.
+
 #### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
@@ -131,7 +134,6 @@ Oskari now has on(name, function), off(name, function) and trigger(name, payload
         Oskari.on('app.start', function(details) {
             // details contain started bundleids and possible errors that happened
         });
-
 
 ### core/abstractmapmodule
 
