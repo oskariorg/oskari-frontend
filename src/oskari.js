@@ -1358,10 +1358,10 @@ Oskari = (function () {
                 Oskari.setLang(setup.env.lang || window.language);
             }
             if(typeof Oskari.setSupportedLocales === 'function') {
-                Oskari.setSupportedLocales(setup.env.locales || []);
+                Oskari.setSupportedLocales(setup.env.locales);
             }
-            if(typeof Oskari.setDecimalSeparators === 'function') {
-                Oskari.setDecimalSeparators(setup.env.decimalSeparators || []);
+            if(typeof Oskari.setDecimalSeparator === 'function') {
+                Oskari.setDecimalSeparator(setup.env.decimalSeparator);
             }
         },
 
