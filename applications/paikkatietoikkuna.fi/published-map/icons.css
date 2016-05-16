@@ -1350,7 +1350,7 @@
     background-position: -4078px 0px !important;
 }
 
-.tool-history-back {
+.tool-history-forward-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1358,7 +1358,7 @@
     background-position: -4110px 0px !important;
 }
 
-.tool-history-forward-dark {
+.tool-history-forward-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1366,7 +1366,7 @@
     background-position: -4142px 0px !important;
 }
 
-.tool-history-forward-light {
+.tool-link {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1374,7 +1374,7 @@
     background-position: -4174px 0px !important;
 }
 
-.tool-history-forward {
+.tool-measure-area-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1382,7 +1382,7 @@
     background-position: -4206px 0px !important;
 }
 
-.tool-link {
+.tool-measure-area-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1390,7 +1390,7 @@
     background-position: -4238px 0px !important;
 }
 
-.tool-measure-area-dark {
+.tool-measure-line-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1398,7 +1398,7 @@
     background-position: -4270px 0px !important;
 }
 
-.tool-measure-area-light {
+.tool-measure-line-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1406,7 +1406,7 @@
     background-position: -4302px 0px !important;
 }
 
-.tool-measure-area {
+.tool-pan {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1414,7 +1414,7 @@
     background-position: -4334px 0px !important;
 }
 
-.tool-measure-line-dark {
+.tool-print {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1422,7 +1422,7 @@
     background-position: -4366px 0px !important;
 }
 
-.tool-measure-line-light {
+.tool-reset {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1430,7 +1430,7 @@
     background-position: -4398px 0px !important;
 }
 
-.tool-measure-line {
+.tool-save-view {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1438,7 +1438,7 @@
     background-position: -4430px 0px !important;
 }
 
-.tool-pan {
+.tool-zoombox-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1446,7 +1446,7 @@
     background-position: -4462px 0px !important;
 }
 
-.tool-print {
+.tool-zoombox-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1454,51 +1454,11 @@
     background-position: -4494px 0px !important;
 }
 
-.tool-reset {
-    width: 32px;
-    height: 32px;
-    background-image: url('icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -4526px 0px !important;
-}
-
-.tool-save-view {
-    width: 32px;
-    height: 32px;
-    background-image: url('icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -4558px 0px !important;
-}
-
-.tool-zoombox-dark {
-    width: 32px;
-    height: 32px;
-    background-image: url('icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -4590px 0px !important;
-}
-
-.tool-zoombox-light {
-    width: 32px;
-    height: 32px;
-    background-image: url('icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -4622px 0px !important;
-}
-
-.tool-zoombox {
-    width: 32px;
-    height: 32px;
-    background-image: url('icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -4654px 0px !important;
-}
-
 .upload-material {
     width: 28px;
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4686px 0px !important;
+    background-position: -4526px 0px !important;
 }
 
