@@ -88,12 +88,6 @@
         var supported = O.getSupportedLocales();
 
         if(supported.length === 0) {
-            // supported locales not set, use current
-            if (console && console.warn) {
-                console.warn(
-                    'Supported locales not set, using current language ' + this.getLang()
-                );
-            }
             return this.getLang();
         }
         var locale = supported[0];

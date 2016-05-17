@@ -175,7 +175,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         addToolbarContainer: function (tbid, pdata) {
             var tbcontainer = pdata.toolbarContainer;
-            tbcontainer.append(jQuery(this.templates.addedToolbar));            
+            tbcontainer.append(jQuery(this.templates.addedToolbar));
             this.toolbars[tbid] = tbcontainer;
             var c = tbcontainer.find('.oskariui-toolbarbuttongroup');
             this.containers[tbid] = c;
@@ -204,10 +204,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         getToolbarContainer: function (ptbid, data) {
             var tbid = ptbid || 'default';
-            var c = this.containers[tbid];            
+            var c = this.containers[tbid];
 
             var showHover = (data && typeof data.disableHover === 'boolean') ? !data.disableHover : true;
-            
+
             var createHoverStyle = false;
             if(c) {
                 createHoverStyle = true;
@@ -236,7 +236,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
                         '</style>').appendTo('head');
-                
+
             }
             if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
@@ -244,7 +244,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                     colours: data.colours
                 };
             }
-            
+
 
             return c;
         },

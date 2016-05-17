@@ -128,14 +128,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     me.setEnabled(true);
                 }
             }
-            
+
             if (pluginConf.id) {
                 me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
                 if (me._hasActiveTools()) {
                     me.setEnabled(true);
                 }
             }
-            
+
         },
 
         /**
@@ -452,7 +452,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             isToolChecked = (toolState !== true);
                             me._toggleDrawToolButton(isToolChecked, toolName, groupName, toolButton);
                         });
-                    
+
                     optionSettings.append(toolButton.toolOption);
 
                     // execute toolElement change function when checked

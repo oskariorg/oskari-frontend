@@ -50,12 +50,6 @@ jQuery(document).ready(function () {
         }
     }
 
-    if (!language) {
-        // default to finnish
-        language = 'fi';
-    }
-    Oskari.setLang(language);
-
     function gfiParamHandler(sandbox) {
         if (getURLParameter('showGetFeatureInfo') !== 'true') {
             return;
@@ -77,7 +71,7 @@ jQuery(document).ready(function () {
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function (appSetup) {
             var app = Oskari.app;
-            if (!app.startupSequence) {
+            if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
                 return;
             }

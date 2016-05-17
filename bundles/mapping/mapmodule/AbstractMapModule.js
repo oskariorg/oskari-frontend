@@ -958,6 +958,7 @@ Oskari.clazz.define(
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
+
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
