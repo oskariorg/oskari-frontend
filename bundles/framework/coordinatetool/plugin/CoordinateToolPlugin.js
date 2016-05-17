@@ -426,6 +426,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (this._popup) {
                 this._popup.close(true);
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -452,8 +454,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
                 }
             } else {
-                me._element = me._createControlElement();
-                this.addToPluginContainer(me._element);
+                if (!me._config.noUI) {
+                    me._element = me._createControlElement();
+                    this.addToPluginContainer(me._element);
+                }
+            }
+        },
+
+
+        toggleIconVisibility: function(visible) {
+            var me = this;
+            var mapmodule = me.getMapModule();
+            if(!Oskari.util.isMobile() && me._element) {
+                if(visible) {
+                    me._element.show();
+                } 
+                else {
+                    me._element.hide();
+                }
+            } else if(Oskari.util.isMobile()){
+                if(visible) {                     
+                    for(var id in me._mobileDefs.buttons) {
+                        var button = me._mobileDefs.buttons[id];
+                        mapmodule.getMobileDiv().find('.' + button.iconCls).show();
+                    }
+                } 
+                else {
+                    for(var id in me._mobileDefs.buttons) {
+                        var button = me._mobileDefs.buttons[id];
+                        mapmodule.getMobileDiv().find('.' + button.iconCls).hide();
+                    }                    
+                }
             }
         },
 
