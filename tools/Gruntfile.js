@@ -18,7 +18,7 @@ module.exports = function (grunt) {
                 options: {
                     //targetDir: '../resources'
                 }
-            } 
+            }
         },
         releaseManual: {
             options: {
@@ -327,7 +327,7 @@ module.exports = function (grunt) {
         grunt.config.set('copy.common.files', [{
             expand: true,
             cwd: '../',
-            src: ['libraries/**', 'bundles/**'],
+            src: ['libraries/**', 'bundles/**', 'resources/**'],
             dest: '../dist/'
         }
         ]);
