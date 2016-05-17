@@ -99,6 +99,10 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
                 "lang" : "sl",
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/elf/elf-license/resources/locale/sl.js"
+            }, {
+                "lang" : "nb",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-license/resources/locale/nb.js"
             }
         ]
     },

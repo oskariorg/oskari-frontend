@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "nb",
     "key": "FeatureData2",
     "value": {
-        "title": "Feature Data",
+        "title": "Objektegenskaper",
         "desc": "",
         "loading": "Laster…",
         "showmore": "Vis",
@@ -12,11 +12,11 @@ Oskari.registerLocalization(
         "errorscale": "Data i dette kartlaget kan ikke vises i denne målestokken. Vennligst tilpass målestokken.",
         "errordata": "Serverdata inneholder feil. Vennligst oppfrisk kartet ved å bevege det.",
         "columnSelectorTooltip": "Velg synlige kolonner.",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "Statistiske verdier",
         "selectionTools": {
             "title": "Velg forekomster på kartet",
             "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
+            "selectFromTop": "Fra det øverste laget",
             "selectAll": "Velg fra alle lag",
             "link": {
                 "title": "Velg flere forekomster"
@@ -147,9 +147,10 @@ Oskari.registerLocalization(
             }
         },
         "gridFooter": {
-            "aggregateColumnField": "NOT TRANSLATED",
-            "noDataMessage": "NOT TRANSLATED",
-            "noDataCommonMessage": "NOT TRANSLATED"
+            "aggregateColumnField": "Count",
+            "differenceMessage": "The difference of unauthorized feature values is presented with value",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
 }
