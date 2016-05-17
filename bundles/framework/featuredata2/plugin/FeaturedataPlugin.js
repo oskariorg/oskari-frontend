@@ -17,15 +17,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._index = 90;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
+        me._fyloutOpen = undefined;
         me._mobileDefs = {
             buttons:  {
                 'mobile-featuredata': {
-                    iconCls: 'mobile-info-marker-light mobiletoolbar',
+                    iconCls: 'mobile-info-marker',
                     tooltip: '',
                     sticky: true,
+                    toggleChangeIcon: true,
                     show: true,
                     callback: function () {
-                        me._openFeatureDataFlyout();
+                        if (me._flyoutOpen) {
+                            var sandbox = me.getSandbox();
+                            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
+                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+                            sandbox.request(me, toolbarRequest);
+                            me._flyoutOpen = undefined;
+                            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+                            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
+                        } else {
+                            me._openFeatureDataFlyout();
+                            me._flyoutOpen = true;
+                        }
                     }
                 }
             },
@@ -52,6 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
+            el.hide();
             return el;
         },
 
@@ -59,9 +73,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, forced) {
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
@@ -69,12 +83,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
+            if(!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
 
-            if (mapInMobileMode) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 me._element = me._createControlElement();
@@ -125,6 +139,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return false;
             });
         },
+
+        handleCloseFlyout: function () {
+            var me = this,
+                sandbox = me.getSandbox();
+
+            if (!me._flyoutOpen) {
+                return;
+            }
+
+            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
+            sandbox.request(me, toolbarRequest);
+            me._flyoutOpen = undefined;
+            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
+        },
+
         /**
          * @method _refresh
          * Updates the plugins interface (hides if no featuredata layer selected)
@@ -205,7 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 top = jQuery(mobileDiv).offset().top,
                 height = jQuery(mobileDiv).outerHeight(true),
                 flyoutTop = parseInt(top)+parseInt(height);
-            
+
             flyout.container.parentElement.parentElement.style['top'] = flyoutTop + 'px';
             jQuery(flyout.container.parentElement.parentElement).find('.oskari-flyoutheading').remove();
 

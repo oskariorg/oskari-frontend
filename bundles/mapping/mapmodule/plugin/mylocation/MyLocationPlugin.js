@@ -24,7 +24,7 @@ Oskari.clazz.define(
         me._mobileDefs = {
             buttons:  {
                 'mobile-my-location': {
-                    iconCls: 'mobile-my-location mobiletoolbar',
+                    iconCls: 'mobile-my-location',
                     tooltip: '',
                     sticky: false,
                     show: true,
@@ -143,9 +143,9 @@ Oskari.clazz.define(
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, forced) {
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -157,12 +157,12 @@ Oskari.clazz.define(
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
+            if(!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
 
-            if (mapInMobileMode) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 me._element = me._createControlElement();

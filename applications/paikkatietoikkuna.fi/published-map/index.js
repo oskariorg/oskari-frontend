@@ -5,7 +5,7 @@ jQuery(document).ready(function() {
     if(!ajaxUrl) {
         jQuery('#mapdiv').append('Unable to start');
         return;
-    } 
+    }
 
     function getURLParameter(name) {
     	var value = (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1];
@@ -30,23 +30,12 @@ jQuery(document).ready(function() {
     }
 
     // populate url with possible control parameters
-    if(ssl) {
-        ajaxUrl += "ssl=" + ssl + "&";
-    }
     var getAppSetupParams = {};
     if(typeof window.controlParams == 'object') {
         for(var key in controlParams) {
             getAppSetupParams[key] = controlParams[key];
         }
     }
-        
-    if(!language) {
-        // default to finnish
-        language = 'fi';
-    }
-    Oskari.setLang(language);
-
-    Oskari.setLoaderMode('dev');
 
     function gfiParamHandler(sandbox) {
         if(getURLParameter('showGetFeatureInfo') != 'true') {
@@ -59,45 +48,27 @@ jQuery(document).ready(function() {
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
-    function start(appSetup, appConfig, cb) {
-        var app = Oskari.app;
-        app.setApplicationSetup(appSetup);
-        app.setConfiguration(appConfig);
-        app.startApplication(function() {
-          if (cb) {
-              cb();
-          }
-        });
-    }
-    
     jQuery.ajax({
-        type : 'GET',
-        dataType : 'json',
-        beforeSend : function(x) {
-            if (x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-            }
-        },
+        type: 'POST',
+        dataType: 'json',
         data : getAppSetupParams,
-        url : ajaxUrl + 'action_route=GetAppSetup&noSavedState=true',
-        success : function(app) {
-            if (app.startupSequence && app.configuration) {
-              var appSetup = {
-                "startupSequence": app.startupSequence
-              };
-              start(appSetup, app.configuration, function() {
-                    var sb = Oskari.getSandbox();
-                    gfiParamHandler(sb);
-                });
-            } else {
+        url: ajaxUrl + 'action_route=GetAppSetup',
+        success: function (appSetup) {
+            var app = Oskari.app;
+            if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
+                return;
             }
+            app.setApplicationSetup(appSetup);
+            app.startApplication(function () {
+                var sb = Oskari.getSandbox();
+                gfiParamHandler(sb);
+            });
         },
-        error : function(jqXHR, textStatus) {
-            if (jqXHR.status != 0) {
+        error: function (jqXHR, textStatus) {
+            if (jqXHR.status !== 0) {
                 jQuery('#mapdiv').append('Unable to start');
             }
         }
     });
-
-}); 
+});

@@ -25,6 +25,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         this.containers = {};
         this.toolbars = {};
         this.groupsToToolbars = {};
+        this._toolbarConfigs = {};
     }, {
         /**
          * @static
@@ -176,13 +177,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var tbcontainer = pdata.toolbarContainer;
             tbcontainer.append(jQuery(this.templates.addedToolbar));
             this.toolbars[tbid] = tbcontainer;
-            var c = tbcontainer.find(".oskariui-toolbarbuttongroup");
+            var c = tbcontainer.find('.oskariui-toolbarbuttongroup');
             this.containers[tbid] = c;
 
             if (pdata.title) {
-                tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
+                tbcontainer.find('.oskariui-toolbar-title p').append(pdata.title);
             } else {
-                tbcontainer.find(".oskariui-toolbar-title").remove();
+                tbcontainer.find('.oskariui-toolbar-title').remove();
             }
             return c;
         },
@@ -190,6 +191,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             if (title) {
                 this.menutoolbarcontainer.find(".oskariui-menutoolbar-title p").html(title);
             }
+        },
+
+        getToolBarConfigs: function(ptbid){
+            var tbid = ptbid || 'default';
+            return this._toolbarConfigs[tbid];
         },
 
         /**
@@ -200,11 +206,45 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var tbid = ptbid || 'default';
             var c = this.containers[tbid];
 
+            var showHover = (data && typeof data.disableHover === 'boolean') ? !data.disableHover : true;
+
+            var createHoverStyle = false;
+            if(c) {
+                createHoverStyle = true;
+            }
+
             if (c === undefined && this.menutoolbarcontainer && !data.toolbarContainer) {
                 c = this.createMenuToolbarContainer(tbid, data);
             } else if ((c === undefined || c.parents('body').length === 0) && data && data.toolbarContainer) {
                 c = this.addToolbarContainer(tbid, data);
+                createHoverStyle = true;
             }
+
+            if(!data) {
+                data = {};
+            }
+            data.colours = data.colours || {
+                hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
+            };
+
+            var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
+
+            if(addHoverStyle) {
+                c.addClass('toolbar_' + tbid);
+                jQuery('<style type="text/css">'+
+                            'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
+                            '   background-color: ' + data.colours.hover + ';' +
+                            '}' +
+                        '</style>').appendTo('head');
+
+            }
+            if(!this._toolbarConfigs[tbid]) {
+                this._toolbarConfigs[tbid] = {
+                    createdHover: (addHoverStyle && showHover) ? true : false,
+                    colours: data.colours
+                };
+            }
+
 
             return c;
         },

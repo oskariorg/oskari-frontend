@@ -378,6 +378,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 } else if (event.getViewState() === "close") {
                     plugin.setEnabled(false);
+                    if (this.plugin) {
+                        this.plugin.handleCloseFlyout();
+                    }
                 } else {
                     plugin.setEnabled(true, true);
                 }

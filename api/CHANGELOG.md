@@ -85,6 +85,8 @@ Improved request to allow add custom svg markers. Custom marker is defined shape
 
 #### [add] [rpc] New functions
 
+setCursorStyle(cursorStyle) - function added. Functionality to change the mouse cursor on the map to any valid cursor css declaration ('crosshair','progress' etc.) supported by the browser. 
+
 An experimental **getScreenshot()** function is now available when the Oskari instance uses Openlayers 3 based mapmodule.
 The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
 
@@ -97,6 +99,8 @@ Output: array of pixel measurements , requested scale
 Returns pixel mesurements for mm measurements in requested scale.
 Use case: Plot paper size area on a map. See plotPlotArea-function in rpc_example.html.
 If scale is not entered, function computes fit scale so that paper size area covers the whole map. 
+
+New functions to zoom map: zoomIn, zoomOut, zoomTo. All return the current zoomlevel after zooming.
 
 ## 1.35
 

@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._mobileDefs = {
             buttons:  {
                 'mobile-layerselection': {
-                    iconCls: 'mobile-layers mobiletoolbar',
+                    iconCls: 'mobile-layers',
                     tooltip: '',
                     sticky: true,
                     show: true,

@@ -14,11 +14,10 @@ module.exports = function (grunt) {
             files: ['../tests/minifierFullMapAppSetup.json']
         },
         sprite: {
-            options: {
-                iconDirectoryPath: '../applications/sample/servlet/icons',
-                resultImageName: '../applications/sample/servlet/icons/icons.png',
-                resultCSSName: '../applications/sample/servlet/css/icons.css',
-                spritePathInCSS: '../icons'
+            main : {
+                options: {
+                    //targetDir: '../resources'
+                }
             }
         },
         releaseManual: {
@@ -264,11 +263,15 @@ module.exports = function (grunt) {
             dest = '../dist/<%= version %>' + appName + '/';
             imageDest = './' + appName + '/images/';
             options = {
+                targetDir: '../dist/<%= version %>' + appName,
+                appIconsDir : config.substring(0, last) + '/icons'
+                /*
                 iconDirectoryPath: config.substring(0, last) + '/icons',
                 resultImageName: '../dist/<%= version %>' + appName + '/icons/icons.png',
                 resultCSSName: '../dist/<%= version %>' + appName + '/css/icons.css',
                 spritePathInCSS: '../icons',
                 defaultIconDirectoryPath: defaultIconDirectoryPath
+                */
             };
             files = [];
             copyFiles = {
@@ -291,7 +294,7 @@ module.exports = function (grunt) {
                     dest: dest
                 });
                 // modify css-sprite to use parent icons instead
-                options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
+                options.iconDirectoryPath = options.appIconsDir.replace(appName, parentAppName);
             }
 
             // add files to be copied
@@ -324,7 +327,7 @@ module.exports = function (grunt) {
         grunt.config.set('copy.common.files', [{
             expand: true,
             cwd: '../',
-            src: ['libraries/**', 'bundles/**'],
+            src: ['libraries/**', 'bundles/**', 'resources/**'],
             dest: '../dist/'
         }
         ]);

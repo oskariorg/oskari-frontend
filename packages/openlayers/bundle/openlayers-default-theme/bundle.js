@@ -81,7 +81,7 @@ Oskari.clazz.define(
             source: {
                 scripts: [{
                     "type": "text/css",
-                    "src": "../../../../resources/openlayers/theme/default/style.css"
+                    "src": "../../../../libraries/OpenLayers/theme/default/style.css"
                 }],
                 resources: []
             },

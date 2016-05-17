@@ -50,6 +50,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.dialog.bind('click', function () {
                     me.close(true);
                 });
+            } else {
+                actionDiv.remove();
             }
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
@@ -131,6 +133,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 var div = this.dialog.find('.icon-close');
                 div.removeClass('icon-close icon-close:hover');
                 div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+
+            if (colourScheme.bodyBgColour) {
+                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
             }
 
             /*buttons and actionlinks*/
@@ -269,19 +275,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 left = left + (targetWidth / 2) - (dialogWidth / 2);
             }
             top = Math.min(top, windowHeight - dialogHeight);
-            // TODO fix left like above
+
             if (left < 0) {
                 left = 0;
             }
             if (top < 0) {
                 top = 0;
             }
+
             // TODO: check for right and bottom as well
 
             if (!noArrow) {
                 me.dialog.addClass('arrow');
             }
             me.dialog.addClass(alignment);
+
+            // Check at if popup is outside screen from right
+            if(jQuery(window).width() < (me.dialog.width() + left)) {
+                left = jQuery(window).width() - me.dialog.width();
+            }
+
             //move dialog to correct location
             me.dialog.css({
                 'left': left + 'px',
@@ -344,7 +357,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             e.stopPropagation();
         },
         setTitle: function (title) {
-            this.dialog.find('h3').html(title);
+            if (title) {
+                this.dialog.find('h3').html(title);
+            } else {
+                jQuery(this.dialog).find('h3').remove();
+            }
         },
         getTitle: function () {
             return this.dialog.find('h3')[0].textContent;
