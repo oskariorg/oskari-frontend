@@ -112,7 +112,7 @@ function() {
                     me.supportedProjections = null;
                 }
             });
-            
+
 
             if(me.projectionTrasformationIsCheckedInModifyMode) {
                 inputTransform.setChecked(true);
@@ -133,7 +133,7 @@ function() {
                 //me.getPlugin().toggleIconVisibility(true);
             }
         });
-        
+
         if(me.noUiIsCheckedInModifyMode) {
             input.setChecked(true);
             me.noUI = true;
