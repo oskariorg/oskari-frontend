@@ -128,14 +128,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     me.setEnabled(true);
                 }
             }
-            
+
             if (pluginConf.id) {
                 me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
                 if (me._hasActiveTools()) {
                     me.setEnabled(true);
                 }
             }
-            
+
         },
 
         /**
@@ -185,12 +185,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 }
             };
+
             // we want toolbar always with no default tools
             retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
-            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
+
+            var selectedDrawTools = me._hasSelectedDrawTool();
+
+            //PublishedMyPlaces is not supported with ol3
+            
+            /*
+            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
                 me.publishedmyplaces2Config.myplaces = me.drawOptions;
                 retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
             }
+            */
             return retValue;
         },
         /**
@@ -303,6 +311,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
 
                 // show drawing controls for admin users
+                //TODO: PublishedMyPlaces is not supported with ol3!
+                /*
                 if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
                     //if there is not yet config for publishedmyplaces, create one to be used further
                     if (!me.publishedmyplaces2Config) {
@@ -332,6 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     options.append(selectTool);
 
                 }
+                */
                 tool.toolContainer.find(".extraOptions").append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
@@ -449,7 +460,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                             isToolChecked = (toolState !== true);
                             me._toggleDrawToolButton(isToolChecked, toolName, groupName, toolButton);
                         });
-                    
+
                     optionSettings.append(toolButton.toolOption);
 
                     // execute toolElement change function when checked
