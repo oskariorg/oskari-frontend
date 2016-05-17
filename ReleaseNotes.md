@@ -5,6 +5,13 @@
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
 updating to custom Oskari installations. Please read the release notes and ping us on for example Slack or with a Github issue if there's problems.*
 
+Known issues:
+
+- featuredata is sometimes visible even when there are no wfs-layers on map
+- moving between mobile/desktop modes might have some issues
+- publisher: the iframe code for embedded map is not always selectable
+- publisher: adding myplaces draw tools on embedded map no longer works (also not supported on openlayers3 yet) (
+
 ### Mobile mode
 
 The mapmodule now handles map size (and changes to it) more visibly. It creates a container for plugin UIs on top of the map that is hidden when in "desktop mode". When
