@@ -386,14 +386,32 @@ Oskari.clazz.define(
             );
 
             var loc = this.instance.getLocalization('resultBox'),
-                resultActions = {},
+                resultActions = [],
+                resultAction,
                 action;
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
-                    resultActions[name] = action(result);
+                    resultAction = {};
+                    resultAction['name'] = name;
+                    resultAction['type'] = 'link';
+                    resultAction['action'] = action(result);
+                    resultAction['group'] = 1;
+                    resultActions.push(resultAction);
                 }
             }
+
+            var closeAction = {};
+            closeAction['name'] = loc.close;
+            closeAction['type'] = 'link';
+            closeAction['group'] = 1;
+            closeAction['action'] = function () {
+                var rN = 'InfoBox.HideInfoBoxRequest',
+                    rB = sandbox.getRequestBuilder(rN),
+                    request = rB(popupId);
+                sandbox.request(me.instance.getName(), request);
+            };
+            resultActions.push(closeAction);
 
             var contentItem = {
                 html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
@@ -401,12 +419,8 @@ Oskari.clazz.define(
             };
             var content = [contentItem];
 
-            /* impl smashes action key to UI - we'll have to localize that here */
-            contentItem.actions[loc.close] = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = sandbox.getRequestBuilder(rN),
-                    request = rB(popupId);
-                sandbox.request(me.instance.getName(), request);
+            var options = {
+                hidePrevious: true
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
@@ -416,7 +430,7 @@ Oskari.clazz.define(
                     loc.title,
                     content,
                     new OpenLayers.LonLat(result.lon, result.lat),
-                    true
+                    options
                 );
 
             sandbox.request(this.instance.getName(), request);
@@ -442,42 +456,9 @@ Oskari.clazz.define(
                 descending: pDescending
             };
             locations.sort(function (a, b) {
-                return me._searchResultComparator(a, b, pAttribute, pDescending);
+                return Oskari.util.naturalSort(a[pAttribute].toLowerCase(), b[pAttribute].toLowerCase(), pDescending);
             });
             return locations;
-        },
-
-        /**
-         * @private @method _searchResultComparator
-         * Compares the given attribute on given objects for sorting
-         * search result objects.
-         *
-         * @param {Object} a search result 1
-         * @param {Object} b search result 2
-         * @param {String} pAttribute attributename to sort by (e.g.
-         * a[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         *
-         */
-        _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase(),
-                nameB = b[pAttribute].toLowerCase(),
-                value = 0;
-            if (nameA === nameB || 'name' === pAttribute) {
-                // Because problem with address 1 and address 10 then
-                // id are ranked right
-                nameA = a.id;
-                nameB = b.id;
-            }
-            if (nameA < nameB) {
-                value = -1;
-            } else if (nameA > nameB) {
-                value = 1;
-            }
-            if (pDescending) {
-                value = value * -1;
-            }
-            return value;
         },
 
         addSearchResultAction: function (action) {

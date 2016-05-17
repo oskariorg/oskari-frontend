@@ -411,7 +411,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 create: function (event, ui) {
                     // FIXME don't use jQuery.browser
                     /* IE9 needs fixed width to not jump flyout width during and after dragging */
-                    if (jQuery.browser.msie && jQuery.browser.version[0] === '9') {
+                    if (jQuery.browser && jQuery.browser.msie && jQuery.browser.version[0] === '9') {
                         flyout.css('width', flyout.width() + 'px');
                     }
                 },

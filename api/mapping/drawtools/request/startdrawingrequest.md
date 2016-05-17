@@ -21,13 +21,13 @@ Activates draw control on map.
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>* id</td><td> String</td><td> Identifier for request</td><td> </td>
+  <td> \* id</td><td> String</td><td> Identifier for request</td><td> </td>
 </tr>
 <tr>
-  <td>* shape</td><td> String</td><td> Drawing shape: Point/Circle/Polygon/Box/Square/LineString</td><td> </td>
+  <td> \* shape</td><td> String</td><td> Drawing shape: Point/Circle/Polygon/Box/Square/LineString</td><td> </td>
 </tr>
 <tr>
-  <td>* options</td><td> Object</td><td> Parameters for options-object are listed in the next table</td><td> null</td>
+  <td> \* options</td><td> Object</td><td> Parameters for options-object are listed in the next table</td><td> null</td>
 </tr>
 </table>
 
@@ -95,8 +95,8 @@ Parameters for options-object:
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', [
-		id: 'bufferedLineSelection', 
-		shape: 'LineString', 
+		'bufferedLineSelection', 
+		'LineString']
 		{
         	buffer: 200,
             allowMultipleDrawing: 'single',

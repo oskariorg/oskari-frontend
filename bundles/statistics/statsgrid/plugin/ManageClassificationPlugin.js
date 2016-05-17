@@ -264,8 +264,11 @@ Oskari.clazz.define(
         _setLayerToolsEditModeImpl: function () {
             var me = this,
                 active = me.inLayerToolsEditMode(),
-                el = me.getElement(),
-                content = el.find('div.content');
+                el = me.getElement();
+            if(!el) {
+                return;
+            }
+            var content = el.find('div.content');
 
             if (active) {
                 content.hide();
@@ -791,9 +794,6 @@ Oskari.clazz.define(
             // Toggle content HTML
             me._toggleHeaderClickBind(false, el);
 
-            // Hide Classify dialog
-            //me.setVisible(me._isStatsLayerVisible());
-            me.setVisible(me.isVisible());
             // Setup Colors
             me.setColors();
         },
@@ -811,7 +811,6 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var me = this,
                 el;
-
             el = jQuery('<div class="mapplugin manageClassificationPlugin" />');
             el.toggle(me.isVisible());
             me.refresh(el);

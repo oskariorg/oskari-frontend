@@ -24,7 +24,7 @@
       margin-left: 7.5px; }
     .tools .publishedToolbarContainer .publishedToolbarContent {
       background-color: #424343;
-      color: white;
+      color: #FFF;
       border-radius: 6px;
       padding-top: 3px;
       padding-bottom: 3px;
@@ -39,31 +39,37 @@
           cursor: pointer;
           width: 32px;
           height: 32px; }
-        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:active:not(.disabled) {
+        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool.selected,
+        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:hover:not(.disabled),
+        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:active:not(.disabled) {
           background-color: #212121; }
       .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow:first-child {
         border-top: none; }
     .tools .publishedToolbarContainer .publishedToolbarContent.dark {
       background-color: #424343;
       border: none; }
-      .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:active:not(.disabled) {
+      .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool.selected,
+      .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:hover:not(.disabled),
+      .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:active:not(.disabled) {
         background-color: #212121; }
     .tools .publishedToolbarContainer .publishedToolbarContent.light {
-      background-color: white;
-      border: 1px solid #888888; }
-      .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:active:not(.disabled) {
+      background-color: #FFF;
+      border: 1px solid #888; }
+      .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool.selected,
+      .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:hover:not(.disabled),
+      .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:active:not(.disabled) {
         background-color: #eeeeee; }
     .tools .publishedToolbarContainer .publishedToolbarPopupContent.dark .publishedToolPopupContent {
       background-color: #424343;
-      color: white;
+      color: #FFF;
       border: none; }
     .tools .publishedToolbarContainer .publishedToolbarPopupContent.light .publishedToolPopupContent {
-      background-color: white;
+      background-color: #FFF;
       color: #424343;
-      border: 1px solid #888888; }
+      border: 1px solid #888; }
     .tools .publishedToolbarContainer .publishedToolPopupContent {
       background-color: #424343;
-      color: white;
+      color: #FFF;
       border-radius: 6px;
       padding: 0 10px 3px 10px;
       display: block;
@@ -82,8 +88,8 @@
       background-color: #424343;
       border: none; }
     .tools .publishedToolbarContainer .publishedToolPopupContent.light {
-      background-color: white;
-      border: 1px solid #888888; }
+      background-color: #FFF;
+      border: 1px solid #888; }
     .tools .publishedToolbarContainer .tool-group-title {
       font-weight: bold; }
 
@@ -106,3 +112,17 @@
     .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
       float: right;
       margin-right: 7.5px; }
+
+.oskariui-toolbar-container .oskariui-toolbarbuttongroup .toolrow {
+  border-top: none;
+  padding: 0px; }
+
+.divmanazerpopup.toolbar-popup.bottom {
+  background-color: #e6e6e6;
+  min-width: 50px; }
+  .divmanazerpopup.toolbar-popup.bottom .popup-body .content {
+    margin: 0px; }
+
+.divmanazerpopup.toolbar-popup.bottom.mobile {
+  border: 2px solid silver;
+  border-radius: 0px; }

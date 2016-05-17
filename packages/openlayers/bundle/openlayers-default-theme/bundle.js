@@ -57,11 +57,13 @@ Oskari.clazz.define(
             'start': function () {
                 // FIXME this is ugly, why on earth are we diggin up the path
                 // from the mediator?
-                var bundlePath =
-                    this.mediator.manager.bundleDefinitionStates[
-                        'openlayers-default-theme'
-                    ].bundlePath;
-                OpenLayers.ImgPath = bundlePath + '/img/';
+                if(this.mediator && this.mediator.manager && this.mediator.manager.bundleDefinitionStates) {
+                    var bundlePath =
+                        this.mediator.manager.bundleDefinitionStates[
+                            'openlayers-default-theme'
+                        ].bundlePath;
+                    OpenLayers.ImgPath = bundlePath + '/img/';
+                }
             },
             'stop': function () {
                 // delete OpenLayers...just joking
@@ -79,7 +81,7 @@ Oskari.clazz.define(
             source: {
                 scripts: [{
                     "type": "text/css",
-                    "src": "../../../../resources/openlayers/theme/default/style.css"
+                    "src": "../../../../libraries/OpenLayers/theme/default/style.css"
                 }],
                 resources: []
             },

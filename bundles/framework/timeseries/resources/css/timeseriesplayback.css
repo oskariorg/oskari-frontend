@@ -40,16 +40,16 @@ div.mapplugin.timeseries {
         background: #ffde00;
         position: absolute;
         content: "";
-        top: 12.01201px;
-        left: 16.66667px; }
+        top: 12.012012012px;
+        left: 16.6666666667px; }
       div.mapplugin.timeseries div.playback-button button.pause:after {
         width: 8px;
         height: 16px;
         background: #ffde00;
         position: absolute;
         content: "";
-        top: 12.01201px;
-        right: 16.66667px; }
+        top: 12.012012012px;
+        right: 16.6666666667px; }
   div.mapplugin.timeseries .oskari-timeslider {
     margin-top: 10px;
     width: 90%;
@@ -70,7 +70,7 @@ div.mapplugin.timeseries {
           left: -24px; }
       div.mapplugin.timeseries .oskari-timeslider .interval-line-highlight .line {
         width: 1px;
-        border-left: 1px solid white;
+        border-left: 1px solid #fff;
         height: 12px;
         position: absolute;
         bottom: 0; }
@@ -83,12 +83,12 @@ div.mapplugin.timeseries {
         font-size: 12px;
         position: absolute;
         top: 16px;
-        color: white; }
+        color: #fff; }
         div.mapplugin.timeseries .oskari-timeslider .interval-line .label.center {
           left: -14px; }
       div.mapplugin.timeseries .oskari-timeslider .interval-line .line {
         width: 1px;
-        border-left: 1px solid white;
+        border-left: 1px solid #fff;
         height: 8px;
         position: absolute;
         bottom: 0; }

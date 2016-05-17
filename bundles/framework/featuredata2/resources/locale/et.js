@@ -12,16 +12,19 @@ Oskari.registerLocalization(
         "errorscale": "Andmeid ei saa selles mõõtkavas näidata. Palun muuda mõõtkava.",
         "errordata": "Serverist edastatud andmed sisaldavad vigu. Palun nihuta kaarti veidi selle uuendamiseks.",
         "columnSelectorTooltip": "Näita veerge",
+        "featureDataPopup": "Statistical values",
         "selectionTools": {
             "title": "Vali nähtused kaardil",
             "instructions": "NOT TRANSLATED",
+            "selectFromTop": "From topmost layer",
+            "selectAll": "From all layers",
             "link": {
                 "title": "Vali rohkem"
             },
             "button": {
                 "cancel": "Cancel",
                 "empty": "Tühista",
-                "show": "NOT TRANSLATED",
+                "show": "Show features",
                 "close": "Sulge",
                 "edit": "Toimeta"
             },
@@ -42,106 +45,112 @@ Oskari.registerLocalization(
                     "tooltip": "Lisa ring"
                 },
                 "select": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Draw a geometry and select features based on that geometry."
                 }
             }
         },
         "layer": {
-            "style": "NOT TRANSLATED",
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "out-of-scale": "NOT TRANSLATED",
-            "move-to-scale": "NOT TRANSLATED",
-            "out-of-content-area": "NOT TRANSLATED",
-            "move-to-content-area": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
-            "object-data": "NOT TRANSLATED",
+            "style": "Style",
+            "show": "Show",
+            "hide": "Hide",
+            "hidden": "The map layer is temporarily hidden.",
+            "out-of-scale": "The map layer cannot be shown at this scale level.",
+            "move-to-scale": "Move to a suitable map level.",
+            "out-of-content-area": "The map layer has no features at the map view area.",
+            "move-to-content-area": "Move to a suitable location.",
+            "description": "Description",
+            "object-data": "Feature data",
             "rights": {
-                "notavailable": "NOT TRANSLATED",
-                "guest": "NOT TRANSLATED",
-                "loggedin": "NOT TRANSLATED",
-                "official": "NOT TRANSLATED",
-                "need-login": "NOT TRANSLATED",
+                "notavailable": "Publication prohibited",
+                "guest": "Please log in, if you want to publish the map layer in an embedded map.",
+                "loggedin": "Publication permitted",
+                "official": "Publishable only for authorities",
+                "need-login": "Please log in to publish embedded maps.",
                 "can_be_published_by_provider": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Publication permitted for data providers",
+                    "tooltip": "The map layer is publishable in embedded maps only for data providers. If you are a data provider, please contact the support service."
                 },
                 "can_be_published": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Publication permitted",
+                    "tooltip": "The map layer is publishable in embedded maps. The usage limit is not limited."
                 },
                 "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Publication permitted",
+                    "tooltip": "The map layer is publishable in embedded maps. The weekly usage limit may be limited."
                 },
                 "no_publication_permission": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Publication prohibited",
+                    "tooltip": "The map layer is not publishable in embedded maps. The data provider has not granted permissions."
                 },
                 "can_be_published_by_authority": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Publication permitted for authorities",
+                    "tooltip": "The map layer is publishable in embedded maps only for authorities. If you are an authority, please contact the support service."
                 }
             },
             "tooltip": {
-                "type-base": "NOT TRANSLATED",
-                "type-wms": "NOT TRANSLATED",
-                "type-wfs": "NOT TRANSLATED"
+                "type-base": "Background map",
+                "type-wms": "Map layer",
+                "type-wfs": "Data product"
             },
             "filter": {
-                "title": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "cancelButton": "NOT TRANSLATED",
-                "clearButton": "NOT TRANSLATED",
-                "refreshButton": "NOT TRANSLATED",
-                "addFilter": "NOT TRANSLATED",
-                "removeFilter": "NOT TRANSLATED",
+                "title": "Filter",
+                "description": "Filter values on map layer:",
+                "cancelButton": "Cancel",
+                "clearButton": "Clear filter",
+                "refreshButton": "Refresh filter",
+                "addFilter": "Add filter",
+                "removeFilter": "Remove filter",
                 "bbox": {
-                    "title": "NOT TRANSLATED",
-                    "on": "NOT TRANSLATED",
-                    "off": "NOT TRANSLATED"
+                    "title": "Map filter",
+                    "on": "Only features visible on the map",
+                    "off": "All features"
                 },
                 "clickedFeatures": {
-                    "title": "NOT TRANSLATED",
-                    "label": "NOT TRANSLATED"
+                    "title": "Feature filter",
+                    "label": "Only features selected on the map"
                 },
                 "values": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Attribute filter",
                     "placeholders": {
-                        "case-sensitive": "NOT TRANSLATED",
-                        "attribute": "NOT TRANSLATED",
-                        "boolean": "NOT TRANSLATED",
-                        "operator": "NOT TRANSLATED",
-                        "attribute-value": "NOT TRANSLATED"
+                        "case-sensitive": "Filter is case-sensitive",
+                        "attribute": "Attribute",
+                        "boolean": "Logical operator",
+                        "operator": "Operator",
+                        "attribute-value": "Value"
                     },
-                    "equals": "NOT TRANSLATED",
-                    "like": "NOT TRANSLATED",
-                    "notEquals": "NOT TRANSLATED",
-                    "notLike": "NOT TRANSLATED",
-                    "greaterThan": "NOT TRANSLATED",
-                    "lessThan": "NOT TRANSLATED",
-                    "greaterThanOrEqualTo": "NOT TRANSLATED",
-                    "lessThanOrEqualTo": "NOT TRANSLATED"
+                    "equals": "on yhtäsuuri kuin",
+                    "like": "on likimäärin yhtäsuuri kuin",
+                    "notEquals": "on erisuuri kuin",
+                    "notLike": "on likimäärin erisuuri kuin",
+                    "greaterThan": "on suurempi kuin",
+                    "lessThan": "on pienempi kuin",
+                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
+                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "NOT TRANSLATED",
-                    "aggregateValueSelectTitle": "NOT TRANSLATED",
-                    "selectAggregateAnalyse": "NOT TRANSLATED",
-                    "selectIndicator": "NOT TRANSLATED",
-                    "selectReadyButton": "NOT TRANSLATED",
-                    "getAggregateAnalysisFailed": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
+                    "addAggregateFilter": "Use statistical values",
+                    "aggregateValueSelectTitle": "Select Statistical Values",
+                    "selectAggregateAnalyse": "Select analysis layer",
+                    "selectIndicator": "Select property",
+                    "selectReadyButton": "Close",
+                    "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
+                    "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
+                    "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
                 },
                 "validation": {
-                    "title": "NOT TRANSLATED",
-                    "attribute_missing": "NOT TRANSLATED",
-                    "operator_missing": "NOT TRANSLATED",
-                    "value_missing": "NOT TRANSLATED",
-                    "boolean_operator_missing": "NOT TRANSLATED"
+                    "title": "Features could not be filtered. The following errors occurred:",
+                    "attribute_missing": "The attribute is missing.",
+                    "operator_missing": "The operator is missing.",
+                    "value_missing": "The value is missing.",
+                    "boolean_operator_missing": "The logical operator is missing."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Count",
+            "differenceMessage": "NOT TRANSLATED",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
 }

@@ -84,6 +84,9 @@ Options object
 		<b>featureStyle</b> - A style object.
 	</li>
 	<li>
+    		<b>optionalStyles</b> - Styles for geojson features. Style is used, if feature property value matches to style property value
+    </li>
+	<li>
 		<b>attributes</b> - Feature's attributes, especially handy when the geometry is a WKT-string.
 	</li>
   <li>
@@ -133,16 +136,15 @@ var geojsonObject = {
 	        'test_property': 2
 	      }
         }
-
       ]
-    };
+    };```
 
+```
 //some additional options for the layer
 var layerOptions = {
     'minResolution': 2,
     'maxResolution': 100
 };
-
 //override some default styles
 var featureStyle = {
   stroke: {
@@ -150,7 +152,37 @@ var featureStyle = {
     width: 10
   }
 };
+//override feature style with feature property based style
+ var optionalStyles = [{
+                                property: {
+                                    value: 'AIRPLANE',
+                                    key: 'mode'
+                                },
+                                fill: {
+                                    color: '#FF0000'
+                                },
+                                stroke: {
+                                    color: '#FF0000',
+                                    width: 5
+                                }
+                            },{
+                                property: {
+                                    value: 'BUS',
+                                    key: 'mode'
+                                },
+                                fill: {
+                                    color: '#0000ff'
+                                },
+                                stroke: {
+                                    color: '#0000ff',
+                                    width: 5
+                                }
+                            }];                            
+>- *key* is feature property name
+>- *value* is the property matching value to style
+```
 
+```
 //Add the features on a specific layer
 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
@@ -162,6 +194,7 @@ Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
     attributes: null
 }]);
 ```
+
 Usage example (WKT)
 
 ```javascript

@@ -3,60 +3,49 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "catalogue.bundle.metadatafeedback",
     "value": {
-        "title": "Metadata",
+        "title": "Metaúdaje",
         "desc": "",
         "userFeedback": {
-            "userFeedback": "User feedback",
-            "subject": "Subject",
-            "subjectPlaceholder": "Title for your feedback item",
-            "ratingScore": "Rating score",
-            "ratingJustification": "Rating justification"
+            "userFeedback": "Spätná väzba od používateľov",
+            "ratingScore": "Výsledok hodnotenia",
+            "ratingJustification": "Zdôvodnenie hodnotenia"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specification",
-            "targetIdentification": "Target identification",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "Not defined.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Not defined.",
-            "natureOfTarget": "Nature of the target"
+            "tabTitle": "Spätná väzba",
+            "average": "Priemerné hodnotenie"
         },
         "userInformation": {
-            "userInformation": "User information",
-            "userDetails": "User details",
-            "userName": "User name:",
-            "contactRole": "User Role:",
-            "ciRoleUser": "User",
-            "ciRoleResourceProvider": "Resource Provider",
-            "ciRoleCustodian": "Researcher",
-            "ciRoleOwner": "Owner",
-            "ciRoleSponsor": "Sponsor",
-            "ciRoleDistributor": "Distributor",
-            "ciRoleOriginator": "Originator",
-            "ciRolePointOfContact": "PointOfContact",
-            "ciRolePrincipalInvestigator": "PrincipalInvestigator",
-            "ciRoleProcessor": "Processor",
-            "ciRolePublisher": "Publisher",
-            "ciRoleAuthor": "Author",
-            "ciRoleCollaborator": "Collaborator"
+            "userInformation": "Informácie o používateľovi",
+            "userDetails": "Detaily o používateľovi",
+            "userName": "Názov používateľa:",
+            "contactRole": "Úloha",
+            "ciRoleUser": "Používateľ",
+            "ciRoleResourceProvider": "Poskytovateľ zdroja",
+            "ciRoleCustodian": "Výskumník",
+            "ciRoleOwner": "Vlastník",
+            "ciRoleSponsor": "Sponzor",
+            "ciRoleDistributor": "Distribútor",
+            "ciRoleOriginator": "Pôvodca",
+            "ciRolePointOfContact": "KontaktnýBod",
+            "ciRolePrincipalInvestigator": "Hlavný vyšetrovateľ",
+            "ciRoleProcessor": "Spracovateľ",
+            "ciRolePublisher": "Vydavateľ",
+            "ciRoleAuthor": "Autor",
+            "ciRoleCollaborator": "Spolupracovník"
         },
         "actionButtons": {
-            "save": "Save",
-            "cancel": "Cancel"
+            "save": "Uložiť",
+            "cancel": "Zrušiť"
         },
         "errorPopup": {
-            "title": "Error!",
-            "savingTheFeedbackFailed": "Saving the feedback failed.",
-            "formValidationFailed": "Validation of form failed.",
+            "title": "Chyba",
+            "savingTheFeedbackFailed": "Vaša spätná väzba sa nedala uložiť.",
+            "formValidationFailed": "Formulár nemohol byť overený. Prosím, skontrolujte uvedené údaje a skúste to znova.",
             "okButtonText": "OK"
         },
         "successPopup": {
-            "title": "Success!",
-            "savingTheFeedbackSuccesful": "Saving the feedback was succesful."
+            "title": "Ďakujeme vám",
+            "savingTheFeedbackSuccesful": "Vaša spätná väzba bola úspešne uložená."
         }
     }
 }

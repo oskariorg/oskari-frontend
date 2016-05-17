@@ -76,6 +76,8 @@ Oskari.clazz.define(
             	this.__log('Back to normal for layer:', data.layerId, status.error);
 				status.error = [];
                 loadEvent.setStatus(loadEvent.status.complete);
+				// No operations for wfs layer in case of true, e.g. manual refresh / feature data refresh
+				loadEvent.setNop(data.success_nop);
 			}
 			else {
 				status.error.push('error');

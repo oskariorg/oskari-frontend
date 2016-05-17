@@ -22,28 +22,28 @@ Oskari.registerLocalization(
                 "tags": "Finestra della mappa, guida utente"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Strumenti della mappa",
+                "tags": "Guida_Strumenti"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Cerca",
+                "tags": "Guida_Cerca"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Layers",
+                "tags": "Guida_Layers"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Pubblicazione mappe",
+                "tags": "Guida_Pubblicazione mappe"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Mappe Tematiche",
+                "tags": "Guida_Mappe Tematiche"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Analisi",
+                "tags": "Guida_Analisi"
             }
         ],
         "help": {

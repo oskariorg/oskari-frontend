@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Errore nell'ottenimento delle informazioni sulla licenza",
                 "message": "Non si possono ottenere le informazioni sulla licenza"
             },
-            "failedGetLicenseInformation": {
-                "title": "Impossibile ottenere informazioni sulla licenza",
-                "message": "Impossibile connettersi al server della licenza"
-            },
             "cannotGetLicensePrice": {
                 "title": "Impossibile ottenere il prezzo della licenza",
                 "message": "Non si può ottenere il prezzo della licenza"
@@ -58,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Riempi i dettagli della licenza, tutti i campi obbligatori sono contrassegnati con l'asterisco (*). Premi 'Avanti' per vedere il sommario e il prezzo della licenza. Se desideri selezionare un modello di licenza  diverso  premi 'Indietro'. È anche possibile interrompere l'ordine premendo il pulsante 'Chiudi'.",
                 "summary": "Leggi e accetta la licenza compilata premendo 'Concludi'. Se desideri modificare alcune informazioni compilate , torna indietro premendo il pulsante 'Indietro'. È anche possibile interrompere l'ordine premendo il pulsante 'Chiudi'.",
                 "orderDetails": "Sopra sono visualizzate le informazioni sull'ordine della licenza. Chiudi la finestra premendo il pulsante 'Chiudi'. Se desideri disattivare l'ordine premere il pulsante  'Disattiva licenza'."
-            },
-            "concludeSuccessTitle": "Contratto di licenza stipulato correttamente",
-            "conclude": {
-                "title": "Dettagli sull'ordine della licenza",
-                "productid": "Prodotto",
-                "licenseid": "Licenza",
-                "validto": "Valida fino al"
             },
             "deactivateConfirm": {
                 "title": "Licenza disattivata",

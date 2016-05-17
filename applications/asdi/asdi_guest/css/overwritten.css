@@ -2,7 +2,9 @@ table td {
 	text-align: left;
 	vertical-align: top;
 }
-
+#contentMap {
+    margin-left: 170px !important;
+}
 table {
 	border-top-width: 0px;
 }
@@ -190,6 +192,7 @@ div.mapplugin.timeseries div.playback-button button.pause:before {
 /**
  * Use the light icons as defaults
  */
+/*
 .tool-history-back {
     background-position: -3382px 0px !important;
 }
@@ -225,6 +228,7 @@ div.mapplugin.timeseries div.playback-button button.pause:before {
 .tool-link {
     background-position: -2328px 0px !important;
 }
+*/
 
 /**
  * login flyout
@@ -248,4 +252,10 @@ div.asdiLoginInputField {
     background-image: url('asdi_logoplugin_logo.png') !important;
     width: 23px !important;
     height: 27px !important;
+    float: left;
 }
+
+.logoplugin .data-sources, .logoplugin .terms {
+    float: left;
+}
+

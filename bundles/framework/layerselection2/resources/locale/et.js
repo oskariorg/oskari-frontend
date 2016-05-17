@@ -13,34 +13,34 @@ Oskari.registerLocalization(
             "out-of-scale": "Selle kaardilehe andmeid ei saa valitud mõõtkavas näidata.",
             "move-to-scale": "Liigu sobivasse mõõtkavasse.",
             "out-of-content-area": "Kaardikiht ei sisalda antud asukohas andmeid.",
-            "move-to-content-area": "Liigu sisuala keskpunkti.",
+            "move-to-content-area": "Liigu teise asukohta.",
             "description": "Kirjeldus",
             "object-data": "Objekti andmed",
             "rights": {
-                "notavailable": "Avaldamine keelatud.",
-                "guest": "Selle kaardikihi avaldamiseks logige sisse.",
-                "loggedin": "Avaldamine lubatud.",
-                "official": "Avaldamine lubatud ametkondlikuks kasutuseks.",
-                "need-login": "Peate sisse logima.",
+                "notavailable": "Avalikustamine keelatud",
+                "guest": "Selle kaardikihi avalikustamiseks logige sisse.",
+                "loggedin": "Avalikustamine lubatud.",
+                "official": "Avalikustamine lubatud ametkondlikuks kasutuseks.",
+                "need-login": "Logige sisse, et avalikustada lõimkaarti.",
                 "can_be_published_by_provider": {
-                    "label": "Avaldamine lubatud andmete tarnijale.",
-                    "tooltip": "Selle kaardikihi avaldamiseks on vaja andmete tarnija nõusolekut. Kui olete andmete tarnija, siis pöörduge toe pakkuja poole ja küsige avaldamise nõusolekut."
+                    "label": "Avalikustamine lubatud andmete tarnijale.",
+                    "tooltip": "Selle kaardikihi avalikustamiseks on vaja andmete tarnija nõusolekut. Kui olete andmete tarnija, siis pöörduge toe pakkuja poole ja küsige nõusolekut."
                 },
                 "can_be_published": {
                     "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ilma kasutajate arvu piiramata."
+                    "tooltip": "Kaarikihti saab avalikustada lõimkaardil piiranguteta."
                 },
                 "can_be_published_map_user": {
-                    "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ja kasutajate arvu nädalas võib piirata."
+                    "label": "Avalikustamine lubatud.",
+                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil kuid kasutuste arv nädalas võib olla piiratud."
                 },
                 "no_publication_permission": {
-                    "label": "Avaldamine keelatud.",
-                    "tooltip": "Andmete tarnija ei ole andnud õigust seda kaardikihti põimitud kaardiaknas avaldada."
+                    "label": "Avalikustamine keelatud.",
+                    "tooltip": "Andmete tarnija ei ole andnud õigust seda kaardikihti lõinkaardil kasutada."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib kasutuspiiranguteta avaldada põimitud kaardiaknas."
+                    "label": "Avalikustamine lubatud.",
+                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil vaid ametkondadele. Kontakteeru tarnijaga."
                 }
             },
             "tooltip": {
@@ -48,57 +48,60 @@ Oskari.registerLocalization(
                 "type-wms": "Kaardikiht",
                 "type-wfs": "Andmetoode"
             },
+            "refresh_load": {
+                "tooltip": "Värskenda kaardikihti, andmed ei uuene automaatselt."
+            },
             "filter": {
-                "title": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "cancelButton": "NOT TRANSLATED",
-                "clearButton": "NOT TRANSLATED",
-                "refreshButton": "NOT TRANSLATED",
-                "addFilter": "NOT TRANSLATED",
-                "removeFilter": "NOT TRANSLATED",
+                "title": "Filter",
+                "description": "Filter values on map layer:",
+                "cancelButton": "Tühista",
+                "clearButton": "Tühista filter",
+                "refreshButton": "Värskenda filter",
+                "addFilter": "Lisa filter",
+                "removeFilter": "Eemalda filter",
                 "bbox": {
-                    "title": "NOT TRANSLATED",
-                    "on": "NOT TRANSLATED",
-                    "off": "NOT TRANSLATED"
+                    "title": "Filter",
+                    "on": "Only features visible on the map",
+                    "off": "Kõik objektid"
                 },
                 "clickedFeatures": {
-                    "title": "NOT TRANSLATED",
-                    "label": "NOT TRANSLATED"
+                    "title": "Objekti filter",
+                    "label": "Only features selected on the map"
                 },
                 "values": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Andmefilter",
                     "placeholders": {
-                        "case-sensitive": "NOT TRANSLATED",
-                        "attribute": "NOT TRANSLATED",
-                        "boolean": "NOT TRANSLATED",
-                        "operator": "NOT TRANSLATED",
-                        "attribute-value": "NOT TRANSLATED"
+                        "case-sensitive": "Filter on tõusutundlik(eristab suur-ja väiketähti)",
+                        "attribute": "Attribute",
+                        "boolean": "Logical operator",
+                        "operator": "Operator",
+                        "attribute-value": "Value"
                     },
-                    "equals": "NOT TRANSLATED",
-                    "like": "NOT TRANSLATED",
-                    "notEquals": "NOT TRANSLATED",
-                    "notLike": "NOT TRANSLATED",
-                    "greaterThan": "NOT TRANSLATED",
-                    "lessThan": "NOT TRANSLATED",
-                    "greaterThanOrEqualTo": "NOT TRANSLATED",
-                    "lessThanOrEqualTo": "NOT TRANSLATED"
+                    "equals": "is equal to",
+                    "like": "is like",
+                    "notEquals": "is not equal to",
+                    "notLike": "is not like",
+                    "greaterThan": "is greater than",
+                    "lessThan": "is smaller than",
+                    "greaterThanOrEqualTo": "is greater than or equal to",
+                    "lessThanOrEqualTo": "is smaller than or equal to"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "NOT TRANSLATED",
-                    "aggregateValueSelectTitle": "NOT TRANSLATED",
-                    "selectAggregateAnalyse": "NOT TRANSLATED",
-                    "selectIndicator": "NOT TRANSLATED",
-                    "selectReadyButton": "NOT TRANSLATED",
-                    "getAggregateAnalysisFailed": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
+                    "addAggregateFilter": "Use statistical values",
+                    "aggregateValueSelectTitle": "Select Statistical Values",
+                    "selectAggregateAnalyse": "Select analysis layer",
+                    "selectIndicator": "Select property",
+                    "selectReadyButton": "Close",
+                    "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
+                    "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
+                    "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
                 },
                 "validation": {
-                    "title": "NOT TRANSLATED",
-                    "attribute_missing": "NOT TRANSLATED",
-                    "operator_missing": "NOT TRANSLATED",
-                    "value_missing": "NOT TRANSLATED",
-                    "boolean_operator_missing": "NOT TRANSLATED"
+                    "title": "Features could not be filtered. The following errors occurred:",
+                    "attribute_missing": "The attribute is missing.",
+                    "operator_missing": "The operator is missing.",
+                    "value_missing": "The value is missing.",
+                    "boolean_operator_missing": "The logical operator is missing."
                 }
             }
         }

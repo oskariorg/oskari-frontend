@@ -1193,7 +1193,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 descending: pDescending
             };
             dataArray.sort(function (a, b) {
-                return me._sortComparator(a, b, pAttribute, pDescending);
+                if (typeof a[pAttribute] === 'object' ||
+                    typeof b[pAttribute] === 'object') {
+                    // not sorting objects
+                    return 0;
+                }
+                var nameA = me._getAttributeValue(a, pAttribute);
+                var nameB = me._getAttributeValue(b, pAttribute);
+                return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         },
 
@@ -1224,41 +1231,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 nameA = parseFloat(nameA);
             }
             return nameA;
-        },
-        /**
-         * @private @method _sortComparator
-         * Compares the given attribute on given objects for sorting search
-         * result objects.
-         *
-         * @param {Object} a search result 1
-         * @param {Object} b search result 2
-         * @param {String} pAttribute
-         * Attributename to sort by (e.g. a[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         */
-        _sortComparator: function (a, b, pAttribute, pDescending) {
-            var nameA,
-                nameB,
-                value = 0;
-
-            if (typeof a[pAttribute] === 'object' ||
-                    typeof b[pAttribute] === 'object') {
-                // not sorting objects
-                return 0;
-            }
-
-            nameA = this._getAttributeValue(a, pAttribute);
-            nameB = this._getAttributeValue(b, pAttribute);
-
-            if (nameA < nameB) {
-                value = -1;
-            } else if (nameA > nameB) {
-                value = 1;
-            }
-            if (pDescending) {
-                value = value * -1;
-            }
-            return value;
         },
         /**
          * @method _getLocalization

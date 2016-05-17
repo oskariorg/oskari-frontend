@@ -18,6 +18,17 @@ Oskari.clazz.define(
     }, {
 
         templates: {
+            main :  jQuery(
+                '<div class="mapplugin logoplugin">' +
+                '  <div class="icon"></div>' +
+                '  <div class="terms">' +
+                '    <a href="#" target="_blank"></a>' +
+                '  </div>' +
+                '  <div class="data-sources">' +
+                '    <a href="#"></a>' +
+                '  </div>' +
+                '</div>'
+            ),
             dataSourcesDialog: jQuery(
                 '<div class="data-sources-dialog">' +
                 '  <div class="layers">' +
@@ -29,7 +40,9 @@ Oskari.clazz.define(
                 '</div>'
             )
         },
-
+        _initImpl : function() {
+            this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
+        },
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
@@ -89,57 +102,29 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            return jQuery(
-                '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
-                '  <div class="terms">' +
-                '    <a href="#" target="_blank"></a>' +
-                '  </div>' +
-                '  <div class="data-sources">' +
-                '    <a href="#"></a>' +
-                '  </div>' +
-                '</div>'
-            );
+            var container = this.templates.main.clone();
+            var conf = this.getConfig() || {};
+            this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
+            this._createServiceLink(container);
+
+            var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
+            this._createTermsLink(termsUrl, container);
+            this._createDataSourcesLink(container);
+
+            return container;
         },
 
-        /**
-         * @public  @method _refresh
-         * Called after a configuration change.
-         *
-         *
-         */
-        refresh: function () {
+        _createServiceLink: function (el) {
             var me = this,
-                conf = me.getConfig(),
-                termsUrl;
-
-            if (conf) {
-                termsUrl = me.getSandbox().getLocalizedProperty(conf.termsUrl);
-
-                if (conf.font) {
-                    me.changeFont(conf.font);
-                } else {
-                    var font = me.getToolFontFromMapModule();
-                    if (font !== null && font !== undefined) {
-                        me.changeFont(font, me.getElement());
-                    }
-                }
-            }
-
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
-
-            me._createServiceLink();
-            me._createTermsLink(termsUrl);
-            me._createDataSourcesLink();
-        },
-
-        _createServiceLink: function () {
-            var me = this,
+                el = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
                 link,
                 linkParams;
+            if(!el) {
+                return;
+            }
 
-            link = me.getElement().find('.icon');
+            link = el.find('.icon');
             link.unbind('click');
 
             link.click(function (event) {
@@ -162,9 +147,13 @@ Oskari.clazz.define(
             // setup current url as base if none configured
             return sandbox.createURL(url || window.location.pathname, true);
         },
-        _createTermsLink: function (termsUrl) {
+        _createTermsLink: function (termsUrl, el) {
             var me = this,
-                link = me.getElement().find('.terms a');
+                el = el || me.getElement();
+            if(!el) {
+                return;
+            }
+            var link = el.find('.terms a');
 
             if (termsUrl) {
                 link.html(me._loc.terms);
@@ -181,12 +170,17 @@ Oskari.clazz.define(
             }
         },
 
-        _createDataSourcesLink: function () {
+        _createDataSourcesLink: function (el) {
             var me = this,
-                conf = me.getConfig(),
-                dataSources = me.getElement().find('.data-sources');
+                conf = me.getConfig() || {},
+                el = el || me.getElement();
 
-            if (conf && conf.hideDataSourceLink) {
+            if(!el) {
+                return;
+            }
+            var dataSources = el.find('.data-sources');
+
+            if (conf.hideDataSourceLink) {
                 dataSources.hide();
             } else {
                 dataSources.show();

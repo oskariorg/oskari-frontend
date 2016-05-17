@@ -3,20 +3,20 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "BackendStatus",
     "value": {
-        "title": "Backend Status",
+        "title": "KoncovýStav",
         "desc": "",
         "feedback": {
             "missing_backendstatus_status": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Mapové vrstvy",
+                "message": "Informácie o stave tejto mapovej vrstvy sú nedostupné."
             },
             "missing_backendstatus_information": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Mapové vrstvy",
+                "message": "Informácie o stave tejto mapovej vrstvy sú nedostupné."
             },
             "missing_backendstatus_infourl": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Mapové vrstvy",
+                "message": "Informácie o stave tejto mapovej vrstvy sú nedostupné."
             }
         }
     }

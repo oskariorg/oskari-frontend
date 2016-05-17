@@ -1,7 +1,6 @@
 jQuery(document).ready(function () {
     Oskari.setLang('fi');
     Oskari.setLoaderMode('dev');
-    Oskari.setPreloaded(true);
     var downloadAppSetupConfig = function (notifyCallback) {
             jQuery.ajax({
                 type: 'GET',

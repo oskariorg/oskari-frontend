@@ -143,18 +143,28 @@ Oskari.clazz.define(
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent'];
+                'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+                'RPCUIEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
                 allowedFunctions = [];
                 // allow all available functions by default
                 var funcs = this._availableFunctions;
+
+                // Special handling for getScreenshot() since it's not always present
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                if(typeof mapModule.getScreenshot === 'function') {
+                    // this is only available in Openlayers3 implementation of mapmodule
+                    funcs['getScreenshot'] = function() {
+                        return mapModule.getScreenshot();
+                    };
+                }
+
                 for(var name in funcs) {
-                    if(!funcs.hasOwnProperty(name)) {
-                        continue;
+                    if(funcs.hasOwnProperty(name)) {
+                        allowedFunctions.push(name);
                     }
-                    allowedFunctions.push(name);
                 }
             }
 
@@ -170,6 +180,10 @@ Oskari.clazz.define(
                     'MapMoveRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
+                    'GetFeedbackServiceRequest',
+                    'GetFeedbackServiceDefinitionRequest',
+                    'GetFeedbackRequest',
+                    'PostFeedbackRequest',
                     'SearchRequest',
                     'ChangeMapLayerOpacityRequest',
                     'MyLocationPlugin.GetUserLocationRequest',
@@ -290,6 +304,51 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
+            zoomIn : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomOut : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(-1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomTo : function(newZoom) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                mapModule.setZoomLevel(newZoom);
+                return mapModule.getMapZoom();
+            },
+            getPixelMeasuresInScale : function(mmMeasures, scale) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    scalein = scale,
+                    pixelMeasures = [],
+                    zoomLevel = 0,
+                    nextScale;
+
+                if(mmMeasures && mmMeasures.constructor === Array){
+                    if(!scalein){
+                        scalein = mapModule.calculateFitScale4Measures(mmMeasures);
+                    }
+                    pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
+                }
+
+                var scales = mapModule.getScaleArray();
+                scales.forEach(function(sc, index) {
+                    if ((!nextScale || nextScale > sc) && sc > scalein) {
+                        nextScale = sc;
+                        zoomLevel = index;
+                    }
+                });
+
+                return {
+                    pixelMeasures: pixelMeasures,
+                    scale: scalein,
+                    zoomLevel: zoomLevel
+                };
+            },
             resetState : function() {
                 this.sandbox.resetState();
             },
@@ -316,6 +375,17 @@ Oskari.clazz.define(
                     }
                 });
                 return features;
+            },
+            setCursorStyle: function(cursorStyle) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var element = mapModule.getMapEl();
+                jQuery(element).css('cursor',cursorStyle);
+                return cursorStyle;
+            },
+            sendUIEvent: function(bundleId, payload) {
+                var me = this,
+                    event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
+                me.sandbox.notifyAll(event);
             }
         },
 

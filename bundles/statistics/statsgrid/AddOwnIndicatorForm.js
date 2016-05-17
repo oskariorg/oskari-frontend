@@ -111,13 +111,22 @@ Oskari.clazz.define(
             field.prev().append(me.localization.addDataMetaReferenceLayer);
 
             // Add region categories
-            var regionCategories = layer.getCategoryMappings().categories;
+            // FIXME: copypasted from ManageStatsPlugin
+            var regionCategories = [
+                'KUNTA',
+                'ALUEHALLINTOVIRASTO',
+                'MAAKUNTA',
+                'NUTS1',
+                'SAIRAANHOITOPIIRI',
+                //'SUURALUE',
+                'SEUTUKUNTA',
+                'ERVA',
+                'ELY-KESKUS'
+            ];
 
             _.each(regionCategories, function (region) {
                 var regionOption = jQuery('<option></option>');
-                regionOption.
-                val(region).
-                html(me.localization.regionCategories[region]);
+                regionOption.val(region).html(me.localization.regionCategories[region]);
 
                 if (me.regionCategory === region) {
                     regionOption.attr('selected', 'selected');

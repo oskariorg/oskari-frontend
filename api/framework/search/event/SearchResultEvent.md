@@ -1,78 +1,70 @@
 # SearchResultEvent [rpc]
 
-Response to ``SearchRequest`` with the searchresult.
+Notifies that search result has been got.
 
-# Event methods
+## Description
 
-## getName
+Used to notify that the ``SearchRequest`` has received a reply from search.
 
-Get event name.
+## Parameters
 
-## getSuccess
+(* means the parameter is required)
 
-Get search success status. If it's true, search is done and even if no items are found. If false then search is not success.
+<table class="table">
+<tr>
+  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
+</tr>
+<tr>
+  <td> \* success</td><td> Boolean </td><td> true if result was got successfully</td><td> </td>
+</tr>
+<tr>
+  <td> \* requestParameters</td><td> Object </td><td> request parameters</td><td> </td>
+</tr>
+<tr>
+  <td> \* result</td><td> Object </td><td> search result</td><td> </td>
+</tr>
+</table>
 
-## getResult
+## Event methods
 
-Search result e.g.
-```json
+### getName()
+Returns event name
+
+### getSuccess()
+Returns true if result was got successfully
+
+### getResult()
+Returns search result as JSON
+
+### getRequestParameters()
+Returns request parameters as JSON
+
+### getParams()
+Returns event parameters as an object:
+<pre class="event-code-block">
+<code>
 {
-    "totalCount": 4,
-    "locations": [
-      {
-        "id": 0,
-        "rank": 10,
-        "lon": "389828.281",
-        "village": "Vantaa",
-        "name": "Vantaa",
-        "zoomScale": 56650,
-        "type": "Municipality, urban area",
-        "lat": "6686279.347"
-      },
-      {
-        "id": 1,
-        "rank": 30,
-        "lon": "383183.648",
-        "village": "Hausj√§rvi",
-        "name": "Vantaa",
-        "zoomScale": 11300,
-        "type": "Village, district or neighbourhood",
-        "lat": "6733424.84"
-      },
-      {
-        "id": 2,
-        "rank": 50,
-        "lon": "387139.034",
-        "village": "Helsinki",
-        "name": "Vantaa",
-        "zoomScale": 5650,
-        "type": "Watercourse",
-        "lat": "6683063.213"
-      },
-      {
-        "id": 3,
-        "rank": 50,
-        "lon": "383746.169",
-        "village": "Nurmij√§rvi",
-        "name": "Vantaa",
-        "zoomScale": 2800,
-        "type": "House",
-        "lat": "6708499.96"
-      }
-    ]
-}
-```
+    success: this._success,
+    result: this._result,
+    requestParameters: this._requestParameters
+};
+</code>
+</pre>
 
-## getRequestParameters
+## RPC
 
-The query that was used in search e.g "Vantaa"
+Event occurs after a search request.
 
-## getParams (RPC response)
-
-```json
+<pre class="event-code-block">
+<code>
 {
   "success": true,
   "result": {
+    "methods": [
+      {},
+      {},
+      {}
+    ],
     "totalCount": 4,
     "locations": [
       {
@@ -82,17 +74,17 @@ The query that was used in search e.g "Vantaa"
         "village": "Vantaa",
         "name": "Vantaa",
         "zoomScale": 56650,
-        "type": "Municipality, urban area",
+        "type": "Kunta, kaupunki",
         "lat": "6686279.347"
       },
       {
         "id": 1,
         "rank": 30,
         "lon": "383183.648",
-        "village": "Hausj√§rvi",
+        "village": "Hausj‰rvi",
         "name": "Vantaa",
         "zoomScale": 11300,
-        "type": "Village, district or neighbourhood",
+        "type": "Kyl‰, kaupunginosa tai kulmakunta",
         "lat": "6733424.84"
       },
       {
@@ -102,21 +94,22 @@ The query that was used in search e.g "Vantaa"
         "village": "Helsinki",
         "name": "Vantaa",
         "zoomScale": 5650,
-        "type": "Watercourse",
+        "type": "Virtavesi",
         "lat": "6683063.213"
       },
       {
         "id": 3,
         "rank": 50,
         "lon": "383746.169",
-        "village": "Nurmij√§rvi",
+        "village": "Nurmij‰rvi",
         "name": "Vantaa",
         "zoomScale": 2800,
-        "type": "House",
+        "type": "Talo",
         "lat": "6708499.96"
       }
     ]
   },
   "requestParameters": "Vantaa"
 }
-```
+</code>
+</pre>

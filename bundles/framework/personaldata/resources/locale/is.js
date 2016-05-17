@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Gögnin mín",
         "desc": "Gögnin mín",
         "notLoggedIn": "Gögnin mín inniheldur notandasnið og allar fitjur sem þú hefur vistað, kortasýn, ívafin kort, vísbendingar, greiningar og gagnasett. <a href='/web/is/innskra'>Skráðu þig inn til að til að skoða gögnin þín</a>.",
-        "notLoggedInText": "NOT TRANSLATED",
+        "notLoggedInText": "Skrá inn",
         "tabs": {
             "myviews": {
                 "title": "Kortasýnir mínar",
@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Lýsing",
                     "publish": "Birt",
                     "edit": "Breyta",
-                    "delete": "Eyða"
+                    "delete": "Eyða",
+                    "default": "Sjálfgefið"
                 },
                 "popup": {
                     "edit": "Breyta kortasýn",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Hætta við",
                     "error_noname": "Nafn á kortasýn",
                     "deletetitle": "Eyða kortasýn",
-                    "deletemsg": "Viltu eyða þessari kortasýn?"
+                    "deletemsg": "Viltu eyða þessari kortasýn?",
+                    "default": "Sjálfgefin sýn"
                 },
                 "save": {
                     "success": "Kortasýnin hefur verið vistuð.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "Ok",
                     "save": "Vista",
                     "cancel": "Hætta við",
-                    "toolbarsave": "Vista kortasýn"
+                    "toolbarsave": "Vista kortasýn",
+                    "saveCurrent": "Vista núverandi glugga."
                 },
                 "error": {
                     "title": "Villa!",

@@ -41,6 +41,30 @@ Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
                 "lang": "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-lang-overrides/resources/locale/es.js"
+            }, {
+                "lang" : "et",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/et.js"
+            }, {
+                "lang" : "is",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/is.js"
+            }, {
+                "lang" : "it",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/it.js"
+            }, {
+                "lang" : "nl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/nl.js"
+            }, {
+                "lang" : "sk",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/sk.js"
+            }, {
+                "lang" : "sl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/sl.js"
             }
         ]
     },

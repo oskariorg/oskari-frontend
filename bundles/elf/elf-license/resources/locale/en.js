@@ -38,12 +38,12 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Licence information",
-            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptionsTitle": "ELF Products are currently licensed only for evaluation or development purposes on a time limited and restricted basis:",
             "licenseModelDescriptions": {
-                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
-                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+                "evaluation": "Evaluation Licence – You can access and use ELF products for the purpose of evaluating its suitability for your own internal use.",
+                "developer": "Developer Licence – You can access and use ELF products for the purpose of developing your own products."
             },
-            "licenseModelsTitle": "Licence models:",
+            "licenseModelsTitle": "Licence models",
             "noRightToAnyLicenseModels": "You do not have rights to view any licence models.",
             "loginShort": "Log in to show licence models.",
             "licenseSummaryTitle": "Licence Summary",
@@ -52,7 +52,7 @@ Oskari.registerLocalization(
             "help": {
                 "info": "Select a licence model by clicking a model you want.",
                 "details": "Fill the licence information. The required data are marked with an asterisk (*). Press Next to see a licence summary and price. Press Previous to select another licence model. Press Close to stop the licence order.",
-                "summary": "Read licence conditions and accept them by pressing Conclude. Press Previous to edit licence information. Press Close to stop the licence order.",
+                "summary": "Read licence conditions and accept them by pressing Accept. Press Previous to edit licence information. Press Close to stop the licence order.",
                 "orderDetails": "Read the licence information above. Press Deactivate licence to stop the licence order. Press Close to close the window."
             },
             "deactivateConfirm": {
@@ -64,13 +64,19 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "Licence service URL: {serviceurl}",
             "licenceConcluded": {
                 "message": "Licence has been concluded. Please check the licence information below:"
+            },
+            "licenseDurations": {
+                "D":"days",
+                "W":"weeks",
+                "M": "months",
+                "Y": "years"
             }
         },
         "buttons": {
             "close": "Close",
             "previous": "Previous",
             "next": "Next",
-            "conclude": "Conclude",
+            "conclude": "Accept",
             "ok": "OK",
             "deactivate": "Deactivate licence",
             "no": "No",

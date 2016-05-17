@@ -107,6 +107,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 var layer = args[0];
                 var config = me.__getLayerConfig(caps, layer);
                 var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
+                //this doesn't get merged automatically by ol3
+                options.crossOrigin = config.crossOrigin;
                 if(config.url) {
                     // override capabilities url with the configured one
                     options.urls = [config.url];
@@ -136,7 +138,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 params : {},
                 buffer: 0,
                 displayInLayerSwitcher: false,
-                isBaseLayer: false
+                isBaseLayer: false,
+                crossOrigin : layer.getAttributes('crossOrigin')
             };
 
             var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {

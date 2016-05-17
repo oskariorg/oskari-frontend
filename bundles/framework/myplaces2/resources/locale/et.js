@@ -3,91 +3,92 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "MyPlaces2",
     "value": {
-        "title": "Kohad",
+        "title": "Kaardikihid",
         "desc": "",
         "category": {
-            "defaultName": "Minu kaardikiht",
-            "organization": "Minu kohad",
+            "defaultName": "Vaikimisi kaardikiht",
+            "organization": "NOT TRANSLATED",
             "inspire": "Minu kohad"
         },
         "guest": {
             "loginShort": "Kasutamiseks logi sisse"
         },
         "tab": {
-            "title": "Kohad",
-            "nocategories": "NOT TRANSLATED",
-            "maxFeaturesExceeded": "NOT TRANSLATED",
+            "title": "Minu kaardikihid",
+            "nocategories": "Sul ei ole salvestatud kaardikihte",
+            "maxFeaturesExceeded": "Liiga palju kihte, jätkamiseks eemalda mõned",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "See kiht on avalikustamata, vajuta siia, et avalikustada.",
+                "publicTooltip": "See kiht on avalik, vajuta siia et muuta kiht mitteavalikuks."
             },
+            "addCategoryFormButton": "Uus kaardikiht",
             "addCategory": "Lisa kaardikiht",
-            "editCategory": "Toimeta kaardikihti",
+            "editCategory": "Muuda kaardikihti",
             "deleteCategory": "Kustuta kaardikiht",
-            "edit": "Toimeta",
+            "edit": "Muuda",
             "delete": "Kustuta",
             "grid": {
-                "name": "Nimi",
-                "desc": "Kirjeldus",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "Nimetus",
+                "desc": "Kirjelda objekti",
+                "createDate": "Koostatud",
+                "updateDate": "Uuendatud",
+                "measurement": "Suurus",
+                "edit": "Muuda",
+                "delete": "Kustuta"
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
+                    "title": "Kustuta objekt",
+                    "confirm": "Kas soovid kustutada valitud objekti?",
                     "btnDelete": "Kustuta",
                     "btnCancel": "Tühista",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "Objekt on kustutatud",
+                    "error": "Seda objekti ei saa kustutada - proovi hiljem uuesti.",
+                    "cancel": "Objekti ei kustutatud"
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "add": "",
-                "next": "",
-                "edit": "NOT TRANSLATED",
+                "title": "Mõõda vahemaa",
+                "tooltip": "Märgi kaardile punktid nende vahelise kauguse mõõtmiseks",
+                "add": "Lisa joon",
+                "next": "Järgmine",
+                "edit": "Märgi kaardile joone alguspunkt ja nurgapunktid. Topelt-klõps lõpetab joone. Mitme joone joonistamisel nende pikkused summeeritakse.",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "add": "",
-                "next": "",
-                "edit": "NOT TRANSLATED",
+                "title": "Mõõda pindala",
+                "tooltip": "Joonesta polügoon selle pindala mõõtmiseks.",
+                "add": "Lisa polügoonile nurgapunkte klikkides kaardil. Joonistamise lõpetab topeltklikk või klikkides 'Lõpeta joonistamine'. Polügooni sisse saarte loomiseks vajuta samal ajal Alt-nuppu.",
+                "next": "Järgmine",
+                "edit": "Märgi kaardile polügooni alguspunkt ja nurgapunktid. Topelt-klõps lõpetab polügooni joonestamise.",
                 "noResult": "0 m²"
             },
             "point": {
                 "title": "Lisa punkt",
-                "tooltip": "Lisa punkt",
+                "tooltip": "Lisa punkt lisamaks seda oma objektide loendisse. Loendisse saab lisada mitmeid punkte.",
                 "add": "Lisa punkt klikkides kaardil.",
-                "next": "Samale joonisele võib salvestada või joonistada veel punkte.",
-                "edit": "Liiguta punkti klikkides ja vedades.",
-                "save": "Salvesta asukoht"
+                "next": "Samale kaardikihile saab kana mitmeid punktobjekte.",
+                "edit": "Punkti saab nihutada, lohistades seda kaardil teise asukohta.",
+                "save": "Salvesta asukohta \"Minu kaardikihid\""
             },
             "line": {
-                "title": "Lisa joon",
-                "tooltip": "Lisa joon",
-                "add": "Lisa joonele murdepunkt klikkides kaardil. Joonistamise lõpetab topeltklikk või klikkides 'Lõpeta joonistamine'.",
-                "next": "Samale joonisele võib salvestada või joonistada veel jooni.",
-                "edit": "Toimeta joont klikkides ja vedades selle murdepunkte.",
-                "save": "Salvesta kuju",
+                "title": "Lisa joon asukohta \"Minu kaardikihid\"",
+                "tooltip": "Joonista ja lisa joon asukohta \"Minu kaardikihid\"",
+                "add": "Lisa joonele nurgapunkt klikkides kaardil. Joonistamise lõpetab topeltklikk või klikkides 'Lõpeta joonistamine'.",
+                "next": "Nurgapunkte on võimalik muuta lohistades neid teise asukohta",
+                "edit": "Nurgapunkte on võimalik muuta lohistades neid teise asukohta",
+                "save": "Salvesta objekt",
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Lisa ala",
-                "tooltip": "Lisa ala",
+                "title": "Lisa polügoon asukohta \"Minu kaardikihid\"",
+                "tooltip": "Joonista polügoon ja savesta see asukohta \"Minu kaardikihid\"",
                 "add": "Lisa polügoonile murdepunkte klikkides kaardil. Joonistamise lõpetab topeltklikk või klikkides 'Lõpeta joonistamine'. Polügooni sisse saarte loomiseks vajuta samal ajal Alt-nuppu.",
                 "next": "Samale joonisele võib salvestada või joonistada veel polügoone.",
-                "edit": "Toimeta pindobjekti kuju klikkides ja vedades selle servajoone murdepunkte.",
-                "save": "Salvesta kuju",
+                "edit": "Toimeta polügooni kuju klikkides ja lohistades selle nurgapunkte.",
+                "save": "Salvesta objekt",
                 "noResult": "0 m²"
             }
         },
@@ -95,9 +96,9 @@ Oskari.registerLocalization(
             "ok": "OK",
             "cancel": "Tühista",
             "close": "Tühista",
-            "finish": "Salvesta joonis",
+            "finish": "Salvesta objekt",
             "save": "Salvesta",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "Save objekt",
             "movePlaces": "Nihuta kohad ja kustuta",
             "deleteCategory": "Kustuta",
             "deleteCategoryAndPlaces": "Kustuta kategooria ja kohad",
@@ -117,24 +118,23 @@ Oskari.registerLocalization(
                 "placeholder": "Kirjelda kohta"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": "Text visible on map"
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "Line length:",
+                "area": "Area size:"
             },
             "category": {
                 "label": "Kaardikiht",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "Create new layer",
+                "choose": "or select one of your existing map layers:"
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "Uus kiht"
+                "placeholder": "Link to feature image",
+                "previewLabel": "Image preview"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Styles for places at map layer",
                 "point": {
                     "tooltip": "Punkt"
                 }
@@ -165,10 +165,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "Visible place data",
                 "placename": "Nimi",
                 "placedesc": "Kirjeldus",
-                "image": "NOT TRANSLATED"
+                "image": "Image"
             },
             "edit": {
                 "title": "Toimeta kaardikihti",
@@ -176,34 +176,34 @@ Oskari.registerLocalization(
                 "cancel": "Tagasi"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "Place style",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the point style. Note! The selection affects all the point features at this map layer."
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the area style. Note! The selection affects all the area features at this map layer."
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Edit the line style. Note! The selection affects all the line features at this map layer."
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
-            "tooltip": "",
+            "title": "Point style",
+            "tooltip": "Define a style for point features.",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": "Icon"
             },
             "size": {
                 "label": "Suurus"
             },
             "color": {
                 "label": "Värvus",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
                 "save": "Salvesta",
@@ -211,27 +211,27 @@ Oskari.registerLocalization(
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
-            "tooltip": "",
+            "title": "Line style",
+            "tooltip": "Define a style for line features.",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": "Style"
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": "Endings"
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": "Corners"
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": "Width"
             },
             "color": {
                 "label": "Värvus",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
                 "save": "Salvesta",
@@ -239,35 +239,35 @@ Oskari.registerLocalization(
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
-            "tooltip": "",
+            "title": "Area Style",
+            "tooltip": "Define a style for area features.",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line style"
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line endings"
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line corners"
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": "Edge line width"
             },
             "linecolor": {
                 "label": "Joone värvus",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "Fill colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": "Fill pattern"
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": "Preview"
             },
             "buttons": {
                 "save": "Salvesta",
@@ -316,7 +316,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Kihi kirjeldus sisaldab mittelubatud märke. Lubatud märgid on tähed a-z kui ka ä ja ö, numbrid, tagasijooksu ja poolitusmärgid.",
             "dotSize": "Punkti suurus ei mahu piirväärtuste (1-5) sisse.",
             "dotColor": "Vale punkti värvus.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "The point icon is invalid.",
             "lineSize": "Joone laius ei mahu piirväärtuste (1-50) sisse.",
             "lineColor": "Vale joonevärvusr.",
             "areaLineSize": "Pinna piirjoone laius ei mahu piirväärtuste (1-50) sisse.",

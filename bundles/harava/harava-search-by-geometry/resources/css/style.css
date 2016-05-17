@@ -1,5 +1,3 @@
-
-
 #searchbygeom {
   position: absolute;
   z-index: 1000;
@@ -13,39 +11,39 @@
   margin: 2px; }
 
 .searchbygeom-point {
-  background: url('../images/selectPoint.png') no-repeat;
+  background: url("../images/selectPoint.png") no-repeat;
   background-position: center center; }
 
 .searchbygeom-point.active {
-  background: url('../images/selectPoint_active.png') no-repeat !important; }
+  background: url("../images/selectPoint_active.png") no-repeat !important; }
 
 .searchbygeom-mapextent {
-  background: url('../images/selectMapExtent.png') no-repeat;
+  background: url("../images/selectMapExtent.png") no-repeat;
   background-position: center center; }
 
 .searchbygeom-mapextent.active {
-  background: url('../images/selectMapExtent_active.png') no-repeat !important; }
+  background: url("../images/selectMapExtent_active.png") no-repeat !important; }
 
 .searchbygeom-line {
-  background: url('../images/selectLine.png') no-repeat;
+  background: url("../images/selectLine.png") no-repeat;
   background-position: center center; }
 
 .searchbygeom-line.active {
-  background: url('../images/selectLine_active.png') no-repeat !important; }
+  background: url("../images/selectLine_active.png") no-repeat !important; }
 
 .searchbygeom-regular-polygon {
-  background: url('../images/selectRegularPolygon.png') no-repeat;
+  background: url("../images/selectRegularPolygon.png") no-repeat;
   background-position: center center; }
 
 .searchbygeom-regular-polygon.active {
-  background: url('../images/selectRegularPolygon_active.png') no-repeat !important; }
+  background: url("../images/selectRegularPolygon_active.png") no-repeat !important; }
 
 .searchbygeom-polygon {
-  background: url('../images/selectPolygon.png') no-repeat;
+  background: url("../images/selectPolygon.png") no-repeat;
   background-position: center center; }
 
 .searchbygeom-polygon.active {
-  background: url('../images/selectPolygon_active.png') no-repeat !important; }
+  background: url("../images/selectPolygon_active.png") no-repeat !important; }
 
 .searchbygeom-link {
   cursor: pointer;

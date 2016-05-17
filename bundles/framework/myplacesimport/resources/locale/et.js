@@ -3,77 +3,77 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "MyPlacesImport",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Andmete import",
         "desc": "NOT TRANSLATED",
-        "help": "NOT TRANSLATED",
         "tool": {
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": "Impordi oma andmed"
         },
         "flyout": {
-            "title": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "title": "Andmete import",
+            "description": "Impordi andmed oma arvutist kokkupakituna(*.zip failina). Toetatavad amdeformaadid on: Shapefile(*.shp, *.shx, *.dbf, *.prj); GPS-fail(*.gpx); MapInfo(*.mif, *.mid); Google Maps(*.kml, *.kmz). Veendu, et andmete koordinaatsüsteem on õige.",
+            "help": "Impordi andmed oma arvutist kokkupakituna(*.zip failina). Enne iportimist veendu et andmed oleks õiges formaadis ja koordinaatsüsteemis.",
             "actions": {
-                "cancel": "NOT TRANSLATED",
-                "next": "NOT TRANSLATED"
+                "cancel": "Tühista",
+                "next": "Järgmine"
             },
             "file": {
-                "submit": "NOT TRANSLATED",
+                "submit": "Impordi",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "Viga",
+                    "message": "Lisatav fail on liiga suur. Maksimum <xx> mb.",
+                    "close": "Sulge"
                 }
             },
             "layer": {
-                "title": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "source": "NOT TRANSLATED",
-                "style": "NOT TRANSLATED"
+                "title": "Andmestiku info",
+                "name": "Nimi",
+                "desc": "Kirjaldus",
+                "source": "Andmeallikas",
+                "style": "Muuda stiili"
             },
             "validations": {
                 "error": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Viga",
+                    "message": "Andmeid ei imporditud. Fail ja nimi on puudu. Eemalda vead ja proovi uuesti."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Andmesiku import õnnestus.",
+                    "message": "Andmestik on inporditud.  Leiad need \"Minu andmed\" manüü alt."
                 },
                 "failure": {
-                    "title": "NOT TRANSLATED"
+                    "title": "Andmestikku ei imporditud."
                 }
             }
         },
         "tab": {
-            "title": "NOT TRANSLATED",
+            "title": "Andmestikud",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "source": "NOT TRANSLATED",
-                "remove": "NOT TRANSLATED",
-                "removeButton": "NOT TRANSLATED"
+                "name": "Nimi",
+                "description": "Kirjeldus",
+                "source": "Andmeallikas",
+                "remove": "Kustuta",
+                "removeButton": "Kustuta"
             },
-            "confirmDeleteMsg": "NOT TRANSLATED",
+            "confirmDeleteMsg": "Kas tahad kustutada andmestikku.",
             "buttons": {
-                "ok": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "ok": "OK",
+                "cancel": "Tühista",
+                "delete": "Kustuta"
             },
             "notification": {
-                "deletedTitle": "NOT TRANSLATED",
-                "deletedMsg": "NOT TRANSLATED"
+                "deletedTitle": "Andmestiku kustutamine",
+                "deletedMsg": "Andmestik on kustutatud"
             },
             "error": {
-                "title": "NOT TRANSLATED",
-                "generic": "NOT TRANSLATED"
+                "title": "Viga",
+                "generic": "Süsteemiviga esines"
             }
         },
         "layer": {
-            "organization": "NOT TRANSLATED",
-            "inspire": "NOT TRANSLATED"
+            "organization": "Minu andmestikud",
+            "inspire": "Minu andmestikud"
         }
     }
 }
