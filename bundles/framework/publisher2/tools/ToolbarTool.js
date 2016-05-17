@@ -190,10 +190,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
 
             var selectedDrawTools = me._hasSelectedDrawTool();
+
+            //PublishedMyPlaces is not supported with ol3
+            
+            /*
             if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
                 me.publishedmyplaces2Config.myplaces = me.drawOptions;
                 retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
             }
+            */
             return retValue;
         },
         /**
@@ -306,6 +311,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
 
                 // show drawing controls for admin users
+                //TODO: PublishedMyPlaces is not supported with ol3!
+                /*
                 if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
                     //if there is not yet config for publishedmyplaces, create one to be used further
                     if (!me.publishedmyplaces2Config) {
@@ -335,6 +342,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     options.append(selectTool);
 
                 }
+                */
                 tool.toolContainer.find(".extraOptions").append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
