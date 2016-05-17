@@ -185,9 +185,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 }
             };
+
             // we want toolbar always with no default tools
             retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
-            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer) {
+
+            var selectedDrawTools = me._hasSelectedDrawTool();
+            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
                 me.publishedmyplaces2Config.myplaces = me.drawOptions;
                 retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
             }
