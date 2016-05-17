@@ -1341,6 +1341,7 @@ Oskari.clazz.define(
 
         /**
          * Register wellknown style
+         * !! DO NOT USE - SUBJECT TO CHANGE !!
          * @method  @public registerStyle
          * @param  {String} key    style key
          * @param  {Object} styles styles object
@@ -1354,6 +1355,7 @@ Oskari.clazz.define(
 
         /**
          * Get wellknown style object
+         * !! DO NOT USE - SUBJECT TO CHANGE !!
          * @method  @public getWellknownStyle
          * @param  {String} key   style key
          * @param  {String} style style name
