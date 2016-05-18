@@ -448,7 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         _openToolsPopup: function () {
-            var me = this
+            var me = this,
                 conf = me.conf,
                 mapmodule = me.getMapModule(),
                 isMobile = Oskari.util.isMobile();

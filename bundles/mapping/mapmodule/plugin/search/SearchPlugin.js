@@ -365,7 +365,7 @@ Oskari.clazz.define(
             var me = this,
                 errorMsg = msg.error,
                 resultsContainer = me.resultsContainer.clone(),
-                content = resultsContainer.find('div.content');
+                content = resultsContainer.find('div.content'),
                 popupTitle = me._loc.title,
                 mapmodule = me.getMapModule(),
                 themeColours = mapmodule.getThemeColours();

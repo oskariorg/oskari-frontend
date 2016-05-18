@@ -70,7 +70,7 @@ function(instance, localization) {
         // Determining the dataTypes ('nopeusrajoitus' etc.) for each feature.
         // Also creating the tab panels and grids.
         for(var i = 0; i < features.length; ++i) {
-            f = features[i],
+            var f = features[i],
             dataType = f.attributes['TIETOLAJI'];
 
             panel = this.tabPanels[dataType];

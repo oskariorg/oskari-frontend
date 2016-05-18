@@ -654,7 +654,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
                  */
                 MapClickedEvent: function (event) {
-                    var me = this;
+                    var me = this,
                         lonlat = event.getLonLat(),
                         data = {
                             'lonlat': {
