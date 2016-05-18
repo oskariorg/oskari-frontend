@@ -181,5 +181,9 @@ div.oskari-flyout.ui-draggable.mobile.oskari-detached {
     div.oskari-flyouttoolbar {
         background-color: rgb(230, 230, 230);
         height: 41px;
+
+        div.oskari-flyoutheading {
+            display: none;
+        }
     }
 }
