@@ -21,14 +21,18 @@ Oskari.clazz.define(
             tagPipeActive: false,
             mustacheActive: false,
             mustacheType: null,
-            paavesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
-            jakeluvesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
-            tonttivesijohdot: ['tagtype','tag-low-pressure-level','tag-max-pressuire-level','tag-other-issue'],
-            tonttijatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
-            jatevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
-            jatevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
-            hulevesijohdot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight'],
-            hulevesikaivot: ['tagtype','tag-bottom-hight','tag-low-tag-hight','tag-barrage-hight']
+            allTagTypes: ['vesi_putki','maapaloposti','seinapaloposti','sprinkleri','jatevesi_putki','jatevesi_kaivo','hulevesi_putki','hulevesi_kaivo','sekaviemari_putki','sekaviemari_kaivo','muu_liitynta'],
+            vesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressuire-level'],
+            maapaloposti: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressuire-level'],
+            seinapaloposti: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressuire-level'],
+            sprinkleri: ['tagtype','tag-address','tag-pipe-size','tag-max-water-take','tag-min-pressure-level'],
+            jatevesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            jatevesi_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            hulevesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            hulevesi_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            sekaviemari_putki: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            sekaviemari_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            muu_liitynta: ['tagtype','tag-address','tag-other-issue']
         };
     },{
 
@@ -45,9 +49,15 @@ Oskari.clazz.define(
             //main wrapper
             me.templates.main = jQuery('<div class="tag-pipe-wrapper"></div>');
 
+            me.templates.formRedirect = jQuery(
+                '<div class="tag-pipe-redirect-to-form">' +
+                '   <select></select>' +
+                '</div>'
+            );
+
             //form body
             me.templates.form = jQuery(
-                '<form method="" action="">' +
+                '<form class="tag-pipe-form" method="" action="">' +
                 '<fieldset>' +
                 '    <input type="hidden" name="id" />' +
                 '       <h4></h4>' +
@@ -288,41 +298,87 @@ Oskari.clazz.define(
             me.highlightVectorLayer.addFeatures(features);
             _map.setLayerIndex(me.highlightVectorLayer, 1000000);
         },
+
         /**
-         * @method _getTagPipe
-         * Gets channel by id
+         * [_initFormRedirectSelect create select options from arrays]
+         * @return {[array]} [different tag types]
          */
-/*        _getTagPipe: function (uid) {
-            var i;
-            for (i = 0; i < this.channels.length; i += 1) {
-                if (this.channels[i].id === uid) {
-                    return this.channels[i];
-                }
-            }
-            return null;
-        },*/
+        _initFormRedirectSelect: function(){
+            var me = this,
+            output = [];
+            output.push('<option value=""></option>');
+
+            jQuery.each(me.state.allTagTypes, function(key, value) {
+                output.push('<option value="'+ value +'">'+ me._getLocalization("tagtype-"+value) +'</option>');
+            });
+
+            return output.join('');
+        },
         /**
+         * @method _openForm opens redirect select and from change event form
+         * Opens edit/create form depending on event target location
+         */
+        _openForm: function (event, instance, data) {
+            // Semi deep clone
+            var me = instance,
+                direct = me.templates.formRedirect,
+                target = jQuery(event.target);
+               
+                //update help text
+                me._manageHelp(true, me._getLocalization('help_redirect'));
+
+                //remove listing and change mapclick event state
+                me.container.find(".tag-pipe-list").remove();
+                me.container.find(".cancel-tag-btn").hide();
+                me.state.tagPipeActive = false;
+
+                //add redirect select with options to container
+                direct.find('select').html(me._initFormRedirectSelect());
+                direct.change(function(e){
+                    var el = jQuery(this),
+                    value = el.find(":selected").val();
+
+                    if(value === ""){
+                        me._manageHelp(true, me._getLocalization('help_redirect'));
+                        me.container.find('form').remove();
+                    }else{
+                        me._manageHelp(true, me._getLocalization('help_insert'));
+                        me.container.find('form').remove();
+                        me.container.append(me._initForm(value));
+                    }
+                });
+                me.container.append(direct);
+        },
+
+               /**
          * [_initForm creates form with state params]
          * @param  {[array]} data [feature]
          * @return {[jquery object]}      [html]
          */
-        _initForm: function(data){
+        _initForm: function(type){
             var me = this,
-            form = me.templates.form.clone(true),
-            type = data.id.replace("_",".").split(".");
-            me.state.mustacheType = type[0];
+            form = me.templates.form.clone(true);
+            me.state.mustacheType = type;
+            form.attr("type", me.state.mustacheType);
+
+            //add topic for form
+            form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
 
             //loop states and find right form input names
             jQuery.each(me.state[me.state.mustacheType], function(index, item) {
                 me.templates.form.detailinputs = jQuery(
                 '    <label>' +
                 '        <span></span>' +
-                '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="details-topic" language="'+item+'" required="required" />' +
+                '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details" language="'+item+'" required="required" />' +
                 '    </label>'
                 );
                 form.find('.tag-pipe-form-inner-wrapper').append(me.templates.form.detailinputs);
             });
             
+            form.find("[name=tag-bottom-height]").blur(function(e){
+                console.info(me._calculateTagHeight(form));
+            });
+
             //add localization to inputs
             form.find('input,select').each(function (index) {
                 var el = jQuery(this);
@@ -334,9 +390,6 @@ Oskari.clazz.define(
                    }
                 }
             });
-
-            //add topic for form
-            form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
 
             //add buttons to fieldset of form
             var firstFieldset = form.find('fieldset:nth-of-type(1)');
@@ -393,24 +446,76 @@ Oskari.clazz.define(
 
             return form;
         },
-        /**
-         * @method _openForm
-         * Opens edit/create form depending on event target location
-         */
-        _openForm: function (event, instance, data) {
-            // Semi deep clone
-            var me = instance,
-                form = me._initForm(data),
-                target = jQuery(event.target);
 
-                //me._populateForm(form, me._getChannel(parseInt(uid, 10)));
-                //me._populateForm(form, null);
-                me._manageHelp(true, me._getLocalization('help_insert'));
-                me.container.find(".tag-pipe-list").remove();
-                me.container.find(".cancel-tag-btn").hide();
-                me.state.tagPipeActive = false;
-                me.container.append(form);
+        _calculateTagHeight: function(form){
+            var me = this,
+            tagType = form.attr("type").split("_"),
+            type = tagType[1],
+            pipeSize = parseInt(form.find("[name=tag-pipe-size]").val()),
+            groundHeight = parseInt(form.find("[name=tag-bottom-height]").val());
+
+            switch (type) {
+                case "kaivo":
+                    if(pipeSize > 0 && pipeSize <= 250){
+                        //Pohjan korkeus + 150mm
+                        return groundHeight + 150;
+                    }else if(pipeSize >= 251 && pipeSize <= 350){
+                        //Pohjan korkeus + 200 mm
+                        return groundHeight + 200;
+                    }else if(pipeSize > 350){
+                        //Pohjan korkeus + 0,75 * katuviemärin halkaisija
+                        return (0.75*pipeSize) + groundHeight;
+                    }
+                break;
+
+                case "putki":
+                    if(pipeSize > 0 && pipeSize < 500){
+                        //Pohjan korkeus + 0,5 * katuviemärin halkaisija
+                        return (0.5*pipeSize) + groundHeight;
+                    }else if(pipeSize > 500){
+                        //Pohjan korkeus + 0,75 * katuviemärin halkaisija
+                        return (0.75*pipeSize) + groundHeight;
+                    }
+                break;
+            }
+
         },
+
+        _calculateBarrageHeight: function(form){
+            var me = this,
+            tagType = form.attr("type").split("_"),
+            type = tagType[0],
+            pipeSize = parseInt(form.find("[name=tag-pipe-size]").val()),
+            groundHeight = parseInt(form.find("[name=tag-bottom-height]").val());
+
+            switch (type) {
+                case "jatevesi":
+                    if(pipeSize > 0 && pipeSize <= 250){
+                        //Pohjan korkeus + 150mm
+                        return groundHeight + 150;
+                    }else if(pipeSize >= 251 && pipeSize <= 350){
+                        //Pohjan korkeus + 200 mm
+                        return groundHeight + 200;
+                    }else if(pipeSize > 350){
+                        //Pohjan korkeus + 0,75 * katuviemärin halkaisija
+                        return (0.75*pipeSize) + groundHeight;
+                    }
+                break;
+
+                case "hulevesi":
+                case "sekaviemari":
+                    if(pipeSize > 0 && pipeSize < 500){
+                        //Pohjan korkeus + 0,5 * katuviemärin halkaisija
+                        return (0.5*pipeSize) + groundHeight;
+                    }else if(pipeSize > 500){
+                        //Pohjan korkeus + 0,75 * katuviemärin halkaisija
+                        return (0.75*pipeSize) + groundHeight;
+                    }
+                break;
+            }
+
+        },
+
         /**
          * @method _closeForm
          * Closes given form and shows the button that opens it
@@ -427,7 +532,9 @@ Oskari.clazz.define(
                 me.mustacheVectorLayer.destroy();
                 me.mustacheVectorLayer = null;
             }
-            // destroy form
+
+            // destroy form and redirect component
+            form.prev('div').remove();
             form.remove();
         },
 
@@ -673,6 +780,7 @@ Oskari.clazz.define(
             _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
 
         },
+
         /**
          * [_populateMustacheInfo gets certain values from form]
          * @return {[object]} [output data]
@@ -688,16 +796,7 @@ Oskari.clazz.define(
 
             return output;
         },
-        _updateLayer: function(){
-            console.info("Updates WMS layer");
-            var me = this;
-            var updateRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                    updateRequest;
-                var params = {};
-                params['viewparams'] = "id:1";
-                updateRequest = updateRequestBuilder(40, true, params);
-                me.sandbox.request(me.instance, updateRequest);
-        },
+
         /**
          * [activateTagPipeLayers: Puts tagpipe layers on]
          */
