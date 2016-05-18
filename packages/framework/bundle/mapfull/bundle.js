@@ -132,6 +132,10 @@ function() {
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/sv.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/mapfull/resources/locale/fr.js"
         }]
     },
     "bundle" : {

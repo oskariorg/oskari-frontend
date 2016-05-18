@@ -140,13 +140,13 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Modifier le style d'entité point",
+                "dot": "Modifier le style d'entité ponctuelle",
                 "area": "Modifier le style d'entité surfacique",
                 "line": "Modifier le style d'entité linéaire"
             },
             "dot": {
                 "title": "Style d'entité point",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités ponctuelles",
                 "symbol": {
                     "label": "Icône"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Style d'entité linéaire",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités linéaires",
                 "style": {
                     "label": "tiret"
                 },
@@ -196,12 +196,12 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Style d'entité surfacique",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités surfaciques",
                 "linestyle": {
                     "label": "trait pointillé"
                 },
                 "linecap": {
-                    "label": "Extrêmités de ligne"
+                    "label": "Extrémités de ligne"
                 },
                 "linecorner": {
                     "label": "Coins de ligne"
@@ -243,7 +243,7 @@ Oskari.registerLocalization(
                     "title": "Paramètres supplémentaires",
                     "dataSource": "Source des données",
                     "metadata": "Lien des métadonnées",
-                    "export_selection": "Export only selected features"
+                    "export_selection": "N'exporter que les entités sélectionnées"
                 },
                 "columns": {
                     "title": "Colonnes",

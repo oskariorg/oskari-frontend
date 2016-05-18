@@ -92,10 +92,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             "type": "text/javascript",
             "src": "../../../../bundles/framework/layerselection2/resources/locale/lv.js"
         }, {
-            "lang": "es",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/layerselection2/resources/locale/es.js"
-        }, {
             "lang": "is",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/layerselection2/resources/locale/is.js"

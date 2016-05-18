@@ -12,11 +12,11 @@ Oskari.registerLocalization(
         "errorscale": "Los datos no se pueden mostrar a este nivel de escala. Por favor, cambie el nivel de escala.",
         "errordata": "Los datos porporcionados por el servidor contienen errores. Por favor, muévase por el mapa ligeramente para actualizarlo.",
         "columnSelectorTooltip": "Muestra las columnas",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "valores estadísticos",
         "selectionTools": {
             "title": "Selecciona los fenómenos en el mapa",
             "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
+            "selectFromTop": "desde la capa superior",
             "selectAll": "seleccionar de todas las capas",
             "link": {
                 "title": "Selecciona más"
@@ -147,9 +147,10 @@ Oskari.registerLocalization(
             }
         },
         "gridFooter": {
-            "aggregateColumnField": "NOT TRANSLATED",
-            "noDataMessage": "NOT TRANSLATED",
-            "noDataCommonMessage": "NOT TRANSLATED"
+            "aggregateColumnField": "contar",
+            "differenceMessage": "La diferencia de valores de funciones no autorizadas se presenta con valor",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "Existen valores de objetos no autorizados en los datos"
         }
     }
 }
