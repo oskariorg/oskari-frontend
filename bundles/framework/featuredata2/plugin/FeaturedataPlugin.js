@@ -226,7 +226,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         _openFeatureDataFlyout: function () {
             this._instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
-
             //set style to mobile flyout
             var flyout = this._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).addClass('mobile');
@@ -237,8 +236,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 flyoutTop = parseInt(top)+parseInt(height);
 
             flyout.container.parentElement.parentElement.style['top'] = flyoutTop + 'px';
-            jQuery(flyout.container.parentElement.parentElement).find('.oskari-flyoutheading').remove();
-
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
