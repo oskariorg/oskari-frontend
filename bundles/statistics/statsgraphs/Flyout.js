@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
               ],
                keys: {
                   // this doesn't seem to work really
-                 value: regions,
+                 value: regions
                }
             });
 
