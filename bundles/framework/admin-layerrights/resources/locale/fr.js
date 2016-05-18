@@ -3,32 +3,32 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "admin-layerrights",
     "value": {
-        "title": "Layer Rights",
-        "desc": "desc",
+        "title": "Droits sur la couche",
+        "desc": "NON TRADUIT",
         "tile": {
-            "title": "Map Layer Rights"
+            "title": "Droits sur la couche cartographique"
         },
         "flyout": {
-            "title": "Map Layer Rights Management",
-            "message": "Layer Rights Management"
+            "title": "Droits sur la couche cartographique",
+            "message": "Gestion des droits sur les couches cartographiques"
         },
         "rights": {
-            "name": "Map Layer",
-            "rightToPublish": "Publish",
-            "rightToView": "View",
-            "rightToDownload": "Download",
-            "rightToPublishView": "View in Embedded map",
+            "name": "Couche cartographique",
+            "rightToPublish": "Publier",
+            "rightToView": "Visualiser",
+            "rightToDownload": "Téléchargement",
+            "rightToPublishView": "Voir dans la carte intégrée",
             "success": {
-                "title": "Layer rights saved",
-                "message": "Layer rights were saved successfully."
+                "title": "Droits sur la couche enregistrés",
+                "message": "Les droits sur la couche cartographiques ont été mis à jour"
             },
             "error": {
-                "title": "Layer rights not saved",
-                "message": "Saving of layer rights failed."
+                "title": "Erreur",
+                "message": "Les droits sur la couche cartographiques n'ont pu être mis à jour"
             },
-            "selectValue": "Select the value"
+            "selectValue": "Sélectionner la valeur"
         },
-        "save": "Save",
+        "save": "Enregistrer",
         "selectRole": "Role"
     }
 }

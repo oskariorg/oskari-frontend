@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Afficher les couches cartographiques dans le menu.",
                 "info": "Sélectionnez la couche cartographique d’arrière-plan. Vous pouvez sélectionner la couche cartographique d’arrière-plan dans l’aperçu de carte.",
-                "tooltip": "La couche cartographique d’arrière-plan apparaît sur la couche de fond de la carte. Une seule couche cartographique d’arrière-plan peut apparaître à la fois. L’utilisateur peut changer la carte d'arrière-plan s'il y a plus d’une couche cartographique sélectionnée en carte d’arrière-plan. La couche cartographique d’arrière-plan par défaut peut être sélectionnée dans l’aperçu de carte.",
-                "promote": "Souhaitez-vous faire aussi apparaître les images aériennes ?"
+                "tooltip": "La couche cartographique d’arrière-plan apparaît sur la couche de fond de la carte. Une seule couche cartographique d’arrière-plan peut apparaître à la fois. L’utilisateur peut changer la carte d'arrière-plan s'il y a plus d’une couche cartographique sélectionnée en carte d’arrière-plan. La couche cartographique d’arrière-plan par défaut peut être sélectionnée dans l’aperçu de carte."
             },
             "preview": "L’aperçu de la carte intégrée",
             "location": "Emplacement et niveau de d’agrandissement",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Vous pouvez créer des cartes intégrées après vous être identifié dans le service.",
             "signup": "S’identifier",
-            "signupUrl": "/web/fr/identification",
-            "register": "S’inscrire",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "S’inscrire"
         },
         "StartView": {
             "text": "Vous pouvez créer la carte et l’intégrer sur votre propre site internet.",
@@ -217,20 +214,14 @@ Oskari.registerLocalization(
             "show": "Afficher",
             "hide": "Masquer",
             "hidden": "La couche cartographique est temporairement masquée.",
-            "selectAsBaselayer": "",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "La couche cartographique ne peut pas être publiée dans une carte intégrée.",
-                    "tooltip": "La couche cartographique ne peut pas être publiée dans une carte intégrée. Le nombre d’utilisateurs hebdomadaire peut être limité."
-                }
-            }
+            "selectAsBaselayer": "Couche cartographique de fond"
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Publiable"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "N'afficher que les couches publiables"
             }
         }
     }

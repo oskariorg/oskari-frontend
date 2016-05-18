@@ -5,16 +5,16 @@ Oskari.registerLocalization(
     "value": {
         "tools": {
             "table_icon": {
-                "tooltip": "Go to thematic maps",
-                "title": "Thematic maps"
+                "tooltip": "Aller aux cartes thématiques",
+                "title": "Cartes thématiques"
             },
             "diagram_icon": {
-                "tooltip": "Show diagram",
-                "title": "Diagram"
+                "tooltip": "Voir le diagramme",
+                "title": "Diagramme"
             },
             "statistics": {
-                "tooltip": "going to the thematic maps",
-                "title": "Statistics"
+                "tooltip": "en allant aux cartes thématiques",
+                "title": "Statistiques"
             }
         }
     }

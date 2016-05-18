@@ -108,6 +108,10 @@ function() {
             "lang" : "nb",
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/nb.js"
+        }, {
+            "lang" : "fr",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/fr.js"
         }]
     },
     "bundle" : {
