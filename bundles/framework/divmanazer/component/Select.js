@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
             }
 
             // Select first one if there's no found selections
-            if (!found && options) {
+            if (!found && options && options.length >= 1) {
                 options[0].selected = true;
             }
 

@@ -1,7 +1,9 @@
 div.mapplugin.search div.close {
   float: right; }
+
 div.mapplugin.search input:disabled {
   opacity: 1; }
+
 div.mapplugin.search input[type=text] {
   -webkit-border-radius: 4px 0 0 4px;
   -moz-border-radius: 4px 0 0 4px;
@@ -13,6 +15,7 @@ div.mapplugin.search input[type=text] {
   background-clip: padding-box;
   border-right: 0;
   width: 140px; }
+
 div.mapplugin.search input[type=button] {
   -webkit-border-radius: 0 4px 4px 0;
   -moz-border-radius: 0 4px 4px 0;
@@ -23,6 +26,7 @@ div.mapplugin.search input[type=button] {
   -moz-background-clip: padding-box;
   background-clip: padding-box;
   width: 60px; }
+
 div.mapplugin.search div.results {
   border: 1px solid #f3f3f3;
   background: white;
@@ -55,15 +59,13 @@ table.search-results {
 div.published-search-div {
   float: left; }
   div.published-search-div div.search-area-div {
-    min-width: 180px;
+    max-width: 318px;
     display: block;
     float: right; }
     div.published-search-div div.search-area-div div.search-left, div.published-search-div div.search-area-div div.search-middle, div.published-search-div div.search-area-div div.search-right {
       display: inline-block;
       float: left;
       height: 38px; }
-    div.published-search-div div.search-area-div div.search-middle {
-      min-width: 180px; }
     div.published-search-div div.search-area-div div.search-right {
       cursor: pointer; }
     div.published-search-div div.search-area-div input.search-input {
@@ -71,7 +73,6 @@ div.published-search-div {
       border: none;
       box-shadow: none;
       background-image: none;
-      width: 145px;
       float: left;
       padding: 5px;
       outline: none; }
@@ -227,4 +228,3 @@ div.published-search-div {
 /* MOBILE */
 .mobileToolbarDiv input[type=text] {
   height: 10px; }
-

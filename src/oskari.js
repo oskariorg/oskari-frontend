@@ -1337,7 +1337,24 @@ Oskari = (function () {
             var loader = Oskari.loader([recData], config);
             loader.processSequence(callback);
         },
-
+        loadAppSetup : function(url, params, errorCB) {
+            var me = this;
+            jQuery.ajax({
+                type : 'GET',
+                dataType : 'json',
+                data : params,
+                url: url,
+                success : function(setup) {
+                    me.setApplicationSetup(setup);
+                    me.startApplication();
+                },
+                error : function(jqXHR) {
+                    if(typeof errorCB === 'function') {
+                        error(jqXHR);
+                    }
+                }
+            });
+        },
         /**
          * @public @method setApplicationSetup
          * Each bundledef is of kind playable by method playBundle. callback:
@@ -1350,6 +1367,19 @@ Oskari = (function () {
          */
         setApplicationSetup: function (setup) {
             this.appSetup = setup;
+            if(setup.configuration) {
+                this.setConfiguration(setup.configuration);
+            }
+            setup.env = setup.env || {};
+            if(typeof Oskari.setLang === 'function') {
+                Oskari.setLang(setup.env.lang || window.language);
+            }
+            if(typeof Oskari.setSupportedLocales === 'function') {
+                Oskari.setSupportedLocales(setup.env.locales);
+            }
+            if(typeof Oskari.setDecimalSeparator === 'function') {
+                Oskari.setDecimalSeparator(setup.env.decimalSeparator);
+            }
         },
 
         /**

@@ -1,0 +1,151 @@
+.olImageLoadError {
+  display: none !important; }
+
+div.olMap {
+  position: relative; }
+  div.olMap.cursor-crosshair {
+    cursor: crosshair; }
+
+div.mapplugins {
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  z-index: 15000; }
+  div.mapplugins .mappluginsContainer {
+    margin: 0;
+    padding: 0; }
+    div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 3px dashed #666666;
+      border-radius: 20px;
+      min-height: 70px;
+      min-width: 70px;
+      padding: 15px; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed {
+        background-color: rgba(0, 255, 0, 0.3); }
+        div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed.ui-state-highlight {
+          background-color: rgba(127, 255, 127, 0.5);
+          border-color: #FFF; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.disallowed {
+        background-color: rgba(255, 0, 0, 0.3); }
+    div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
+      /* Note that this must also have a position for IE11:
+                 * https://coderwall.com/p/s8pjpg
+                 */
+      pointer-events: auto;
+      position: relative;
+      margin: 0 auto;
+      z-index: 15000;
+      /* Hackish margin fixes */
+      /* Position: relative; breaks bg layer selection plugin, we need to redo its positioning */ }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.backgroundLayerSelectionPlugin {
+        position: static; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.indexmap {
+        margin-bottom: 0; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
+        margin-top: 20px; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.scalebar {
+        margin-bottom: 0; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.zoombar {
+        margin-top: 10px;
+        margin-bottom: 10px; }
+  div.mapplugins.top {
+    height: 0;
+    top: 0; }
+    div.mapplugins.top .mappluginsContainer .mappluginsContent {
+      margin-top: 10px; }
+    div.mapplugins.top.center {
+      width: 100%; }
+      div.mapplugins.top.center .mappluginsContainer .mappluginsContent {
+        margin-right: auto;
+        margin-left: auto;
+        display: inline-block; }
+        div.mapplugins.top.center .mappluginsContainer .mappluginsContent.ui-droppable {
+          min-height: 120px; }
+        div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0 5px; }
+          div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            text-align: center; }
+          div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            float: right; }
+    div.mapplugins.top.right .mapplugin.layerselection {
+      margin-left: 0; }
+    div.mapplugins.top.right .mapplugin.search {
+      text-align: right; }
+    div.mapplugins.top.right .mapplugin.featuredataplugin, div.mapplugins.top.right .mapplugin.mapwfs2plugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
+      display: block;
+      float: right;
+      margin: 0 0 0 10px; }
+    div.mapplugins.top.left .mapplugin.layerselection {
+      margin-right: 0; }
+    div.mapplugins.top.left .mapplugin.search {
+      text-align: left; }
+    div.mapplugins.top.left .mapplugin.featuredataplugin, div.mapplugins.top.left .mapplugin.mapwfs2plugin, div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search, div.mapplugins.top.left .mapplugin.tools {
+      display: block;
+      float: left;
+      margin: 0 10px 0 0; }
+  div.mapplugins.bottom {
+    bottom: 0; }
+    div.mapplugins.bottom .mappluginsContainer .mappluginsContent {
+      margin-bottom: 10px; }
+    div.mapplugins.bottom.center {
+      width: 100%; }
+      div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent {
+        margin-right: auto;
+        margin-left: auto;
+        display: inline-block; }
+        div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent.ui-droppable {
+          min-height: 120px; }
+        div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0 5px; }
+          div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            float: right; }
+    div.mapplugins.bottom.right .mapplugin.logoplugin {
+      clear: both; }
+    div.mapplugins.bottom.left .mapplugin.logoplugin {
+      clear: both; }
+  div.mapplugins.left {
+    left: 0; }
+    div.mapplugins.left .mappluginsContainer .mappluginsContent {
+      margin-left: 10px;
+      text-align: left; }
+    div.mapplugins.left.center {
+      height: 100%;
+      /* Side centers aren't used ATM
+            display: table;*/
+      display: none !important; }
+      div.mapplugins.left.center .mappluginsContainer {
+        display: table-cell;
+        vertical-align: middle; }
+        div.mapplugins.left.center .mappluginsContainer .mappluginsContent.ui-droppable {
+          min-width: 120px; }
+  div.mapplugins.right {
+    right: 0; }
+    div.mapplugins.right .mappluginsContainer .mappluginsContent {
+      margin-right: 10px;
+      text-align: right; }
+    div.mapplugins.right.center {
+      height: 100%;
+      /* Side centers aren't used ATM
+            display: table;*/
+      display: none !important; }
+      div.mapplugins.right.center .mappluginsContainer {
+        display: table-cell;
+        vertical-align: middle; }
+        div.mapplugins.right.center .mappluginsContainer .mappluginsContent.ui-droppable {
+          min-width: 120px; }
+
+/* Hackhack for published maps that don't have bglayerselectionplugin */
+.published div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
+  margin-top: 10px; }
+
+/* Publisher fonts, not part of style guide */
+.oskari-publisher-font-arial {
+  font-family: Arial, sans-serif !important; }
+
+.oskari-publisher-font-georgia {
+  font-family: Georgia, serif !important; }

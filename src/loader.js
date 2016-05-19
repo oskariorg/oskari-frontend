@@ -143,14 +143,13 @@
                     }
                 }
              * @param  {Object} sequence see above
-             * @return {[type]}          [description]
              */
             processSequence : function(done) {
                 var me = this;
                 if(sequence.length === 0) {
                     // everything has been loaded
                     if(typeof done === 'function') {
-                        done();
+                        done(result);
                     }
                     o.trigger('app.start', result);
                     return;

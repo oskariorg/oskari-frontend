@@ -12,6 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "core": "node build-core.js",
+    "sprite": "./node_modules/.bin/grunt sprite:main",
     "build": "./node_modules/.bin/grunt release:servlet",
     "build-paikkis": "./node_modules/.bin/grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map_ol3/minifierAppSetup.json",
     "build-dev-paikkis": "./node_modules/.bin/grunt devRelease:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json",
@@ -38,7 +39,7 @@
     "grunt-trimtrailingspaces": "^2.2.0",
     "grunt-vulcanize": "^1.0.0",
     "jshint": "^2.9.1",
-    "lodash.defaultsdeep": "^4.3.2",
+    "lodash": "^4.12.0",
     "node-fs-extra": "^0.8.1",
     "openlayers": "3.15.1",
     "uglify-js": "^2.6.2",

@@ -212,20 +212,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
 
             Oskari.setSandbox(sandboxName, sandbox);
-            jQuery.ajax({
-                type: 'POST',
-                url: conf.globalMapAjaxUrl + 'action_route=GetSupportedLocales',
-                timestamp: new Date().getTime(),
-
-                success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales || []);
-                    Oskari.setDecimalSeparators(data.decimalSeparators || {});
-                },
-                error: function () {
-                    // TODO add error handling
-                }
-            });
-
             Oskari.setMarkers(me.conf.svgMarkers || []);
 
             // take map div ID from config if available
