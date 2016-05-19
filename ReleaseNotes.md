@@ -26,6 +26,10 @@ The legend/classification and map is now working correctly again.
 
 Normal desktop UI works correctly again.
 
+### publisher2
+
+Featuredata-tool enabled by default when wfs layers are present.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
