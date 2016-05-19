@@ -40,17 +40,17 @@
                 "tagtype-sekaviemari_putki": "SEV-liitoskohta",
                 "tagtype-sekaviemari_kaivo": "SEV-liitoskaivo",
                 "tagtype-muu_liitynta": "Muu huomio",
-                "tag-pipe-size": "Putken koko",
+                "tag-pipe-size": "Putken koko (mm)",
                 "tag-address": "Osoite",
                 "tag-low-pressure-level": "Alin painetaso",
-                "tag-max-pressuire-level": "Ylin painetaso",
+                "tag-max-pressure-level": "Ylin painetaso",
                 "tag-other-issue": "Muu huomautus",
-                "tag-bottom-height": "Pohjan korkeus",
-                "tag-low-tag-height": "Alin liitoskorkeus",
-                "tag-barrage-height": "Padotuskorkeus",
+                "tag-bottom-height": "Pohjan korkeus (m)",
+                "tag-low-tag-height": "Alin liitoskorkeus (m)",
+                "tag-barrage-height": "Padotuskorkeus (m)",
                 "tag-max-water-take": "Max. vedenotto",
                 "tag-min-pressure-level": "Minimipainetaso",
-                "tag-ground-height": "Maanpinnan korkeus"
+                "tag-ground-height": "Maanpinnan korkeus (m)"
             }
         },
         "save": "tallenna"
