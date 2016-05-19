@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 
     closurecompiler: {
       options: {
-        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+        compilation_level: 'ADVANCED_OPTIMIZATIONS'
       },
       dist: {
         files: {

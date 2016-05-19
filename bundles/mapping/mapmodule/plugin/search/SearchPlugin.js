@@ -365,7 +365,7 @@ Oskari.clazz.define(
             var me = this,
                 errorMsg = msg.error,
                 resultsContainer = me.resultsContainer.clone(),
-                content = resultsContainer.find('div.content');
+                content = resultsContainer.find('div.content'),
                 popupTitle = me._loc.title,
                 mapmodule = me.getMapModule(),
                 themeColours = mapmodule.getThemeColours();
@@ -761,28 +761,26 @@ Oskari.clazz.define(
                 right = div.find('div.search-right'),
                 closeResults = middle.find('div.close-results'),
                 inputField = div.find('input.search-input'),
-                // Left and right widths substracted from the results table width
-                middleWidth = (318 - (style.widthLeft + style.widthRight)),
-                // Close search width substracted from the middle width
-                inputWidth = (middleWidth - 35);
+                searchContainer;
 
             left.css({
                 'background-image': 'url("' + bgLeft + '")',
                 'width': style.widthLeft + 'px'
             });
-            middle.css({
-                'background-image': 'url("' + bgMiddle + '")',
-                'background-repeat': 'repeat-x',
-                'width': middleWidth + 'px'
-            });
             right.css({
                 'background-image': 'url("' + bgRight + '")',
                 'width': style.widthRight + 'px'
             });
-            inputField.css({
-                'width': inputWidth + 'px'
+
+            //calculate the width for the middle container of the search
+            var middleWidth = parseInt(jQuery('.search-area-div').css('width')) - style.widthLeft - style.widthRight;
+            middle.css({
+                'background-image': 'url("' + bgMiddle + '")',
+                'background-repeat': 'repeat-x',
+                'width': middleWidth+'px'
             });
 
+            jQuery('.search-area-div').css('width', parseInt(left.outerWidth() + middleWidth + right.outerWidth())+'px');
             closeResults.removeClass('icon-close icon-close-white');
 
             // Change the font colour to whitish and the close icon to white

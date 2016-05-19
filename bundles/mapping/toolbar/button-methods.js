@@ -99,7 +99,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                     me._addHoverIcon(pConfig,toolbarConfig,button);
                 }
                 buttonEl.addClass('hover');
-                
+
             }, function(){
                 var buttonEl = jQuery(this);
                 buttonEl.removeClass('hover');
@@ -222,7 +222,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         if (btn.enabled === false) {
             return;
-        }        
+        }
 
         toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
         group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
@@ -231,7 +231,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if(typeof btn.selected === 'undefined') {
             btn.selected = button.hasClass('selected');
         }
-        
+
         this._deactiveTools(pId,pGroup);
 
         if (btn.sticky === true) {
@@ -271,12 +271,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.addClass('selected');
                 btn.selected = true;
             }
-        }        
+        }
 
         btn.callback(btn.children);
 
         if(!button.hasClass('selected') && button.hasClass('hover')){
-            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);            
+            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
             me._addHoverIcon(btn,toolbarConfig,button);
         }
     },
@@ -287,7 +287,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        
+
         var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
         buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
     },
@@ -310,9 +310,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Change button icon theme
      * @method  @priavate _changeButtonIconTheme
      * @param  {Object} btnConfig button config
-     * @param  {Object} buttonEl  button jQuery element    
+     * @param  {Object} buttonEl  button jQuery element
      */
-    _changeButtonIconTheme: function(btnConfig, buttonEl){        
+    _changeButtonIconTheme: function(btnConfig, buttonEl){
         if(!btnConfig || !btnConfig.activeColour || !buttonEl) {
             return;
         }
@@ -342,8 +342,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.removeClass(btn.iconCls + '-light');
                 button.removeClass(btn.iconCls + '-dark');
             }
-            
-            me._changeButtonIconTheme(btn, button);            
+
+            me._changeButtonIconTheme(btn, button);
 
             // Change default icon back
             if(btn.toggleChangeIcon === true) {

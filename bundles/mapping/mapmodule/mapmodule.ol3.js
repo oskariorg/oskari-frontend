@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
             var view = this.getMap().getView(),
-                centerCoords = view.getCenter();
+                centerCoords = view.getCenter(),
                 centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
                 newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels),

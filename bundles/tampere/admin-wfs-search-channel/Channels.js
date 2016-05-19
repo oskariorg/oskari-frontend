@@ -569,7 +569,7 @@ Oskari.clazz.define(
                 url += "&desc="+JSON.stringify(dataObject.desc);
                 url += "&topic="+JSON.stringify(dataObject.topic);
                 url += "&paramsForSearch="+JSON.stringify(dataObject.params);
-                url += "&isDefault="+dataObject["is-default"],
+                url += "&isDefault="+dataObject["is-default"];
                 url += "&isAddress="+dataObject["is-address"];
 
                 jQuery.ajax({

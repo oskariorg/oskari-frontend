@@ -416,7 +416,7 @@ function(url, uuid) {
      * @param {Function} callback the callback function that gets called when the commit function has returned.
      */
     commitEditedFeatures : function(layerType, editedFeature, layerName, callback) {
-        var p = this.protocols[layerType];
+        var p = this.protocols[layerType],
             uuid = this.uuid,
             features = [],
             geom = editedFeature.geometry,
@@ -525,7 +525,7 @@ function(url, uuid) {
      * handles insert & update (NO delete here see next moethd)
      */
     commitFeedback : function(model, callback) {
-        var p = this.protocols['feedback_area'];
+        var p = this.protocols['feedback_area'],
             uuid = this.uuid,
             features = [],
             geom = model.getGeometry(),

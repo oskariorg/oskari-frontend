@@ -1,46 +1,81 @@
 # Release Notes
 
-## 1.36
+## 1.37
+
+### VectorLayerPlugin.ol2
+
+Click events didn't propagate properly when vector features were added to map. This has been fixed.
 
 ### routingService
 
-Added default routing markers/icons. See /framework/routingService/instance.js.
+Added new marker_ferry, marker_flight, ferry_stop and flight stop routing markers. See /framework/routingService/instance.js.
 
-### mapmodule ol2/ol3
+## 1.36
 
-Fixed getStyle function size handling. When adding featurecollection then svgmarker size is not calculated right.
+*This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
+updating to custom Oskari installations. Please read the release notes and ping us on for example Slack or with a Github issue if there's problems.*
 
-### publisher 2
+Known issues:
 
-Language selection in publisher no longer affects the map preview, but the preview will be displayed using the application's default language.
+- featuredata is sometimes visible even when there are no wfs-layers on map
+- moving between mobile/desktop modes might have some issues
+- publisher: the iframe code for embedded map is not always selectable
+- publisher: adding myplaces draw tools on embedded map no longer works (also not supported on openlayers3 yet) (
 
-### infobox
+### Mobile mode
 
-Infobox-functionality is modified to allow displaying infobox in mobile mode as Oskari.userinterface.component.Popup when screen size is smaller than the defined mobile breakpoints.
+The mapmodule now handles map size (and changes to it) more visibly. It creates a container for plugin UIs on top of the map that is hidden when in "desktop mode". When
+the device is detected as mobile client or map size is small enough (max 500x400px) the map calls for plugins to redraw the UI in "mobile mode". This happens by calling
+ the redrawUI() for any plugin that is registered on the mapmodule and has such a function. Mapmodule provides an extra toolbar and a container for plugins to use in "mobile mode".
 
-ShowInfoBoxRequest is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints mean the size of the screen in pixels to start using mobile mode. It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
+#### Mapmodule plugins and redrawUI()
 
-Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
+Plugin UI rendering/starting has been changed (affects any plugin extending BasicMapModulePlugin). It only calls to setEnabled and setVisible:
 
-The relative position of the infobox to the coordinates on the map can now be provided in options, so the infobox is displayed either over, under, to the left or to the right of the given position. Note! Only OL3!
+    this.setEnabled(blnEnabled);
+    this.setVisible(blnVisible);
 
-```javascript
-    {
-        //display the popup on top of the coordinates given. Possible values: top, bottom, left, right 
-        positioning: 'top'
-    }
-```
+If getElement() doesn't return an element setVisible(true) calls a new function redrawUI(blnUseMobileMode, blnForced) which is responsible for renderering the UI.
+The default implementation for redrawUI calls createControlElement() that was previously part of the startPlugin() implementation and doesn't do much else.
+Functions redrawUI() and startPlugin() can now return a boolean true to meaning that it couldn't render it's UI and it should be retried at a later time.
 
-Also, the background- and textcolour of buttons and textcolour of action links can now be provided as part of the colourScheme-object in options.
+Plugins using the default implementation in BasicMapModulePlugin don't do anything after the initial redrawUI call.
+Any plugin that supports mobile mode should override the default redrawUI() to move it's UI to a "mobile mode" meaning a more compact UI in the plugin container or adding
+ a button to the mobile toolbar that can be used to open a larger ui in a popup on top of the map. There are additional functions to help registering the toolbar buttons on
+ BasicMapModulePlugin like addToolbarButtons().
 
-```javascript
-    colourScheme: {
-        buttonBgColour: '#00CCDD',
-        buttonLabelColour: '#00F000',
-        linkColour: '#DD0000'
-    }
-```
+If a plugin supports mobile mode and requires toolbar bundle for it, but toolbar isn't available when the plugin is started the redrawUI should return with boolean true value
+ signalling that is needs another attempt to create the UI. If the second parameter for redrawUI() is a boolean true, the plugin should make any effort possible to create it's UI
+ even if it means creating the desktop UI in mobile mode. This is in a case when all the bundles of the application has been started and toolbar has not been part of the
+  application/is not available. Another call to redrawUI() is done by mapmodule for any plugin that returned true from previous redrawUI call(). The call is done when the
+  toolbar has loaded.
 
+RedrawUI() is also called when the mapsize changes from mode to another or on any other occasion when the UI needs to be redrawn (style change etc). It should teardown any UI it
+ has created before recreating another version of the UI.
+
+Calls to redrawUI() are done in orderly fashion. Plugins are sorted by values from plugin.getIndex() function or if no such function exist the plugin is treated as having a large index value.
+
+### Default iconsets for applications
+
+Oskari now has a default icon set and applications no longer need to provide the icons-folder. Applications may provide icons-folder to add or override icons in the default set.
+The default set is located in Oskari/resources/icons and precompiled sprite/css (icons.png/icons.css) is located in Oskari/resources. These can be copied under application folder
+ so development shows correct icons. Running the minifier/build under tools will rewrite the icons.png/icons.css for the build (under dist-folder).
+
+The following cleanup can be done for applications using the default base-styles and iconset:
+
+1) remove Oskari/applications/xxx/yyyy/icons folder
+
+2) remove Oskari/applications/xxx/yyyy/images folder
+
+3) remove forms.css and portal.css from Oskari/applications/xxx/yyyy/css folder
+- move any application specific css from for forms.css/portal.css to overwritten.css if any
+- forms.css and portal.css styles can be linked from Oskari/resources/css
+
+4) copy icons.css and icons.png from Oskari/resources to Oskari/applications/xxx/yyyy/
+- you can also not copy them and link css from Oskari/resources/icons.css if you don't have any icons to add/override
+- `npm run sprite` can be executed under tools to create new default iconset
+
+See https://github.com/nls-oskari/oskari-server/blob/develop/MigrationGuide.md#application-changes-to-jsp-files for more info about JSP/html changes.
 
 ### Oskari core and require.js
 
@@ -78,6 +113,15 @@ If the loader detects that a bundles code is already in the browser it won't loa
 Oskari.setLoaderMode([string]) now only effects if value is 'dev'. This results in timestamp being added to any file url that is downloaded to force new versions of files.
 This will propably change to some more intuitive flag in the future.
 
+Oskari.app.setApplicationSetup() now tries to setup configuration and environmental information like language, supported locales and decimal separators. They are part of the 
+response from GetAppSetup action handler. This means that it's no longer needed to call setLang() setConfiguration() etc manually.
+
+Added an experimental function to directly load appsetup and start the application from an url with parameters:
+
+    Oskari.app.loadAppSetup(ajaxUrl + 'action_route=GetAppSetup', { uuid : 'qwer-qtweqt-asdf-htr' });
+
+You can also provide a function as third parameter that is an error handler. It will be called if there is a problem loading the appsetup.
+
 #### Logger
 
 Added a logger implementation that can be accessed with (see src/logger.js for details):
@@ -96,6 +140,12 @@ Added sanitize function to Oskari.util for escaping html or specific tags. Usage
      var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
      jQuery('body').append(element).append(anotherElement).append(stylishElement);
 
+Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
+Oskari.util.getColorBrightness has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark or light. Function returns 'dark' or 'light'.
+Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark. Function returns true/false;
+Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
+Oskari.util.isMobile has been added to /Oskari/bundles/bundle.js. It's used to check at is map in mobile mode.
+
 #### Application lifecycle events
 
 Oskari now has on(name, function), off(name, function) and trigger(name, payload) functions for application events:
@@ -110,20 +160,181 @@ Oskari now has on(name, function), off(name, function) and trigger(name, payload
             // details contain started bundleids and possible errors that happened
         });
 
+#### maplayer-service
 
-### core/abstractmapmodule
+When loading maplayers the service sends the map srs with parameter "srs". Previously used parameter "epsg".
+Most of the other ajax-calls use "srs" so this is a consistency improvement.
 
-New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions can register wellknown svg markers to mapmodule and get wellknowed marker.
+#### AbstractLayer
+
+getAttribute() now takes an optional param which can be used to get a value from attributes:
+
+    layer.getAttribute('attributeName');
+
+### tools
+
+The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src.
+This is in preparation for the core rewrite/restructuring/clarification.
+The build includes requirejs with it's text plugin from under libraries.
+
+Upgraded build-tools with new dependency versions.
+Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
+Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
+
+### infobox
+
+Openlayers 2 and openlayers 3 code unified: infobox bundle is now located under mapping including code for both ol2 and ol3.
+
+Infobox-functionality is modified to allow displaying infobox in mobile mode as Oskari.userinterface.component.Popup when screen size is smaller than the defined mobile breakpoints.
+
+ShowInfoBoxRequest is modified to allow giving multiple additional parameters (hidePrevious, colourScheme, font) in one options-object. Request now allows giving mobileBreakpoints as one parameter. MobileBreakpoints mean the size of the screen in pixels to start using mobile mode. It is now also possible to define links and buttons to infobox content and give them information that is shown in InfoboxActionEvent when link/button is clicked.
+
+Now Infobox can be showed to added marker. ShowInfoBoxRequest is modified to allow give marker id where popup is showed. 
+
+The relative position of the infobox to the coordinates on the map can now be provided in options, so the infobox is displayed either over, under, to the left or to the right of the given position. Note! Only OL3!
+
+```javascript
+    {
+        //display the popup on top of the coordinates given. Possible values: top, bottom, left, right 
+        positioning: 'top'
+    }
+```
+
+Also, the background- and textcolour of buttons and textcolour of action links can now be provided as part of the colourScheme-object in options.
+
+```javascript
+    colourScheme: {
+        buttonBgColour: '#00CCDD',
+        buttonLabelColour: '#00F000',
+        linkColour: '#DD0000'
+    }
+```
+
+### toolbar
+
+Openlayers 2 and openlayers 3 code unified: toolbar bundle is now located under mapping including code for both ol2 and ol3.
+
+#### Toolbar.AddToolButtonRequest
+
+New configuration params:
+- activeColour: button active background colour
+- toggleChangeIcon: toggle change button icon. Is this setted true, icon class is calculated for added activeColour
+
+#### Toolbar.ToolbarRequest / add
+
+New configuration params:
+- disableHover: disable or not  toolbar buttons hover
+- colours, this can be used to configure toolbar colours. Now only supported hover colour. 
+
+### abstractmapmodule
+
+!! ``registerWellknownStyle``, ``getWellknownStyle`` and ``MapModulePlugin.RegisterStyleRequest`` will be changed by breaking backwards compatibility, DO NOT USE !!
+
+New function ``registerWellknownStyle`` and ``getWellknownStyle``. These functions are currently used to register wellknown svg markers to mapmodule and get marker SVG by name.
+They will be changed so that a full style can be registered with a name that can be used as reference on further styling instead of providing the whole style object whenever adding features.
 
 New ``MapModulePlugin.RegisterStyleRequest`` request, it's used when adding new wellknown style to mapmodule. See example /framework/routingService/instance.js.
 
 ``GetSvg```function now handles also wellknown markers. Shape object must then include key/name attributes. Key is wellknown markers name and name is marker name. Optional shape object can contains color attribute, which is used change colors of these svg classes 'normal-color' or 'shading-color'. Shading color is calculated from color (darkened).
 
-### tools
+### mapmodule ol2/ol3
 
-The Oskari core (the file Oskari/bundles/bundle.js) can now be built from multiple files under Oskari/src. 
-This is in preparation for the core rewrite/restructuring/clarification.
-The build includes requirejs with it's text plugin from under libraries.
+Fixed getStyle function size handling. When adding featurecollection then svgmarker size is now calculated correctly.
+SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
+
+### Openlayers 3 mapmodule
+
+Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
+The function produces a dataURL for PNG-image from the map contents.
+This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
+The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
+
+### Openlayers 3 layerplugins
+
+Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
+This is required for layers that will need to be used for the new getScreenshot() functionality.
+When using oskari-server add the crossOrigin value to the layers that support it in `oskari_maplayer` tables `attributes` column:
+
+    {
+      "crossOrigin" : "anonymous"
+    }
+
+You should check that the layer tile requests have the `Access-Control-Allow-Origin` header properly configured before configuring the layer.
+If the layer doesn't provide the header the layer tiles will NOT load and the console shows an error message like this:
+
+    Image from origin 'http://where.tiles.are.loaded' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://oskari.instance' is therefore not allowed access.
+
+### openlayers 3 version update
+
+Updated openlayers version in published maps from 3.11.2 -> 3.15.1
+
+### openlayers 3 custom build configuration files created
+
+Openlayers 3 build configuration files are located under tools/conf/ol3. To create custom build of ol3, use ol-custom.json and ol-custom-debug.json files in build script.
+
+NOTE! ol-custom.json doesn't have support for statistical functionality!
+
+### mapfull
+
+Fixed map layer opacity change in published maps when resetting map state to published state.
+
+### selected-featuredata
+
+*New bundle!* Selected-featuredata allows infobox opening in new flyout.
+
+### rpc
+
+Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
+
+New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
+http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
+
+New functions to zoom map: zoomIn, zoomOut, zoomTo. All return the current zoomlevel after zooming.
+
+### markers
+
+Marker icons are now defined in mapfull conf in svgMarkers property. We are working toward easily customizable markers in Oskari and this is one step in that direction.
+The server components do not yet support custom markers and have their own source for marker shapes. This might still change when we finalize the server side
+ (myplaces, analysis, custom wfs etc) marker styling.
+
+Array contains objects which tell following info:
+- x: image center point in pixels (starting left to right)
+- y: image center point in pixels (starting bottom to up)
+- data: marker svg. Marker must be 32 x 32 pixel size.
+
+For example:
+  {
+      x: 14.06,
+      y: 5.38,
+      data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
+  };
+
+### feedbackService [new, this is POC for time being and will be develop future on]] 
+
+One new event and 4 new requests
+
+FeedbackResultEvent notifies that feedback request response has been got from the service. Includes the response data.
+
+Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successful
+ and the response data has been got from the service.
+
+Look at http://oskari.org/examples/rpc-api/rpc_example.html and RPC api documentation in details.
+
+### routingService
+
+Added default routing markers/icons. See /framework/routingService/instance.js.
+
+### divmanazer/ui-components
+
+Removed Raphael library from package.
+
+### divmanazer/visualization-form
+
+Removed Raphael dependencies from DotForm, AreaForm and LineForm. Make dot, line and area previews without Raphael library.
+
+### publisher 2
+
+Language selection in publisher no longer affects the map preview, but the preview will be displayed using the application's default language.
 
 ### integration/admin-layerselector
 
@@ -147,84 +358,6 @@ Extra warning added to the user, when there is no manual refresh wfs layers visi
 Feature data is not emptied for the manual refresh layer, when map is moved. 
 In this case grid opacity is changed to 0.5 for to see that the user must push refresh-button for to get valid values. 
 
-### toolbar 
-
-Openlayers 2 and openlayers 3 code unified: toolbar bundle is now located under mapping including code for both ol2 and ol3.
-
-#### Toolbar.AddToolButtonRequest
-
-New configuration params:
-- activeColour: button active background colour
-- toggleChangeIcon: toggle change button icon. Is this setted true, icon class is calculated for added activeColour
-
-
-#### Toolbar.ToolbarRequest / add
-
-New configuration params:
-- disableHover: disable or not  toolbar buttons hover
-- colours, this can be used to configure toolbar colours. Now only supported hover colour. 
-
-
-### infobox
-
-Openlayers 2 and openlayers 3 code unified: infobox bundle is now located under mapping including code for both ol2 and ol3.
-
-### openlayers 3 custom build configuration files created
-
-Openlayers 3 build configuration files are located under tools/conf/ol3. To create custom build of ol3, use ol-custom.json and ol-custom-debug.json files in build script.
-
-NOTE! ol-custom.json doesn't have support for statistical functionality! 
-
-### openlayers 3 version update
-
-Updated openlayers version in published maps from 3.11.2 -> 3.14.2 
-
-### core
-
-#### markers
-
-Marker icons are now defined in mappfull conf in svgMarkers property.
-
-Array contains objects which tell following info:
-- x: image center point in pixels (starting left to right)
-- y: image center point in pixels (starting bottom to up)
-- data: marker svg. Marker must be 32 x 32 pixel size.
-
-For example:
-  {
-      x: 14.06,
-      y: 5.38,
-      data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0" /></svg>'
-  };
-
-#### util.naturalSort
-
-Oskari.util.naturalSort has been added to /Oskari/bundles/bundle.js. It's used to sort arrays for natural.
-
-#### util.getColorBrightness
-
-Oskari.util.getColorBrightness has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark or light. Function returns 'dark' or 'light'.
-
-#### util.isDarkColor
-
-Oskari.util.isDarkColor has been added to /Oskari/bundles/bundle.js. It's used to check at is color dark. Function returns true/false;
-
-#### util.isLightColor
-
-Oskari.util.isLightColor has been added to /Oskari/bundles/bundle.js. It's used to check at is light dark. Function returns true/false;
-
-#### util.isMobile
-
-Oskari.util.isMobile has been added to /Oskari/bundles/bundle.js. It's used to check at is map in mobile mode.
-
-### divmanazer/ui-components
-
-Removed Raphael library from package.
-
-### divmanazer/visualization-form
-
-Removed Raphael dependencies from DotForm, AreaForm and LineForm. Make dot, line and area previews without Raphael library.
-
 ### coordinatetool
 
 Added funtionality to configure and display What3words code for the current coordinates in map click and in mouse move pause.
@@ -247,78 +380,6 @@ State management improved, because of bugs in published view / previous state se
 
 New tab containing misc functionalities (actionlinks, list of layers associated with the metadata)
 
-### tools
-
-Upgraded build-tools with new dependency versions.
-Tested to work with [Nodejs 5.3.0, 5.7.0 and 5.9.0](https://nodejs.org/en/download/stable/).
-Remove/rename Oskari/tools/node_modules folder and run npm install in Oskari/tools before running the minifier.
-
-### selected-featuredata
-
-*New bundle!* Selected-featuredata allows infobox opening in new flyout.
-
-### core
-
-#### AbstractLayer
-
-getAttribute() now takes an optional param which can be used to get a value from attributes:
-
-    layer.getAttribute('attributeName');
-
-#### maplayer-service
-
-When loading maplayers the service sends the map srs with parameter "srs". Previously used parameter "epsg".
-Most of the other ajax-calls use "srs" so this is a consistency improvement.
-
-### Openlayers 3 layerplugins
-
-Layers can now be configured to have a crossOrigin attribute. This is passed to the Openlayers layer source enabling reading the canvas data.
-This is required for layers that will need to be used for the new getScreenshot() functionality.
-When using oskari-server add the crossOrigin value to the layers that support it in `oskari_maplayer` tables `attributes` column:
-
-    {
-      "crossOrigin" : "anonymous"
-    }
-
-You should check that the layer tile requests have the `Access-Control-Allow-Origin` header properly configured before configuring the layer.
-If the layer doesn't provide the header the layer tiles will NOT load and the console shows an error message like this:
-
-    Image from origin 'http://where.tiles.are.loaded' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://oskari.instance' is therefore not allowed access.
-
-### Openlayers 3 mapmodule
-
-Openlayers 3 implementation of mapmodule now offers a new function getScreenshot().
-The function produces a dataURL for PNG-image from the map contents.
-This is an experimental feature and requires support from maplayers that are on the map (cross-origin use must be allowed).
-The function returns an empty string if the dataURL can't be produced. A warning print is logged to console in such case.
-
-SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
-
-### Openlayers 2 mapmodule
-
-SVG marker improvements. Fixed svg image positioning so at Oskari calculate svg image position when adding marker.
-
-### rpc
-
-Now makes a new getScreenshot() function available when using mapmodule supporting it (only Openlayers3 implementation supported currently).
-
-New function ``getPixelMeasuresInScale`` (Get pixel measures in scale) available for plotting paper size print area on a mapcurrently).
-http://oskari.org/examples/rpc-api/rpc_example.html  (only Openlayers3 implementation supported currently).
-
-New functions to zoom map: zoomIn, zoomOut, zoomTo. All return the current zoomlevel after zooming.
-
-### feedbackService [new, this is POC for time being and will be develop future on]] 
-
-One new event and  4 new requests
-
-FeedbackResultEvent notifies that feedback request response has been got from the service. Includes the response data.
-
-Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successfull 
-and the response data has been got from the service. 
-
-Look at http://oskari.org/examples/rpc-api/rpc_example.html and RPC api documentation in details.
-
-
 ### timeseries
 
 Increased default animation speed from 2000 ms to 4000 ms. Also made possible to adjust animation speed. For example configuration:
@@ -336,10 +397,6 @@ New bundle ``content-editor`` available for wfs layer editing (wfs-t). Look at o
 ### divmanazer/FilterDialog  & analysis/AnalyseService
 A modification in the request of describe WFS feature type.
 &simpe=true request paramater is added to get similiar response as before.
-
-### mapfull
-
-Fixed map layer opacity change in published maps when resetting map state to published state.
 
 ### statistics/statsgrid.polymer (experimental)
 
