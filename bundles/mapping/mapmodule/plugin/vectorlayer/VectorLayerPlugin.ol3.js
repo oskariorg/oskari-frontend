@@ -309,7 +309,7 @@ Oskari.clazz.define(
                             me._map.on('pointermove', function (evt) {
                               var target = me._map.getTarget();
                               var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
-                              var cursor = null;
+                              var originalCursor = me.getMapModule().getCursorStyle();
                               var hit = this.forEachFeatureAtPixel(evt.pixel,
                                   function(feature, layer) {
                                     if(feature.getProperties()['oskari-cursor']) {
@@ -321,7 +321,7 @@ Oskari.clazz.define(
                                 if (hit && cursor) {
                                   jTarget.css('cursor', cursor);
                                 } else {
-                                  jTarget.css('cursor', '');
+                                  jTarget.css('cursor', originalCursor);
                                 }
                           });
                           me._pointerMoveAdded = true;
