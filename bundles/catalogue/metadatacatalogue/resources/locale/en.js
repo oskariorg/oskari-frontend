@@ -33,6 +33,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Resource language",
         "modifySearch": "Edit search options",
         "showSearch": "Show all search results",
+        "showDataset": "Show only datasets",
+        "showService": "Show only services",
         "metadataCatalogueResults": "Search Results",
         "show": "Show map layer",
         "hide": "Hide map layer",

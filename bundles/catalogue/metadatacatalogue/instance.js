@@ -113,6 +113,8 @@ Oskari.clazz.define(
                 '<div class="metadataResultHeader">' +
                 '  <div class="panelHeader resultTitle"></div>' +
                 '  <div class="panelHeader resultLinks">' +
+                '    <a href="JavaScript:void(0);" class="showDataset filter-link" data-value="dataset"></a>' +
+                '    <a href="JavaScript:void(0);" class="showService filter-link" data-value="service"></a>' +
                 '    <a href="JavaScript:void(0);" class="showLink"></a>' +
                 '    <a href="JavaScript:void(0);" class="modifyLink"></a>' +
                 '  </div>' +
@@ -763,7 +765,6 @@ Oskari.clazz.define(
          */
         _showResults: function (metadataCatalogueContainer, data) {
             var me = this;
-
             me.lastResult = data.results;
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                 searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
@@ -781,6 +782,7 @@ Oskari.clazz.define(
             showLink.click(function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
+                resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
             modifyLink.html(me.getLocalization('modifySearch'));
@@ -789,6 +791,13 @@ Oskari.clazz.define(
                 optionPanel.show();
                 me._removeFeaturesFromMap();
             });
+
+            var showDatasetLink = resultHeader.find('.showDataset');
+            showDatasetLink.html(me.getLocalization('showDataset'));
+
+            var showServicesLink = resultHeader.find('.showService');
+            showServicesLink.html(me.getLocalization('showService'));
+
 
             if (data.results.length === 0) {
                 resultPanel.append(resultHeader);
@@ -872,6 +881,22 @@ Oskari.clazz.define(
             resultPanel.append(table);
             optionPanel.hide();
             resultPanel.show();
+
+
+            //filter functionality
+            resultHeader.find('.filter-link').on('click', function(event) {
+                var filterValue = jQuery(event.currentTarget).data('value');
+                //hide filterlinks and show "show all"-link
+                resultHeader.find('.filter-link').hide();
+                resultHeader.find('.showLink').show();
+
+                var allRows = table.find('tr[class*=filter-');
+                _.each(allRows, function(item) {
+                    if (!jQuery(item).hasClass('filter-'+filterValue)) {
+                        jQuery(item).hide();
+                    }
+                })
+            });
         },
 
         _populateResultTable: function (resultsTableBody) {
@@ -914,6 +939,9 @@ Oskari.clazz.define(
                     row = results[i];
                     resultContainer = me.templates.resultTableRow.clone();
                     resultContainer.addClass('res' + i);
+
+                    //resultcontainer filtering
+                    resultContainer.addClass('filter-'+row.natureofthetarget);
                     resultContainer.data('resultId', row.id);
                     cells = resultContainer.find('td').not('.spacer');
                     titleText = row.name;
