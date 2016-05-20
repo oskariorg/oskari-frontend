@@ -1263,28 +1263,38 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             if (featureGeometryId != null) {
-                var featureGeometry = me.layerGeometries.geometry.components[i];
-                var content = [{
-                    html : me.templates.deleteDialog.clone(),
-                    useButtons: true,
-                    primaryButton: me.loc.buttons.delete,
-                    actions : {}
-                }];
+                var featureGeometry = me.layerGeometries.geometry.components[i],
+                    contentActions = [];
 
-                content[0].actions[me.loc.buttons.cancel] = function() {
-
+                var cancelAction = {};
+                cancelAction['name'] = me.loc.buttons.cancel;
+                cancelAction['type'] = 'button';
+                cancelAction['group'] = 1;
+                cancelAction['action'] = function () {
                     var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
                     me._highlighGeometries(me.highlightFeaturesIds, me._getLayerById(me.selectedLayerId), true);
                 };
+                contentActions.push(cancelAction);
 
-                content[0].actions[me.loc.buttons.delete] = function() {
+                var deleteAction = {};
+                deleteAction['name'] = me.loc.buttons.delete;
+                deleteAction['type'] = 'button';
+                deleteAction['group'] = 1;
+                deleteAction['action'] = function () {
                     me.layerGeometries.geometry.components.splice(featureGeometryId, 1);
                     me.prepareRequest(null, true);
                     var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')("contentEditor");
                     me.sandbox.request(me, request);
                     me._enableGFIRequestProcess();
                 };
+                contentActions.push(deleteAction);
+
+                var content = [{
+                    html : me.templates.deleteDialog.clone(),
+                    actions : contentActions
+                }];
+
                 var options = {
                     hidePrevious: true
                 };
