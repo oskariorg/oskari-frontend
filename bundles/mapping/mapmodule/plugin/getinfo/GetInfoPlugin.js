@@ -319,7 +319,6 @@ Oskari.clazz.define(
                                 lonlat: lonlat,
                                 via: 'ajax'
                             });
-                            hideprev = false;
                         });
                     }
 
