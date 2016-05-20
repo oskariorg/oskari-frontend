@@ -819,7 +819,13 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
-                            popup.popup.setPosition(undefined);
+                            if(typeof popup.popup.setPosition === 'function') {
+                                popup.popup.setPosition(undefined);
+                            }
+                            if (this._popups[pid].popup) {
+                                this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
+                                this._popups[pid].popup.close();
+                            }
                             delete this._popups[pid];
                             event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
                         	sandbox.notifyAll(event);
