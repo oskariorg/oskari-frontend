@@ -23,17 +23,17 @@ Oskari.clazz.define(
             mustacheType: null,
             calculateTagTypes: ['jatevesi','hulevesi','sekaviemari'],
             allTagTypes: ['vesi_putki','maapaloposti','seinapaloposti','sprinkleri','jatevesi_putki','jatevesi_kaivo','hulevesi_putki','hulevesi_kaivo','sekaviemari_putki','sekaviemari_kaivo','muu_liitynta'],
-            vesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
-            maapaloposti: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
-            seinapaloposti: ['tagtype','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
-            sprinkleri: ['tagtype','tag-address','tag-pipe-size','tag-max-water-take','tag-min-pressure-level'],
-            jatevesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            jatevesi_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            hulevesi_putki: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            hulevesi_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            sekaviemari_putki: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            sekaviemari_kaivo: ['tagtype','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
-            muu_liitynta: ['tagtype','tag-address','tag-other-issue'],
+            vesi_putki: ['tag-type','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
+            maapaloposti: ['tag-type','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
+            seinapaloposti: ['tag-type','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
+            sprinkleri: ['tag-type','tag-address','tag-pipe-size','tag-max-water-take','tag-min-pressure-level'],
+            jatevesi_putki: ['tag-type','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            jatevesi_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            hulevesi_putki: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            hulevesi_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            sekaviemari_putki: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            sekaviemari_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
+            muu_liitynta: ['tag-type','tag-address','tag-other-issue'],
             doNotUseInLabel: ['tag-address','tag-pipe-size','tag-ground-height'],
             onlyNumberInputs: ['tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height','tag-ground-height','tag-low-tag-height','tag-barrage-height']
         };
@@ -312,7 +312,7 @@ Oskari.clazz.define(
             output.push('<option value=""></option>');
 
             jQuery.each(me.state.allTagTypes, function(key, value) {
-                output.push('<option value="'+ value +'">'+ me._getLocalization("tagtype-"+value) +'</option>');
+                output.push('<option value="'+ value +'">'+ me._getLocalization("tag-type-"+value) +'</option>');
             });
 
             return output.join('');
@@ -389,8 +389,8 @@ Oskari.clazz.define(
             //calculate certain values into inputs
             if(me.state.calculateTagTypes.indexOf(tagType[0]) > -1){
                 form.find("[name=tag-bottom-height]").blur(function(e){
-                    form.find("[name=tag-low-tag-height]").val(me._calculateTagHeight(form, tagType));
-                    form.find("[name=tag-barrage-height]").val(me._calculateBarrageHeight(form, tagType));
+                    form.find("[name=tag-low-tag-height]").val(parseFloat(me._calculateTagHeight(form, tagType).toFixed(2)));
+                    form.find("[name=tag-barrage-height]").val(parseFloat(me._calculateBarrageHeight(form, tagType).toFixed(2)));
                 });
             }
 
@@ -400,8 +400,8 @@ Oskari.clazz.define(
                 el.prev('span').html(me._getLocalization(el.attr('name')));
                 if(el.attr("language") != null){
                    el.attr("placeholder", me._getLocalization(el.attr("language")));
-                   if(el.attr("name") == "tagtype"){
-                        el.val(me._getLocalization("tagtype-"+el.attr("tagtype")));
+                   if(el.attr("name") == "tag-type"){
+                        el.val(me._getLocalization("tag-type-"+el.attr("tagtype")));
                    }
                 }
             });
@@ -614,42 +614,20 @@ Oskari.clazz.define(
 
             if (me._formIsValid(form, me)) {
 
-                //FIXME
-/*                var url = "";
+                var data = {};
 
-                var dataObject = {
-                    'id': frm.find("[name=id]").val(),
-                    'choose-wfs-layer': frm.find("[name=choose-wfs-layer]").val(),
-                    'topic' : {},
-                    'desc': {},
-                    'params' : [],
-                    'is-default' : frm.find("[name=details-default]").is(":checked"),
-                    'is-address' : frm.find("[name=details-isaddress]").is(":checked")
-                };
-
-                jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
-                    dataObject.topic[item] = frm.find("[name=details-topic-"+item+"]").val();
-                    dataObject.desc[item] = frm.find("[name=details-desc-"+item+"]").val();
+                form.find('input[type=text]').each(function(index, value) {
+                    var input = jQuery(this);
+                    data[input.attr("name").replace(/-/g , "_")] = input.val();
                 });
-
-                jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
-                    dataObject.params.push(jQuery(this).val());
-                });
-
-                url += "id="+dataObject["id"];
-                url += "&wfsLayerId="+dataObject["choose-wfs-layer"];
-                url += "&desc="+JSON.stringify(dataObject.desc);
-                url += "&topic="+JSON.stringify(dataObject.topic);
-                url += "&paramsForSearch="+JSON.stringify(dataObject.params);
-                url += "&isDefault="+dataObject["is-default"],
-                url += "&isAddress="+dataObject["is-address"];*/
 
                 jQuery.ajax({
-                    type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
-                    data: url,
+                    type: form.attr('method'),
+                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
+                    data: data,
                     success: function (data) {
-                        me._closeForm(form);
+                        console.dir(data);
+                        //me._closeForm(form);
                         //me.fetchChannels(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
