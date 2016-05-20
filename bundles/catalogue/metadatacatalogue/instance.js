@@ -960,7 +960,10 @@ Oskari.clazz.define(
                             locIdentificationCode = identification.code;
                         }
 
-                        titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
+                        //only add the date for certain types of targets
+                        if (row.natureofthetarget && (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'service')) {
+                            titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
+                        }
                     }
                     // Add title
                     jQuery(cells[0]).append(titleText);
