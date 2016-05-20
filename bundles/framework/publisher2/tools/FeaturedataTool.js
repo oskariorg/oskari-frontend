@@ -80,6 +80,10 @@ function() {
                 break;
             }
         }
+
+        //enable by default if wfs
+        this.setEnabled(true);
+
         return wfs;
     }
 }, {

@@ -146,5 +146,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
                 this.__listeners[type] = [];
             }
             return this.__listeners[type];
-        },
+        }
     });
