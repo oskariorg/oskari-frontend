@@ -30,6 +30,10 @@ Normal desktop UI works correctly again.
 
 Featuredata-tool enabled by default when wfs layers are present.
 
+### infobox
+
+Fixed mobile popup close.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
