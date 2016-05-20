@@ -49,7 +49,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.attr('title', pConfig.tooltip);
         button.attr('id', 'oskari_toolbar_' + pGroup + '_' + pId);
 
-
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
             //if style explicitly provided, add that as well
             var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
@@ -104,7 +103,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 var buttonEl = jQuery(this);
                 buttonEl.removeClass('hover');
                 if(!buttonEl.hasClass('selected')) {
-                    me._addButtonTheme(pConfig,button);
+                    me._addButtonTheme(pConfig,toolbarConfig,button);
                 }
             });
         }
@@ -130,7 +129,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._checkToolChildrenPosition(pId, pGroup, pConfig);
         }
         if(pConfig.iconCls) {
-            me._addButtonTheme(pConfig,button);
+            me._addButtonTheme(pConfig,toolbarConfig,button);
         }
     },
 
@@ -295,15 +294,25 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Add button theme
      * @method  @private _addButtonTheme
      * @param {Object} btnConfig button config
+     * @param {Object} toolbarConfig toolbar config
      * @param {Object} buttonEl  button jQuery element
      */
-    _addButtonTheme: function(btnConfig, buttonEl){
+    _addButtonTheme: function(btnConfig, toolbarConfig, buttonEl){
         if(!btnConfig || !btnConfig.iconCls || !buttonEl) {
             return;
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
+        if(toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
+            if(Oskari.util.getColorBrightness(toolbarConfig.colours.background) === 'light') {
+                buttonEl.addClass(btnConfig.iconCls + '-light');
+            } else {
+                buttonEl.addClass(btnConfig.iconCls + '-dark');
+            }
+        }
+        else {
+            buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
+        }
     },
 
     /**
