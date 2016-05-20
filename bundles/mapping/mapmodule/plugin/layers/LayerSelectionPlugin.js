@@ -161,8 +161,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
             var header = this.getElement().find('div.header');
             header.unbind('click');
-            if (this.inLayerToolsEditMode()) {
-                this.closeSelection();
+            if (this.inLayerToolsEditMode() && me.popup.isVisible()) {
+                me.popup.getJqueryContent().detach();
+                me.popup.close(true);
+                me.popup = null;
             } else {
                 this._bindHeader(header);
             }
@@ -556,6 +558,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function(){
+                        me.popup.getJqueryContent().detach();
                         var sandbox = me.getSandbox();
                         sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                     });
@@ -575,6 +578,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         'bgColour': themeColours.backgroundColour,
                         'titleColour': themeColours.textColour,
                         'iconCls': popupCloseIcon
+                    });
+                    me.popup.onClose(function() {
+                        me.popup.getJqueryContent().detach();
                     });
                 }
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
@@ -597,25 +603,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if(layersTitle.length>0){
                     layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
                 }
-            }
-        },
-
-        /**
-         * @method closeSelection
-         * Programmatically closes the plugins interface as if user had clicked it close
-         */
-        closeSelection: function (el) {
-            var element = el || this.getElement();
-            if(!element) {
-                return;
-            }
-            var icon = element.find('div.header div.header-icon');
-            var header = element.find('div.header');
-
-            icon.removeClass('icon-arrow-white-down');
-            icon.addClass('icon-arrow-white-right');
-            if (element.find('.content')[0]) {
-                element.find('.content').detach();
             }
         },
 
@@ -651,15 +638,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this;
             header.bind('click', function () {
                 if (me.popup && me.popup.isVisible()) {
+                    me.popup.getJqueryContent().detach();
                     me.popup.close(true);
                     me.popup = null;
                     return;
-                }
-                var content = me.getElement().find('.content');
-                if (!content[0]) {
-                    me.openSelection();
                 } else {
-                    me.closeSelection();
+                    me.openSelection();
                 }
             });
         },
@@ -682,8 +666,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             me._bindHeader(header);
 
-            me.closeSelection(el);
-
             if (!me.layerContent) {
                 me.layerContent = me.templates.layerContent.clone();
                 me.setupLayers(undefined, el);
@@ -695,10 +677,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         teardownUI : function() {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
-            this.closeSelection();
-                if (this.popup) {
-                    this.popup.close(true);
-                }
+            if (this.popup) {
+                this.popup.close(true);
+            }
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode

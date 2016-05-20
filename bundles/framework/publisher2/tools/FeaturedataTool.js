@@ -40,7 +40,6 @@ function() {
      */
     init: function(data) {
         var me = this;
-
         if (data.configuration[me.bundleName]) {
             me.setEnabled(true);
         }
@@ -80,10 +79,6 @@ function() {
                 break;
             }
         }
-
-        //enable by default if wfs
-        this.setEnabled(true);
-
         return wfs;
     }
 }, {
