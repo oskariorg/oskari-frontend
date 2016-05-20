@@ -235,7 +235,7 @@ Oskari.clazz.define(
                 }
             }
         },
-        _removeFeaturesByAttribute: function(olLayer, identifier, value, keepInPrioList) {
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
             var source = olLayer.getSource(),
                 featuresToRemove = [];
 
@@ -257,13 +257,11 @@ Oskari.clazz.define(
                 var feature = featuresToRemove[i];
                 source.removeFeature(feature);
                 var featuresPrio = this._features[olLayer.get('id')][0].data;
-                if(!keepInPrioList) {
-                    for(key in featuresPrio) {
-                        if(featuresPrio[key].get('id')===feature.get('id')) {
-                            featuresPrio.splice(key,1);
-                        }
-                    };
-                }
+                for(key in featuresPrio) {
+                    if(featuresPrio[key].get('id')===feature.get('id')) {
+                        featuresPrio.splice(key,1);
+                    }
+                };
                 var geojson = formatter.writeFeaturesObject([feature]);
                 removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
             }
@@ -378,7 +376,7 @@ Oskari.clazz.define(
                         });
 
                         if(options.prio && !isNaN(options.prio)){
-                            this._removeFeaturesByAttribute(layer, null, null, true);
+                            //this._removeFeaturesByAttribute(layer);
                             vectorSource.clear();
 
                             me._features[options.layerId].sort(function(a,b){
