@@ -6,9 +6,10 @@
 
 Added new marker_ferry, marker_flight, ferry_stop and flight stop routing markers. See /framework/routingService/instance.js.
 
-### VectorLayerPlugin.ol2
+### VectorLayerPlugin
 
-Click events didn't propagate properly when vector features were added to map. This has been fixed.
+ol2: Click events didn't propagate properly when vector features were added to map. This has been fixed.
+ol2 & ol3: Fixed an issue where removed features were readded on map with new features.
 
 ### Flyouts in fullscreen mode
 
