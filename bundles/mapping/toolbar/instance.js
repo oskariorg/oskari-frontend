@@ -230,13 +230,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
-                
+
             } else {
                 if(!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
                 }
                 if(!data.colours.background) {
-                    data.colours.background = '#333438';   
+                    data.colours.background = '#333438';
                 }
             }
             data.colours = data.colours || {
