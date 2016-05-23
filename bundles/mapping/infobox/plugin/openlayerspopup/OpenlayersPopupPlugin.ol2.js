@@ -151,9 +151,11 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
+                    var popupType = "mobile";
                     popup.setContent(contentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id);
+                    var popupDOM = jQuery('#' + id),
+                        popupType = "desktop";
                     popup.setContentHTML(popupContent);
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
