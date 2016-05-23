@@ -822,9 +822,10 @@ Oskari.clazz.define(
                             if(typeof popup.popup.setPosition === 'function') {
                                 popup.popup.setPosition(undefined);
                             }
-                            if (this._popups[pid].popup) {
+                            if (popup.popup && popup.type === "desktop") {
                                 this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
-                                this._popups[pid].popup.close();
+                            } else if (popup.popup && popup.type === "mobile") {
+                                popup.popup.close();
                             }
                             delete this._popups[pid];
                             event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
@@ -836,8 +837,10 @@ Oskari.clazz.define(
             }
             // id specified, delete only single popup
             if (this._popups[id]) {
-                if (this._popups[id].popup) {
+                if (this._popups[id].popup && this._popups[id].type === "desktop") {
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
+                } else if (this._popups[id].popup && this._popups[id].type === "mobile") {
+                    this._popups[id].popup.close();
                 }
                 delete this._popups[id];
                 event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
