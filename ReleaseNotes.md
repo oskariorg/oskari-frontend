@@ -35,6 +35,10 @@ Featuredata-tool enabled by default when wfs layers are present.
 
 Fixed mobile popup close.
 
+### statehandler
+
+No longer calls AddView action route on page unload.
+
 ### toolbar
 
 Now you can define hover color and icon background color in bundle config.
