@@ -48,7 +48,7 @@ Example configuration:
 ```javascript
   colours: {
      hover: '#ff0000',
-     background: '#ffffff '
+     background: '#ffffff'
   }
 ```
 Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation data not contains these configs.
