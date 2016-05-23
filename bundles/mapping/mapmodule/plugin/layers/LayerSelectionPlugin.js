@@ -636,12 +636,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         _bindHeader: function (header) {
             var me = this;
+
             header.bind('click', function () {
                 if (me.popup && me.popup.isVisible()) {
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
                     me.popup = null;
                     return;
+                } else if (me.getElement().find('.content')[0]) {
+                    me.closeSelection();
                 } else {
                     me.openSelection();
                 }
@@ -681,6 +684,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this.popup.close(true);
             }
         },
+
+        /**
+         * @method closeSelection
+         * Programmatically closes the plugins interface as if user had clicked it close
+         */
+        closeSelection: function (el) {
+            var element = el || this.getElement();
+            if(!element) {
+                return;
+            }
+            var icon = element.find('div.header div.header-icon');
+            var header = element.find('div.header');
+
+            icon.removeClass('icon-arrow-white-down');
+            icon.addClass('icon-arrow-white-right');
+            if (element.find('.content')[0]) {
+                element.find('.content').detach();
+            }
+        },
+
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
