@@ -792,19 +792,18 @@ Oskari.clazz.define(
                 me._removeFeaturesFromMap();
             });
 
-            var showDatasetsLink = resultHeader.find('.showDatasets');
-            showDatasetsLink.html(me.getLocalization('showDatasets'));
-
-            var showServicessLink = resultHeader.find('.showServices');
-            showServicessLink.html(me.getLocalization('showServices'));
-
-
             if (data.results.length === 0) {
                 resultPanel.append(resultHeader);
                 resultPanel.append(me.getLocalization('searchservice_search_not_found_anything_text'));
                 resultPanel.show();
                 return;
             }
+
+            var showDatasetsLink = resultHeader.find('.showDatasets');
+            showDatasetsLink.html(me.getLocalization('showDatasets'));
+
+            var showServicessLink = resultHeader.find('.showServices');
+            showServicessLink.html(me.getLocalization('showServices'));
 
             // render results
             var table = me.templates.resultTable.clone(),
