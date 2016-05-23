@@ -89,3 +89,29 @@
 	margin-right: 20px !important;
 	width: 97% !important;
 }
+
+.tag-pipe-wrapper .accordion {
+	background-color: #F3F3F3;
+	border: 1pt solid #999;
+	clear: both;
+	display: block;
+	list-style-type: none;
+}
+
+.tag-pipe-wrapper .accordion:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.tag-pipe-wrapper .accordion .accordion-header h3 {
+	font-size: 16px;
+	line-height: 40px;
+	float: left;
+	padding: 0 0 0 10px;
+}
+
+.tag-pipe-wrapper .accordion .accordion-header input {
+	float: right;
+	margin: 5px 5px 5px 0;
+}

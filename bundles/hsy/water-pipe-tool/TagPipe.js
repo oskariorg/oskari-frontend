@@ -16,6 +16,7 @@ Oskari.clazz.define(
         this.setContent(this.createUi());
         this.highlightVectorLayer = null;
         this.mustacheVectorLayer = null;
+        //there is finnish words in state variables cause in future there will be direct reading from WMS or WFS interfaces, it's easier to read direct params with right name
         this.state = {
             tagPipeClickLonLat: null,
             tagPipeActive: false,
@@ -52,6 +53,8 @@ Oskari.clazz.define(
             //main wrapper
             me.templates.main = jQuery('<div class="tag-pipe-wrapper"></div>');
 
+            me.templates.tagpipeSection = jQuery('<div class="tag-pipe-section"></div>');
+
             me.templates.formRedirect = jQuery(
                 '<div class="tag-pipe-redirect-to-form">' +
                 '   <select></select>' +
@@ -85,6 +88,40 @@ Oskari.clazz.define(
                 '</ul>'
             );
 
+            me.templates.search = jQuery(
+                '<div class="tag-search-wrapper">' +
+                '  <input type="search"></input>' +
+                '  <div class="icon-close"></div>' +
+                '</div>'
+            );
+            me.templates.search.find('input').keypress(
+                function (event) {
+                    if (event.keyCode === 10 || event.keyCode === 13) {
+                        me._filterList(event, me);
+                    }
+                }
+            );
+            me.templates.search.find('div.icon-close').click(
+                function (event) {
+                    jQuery(event.target)
+                        .parent()
+                        .find('input[type=search]')
+                        .val('');
+                    me._filterList(event, me);
+                }
+            );
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SearchButton'
+            );
+            // jQuery doesn't clone handlers that aren't created with jQuery,
+            // so we have to do this with jQuery...
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._filterList(event, me);
+                }
+            );
+            btn.insertTo(me.templates.search);
+
             //pipe list item
             me.templates.pipeListElement = jQuery(
                 '<li class="tag-pipe-list-element">' +
@@ -93,6 +130,25 @@ Oskari.clazz.define(
                     '<a class="tag-pipe-select" href="#"></a>' +
                 '</li>'
             );
+
+            me.templates.list = jQuery('<ul class="tag-pipes-accordion"></ul>');
+
+            me.templates.item = jQuery(
+                '<li class="accordion">' +
+                '<div class="header accordion-header clearfix">' +
+                '   <h3></h3>' +
+                '</div>' +
+                '</li>'
+            );
+
+            btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
+            btn.setName('edit');
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._openForm(event, me);
+                }
+            );
+            btn.insertTo(me.templates.item.find('div.header'));
         },
 
         /**
@@ -113,6 +169,8 @@ Oskari.clazz.define(
             btn.setHandler(function (event) {
                 me.container.find(".add-tag-btn").hide();
                 me.container.find(".cancel-tag-btn").show();
+                me.container.find(".tag-pipes-accordion").hide();
+                me.container.find(".tag-search-wrapper").hide();
                 me.state.tagPipeActive = true;
                 me._activateNormalGFI(false);
                 me._activateNormalWFSReq(false);
@@ -138,6 +196,8 @@ Oskari.clazz.define(
                 me.container.find(".cancel-tag-btn").hide();
                 me.state.tagPipeActive = false;
                 me.container.find(".add-tag-btn").show();
+                me.container.find(".tag-pipes-accordion").show();
+                me.container.find(".tag-search-wrapper").show();
                 me.container.find(".tag-pipe-list").remove();
                 me._activateNormalGFI(true);
                 me._activateNormalWFSReq(true);
@@ -154,6 +214,12 @@ Oskari.clazz.define(
             var help = me.templates.help.clone();
             help.hide();
             me.container.append(help);
+
+            me.container.append(me.templates.tagpipeSection);
+
+            me._fetchTagPipes(me.container);
+
+            me.container.append(me.templates.search);
 
             return me.container;
         },
@@ -221,21 +287,21 @@ Oskari.clazz.define(
 
         /**
          * @method _deleteTagPipe
-         * Gets channel id based on event target and deletes it
+         * Gets tagpipe id based on event target and deletes it
          */
-/*        _deleteTagPipe: function (event, me) {
+        _deleteTagPipe: function (event, me) {
             var item = jQuery(event.target).parents('li'),
                 uid = parseInt(item.attr('data-id')),
-                channel = me._getChannel(uid);
+                tagpipe = me._getTagPipe(uid);
 
-            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel.topic[Oskari.getLang()]))) {
+            if (!window.confirm(me._getLocalization('confirm_delete').replace('{tagpipe}', tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type)))) {
                 return;
             }
 
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel&id='+ uid,
+                url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe&tag_id='+ uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -246,10 +312,10 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     item.remove();
-                    //me.fetchChannels(me.container);
+                    me._fetchTagPipes(me.container);
                 }
             });
-        },*/
+        },
 
         /**
          * [_createTagPipeList creates list based on user click to pipes]
@@ -283,7 +349,7 @@ Oskari.clazz.define(
                 list.append(listEl);
             }
 
-            me.container.append(list);
+            me.container.find(".tag-pipe-section").append(list);
         },
 
         /**
@@ -317,6 +383,7 @@ Oskari.clazz.define(
 
             return output.join('');
         },
+
         /**
          * @method _openForm opens redirect select and from change event form
          * Opens edit/create form depending on event target location
@@ -325,49 +392,81 @@ Oskari.clazz.define(
             // Semi deep clone
             var me = instance,
                 direct = me.templates.formRedirect,
-                target = jQuery(event.target);
-               
-                //update help text
-                me._manageHelp(true, me._getLocalization('help_redirect'));
+                target = jQuery(event.target),
+                tagPipeSection = me.container.find(".tag-pipe-section"),
+                item = target.parents('li'),
+                uid = item.attr('data-id');
 
-                //remove listing and change mapclick event state
-                me.container.find(".tag-pipe-list").remove();
-                me.container.find(".cancel-tag-btn").hide();
-                me.state.tagPipeActive = false;
+                if (uid && uid.length) {
+                    me._activateNormalGFI(false);
+                    me._activateNormalWFSReq(false);
+                    me.state.mustacheActive = true;
+                    var tagpipe = me._getTagPipe(parseInt(uid, 10));
+                    target.hide();
+                    item.append(me._initForm(tagpipe.tag_type, tagpipe));
 
-                //add redirect select with options to container
-                direct.find('select').html(me._initFormRedirectSelect());
-                direct.change(function(e){
-                    var el = jQuery(this),
-                    value = el.find(":selected").val(),
-                    form = me.container.find('form');
-                    me.state.mustacheActive = false;
-                    me._clearMustacheVectorLayer();
+                }else{
 
-                    if(value === ""){
-                        me._manageHelp(true, me._getLocalization('help_redirect'));
-                        form.remove();
-                    }else{
-                        me._manageHelp(true, me._getLocalization('help_insert'));
-                        form.remove();
-                        me.container.append(me._initForm(value));
-                    }
-                });
-                me.container.append(direct);
+                    //update help text
+                    me._manageHelp(true, me._getLocalization('help_redirect'));
+
+                    //remove listing and change mapclick event state
+                    me.container.find(".tag-pipe-list").remove();
+                    me.container.find(".cancel-tag-btn").hide();
+                    me.state.tagPipeActive = false;
+
+                    //add redirect select with options to container
+                    direct.find('select').html(me._initFormRedirectSelect());
+                    direct.change(function(e){
+                        var el = jQuery(this),
+                        value = el.find(":selected").val(),
+                        form = me.container.find('form');
+                        me.state.mustacheActive = false;
+                        me._clearMustacheVectorLayer();
+
+                        if(value === ""){
+                            me._manageHelp(true, me._getLocalization('help_redirect'));
+                            form.remove();
+                        }else{
+                            me._manageHelp(true, me._getLocalization('help_insert'));
+                            form.remove();
+                            tagPipeSection.append(me._initForm(value, null));
+                        }
+                    });
+                    tagPipeSection.append(direct);
+
+                }
         },
 
-               /**
+        /**
+         * [_getTagPipe gets certain tagpipe attributes]
+         * @param  {[integer]} uid [tag_id]
+         * @return {[array]}     [tagpipe array]
+         */
+        _getTagPipe: function (uid) {
+            var i,
+            me = this;
+
+            for (i = 0; i < me.tagpipes.length; i += 1) {
+                if (me.tagpipes[i].tag_id === uid) {
+                    return me.tagpipes[i];
+                }
+            }
+            return null;
+        },
+
+        /**
          * [_initForm creates form with state params]
          * @param  {[array]} data [feature]
          * @return {[jquery object]}      [html]
          */
-        _initForm: function(type){
+        _initForm: function(type, tagpipe){
             var me = this,
             form = me.templates.form.clone(true),
             tagType = type.split("_");
             me.state.mustacheType = type;
             form.attr("type", me.state.mustacheType);
-
+            
             //add topic for form
             form.find('h4').text(me._getLocalization('tag-pipe-details-header'));
 
@@ -440,16 +539,16 @@ Oskari.clazz.define(
                 'Oskari.userinterface.component.buttons.SaveButton'
             );
             btn.insertTo(buttonFieldset);
-/*            btn = Oskari.clazz.create(
+            btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
-            btn.addClass('delete--tagpipe');
+            btn.addClass('delete-tagpipe hidden');
             jQuery(btn.getElement()).click(
                 function (event) {
                     me._deleteTagPipe(event, me);
                 }
             );
-            btn.insertTo(buttonFieldset);*/
+            btn.insertTo(buttonFieldset);
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
@@ -469,7 +568,12 @@ Oskari.clazz.define(
                 }
             });
 
-            me._populateForm(form, null);
+            if(tagpipe){
+                me._populateForm(form, tagpipe);
+                form.find('.delete-tagpipe').removeClass('hidden');
+            }else{
+                me._populateForm(form, null);
+            }
 
             return form;
         },
@@ -552,8 +656,19 @@ Oskari.clazz.define(
          * Closes given form and shows the button that opens it
          */
         _closeForm: function (form) {
-            var me = this;
-            form.parent().find('.add-tag-btn').show();
+            var me = this,
+            tagPipeWrapper = form.parents(".tag-pipe-wrapper");
+
+            if (form.parent().is('li')) {
+                // show edit button
+                form.parent().find('.header input').show();
+            } else {
+                form.prev('div.tag-pipe-redirect-to-form').remove();
+            }
+
+            tagPipeWrapper.find('.add-tag-btn').show();
+            tagPipeWrapper.find(".tag-pipes-accordion").show();
+            tagPipeWrapper.find(".tag-search-wrapper").show();
             me._activateNormalGFI(true);
             me._activateNormalWFSReq(true);
             me._clearHighlightVectorLayer();
@@ -564,9 +679,25 @@ Oskari.clazz.define(
                 me.mustacheVectorLayer = null;
             }
 
-            // destroy form and redirect component
-            form.prev('div').remove();
+            // destroy form
             form.remove();
+        },
+
+        /**
+         * [_mustacheLayerIsValid check that mustachelayer is not empty]
+         * @return {[output]} [true/false]
+         */
+        _mustacheLayerIsValid: function(){
+            var me = this,
+            output = false;
+
+            if(me.mustacheVectorLayer !== null && me.mustacheVectorLayer.features !== 0){
+                output = true;
+            }else{
+                 me._openPopup(me._getLocalization('mustache_invalid'), me._getLocalization('mustache_invalid_help'));
+            }
+
+            return output;
         },
 
         /**
@@ -612,14 +743,22 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var form = jQuery(event.target);
 
-            if (me._formIsValid(form, me)) {
+            if (me._formIsValid(form, me) && me._mustacheLayerIsValid()) {
 
                 var data = {};
 
+                //get data from form
                 form.find('input[type=text]').each(function(index, value) {
                     var input = jQuery(this);
                     data[input.attr("name").replace(/-/g , "_")] = input.val();
                 });
+
+                data['tag_type'] = me.container.find(".tag-pipe-redirect-to-form select :selected").val();
+
+                //get data from vector layer
+                var geojson_format = new OpenLayers.Format.GeoJSON();
+                var geojson = geojson_format.write(me.mustacheVectorLayer.features);
+                data['tag_geojson'] = geojson;
 
                 jQuery.ajax({
                     type: form.attr('method'),
@@ -627,8 +766,8 @@ Oskari.clazz.define(
                     data: data,
                     success: function (data) {
                         console.dir(data);
-                        //me._closeForm(form);
-                        //me.fetchChannels(me.container);
+                        me._closeForm(form);
+                        me._fetchTagPipes(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         var error = me._getErrorText(
@@ -654,32 +793,31 @@ Oskari.clazz.define(
             var me = this;
 
             if (tagpipe) {
-                /*this._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+                me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
                 me._progressSpinner.insertTo(jQuery(".tag-pipe-wrapper"));
                 me._progressSpinner.start();
-                fragment.find("[name=id]").val(channel.id);
-                fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
-                fragment.find("[name=details-default]").attr('checked', channel.is_default);
-                fragment.find("[name=details-isaddress]").attr('checked', channel.is_address);
-                $.each(channel.topic, function(lang, text) {
-                    fragment.find("[name=details-topic-"+lang+"]").val(text);
-                });
-                $.each(channel.desc, function(lang, text) {
-                    fragment.find("[name=details-desc-"+lang+"]").val(text);
-                });
-                var paramsSelect =  fragment.find("[name=choose-param-for-search]");
-                $.each(channel.params_for_search, function(index, text) {
-                    if(index > 0){
-                        fragment.find(".new-params-btn").trigger("click");
+
+                me.state.mustacheType = tagpipe.tag_type;
+
+                form.find('input[type=text]').each(function(index, value) {
+                    var input = jQuery(this);
+                    var tagValue = tagpipe[input.attr("name").replace(/-/g , "_")];
+
+                    if(input.attr("name") === "tag-type"){
+                        input.val(me._getLocalization("tag-type-"+tagValue));
+                    }else{
+                        input.val(tagValue);
                     }
-                    //FIXME Dynamic option adding needs it
-                    setTimeout(function(){
-                        fragment.find("[name=choose-param-for-search]").eq(index).val(text);
-                        me._progressSpinner.stop();
-                    },600);
                 });
+
+                //FIXME Dynamic option adding needs it
+                setTimeout(function(){
+                  me.mustachePointOnMap(null, tagpipe.tag_geojson);
+                },300);
+
+                me._progressSpinner.stop();
                
-                fragment.attr('method', 'PUT');*/
+                form.attr('method', 'PUT');
             } else {
                 form.attr('method', 'POST');
             }
@@ -688,6 +826,97 @@ Oskari.clazz.define(
                 return me._submitForm(event, me);
             });
             return form;
+        },
+
+        /**
+         * [[fetchTagPipes fetchTagPipes]]
+         * @param  {[object]} container [html el container]
+         */
+         _fetchTagPipes: function (container) {
+            // Remove old list from container
+            container.find('ul').remove();
+            // get channels with ajax
+            var me = this;
+            
+            jQuery.ajax({
+                type: 'GET',
+                url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
+                success: function (data) {
+                    console.dir(data);
+                    me._createList(me, data.tagpipes, me.state.filter);
+                 },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
+                     me._openPopup(
+                         me._getLocalization('fetch_failed'),
+                         error
+                     );
+                 }
+            });
+        },
+
+        /**
+         * [_createList create tagpipe list from database]
+         * @param  {[object]} me       [this]
+         * @param  {[array]} tagpipes [tagpipes from db]
+         * @param  {[string]} filter   [search string]
+         */
+        _createList: function (me, tagpipes, filter) {
+            var list = me.templates.list.clone(),
+                i,
+                tagpipe,
+                hasFilter = filter !== null && filter !== undefined && filter.length > 0,
+                matches,
+                topic;
+
+            me.tagpipes = tagpipes;
+            if(tagpipes) {
+                for (i = 0; i < tagpipes.length; i += 1) {
+                    tagpipe = tagpipes[i];
+                    topic = tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type);
+                    matches = !hasFilter || topic.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                    if (matches) {
+                        list.append(
+                            me._populateItem(
+                                me.templates.item.clone(true, true),
+                                tagpipe
+                            )
+                        );
+                    }
+                }
+            }
+            // Add list to container
+            if(list.children().length > 0){
+                me.container.append(list);
+            }else{
+                 me._openPopup(
+                     me._getLocalization('tag-pipes'),
+                     me._getLocalization('noMatch')
+                 );
+            }
+        },
+
+        /**
+         * @method _filterList
+         */
+        _filterList: function (event, me) {
+            var filter = jQuery(event.target).parent().find('input[type=search]').val();
+            me.state.filter = filter;
+            me._fetchTagPipes(me.container);
+        },
+
+        /**
+         * @method _populateItem
+         * Populates an item fragment
+         */
+        _populateItem: function (item, tagpipe) {
+            var me = this,
+            topic = tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type);
+
+            item.attr('data-id', tagpipe.tag_id);
+            item.find('h3').html(topic);
+            return item;
         },
 
         /**
@@ -758,7 +987,7 @@ Oskari.clazz.define(
          * [mustachePointOnMap users click adds point to map and then creates line between this and first clicked point]
          * @param  {[object]} lonlat [openlayers lonlat]
          */
-        mustachePointOnMap: function(lonlat){
+        mustachePointOnMap: function(lonlat, geojson){
             var me = this, 
             _map = me.mapModule.getMap(),
             mustacheInfo = me._populateMustacheInfo();
@@ -771,6 +1000,16 @@ Oskari.clazz.define(
             if(me.mustacheVectorLayer === null){
                 me._createMustacheVectorLayer(mustacheInfo);
             }
+
+            if(geojson){
+                var geojson_format = new OpenLayers.Format.GeoJSON();
+                var features = geojson_format.read(geojson);
+
+                //features.attributes = mustacheInfo;
+                me.mustacheVectorLayer.addFeatures(features);
+                _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
+
+            }else{
 
             //me._clearMustacheVectorLayer();
 
@@ -788,6 +1027,8 @@ Oskari.clazz.define(
              me.mustacheVectorLayer.addFeatures(feature);
             _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
 
+            }
+
         },
 
         /**
@@ -800,7 +1041,9 @@ Oskari.clazz.define(
             form = me.container.find("form");
 
             jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+                if(me.state.doNotUseInLabel.indexOf(item) == -1){
                     output[item] = form.find("input[name='"+item+"']").val();
+                }
             });
 
             return output;
