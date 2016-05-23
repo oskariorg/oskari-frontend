@@ -822,9 +822,9 @@ Oskari.clazz.define(
                         if(popup.type && popup.type === 'mobile') {
                             popup.popup.close();
                         } else {
-                            popup.popup.destroy();    
+                            popup.popup.destroy();
                         }
-                        
+
                         delete this._popups[pid];
                     }
                 }
@@ -837,7 +837,7 @@ Oskari.clazz.define(
                     if(popup.type && popup.type === 'mobile') {
                         popup.close();
                     } else {
-                        popup.destroy();    
+                        popup.destroy();
                     }
                 }
                 delete this._popups[id];

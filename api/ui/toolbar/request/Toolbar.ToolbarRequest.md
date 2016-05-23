@@ -44,7 +44,7 @@ Parameters for data-object (add operation):
   <td> disableHover </td><td> Boolean </td><td> disable hover </td><td> false </td>
 </tr>
 <tr>
-  <td> colours </td><td> Object </td><td> Toolbar colours. Now only supported hover colour. For example: {hover:'#ff0000'} </td><td> {hover: '#3c3c3c'} </td>
+  <td> colours </td><td> Object </td><td> Toolbar colours. Now only supported hover colour. For example: {hover:'#ff0000', background: '#ffffff'} </td><td> {hover: '#3c3c3c', background: '#333438'} </td>
 </tr>
 <tr>
   <td> title </td><td> String </td><td> Toolbar title </td><td> true </td>

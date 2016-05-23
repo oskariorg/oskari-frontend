@@ -35,6 +35,22 @@ Featuredata-tool enabled by default when wfs layers are present.
 
 Fixed mobile popup close.
 
+### toolbar
+
+Now you can define hover color and icon background color in bundle config.
+Background color is only used now for selecting light or dark icon.
+
+Example configuration:
+```javascript
+  colours: {
+     hover: '#ff0000',
+     background: '#ffffff '
+  }
+```
+Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation data not contains these configs.
+
+*Notice that att all icons are not specified light or dark icons. This icons are showed only dark style. For example marker-share, tool-feature-selection and tool-print.*
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
