@@ -169,9 +169,11 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
+                    var popupType = "mobile";
                     popup.setContent(contentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id);
+                    var popupDOM = jQuery('#' + id),
+                        popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
                     popup.setPosition(lonlatArray);
@@ -242,6 +244,7 @@ Oskari.clazz.define(
                     inputs.placeholder();
                 }
             }
+
             me._popups[id] = {
                 title: title,
                 contentData: contentData,
