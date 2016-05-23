@@ -153,7 +153,11 @@ Oskari.clazz.define(
                 if (isInMobileMode) {
                     popup.setContent(contentDiv);
                 } else {
+                    var popupDOM = jQuery('#' + id);
                     popup.setContentHTML(popupContent);
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
+                    }
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');

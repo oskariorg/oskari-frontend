@@ -171,9 +171,13 @@ Oskari.clazz.define(
                 if (isInMobileMode) {
                     popup.setContent(contentDiv);
                 } else {
+                    var popupDOM = jQuery('#' + id);
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
                     popup.setPosition(lonlatArray);
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
+                    }
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
