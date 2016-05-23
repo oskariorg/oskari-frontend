@@ -55,6 +55,10 @@ Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation da
 
 *Notice that att all icons are not specified light or dark icons. This icons are showed only dark style. For example marker-share, tool-feature-selection and tool-print.*
 
+### Admin layerselector
+
+Fixed an issue where grouplayers couldn't be created.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
