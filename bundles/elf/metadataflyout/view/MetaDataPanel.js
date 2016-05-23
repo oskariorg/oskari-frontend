@@ -520,10 +520,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
             var additionalTabsFound = false;
-//            console.log(JSON.stringify(me._model, null, '\t'));
-//            debugger;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'service' && model.identification.type !== 'data')) {
+                        continue;
+                    }
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
