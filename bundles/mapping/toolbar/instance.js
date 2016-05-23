@@ -253,8 +253,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                             '}' +
                         '</style>').appendTo('head');
             }
-            /* TODO: Need to use this later? Can toolbar color defined in config / add toolbar request?
+            // TODO: Need to use this later? Can toolbar color defined in config / add toolbar request?
             // Add style for one time per toolbar
+            /*
             if(!this._toolbarConfigs[tbid]) {
                 jQuery('<style type="text/css">'+
                         'div.toolbar_' + tbid + ' {' +
@@ -262,7 +263,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                         '}' +
                     '</style>').appendTo('head');
             }
-*/
+            */
             if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
                     createdHover: (addHoverStyle && showHover) ? true : false,
