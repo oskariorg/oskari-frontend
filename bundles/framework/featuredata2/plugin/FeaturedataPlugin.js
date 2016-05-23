@@ -65,10 +65,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
-            el.hide();
+            if (!me._hasFeaturedataLayers) {
+                el.hide();
+            }
             return el;
         },
-
+        /**
+         * @method _hasFeaturedataLayers
+         * @private
+         * Check whether there are layers with featuredata present -> determine the control element's visibility
+         */
+        _hasFeaturedataLayers: function() {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i;
+            // see if there's any wfs layers, show element if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData()) {
+                    return true;
+                }
+            }
+            return false;
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -161,19 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          */
         refresh: function () {
             var me = this,
-                sandbox = me.getMapModule().getSandbox(),
-                layers = sandbox.findAllSelectedMapLayers(),
-                i,
-                isVisible = false;
+                isVisible = me._hasFeaturedataLayers();
 
             if(this.getElement()) {
                 this.getElement().hide();
-            }
-            // see if there's any wfs layers, show element if so
-            for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData()) {
-                    isVisible = true;
-                }
             }
             if(isVisible && this.getElement()){
               this.getElement().show();

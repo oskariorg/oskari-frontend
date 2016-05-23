@@ -207,8 +207,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
-                me.dialog.remove();
                 me.__notifyListeners('close');
+                me.dialog.remove();
             } else {
                 me.dialog.animate({
                     opacity: 0

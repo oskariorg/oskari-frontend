@@ -1,15 +1,61 @@
 # Release Notes
 
-## 1.37
-
-### VectorLayerPlugin.ol2
-
-Click events didn't propagate properly when vector features were added to map. This has been fixed.
+## 1.36.1
 
 ### routingService
 
 Added new marker_ferry, marker_flight, ferry_stop and flight stop routing markers. See /framework/routingService/instance.js.
 
+### VectorLayerPlugin
+
+ol2: Click events didn't propagate properly when vector features were added to map. This has been fixed.
+ol2 & ol3: Fixed an issue where removed features were readded on map with new features.
+
+### Flyouts in fullscreen mode
+
+Flyouts no longer hide behind the map in fullscreen mode.
+
+### featuredata 2
+
+When moving from mobile mode to desktop, the flyout UI is resumed correctly.
+
+### statsgrid/thematic maps in embedded maps
+
+The legend/classification and map is now working correctly again.
+
+### Zoombar
+
+Normal desktop UI works correctly again.
+
+### publisher2
+
+Featuredata-tool enabled by default when wfs layers are present.
+
+### infobox
+
+Fixed mobile popup close.
+
+### statehandler
+
+No longer calls AddView action route on page unload.
+
+### toolbar
+
+Now you can define hover color and icon background color in bundle config.
+Background color is only used now for selecting light or dark icon.
+
+Example configuration:
+```javascript
+  colours: {
+     hover: '#ff0000',
+     background: '#ffffff'
+  }
+```
+Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation data not contains these configs.
+
+*Notice that att all icons are not specified light or dark icons. This icons are showed only dark style. For example marker-share, tool-feature-selection and tool-print.*
+
+>>>>>>> d45ef11531a74d13137ffca4b8dee9e50e9047e1
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when

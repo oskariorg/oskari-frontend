@@ -100,6 +100,10 @@ Oskari.clazz.define(
         me._mobileToolbar;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent;
+
+        //possible custom css cursor set via rpc
+        this._cursorStyle = '';
+
     }, {
         /**
          * @method init
@@ -1038,6 +1042,16 @@ Oskari.clazz.define(
                 return lightTheme;
             }
 
+        },
+        getCursorStyle: function() {
+            return this._cursorStyle;
+        },
+        setCursorStyle: function(cursorStyle) {
+            var me = this,
+                element = this.getMapEl();
+            jQuery(element).css('cursor',cursorStyle);
+            this._cursorStyle = cursorStyle;
+            return this._cursorStyle;
         },
 
 /*---------------- /THEME ------------------- */

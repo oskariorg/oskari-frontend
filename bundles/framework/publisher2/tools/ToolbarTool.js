@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var selectedDrawTools = me._hasSelectedDrawTool();
 
             //PublishedMyPlaces is not supported with ol3
-            
+
             /*
             if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
                 me.publishedmyplaces2Config.myplaces = me.drawOptions;
