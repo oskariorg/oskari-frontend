@@ -113,8 +113,8 @@ Oskari.clazz.define(
                 '<div class="metadataResultHeader">' +
                 '  <div class="panelHeader resultTitle"></div>' +
                 '  <div class="panelHeader resultLinks">' +
-                '    <a href="JavaScript:void(0);" class="showDataset filter-link" data-value="dataset"></a>' +
-                '    <a href="JavaScript:void(0);" class="showService filter-link" data-value="service"></a>' +
+                '    <a href="JavaScript:void(0);" class="showDatasets filter-link" data-value="dataset"></a>' +
+                '    <a href="JavaScript:void(0);" class="showServices filter-link" data-value="service"></a>' +
                 '    <a href="JavaScript:void(0);" class="showLink"></a>' +
                 '    <a href="JavaScript:void(0);" class="modifyLink"></a>' +
                 '  </div>' +
@@ -792,11 +792,11 @@ Oskari.clazz.define(
                 me._removeFeaturesFromMap();
             });
 
-            var showDatasetLink = resultHeader.find('.showDataset');
-            showDatasetLink.html(me.getLocalization('showDataset'));
+            var showDatasetsLink = resultHeader.find('.showDatasets');
+            showDatasetsLink.html(me.getLocalization('showDatasets'));
 
-            var showServicesLink = resultHeader.find('.showService');
-            showServicesLink.html(me.getLocalization('showService'));
+            var showServicessLink = resultHeader.find('.showServices');
+            showServicessLink.html(me.getLocalization('showServices'));
 
 
             if (data.results.length === 0) {
@@ -950,10 +950,11 @@ Oskari.clazz.define(
                         titleText = titleText + ', ' + row.organization;
                     }
 
-                    // Include identi
+                    // Include identification
                     var identification = row.identification;
                     var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
                     var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
+                    var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
                     if(isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
                         if(!locIdentificationCode) {
@@ -962,7 +963,11 @@ Oskari.clazz.define(
 
                         //only add the date for certain types of targets
                         if (row.natureofthetarget && (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'service')) {
-                            titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
+                            titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
+                            if (isUpdateFrequency) {
+                                titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
+                            }
+                            titleText += ')';
                         }
                     }
                     // Add title
