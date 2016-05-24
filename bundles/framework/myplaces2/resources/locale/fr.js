@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Cette couche cartographique est privée. Cliquez ici pour la publier.",
                 "publicTooltip": "Cette couche cartographique est publique. Cliquez ici pour la dépublier."
             },
+            "addCategoryFormButton": "Nouvelle couche cartographique",
             "addCategory": "Ajouter la couche cartographique",
             "editCategory": "Modifier la couche cartographique",
             "deleteCategory": "Supprimer la couche cartographique",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mesurer la distance",
                 "tooltip": "Mesurer la distance",
-                "add": "",
-                "next": "",
+                "add": "Ajouter une ligne",
+                "next": "Suivant",
                 "edit": "Vous pouvez modifier la ligne en cliquant et faisant glisser ses points de rupture.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mesurer la zone",
                 "tooltip": "Mesurer la zone",
-                "add": "",
-                "next": "",
+                "add": "ajouter une surface",
+                "next": "Suivant",
                 "edit": "Vous pouvez modifier la zone en cliquant et faisant glisser ses points de rupture sur sa bordure de ligne.",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Lien vers l’image",
-                "previewLabel": "Aperçu de l’image",
-                "add": "Nouvelle couche cartographique"
+                "previewLabel": "Aperçu de l’image"
             },
             "rendering": {
                 "label": "Style du lieu",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Style de point",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets ponctuels",
             "symbol": {
                 "label": "Icône"
             },
@@ -212,12 +212,12 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Style de ligne",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets linéaires",
             "style": {
                 "label": "Style"
             },
             "cap": {
-                "label": "Extrêmités"
+                "label": "Extrémités"
             },
             "corner": {
                 "label": "Coins"
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Style de la zone",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets surfaciques",
             "linestyle": {
                 "label": "Style de ligne de bordure"
             },

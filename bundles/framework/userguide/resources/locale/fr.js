@@ -3,28 +3,52 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Help",
+        "title": "Aide",
         "desc": "",
         "flyout": {
-            "title": "User Guide",
-            "loadingtxt": "<p>Loading the guide...</p>"
+            "title": "Guide utilisateur",
+            "loadingtxt": "<p>Chargement du guide...</p>"
         },
         "tile": {
-            "title": "User Guide"
+            "title": "Guide utilisateur"
         },
         "error": {
-            "title": "Error!",
-            "generic": "Loading user guide failed. Please try again later."
+            "title": "Erreur !",
+            "generic": "Échec du chargement du guide utilisateur. Réessayez plus tard."
         },
         "tabs": [
             {
-                "title": "Map window",
-                "tags": "map window,user guide"
+                "title": "Fenêtre de la carte",
+                "tags": "guide accueil"
+            },
+            {
+                "title": "outils cartographiques",
+                "tags": "guide outils"
+            },
+            {
+                "title": "chercher",
+                "tags": "guide recherche"
+            },
+            {
+                "title": "Couches cartographiques",
+                "tags": "guide couches cartographiques"
+            },
+            {
+                "title": "Publication cartographique",
+                "tags": "guide publication"
+            },
+            {
+                "title": "Cartes thématiques",
+                "tags": "guide thématique"
+            },
+            {
+                "title": "Analyse",
+                "tags": "guide analyse"
             }
         ],
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "fenêtre de la carte, guide utilisateur",
+            "contentPart": "corps"
         }
     }
 }

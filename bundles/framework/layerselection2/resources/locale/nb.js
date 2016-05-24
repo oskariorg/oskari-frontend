@@ -49,7 +49,7 @@ Oskari.registerLocalization(
                 "type-wfs": "Dataprodukt"
             },
             "refresh_load": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": "Oppfrisk kartlaget. Data blir ikke oppdatert automatisk i kartet."
             },
             "filter": {
                 "title": "Filter",

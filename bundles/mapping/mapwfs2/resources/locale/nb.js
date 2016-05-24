@@ -7,8 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Standardstil",
         "own-style": "Egen stil",
-        "refresh": "NOT TRANSLATED",
-        "refresh_title": "NOT TRANSLATED",
+        "refresh": "Oppdater",
+        "refresh_title": "Oppdater dataprodukter som ikke gjengis automatisk på kartet",
         "tile": {
             "title": "MapWfs2"
         },
@@ -26,8 +26,8 @@ Oskari.registerLocalization(
             "features_parsing_failed": "Lesing av objekter fra WFS lag {layer}) feilet"
         },
         "information": {
-            "title": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED"
+            "title": "Visning av objektdata",
+            "info": "Noen dataprodukter gjengis ikke automatisk. <br/><br/> Vennligst velg et område på kartet og klikk på Oppdater-knappen. <br/><br/> Klikk Objektegenskaper for å se egenskaper på dataproduktet."
         },
         "button": {
             "cancel": "Avbryt",

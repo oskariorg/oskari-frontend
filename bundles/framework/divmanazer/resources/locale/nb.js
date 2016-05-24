@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Punktstil",
-                "tooltip": "",
+                "tooltip": "Definer en punktstil",
                 "symbol": {
                     "label": "Ikon"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Linjestil",
-                "tooltip": "",
+                "tooltip": "Definer en linjestil",
                 "style": {
                     "label": "Linje"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Arealstil",
-                "tooltip": "",
+                "tooltip": "Definer en arealstil",
                 "linestyle": {
                     "label": "Linje"
                 },

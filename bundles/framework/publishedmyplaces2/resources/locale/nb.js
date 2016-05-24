@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mål avstand",
                 "tooltip": "Mål avstand",
-                "add": "",
-                "next": "",
+                "add": "Legg til linje",
+                "next": "Neste",
                 "edit": "Du kan tilpasse linjen ved å klikke og dra i knekkpunkt",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mål areal",
                 "tooltip": "Mål areal",
-                "add": "",
-                "next": "",
+                "add": "Legg til areal",
+                "next": "Neste",
                 "edit": "Du kan tilpasse området ved å klikke og dra i knekkpunkt på avgrensningslinjen",
                 "noResult": "0 m²"
             },
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punktstil",
-            "tooltip": "",
+            "tooltip": "Definer en punktstil",
             "symbol": {
                 "label": "Ikon"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Linjestil",
-            "tooltip": "",
+            "tooltip": "Definer en linjestil",
             "style": {
                 "label": "Utforming"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Områdestil",
-            "tooltip": "",
+            "tooltip": "Definer en arealstil",
             "linestyle": {
                 "label": "Kantlinje stil"
             },

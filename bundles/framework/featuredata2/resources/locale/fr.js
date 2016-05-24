@@ -12,10 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Les données d'entités de cette couche cartographique ne peuvent être affichées à ce niveau d’échelle. Veuillez changer le niveau d’échelle sur la barre d’échelle.",
         "errordata": "Les données d'entités au niveau du serveur contiennent des erreurs. Veuillez mettre à jour la carte en la déplaçant légèrement.",
         "columnSelectorTooltip": "Sélectionnez des colonnes visibles.",
+        "featureDataPopup": "Valeurs statistiques",
         "selectionTools": {
             "title": "Sélectionnez des entités sur la carte.",
             "instructions": "NOT TRANSLATED",
-            "selectAll": "Select from all layers",
+            "selectFromTop": "A partir de la couche supérieure.",
+            "selectAll": "Dans toutes les couches",
             "link": {
                 "title": "Sélectionnez plus d'entités"
             },
@@ -143,6 +145,12 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "L’opérateur logique est manquant."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Compte",
+            "differenceMessage": "La différence de valeurs d'objet ou caractéristique non-autorisé est présentée avec une valeur.",
+            "noDataMessage": "Compte  = Nombre d'objets avec des objets ou caractéristiques non autorisés.",
+            "noDataCommonMessage": "Il y a des valeurs d'objets ou caractéristiques non-autorisées dans les données."
         }
     }
 }

@@ -55,27 +55,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             tabs: {
                 'title': _.template(
                     '<article>' +
-                    '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic">' +
-                    '            <img src="<%- graphic.fileName %>" />' +
-                    '        </div>' +
-                    '    <% }); %>' +
-
-
                     '    <% if (identification.abstractText.length) { %>' +
-                    '        <h2><%= identification.type === "data" ? locale.heading.abstractTextData : locale.heading.abstractTextService %></h2>' +
                     '        <% _.forEach(identification.abstractText, function (paragraph) { %>' +
                     '            <p><%= paragraph %></p>' +
                     '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataDateStamp.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
-                    '        <p><%- metadataDateStamp %></p>' +
+                    '           <% if (identification.type === "service") {%>'+
+                    '               <p><%=identification.serviceType%></p>'+
+                    '           <% } %>'+
                     '    <% } %>' +
 
                     '    <% if (onlineResources.length) { %>' +
-                    '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
                     '        <% _.forEach(onlineResources, function (onlineResource) { %>' +
                     '            <% if (onlineResource.url.length) { %>' +
@@ -84,223 +73,177 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% }); %>' +
                     '        </ul>' +
                     '    <% } %>' +
+                    '   <hr class="elf-metadata-divider">'+
 
-                    '    <% if (identification.languages.length) { %>' +
-                    '        <h2>' + this.locale.heading.resourceLanguage + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.languages, function (language) { %>' +
-                    '             <li><%= locale.languages[language] || language %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.topicCategories.length) { %>' +
-                    '        <h2>' + this.locale.heading.topicCategory + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.topicCategories, function (topicCategory) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {description: topicCategory}).description %>"><%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {label: topicCategory}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.temporalExtents.length) { %>' +
-                    '        <h2>' + this.locale.heading.temporalExtent + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
-                    '            <li><%= temporalExtent.begin %> - <%= temporalExtent.end %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.spatialResolutions.length) { %>' +
-                    '        <h2>' + this.locale.heading.spatialResolution + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
-                    '            <li>1: <%- resolution %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.responsibleParties.length) { %>' +
-                    '        <h2>' + this.locale.heading.responsibleParty + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
-                    '            <li><%- responsibleParty.organisationName %></li>' +
-                    '            <% if (responsibleParty.electronicMailAddresses.length) { %>' +
-                    '                <ul>' +
-                    '                <% _.forEach(responsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
-                    '                    <li><%- electronicMailAddress %></li>' +
-                    '                <% }); %>' +
+                    '   <h2>'+this.locale.heading.datasetInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.referenceDate+'</td>'+
+                    '           <td>'+
+                    '               <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
+                    '               (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
+                    '               %>)</p>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.temporalInformation+'</td>'+
+                    '           <td>'+
+                    '           <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
+                    '               <p><%= temporalExtent.begin %> - <%= temporalExtent.end %></p>' +
+                    '           <% }); %>' +
+                                        //TODO: "updated:" + maintenanceAndUpdateFrequency
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.descriptiveKeyword+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.descriptiveKeywords, function (keyword) { %>' +
+                    '                   <% if (keyword.length) { %>' +
+                    '                       <li><%- keyword %></li>' +
+                    '                   <% } %>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.resourceLanguage+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.languages, function (language) { %>' +
+                    '                   <li><%= locale.languages[language] || language %></li>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    //TODO: need to dig this stuff up from "somewhere"
+                    /*
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
+                    '           <td>TODO</td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.crs+'</td>'+
+                    '           <td>TODO</td>'+
+                    '       </tr>'+
+                    */
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.contactInformation.pointOfContact+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
+                    '                   <li><%- responsibleParty.organisationName %></li>' +
+                    '                   <% if (responsibleParty.electronicMailAddresses.length) { %>' +
+                    '                       <ul>' +
+                    '                       <% _.forEach(responsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
+                    '                           <li><%- electronicMailAddress %></li>' +
+                    '                       <% }); %>' +
+                    '                       </ul>' +
+                    '                   <% } %>' +
+                    '                   </li>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.metadataContact+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.metadataContact.pointOfContact+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(metadataResponsibleParties, function (metadataResponsibleParty) { %>' +
+                    '                       <li><%- metadataResponsibleParty.organisationName %>' +
+                    '                       <% if (metadataResponsibleParty.electronicMailAddresses.length) { %>' +
+                    '                           <ul>' +
+                    '                               <% _.forEach(metadataResponsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
+                    '                               <li><%- electronicMailAddress %></li>' +
+                    '                           <% }); %>' +
+                    '                           </ul>' +
+                    '                       <% } %>' +
+                    '                       </li>' +
+                    '                   <% }); %>' +
                     '                </ul>' +
-                    '            <% } %>' +
-                    '        </li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.citation.date.date.length) { %>' +
-                    '        <h2>' + this.locale.heading.citationDate + '</h2>' +
-                    '        <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
-                    '        (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
-                    '        %>)</p>' +
-                    '    <% } %>' +
-
-                    '    <% if (distributionFormats.length) { %>' +
-                    '        <h2>' + this.locale.heading.distributionFormat + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(distributionFormats, function (distributionFormat) { %>' +
-                    '            <li><%- distributionFormat.name %> <%= distributionFormat.version ? "(" + distributionFormat.version + ")" : "" %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.spatialRepresentationTypes.length) { %>' +
-                    '        <h2>' + this.locale.heading.spatialRepresentationType + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.spatialRepresentationTypes, function (spatialRepresentationType) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {description: spatialRepresentationType}).description %>"><%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {label: spatialRepresentationType}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (fileIdentifier.length) { %>' +
-                    '        <h2>' + this.locale.heading.fileIdentifier + '</h2>' +
-                    '        <p><%- fileIdentifier %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataStandardName.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataStandardName + '</h2>' +
-                    '        <p><%- metadataStandardName %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataStandardVersion.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataStandardVersion + '</h2>' +
-                    '        <p><%- metadataStandardVersion %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataLanguage.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataLanguage + '</h2>' +
-                    '        <p><%= locale.languages[metadataLanguage] || metadataLanguage %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataCharacterSet.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataCharacterSet + '</h2>' +
-                    '        <p title="<%= (locale.codeLists["gmd:MD_CharacterSetCode"][metadataCharacterSet] || {description: metadataCharacterSet}).description %>"><%= (locale.codeLists["gmd:MD_CharacterSetCode"][metadataCharacterSet] || {label: metadataCharacterSet}).label %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataResponsibleParties.length) { %>' +
-                    '    <h2>' + this.locale.heading.metadataOrganisation + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(metadataResponsibleParties, function (metadataResponsibleParty) { %>' +
-                    '            <li><%- metadataResponsibleParty.organisationName %>' +
-                    '            <% if (metadataResponsibleParty.electronicMailAddresses.length) { %>' +
-                    '                <ul>' +
-                    '                <% _.forEach(metadataResponsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
-                    '                    <li><%- electronicMailAddress %></li>' +
-                    '                <% }); %>' +
-                    '                </ul>' +
-                    '            <% } %>' +
-                    '        </li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (scopeCodes.length) { %>' +
-                    '        <h2>' + this.locale.heading.scopeCode + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(scopeCodes, function (scopeCode) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_ScopeCode"][scopeCode] || {description: scopeCode}).description %>"><%= (locale.codeLists["gmd:MD_ScopeCode"][scopeCode] || {label: scopeCode}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.citation.resourceIdentifiers.length) { %>' +
-                    '        <h2>' + this.locale.heading.resourceIdentifier + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.citation.resourceIdentifiers, function (resourceIdentifier) { %>' +
-                    '            <li><%- resourceIdentifier.codeSpace %>.<%- resourceIdentifier.code %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.operatesOn.length) { %>' +
-                    '        <h2>' + this.locale.heading.operatesOn + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.operatesOn, function (uuid) { %>' +
-                    '            <li><%- uuid %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.serviceType.length) { %>' +
-                    '        <h2>' + this.locale.heading.serviceType + '</h2>' +
-                    '        <p><%- identification.serviceType %> <%= identification.serviceTypeVersion ? "(" + identification.serviceTypeVersion + ")" : "" %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.descriptiveKeywords.length) { %>' +
-                    '        <h2>' + this.locale.heading.descriptiveKeyword + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.descriptiveKeywords, function (keyword) { %>' +
-                    '            <% if (keyword.length) { %>' +
-                    '                <li><%- keyword %></li>' +
-                    '            <% } %>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (dataQualities.length) { %>' +
-                    '        <h2>' + this.locale.heading.reportConformance + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.reportConformances, function (reportConformance) { %>' +
-                    '                <p><%= reportConformance %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.accessConstraints.length) { %>' +
-                    '        <h2>' + this.locale.heading.accessConstraint + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.accessConstraints, function (accessConstraint) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_RestrictionCode"][accessConstraint] || {description: accessConstraint}).description %>"><%= (locale.codeLists["gmd:MD_RestrictionCode"][accessConstraint] || {label: accessConstraint}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.otherConstraints.length) { %>' +
-                    '        <h2>' + this.locale.heading.otherConstraint + '</h2>' +
-                    '        <% _.forEach(identification.otherConstraints, function (otherConstraint) { %>' +
-                    '            <% _.forEach(otherConstraint, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.classifications.length) { %>' +
-                    '        <h2>' + this.locale.heading.classification + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.classifications, function (classification) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {description: classification}).description %>"><%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {label: classification}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.useLimitations.length) { %>' +
-                    '        <h2>' + this.locale.heading.useLimitation + '</h2>' +
-                    '        <% _.forEach(identification.useLimitations, function (useLimitation) { %>' +
-                    '            <% _.forEach(useLimitation, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.technicalInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.accessConstraintInformation+'</td>'+
+                    '           <td>'+
+                    '               <% _.forEach(identification.useLimitations, function (useLimitation) { %>' +
+                    '                   <% _.forEach(useLimitation, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '               <% _.forEach(identification.otherConstraints, function (otherConstraint) { %>' +
+                    '                   <% _.forEach(otherConstraint, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '               <ul>'+
+                    '               <% _.forEach(identification.classifications, function (classification) { %>' +
+                    '                   <li title="<%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {description: classification}).description %>"><%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {label: classification}).label %></li>' +
+                    '               <% }); %>' +
+                    '               </ul>'+
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.spatialRepresentationType+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(identification.spatialRepresentationTypes, function (spatialRepresentationType) { %>' +
+                    '                       <li title="<%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {description: spatialRepresentationType}).description %>"><%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {label: spatialRepresentationType}).label %></li>' +
+                    '                   <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.spatialResolution+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
+                    '                       <li>1: <%- resolution %></li>' +
+                    '                   <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.lineage+'</td>'+
+                    '           <td>'+
+                    '               <% _.forEach(dataQualities, function (dataQuality) { %>' +
+                    '                   <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.metadataChangeDate+" / "+this.locale.tableHeaders.technicalInformation.uniqueIdentifier+'</td>'+
+                    '           <td>'+
+                    '               <%- metadataDateStamp %> / <%- fileIdentifier %></p>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
+/*                    
+                    //TODO: once we get the feedback stars
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.dataQuality+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
+                                //TODO: feedbackstars
+                    '           <td>*****</td>'+ 
+                    '       </tr>'+
+                    '   </table>'+
+*/                    
                     '</article>'
                 ),
                 'quality': _.template(
@@ -579,6 +522,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             var additionalTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
+                        continue;
+                    }
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );

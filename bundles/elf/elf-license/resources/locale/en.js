@@ -51,7 +51,7 @@ Oskari.registerLocalization(
             "priceUnitEuro": "€",
             "help": {
                 "info": "Select a licence model by clicking a model you want.",
-                "details": "Fill the licence information. The required data are marked with an asterisk (*). Press Next to see a licence summary and price. Press Previous to select another licence model. Press Close to stop the licence order.",
+                "details": "Please complete the licence information. The required data are marked with an asterisk (*). Press Next to see a licence summary. Press Previous to select another licence model. Press Close to stop the licence order.",
                 "summary": "Read licence conditions and accept them by pressing Accept. Press Previous to edit licence information. Press Close to stop the licence order.",
                 "orderDetails": "Read the licence information above. Press Deactivate licence to stop the licence order. Press Close to close the window."
             },
