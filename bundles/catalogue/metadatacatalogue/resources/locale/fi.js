@@ -45,6 +45,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä. Hakusanassa saa olla vain yksi jokerimerkki sanan lopussa.",
         "searching": "Haetaan…",
+        "updated": "updated",
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",

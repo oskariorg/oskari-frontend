@@ -45,6 +45,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Sökordet måste innehålla minst ett tecken. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror och bindestreck backsteg.",
         "too_many_stars": "Sökordet innehåller för många (* -tecken). Det kan innehålla högst N * -tecken.",
         "searching": "Söker…",
+        "updated": "updated",
         "grid": {
             "name": "Namn",
             "removeBBOX": "Göm geografisk datatäckning",
