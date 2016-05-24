@@ -33,6 +33,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Resursspråk",
         "modifySearch": "Redigera sökalternativ",
         "showSearch": "Visa alla sökresultatet",
+        "showDatasets": "Show only datasets",
+        "showServices": "Show only services",
         "metadataCatalogueResults": "Sökresultat",
         "show": "Visa kartlagret på kartan.",
         "hide": "Dölj kartlagret från kartan.",

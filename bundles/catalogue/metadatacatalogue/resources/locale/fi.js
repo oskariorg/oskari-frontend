@@ -33,6 +33,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Resurssin kieli",
         "modifySearch": "Muokkaa hakuehtoja",
         "showSearch": "Näytä kaikki hakutulokset",
+        "showDatasets": "Näytä vain aineistot",
+        "showServices": "Näytä vain palvelut",
         "metadataCatalogueResults": "Hakutulokset",
         "show": "Näytä karttataso",
         "hide": "Piilota karttataso",
