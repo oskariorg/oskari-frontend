@@ -268,6 +268,12 @@ Oskari.clazz.define(
                     me.getLayer(me._bufferedFeatureLayerId).getSource().getFeaturesCollection().clear();
                 }
             }
+            // remove overlays
+            me._map.getOverlays().forEach(function (o) {
+              if(!id || o.id === id) {
+                  me._map.removeOverlay(o);
+              }
+            });
             jQuery('.' + me._tooltipClassForMeasure).remove();
         },
          /**
