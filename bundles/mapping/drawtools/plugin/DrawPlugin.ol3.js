@@ -22,6 +22,7 @@ Oskari.clazz.define(
         this._featuresValidity = {};
         this._draw = {};
         this._modify = {};
+        this._functionalityIds = {};
         this._defaultStyle = {
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -117,6 +118,7 @@ Oskari.clazz.define(
             // creating layer for drawing (if layer not already added)
             if(!me._drawLayers[me._layerId]) {
                 me.addVectorLayer(me._layerId);
+                me._functionalityIds[id] = me._layerId;
             }
             // creating layer for buffered features (if layer not already added)
             if(!me._drawLayers[me._bufferedFeatureLayerId]) {
@@ -186,7 +188,7 @@ Oskari.clazz.define(
          */
         sendDrawingEvent: function(id, options) {
             var me = this;
-            var features = me.getFeatures(me._layerId);
+            var features = me.getFeatures(me._functionalityIds[id]);
             var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             var isFinished = false;
 
@@ -214,7 +216,7 @@ Oskari.clazz.define(
 
             if(options.clearCurrent) {
                 // TODO: clear the drawing matching the id from map
-                me.clearDrawing();
+                me.clearDrawing(id);
             }
             if(options.isFinished) {
                 isFinished = options.isFinished;
@@ -241,11 +243,16 @@ Oskari.clazz.define(
          /**
          * @method clearDrawing
          * -  remove features from the draw layers
+         * @param {String} functionality id. If not given, will remove features from the current draw layer
          */
-        clearDrawing : function(){
+        clearDrawing : function(id){
             var me = this;
-            me._drawLayers[me._layerId].getSource().getFeaturesCollection().clear();
-            me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
+            if(id &&  me._functionalityIds) {
+                 me._drawLayers[me._functionalityIds[id]].getSource().getFeaturesCollection().clear();
+            } else {
+                 me._drawLayers[me._layerId].getSource().getFeaturesCollection().clear();
+                 me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
+            }
             jQuery('.' + me._tooltipClassForMeasure).remove();
         },
          /**
