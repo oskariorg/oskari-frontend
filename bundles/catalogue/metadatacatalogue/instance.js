@@ -971,7 +971,7 @@ Oskari.clazz.define(
                         }
 
                         //only add the date for certain types of targets
-                        if (row.natureofthetarget && (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series')) {
+                        if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
                                 titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
