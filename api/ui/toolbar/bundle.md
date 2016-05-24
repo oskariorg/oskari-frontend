@@ -8,7 +8,7 @@ The toolbar bundle provides a common interface for other bundles to add and mani
 
 ## TODO
 
-* Currently toolbar has a set of default buttons. These should probably be added by other bundles.
+* Currently toolbar has a set of default buttons. These should be added by other bundles instead of configuration for preventing buttons.
 * Handling missing for disabling an active tool (selected tool is disabled through request)
 
 ## Screenshot
@@ -16,18 +16,6 @@ The toolbar bundle provides a common interface for other bundles to add and mani
 ![screenshot](toolbar.png)
 
 ## Bundle configuration
-
-Some configuration is needed for URLs:
-
-```javascript
-"conf": {
-  "changeInfoUrl": {
-    "en": "https://www.paikkatietoikkuna.fi/web/en/profile",
-    "fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
-    "sv": "https://www.paikkatietoikkuna.fi/web/sv/profil"
-  }
-}
-```
 
 Toolgroups and tools can be excluded from being added by default.
 
@@ -60,14 +48,6 @@ The following example also excludes all the tools from the toolbar, by setting a
   "history": false,
   "basictools": false,
   "viewtools": false
-}
-```
-
-A tool button can be configured to be disabled by adding following to the configuration:
-
-```javascript
-"conf": {
-  "disabled": true
 }
 ```
 
