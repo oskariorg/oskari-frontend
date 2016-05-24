@@ -63,6 +63,12 @@ Fixed an issue where grouplayers couldn't be created.
 
 Rotation has been disabled since we don't provide means for controlling/resetting the rotation. We will add functionality to enable and control rotation for ol3 in a future release.
 
+### Oskari.util.sanitize
+
+Now accepts second parameter as boolean correctly.
+Now accepts content as string or Element.
+Now in addition to emptying textContent for Element also removes src, link and href attributes from the element.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
