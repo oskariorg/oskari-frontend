@@ -35,6 +35,10 @@ Featuredata-tool enabled by default when wfs layers are present.
 
 Fixed mobile popup close.
 
+### statehandler
+
+No longer calls AddView action route on page unload.
+
 ### toolbar
 
 Now you can define hover color and icon background color in bundle config.
@@ -44,12 +48,20 @@ Example configuration:
 ```javascript
   colours: {
      hover: '#ff0000',
-     background: '#ffffff '
+     background: '#ffffff'
   }
 ```
 Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation data not contains these configs.
 
 *Notice that att all icons are not specified light or dark icons. This icons are showed only dark style. For example marker-share, tool-feature-selection and tool-print.*
+
+### Admin layerselector
+
+Fixed an issue where grouplayers couldn't be created.
+
+### Mapmodule ol3
+
+Rotation has been disabled since we don't provide means for controlling/resetting the rotation. We will add functionality to enable and control rotation for ol3 in a future release.
 
 ## 1.36
 
