@@ -59,6 +59,10 @@ Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation da
 
 Fixed an issue where grouplayers couldn't be created.
 
+### Mapmodule ol3
+
+Rotation has been disabled since we don't provide means for controlling/resetting the rotation. We will add functionality to enable and control rotation for ol3 in a future release.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
