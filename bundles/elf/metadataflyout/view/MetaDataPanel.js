@@ -525,7 +525,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
                     //only show quality tab for services and datasets
                     //TODO: maybe make this a configurable thing at some point instead of hardcoding...
-                    if (tabId === 'quality' && (model.identification.type !== 'service' && model.identification.type !== 'data')) {
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
                         continue;
                     }
                     entry = Oskari.clazz.create(

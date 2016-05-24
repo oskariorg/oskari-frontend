@@ -113,7 +113,7 @@ Oskari.clazz.define(
                 '<div class="metadataResultHeader">' +
                 '  <div class="panelHeader resultTitle"></div>' +
                 '  <div class="panelHeader resultLinks">' +
-                '    <a href="JavaScript:void(0);" class="showDatasets filter-link" data-value="dataset"></a>' +
+                '    <a href="JavaScript:void(0);" class="showDatasets filter-link" data-value="dataset,series"></a>' +
                 '    <a href="JavaScript:void(0);" class="showServices filter-link" data-value="service"></a>' +
                 '    <a href="JavaScript:void(0);" class="showLink"></a>' +
                 '    <a href="JavaScript:void(0);" class="modifyLink"></a>' +
@@ -884,17 +884,25 @@ Oskari.clazz.define(
 
             //filter functionality
             resultHeader.find('.filter-link').on('click', function(event) {
-                var filterValue = jQuery(event.currentTarget).data('value');
+                var filterValues = jQuery(event.currentTarget).data('value').split(',');
                 //hide filterlinks and show "show all"-link
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
                 var allRows = table.find('tr[class*=filter-');
                 _.each(allRows, function(item) {
-                    if (!jQuery(item).hasClass('filter-'+filterValue)) {
+                    var classNameFound = false;
+                    for (var i = 0; i < filterValues.length; i++) {
+                        if (jQuery(item).hasClass('filter-'+filterValues[i])) {
+                            classNameFound = true;
+                        }
+                    }
+
+                    if (!classNameFound) {
                         jQuery(item).hide();
                     }
-                })
+
+                });
             });
         },
 
@@ -940,7 +948,9 @@ Oskari.clazz.define(
                     resultContainer.addClass('res' + i);
 
                     //resultcontainer filtering
-                    resultContainer.addClass('filter-'+row.natureofthetarget);
+                    if (row.natureofthetarget) {
+                        resultContainer.addClass('filter-'+row.natureofthetarget);
+                    }
                     resultContainer.data('resultId', row.id);
                     cells = resultContainer.find('td').not('.spacer');
                     titleText = row.name;
@@ -961,7 +971,7 @@ Oskari.clazz.define(
                         }
 
                         //only add the date for certain types of targets
-                        if (row.natureofthetarget && (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'service')) {
+                        if (row.natureofthetarget && (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series')) {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
                                 titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
