@@ -3,36 +3,37 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "title": "métadonnées",
+        "title": "Métadonnées",
         "desc": "",
         "layer": {
-            "name": "métadonnées",
+            "name": "Métadonnées",
             "description": "",
             "orgName": "Catalogue de métadonnées",
-            "inspire": "métadonnées"
+            "inspire": "Métadonnées"
         },
         "flyout": {
-            "title": "métadonnées",
+            "title": "Métadonnées",
             "abstract": "Informations de base",
             "inspire": "Métadonnées Inspire",
             "jhs": "Métadonnées ISO 19115",
-            "quality": "Data quality",
+            "quality": "Qualité des données",
+            "actions": "NOT TRANSLATED",
             "xml": "Fichier XML ISO 19139",
-            "map": "Etendue géographique",
+            "map": "Étendue géographique",
             "pdf": "Impression",
-            "select_metadata_prompt": "Sélectionnez les métadonnées en cliquant sur les icônes",
-            "metadata_printout_title": "IMPRESSION DE METADONNEES",
+            "select_metadata_prompt": "Sélectionnez les métadonnées en cliquant sur les icônes.",
+            "metadata_printout_title": "IMPRESSION DE MÉTADONNÉES",
             "linkto": "Lien vers ces métadonnées",
             "notFound": "Les métadonnées n’ont pas été trouvées",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
                         "label": "UCS2",
-                        "description": "Jeu de caractères universels 16 bits à taille fixe, aux normes ISO/IEC 10646"
+                        "description": "Jeu de caractères universel 16 bits à taille fixe, aux normes ISO/IEC 10646"
                     },
                     "ucs4": {
                         "label": "UCS4",
-                        "description": "Jeu de caractères universels 32 bits à taille fixe, aux normes ISO/IEC 10646"
+                        "description": "Jeu de caractères universel 32 bits à taille fixe, aux normes ISO/IEC 10646"
                     },
                     "utf7": {
                         "label": "UTF7",
@@ -48,19 +49,19 @@ Oskari.registerLocalization(
                     },
                     "8859part1": {
                         "label": "8859 1ère partie",
-                        "description": "ISO/IEC 8859-1, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 1ère partie : Alphabet latin n° 1"
+                        "description": "ISO/IEC 8859-1, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 1ère partie : Alphabet latin n°1"
                     },
                     "8859part2": {
                         "label": "8859 2ème partie",
-                        "description": "ISO/IEC 8859-2, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 2ème partie : Alphabet latin n° 2"
+                        "description": "ISO/IEC 8859-2, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 2ème partie : Alphabet latin n°2"
                     },
                     "8859part3": {
                         "label": "8859 3ème partie",
-                        "description": "ISO/IEC 8859-3, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 3ème partie : Alphabet latin n° 3"
+                        "description": "ISO/IEC 8859-3, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 3ème partie : Alphabet latin n°3"
                     },
                     "8859part4": {
                         "label": "8859 4ème partie",
-                        "description": "ISO/IEC 8859-4, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 4ème partie : Alphabet latin n° 4"
+                        "description": "ISO/IEC 8859-4, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 4ème partie : Alphabet latin n°4"
                     },
                     "8859part5": {
                         "label": "8859 5ème partie",
@@ -80,11 +81,11 @@ Oskari.registerLocalization(
                     },
                     "8859part9": {
                         "label": "8859 8ème partie",
-                        "description": "ISO/IEC 8859-9, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 9ème partie : Alphabet latin n° 5"
+                        "description": "ISO/IEC 8859-9, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 9ème partie : Alphabet latin n°5"
                     },
                     "8859part10": {
                         "label": "8859 10ème partie",
-                        "description": "ISO/IEC 8859-10, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 10ème partie : Alphabet latin n° 6"
+                        "description": "ISO/IEC 8859-10, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 10ème partie : Alphabet latin n°6"
                     },
                     "8859part11": {
                         "label": "8859 11ème partie",
@@ -92,7 +93,7 @@ Oskari.registerLocalization(
                     },
                     "8859part13": {
                         "label": "8859 13ème partie",
-                        "description": "ISO/IEC 8859-13, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 13ème partie : Alphabet latin n° 7"
+                        "description": "ISO/IEC 8859-13, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 13ème partie : Alphabet latin n°7"
                     },
                     "8859part14": {
                         "label": "8859 14ème partie",
@@ -100,15 +101,15 @@ Oskari.registerLocalization(
                     },
                     "8859part15": {
                         "label": "8859 15ème partie",
-                        "description": "ISO/IEC 8859-15, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 15ème partie : Alphabet latin n° 9"
+                        "description": "ISO/IEC 8859-15, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 15ème partie : Alphabet latin n°9"
                     },
                     "8859part16": {
                         "label": "8859 16ème partie",
-                        "description": "ISO/IEC 8859-16, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 16ème partie : Alphabet latin n° 10"
+                        "description": "ISO/IEC 8859-16, Technologie de l’information, jeux de caractères graphiques codés sur 1 seul octet 8 bits - 16ème partie : Alphabet latin n°10"
                     },
                     "jis": {
                         "label": "JIS",
-                        "description": "Ensemble de codages de caractères utilisés pour les transmissions électroniques"
+                        "description": "Ensemble de codages de caractères japonais utilisés pour les transmissions électroniques"
                     },
                     "shiftJIS": {
                         "label": "Shift-JIS",
@@ -124,7 +125,7 @@ Oskari.registerLocalization(
                     },
                     "ebcdic": {
                         "label": "EBCDIC",
-                        "description": "Ensemble de codage de caractères du mainframe IBM"
+                        "description": "Ensemble de codage de caractères du système informatique IBM"
                     },
                     "eucKR": {
                         "label": "EUC-KR",
@@ -164,11 +165,11 @@ Oskari.registerLocalization(
                 "gmd:CI_DateTypeCode": {
                     "creation": {
                         "label": "Création",
-                        "description": "La date indique le moment où la ressource a été rendue publique."
+                        "description": "La date indique le moment où la ressource a été créée."
                     },
                     "publication": {
                         "label": "Publication",
-                        "description": "La date indique le moment où la ressource a été publiée"
+                        "description": "La date indique le moment où la ressource a été publiée."
                     },
                     "revision": {
                         "label": "Révision",
@@ -304,11 +305,11 @@ Oskari.registerLocalization(
                 "gmd:MD_TopicCategoryCode": {
                     "farming": {
                         "label": "Agriculture",
-                        "description": "Elevage d’animaux et/ou culture de plantes Exemples : agriculture, irrigation, aquaculture, plantation, élevage bovin, animaux nuisibles et maladies touchant les cultures et le bétail"
+                        "description": "Élevage d’animaux et/ou culture de plantes. Exemples : agriculture, irrigation, aquaculture, plantation, élevage bovin, animaux nuisibles et maladies touchant les cultures et le bétail"
                     },
                     "biota": {
                         "label": "Biote",
-                        "description": "Faune et/ou flore dans un habitat naturel. Exemples : Faune, végétation, sciences biologiques, écologie, vie sauvage, vie sous-marine, zones humides"
+                        "description": "Faune et/ou flore dans un habitat naturel. Exemples : faune, végétation, sciences biologiques, écologie, vie sauvage, vie sous-marine, zones humides"
                     },
                     "boundaries": {
                         "label": "Frontières",
@@ -319,12 +320,12 @@ Oskari.registerLocalization(
                         "description": "Processus et phénomènes de l’atmosphère. Exemples : couverture nuageuse, météo, climat, conditions atmosphériques, changement climatique, précipitations."
                     },
                     "economy": {
-                        "label": "Economie",
+                        "label": "Économie",
                         "description": "Activités économiques, conditions et emploi. Exemples : production, main-d’œuvre, chiffre d’affaires, industrie, tourisme et écotourisme, foresterie, industrie de la pêche, chasse de subsistance ou commerciale, exploration et exploitation des ressources (minéraux, pétrole et gaz)"
                     },
                     "elevation": {
-                        "label": "Elévation",
-                        "description": "Hauteur au-dessus ou au-dessous du niveau de la mer Exemples : altitude, bathymétrie, modèles d’élévation numériques, inclinaison, produits dérivés"
+                        "label": "Élévation",
+                        "description": "Hauteur au-dessus ou au-dessous du niveau de la mer. Exemples : altitude, bathymétrie, modèles d’élévation numériques, inclinaison, produits dérivés"
                     },
                     "environment": {
                         "label": "Environnement",
@@ -339,16 +340,16 @@ Oskari.registerLocalization(
                         "description": "Santé, services de santé, écologie humaine et sécurité. Exemples : maladies, facteurs affectant la santé, hygiène, toxicomanie, santé mentale et physique, services de santé"
                     },
                     "imageryBaseMapsEarthCover": {
-                        "label": "Superficie couverte de la terre de fonds de carte d’imagerie",
+                        "label": "Imagerie/Cartes de base/Occupation des terres",
                         "description": "Fonds de carte. Exemples : Couverture du sol, cartes topographiques, imagerie, images non classées, annotations"
                     },
                     "intelligenceMilitary": {
                         "label": "Renseignement militaire",
-                        "description": "Bases militaires, structures et activités militaires Exemples : Casernes, terrains d’entraînement, transports militaires, collecte d’informations"
+                        "description": "Bases militaires, structures et activités militaires. Exemples : Casernes, terrains d’entraînement, transports militaires, collecte d’informations"
                     },
                     "inlandWaters": {
-                        "label": "Eaux intérieurs",
-                        "description": "Caractéristiques des eaux intérieures, systèmes de drainage ainsi que leurs caractéristiques Exemples : Rivières et glaciers, lacs salés, planification de l’utilisation de l’eau, barrages, courants, inondations, qualité de l’eau, cartes hydrographiques"
+                        "label": "Eaux intérieures",
+                        "description": "Caractéristiques des eaux intérieures, systèmes de drainage ainsi que leurs caractéristiques. Exemples : Rivières et glaciers, lacs salés, planification de l’utilisation de l’eau, barrages, courants, inondations, qualité de l’eau, cartes hydrographiques"
                     },
                     "location": {
                         "label": "Situation géographique",
@@ -376,13 +377,13 @@ Oskari.registerLocalization(
                     },
                     "utilitiesCommunication": {
                         "label": "Services de communication",
-                        "description": "Systèmes, énergétiques, fluviaux et d’évacuation des déchets et infrastructures et services de communication  Exemples : hydroélectricité, sources d’énergie nucléaire, solaire et géothermique, assainissement et distribution de l’eau, collecte et traitement des eaux usées, distribution de l’électricité et du gaz, communication des données, réseaux de télécommunication, radio et de communication"
+                        "description": "Systèmes, énergétiques, fluviaux et d’évacuation des déchets et infrastructures et services de communication. Exemples : hydroélectricité, sources d’énergie nucléaire, solaire et géothermique, assainissement et distribution de l’eau, collecte et traitement des eaux usées, distribution de l’électricité et du gaz, communication des données, réseaux de télécommunication, radio et de communication"
                     }
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "Dataset is conformant to the specification.",
-                "qualityPassFalse": "Dataset is not conformant to the specification."
+                "qualityPassTrue": "Le jeu de donnée est conforme à la spécification",
+                "qualityPassFalse": "Le jeu de donnée n'est pas conforme à la spécification"
             },
             "heading": {
                 "abstractTextData": "Texte de résumé (données)",
@@ -390,7 +391,7 @@ Oskari.registerLocalization(
                 "accessConstraint": "Restrictions d’accès",
                 "citationDate": "Date",
                 "classification": "Classifications",
-                "descriptiveKeyword": "Mots clé",
+                "descriptiveKeyword": "Mots-clef",
                 "distributionFormat": "Format de distribution",
                 "fileIdentifier": "Identificateur de fichier",
                 "legalConstraint": "Contraintes juridiques",
@@ -412,28 +413,33 @@ Oskari.registerLocalization(
                 "serviceType": "Type de service",
                 "spatialRepresentationType": "Type représentation spatiale",
                 "spatialResolution": "Résolution spatiale",
-                "temporalExtent": "Etendues temporelles",
+                "temporalExtent": "Étendues temporelles",
                 "topicCategory": "Catégories de rubrique",
                 "useLimitation": "Restrictions d’utilisation",
-                "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
-                "accuracyOfTimeMeasurement": "Accuracy of time measurement",
-                "completenessCommission": "Completeness commission",
-                "completenessOmission": "Completeness omission",
-                "conceptualConsistency": "Conceptual consistency",
-                "domainConsistency": "Domain consistency",
-                "formatConsistency": "Format consistency",
-                "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
-                "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
-                "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
-                "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
-                "temporalConsistency": "Temporal consistency",
-                "temporalValidity": "Temporal validity",
-                "thematicClassificationCorrectness": "Thematic classification correctness",
-                "topologicalConsistency": "Topological consistency"
+                "absoluteExternalPositionalAccuracy": "Précision de positionnement externe absolu",
+                "accuracyOfTimeMeasurement": "Précision de la mesure du temps",
+                "completenessCommission": "Excédent d'exhaustivité",
+                "completenessOmission": "Omission (exhaustivité)",
+                "conceptualConsistency": "Cohérence conceptuelle",
+                "domainConsistency": "Cohérence du domaine",
+                "formatConsistency": "Cohérence du format",
+                "griddedDataPositionalAccuracy": "Précision de positionnement de grille de données",
+                "nonQuantitativeAttributeAccuracy": "Précision d'un attribut non quantitatif",
+                "quantitativeAttributeAccuracy": "Précision d'un attribut quantitatif",
+                "relativeInternalPositionalAccuracy": "Précision de positionnement interne relatif",
+                "temporalConsistency": "Cohérence temporelle",
+                "temporalValidity": "Validité temporelle",
+                "thematicClassificationCorrectness": "Exactitude de la classification thématique",
+                "topologicalConsistency": "Cohérence topologique"
+            },
+            "layerList": {
+                "title": "NOT TRANSLATED",
+                "show": "NOT TRANSLATED",
+                "hide": "NOT TRANSLATED"
             }
         },
         "tile": {
-            "title": "métadonnées",
+            "title": "Métadonnées",
             "tooltip": "Les conditions d’utilisation et la disponibilité du jeu de données sont explicitées dans la description des métadonnées."
         }
     }

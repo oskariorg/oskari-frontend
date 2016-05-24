@@ -111,3 +111,44 @@ Oskari.registerLocalization(
         }
     }
 }, true);
+
+
+Oskari.registerLocalization({
+    "lang": "en",
+    "key": "catalogue.bundle.metadataflyout",
+    "value": {
+        "flyout": {
+            "heading": {
+                "datasetInformation": "Information about the dataset",
+                "contactInformation": "Contact information",
+                "metadataContact": "Metadata contact",
+                "technicalInformation": "Technical information",
+                "dataQuality":"Data quality"
+            },
+            "tableHeaders": {
+                "datasetInformation": {
+                    "referenceDate":"Reference date",
+                    "temporalInformation":"Temporal information",
+                    "resourceLanguage":"Language",
+                    "bbox":"Geographic bounding box",
+                    "crs":"CRS Identifier"
+                },
+                "contactInformation": {
+                    "pointOfContact":"Point of contact, owner, custodian"
+                },
+                "metadataContact": {
+                    "pointOfContact":"Point of contact"
+                },
+                "technicalInformation": {
+                    "accessConstraintInformation":"Access constraint information",
+                    "lineage":"Lineage",
+                    "metadataChangeDate":"Metadata change date",
+                    "uniqueIdentifier":"Unique identifier"
+                },
+                "dataQuality": {
+                    "conformance":"Conformance"
+                }
+            }
+        }        
+    }
+}, true);

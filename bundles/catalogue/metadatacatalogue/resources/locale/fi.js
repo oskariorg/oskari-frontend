@@ -33,6 +33,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Resurssin kieli",
         "modifySearch": "Muokkaa hakuehtoja",
         "showSearch": "Näytä kaikki hakutulokset",
+        "showDatasets": "Näytä vain aineistot",
+        "showServices": "Näytä vain palvelut",
         "metadataCatalogueResults": "Hakutulokset",
         "show": "Näytä karttataso",
         "hide": "Piilota karttataso",
@@ -45,6 +47,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä. Hakusanassa saa olla vain yksi jokerimerkki sanan lopussa.",
         "searching": "Haetaan…",
+        "updated": "ylläpidon tiheys",
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",

@@ -68,6 +68,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "lang": "sl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplacesimport/resources/locale/sl.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/nb.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/fr.js"
         }]
     },
     "bundle": {

@@ -8,11 +8,7 @@ Oskari.registerLocalization(
         "tool": {
             "tooltip": "Finn nærmeste adresse ved å klikke i kartet"
         },
-        "resultsTitle": "Søkeresultater",
-        "grid": {
-            "address": "Adresse",
-            "coordinates": "Koordinater"
-        }
+        "resultsTitle": "Søkeresultater"
     }
 }
 );

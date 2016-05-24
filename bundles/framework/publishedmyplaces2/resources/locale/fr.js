@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mesurer la distance",
                 "tooltip": "Mesurer la distance",
-                "add": "",
-                "next": "",
+                "add": "Ajouter une ligne",
+                "next": "Suivant",
                 "edit": "Vous pouvez modifier la ligne en cliquant et faisant glisser ses points de rupture.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mesurer la zone",
                 "tooltip": "Mesurer la zone",
-                "add": "",
-                "next": "",
+                "add": "Ajouter une surface",
+                "next": "Suivant",
                 "edit": "Vous pouvez modifier la zone en cliquant et faisant glisser ses points de rupture sur sa bordure de ligne.",
                 "noResult": "0 m²"
             },
@@ -158,7 +158,7 @@ Oskari.registerLocalization(
                     "size": "Largeur"
                 },
                 "area": {
-                    "label": "zone",
+                    "label": "Zone",
                     "fillcolor": "Couleur de remplissage",
                     "linecolor": "Couleur de la bordure de ligne",
                     "size": "Largeur de la bordure de ligne"
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Style de point",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets ponctuels",
             "symbol": {
                 "label": "Icône"
             },
@@ -212,12 +212,12 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Style de ligne",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets linéaires",
             "style": {
                 "label": "Style"
             },
             "cap": {
-                "label": "Extrêmités"
+                "label": "Extrémités"
             },
             "corner": {
                 "label": "Coins"
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Style de la zone",
-            "tooltip": "",
+            "tooltip": "Définir un style pour les objets surfaciques",
             "linestyle": {
                 "label": "Style de ligne de bordure"
             },
