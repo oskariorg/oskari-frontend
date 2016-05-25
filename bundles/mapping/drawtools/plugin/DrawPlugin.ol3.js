@@ -300,6 +300,7 @@ Oskari.clazz.define(
                       if (options.buffer > 0) {
                           me.drawBufferedGeometry(geometry, options.buffer);
                       }
+                      me.pointerMoveHandler();
                       me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                       return geometry;
                   }
@@ -313,6 +314,7 @@ Oskari.clazz.define(
                    var start = coordinates[0];
                    var end = coordinates[1];
                    geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
+                   me.pointerMoveHandler();
                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                    return geometry;
                  }
@@ -325,6 +327,7 @@ Oskari.clazz.define(
                      if (!geometry) {
                          geometry = new ol.geom.Circle(coordinates, options.buffer);
                      }
+                     me.pointerMoveHandler();
                      me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                      return geometry;
                  }
@@ -335,6 +338,7 @@ Oskari.clazz.define(
                     }
                     geometry.setCoordinates(coordinates);
                     me.checkIntersection(geometry, options);
+                    me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                     return geometry;
                  }
@@ -433,6 +437,7 @@ Oskari.clazz.define(
          */
         pointerMoveHandler: function(evt) {
             var me = this;
+            evt = evt || {};
             var tooltipCoord = evt.coordinate;
             if (me._sketch) {
                 var output;
@@ -449,7 +454,7 @@ Oskari.clazz.define(
                   output = me.getLineLength(geom);
                   tooltipCoord = geom.getLastCoordinate();
                 }
-                if(me._options.showMeasureOnMap) {
+                if(me._options.showMeasureOnMap && tooltipCoord) {
                     me._map.getOverlays().forEach(function (o) {
                       if(o.id === me._sketch.getId()) {
                           var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
