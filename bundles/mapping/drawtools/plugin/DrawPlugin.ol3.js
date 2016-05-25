@@ -22,6 +22,7 @@ Oskari.clazz.define(
         this._featuresValidity = {};
         this._draw = {};
         this._modify = {};
+        this._functionalityIds = {};
         this._defaultStyle = {
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -117,6 +118,7 @@ Oskari.clazz.define(
             // creating layer for drawing (if layer not already added)
             if(!me._drawLayers[me._layerId]) {
                 me.addVectorLayer(me._layerId);
+                me._functionalityIds[id] = me._layerId;
             }
             // creating layer for buffered features (if layer not already added)
             if(!me._drawLayers[me._bufferedFeatureLayerId]) {
@@ -164,15 +166,17 @@ Oskari.clazz.define(
                 clearCurrent: clearCurrent,
                 isFinished: true
             };
-            me.sendDrawingEvent(id, options);
-            //deactivate draw and modify controls
-            me.removeInteractions(me._draw, id);
-            me.removeInteractions(me._modify, id);
-            me.setVariablesToNull();
-            me._map.un('pointermove', me.pointerMoveHandler, me);
-           //enable gfi
-            if (me._gfiReqBuilder) {
-                me._sandbox.request(me, me._gfiReqBuilder(true));
+            if(me._functionalityIds[id]) {
+                me.sendDrawingEvent(id, options);
+                //deactivate draw and modify controls
+                me.removeInteractions(me._draw, id);
+                me.removeInteractions(me._modify, id);
+                me.setVariablesToNull();
+                me._map.un('pointermove', me.pointerMoveHandler, me);
+               //enable gfi
+                if (me._gfiReqBuilder) {
+                    me._sandbox.request(me, me._gfiReqBuilder(true));
+                }
             }
         },
         /**
@@ -185,11 +189,17 @@ Oskari.clazz.define(
          *                  {Boolean} isFinished: true - if drawing is completed. Default is false.
          */
         sendDrawingEvent: function(id, options) {
-            var me = this;
-            var features = me.getFeatures(me._layerId);
-            var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
-            var isFinished = false;
-
+            var me = this,
+                features = null,
+                bufferedFeatures = null,
+                layerId = me.getLayerIdForFunctionality(id),
+                isFinished = false;
+            if(layerId) {
+                features = me.getFeatures(layerId);
+            }
+            if(me._bufferedFeatureLayerId) {
+                bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
+            }
             if(me._shape === 'Circle') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
@@ -214,7 +224,7 @@ Oskari.clazz.define(
 
             if(options.clearCurrent) {
                 // TODO: clear the drawing matching the id from map
-                me.clearDrawing();
+                me.clearDrawing(id);
             }
             if(options.isFinished) {
                 isFinished = options.isFinished;
@@ -241,11 +251,29 @@ Oskari.clazz.define(
          /**
          * @method clearDrawing
          * -  remove features from the draw layers
+         * @param {String} functionality id. If not given, will remove features from the current draw layer
          */
-        clearDrawing : function(){
+        clearDrawing : function(id){
             var me = this;
-            me._drawLayers[me._layerId].getSource().getFeaturesCollection().clear();
-            me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
+            if(id) {
+                var layer = me.getLayer(me.getLayerIdForFunctionality(id));
+                if(layer) {
+                    layer.getSource().getFeaturesCollection().clear();
+                }
+            } else {
+                if(me.getLayer(me._layerId)) {
+                    me.getLayer(me._layerId).getSource().getFeaturesCollection().clear();
+                }
+                if(me.getLayer(me._bufferedFeatureLayerId)) {
+                    me.getLayer(me._bufferedFeatureLayerId).getSource().getFeaturesCollection().clear();
+                }
+            }
+            // remove overlays
+            me._map.getOverlays().forEach(function (o) {
+              if(!id || o.id === id) {
+                  me._map.removeOverlay(o);
+              }
+            });
             jQuery('.' + me._tooltipClassForMeasure).remove();
         },
          /**
@@ -440,14 +468,17 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         addModifyInteraction : function(layerId, shape, options) {
-            var me = this;
-            me._modify[me._id] = new ol.interaction.Modify({
-               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
-               style: me._styles['modify'],
-               deleteCondition: function(event) {
-                   return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
-               }
-           });
+            var me = this,
+                layer = me.getLayer(layerId);
+            if(layer) {
+                me._modify[me._id] = new ol.interaction.Modify({
+                   features: layer.getSource().getFeaturesCollection(),
+                   style: me._styles['modify'],
+                   deleteCondition: function(event) {
+                       return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
+                   }
+               });
+           }
            me.modifyStartEvent(shape, options);
            me._map.on('pointermove', me.pointerMoveHandler, me);
            me._map.addInteraction(me._modify[me._id]);
@@ -553,11 +584,14 @@ Oskari.clazz.define(
             });
         },
         toggleDrawLayerChangeFeatureEventHandler: function(enable) {
-            var me = this;
-            if (enable) {
-                me._drawLayers[me._layerId].getSource().on('changefeature', me.modifyFeatureChangeEventCallback, me);
-            } else {
-                me._drawLayers[me._layerId].getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
+            var me = this,
+                layer = me.getLayer(me._layerId);
+            if(layer) {
+                 if (enable) {
+                    layer.getSource().on('changefeature', me.modifyFeatureChangeEventCallback, me);
+                } else {
+                    layer.getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
+                }
             }
         },
         /**
@@ -761,11 +795,13 @@ Oskari.clazz.define(
         getCircleAsPolygonFeature: function(features) {
             var me = this;
             var polygonFeatures = [];
-            _.each(features, function (f) {
-                var pointFeature = new ol.geom.Point(f.getGeometry().getCenter());
-                var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles['draw'], 100);
-                    polygonFeatures.push(bufferedFeature);
+            if(features) {
+                _.each(features, function (f) {
+                    var pointFeature = new ol.geom.Point(f.getGeometry().getCenter());
+                    var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles['draw'], 100);
+                        polygonFeatures.push(bufferedFeature);
                 });
+            }
             return polygonFeatures;
         },
          /**
@@ -795,33 +831,12 @@ Oskari.clazz.define(
          * @param {Number} buffer
          */
         addBufferPropertyToFeatures: function(features, buffer) {
-            if(buffer) {
+            if(features && buffer) {
                 _.each(features, function (f) {
                     f.buffer = buffer;
                 });
             }
         },
-        /**@method hasNestedObj
-        *  - checks, if nested key exists
-        * @params {}  object
-        * @params String object path
-        * @public
-        *
-        * @returns {Boolean}: true if nested key exists
-        */
-       hasNestedObj: function(obj, sobj) {
-          var tmpObj = obj,
-              cnt = 0,
-              splits = sobj.split('.');
-
-          for (i=0; tmpObj && i < splits.length; i++) {
-              if (splits[i] in tmpObj) {
-                  tmpObj = tmpObj[splits[i]];
-                  cnt++;
-              }
-          }
-          return cnt === splits.length;
-       },
        /**@method createDrawingTooltip
        * - creates a new tooltip on drawing
        */
@@ -838,6 +853,22 @@ Oskari.clazz.define(
            tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
            me._map.addOverlay(tooltip);
+       },
+       getLayerIdForFunctionality : function(id) {
+           var me = this,
+               layerId = null;
+           if(me._functionalityIds[id]) {
+               layerId = me._functionalityIds[id];
+           }
+           return layerId;
+       },
+       getLayer : function(layerId) {
+            var me = this,
+                layer = null;
+            if(me._drawLayers[layerId]) {
+                layer = me._drawLayers[layerId];
+            }
+            return layer;
        }
    }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
