@@ -85,7 +85,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
                 gfiReqBuilder = sandbox.getRequestBuilder(gfiRn),
                 mapmodule = me.getMapModule(),
-                themeColours = mapmodule.getThemeColours();
+                theme = mapmodule.getTheme(),
+                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
+                themeColours = mapmodule.getThemeColours(wantedTheme);
 
             me.template = jQuery(me.templates.main);
 
@@ -332,7 +334,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest'),
                 mapmodule = me.getMapModule(),
-                themeColours = mapmodule.getThemeColours();
+                theme = mapmodule.getTheme(),
+                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
+                themeColours = mapmodule.getThemeColours(wantedTheme);
 
             if (builder) {
                 me._toolbarContent = me.templates.container.clone();
@@ -344,7 +348,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarContainer: me._toolbarContent,
                             disableHover: mapInMobileMode,
                             colours: {
-                                hover: themeColours.hoverColour
+                                hover: themeColours.hoverColour,
+                                background: themeColours.backgroundColour
                             }
                         }
                 );
@@ -456,7 +461,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             var popupTitle = "Toolbar",
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
                 topOffsetElement = jQuery('div.mobileToolbarDiv'),
-                themeColours = mapmodule.getThemeColours();
+                theme = mapmodule.getTheme(),
+                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
+                themeColours = mapmodule.getThemeColours(wantedTheme);
+
             me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             //me.popup.addClass('mobile-popup');
             me.popup.addClass('toolbar-popup');
