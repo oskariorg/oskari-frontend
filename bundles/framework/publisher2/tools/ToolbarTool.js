@@ -280,10 +280,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 toolName,
                 isChecked;
             if (enabled) {
-                //it might be that a light scheme has been selected prior to adding this tool on the map.
-                //And since no event gets sent in that occasion, we gotta sniff it out manually when enabling the tool to get the toolbar buttons' styling correct
-                me.updateToolbarButtonStyles();
-
                 tool._isPluginStarted = true;
 
                 options = jQuery(me.templates.toolOptions).clone();
@@ -371,27 +367,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     _removeOptions('.tool-option-setting', me._toggleToolOption);
 
                     tool._isPluginStarted = false;
-                }
-            }
-
-        },
-        /**
-         * Make sure that the toolbar buttons have the correct dark/light - setting as their iconCls...
-         */
-        updateToolbarButtonStyles: function() {
-            var me = this,
-                style = me.__mapmodule.getToolStyle(),
-                suffix = (style && style.length > 0 && style.indexOf('light') > -1) ? 'light' : 'dark';
-            if (!style || !style.length) {
-                return;
-            }
-
-            for (var i = 0; i < me.buttonGroups.length; i++) {
-                for (var buttonKey in me.buttonGroups[i].buttons) {
-                    var button = me.buttonGroups[i].buttons[buttonKey];
-                    button.iconCls = button.iconCls.replace('dark','');
-                    button.iconCls = button.iconCls.replace('light','');
-                    button.iconCls += suffix;
                 }
             }
 
