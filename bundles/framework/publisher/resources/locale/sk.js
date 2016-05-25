@@ -3,32 +3,32 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "Publisher",
     "value": {
-        "title": "Vytvoriť mapu",
-        "flyouttitle": "Vytvoriť mapu",
+        "title": "Zverejnenie mapy",
+        "flyouttitle": "Vytvoriť uloženú mapu",
         "desc": "",
         "published": {
-            "title": "Vaša mapa bola vytvorená",
-            "desc": "Vložte mapu na Vašu webovú stránku pridaním HTML kódu"
+            "title": "Uložená mapa bola uložená",
+            "desc": "Uložená mapa sa uložila. Vypublikujte ju na vašu wbstránku tak, že skopírujete tento kód do html kódu na vašej webstránke:"
         },
         "edit": {
             "popup": {
-                "title": "Editovanie vloženej mapy",
-                "msg": "Mapové údaje skôr vloženej mapy sa aktualizujú"
+                "title": "Uložená mapa sa otvára...",
+                "msg": "Uložená mapa sa aktualizuje..."
             }
         },
         "BasicView": {
-            "title": "Vložiť mapu",
-            "titleEdit": "Editovať vloženú mapu",
+            "title": "Vytvoriť uloženú mapu",
+            "titleEdit": "Aktualizovať uloženú mapu",
             "domain": {
-                "title": "Webová stránka, na ktorú sa vloží mapa",
-                "label": "Webová stránka, na ktorú sa vloží mapa",
-                "placeholder": "bez predpôn http alebo www",
-                "tooltip": "Napíšte názov Vašej webovej indexovej stránky napr. názov domény bez predpôn http alebo www, alebo adresu podstránky. Príklad: myhomepage.com"
+                "title": "Základné nastavenia",
+                "label": "Adresa webovej stránky (bez http a www predpôn)",
+                "placeholder": "Adresa webovej stránky",
+                "tooltip": "Napíšte URL webovej stránky - adresu bez predpôn alebo adresy podstránky. Príklad: homepage.com"
             },
             "name": {
-                "label": "Názov mapy",
-                "placeholder": "required",
-                "tooltip": "Zadajte popisný názov Vašej mape . Prosím, všimnite si jazyk používateľského rozhrania"
+                "label": "Názov mapy (vyžaduje sa)",
+                "placeholder": "Názov mapy",
+                "tooltip": "Zadajte názov mapy . Prosím, všimnite si jazyk použitý na mape."
             },
             "language": {
                 "label": "Jazyk",
@@ -40,170 +40,167 @@ Oskari.registerLocalization(
                 "tooltip": "Vybrať jazyk mapového rozhrania a mapových údajov"
             },
             "size": {
-                "label": "Veľkosť",
-                "tooltip": "Vyberte alebo zadefinujte veľkosť mapy, ktorá má byť vložená na Vašu webovú stránku. Náhľad mapy je zobrazený vo vybratej veľkosti"
+                "label": "Veľkosť mapy",
+                "tooltip": "Vyberte veľkosť mapy. Šírka musí byť aspoň 30 pixelov a výška aspoň 20 pixelov. Ako desatinnú čiarku použite bodku. Skontrolujte aktualizácie v náhľade mapy."
             },
             "tools": {
                 "label": "Nástroje",
-                "tooltip": "Vyberte nástroje, ktoré budú zobrazené na mape. Ich umiestnenie je zobrazené v náhľade mapy",
-                "ScaleBarPlugin": "Ryska mierky",
+                "tooltip": "Vyberte dostupné mapové nástroje. Skontrolujte umiestnenie v náhľade mapy.",
+                "ScaleBarPlugin": "Bežec mierky",
                 "IndexMapPlugin": "Indexová mapa",
                 "PanButtons": "Náradie posúvania",
                 "Portti2Zoombar": "Posuvník mierky",
-                "MyLocationPlugin": "Center to user's location",
-                "ControlsPlugin": "Posúvanie zapnuté",
-                "SearchPlugin": "Vyhľadať adresu a názov miesta",
-                "FeaturedataPlugin": "Feature data",
-                "GetInfoPlugin": "Dotazovací nástroj na údaje o mieste",
-                "PublisherToolbarPlugin": "Map tools",
-                "selectDrawLayer": "Select layer for new features"
+                "MyLocationPlugin": "Centrovať na umiestnenie",
+                "ControlsPlugin": "Posúvanie myšou",
+                "SearchPlugin": "Vyhľadať miesto",
+                "FeaturedataPlugin": "Údaje o objektoch",
+                "GetInfoPlugin": "Dotazovací nástroj na objekt",
+                "PublisherToolbarPlugin": "Mapové nástroje",
+                "selectDrawLayer": "Vybrať mapovú vrstvu"
             },
             "toolbarToolNames": {
-                "history_back": "Move backwards",
-                "history_forward": "Move forward",
-                "measureline": "Measure distance",
-                "measurearea": "Measure area",
-                "drawTools": "Drawing tools",
-                "point": "Allow users to add point features.",
-                "line": "Allow users to add line features.",
-                "area": "Allow users to add area features."
+                "history_back": "Choď na predchádzajúce zobrazenie",
+                "history_forward": "Choď na nasledujúce zobrazenie",
+                "measureline": "Merať vzdialenosť",
+                "measurearea": "Merať plochu",
+                "drawTools": "Pridávanie vlastných miest",
+                "point": "Umožniť bodové objekty",
+                "line": "Umožniť líniové objekty",
+                "area": "Umožniť plošné objekty"
             },
             "toollayout": {
-                "label": "Tool Placement",
-                "tooltip": "Select the placement for the tool to be shown on the map.",
-                "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded",
-                "userlayout": "Custom layout",
-                "usereditmode": "Start editing",
-                "usereditmodeoff": "Finish editing"
+                "label": "Umiestnenie nástrojov",
+                "tooltip": "Vybrať umiestnenie pre mapové nástroje.",
+                "lefthanded": "Ľavostranný",
+                "righthanded": "Pravostranný",
+                "userlayout": "Vlastné umiestnenie",
+                "usereditmode": "Začať editovanie",
+                "usereditmodeoff": "Ukončiť editovanie"
             },
             "data": {
-                "label": "Statistics",
-                "tooltip": "Show map statistics",
-                "grid": "Show statistics",
-                "allowClassification": "Allow classification"
+                "label": "Tematické mapy",
+                "tooltip": "Zobraziť tematické mapy na mape.",
+                "grid": "Zobraziť tematické údaje v tabuľke",
+                "allowClassification": "Povoliť klasifikáciu"
             },
             "layout": {
-                "label": "Graphic Layout",
+                "label": "Grafické rozvrhnutie",
                 "fields": {
                     "colours": {
-                        "label": "Color scheme",
-                        "placeholder": "Select the color scheme.",
-                        "buttonLabel": "Select",
-                        "light_grey": "Light gray",
-                        "dark_grey": "Dark gray",
-                        "blue": "Blue",
-                        "red": "Red",
-                        "green": "Green",
-                        "yellow": "Yellow",
-                        "custom": "Own color scheme",
+                        "label": "Farebná schéma",
+                        "placeholder": "Farebná schéma",
+                        "buttonLabel": "Vybrať",
+                        "light_grey": "Svetlo šedá",
+                        "dark_grey": "Tmavo šedá",
+                        "blue": "Modrá",
+                        "red": "Červená",
+                        "green": "Zelená",
+                        "yellow": "Žltá",
+                        "custom": "Moja farebná schéma",
                         "customLabels": {
-                            "bgLabel": "Identifier background",
-                            "titleLabel": "Identifier text",
-                            "headerLabel": "Header text",
-                            "iconLabel": "Icon",
-                            "iconCloseLabel": "Dark",
-                            "iconCloseWhiteLabel": "Light"
+                            "bgLabel": "Pozadie identifikátora",
+                            "titleLabel": "Text identifikátora",
+                            "headerLabel": "Názov miesta",
+                            "iconLabel": "Ikona",
+                            "iconCloseLabel": "Tmavá",
+                            "iconCloseWhiteLabel": "Svetlá"
                         }
                     },
                     "fonts": {
-                        "label": "Font style"
+                        "label": "Štýl písma"
                     },
                     "toolStyles": {
-                        "label": "Tool style",
-                        "default": "Default style",
-                        "rounded-dark": "Rounded (dark)",
-                        "rounded-light": "Rounded (light)",
-                        "sharp-dark": "Angular (dark)",
-                        "sharp-light": "Angular (light)",
-                        "3d-dark": "Three-dimensional (dark)",
-                        "3d-light": "Three-dimensional (light)"
+                        "label": "Štýl nástrojov",
+                        "default": "Predvolený štýl",
+                        "rounded-dark": "Zaoblený (tmavý)",
+                        "rounded-light": "Zaoblený (svetlý)",
+                        "sharp-dark": "Hranatý (tmavý)",
+                        "sharp-light": "Hranatý (svetlý)",
+                        "3d-dark": "Trojdimenzionálny (tmavý)",
+                        "3d-light": "Trojdimenzionálny (svetlý)"
                     }
                 },
                 "popup": {
-                    "title": "Select Color Scheme",
-                    "close": "Close",
+                    "title": "Vybrať farebnú schému",
+                    "close": "Zatvoriť",
                     "gfiDialog": {
-                        "title": "Feature info",
-                        "featureName": "Preview",
-                        "featureDesc": "The color scheme only defines the color of the popup windows for the feature info and map layer selection."
+                        "title": "Info o objektoch",
+                        "featureName": "Náhľad",
+                        "featureDesc": "Vybraná farebná schéma ovplyvňuje grafické rozloženie a informačné okná pri mapových vrstvách"
                     }
                 }
             },
             "layers": {
-                "add": "Create new layer for new features.",
+                "add": "Vytvoriť novú vrstvu",
                 "label": "Mapové vrstvy",
-                "addselect": "Add a drawing layer to the map",
-                "defaultLayer": "(Predvolená vrstva)",
-                "useAsDefaultLayer": "Použiť ako predvolenú vrstvu"
+                "addselect": "Pridať kresliacu vrstvu do mapových vrstiev.",
+                "defaultLayer": "(Predvolená mapová vrstva)",
+                "useAsDefaultLayer": "Použiť ako predvolené"
             },
             "myplaces": {
-                "label": "My map layers"
+                "label": "Moje mapové vrstvy"
             },
             "sizes": {
                 "small": "Malé",
                 "medium": "Stredné",
                 "large": "Veľké",
-                "fill": "Fill space",
-                "custom": "Veľkosť zadaná užívateľom",
+                "fill": "Vyplnenie priestoru",
+                "custom": "Vlastná veľkosť",
                 "width": "šírka",
                 "height": "výška",
                 "separator": "x"
             },
             "buttons": {
                 "save": "Uložiť",
-                "saveNew": "Uložiť nové",
+                "saveNew": "Vytvoriť novú mapu",
                 "ok": "OK",
-                "replace": "Nahradiť",
+                "replace": "Aktualizovať mapu",
                 "cancel": "Zrušiť",
-                "add": "Add a map layer"
+                "add": "Pridať mapovú vrstvu"
             },
             "confirm": {
                 "replace": {
-                    "title": "Želáte si nahradiť vloženú mapu?",
-                    "msg": "Použite \"nahradiť\" aby sa zobrazili zmeny na vloženej mape bez omeškania. Už netreba pridať html kód na Vašu webovú stránku."
+                    "title": "Želáte si aktualizovať mapu?",
+                    "msg": "Aktualizácie sa okamžite zobrazujú na mape. Nemusíte aktualizovať html kód na vašej webovej stránke."
                 }
             },
             "layerselection": {
-                "label": "Zobraziť mapové vrstvy v menu",
+                "label": "Zobraziť menu mapové vrstvy na mape",
                 "info": "Vyberte podkladové mapy. Môžete si zvoliť predvolenú podkladovú mapu v okne pre náhľad mapy",
-                "tooltip": "Podkladová mapa je zobrazená ako spodná vrstva na mape. Keď si zvolíte aby sa mapové vrstvy použili ako spodná vrstva, iba jedna vrstva bude viditeľná a Vy môžete medzi nimi prepínať. Predvolenú podkladovú mapu si môžete nastaviť v zobrazení mapy",
-                "promote": "Zobraziť letecké snímky?"
+                "tooltip": "Podkladová vrstva je zobrazená na spodnej vrstve na mape. Ak zvolíte niekoľko podkladových máp, iba jedna z nich bude viditeľná v danom okamihu. Používateľ si môže vybrať podkladovú vrstvu v používateľskom rozhraní. Prosím, zvoľte predvolenú podkladovú mapu v náhľade mapy."
             },
-            "preview": "Náhľad mapy, ktorá sa má vložiť",
+            "preview": "Náhľad mapy.",
             "location": "Úroveň umiestnenia a priblíženia",
             "zoomlevel": "Úroveň priblíženia",
             "help": "Pomoc",
             "error": {
-                "title": "Chyba!",
-                "size": "Chyba v definíciách veľkosti",
-                "domain": "Webová stránka je vyžiadaná informácia",
-                "domainStart": "Vynechať predpony http alebo www z názvu webovej stránky",
-                "name": "Názov je vyžiadaná informácia",
-                "nohelp": "Pomoc nie je k dispozícii",
-                "saveFailed": "Zverejnenie mapy zlyhalo. Skúste neskôr, prosím",
-                "nameIllegalCharacters": "The name of the map contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-                "domainIllegalCharacters": "Názov webovej stránky obsahuje nepovolené znaky. Povolené znaky sú písmená a-z, rovnako aj å, ä, ö, čísla, medzery a spojovníky."
+                "title": "Chyba",
+                "size": "Veľkosť mapy je neplatná. Šírka musí byť aspoň 30 pixelov a výška aspoň 20 pixelov. Ako desatinnú čiarku použite bodku.",
+                "domain": "Webová stránka sa vyžaduje. Zadajte prosím adresu a skúste znovu.",
+                "domainStart": "Webová stránka je neplatná. Zadajte prosím adresu bez predpôn http alebo www a skúste znovu.",
+                "name": "Názov mapy sa vyžaduje. Zadajte prosím názov a skúste znovu.",
+                "nohelp": "Používateľská príručka nie je k dispozícii.",
+                "saveFailed": "Mapa sa nedala uložiť. Skúste neskôr, prosím",
+                "nameIllegalCharacters": "Názov mapy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z, å, ä, ö, Å, Ä, Ö), čísla (0-9), medzery a spojovníky (-). Prosím, opravte názov a skúste znovu.",
+                "domainIllegalCharacters": "Názov webovej stránky obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z, å, ä, ö, Å, Ä, Ö), čísla (0-9) a špeciálne znaky (-, _, ., !, ~, *, ' and ()). Prosím, opravte adresu a skúste znovu."
             }
         },
         "NotLoggedView": {
-            "text": "Musíte sa prihlásiť, aby ste mohli použiť funkciu vkladania",
+            "text": "Môžete vypublikovať uloženú mapu na vašu webovú stránku. Najprv sa prosím prihláste alebo zaregistrujte.",
             "signup": "Prihlásiť",
-            "signupUrl": "/web/sk/login",
-            "register": "Zaregistrovať",
-            "registerUrl": "/web/sk/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Zaregistrovať"
         },
         "StartView": {
-            "text": "Práve vytvorené zobrazenie mapy môžete vložiť  na Vašu alebo zamestnávateľovu webovú stránku",
-            "touLink": "Zobraziť podmienky používania pre Vkladané mapy",
-            "layerlist_title": "Vkladateľné mapové vrstvy",
-            "layerlist_empty": "Vybrané mapové vrstvy sa nedajú vkladať. Menu Vybraté mapové vrstvy zobrazuje, či mapová vrstva môže alebo nemôže byť vložená",
-            "layerlist_denied": "Nemôže byť vložené",
-            "denied_tooltip": "Poskytovatelia údajov tejto mapy nepovolili zverejnenie týchto materiálov na iných webových stránkach. Skontrolujte práva na zobrazenie v menu Vybraté mapové vrstvy pred vložením",
-            "myPlacesDisclaimer": "NB. You are publishing your own map layer.",
+            "text": "Môžete vypublikovať uloženú mapu na vašu webovú stránku.",
+            "touLink": "Zobraziť podmienky používania",
+            "layerlist_title": "Publikovateľné mapové vrstvy sú otvorené v mapovom okne:",
+            "layerlist_empty": "Žiadne publikovateľné mapové vrstvy sú otvorené v mapovom okne. Prosím, skontrolujte publikovateľné mapové vrstvy v menu Vybraté vrstvy.",
+            "layerlist_denied": "Nepublikovateľné mapové vrstvy sú otvorené v mapovom okne:",
+            "denied_tooltip": "Tieto mapové vrstvy sú nepublikovateľné v uložených mapách. Poskytovatelia údajov nedali povolenie na publikovanie. Prosím, skontrolujte publikovateľné mapové vrstvy v menu Vybraté vrstvy.",
+            "myPlacesDisclaimer": "Upozornenie! Ak používate túto mapovú vrstvu v uloženej mape, tak táto mapová vrstva bude vypublikovaná.",
             "buttons": {
                 "continue": "Pokračovať",
-                "continueAndAccept": "Prijať podmienky používania a pokračovať",
+                "continueAndAccept": "Prijať a pokračovať",
                 "cancel": "Zrušiť",
                 "close": "Zavrieť"
             },
@@ -214,23 +211,17 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "Show",
-            "hide": "Hide",
-            "hidden": "The map layer is temporarily hidden.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "The map layer can be published in a embedded map.",
-                    "tooltip": "The map layer can be published in a embedded map. The weekly number of users can be limited."
-                }
-            }
+            "show": "Zobraziť",
+            "hide": "Skryť",
+            "hidden": "Mapová vrstva je dočasne skrytá.",
+            "selectAsBaselayer": "Podkladová mapová vrstva"
         },
         "layerFilter": {
             "buttons": {
-                "publishable": "Publishable"
+                "publishable": "Publikovateľné"
             },
             "tooltips": {
-                "publishable": "Show only publishable map layers"
+                "publishable": "Zobraziť iba publikovateľné mapové vrstvy."
             }
         }
     }

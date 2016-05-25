@@ -644,6 +644,7 @@ define([
                 data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
                 data.manualRefresh =  form.find("input[type='checkbox'][name='manualRefresh']:checked").val();
+                data.resolveDepth =  form.find("input[type='checkbox'][name='resolveDepth']:checked").val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -827,6 +828,7 @@ define([
                 }, {
                     silent: true
                 });
+                me.model.setVersion(version);
                 me.model.set({_admin:{
                     username: user,
                     password: pw,
@@ -885,10 +887,11 @@ define([
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
                 var layerName = current.attr('data-layername'),
-                    additionalId = current.attr('data-additionalId');
+                    additionalId = current.attr('data-additionalId'),
+                    title = current.text();
                 if (layerName) {
                     // actual layer node -> populate model
-                    me.model.setupCapabilities(layerName, null, additionalId);
+                    me.model.setupCapabilities(layerName, null, additionalId, title);
                 } else {
                     // toggle class to hide submenu
                     current.toggleClass('closed');

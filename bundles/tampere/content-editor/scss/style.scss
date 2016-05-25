@@ -1,0 +1,232 @@
+#contentMap {
+  &.mapContentEditorMode > {
+    #mapdiv, div.row-fluid {
+      position: relative;
+      left: 212px;
+    }
+  }
+  div.content-editor {
+    background: #FFF;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    /* sidebar has 3, we want to open it on top of this */
+    z-index: 2;
+    width: 382px;
+    div.content {
+      padding: 10px;
+    }
+  }
+}
+
+div {
+  &.content-editor {
+    input[type=text] {
+      width: 260px;
+    }
+    .disabled-button {
+      opacity: 0.8;
+    }
+    div#publisher-layout-colours input[name=publisher-colour] {
+      width: 125px;
+    }
+    p#publisher-selected-colour {
+      display: inline;
+    }
+    button#publisher-colours {
+      float: right;
+    }
+    .customsize {
+      &:disabled {
+        color: #DDD;
+      }
+      label {
+        clear: none;
+        display: inline-block;
+        width: 60px;
+        &:first-of-type {
+          margin-right: 3px;
+        }
+        &:last-of-type {
+          margin-left: 3px;
+        }
+        input {
+          width: 100%;
+          &.error {
+            border: 1px solid red;
+          }
+        }
+      }
+    }
+    div {
+      &.icon-info {
+        float: right;
+      }
+      &.tool {
+        margin: 5px;
+      }
+      &.tool-options {
+        padding-left: 23px;
+        .tool-option-settings {
+          padding-left: 27px;
+          padding-top: 5px;
+        }
+      }
+      &.tool label, &.data label, &.tool input, &.data input {
+        margin-right: 10px;
+      }
+      &.tool input[type="button"], &.data input[type="button"] {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+    > div {
+      &.content {
+        overflow: auto;
+        height: 89%;
+      }
+      &.header {
+        background-color: #FDF8D9;
+        padding: 5px 10px;
+        div.icon-close {
+          float: right;
+        }
+      }
+    }
+    .layer.selected {
+      border: 1pt solid #c0d0e0;
+      margin: 0 5px 5px 0;
+      height: unquote("70px\\9");;
+      /*IE9 */
+      &.out-of-scale, &.out-of-content, &.hidden {
+        color: #909090;
+      }
+      div {
+        &.layer-info {
+          background-color: #FFF;
+          padding: 5px;
+          div {
+            &.layer-title {
+              display: inline;
+              h4 {
+                padding: 0;
+              }
+            }
+            &.layer-tool-remove {
+              float: right;
+            }
+          }
+        }
+        &.layer-tools {
+          background-color: #f3f3f3;
+          padding: 7px;
+          div {
+            &.layout-slider {
+              width: 140px;
+              display: inline-block;
+              margin-right: 16px;
+            }
+            &.left-tools {
+              display: inline-block;
+              div {
+                &.layer-visibility {
+                  padding-right: 5px;
+                  display: inline-block;
+                }
+                &.layer-opacity {
+                  display: inline-block;
+                  background-image: url('../../../layerselection2/resources/images/opacity_slider.png');
+                  background-repeat: no-repeat;
+                  input.opacity {
+                    padding: 1px;
+                    width: 25px;
+                  }
+                }
+              }
+            }
+            &.right-tools {
+              padding-top: 5px;
+              float: right;
+              div {
+                float: left;
+                margin-right: 5px;
+                &.layer-rights, &.object-data {
+                  padding-top: 2px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ul.selectedLayersList {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      list-style-type: none;
+      padding: 0;
+      margin: 5px 0 0;
+      span {
+        position: absolute;
+        margin-left: -1.3em;
+      }
+    }
+    .toolrow {
+      border-top: 0;
+    }
+    .content > div {
+      margin-bottom: 20px;
+    }
+    div.form div.field input {
+      width: 100%;
+      /*width: 80%0/;*/
+      /* unquote for libsass bug */
+      background-color: #FFF;
+    }
+  }
+  &.field select {
+    width: 100%;
+    /*width: 80%0/;*/
+    /* unquote for libsass bug */
+    background-color: #FFF;
+  }
+  &.content-editor div.buttons, &.publisher div.startview div.buttons {
+    text-align: center;
+    margin-top: 10px;
+  }
+  &.content-editor div.buttons input, &.publisher div.startview div.buttons input {
+    margin: 5px 2px;
+  }
+}
+
+/* Buttons */
+
+.content-editor-buttons {
+  margin-bottom: 40px;
+  text-align: right;
+  &.hide {
+    display: none;
+  }
+}
+
+.content-draw-tools.hide {
+  display: none;
+}
+
+.content-draw-tools {
+  float: left;
+}
+
+.properties-container {
+  clear: both;
+}
+
+/* Other */
+#delete-dialog {
+  margin-bottom: 30px;
+}
+
+.field-invalid {
+  border: 1px solid red !important;
+}

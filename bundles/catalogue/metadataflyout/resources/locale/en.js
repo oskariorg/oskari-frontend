@@ -16,6 +16,7 @@ Oskari.registerLocalization({
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
             "quality":"Data quality",
+            "actions":"Actions",
             "xml": "ISO 19139 XML file",
             "map": "Geographic extent",
             "pdf": "Printout",
@@ -431,6 +432,11 @@ Oskari.registerLocalization({
                 "temporalValidity":"Temporal validity",
                 "thematicClassificationCorrectness":"Thematic classification correctness",
                 "topologicalConsistency":"Topological consistency"
+            },
+            "layerList": {
+                "title": "Map layers",
+                "show":"Show map layer",
+                "hide": "Hide map layer"
             }
         },
         "tile": {

@@ -19,10 +19,6 @@ Oskari.clazz.define(
 
         me._supportedFormats = {};
         me._statsDrawLayer = null;
-        me._highlightCtrl = null;
-        me._navCtrl = null;
-        me._getFeatureControlHover = null;
-        me._getFeatureControlSelect = null;
         me._modeVisible = false;
         me.ajaxUrl = null;
         me.featureAttribute = 'kuntakoodi';
@@ -221,7 +217,8 @@ Oskari.clazz.define(
                         params: {
                             'LAYERS': wms.LAYERS,
                             'FORMAT': wms.FORMAT
-                        }
+                        },
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     transparent: true,
@@ -265,8 +262,7 @@ Oskari.clazz.define(
             );
 
 
-
-            openlayer.opacity = layer.getOpacity() / 100;
+            openlayer.setOpacity(layer.getOpacity() / 100);
 
             me.getMap().addLayer(openlayer);
             me._layers[openlayer.get('id')] = openlayer;

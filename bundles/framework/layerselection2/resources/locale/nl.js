@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kaartlaag",
                 "type-wfs": "Productgegevens"
             },
+            "refresh_load": {
+                "tooltip": "Refresh the map layer data. Data is not updated automatically on the map."
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Selecteer de features van de kaart laag:",

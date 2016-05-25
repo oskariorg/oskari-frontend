@@ -21,10 +21,14 @@ Oskari.clazz.define(
             "scripts": [{
                 // NOTE! EXTERNAL LIBRARY!
                 "type": "text/javascript",
+                "expose" : "Channel",
                 "src": "../../../../libraries/JSChannel/jschannel.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/rpc/instance.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/rpc/event/RPCUIEvent.js"
             }]
         },
         bundle: {

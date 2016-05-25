@@ -1,10 +1,7 @@
 goog.provide('ol.source.OskariAsyncTileImage');
-
-goog.require('goog.events.EventType');
 goog.require('ol.TileState');
 goog.require('ol.proj');
 goog.require('ol.source.TileImage');
-goog.require('ol.TileRange');
 
 /**
  * @classdesc
@@ -23,8 +20,7 @@ ol.source.OskariAsyncTileImage = function(options) {
     logo: options.logo,
     opaque: options.opaque,
     projection: options.projection,
-    state: options.state !== undefined ?
-        /** @type {ol.source.State} */ (options.state) : undefined,
+    state: options.state !== undefined ? (options.state) : undefined,
     tileGrid: options.tileGrid,
     tileLoadFunction: options.tileLoadFunction ? options.tileLoadFunction : function() {
       // no-op: loading is handled with transport/mediator
@@ -93,17 +89,6 @@ ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
         wfsTileCache = this.getWFSTileCache_(),
         layerTileInfos = wfsTileCache.tileInfos,
         lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
-        /*
-    _.each(layerTileInfos,function(lti,key) {
-        if( !lti.isBoundaryTile) {
-            delete layerTileInfos[key];
-        }
-        if( lti.tileSetIdentifier < lastTileSetIdentifier-1 ) {
-            delete layerTileInfos[key];
-        }
-
-    });
-        */
 };
 
 /**
@@ -154,18 +139,21 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
  * Note! Same as the original function, but tilestate is initialized to LOADING
  * so tilequeue isn't blocked by the async nature of Oskari WFS
  *
+ * Basically substitutes and combines the best parts of the functionalities 
+ * of ol.source.TileImage getTileInternal() & createTile_() - methods. 
+ *
  * @param {number} z Tile coordinate z.
  * @param {number} x Tile coordinate x.
  * @param {number} y Tile coordinate y.
  * @param {number} pixelRatio Pixel ratio.
  * @param {ol.proj.Projection} projection Projection.
- * @return {!ol.Tile} Tile.
- * @private
+ * @param {string} key The key set on the tile.
+ * @return {!ol.Tile}
  */
-ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRatio, projection) {
+ol.source.OskariAsyncTileImage.prototype.createOskariAsyncTile = function(z, x, y, pixelRatio, projection, key) {
   var tileCoordKey = this.getKeyZXY(z, x, y);
   if (this.tileCache.containsKey(tileCoordKey)) {
-    return /** @type {!ol.Tile} */ (this.tileCache.get(tileCoordKey));
+    return /**@type {!ol.Tile}*/(this.tileCache.get(tileCoordKey));
   } else {
     goog.asserts.assert(projection, 'argument projection is truthy');
     var tileCoord = [z, x, y];
@@ -182,8 +170,8 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
         tileUrl !== undefined ? tileUrl : '',
         this.crossOrigin,
         this.tileLoadFunction);
-    goog.events.listen(tile, goog.events.EventType.CHANGE,
-        this.handleTileChange, false, this);
+    ol.events.listen(tile, ol.events.EventType.CHANGE,
+        this.handleTileChange, this);
 
     this.tileCache.set(tileCoordKey, tile);
     return tile;
@@ -191,7 +179,6 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 };
 
 /**
- * Workaround for being able to access renderer's private tile range property...
  * @return  {ol.renderer.canvas.TileLayer}     canvasRenderer to force rerendering of tiles (ugly hack)
  */
  ol.source.OskariAsyncTileImage.prototype.getCanvasRenderer = function(layer, map){
@@ -200,9 +187,11 @@ ol.source.OskariAsyncTileImage.prototype.createTile_ = function(z, x, y, pixelRa
 
 /**
  * Workaround for being able to access renderer's private tile range property...
+ * Not sure if we need this for anything anymore? We needed this in ol 3.11.2 for the canvas to update 
+ * border tiles correctly, but it seems the canvas' behaviour has been fixed in 3.14.2. Still, keeping this as a memory of what once was. 
  */
  ol.renderer.canvas.TileLayer.prototype.resetRenderedCanvasTileRange = function() {
-  this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
+  //this.renderedCanvasTileRange_ = new ol.TileRange(NaN, NaN, NaN, NaN);
  }
 
 /**
@@ -288,5 +277,6 @@ ol.source.OskariAsyncTileImage.prototype.__fixTile = function(tile, imageData, l
  * @inheritDoc
  */
 ol.source.OskariAsyncTileImage.prototype.getTile = function(z, x, y, pixelRatio, projection) {
-    return this.createTile_(z, x, y, pixelRatio, projection);
+    var paramsKey = this.getKeyParams();
+    return this.createOskariAsyncTile(z, x, y, pixelRatio, projection, paramsKey);
 };

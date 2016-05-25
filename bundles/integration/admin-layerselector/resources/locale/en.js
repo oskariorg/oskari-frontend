@@ -151,6 +151,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve depth",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID is a technical tile matrix identifier. It is fetched automatically from the GetCapabilities response.",
             "matrixSet": "JSON for WMTS layer",

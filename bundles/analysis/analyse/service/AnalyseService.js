@@ -188,7 +188,7 @@ Oskari.clazz.define(
          *
          */
         _getWFSLayerPropertiesAndTypes: function (layer_id, success2, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id=' + layer_id;
+            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&simple=true&layer_id=' + layer_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

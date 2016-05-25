@@ -150,12 +150,13 @@ function() {
      * @return {Object} filtered state
      */
     _filterIndicators: function (statsGridState) {
-        statsGridState.indicators = _.filter(statsGridState.indicators, function (indicator) {
+        statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+            const ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
             return (
                 // indicators
-                (!indicator.ownIndicator) ||
+                (!ownIndicator) ||
                 // own indicators
-                (indicator.ownIndicator && indicator.public)
+                (ownIndicator && indicator.public)
             );
         });
         return statsGridState;
@@ -166,10 +167,9 @@ function() {
          *
          */
         _getState: function () {
-            var me = this,
-                statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-                statsGridState = statsGrid.state;
-            return me._filterIndicators(_.clone(statsGridState, true));
+            return {
+                classifyShown:  this.state.enabled
+            };
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

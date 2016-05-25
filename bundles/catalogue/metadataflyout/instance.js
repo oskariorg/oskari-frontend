@@ -254,9 +254,7 @@ Oskari.clazz.define(
              * Fetch when flyout is opened
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    doOpen = event.getViewState() !== 'close',
-                    p;
+                var me = this;
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
                     return;

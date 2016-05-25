@@ -50,14 +50,6 @@ jQuery(document).ready(function () {
         }
     }
 
-    if (!language) {
-        // default to finnish
-        language = 'fi';
-    }
-    Oskari.setLang(language);
-    Oskari.setLoaderMode('dev');
-    Oskari.setPreloaded(preloaded);
-
     function gfiParamHandler(sandbox) {
         if (getURLParameter('showGetFeatureInfo') !== 'true') {
             return;
@@ -72,42 +64,22 @@ jQuery(document).ready(function () {
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
-    function start(appSetup, appConfig, cb) {
-        var app = Oskari.app;
-        app.setApplicationSetup(appSetup);
-        app.setConfiguration(appConfig);
-        app.startApplication(function (startupInfos) {
-            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-            if (cb) {
-                cb(instance);
-            }
-        });
-
-    }
-
-
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        beforeSend: function (x) {
-            if (x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-            }
-        },
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        success: function (app) {
-            if (app.startupSequence && app.configuration) {
-                var appSetup = {
-                    "startupSequence": app.startupSequence
-                };
-                start(appSetup, app.configuration, function (instance) {
-                    var sb = instance.getSandbox();
-                    gfiParamHandler(sb);
-                });
-            } else {
+        success: function (appSetup) {
+            var app = Oskari.app;
+            if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');
+                return;
             }
+            app.setApplicationSetup(appSetup);
+            app.startApplication(function () {
+                var sb = Oskari.getSandbox();
+                gfiParamHandler(sb);
+            });
         },
         error: function (jqXHR, textStatus) {
             if (jqXHR.status !== 0) {

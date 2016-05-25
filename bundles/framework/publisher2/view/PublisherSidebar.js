@@ -48,12 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         //additional bundles (=not map plugins) that were stopped when entering publisher
         me.stoppedBundles = [];
 
-        if (data) {
-            if (data.lang) {
-                Oskari.setLang(data.lang);
-            }
-        }
-
         me.loc = localization;
         me.accordion = null;
 
@@ -181,9 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function(value) {
-                me.setPluginLanguage(value);
-            });
+            form.init(me.data);
 
             // open generic info by default
             form.getPanel().open();
@@ -262,22 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
-
-        setPluginLanguage : function(lang) {
-            var me = this;
-            if (lang === null || lang === undefined) {
-                throw new TypeError(
-                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
-                    '.setPluginLanguage: missing language'
-                );
-            }
-            Oskari.setLang(lang);
-            _.each(me.panels, function(panel) {
-                if (panel._restartActivePlugins && typeof panel._restartActivePlugins === 'function') {
-                    panel._restartActivePlugins();
-                }
-            });
-        },
         /**
         * Get panel/tool handlers
         * @method getHandlers
@@ -317,6 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     if(!grouping[group]) {
                         grouping[group] = [];
                     }
+                    me._addToolConfig(tool);
                     grouping[group].push(tool);
                 }
 
@@ -338,6 +315,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 tools: allTools
             };
         },
+        _addToolConfig: function(tool) {
+            var conf = this.instance.conf || {};
+            if (!conf.toolsConfig || !tool.bundleName) {
+                return;
+            }
+            tool.toolConfig = conf.toolsConfig[tool.bundleName];
+        },
+        /**
+         * @private @method _filterIndicators
+         * Filters out user's indicators which aren't allowed to be published.
+         *
+         * @param  {Object} statsGridState
+         *
+         * @return {Object} filtered state
+         */
+        _filterIndicators: function (statsGridState) {
+            statsGridState.selectedIndicators = _.filter(statsGridState.selectedIndicators, function (indicator) {
+                var ownIndicator = indicator.datasourceId == "fi.nls.oskari.control.statistics.plugins.user.UserIndicatorsStatisticalDatasourcePlugin";
+                return (
+                    // indicators
+                    (!ownIndicator) ||
+                    // own indicators
+                    (ownIndicator && indicator.public)
+                );
+            });
+            return statsGridState;
+        },
+        /**
+         * Get stats layer.
+         * @method @private _getStatsLayer
+         *
+         * @return founded stats layer, if not found then null
+         */
+         _getStatsLayer: function(){
+             var me = this,
+                 selectedLayers = this.instance.getSandbox().findAllSelectedMapLayers(),
+                 statsLayer = null,
+                 layer;
+             for (i = 0; i < selectedLayers.length; i += 1) {
+                 layer = selectedLayers[i];
+                 if (layer.getLayerType() === 'stats') {
+                     statsLayer = layer;
+                     break;
+                 }
+             }
+             return statsLayer;
+         },
         /**
         * Gather selections.
         * @method _gatherSelections
@@ -346,6 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _gatherSelections: function(){
             var me = this,
                 sandbox = this.instance.getSandbox(),
+                statsLayer = me._getStatsLayer(),
                 selections = {
                     configuration: {
 
@@ -357,6 +382,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             selections.configuration.mapfull = {
                 state: mapFullState
             };
+            var me = this,
+                statsGrid = sandbox.getStatefulComponents().statsgrid;
+
+            if (statsGrid && statsLayer) {
+                var statsGridState = statsGrid.getState();
+                // Filtering indicators here in the publishing step, because for
+                // the private state they are allowed.
+                statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+                statsGridState.embedded = true;
+                statsGridState.layerId = statsLayer._id;
+                selections.configuration.publishedgrid = {
+                    state: statsGridState
+                };
+            }
 
             jQuery.each(me.panels, function(index, panel){
                 if (panel.validate && typeof panel.validate === 'function') {

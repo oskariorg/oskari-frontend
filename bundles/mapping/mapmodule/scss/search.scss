@@ -59,7 +59,8 @@ div.mapplugin.search {
 
 table.search-results {
   width: 100%;
-  margin: 0px; 
+  margin: 0px;
+  border: 0px;
 
   td, th {
       text-align: left;
@@ -77,7 +78,7 @@ div.published-search-div {
   float: left; 
 
   div.search-area-div {
-    min-width: 180px;
+    max-width:318px;
     display: block;
     float: right;   
 
@@ -85,10 +86,6 @@ div.published-search-div {
       display: inline-block;
       float: left;
       height: 38px; 
-    }
-
-    div.search-middle {
-      min-width: 180px; 
     }
 
     div.search-right {
@@ -100,7 +97,6 @@ div.published-search-div {
       border: none;
       box-shadow: none;
       background-image: none;
-      width: 145px;
       float: left;
       padding: 5px;
       outline: none; 
@@ -312,4 +308,26 @@ div.published-search-div {
 
 .mappluginsContent.ui-sortable div.mapplugin.search {
   right: 0px; 
+}
+
+
+.mobilesearch {
+  float:left;
+  margin-right: 6px;
+
+  input[type=button] {
+    vertical-align: top;
+  }
+}
+
+.divmanazerpopup.searchresult {
+  margin-left: -30px!important;
+}
+
+
+/* MOBILE */
+.mobileToolbarDiv {
+    input[type=text] {
+        height:10px;
+    }
 }

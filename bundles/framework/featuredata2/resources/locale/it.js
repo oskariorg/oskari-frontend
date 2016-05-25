@@ -12,12 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "I dati non possono essere visualizzati a questa scala. Cambiare scala di visualizzazione.",
         "errordata": "I dati forniti dal server contengono errori. Sposta di poco l'area della mappa per aggiornarli.",
         "columnSelectorTooltip": "Seleziona colonne visibili.",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "Valori Statistici",
         "selectionTools": {
             "title": "Seleziona elementi sulla mappa",
             "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
-            "selectAll": "Seleziona da tutti i layers",
+            "selectFromTop": "Dal layer superiore",
+            "selectAll": "Da tutti i layers",
             "link": {
                 "title": "Seleziona più elementi"
             },
@@ -145,6 +145,12 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Non è stato selezionato alcun operatore logico."
                 }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Conteggio",
+            "differenceMessage": "La differenza dei valori degli elementi non autorizzati è rappresentata dal valore",
+            "noDataMessage": "Conteggio = numero di elementi senza autorizzazione",
+            "noDataCommonMessage": "Ci sono valori di elementi senza autorizzazione nei dati"
         }
     }
 }

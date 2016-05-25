@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement
- * This sets map domain object values accoding to (optional) querystring parameters.
+ * This sets map domain object values according to (optional) query string parameters.
  * Note that this not set the actual map implementation state, only the domain object.
  */
 Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement',

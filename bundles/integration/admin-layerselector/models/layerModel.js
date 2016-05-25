@@ -150,9 +150,10 @@ if (!Function.prototype.bind) {
              * @param  {String} layerName      name to search for
              * @param  {Object} capabilities (optional capabilities object)
              * @param  {String} additionalId additional id used for searching (optional)
+             * @param  {String} title used for  mapping capabilities because of duplicate layer names
              * @return {Boolean}             true if name was found
              */
-            setupCapabilities: function (layerName, capabilities, additionalId) {
+            setupCapabilities: function (layerName, capabilities, additionalId, title) {
                 if (!layerName) {
                     return;
                 }
@@ -161,13 +162,27 @@ if (!Function.prototype.bind) {
                     capabilities = this.get('capabilities');
                 }
                 // layer node
-                if (capabilities.layerName === layerName) {
-                    if(!additionalId) {
-                        me._setupFromCapabilitiesValues(capabilities);
-                        return true;
-                    } else if(capabilities.additionalId === additionalId) {
-                        me._setupFromCapabilitiesValues(capabilities);
-                        return true;
+                // title is also used for matching because of duplicate layernames in capabilities
+                if(title) {
+                    if (capabilities.layerName === layerName && capabilities.title === title) {
+                        if (!additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        } else if (capabilities.additionalId === additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    if (capabilities.layerName === layerName) {
+                        if (!additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        } else if (capabilities.additionalId === additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        }
                     }
                 }
                 // group node
@@ -180,7 +195,7 @@ if (!Function.prototype.bind) {
                 // check layers directly under this
                 _.each(capabilities.layers, function (layer) {
                     if (!found) {
-                        found = me.setupCapabilities(layerName, layer, additionalId);
+                        found = me.setupCapabilities(layerName, layer, additionalId, title);
                     }
                 });
                 // if not found, check any groups under this
@@ -271,6 +286,17 @@ if (!Function.prototype.bind) {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.manualRefresh;
+                }
+                return false;
+            },
+            /**
+             * Returns wfs service resolveDepth param
+             * @return {Boolean} true/false
+             */
+            isResolveDepth: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.resolveDepth;
                 }
                 return false;
             },

@@ -54,6 +54,7 @@ state : {
   <td> `userinterface.UpdateExtensionRequest` </td>
   <td> When an embedded maps 'Edit' link is clicked to close the personaldata flyout </td>
 </tr>
+</table>
 
 ## Events the bundle listens to
 

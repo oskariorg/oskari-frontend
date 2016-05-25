@@ -151,6 +151,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
             "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve xlink:hrefs",
             "matrixSetId": "WMTS MatrixSetId",
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",

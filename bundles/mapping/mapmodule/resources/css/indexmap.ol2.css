@@ -16,11 +16,11 @@ div.mapplugin.indexmap {
     width: 46px !important;
     height: 46px !important;
     cursor: default;
-    background: url('../images/component-indexmap.png') 0px 0px !important;
+    background: url("../images/component-indexmap.png") 0px 0px !important;
     display: inline-block;
     position: relative; }
     div.mapplugin.indexmap .indexmapToggle:hover {
-      background: url('../images/component-indexmap_hover.png') !important; }
+      background: url("../images/component-indexmap_hover.png") !important; }
 
 .right div.mapplugin.indexmap {
   text-align: right; }
@@ -35,6 +35,7 @@ div.mapplugin.indexmap {
   border-style: solid;
   border-left-width: 2px;
   border-top-width: 2px; }
+
 .olControlOverviewMapContainer #OpenLayers_Control_minimizeDiv {
   position: absolute !important;
   width: 46px !important;
@@ -42,7 +43,7 @@ div.mapplugin.indexmap {
   right: 0px;
   bottom: 0px;
   cursor: default;
-  background: url('../images/component-indexmap_hover.png') !important; }
+  background: url("../images/component-indexmap_hover.png") !important; }
 
 .olControlOverviewMapExtentRectangle {
   border: 2px dashed #f47729 !important; }

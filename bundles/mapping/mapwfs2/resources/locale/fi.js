@@ -27,7 +27,12 @@ Oskari.registerLocalization(
         },
         "information": {
             "title": "Kohdetietojen esittäminen",
-            "info": "Osa valituista vektoritasoista (WFS) ei päivity automaattisesti. Zbr/><br/> Valitse haluamasi alue kartalta ja klikkaa Päivitä-painiketta kartalla.<br/><br/>Klikkaa Kohdetiedot nähdäksesi tason kohdetiedot."
+            "info": "Osa valituista vektoritasoista (WFS) ei päivity automaattisesti. <br/><br/> Valitse haluamasi alue kartalta ja klikkaa Päivitä-painiketta kartalla.<br/><br/>Klikkaa Kohdetiedot nähdäksesi tason kohdetiedot."
+        },
+        "refresh_alert": {
+            "title": "Näkyvyysvaroitus",
+            "all_not_in_scale": "Zoomitasolla ei ole yhtään virkistettävää tasoa näkyvissä, muuta zoomitaso sopivaksi",
+            "all_invisible" : "Kartalla ei ole yhtään virkistettävää tasoa näkyvissä, laita tasot näkyviin valituista tasoista"
         },
         "button": {
             "cancel": "Peruuta",

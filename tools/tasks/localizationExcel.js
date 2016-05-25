@@ -53,7 +53,7 @@ module.exports = function (grunt) {
         'impL10nExcels',
         'Import localization excel file translations back to localization json.',
         function () {
-            var pattern = grunt.option('pattern'),
+            var pattern = grunt.option('pattern') || '../dist/L10N/*/*.xlsx',
                 delimiter = grunt.option('delimiter') || '.',
                 locale = grunt.option('locale'),
                 templateLocale = grunt.option('templateLocale') || 'en';

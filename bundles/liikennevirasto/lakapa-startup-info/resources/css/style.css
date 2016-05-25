@@ -2,6 +2,7 @@
 /* Override popup styles */
 div.divmanazerpopup.startupinfo.arrow:after, div.divmanazerpopup.startupinfo.arrow:before {
   display: none; }
+
 div.divmanazerpopup.startupinfo.bluetitle h3 {
   /* Same as h3.inverted? */
   color: #fff;
@@ -18,8 +19,10 @@ div.divmanazerpopup.startupinfo.bluetitle h3 {
   div.divmanazerpopup.startupinfo.bluetitle h3 span {
     float: right;
     padding-top: 3px; }
+
 div.divmanazerpopup.startupinfo.draggable {
   cursor: move; }
+
 div.divmanazerpopup.startupinfo .actions input {
   display: inline-block;
   vertical-align: baseline;

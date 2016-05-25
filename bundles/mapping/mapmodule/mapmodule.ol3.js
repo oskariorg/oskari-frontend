@@ -30,7 +30,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
     function (id, imageUrl, options, mapDivId) {
         this._dpi = 72;   //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
-    }, {
+
+     }, {
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
@@ -111,6 +112,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             map.on('pointermove', function (evt) {
+
+                clearTimeout(this.mouseMoveTimer);
+                this.mouseMoveTimer = setTimeout(function() {
+                    // No mouse move in 1000 ms - mouse move paused
+                    var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], true);
+                    sandbox.notifyAll(hoverEvent);
+                }, 1000);
                 var hoverEvent = sandbox.getEventBuilder('MouseHoverEvent')(evt.coordinate[0], evt.coordinate[1], false);
                 sandbox.notifyAll(hoverEvent);
             });
@@ -146,6 +154,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     bounds.top];
             }
             return extent;
+        },
+        /**
+         * Produces an dataurl for PNG-image from the map contents.
+         * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
+         * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
+         */
+        getScreenshot : function() {
+            try {
+                var imageData = null;
+                this.getMap().once('postcompose', function(event) {
+                    var canvas = event.context.canvas;
+                    imageData = canvas.toDataURL('image/png');
+                });
+
+                this.getMap().renderSync();
+                return imageData;
+           } catch(err) {
+               this.getSandbox().printWarn('Error producing a screenshot' + err);
+           }
+           return '';
         },
 
 /*<------------- / OL3 specific ----------------------------------- */
@@ -282,22 +310,32 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
         /**
          * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
+         * Transforms coordinates from srs projection to the targerSRS projection.
          * @param {Object} pLonlat object with lon and lat keys
          * @param {String} srs projection for given lonlat params like "EPSG:4326"
+         * @param {String} targetsrs projection to transform to like "EPSG:4326" (optional, defaults to map projection)
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
-        transformCoordinates: function (pLonlat, srs) {
-            if(!srs || this.getProjection() === srs) {
+        transformCoordinates: function (pLonlat, srs, targetSRS) {
+
+            if(!targetSRS) {
+                targetSRS = this.getProjection();
+            }
+            if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
-            // TODO: check that srs definition exists as in OL2
-            //var transformed = new ol.proj.fromLonLat([pLonlat.lon, pLonlat.lat], this.getProjection());
-            var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, this.getProjection());
-            return {
-              lon : transformed[0],
-              lat : transformed[1]
-            };
+
+            var isSRSDefined = ol.proj.get(srs);
+            var isTargetSRSDefined = ol.proj.get(targetSRS);
+
+            if (isSRSDefined && isTargetSRSDefined) {
+              var transformed = ol.proj.transform([pLonlat.lon, pLonlat.lat], srs, targetSRS);
+                  return {
+                      lon : transformed[0],
+                      lat : transformed[1]
+                  };
+            }
+            throw new Error('SrsName not supported!');
         },
         /**
          * @method orderLayersByZIndex
@@ -308,8 +346,72 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return a.getZIndex()-b.getZIndex();
             });
         },
-/* --------- /Impl specific --------------------------------------> */
 
+        calculatePixelsInScale: function(mmMeasures, plotScale) {
+            var units = this.getMap().getView().getProjection().getUnits(),
+                view = this.getMap().getView(),
+                centerCoords = view.getCenter(),
+                tempCoords = [],
+                tempPixels,
+                centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                scaleCoef = plotScale/1000;
+                pixels = [];
+
+            for (var i = 0; i < mmMeasures.length; ++i) {
+                // mm measure in metres  e.g. in 1:10 000  10 mm  is 100 000 mm (100 m)
+                var in_m = mmMeasures[i] * scaleCoef * mpu;
+                // Use coordinates to get pixel size
+                tempCoords[0] = centerCoords[0] + in_m;
+                tempCoords[1] = centerCoords[1];
+                tempPixels = this.getMap().getPixelFromCoordinate(tempCoords);
+
+                pix = tempPixels[0] - centerPixels[0];
+
+                pixels.push(pix);
+            }
+            return pixels;
+        },
+        /* Calculate best fix scale based on measures in case of two measures
+         * The case of two measures is interpreted as paper size
+         * If first measure is shorter than second, then orientation is portrait
+         * @param mmMeasures    unit mm
+         * return fixScale or MapScale
+         */
+        calculateFitScale4Measures: function(mmMeasures) {
+            var map = this.getMap(),
+                units = map.getView().getProjection().getUnits(),
+                mapScale = this._sandbox.getMap().getScale(),
+                extent = map.getView().calculateExtent(map.getSize()),
+                mpu = ol.proj.METERS_PER_UNIT[units],
+                margin = 10.0;
+                scaleCoef = mapScale/1000;
+
+            if(mmMeasures.length !== 2){
+                return mapScale;
+            }
+
+            if(mmMeasures[0] > mmMeasures[1]){
+                //landscape
+                // fit width scale
+                var view_width = extent[2] - extent[0];
+                var paper_width =  mmMeasures[0] * scaleCoef * mpu;
+                if(paper_width > view_width){
+                    return Math.round((view_width/(paper_width + margin)) * mapScale);
+                }
+            } else {
+                //portrait
+                var view_height = extent[3] - extent[1];
+                var paper_height =  mmMeasures[1] * scaleCoef * mpu;
+                if(paper_height > view_height){
+                    return Math.round((view_height/(paper_height + margin)) * mapScale);
+                }
+            }
+
+            return mapScale;
+
+        },
+/* --------- /Impl specific --------------------------------------> */
 
 /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
@@ -435,21 +537,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         getStyle: function(styleDef) {
             var me = this;
-            styleDef = styleDef || {};
+            style = jQuery.extend(true, {}, styleDef);
             var olStyle = {};
-            if(Oskari.util.keyExists(styleDef, 'fill.color')) {
+            if(Oskari.util.keyExists(style, 'fill.color')) {
                 olStyle.fill = new ol.style.Fill({
-                  color: styleDef.fill.color
+                  color: style.fill.color
                 });
             }
-            if(styleDef.stroke) {
-            	olStyle.stroke = me.__getStrokeStyle(styleDef);
+            if(style.stroke) {
+            	olStyle.stroke = me.__getStrokeStyle(style);
             }
-            if(styleDef.image) {
-                olStyle.image = me.__getImageStyle(styleDef)
+            if(style.image) {
+                olStyle.image = me.__getImageStyle(style);
             }
-            if (styleDef.text) {
-                var textStyle = me.__getTextStyle(styleDef.text);
+            if (style.text) {
+                var textStyle = me.__getTextStyle(style.text);
                 if (textStyle) {
                     olStyle.text = textStyle;
                 }
@@ -470,7 +572,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(styleDef.stroke.width) {
                 stroke.width = styleDef.stroke.width;
             }
-
+            if(styleDef.stroke.lineDash) {
+                if(_.isArray(styleDef.stroke.lineDash)) {
+                    stroke.lineDash = styleDef.stroke.lineDash;
+                } else {
+                    stroke.lineDash = [styleDef.stroke.lineDash];
+                }
+            }
+            if(styleDef.stroke.lineCap) {
+                stroke.lineCap = styleDef.stroke.lineCap;
+            }
             return new ol.style.Stroke(stroke);
         },
         /**
@@ -480,18 +591,36 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {ol.style.Circle}
          */
         __getImageStyle: function(styleDef) {
+            var me = this;
             var image = {};
+            var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+            styleDef.image.size = size;
+          	var svg = me.getSvg(styleDef.image);
+            if(svg) {
+                image = new ol.style.Icon({
+              	    src: svg,
+                    size: [size, size],
+                    imgSize: [size, size]
+                });
+                return image;
+            }
+
             if(styleDef.image.radius) {
                 image.radius = styleDef.image.radius;
+            }
+            if(styleDef.snapToPixel) {
+                image.snapToPixel = styleDef.snapToPixel;
             }
             if(Oskari.util.keyExists(styleDef.image, 'fill.color')) {
                 image.fill = new ol.style.Fill({
                     color: styleDef.image.fill.color
                 });
             }
+            if(styleDef.stroke) {
+                image.stroke = this.__getStrokeStyle(styleDef);
+            }
             return new ol.style.Circle(image);
         },
-
         /**
          * Parses JSON and returns matching ol.style.Text
          * @param  {Object} textStyleJSON text style definition
@@ -505,29 +634,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(textStyleJSON.scale) {
                 text.scale = textStyleJSON.scale;
             }
+            if(textStyleJSON.offsetX) {
+                text.offsetX = textStyleJSON.offsetX;
+            }
+            if(textStyleJSON.offsetY) {
+                text.offsetY = textStyleJSON.offsetY;
+            }
+            if(textStyleJSON.rotation) {
+                text.rotation = textStyleJSON.rotation;
+            }
+            if(textStyleJSON.textAlign) {
+                text.textAlign = textStyleJSON.textAlign;
+            }
+            if(textStyleJSON.textBaseline) {
+                text.textBaseline = textStyleJSON.textBaseline;
+            }
+            if(textStyleJSON.font) {
+                text.font = textStyleJSON.font;
+            }
             if(Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
                 text.fill = new ol.style.Fill({
                     color: textStyleJSON.fill.color
                 });
             }
             if(textStyleJSON.stroke) {
-                var textStroke = {};
-                if(textStyleJSON.stroke.color) {
-                    textStroke.color = textStyleJSON.stroke.color;
-                }
-                if(textStyleJSON.stroke.width) {
-                    textStroke.width = textStyleJSON.stroke.width;
-                }
-                text.stroke = new ol.style.Stroke(textStroke);
+                text.stroke = this.__getStrokeStyle(textStyleJSON);
             }
-
             if (textStyleJSON.labelText) {
                 text.text = textStyleJSON.labelText;
             }
-
             return new ol.style.Text(text);
         }
-
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

@@ -125,9 +125,9 @@ function() {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/sl.js"
         }, {
-            "lang": "sl",
+            "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/mapfull/resources/locale/sl.js"
+            "src": "../../../../bundles/framework/mapfull/resources/locale/sk.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",

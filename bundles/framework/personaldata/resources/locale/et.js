@@ -5,21 +5,22 @@ Oskari.registerLocalization(
     "value": {
         "title": "Minu andmed",
         "desc": "Minu andmed",
-        "notLoggedIn": "Võid salvestada kaardivaateid ja sirvida kaarte, mida oled põiminud teistes veebilehtes Minu andmete all",
-        "notLoggedInText": "NOT TRANSLATED.",
+        "notLoggedIn": "Süsteemi loginud kasutaja saab näha oma konto andmeid, salvestatud kohti, kaardivaateid, lõimitavaid kaarte, analüüse ja andmestikke.",
+        "notLoggedInText": "Logi sisse",
         "tabs": {
             "myviews": {
                 "title": "Minu kaardivaated",
-                "edit": "Toimeta",
-                "publish": "Avalda",
-                "unpublish": "Ära avalda",
+                "edit": "Muuda",
+                "publish": "Avalikusta",
+                "unpublish": "Tee mitteavalikuks",
                 "delete": "Kustuta",
                 "grid": {
                     "name": "Nimi",
                     "description": "Kirjeldus",
-                    "publish": "Avaldatud",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "publish": "Avalikustatud",
+                    "edit": "Muuda",
+                    "delete": "Kustuta",
+                    "default": "Vaikimisi"
                 },
                 "popup": {
                     "edit": "Toimeta vaate info",
@@ -31,12 +32,13 @@ Oskari.registerLocalization(
                     "cancel": "Tühista",
                     "error_noname": "Trüki nimi",
                     "deletetitle": "Kinnita kustutamine",
-                    "deletemsg": "Kas soovid selle kaardivaate kustutada?"
+                    "deletemsg": "Kas soovid selle kaardivaate kustutada?",
+                    "default": "Vaikimisi"
                 },
                 "save": {
                     "success": "Kaardivaade on salvestatud.",
                     "error_noname": "Nimeväli ei tohi olla tühi.",
-                    "error_illegalchars": "Nimi sisaldab mittelubatud märke. Lubatud märgid on tähed a-z kui ka ä ja ö, numbrid, tagasijooksu ja poolitusmärgid.",
+                    "error_illegalchars": "Nimi sisaldab mittelubatavaid märke. Lubatud märgid on tähed a-z kui ka ä ja ö, numbrid, tühikud ja sidekriipsud.",
                     "msg": {
                         "view_name": "Kaardivaate nimi"
                     }
@@ -45,37 +47,38 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Salvesta",
                     "cancel": "Tühista",
-                    "toolbarsave": "Salvesta kaardivaade"
+                    "toolbarsave": "Salvesta kaardivaade",
+                    "saveCurrent": "Salvesta praegune vaade"
                 },
                 "error": {
                     "title": "Viga!",
                     "generic": "Süsteemi viga! Palun proovi hiljem uuesti.",
-                    "notsaved": "Kaardivaate salvestamine ebaõnnestus.",
-                    "notdeleted": "Kaardivaate kustutamine ebaõnnestus.",
-                    "makePublic": "Kaardivaadet pole võimalik avaldada. Proovi hiljem uuesti.",
-                    "makePrivate": "Kaardivaate avaldamist pole võimalik tagasi võtta. Proovi hiljem uuesti.",
-                    "loadfailed": "Kaardivaadete allalaadimine ebaõnnestus."
+                    "notsaved": "Kaardi salvestamine ebaõnnestus.",
+                    "notdeleted": "Kaardi kustutamine ebaõnnestus.",
+                    "makePublic": "Kaarti pole võimalik avalikustada. Proovi hiljem uuesti.",
+                    "makePrivate": "Avalikustad kaarti pole võimalik muuta mitteavalikuks. Proovi hiljem uuesti.",
+                    "loadfailed": "Kaarti ei ole võimalik taastada."
                 }
             },
             "publishedmaps": {
-                "title": "Põimitud kaardid",
+                "title": "Lõimitavad kaardid",
                 "show": "Näita kaardil",
-                "getHTML": "NOT TRANSLATED",
-                "edit": "Toimeta",
-                "publish": "Avalda kaart",
-                "unpublish": "Ära avalda kaarti",
+                "getHTML": "HTML kood",
+                "edit": "Muuda",
+                "publish": "Avalikusta kaart",
+                "unpublish": "Tee kaart mitteavalikuks",
                 "delete": "Kustuta",
                 "grid": {
                     "name": "Nimi",
-                    "domain": "Kaardi seadistused",
+                    "domain": "Veebisait",
                     "publish": "Olek",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "Kasuta",
+                    "html": "HTML kood",
+                    "edit": "Muuda",
+                    "delete": "Kustuta"
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": "Kopeeri allolev kood oma veebisaidile, et seal lõimitud kaarti avalikustada."
                 },
                 "popup": {
                     "edit": "Muuda kaardi nimi",
@@ -86,15 +89,15 @@ Oskari.registerLocalization(
                     "cancel": "Tühista",
                     "error_noname": "Lisa kaardile nimi",
                     "deletetitle": "Kas kaart kustutada?",
-                    "deletemsg": "Soovid kustutada põimitud kaardi. Seda ei näidata enam teie veebilehel.",
+                    "deletemsg": "Soovid kustutada lõimitud kaardi. Seda ei näidata enam teie veebilehel.",
                     "showErrorTitle": "Mittetäielik vaade",
-                    "showConfirmMissing": "Mõned salvestatud kaardikihid pole kättesaadavad, kas soovid ikka seda vaadet avada?",
+                    "showConfirmMissing": "Mõned salvestatud kaardikihid pole kättesaadavad, kas soovid siiski seda lõimkaarti avada?",
                     "showConfirmNotLoaded": "Mõned kaardikihid pole veel laaditud, proovi hiljem uuesti."
                 },
                 "save": {
-                    "success": "Kaart on salvestatud.",
+                    "success": "Lõimkaart on salvestatud.",
                     "error_noname": "Nimeväli ei tohi olla tühi.",
-                    "error_illegalchars": "Nimi sisaldab mittelubatud märke. Lubatud märgid on tähed a-z kui ka ä ja ö, numbrid, tagasijooksu ja poolitusmärgid.",
+                    "error_illegalchars": "Nimi sisaldab mittelubatud märke. Lubatud märgid on tähed a-z ja ka ä ja ö, numbrid, tühikud ja sidekriipsud.",
                     "msg": {
                         "view_name": "Kaardi nimi"
                     }
@@ -107,22 +110,22 @@ Oskari.registerLocalization(
                 },
                 "error": {
                     "title": "Viga!",
-                    "generic": "Süsteemi viga! Palun proovi hiljem uuesti",
-                    "notsaved": "Kaardi salvestamine ebaõnnestus.",
-                    "notdeleted": "Kaardi kustutamine ebaõnnestus.",
-                    "makePublic": "Kaarti pole võimalik avaldada. Proovi hiljem uuesti.",
-                    "makePrivate": "Kaardi avaldamist pole võimalik tagasi võtta. Proovi hiljem uuesti."
+                    "generic": "Lõimkaarti ei saa salvestada.",
+                    "notsaved": "Lõimkaarti ei saa uuendada.",
+                    "notdeleted": "Lõimkaarti ei saa kustutada.",
+                    "makePublic": "Lõimkaarti ei saa avalikustada.",
+                    "makePrivate": "Lõimkaarti ei saa muute mitteavalikuks."
                 }
             },
             "account": {
                 "title": "Minu konto",
                 "firstName": "Eesnimi",
                 "lastName": "Perekonnanimi",
-                "nickName": "Hüüdnimi",
+                "nickName": "Kasutajanimi",
                 "email": "E-post",
-                "changeInfo": "Muuda oma konto infot",
-                "changePassword": "Muuda oma salasõna",
-                "removeAccount": "Kustuta oma konto",
+                "changeInfo": "Muuda konto infot",
+                "changePassword": "Muuda salasõna",
+                "removeAccount": "Kustuta konto",
                 "changeInfoUrl": "/web/et/profile"
             }
         },

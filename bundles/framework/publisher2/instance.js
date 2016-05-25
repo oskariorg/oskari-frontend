@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
-
         this.publisher = null;
     }, {
         /**
@@ -194,8 +193,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
                 // FIXME: not like this! see setter...
-                if (me.sandbox._mapMode === 'mapPublishMode') {
-                    delete me.sandbox._mapMode;
+                if (me.sandbox.mapMode === 'mapPublishMode') {
+                    delete me.sandbox.mapMode;
                 }
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();

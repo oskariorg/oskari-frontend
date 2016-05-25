@@ -24,6 +24,7 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
+            "expose" : "org.cometd",
             "src" : "../../../../libraries/cometd/comp.js"
         },{
             "type" : "text/javascript",
@@ -146,6 +147,10 @@ function() {
             "lang" : "sl",
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sl.js"
+        }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sk.js"
         }, {
             "lang" : "de",
             "type" : "text/javascript",

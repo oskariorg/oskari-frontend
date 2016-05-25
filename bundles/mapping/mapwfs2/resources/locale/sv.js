@@ -27,7 +27,12 @@ Oskari.registerLocalization(
         },
         "information": {
             "title": "WFS-data rendering",
-            "info": "There are WFS-layers on a map, which are not rendered automatically.<br/> Locate and zoom first an area, where features are located.<br/> Feature data and features are retreaved via Feature data-button <br/> Features are rendered via Refresh-button"
+            "info": "There are WFS-layers on the map, which are not rendered automatically. <br/><br/> Locate and zoom in on an area, where features are located.  <br/><br/>  Feature data and features are retrieved via Feature data -button and features are rendered via Refresh-button."
+        },
+        "refresh_alert": {
+            "title": "Visibility warning",
+            "all_not_in_scale": "There are no layers to refresh, please move to a suitable zoom level and try again",
+            "all_invisible" : "There are no visible layers to refresh, please open selected layers and set visible some of current layers"
         },
         "button": {
             "cancel": "Avbryt",
