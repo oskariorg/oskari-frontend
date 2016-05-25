@@ -203,6 +203,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          * @return {jQuery} reference to the toolbar container
          */
         getToolbarContainer: function (ptbid, data) {
+            var me = this;
             var tbid = ptbid || 'default';
             var c = this.containers[tbid];
 
@@ -223,21 +224,47 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             if(!data) {
                 data = {};
             }
+
+            if(!data.colours) {
+                data.colours = {
+                    hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
+                    background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
+                };
+
+            } else {
+                if(!data.colours.hover) {
+                    data.colours.hover = '#3c3c3c';
+                }
+                if(!data.colours.background) {
+                    data.colours.background = '#333438';
+                }
+            }
             data.colours = data.colours || {
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
 
             var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
 
+            c.addClass('toolbar_' + tbid);
             if(addHoverStyle) {
-                c.addClass('toolbar_' + tbid);
                 jQuery('<style type="text/css">'+
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
                         '</style>').appendTo('head');
-
             }
+            // TODO: Need to use this later? Can toolbar color defined in config / add toolbar request?
+            // Add style for one time per toolbar
+            /*
+            if(!this._toolbarConfigs[tbid]) {
+                jQuery('<style type="text/css">'+
+                        'div.toolbar_' + tbid + ' {' +
+                        '   background-color: ' + data.colours.background + ';' +
+                        '}' +
+                    '</style>').appendTo('head');
+            }
+            */
+            
             if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
                     createdHover: (addHoverStyle && showHover) ? true : false,

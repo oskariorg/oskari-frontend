@@ -1,5 +1,82 @@
 # Release Notes
 
+## 1.36.1
+
+### routingService
+
+Added new marker_ferry, marker_flight, ferry_stop and flight stop routing markers. See /framework/routingService/instance.js.
+
+### VectorLayerPlugin
+
+ol2: Click events didn't propagate properly when vector features were added to map. This has been fixed.
+ol2 & ol3: Fixed an issue where removed features were readded on map with new features.
+
+### DrawPlugin.ol3
+
+Measurement results are now shown after each new point in geometry. Previously shown based on hover which didn't work properly on touch screen devices.
+
+### Flyouts in fullscreen mode
+
+Flyouts no longer hide behind the map in fullscreen mode.
+
+### featuredata 2
+
+When moving from mobile mode to desktop, the flyout UI is resumed correctly.
+
+### statsgrid/thematic maps in embedded maps
+
+The legend/classification and map is now working correctly again.
+
+### Zoombar
+
+Normal desktop UI works correctly again.
+
+### publisher2
+
+Featuredata-tool enabled by default when wfs layers are present.
+
+### infobox
+
+Fixed mobile popup close.
+
+### statehandler
+
+No longer calls AddView action route on page unload.
+
+### toolbar
+
+Now you can define hover color and icon background color in bundle config.
+Background color is only used now for selecting light or dark icon.
+
+Example configuration:
+```javascript
+  colours: {
+     hover: '#ff0000',
+     background: '#ffffff'
+  }
+```
+Configured colors are only used when ``Toolbar.ToolbarRequest`` add operation data not contains these configs.
+
+*Notice that att all icons are not specified light or dark icons. This icons are showed only dark style. For example marker-share, tool-feature-selection and tool-print.*
+
+### Admin layerselector
+
+Fixed an issue where grouplayers couldn't be created.
+
+### publisher2
+
+Fixed toolbar error when changing theme.
+
+### Mapmodule ol3
+
+Rotation has been disabled since we don't provide means for controlling/resetting the rotation. We will add functionality to enable and control rotation for ol3 in a future release.
+
+### Oskari.util.sanitize
+
+Now accepts second parameter as boolean correctly.
+Now accepts content as string or Element.
+Now in addition to emptying textContent for Element also removes src, link and href attributes from the element.
+
 ## 1.36
 
 *This release has major changes for mapmodule, mapmodule plugin handling, application icons, application loading, build script and much more. There might very well be issues when
