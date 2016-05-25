@@ -72,7 +72,7 @@ function() {
             if(me.noUI) {
                 pluginConfig.noUI = me.noUI;
             }
-            if(me.toolConfig.roundToDecimals) {
+            if(me.toolConfig && me.toolConfig.roundToDecimals) {
                 pluginConfig.roundToDecimals = me.toolConfig.roundToDecimals;
             }
             var json = {

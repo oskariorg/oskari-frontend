@@ -11,6 +11,10 @@ Added new marker_ferry, marker_flight, ferry_stop and flight stop routing marker
 ol2: Click events didn't propagate properly when vector features were added to map. This has been fixed.
 ol2 & ol3: Fixed an issue where removed features were readded on map with new features.
 
+### DrawPlugin.ol3
+
+Measurement results are now shown after each new point in geometry. Previously shown based on hover which didn't work properly on touch screen devices.
+
 ### Flyouts in fullscreen mode
 
 Flyouts no longer hide behind the map in fullscreen mode.
