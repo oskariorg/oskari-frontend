@@ -5,7 +5,8 @@ Oskari.registerLocalization(
     "value": {
         "title": "Tegnforklaringer",
         "desc": "",
-        "noLegendsText": "Ingen tegnforklaringer er tilgjengelige"
+        "noLegendsText": "Ingen tegnforklaringer er tilgjengelige",
+        "invalidLegendUrl": "NOT TRANSLATED"
     }
 }
 );

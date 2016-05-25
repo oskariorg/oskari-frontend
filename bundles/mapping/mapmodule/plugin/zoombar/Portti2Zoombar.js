@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._uiMode === 'desktop' && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
+                    if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') + 1
                         );
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-minus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._uiMode === 'desktop' && me._slider.slider('value') > 0) {
+                    if (me._slider && me._slider.slider('value') > 0) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') - 1
                         );
@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         _setZoombarValue: function (value) {
             var me = this;
-            if (me._uiMode === 'desktop' && me._slider) {
+            if (me._slider) {
                 // disable events in "onChange"
                 me._suppressEvents = true;
                 /*me._slider.setValue(value);*/
@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         },
 
         _setLayerToolsEditModeImpl: function () {
-            if (this._uiMode === 'desktop' && this._slider) {
+            if (this._slider) {
                 this._slider.slider(
                     'option',
                     'disabled',

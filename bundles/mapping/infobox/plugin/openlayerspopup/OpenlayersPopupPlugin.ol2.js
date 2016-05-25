@@ -151,9 +151,15 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
+                    var popupType = "mobile";
                     popup.setContent(contentDiv);
                 } else {
+                    var popupDOM = jQuery('#' + id),
+                        popupType = "desktop";
                     popup.setContentHTML(popupContent);
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
+                    }
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -822,9 +828,8 @@ Oskari.clazz.define(
                         if(popup.type && popup.type === 'mobile') {
                             popup.popup.close();
                         } else {
-                            popup.popup.destroy();    
+                            popup.popup.destroy();
                         }
-                        
                         delete this._popups[pid];
                     }
                 }
@@ -837,7 +842,7 @@ Oskari.clazz.define(
                     if(popup.type && popup.type === 'mobile') {
                         popup.close();
                     } else {
-                        popup.destroy();    
+                        popup.destroy();
                     }
                 }
                 delete this._popups[id];

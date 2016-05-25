@@ -95,6 +95,18 @@ function() {
             "lang" : "sl",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/sl.js"
+        }, {
+            "lang" : "nb",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/nb.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/es.js"
+        }, {
+            "lang" : "fr",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/fr.js"
         }]
     },
     "bundle" : {

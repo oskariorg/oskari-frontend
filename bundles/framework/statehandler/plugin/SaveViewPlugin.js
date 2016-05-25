@@ -97,6 +97,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             jQuery.cookie("oskaristate", data, {
                 expires: expiredays
             });
+            if(!view) {
+                // cookie set, no need to call server
+                return;
+            }
 
             // need to serialize json data so parameters are sent correctly
             data.viewData = JSON.stringify(data.viewData);

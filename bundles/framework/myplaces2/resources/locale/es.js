@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
                 "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
             },
+            "addCategoryFormButton": "nueva capa de mapa",
             "addCategory": "Añadir capa",
             "editCategory": "Editar capa",
             "deleteCategory": "Borrar capa",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Medir distancia",
                 "tooltip": "Medir distancia",
-                "add": "",
-                "next": "",
+                "add": "Add line",
+                "next": "Next",
                 "edit": "Puede editar la línea haciendo clic y arrastrando los vertices.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Medir área",
                 "tooltip": "Medir área",
-                "add": "",
-                "next": "",
+                "add": "Add area",
+                "next": "Next",
                 "edit": "Puedes editar el área haciendo clic y arrastrando los vertices en el borde de la línea.",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Enlace a la imagen",
-                "previewLabel": "Previsualización de imagen",
-                "add": "Nueva capa de mapa"
+                "previewLabel": "Previsualización de imagen"
             },
             "rendering": {
                 "label": "Colocar estilo",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Estilo de punto",
-            "tooltip": "",
+            "tooltip": "Define a style for point features.",
             "symbol": {
                 "label": "Símbolo"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Estilo de línea",
-            "tooltip": "",
+            "tooltip": "Define a style for line features.",
             "style": {
                 "label": "Estilo"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Estilo de área",
-            "tooltip": "",
+            "tooltip": "Define a style for area features.",
             "linestyle": {
                 "label": "Estilo de línea borde"
             },

@@ -20,7 +20,8 @@ function () {
         metadataFlyoutLicenseDialog: jQuery('<div class="elf_license_dialog" style="width:100%!important;">' +
             '   <div class="elf_license_dialog_license_data" style="height:auto!important;">' +
             '      <div class="elf_license_dialog_descriptions_title"></div>' +
-            '      <div class="elf_license_dialog_descriptions"></div>' +
+            '      <div>'+
+            '           <ul class="elf_license_dialog_descriptions"></ul>'+
             '      </div>' +
             '</div>'),
         licenseDialog: jQuery('<div class="elf_license_dialog">' +

@@ -100,6 +100,10 @@ Oskari.clazz.define(
         me._mobileToolbar;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent;
+
+        //possible custom css cursor set via rpc
+        this._cursorStyle = '';
+
     }, {
         /**
          * @method init
@@ -723,17 +727,19 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function() {
-            this._updateSizeImpl();
-            this.updateDomain();
-
             var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 width =  mapVO.getWidth(),
                 height = mapVO.getHeight();
 
+            this._updateSizeImpl();
+            this.updateDomain();
+
+            var widthNew = mapVO.getWidth(),
+                heightNew = mapVO.getHeight();
             // send as an event forward
-            if(width && height) {
-              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(width, height);
+            if(width !== widthNew || height !== heightNew) {
+              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
               sandbox.notifyAll(evt);
             }
         },
@@ -953,7 +959,7 @@ Oskari.clazz.define(
             });
         },
 
-        _adjustMobileMapSize: function(){
+        _adjustMobileMapSize: function() {
             // TODO: should use mapdiv height, not window since publisher can force the size to smaller than fullscreen
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
@@ -988,6 +994,7 @@ Oskari.clazz.define(
                     mobileDiv.attr('data-height', mapDivHeight);
                 }
             }
+            this.updateSize();
         },
 
 /*---------------- /MAP MOBILE MODE ------------------- */
@@ -1038,6 +1045,16 @@ Oskari.clazz.define(
                 return lightTheme;
             }
 
+        },
+        getCursorStyle: function() {
+            return this._cursorStyle;
+        },
+        setCursorStyle: function(cursorStyle) {
+            var me = this,
+                element = this.getMapEl();
+            jQuery(element).css('cursor',cursorStyle);
+            this._cursorStyle = cursorStyle;
+            return this._cursorStyle;
         },
 
 /*---------------- /THEME ------------------- */

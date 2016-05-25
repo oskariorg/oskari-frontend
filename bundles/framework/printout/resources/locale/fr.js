@@ -3,176 +3,176 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "Printout",
     "value": {
-        "title": "Print the Map view",
-        "flyouttitle": "Print the Map view",
+        "title": "Imprimer la vue de la carte",
+        "flyouttitle": "Imprimer la vue de la carte",
         "desc": "",
-        "btnTooltip": "Print",
+        "btnTooltip": "Imprimer la vue de la carte actuelle vers une image PNG ou un fichier PDF.",
         "BasicView": {
-            "title": "Print the Map view",
+            "title": "Imprimer la vue de la carte",
             "name": {
-                "label": "The name of the map",
-                "placeholder": "required",
-                "tooltip": "Give your map a descriptive name. Please note the language of the user interface."
+                "label": "Nom de la carte",
+                "placeholder": "requis",
+                "tooltip": "Entrez un nom pour votre impression. Attention à la langue utilisée dans les couches cartographiques."
             },
             "language": {
-                "label": "Language",
+                "label": "Lague",
                 "options": {
-                    "fi": "Finnish",
-                    "sv": "Swedish",
-                    "en": "English"
+                    "fi": "Finnois",
+                    "sv": "Suédois",
+                    "en": "Anglais"
                 },
-                "tooltip": "Select the language to be used in the print. Please note the language of the the user interface and the data set."
+                "tooltip": "Sélectionnez un nom pour votre impression. Attention à la langue utilisée dans les couches cartographiques et l'interface utilisateur."
             },
             "size": {
-                "label": "Size",
-                "tooltip": "Choose the print size. Updates are shown in the preview image.",
+                "label": "Taille et direction.",
+                "tooltip": "Sélectionnez une taille d'impression et une direction. Vous pouvez voir les changements dans l'aperçu de l'image.",
                 "options": [
                     {
                         "id": "A4",
                         "label": "A4 portrait",
-                        "classForPreview": "preview-portrait",
+                        "classForPreview": "aperçu-portrait",
                         "selected": true
                     },
                     {
-                        "id": "A4_Landscape",
-                        "label": "A4 landscape",
-                        "classForPreview": "preview-landscape"
+                        "id": "A4_Paysage",
+                        "label": "A4 paysage",
+                        "classForPreview": "aperçu-paysage"
                     },
                     {
                         "id": "A3",
                         "label": "A3 portrait",
-                        "classForPreview": "preview-portrait"
+                        "classForPreview": "aperçu-portrait"
                     },
                     {
-                        "id": "A3_Landscape",
-                        "label": "A3 landscape",
-                        "classForPreview": "preview-landscape"
+                        "id": "A3_Paysage",
+                        "label": "A3 paysage",
+                        "classForPreview": "aperçu-paysage"
                     }
                 ]
             },
             "preview": {
-                "label": "Preview",
-                "tooltip": "You can largen the preview image by clicking it.",
-                "pending": "Preview will be updated shortly.",
+                "label": "Aperçu",
+                "tooltip": "Cliquez sur l'aperçu pour ouvrir une image plus grande dans une nouvelle fenêtre.",
+                "pending": "L'aperçu va être mis a jour sous peu.",
                 "notes": {
-                    "extent": "You can check the map extent for the printout in the preview image.",
-                    "restriction": "Not all map layers are shown in the preview."
+                    "extent": "Vérifiez l'emprise de la carte sur l'aperçu.",
+                    "restriction": "L'aperçu ne montre qu'un fond de carte."
                 }
             },
             "buttons": {
-                "save": "Get Printout",
+                "save": "Imprimer",
                 "ok": "OK",
-                "back": "Previous",
-                "cancel": "Cancel"
+                "back": "Précédent",
+                "cancel": "Annuler"
             },
             "location": {
-                "label": "Location and zoom level",
-                "tooltip": "Printout scale matches the scale of the map in browser.",
-                "zoomlevel": "Printout scale"
+                "label": "Emplacement et échelle",
+                "tooltip": "L'échelle d'impression correspond à l'échelle utilisée pour la carte précédente.",
+                "zoomlevel": "Échelle"
             },
             "settings": {
-                "label": "More settings",
-                "tooltip": "Choose a file format, a title, a scale and a date for the map printout."
+                "label": "Paramètres avancés",
+                "tooltip": "Sélectionnez les paramètres de votre impression."
             },
             "format": {
-                "label": "File format",
-                "tooltip": "Select the file format",
+                "label": "Format du fichier",
+                "tooltip": "Sélectionnez le format du fichier de votre impression.",
                 "options": [
                     {
                         "id": "png",
                         "format": "image/png",
-                        "label": "PNG image"
+                        "label": "Image PNG"
                     },
                     {
                         "id": "pdf",
                         "format": "application/pdf",
                         "selected": true,
-                        "label": "PDF document"
+                        "label": "Document PDF"
                     }
                 ]
             },
             "mapTitle": {
-                "label": "Map Title",
-                "tooltip": "Add a title for the map."
+                "label": "Titre de la carte",
+                "tooltip": "Ajoutez un titre à la carte."
             },
             "content": {
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Show Finnish geoportal Paikkatietoikkuna's logo in the printout.",
-                        "tooltip": "You can hide Finnish geoportal Paikkatietoikkuna's logo if necessary.",
-                        "checked": "checked"
+                        "label": "Afficher le logo du géoportail finlandais Paikkatietoikkuna sur l'impression.",
+                        "tooltip": "Vous pouvez cacher le logo du géoportail finlandais Paikkatietoikkuna si nécessaire.",
+                        "checked": "vérifié"
                     },
                     {
-                        "id": "pageScale",
-                        "label": "Add a scale to the map printout.",
-                        "tooltip": "Add a scale to the map, if you want.",
-                        "checked": "checked"
+                        "id": "échellePage",
+                        "label": "Ajoutez une échelle à l'impression.",
+                        "tooltip": "Ajoutez une échelle à la carte, si vous le voulez.",
+                        "checked": "vérifié"
                     },
                     {
                         "id": "pageDate",
-                        "label": "Show a date in the map printout.",
-                        "tooltip": "You can add a date to the printout.",
-                        "checked": "checked"
+                        "label": "Afficher une date sur l'impression.",
+                        "tooltip": "Vous pouvez afficher une date sur l'impression.",
+                        "checked": "vérifié"
                     }
                 ]
             },
             "legend": {
-                "label": "Map legend",
-                "tooltip": "Select a position for the map legend. If any position is not selected, a map legend is not shown in the map printout.",
+                "label": "Légende de la carte",
+                "tooltip": "Sélectionnez une position pour l'échelle de la carte. Si aucune position n'est sélectionnée, la légende ne s'affichera pas sur l'impression.",
                 "options": [
                     {
                         "id": "oskari_legend_NO",
                         "loca": "NO",
-                        "label": "No map legend",
-                        "tooltip": "The map legend is not shown in the map printout.",
+                        "label": "Pas de légende de la carte.",
+                        "tooltip": "La légende ne s'affiche pas sur l'impression.",
                         "selected": true
                     },
                     {
                         "id": "oskari_legend_LL",
                         "loca": "LL",
-                        "label": "Left lower corner",
-                        "tooltip": "The map legend is shown in the left lower corner of the printout."
+                        "label": "Coin en bas à gauche",
+                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à gauche de l'impression."
                     },
                     {
                         "id": "oskari_legend_LU",
                         "loca": "LU",
-                        "label": "Left upper corner",
-                        "tooltip": "The map legend is shown in the left upper corner of the printout."
+                        "label": "Coin en haut à gauche",
+                        "tooltip": "La légende de la carte s'affiche dans le coin en haut à gauche de l'impression."
                     },
                     {
                         "id": "oskari_legend_RU",
                         "loca": "RU",
-                        "label": "Right upper corner",
-                        "tooltip": "The map legend is shown in the right upper corner of the printout."
+                        "label": "Coin en haut à droite",
+                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à droite de l'impression."
                     },
                     {
                         "id": "oskari_legend_RL",
                         "loca": "RL",
-                        "label": "Right lower corner",
-                        "tooltip": "The map legend is shown in the right upper corner of the printout."
+                        "label": "Coin en bas à droite",
+                        "tooltip": "La légende de la carte s'affiche dans le coin en bas à droite de l'impression."
                     }
                 ]
             },
-            "help": "Help",
+            "help": "Aide",
             "error": {
-                "title": "Error",
-                "size": "Error in size definitions",
-                "name": "Name is required information",
-                "nohelp": "There is no help available.",
-                "saveFailed": "Printing the map view not succeeded. Please try again later.",
-                "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
+                "title": "Erreur",
+                "size": "Erreur dans les définitions de tailles",
+                "name": "Le nom est requis",
+                "nohelp": "Aucune aide disponible",
+                "saveFailed": "Échec de l'impression de la vue de la carte. Réessayez plus tard.",
+                "nameIllegalCharacters": "Le nom contient des caractères non-autorisés. Les caractères autorisés sont les lettres de a à z ainsi que å, ä et ö, les nombres, backspaces, et les traits d'union."
             }
         },
         "StartView": {
-            "text": "You can print out the Map view you just created as a PNG image or a PDF file.",
+            "text": "Vous pouvez imprimer la vue de la carte que vous venez de créer en tant qu'image PNG ou que document PDF.",
             "info": {
-                "maxLayers": "You can use at most eight map layers in the printout.",
-                "printoutProcessingTime": "Printing out the map view may take some time when multiple layers are selected."
+                "maxLayers": "Vous pouvez utiliser au plus huit couches cartographiques pour l'impression.",
+                "printoutProcessingTime": "L'impression peut prendre un certain temps si de nombreuses couches sont sélectionnées."
             },
             "buttons": {
-                "continue": "Continue",
-                "cancel": "Cancel"
+                "continue": "Continuer",
+                "cancel": "Annuler"
             }
         }
     }

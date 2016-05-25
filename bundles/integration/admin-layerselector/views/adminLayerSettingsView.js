@@ -608,7 +608,7 @@ define([
             * @param {Object} data saved data
             * @param {jQuery} element jQuery element
             */
-            _addLayerAjax: function(data, element){
+            _addLayerAjax: function(data, element, callback){
                 var me = this,
                     form = element.parents('.admin-add-layer'),
                     accordion = element.parents('.accordion'),
@@ -644,6 +644,9 @@ define([
                             }
                             form.remove();
 
+                            if (typeof callback === 'function') {
+                                callback();
+                            }
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
@@ -703,7 +706,7 @@ define([
              *
              * @method addLayer
              */
-            addLayer: function (e) {
+            addLayer: function (e, callback) {
                 if (e && e.stopPropagation) {
                     e.stopPropagation();
                 }
@@ -837,7 +840,7 @@ define([
 
                     btn.setHandler(function() {
                         dialog.close();
-                        me._addLayerAjax(data, element);
+                        me._addLayerAjax(data, element, callback);
                     });
 
                     cancelBtn.setHandler(function() {
@@ -847,7 +850,7 @@ define([
                     dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
                     dialog.makeModal();
                 } else {
-                    me._addLayerAjax(data, element);
+                    me._addLayerAjax(data, element, callback);
                 }
             },
             /**
@@ -899,7 +902,7 @@ define([
                         });
                     },
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
-                    success: function () {
+                    success: function (resp) {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
                             //trigger event to View.js so that it can act accordingly

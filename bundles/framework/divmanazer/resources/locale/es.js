@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Estilo de objeto puntal",
-                "tooltip": "",
+                "tooltip": "Define un estilo para los objetos puntuales",
                 "symbol": {
                     "label": "Icono"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Estilo de objeto lineal",
-                "tooltip": "",
+                "tooltip": "Define u estilo para los objetos lineales",
                 "style": {
                     "label": "Guión"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Estilo deobjeto superficial",
-                "tooltip": "",
+                "tooltip": "Define un estilo para los objetos superficiales",
                 "linestyle": {
                     "label": "Línea discontinua"
                 },
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Ajustes adicionales",
                     "dataSource": "Fuente de datos",
-                    "metadata": "Enlace de metadatos"
+                    "metadata": "Enlace de metadatos",
+                    "export_selection": "Exportar solo los objetos seleccionados"
                 },
                 "columns": {
                     "title": "Columnas",

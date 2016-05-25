@@ -49,7 +49,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.attr('title', pConfig.tooltip);
         button.attr('id', 'oskari_toolbar_' + pGroup + '_' + pId);
 
-
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
             //if style explicitly provided, add that as well
             var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
@@ -104,7 +103,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 var buttonEl = jQuery(this);
                 buttonEl.removeClass('hover');
                 if(!buttonEl.hasClass('selected')) {
-                    me._addButtonTheme(pConfig,button);
+                    me._addButtonTheme(pConfig,toolbarConfig,button);
                 }
             });
         }
@@ -130,7 +129,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._checkToolChildrenPosition(pId, pGroup, pConfig);
         }
         if(pConfig.iconCls) {
-            me._addButtonTheme(pConfig,button);
+            me._addButtonTheme(pConfig,toolbarConfig,button);
         }
     },
 
@@ -232,9 +231,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             btn.selected = button.hasClass('selected');
         }
 
-        this._deactiveTools(pId,pGroup);
 
         if (btn.sticky === true) {
+
+            //only need to deactivate tools when sticky button
+            this._deactiveTools(pId,pGroup);
+
             // notify components that tool has changed
             e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
             this.sandbox.notifyAll(e);
@@ -287,7 +289,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-
         var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
         buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
     },
@@ -295,15 +296,25 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Add button theme
      * @method  @private _addButtonTheme
      * @param {Object} btnConfig button config
+     * @param {Object} toolbarConfig toolbar config
      * @param {Object} buttonEl  button jQuery element
      */
-    _addButtonTheme: function(btnConfig, buttonEl){
+    _addButtonTheme: function(btnConfig, toolbarConfig, buttonEl){
         if(!btnConfig || !btnConfig.iconCls || !buttonEl) {
             return;
         }
         buttonEl.removeClass(btnConfig.iconCls + '-light');
         buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
+        if(toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
+            if(Oskari.util.getColorBrightness(toolbarConfig.colours.background) === 'light') {
+                buttonEl.addClass(btnConfig.iconCls + '-light');
+            } else {
+                buttonEl.addClass(btnConfig.iconCls + '-dark');
+            }
+        }
+        else {
+            buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
+        }
     },
 
     /**
@@ -317,7 +328,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
 
-        if(Oskari.util.isLightColor(btnConfig.activeColour)) {
+        if(Oskari.util.isLightColor(btnConfig.activeColour) && buttonEl.hasClass('selected')) {
+            buttonEl.css('background-color', btnConfig.activeColour);
             buttonEl.addClass(btnConfig.iconCls + '-light');
         } else {
             buttonEl.addClass(btnConfig.iconCls + '-dark');
@@ -337,8 +349,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             var btn = this.buttons[pGroup][id];
             var button = group.find('div.tool[tool=' + id + ']');
             // Change default background color back
+
             if(btn.activeColour) {
                 button.css('background-color', '');
+                button.removeClass('selected');
                 button.removeClass(btn.iconCls + '-light');
                 button.removeClass(btn.iconCls + '-dark');
             }

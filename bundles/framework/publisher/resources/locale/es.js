@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Mostrar las capas en el menú",
                 "info": "Seleccione los mapas de fondo. Puede configurar el mapa de fondo en la ventana de previsualización del mapa",
-                "tooltip": "El mapa de fondo se muestra como la capa de fondo del mapa. Cuando seleccione las capas que va a utilizar como fondo, sólo una es visible cada vez, pudiendo intercambiarlas. Puede configurar el mapa de fondo por defecto en la previsualización del mapa",
-                "promote": "¿Mostrar imágenes por defecto?"
+                "tooltip": "El mapa de fondo se muestra como la capa de fondo del mapa. Cuando seleccione las capas que va a utilizar como fondo, sólo una es visible cada vez, pudiendo intercambiarlas. Puede configurar el mapa de fondo por defecto en la previsualización del mapa"
             },
             "preview": "Previsualización del mapa a incorporar",
             "location": "Localización y nivel de zoom",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Necesitas identificarte antes de utilizar las funciones de incrustación",
             "signup": "Acceder",
-            "signupUrl": "/web/es/login",
-            "register": "Registrarse",
-            "registerUrl": "/web/es/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrarse"
         },
         "StartView": {
             "text": "Puede incorporar la vista que acaba de crear en su propio portal web o en el portal de su empresa",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Mostrar",
             "hide": "Ocultar",
             "hidden": "Se ha ocultado el mapa temporalmente.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publicación permitida",
-                    "tooltip": "La capa puede publicarse en un visualizador incorporado y el número de usuarios semanales puede limitarse."
-                }
-            }
+            "selectAsBaselayer": "capa del mapa base"
         },
         "layerFilter": {
             "buttons": {

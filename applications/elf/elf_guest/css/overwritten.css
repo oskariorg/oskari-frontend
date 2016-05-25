@@ -191,3 +191,16 @@ div.admin-layerselector .show-add-class {
     border: none !important;
 }
 */
+
+
+
+/*metadataflyout overrides*/
+hr.elf-metadata-divider {
+    border: 1px solid #e6e6e6;
+    margin-bottom: 15px;
+}
+
+table.elf-metadata-table-no-border td {
+    border: none!important;
+    width: 50%;
+}
