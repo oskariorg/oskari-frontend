@@ -1,0 +1,1504 @@
+.add-area {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: 0px 0px !important;
+}
+
+.add-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -28px 0px !important;
+}
+
+.add-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -56px 0px !important;
+}
+
+.analysis-selection-edit {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -84px 0px !important;
+}
+
+.analysis-selection-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -112px 0px !important;
+}
+
+.analysis-selection-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -140px 0px !important;
+}
+
+.analysis-selection-remove {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -168px 0px !important;
+}
+
+.backendstatus-down {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -196px 0px !important;
+}
+
+.backendstatus-maintenance-pending {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -216px 0px !important;
+}
+
+.backendstatus-maintenance {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -236px 0px !important;
+}
+
+.backendstatus-ok {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -256px 0px !important;
+}
+
+.backendstatus-unknown {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -276px 0px !important;
+}
+
+.component-indexmap {
+    width: 46px;
+    height: 46px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -296px 0px !important;
+}
+
+.component-indexmap:hover {
+    width: 46px;
+    height: 46px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -296px -46px !important;
+}
+
+.component-tab-bg {
+    width: 1px;
+    height: 26px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -342px 0px !important;
+}
+
+.icon-area {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -343px 0px !important;
+}
+
+.icon-arrow-down {
+    width: 13px;
+    height: 15px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -371px 0px !important;
+}
+
+.icon-arrow-right {
+    width: 13px;
+    height: 15px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -384px 0px !important;
+}
+
+.icon-arrow-white-down {
+    width: 13px;
+    height: 15px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -397px 0px !important;
+}
+
+.icon-arrow-white-right {
+    width: 13px;
+    height: 15px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -410px 0px !important;
+}
+
+.icon-bubble-left {
+    width: 20px;
+    height: 15px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -423px 0px !important;
+}
+
+.icon-bubble-right {
+    width: 23px;
+    height: 21px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -443px 0px !important;
+}
+
+.icon-close-dark {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -466px 0px !important;
+}
+
+.icon-close-white {
+    width: 20px;
+    height: 20px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -482px 0px !important;
+}
+
+.icon-close {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -502px 0px !important;
+}
+
+.icon-close:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -502px -16px !important;
+}
+
+.icon-corner-round {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -518px 0px !important;
+}
+
+.icon-corner-sharp {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -546px 0px !important;
+}
+
+.icon-double-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -574px 0px !important;
+}
+
+.icon-drag-corner {
+    width: 23px;
+    height: 23px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -602px 0px !important;
+}
+
+.icon-drag-corner:hover {
+    width: 23px;
+    height: 23px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -602px -23px !important;
+}
+
+.icon-drag {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -625px 0px !important;
+}
+
+.icon-drag:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -625px -16px !important;
+}
+
+.icon-find-nearest-address-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -641px 0px !important;
+}
+
+.icon-find-nearest-address-light {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -669px 0px !important;
+}
+
+.icon-find-nearest-place-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -697px 0px !important;
+}
+
+.icon-find-nearest-place-light {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -725px 0px !important;
+}
+
+.icon-funnel-active {
+    width: 18px;
+    height: 18px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -753px 0px !important;
+}
+
+.icon-funnel {
+    width: 18px;
+    height: 18px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -771px 0px !important;
+}
+
+.icon-geolocator {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -789px 0px !important;
+}
+
+.icon-info-area-active {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -817px 0px !important;
+}
+
+.icon-info-area {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -833px 0px !important;
+}
+
+.icon-info {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -849px 0px !important;
+}
+
+.icon-info:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -849px -16px !important;
+}
+
+.icon-line-basic {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -865px 0px !important;
+}
+
+.icon-line-dashed {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -893px 0px !important;
+}
+
+.icon-line-flat_cap {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -921px 0px !important;
+}
+
+.icon-line-round_cap {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -949px 0px !important;
+}
+
+.icon-line-thin-diagonal {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -977px 0px !important;
+}
+
+.icon-line-thin-horizontal {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1005px 0px !important;
+}
+
+.icon-line-wide-diagonal {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1033px 0px !important;
+}
+
+.icon-line-wide-horizontal {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1061px 0px !important;
+}
+
+.icon-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1089px 0px !important;
+}
+
+.icon-maximize {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1117px 0px !important;
+}
+
+.icon-maximize:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1117px -16px !important;
+}
+
+.icon-menu {
+    width: 25px;
+    height: 7px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1133px 0px !important;
+}
+
+.icon-minimize {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1158px 0px !important;
+}
+
+.icon-minimize:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1158px -16px !important;
+}
+
+.icon-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1174px 0px !important;
+}
+
+.icon-private {
+    width: 18px;
+    height: 18px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1202px 0px !important;
+}
+
+.icon-public {
+    width: 18px;
+    height: 18px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1220px 0px !important;
+}
+
+.icon-restore {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1238px 0px !important;
+}
+
+.icon-restore:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1238px -16px !important;
+}
+
+.icon-select-geometry {
+    width: 23px;
+    height: 23px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1254px 0px !important;
+}
+
+.icon-table {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1277px 0px !important;
+}
+
+.layer-analysis {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1293px 0px !important;
+}
+
+.layer-base {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1309px 0px !important;
+}
+
+.layer-gfi-1 {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1325px 0px !important;
+}
+
+.layer-gfi-2 {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1341px 0px !important;
+}
+
+.layer-group {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1357px 0px !important;
+}
+
+.layer-newest-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1373px 0px !important;
+}
+
+.layer-newest {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1389px 0px !important;
+}
+
+.layer-publishable-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1405px 0px !important;
+}
+
+.layer-publishable {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1421px 0px !important;
+}
+
+.layer-stats-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1437px 0px !important;
+}
+
+.layer-stats {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1453px 0px !important;
+}
+
+.layer-vector {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1469px 0px !important;
+}
+
+.layer-wfs {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1485px 0px !important;
+}
+
+.layer-wms {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1501px 0px !important;
+}
+
+.layer-wmts {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1517px 0px !important;
+}
+
+.marker-arrow {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1533px 0px !important;
+}
+
+.marker-dot {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1561px 0px !important;
+}
+
+.marker-flag {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1589px 0px !important;
+}
+
+.marker-pin {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1617px 0px !important;
+}
+
+.marker-pin2 {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1645px 0px !important;
+}
+
+.marker-share-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1673px 0px !important;
+}
+
+.marker-share-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1705px 0px !important;
+}
+
+.marker-square {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1737px 0px !important;
+}
+
+.marker-stud {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1765px 0px !important;
+}
+
+.marker {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1793px 0px !important;
+}
+
+.menu-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1825px 0px !important;
+}
+
+.menu-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1860px 0px !important;
+}
+
+.menu-rounded-dark {
+    width: 36px;
+    height: 36px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1895px 0px !important;
+}
+
+.menu-rounded-light {
+    width: 36px;
+    height: 36px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1931px 0px !important;
+}
+
+.menu-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1967px 0px !important;
+}
+
+.menu-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2002px 0px !important;
+}
+
+.mobile-close-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2037px 0px !important;
+}
+
+.mobile-close-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2069px 0px !important;
+}
+
+.mobile-info-marker-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2101px 0px !important;
+}
+
+.mobile-info-marker-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2133px 0px !important;
+}
+
+.mobile-infobox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2165px 0px !important;
+}
+
+.mobile-infobox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2197px 0px !important;
+}
+
+.mobile-layers-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2229px 0px !important;
+}
+
+.mobile-layers-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2261px 0px !important;
+}
+
+.mobile-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2293px 0px !important;
+}
+
+.mobile-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2325px 0px !important;
+}
+
+.mobile-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2357px 0px !important;
+}
+
+.mobile-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2389px 0px !important;
+}
+
+.mobile-menu-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2421px 0px !important;
+}
+
+.mobile-menu-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2453px 0px !important;
+}
+
+.mobile-my-location-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2485px 0px !important;
+}
+
+.mobile-my-location-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2517px 0px !important;
+}
+
+.mobile-next-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2549px 0px !important;
+}
+
+.mobile-next-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2581px 0px !important;
+}
+
+.mobile-north-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2613px 0px !important;
+}
+
+.mobile-north-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2645px 0px !important;
+}
+
+.mobile-previous-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2677px 0px !important;
+}
+
+.mobile-previous-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2709px 0px !important;
+}
+
+.mobile-refresh-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2741px 0px !important;
+}
+
+.mobile-refresh-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2773px 0px !important;
+}
+
+.mobile-reset-map-state-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2805px 0px !important;
+}
+
+.mobile-reset-map-state-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2837px 0px !important;
+}
+
+.mobile-search-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2869px 0px !important;
+}
+
+.mobile-search-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2901px 0px !important;
+}
+
+.mobile-selection-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2933px 0px !important;
+}
+
+.mobile-selection-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2965px 0px !important;
+}
+
+.mobile-xy-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2997px 0px !important;
+}
+
+.mobile-xy-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3029px 0px !important;
+}
+
+.mobile-zoom-in-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3061px 0px !important;
+}
+
+.mobile-zoom-in-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3093px 0px !important;
+}
+
+.mobile-zoom-out-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3125px 0px !important;
+}
+
+.mobile-zoom-out-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3157px 0px !important;
+}
+
+.mylocation-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3189px 0px !important;
+}
+
+.mylocation-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3224px 0px !important;
+}
+
+.mylocation-rounded-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3259px 0px !important;
+}
+
+.mylocation-rounded-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3294px 0px !important;
+}
+
+.mylocation-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3329px 0px !important;
+}
+
+.mylocation-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3364px 0px !important;
+}
+
+.myplaces-area {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3399px 0px !important;
+}
+
+.myplaces-draw-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3427px 0px !important;
+}
+
+.myplaces-draw-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3459px 0px !important;
+}
+
+.myplaces-draw-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3491px 0px !important;
+}
+
+.myplaces-draw-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3523px 0px !important;
+}
+
+.myplaces-draw-point-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3555px 0px !important;
+}
+
+.myplaces-draw-point-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3587px 0px !important;
+}
+
+.myplaces-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3619px 0px !important;
+}
+
+.myplaces-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3647px 0px !important;
+}
+
+.refresh {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3675px 0px !important;
+}
+
+.refresh:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3675px -16px !important;
+}
+
+.selection-area {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3691px 0px !important;
+}
+
+.selection-area:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3691px -32px !important;
+}
+
+.selection-circle {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3723px 0px !important;
+}
+
+.selection-circle:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3723px -32px !important;
+}
+
+.selection-edit {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3755px 0px !important;
+}
+
+.selection-edit:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3755px -32px !important;
+}
+
+.selection-line {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3787px 0px !important;
+}
+
+.selection-line:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3787px -32px !important;
+}
+
+.selection-point {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3819px 0px !important;
+}
+
+.selection-point:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3819px -32px !important;
+}
+
+.selection-remove {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3851px 0px !important;
+}
+
+.selection-remove:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3851px -32px !important;
+}
+
+.selection-square {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3883px 0px !important;
+}
+
+.selection-square:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3883px -32px !important;
+}
+
+.tool-draw-cut {
+    width: 35px;
+    height: 36px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3915px 0px !important;
+}
+
+.tool-feature-selection-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3950px 0px !important;
+}
+
+.tool-feature-selection-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3982px 0px !important;
+}
+
+.tool-history-back-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4014px 0px !important;
+}
+
+.tool-history-back-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4046px 0px !important;
+}
+
+.tool-history-forward-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4078px 0px !important;
+}
+
+.tool-history-forward-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4110px 0px !important;
+}
+
+.tool-link-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4142px 0px !important;
+}
+
+.tool-link-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4174px 0px !important;
+}
+
+.tool-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4206px 0px !important;
+}
+
+.tool-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4238px 0px !important;
+}
+
+.tool-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4270px 0px !important;
+}
+
+.tool-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4302px 0px !important;
+}
+
+.tool-pan-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4334px 0px !important;
+}
+
+.tool-pan-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4366px 0px !important;
+}
+
+.tool-print-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4398px 0px !important;
+}
+
+.tool-print-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4430px 0px !important;
+}
+
+.tool-reset-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4462px 0px !important;
+}
+
+.tool-reset-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4494px 0px !important;
+}
+
+.tool-save-view-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4526px 0px !important;
+}
+
+.tool-save-view-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4558px 0px !important;
+}
+
+.tool-zoombox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4590px 0px !important;
+}
+
+.tool-zoombox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4622px 0px !important;
+}
+
+.upload-material-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4654px 0px !important;
+}
+
+.upload-material-light {
+    width: 28px;
+    height: 28px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4682px 0px !important;
+}
+

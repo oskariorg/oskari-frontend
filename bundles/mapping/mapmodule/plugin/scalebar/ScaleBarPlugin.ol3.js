@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             });
             this.getMap().addControl(this._scalebar);
             return el;
-        },
+        }
 
         /**
          * @method _createEventHandlers

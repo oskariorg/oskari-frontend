@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             langElement.append('<div class="info-label"></div>');
             me.langField.field = langField;
             me.langField.element = langElement;
-            
+
             me._languageChanged(selectedLang);
         },
 

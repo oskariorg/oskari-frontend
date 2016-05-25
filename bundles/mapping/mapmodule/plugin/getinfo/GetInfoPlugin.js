@@ -395,7 +395,8 @@ Oskari.clazz.define(
                 colourScheme: colourScheme,
                 font: font,
                 title: this._loc.title,
-                infoboxId: this.infoboxId
+                infoboxId: this.infoboxId,
+                hidePrevious: false
             });
         },
 
@@ -433,7 +434,7 @@ Oskari.clazz.define(
             ),
             request;
             var options = {
-                hidePrevious: true,
+                hidePrevious: params.hidePrevious === undefined ? true : params.hidePrevious,
                 colourScheme: params.colourScheme,
                 font: params.font
             };

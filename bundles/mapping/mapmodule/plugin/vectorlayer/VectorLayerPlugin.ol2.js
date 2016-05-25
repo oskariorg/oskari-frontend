@@ -97,6 +97,7 @@ Oskari.clazz.define(
                         }
                         return true;
                     });
+                    olLayer.events.fallThrough = true;
                     olLayer.setOpacity(opacity);
 
                     me._map.addLayer(olLayer);
@@ -201,17 +202,20 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
+         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
                 foundFeatures,
                 olLayer,
                 layerId;
-
             if(layer && layer !== null){
-                layerId = layer.getId();
-                olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
+                  if(layer instanceof OpenLayers.Layer.Vector) {
+                      layerId = layer.id;
+                  } else if(_.isString(layer)) {
+                      layerId = layer;
+                  }
+                  olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
             }
             // Removes only wanted features from the given maplayer
             if (olLayer) {
@@ -238,7 +242,7 @@ Oskari.clazz.define(
                 }
             }
         },
-        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+        _removeFeaturesByAttribute: function(olLayer, identifier, value, removeForSorting) {
             var featuresToRemove = [];
 
             // add all features if identifier and value are missing or
@@ -248,7 +252,6 @@ Oskari.clazz.define(
             }
             else {
                 featuresToRemove = olLayer.getFeaturesByAttribute(identifier, value);
-
             }
 
             // notify other components of removal
@@ -259,8 +262,16 @@ Oskari.clazz.define(
             olLayer.removeFeatures(featuresToRemove);
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
-                var geojson = formatter.write([feature]);
-                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
+                var featuresPrio = this._features[this._getLayerId(olLayer.name)][0].data;
+                if(!removeForSorting) {
+                    for(key in featuresPrio) {
+                        if(featuresPrio[key].id===feature.id) {
+                            featuresPrio.splice(key,1);
+                        }
+                    };
+                    var geojson = formatter.write([feature]);
+                    removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
+                }
             }
             sandbox.notifyAll(removeEvent);
         },
@@ -272,9 +283,8 @@ Oskari.clazz.define(
         },
         _getLayerId : function(name) {
             var index = this._olLayerPrefix.length;
-            return name.substring(index +1);
+            return name.substring(index);
         },
-
         /**
          * @method addFeaturesToMap
          * @public
@@ -378,7 +388,7 @@ Oskari.clazz.define(
                    });
 
                    if(options.prio && !isNaN(options.prio)){
-                       this._removeFeaturesByAttribute(olLayer);
+                       this._removeFeaturesByAttribute(olLayer, null, null, true);
                        olLayer.removeAllFeatures();
                        olLayer.refresh();
 

@@ -193,16 +193,23 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {Oskari.mapframework.domain.VectorLayer} layer layer details
+         * @param {Oskari.mapframework.domain.VectorLayer} layer object OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer){
             var me = this,
                 olLayer,
                 layerId;
-
             if(layer && layer !== null){
-                layerId = layer.getId();
+                if(layer instanceof ol.layer.Vector) {
+                    layerId = layer.get('id');
+                } else if(_.isString(layer) || _.isNumber(layer)) {
+                    layerId = layer;
+                }
                 olLayer = me._layers[layerId];
+
+                if(!olLayer) {
+                    return;
+                }
             }
             if (olLayer) {
                 // Removes only wanted features from the given maplayer
@@ -249,6 +256,12 @@ Oskari.clazz.define(
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
                 source.removeFeature(feature);
+                var featuresPrio = this._features[olLayer.get('id')][0].data;
+                for(key in featuresPrio) {
+                    if(featuresPrio[key].get('id')===feature.get('id')) {
+                        featuresPrio.splice(key,1);
+                    }
+                };
                 var geojson = formatter.writeFeaturesObject([feature]);
                 removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
             }
@@ -302,7 +315,7 @@ Oskari.clazz.define(
                             me._map.on('pointermove', function (evt) {
                               var target = me._map.getTarget();
                               var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
-                              var cursor = null;
+                              var originalCursor = me.getMapModule().getCursorStyle();
                               var hit = this.forEachFeatureAtPixel(evt.pixel,
                                   function(feature, layer) {
                                     if(feature.getProperties()['oskari-cursor']) {
@@ -314,7 +327,7 @@ Oskari.clazz.define(
                                 if (hit && cursor) {
                                   jTarget.css('cursor', cursor);
                                 } else {
-                                  jTarget.css('cursor', '');
+                                  jTarget.css('cursor', originalCursor);
                                 }
                           });
                           me._pointerMoveAdded = true;
@@ -363,7 +376,7 @@ Oskari.clazz.define(
                         });
 
                         if(options.prio && !isNaN(options.prio)){
-                            this._removeFeaturesByAttribute(layer);
+                            //this._removeFeaturesByAttribute(layer);
                             vectorSource.clear();
 
                             me._features[options.layerId].sort(function(a,b){

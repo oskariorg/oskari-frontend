@@ -2,8 +2,7 @@
  * Adds internalization support for Oskari
  */
 (function(O) {
-	var oskariLang = null;
-	var defaultLang = null;
+	var oskariLang = 'en';
 	var localizations = {};
 	var supportedLocales = null;
 
@@ -17,10 +16,8 @@
      *
      */
     O.setSupportedLocales = function (locales) {
-        if (locales === null || locales === undefined) {
-            throw new TypeError(
-                'setSupportedLocales(): Missing locales'
-            );
+        if (!locales) {
+            return;
         }
         if (!Array.isArray(locales)) {
             throw new TypeError(
@@ -45,10 +42,8 @@
      *
      */
     O.setLang = function (lang) {
-        if (lang === null || lang === undefined) {
-            throw new TypeError(
-                'setLang(): Missing lang'
-            );
+        if (!lang) {
+            return;
         }
         oskariLang = lang;
     };
@@ -60,7 +55,7 @@
      * @return {string} Language
      */
     O.getLang = function () {
-        return oskariLang;
+        return oskariLang || 'en';
     };
 
     /**
@@ -93,20 +88,14 @@
         var supported = O.getSupportedLocales();
 
         if(supported.length === 0) {
-            // supported locales not set, use current
-            if (console && console.warn) {
-                console.warn(
-                    'Supported locales not set, using current language ' + this.getLang()
-                );
-            }
-            return oskariLang;
+            return this.getLang();
         }
         var locale = supported[0];
 
         if (locale.indexOf('_') !== -1) {
             return locale.substring(0, locale.indexOf('_'));
         }
-        return oskariLang;
+        return this.getLang();
     };
 
 
@@ -159,6 +148,7 @@
         if(localizations[l] && localizations[l][key]) {
             return localizations[l][key];
         } else {
+            var defaultLang = O.getDefaultLanguage();
             if (fallbackToDefault && localizations[defaultLang] && localizations[defaultLang][key]) {
                 return localizations[defaultLang][key];
             } else {
@@ -235,16 +225,19 @@
     // ------------------------------------------------
     // Decimal separators
     // ------------------------------------------------
-    var decimalSeparators = [];
+    var decimalSeparator;
 
     /**
-     * @public @method setDecimalSeparators
+     * @public @method setDecimalSeparator
      *
-     * @param {Object} decimalSeparators Decimal separators
+     * @param {String} separator to use. Defaults to ','
      *
      */
-    O.setDecimalSeparators = function (separators) {
-        decimalSeparators = separators;
+    O.setDecimalSeparator = function (separator) {
+        if(!separator) {
+            return;
+        }
+        decimalSeparator = separator;
     };
     /**
      * @public @method getDecimalSeparator
@@ -252,32 +245,6 @@
      * @return {string} Decimal separator
      */
     O.getDecimalSeparator =  function () {
-        var me = this,
-            lang = O.getLang();
-        var locales = O.getSupportedLocales().filter(
-                function (locale){
-                    return locale.indexOf(lang) === 0;
-                }
-            );
-        var separators = locales.map(function (locale) {
-                    return me.getDecimalSeparators()[locale];
-                }
-            );
-
-        if (separators.length > 1 &&console && console.warn) {
-            console.warn(
-                'Found more than one separator for ' + this.getLang()
-            );
-        }
-
-        if (separators.length && separators[0]) {
-            return separators[0];
-        }
-        return ','; // Most common separator
-    };
-
-
-    O.getDecimalSeparators = function () {
-        return decimalSeparators;
+        return decimalSeparator || ',';
     };
 }(Oskari));

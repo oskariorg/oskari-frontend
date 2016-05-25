@@ -304,6 +304,23 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
+            zoomIn : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomOut : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(-1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomTo : function(newZoom) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                mapModule.setZoomLevel(newZoom);
+                return mapModule.getMapZoom();
+            },
             getPixelMeasuresInScale : function(mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
@@ -358,6 +375,10 @@ Oskari.clazz.define(
                     }
                 });
                 return features;
+            },
+            setCursorStyle: function(cursorStyle) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                return mapModule.setCursorStyle(cursorStyle);
             },
             sendUIEvent: function(bundleId, payload) {
                 var me = this,

@@ -12,10 +12,10 @@ function() {
         'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
     ],
     templates: {
-        'toolOptions': '<div class="tool-options"></div>',
-        'toolOptionSettingInput': '<div class="tool-option"><input type="checkbox" /><label></label></div>'
+        'toolOptions': '<div class="tool-options"></div>'
     },
     supportedProjections: null,
+    roundToDecimals: null,
     noUI: null,
     projectionTrasformationIsCheckedInModifyMode: false,
     noUiIsCheckedInModifyMode: false,
@@ -63,7 +63,6 @@ function() {
     */
     getValues: function () {
         var me = this;
-
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
@@ -72,6 +71,9 @@ function() {
             }
             if(me.noUI) {
                 pluginConfig.noUI = me.noUI;
+            }
+            if(me.toolConfig && me.toolConfig.roundToDecimals) {
+                pluginConfig.roundToDecimals = me.toolConfig.roundToDecimals;
             }
             var json = {
                 configuration: {}
@@ -95,41 +97,56 @@ function() {
         var me = this,
             template = jQuery(me.templates.toolOptions).clone(),
             loc = Oskari.getLocalization('coordinatetool', Oskari.getLang() || Oskari.getDefaultLanguage()),
-            optionNoUI = jQuery(me.templates.toolOptionSettingInput).clone(),
             labelNoUI = loc.display.publisher.noUI;
 
-        if(me.toolConfig && me.toolConfig.supportedProjections) {
-            optionShowTransformationTools = jQuery(me.templates.toolOptionSettingInput).clone(),
-            labelShowTransformationTools = loc.display.publisher.showTransformationTools,
+        var input = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
 
-            optionShowTransformationTools.find('label').html(labelShowTransformationTools);
-            optionShowTransformationTools.find('input').change(function (e) {
-                if(jQuery(this).is(':checked')) {
+        if(me.toolConfig && me.toolConfig.supportedProjections) {
+            var inputTransform = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
+            inputTransform.setTitle(loc.display.publisher.showTransformationTools);
+            inputTransform.setHandler(function(checked){
+                if(checked === 'on') {
                     me.supportedProjections = me.toolConfig.supportedProjections;
                 } else {
                     me.supportedProjections = null;
                 }
             });
 
+
             if(me.projectionTrasformationIsCheckedInModifyMode) {
-                optionShowTransformationTools.find('input').attr('checked', 'checked');
+                inputTransform.setChecked(true);
                 me.supportedProjections = me.toolConfig.supportedProjections;
             }
-            template.append(optionShowTransformationTools);
+            template.append(inputTransform.getElement());
         }
-        optionNoUI.find('label').html(labelNoUI);
-        optionNoUI.find('input').change(function (e) {
-            if(jQuery(this).is(':checked')) {
+
+        input.setTitle(labelNoUI);
+        input.setHandler(function(checked){
+            if(checked === 'on') {
                 me.noUI = true;
+                me.getPlugin().teardownUI();
+                //me.getPlugin().toggleIconVisibility(false);
             } else {
                 me.noUI = null;
+                me.getPlugin().redrawUI(Oskari.util.isMobile());
+                //me.getPlugin().toggleIconVisibility(true);
             }
         });
+
         if(me.noUiIsCheckedInModifyMode) {
-            optionNoUI.find('input').attr('checked', 'checked');
+            input.setChecked(true);
             me.noUI = true;
         }
-        template.append(optionNoUI);
+        var inputEl = input.getElement();
+        if(inputEl.style) {
+            inputEl.style.width = 'auto';
+        }
+
+        template.append(inputEl);
         return template;
      }
 }, {

@@ -112,3 +112,17 @@
     .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
       float: right;
       margin-right: 7.5px; }
+
+.oskariui-toolbar-container .oskariui-toolbarbuttongroup .toolrow {
+  border-top: none;
+  padding: 0px; }
+
+.divmanazerpopup.toolbar-popup.bottom {
+  background-color: #e6e6e6;
+  min-width: 50px; }
+  .divmanazerpopup.toolbar-popup.bottom .popup-body .content {
+    margin: 0px; }
+
+.divmanazerpopup.toolbar-popup.bottom.mobile {
+  border: 2px solid silver;
+  border-radius: 0px; }

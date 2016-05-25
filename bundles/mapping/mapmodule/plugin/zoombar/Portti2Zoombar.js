@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._mobileDefs = {
             buttons:  {
                 'mobile-zoom-in': {
-                    iconCls: 'mobile-zoom-in mobiletoolbar',
+                    iconCls: 'mobile-zoom-in',
                     tooltip: '',
                     sticky: false,
                     show: true,
@@ -46,13 +46,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         if(currentZoom<maxZoomLevel) {
                             me.getMapModule().setZoomLevel(currentZoom+1);
                         }
-                    },
-                    //toggleChangeIcon: true,
-                    //activeColor: '#E6E6E6'
-                    //childPosition: 'bottom'
+                    }
                 },
                 'mobile-zoom-out': {
-                    iconCls: 'mobile-zoom-out mobiletoolbar',
+                    iconCls: 'mobile-zoom-out',
                     tooltip: '',
                     sticky: false,
                     show: true,
@@ -63,9 +60,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                             me.getMapModule().setZoomLevel(currentZoom-1);
                         }
                     }
-                    //toggleChangeIcon: true,
-                    //activeColor: '#E6E6E6',
-                    //childPosition: 'bottom'
                 }
             },
             buttonGroup: 'mobile-toolbar'
@@ -199,7 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._uiMode === 'desktop' && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
+                    if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') + 1
                         );
@@ -209,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-minus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._uiMode === 'desktop' && me._slider.slider('value') > 0) {
+                    if (me._slider && me._slider.slider('value') > 0) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') - 1
                         );
@@ -253,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         _setZoombarValue: function (value) {
             var me = this;
-            if (me._uiMode === 'desktop' && me._slider) {
+            if (me._slider) {
                 // disable events in "onChange"
                 me._suppressEvents = true;
                 /*me._slider.setValue(value);*/
@@ -279,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         },
 
         _setLayerToolsEditModeImpl: function () {
-            if (this._uiMode === 'desktop' && this._slider) {
+            if (this._slider) {
                 this._slider.slider(
                     'option',
                     'disabled',
@@ -413,9 +407,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} modeChanged is the ui mode changed (mobile/desktop)
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, modeChanged) {
+        redrawUI: function(mapInMobileMode, forced) {
             if(!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -427,12 +421,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(toolbarNotReady) {
+            if(!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
 
-            if (mapInMobileMode) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 me._element = me._createControlElement();

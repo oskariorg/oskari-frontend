@@ -100,6 +100,10 @@ Oskari.clazz.define(
         me._mobileToolbar;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent;
+
+        //possible custom css cursor set via rpc
+        this._cursorStyle = '';
+
     }, {
         /**
          * @method init
@@ -723,17 +727,19 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function() {
-            this._updateSizeImpl();
-            this.updateDomain();
-
             var sandbox = this.getSandbox(),
                 mapVO = sandbox.getMap(),
                 width =  mapVO.getWidth(),
                 height = mapVO.getHeight();
 
+            this._updateSizeImpl();
+            this.updateDomain();
+
+            var widthNew = mapVO.getWidth(),
+                heightNew = mapVO.getHeight();
             // send as an event forward
-            if(width && height) {
-              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(width, height);
+            if(width !== widthNew || height !== heightNew) {
+              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
               sandbox.notifyAll(evt);
             }
         },
@@ -887,7 +893,12 @@ Oskari.clazz.define(
                         'add',
                         {
                             show: true,
-                            toolbarContainer: me._toolbarContent
+                            toolbarContainer: me._toolbarContent,
+                            colours: {
+                                hover: this.getThemeColours().hoverColour,
+                                background: this.getThemeColours().backgroundColour
+                            },
+                            disableHover: true
                         }
                 );
                 sandbox.request(me.getName(), request);
@@ -927,7 +938,6 @@ Oskari.clazz.define(
                 var sortedList = this._getSortedPlugins();
                 _.each(sortedList, function(plugin) {
                     if (plugin && typeof plugin.redrawUI === 'function') {
-                        var index = plugin.getIndex();
                         plugin.redrawUI(me.getMobileMode(), modeChanged);
                     }
                 });
@@ -950,10 +960,12 @@ Oskari.clazz.define(
             });
         },
 
-        _adjustMobileMapSize: function(){
+        _adjustMobileMapSize: function() {
+            // TODO: should use mapdiv height, not window since publisher can force the size to smaller than fullscreen
             var mapDivHeight = jQuery(window).height();
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
+
             if(mobileDiv.children().length === 0) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
@@ -969,16 +981,21 @@ Oskari.clazz.define(
                 // case: no tools in toolbar or no toolbar -> force height
                 else if (mobileDiv.height() < mobileDiv.children().height()) {
                     // any floated plugins might require manual height setting if there is no toolbar
-                    mobileDiv.height(mobileDiv.children().height())
+                    mobileDiv.height(mobileDiv.children().height());
                 }
             }
 
             // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
-            if (Oskari.util.isMobile()) {
+            // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
+            if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
                 mapDivHeight -= mobileDiv.outerHeight();
-                jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                this.updateDomain();
+                if((mobileDiv.attr('data-height') + '') !== mapDivHeight) {
+                    jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
+                    this.updateDomain();
+                    mobileDiv.attr('data-height', mapDivHeight);
+                }
             }
+            this.updateSize();
         },
 
 /*---------------- /MAP MOBILE MODE ------------------- */
@@ -1003,30 +1020,46 @@ Oskari.clazz.define(
             }
         },
 
-        getThemeColours: function(){
+        getThemeColours: function(theme){
             var me = this;
-            var theme = me.getTheme();
+            // Check at the is konowed theme
+            if(theme && theme !== 'light' && theme !== 'dark'){
+                theme = 'dark';
+            }
+            var wantedTheme = theme || me.getTheme();
 
             var darkTheme =  {
                 textColour: '#ffffff',
                 backgroundColour: '#3c3c3c',
                 activeColour: '#E6E6E6',
-                activeTextColour: '#000000'
+                activeTextColour: '#000000',
+                hoverColour: '#E6E6E6'
             };
 
             var lightTheme =  {
                 textColour: '#000000',
                 backgroundColour: '#ffffff',
                 activeColour: '#3c3c3c',
-                activeTextColour: '#ffffff'
+                activeTextColour: '#ffffff',
+                hoverColour: '#3c3c3c'
             };
 
-            if(theme === 'dark') {
+            if(wantedTheme === 'dark') {
                 return darkTheme;
             } else {
                 return lightTheme;
             }
-            
+
+        },
+        getCursorStyle: function() {
+            return this._cursorStyle;
+        },
+        setCursorStyle: function(cursorStyle) {
+            var me = this,
+                element = this.getMapEl();
+            jQuery(element).css('cursor',cursorStyle);
+            this._cursorStyle = cursorStyle;
+            return this._cursorStyle;
         },
 
 /*---------------- /THEME ------------------- */
@@ -1199,7 +1232,7 @@ Oskari.clazz.define(
             }
         },
         /**
-         * Starts any plugins that reported 
+         * Starts any plugins that reported
          * @param  {[type]} force [description]
          * @return {[type]}       [description]
          */
@@ -1240,6 +1273,7 @@ Oskari.clazz.define(
         startPlugins: function () {
             var me = this;
             var sortedList = this._getSortedPlugins();
+
             _.each(sortedList, function(plugin) {
                 if (plugin && typeof plugin.startPlugin === 'function') {
                     me.startPlugin(plugin);
@@ -1326,9 +1360,10 @@ Oskari.clazz.define(
 
 
 /* --------------- STYLES --------------------------- */
-    
+
         /**
          * Register wellknown style
+         * !! DO NOT USE - SUBJECT TO CHANGE !!
          * @method  @public registerStyle
          * @param  {String} key    style key
          * @param  {Object} styles styles object
@@ -1342,6 +1377,7 @@ Oskari.clazz.define(
 
         /**
          * Get wellknown style object
+         * !! DO NOT USE - SUBJECT TO CHANGE !!
          * @method  @public getWellknownStyle
          * @param  {String} key   style key
          * @param  {String} style style name
@@ -1357,7 +1393,7 @@ Oskari.clazz.define(
                 return me._wellknownStyles[key][style]
             } else {
                 return me._wellknownStyles[key];
-            }   
+            }
         },
 
 /* --------------- /STYLES --------------------------- */
@@ -1392,7 +1428,7 @@ Oskari.clazz.define(
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
                 markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
                 svgObject = {
                     data: markerStyle.shape.data,
@@ -1400,7 +1436,7 @@ Oskari.clazz.define(
                     y: markerStyle.shape.y
                 };
             }
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null && 
+            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
                 markerStyle.shape.key && markerStyle.shape.name) {
                 svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
                 if(svgObject === null) {

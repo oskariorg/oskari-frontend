@@ -13,18 +13,18 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "title": "Koordinater",
-                "searchButton": "Centrum karta",
-                "addMarkerButton": "?",
-                "info": "Klicka på den plats på kartan för att se koordinaterna eller mata in koordinaterna och sök",
-                "showMouseCoordinates": "Visa musen koordinaterna"
+                "searchButton": "Fokusera kartan",
+                "addMarkerButton": "Tillägg markör",
+                "info": "Klicka på en plats på kartan för att se dess koordinater eller mata in koordinaterna och klicka på knappen \"Fokusera kartan\"",
+                "showMouseCoordinates": "Visa koordinaterna för musmarkörens position"
             },
             "compass": {
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
             "reversegeocode": {
-                "errorTitle": "Geokooding fel",
-                "error": "Fel på finna geokod för koordinaaten",
+                "errorTitle": "Geokodningsfel",
+                "error": "Geokodningen misslyckades. Geokoden kunde inte hämtas för den valda platsen",
                 "WHAT3WORDS_CHANNEL": {
                     "label": "What3words: "
                 },
@@ -33,18 +33,18 @@ Oskari.registerLocalization(
                 }
             },
             "tooltip" : {
-                "tool": "Visa/stäng koordinaterna verktyget",
+                "tool": "Visa koordinaterna eller fokusera kartan till de valda koordinaterna",
                 "close": "Stäng"
             },
              "checkValuesDialog": {
                 "button": "OK",
-                "title": "Kontrollsummevärden",
-                "message": "Kontrollera koordinatvärdena för fälten"
+                "title": "Fel",
+                "message": "Koordinaterna er felaktiga. Kontrollera koordinatvärdena och försök igen"
             },
             "projectionChange": {
-                "header": "Change projection",
-                "projection":"Projection",
-                "confirmationMessage": "Changing the projection will return the application to it's initial state and all opened maplayers will be removed. Do you wish to continue?",
+                "header": "Byt projektion",
+                "projection":"Projektion",
+                "confirmationMessage": "Genom att byta projektion återgår applikationen till startläget och alla öppna kartlager stänges. Vill du fortsätta?",
                 "buttons": {
                     "ok": "OK",
                     "cancel": "Avbryt"
@@ -57,8 +57,8 @@ Oskari.registerLocalization(
                     "NLSFI:etrs_gk": "ETRS-GKn-plankoordinater",
                     "NLSFI:kkj": "KKS grundkoordinatsystem",
                     "NLSFI:ykj": "KKS enhetskoordinatsystem",
-                    "EPSG:4258": "ETRS89 geografiska koordinater (~WGS84)",
-                    "LATLON:kkj": "KKS geografiska koordinater",
+                    "EPSG:4258": "ETRS89 geografiska (~WGS84)",
+                    "LATLON:kkj": "KKS geografiska",
                     "EPSG:3046": "ETRS-TM34",
                     "EPSG:3048": "ETRS-TM36",
                     "EPSG:3873": "ETRS-GK19",
@@ -82,11 +82,11 @@ Oskari.registerLocalization(
             },
             "cannotTransformCoordinates" : {
                 "title": "Fel",
-                "message": "Koordinater kan inte omvandlas"
+                "message": "Koordinaterna kunde inte omvandlas"
             },
             "publisher": {
-                "showTransformationTools": "Visa verktyg för koordinatförvandling",
-                "noUI": "Visa inte användargränsnitt (Använd RPC gränssnitt)"
+                "showTransformationTools": "Visa verktyg för koordinattransformation",
+                "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
         }
     }
