@@ -895,7 +895,8 @@ Oskari.clazz.define(
                             show: true,
                             toolbarContainer: me._toolbarContent,
                             colours: {
-                                hover: this.getThemeColours().hoverColour
+                                hover: this.getThemeColours().hoverColour,
+                                background: this.getThemeColours().backgroundColour
                             },
                             disableHover: true
                         }
@@ -1019,9 +1020,13 @@ Oskari.clazz.define(
             }
         },
 
-        getThemeColours: function(){
+        getThemeColours: function(theme){
             var me = this;
-            var theme = me.getTheme();
+            // Check at the is konowed theme
+            if(theme && theme !== 'light' && theme !== 'dark'){
+                theme = 'dark';
+            }
+            var wantedTheme = theme || me.getTheme();
 
             var darkTheme =  {
                 textColour: '#ffffff',
@@ -1039,7 +1044,7 @@ Oskari.clazz.define(
                 hoverColour: '#3c3c3c'
             };
 
-            if(theme === 'dark') {
+            if(wantedTheme === 'dark') {
                 return darkTheme;
             } else {
                 return lightTheme;

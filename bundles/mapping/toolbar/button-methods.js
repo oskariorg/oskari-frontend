@@ -231,7 +231,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             btn.selected = button.hasClass('selected');
         }
 
-
         if (btn.sticky === true) {
 
             //only need to deactivate tools when sticky button
@@ -258,7 +257,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                     // Remove button light and dark icons
                     button.removeClass(btn.iconCls + '-light');
                     button.removeClass(btn.iconCls + '-dark');
-                    me._changeButtonIconTheme(btn, button);
+                    me._changeButtonIconTheme(btn, button, btn.activeColour);
                 }
             }
         }
@@ -323,13 +322,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @param  {Object} btnConfig button config
      * @param  {Object} buttonEl  button jQuery element
      */
-    _changeButtonIconTheme: function(btnConfig, buttonEl){
+    _changeButtonIconTheme: function(btnConfig, buttonEl, color){
         if(!btnConfig || !btnConfig.activeColour || !buttonEl) {
             return;
         }
 
-        if(Oskari.util.isLightColor(btnConfig.activeColour) && buttonEl.hasClass('selected')) {
-            buttonEl.css('background-color', btnConfig.activeColour);
+        if(Oskari.util.isLightColor(color)) {
             buttonEl.addClass(btnConfig.iconCls + '-light');
         } else {
             buttonEl.addClass(btnConfig.iconCls + '-dark');
@@ -357,7 +355,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.removeClass(btn.iconCls + '-dark');
             }
 
-            me._changeButtonIconTheme(btn, button);
+            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
+            me._changeButtonIconTheme(btn, button, toolbarConfig.colours.background);
 
             // Change default icon back
             if(btn.toggleChangeIcon === true) {

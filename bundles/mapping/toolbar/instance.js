@@ -264,6 +264,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                     '</style>').appendTo('head');
             }
             */
+            
             if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
                     createdHover: (addHoverStyle && showHover) ? true : false,
