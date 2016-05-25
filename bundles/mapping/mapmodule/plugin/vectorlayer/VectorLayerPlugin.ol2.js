@@ -343,6 +343,7 @@ Oskari.clazz.define(
                            }
                            return true;
                        });
+                       olLayer.events.fallThrough = true;
                        olLayer.setOpacity(opacity);
                        isOlLayerAdded = false;
                    }

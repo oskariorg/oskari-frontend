@@ -577,6 +577,20 @@
                     }
                 }
             }
+        }, {
+            "title": "Water pipe tool",
+            "fi": "Water pipe tool",
+            "sv": "",
+            "en": "",
+            "bundlename": "water-pipe-tool",
+            "bundleinstancename": "water-pipe-tool",
+            "metadata": {
+                "Import-Bundle": {
+                    "link-panel": {
+                        "bundlePath": "../../../packages/hsy/bundle/"
+                    }
+                }
+            }
         }
     ]
 }

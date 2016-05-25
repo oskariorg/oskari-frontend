@@ -14,7 +14,7 @@ Oskari.clazz.define(
         this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
-        this.highlightVectorLayer = null;
+        //this.highlightVectorLayer = null;
         this.mustacheVectorLayer = null;
         //there is finnish words in state variables cause in future there will be direct reading from WMS or WFS interfaces, it's easier to read direct params with right name
         this.state = {
@@ -190,9 +190,9 @@ Oskari.clazz.define(
                 me._activateNormalWFSReq(false);
                 me._activateTagPipeLayers();
 
-                if(me.highlightVectorLayer === null){
+/*                if(me.highlightVectorLayer === null){
                     me._createHighlightVectorLayer();
-                }
+                }*/
 
                 me._manageHelp(true, me._getLocalization('help_start'));
             });
@@ -215,7 +215,7 @@ Oskari.clazz.define(
                 me.container.find(".tag-pipe-list").remove();
                 me._activateNormalGFI(true);
                 me._activateNormalWFSReq(true);
-                me._clearHighlightVectorLayer();
+                //me._clearHighlightVectorLayer();
 
                 me._manageHelp(false);
             });
@@ -341,8 +341,20 @@ Oskari.clazz.define(
             list = me.templates.pipeList.clone();
 
             me.container.find("."+me.templates.pipeList.attr("class")).remove();
-
+            console.dir(data);
             for(var i in data){
+
+                var geojsonObject = {
+  'type': 'FeatureCollection',
+  'crs': {
+    'type': 'name',
+    'properties': {
+      'name': 'EPSG:4326'
+    }
+  },
+  'features': [data[i]]
+};
+
                 var listEl = me.templates.pipeListElement.clone(),
                 listElspan = listEl.find("span"),
                 listElaOnMap = listEl.find("a.tag-pipe-show-onmap"),
@@ -350,15 +362,17 @@ Oskari.clazz.define(
 
                 listElspan.text(data[i].id);
                 listElaOnMap.text(me._getLocalization("show_on_map"));
-                listElaOnMap.bind("click", {feature: data[i]}, function(e){
+                listElaOnMap.bind("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
-                    me._showHighlightedPipe(e.data.feature);
+                    //me._showHighlightedPipe(e.data.feature);
+                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null);
                 });
                 listElaSelect.text(me._getLocalization("select_tag_pipe"));
-                listElaSelect.bind("click", {feature: data[i]}, function(e){
+                listElaSelect.bind("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
                     me._openForm(e, me, e.data.feature);
-                    me._showHighlightedPipe(e.data.feature);
+                    //me._showHighlightedPipe(e.data.feature);
+                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null);
                 });
 
                 list.append(listEl);
@@ -367,11 +381,55 @@ Oskari.clazz.define(
             me.container.find(".tag-pipe-section").append(list);
         },
 
+        _addFeaturesToMap: function(geojsonObject, layerId, clearPrevious, labelProperty){
+            var me = this;
+            console.dir(geojsonObject);
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var features = geojson_format.read(geojsonObject);
+            console.dir(features);
+            var params = [geojsonObject, {
+                layerId: layerId, 
+                clearPrevious: clearPrevious,
+                centerTo: true,
+                featureStyle: {
+                    fill: {
+                        color: '#ff0000'
+                    },
+                    stroke : {
+                        color: '#ff0000',
+                        width: 5
+                    },
+                    text : {
+                        scale : 1.3,
+                        fill : {
+                            color : 'rgba(0,0,0,1)'
+                        },
+                        stroke : {
+                            color : 'rgba(255,255,255,1)',
+                            width : 2
+                        },
+                        labelProperty: labelProperty
+                    }
+                },
+                attributes: null,
+                cursor: 'zoom-in',
+                prio: 1
+            }];
+
+            me.sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
+
+        },
+
+        _removeFeaturesFromMap: function(layerId, propKey, propValue){
+            var me = this;
+            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[propKey, propValue, layerId]);
+        },
+
         /**
          * [_showHighlightedPipe highlights certain geometry]
          * @param  {[object]} feature [feature]
          */
-        _showHighlightedPipe: function(feature){
+/*        _showHighlightedPipe: function(feature){
             var me = this, 
             _map = me.mapModule.getMap();
 
@@ -381,7 +439,7 @@ Oskari.clazz.define(
 
             me.highlightVectorLayer.addFeatures(features);
             _map.setLayerIndex(me.highlightVectorLayer, 1000000);
-        },
+        },*/
 
         /**
          * [_initFormRedirectSelect create select options from arrays]
@@ -685,7 +743,7 @@ Oskari.clazz.define(
             tagPipeWrapper.find(".tag-search-wrapper").show();
             me._activateNormalGFI(true);
             me._activateNormalWFSReq(true);
-            me._clearHighlightVectorLayer();
+            //me._clearHighlightVectorLayer();
             me._manageHelp(false);
             me.state.mustacheType = null;
             if(me.mustacheVectorLayer !== null){
@@ -966,7 +1024,7 @@ Oskari.clazz.define(
             }
 
             //clear all highlight vectors
-            me._clearHighlightVectorLayer();
+            //me._clearHighlightVectorLayer();
 
             jQuery.ajax({
                 type: "POST",
@@ -1312,7 +1370,7 @@ Oskari.clazz.define(
          * [createHighlightVectorLayer creates highlight vector layer to map]
          * @return {[none]}
          */
-        _createHighlightVectorLayer: function(){
+/*        _createHighlightVectorLayer: function(){
             var me = this,
             _map = me.mapModule.getMap();
 
@@ -1328,7 +1386,7 @@ Oskari.clazz.define(
 
             _map.addLayers([me.highlightVectorLayer]);
 
-        },
+        },*/
         /**
          * [_createLabelForMustacheVector creates certain label for vectorlayer]
          * @param  {[array]} mustacheInfo [data & values of inputs]
@@ -1352,7 +1410,7 @@ Oskari.clazz.define(
         },
 
          /**
-         * [createHighlightVectorLayer creates highlight vector layer to map]
+         * [_createMustacheVectorLayer creates highlight vector layer to map]
          * @return {[none]}
          */
         _createMustacheVectorLayer: function(mustacheInfo){
@@ -1388,12 +1446,12 @@ Oskari.clazz.define(
         /**
          * [clearHighlightVectorLayer removes all features from highlight layer]
          */
-        _clearHighlightVectorLayer: function(){
+/*        _clearHighlightVectorLayer: function(){
             var me = this;
             if(me.highlightVectorLayer !== null){
                 me.highlightVectorLayer.removeAllFeatures();
             }
-        },
+        },*/
          /**
          * [clearHighlightVectorLayer removes all features from highlight layer]
          */

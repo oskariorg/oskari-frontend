@@ -11,7 +11,7 @@ body{
         margin: 15px 37px;
         width: 77%;
         overflow: hidden;
-        background-image: url('../images/icon_hsy_sm.png');
+        background-image: url('../icon_hsy_sm.png');
         background-repeat: no-repeat;
 }
 
@@ -117,7 +117,7 @@ button.approve:hover:enabled, input.approve:hover:enabled{
 }
 
 .logoplugin .icon{
-    background-image: url('../images/hsy-logo_50px.png') !important;
+    background-image: url('../hsy-logo_50px.png') !important;
     height: 26px !important;
     width: 50px !important;
     background-color: #FFFFFF !important;
