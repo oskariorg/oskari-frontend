@@ -65,7 +65,6 @@ Oskari.clazz.define(
             me.templates.form = jQuery(
                 '<form class="tag-pipe-form" method="" action="">' +
                 '<fieldset>' +
-                '    <input type="hidden" name="id" />' +
                 '       <h4></h4>' +
                 '    <div class="tag-pipe-form-inner-wrapper">' +
                 '    </div>' +
@@ -140,6 +139,21 @@ Oskari.clazz.define(
                 '</div>' +
                 '</li>'
             );
+
+            btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            btn.addClass('show-tag-on-map primary');
+            btn.setTitle("Kartalle");
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    var target = jQuery(event.target),
+                    item = target.parents('li'),
+                    uid = item.attr('data-id'),
+                    tagpipe = me._getTagPipe(parseInt(uid, 10));
+                    me.state.mustacheType = tagpipe.tag_type;
+                    me._addGeoJSONFeaturesToMap(tagpipe.tag_geojson);
+                }
+            );
+            btn.insertTo(me.templates.item.find('div.header'));
 
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
@@ -313,6 +327,7 @@ Oskari.clazz.define(
                 success: function (data) {
                     item.remove();
                     me._fetchTagPipes(me.container);
+                    me._clearMustacheVectorLayer();
                 }
             });
         },
@@ -389,7 +404,6 @@ Oskari.clazz.define(
          * Opens edit/create form depending on event target location
          */
         _openForm: function (event, instance, data) {
-            // Semi deep clone
             var me = instance,
                 direct = me.templates.formRedirect,
                 target = jQuery(event.target),
@@ -400,7 +414,7 @@ Oskari.clazz.define(
                 if (uid && uid.length) {
                     me._activateNormalGFI(false);
                     me._activateNormalWFSReq(false);
-                    me.state.mustacheActive = true;
+                    me.state.mustacheActive = false;
                     var tagpipe = me._getTagPipe(parseInt(uid, 10));
                     target.hide();
                     item.append(me._initForm(tagpipe.tag_type, tagpipe));
@@ -741,7 +755,8 @@ Oskari.clazz.define(
          */
         _submitForm: function (event, me) {
             event.preventDefault(); // We don't want the form to submit
-            var form = jQuery(event.target);
+            var form = jQuery(event.target),
+            parentLi = form.parents('li');
 
             if (me._formIsValid(form, me) && me._mustacheLayerIsValid()) {
 
@@ -753,19 +768,22 @@ Oskari.clazz.define(
                     data[input.attr("name").replace(/-/g , "_")] = input.val();
                 });
 
-                data['tag_type'] = me.container.find(".tag-pipe-redirect-to-form select :selected").val();
+                data.tag_type = me.container.find(".tag-pipe-redirect-to-form select :selected").val();
 
                 //get data from vector layer
                 var geojson_format = new OpenLayers.Format.GeoJSON();
                 var geojson = geojson_format.write(me.mustacheVectorLayer.features);
-                data['tag_geojson'] = geojson;
+                data.tag_geojson = geojson;
+
+                if(parentLi){
+                    data.tag_id = parseInt(parentLi.attr('data-id'));
+                }
 
                 jQuery.ajax({
                     type: form.attr('method'),
                     url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
                     data: data,
                     success: function (data) {
-                        console.dir(data);
                         me._closeForm(form);
                         me._fetchTagPipes(me.container);
                     },
@@ -842,7 +860,6 @@ Oskari.clazz.define(
                 type: 'GET',
                 url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
                 success: function (data) {
-                    console.dir(data);
                     me._createList(me, data.tagpipes, me.state.filter);
                  },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -1003,31 +1020,47 @@ Oskari.clazz.define(
 
             if(geojson){
                 var geojson_format = new OpenLayers.Format.GeoJSON();
-                var features = geojson_format.read(geojson);
+                var geojson2point = geojson_format.parseCoords.point(geojson.features[0].geometry.coordinates[1]);
+                me.state.tagPipeClickLonLat = new OpenLayers.LonLat(geojson2point.x, geojson2point.y);
 
-                //features.attributes = mustacheInfo;
+                me._addGeoJSONFeaturesToMap(geojson);
+
+            }else{
+            
+                var points = [ 
+                    new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
+                    new OpenLayers.Geometry.Point(me.state.tagPipeClickLonLat.lon, me.state.tagPipeClickLonLat.lat)
+                ];
+                
+                var feature = new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.LineString(points)
+                );
+
+                feature.attributes = mustacheInfo;
+
+                 me.mustacheVectorLayer.addFeatures(feature);
+                _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
+
+            }
+
+        },
+
+        _addGeoJSONFeaturesToMap: function(geojson){
+                var me = this,
+                _map = me.mapModule.getMap(),
+                geojson_format = new OpenLayers.Format.GeoJSON(),
+                features = geojson_format.read(geojson);
+
+                if(me.mustacheVectorLayer === null){
+                    me._createMustacheVectorLayer(geojson.features[0].properties);
+                }
+
+                features.attributes = geojson.features[0].properties;
+
                 me.mustacheVectorLayer.addFeatures(features);
                 _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
 
-            }else{
-
-            //me._clearMustacheVectorLayer();
-
-            var points = [ 
-                new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
-                new OpenLayers.Geometry.Point(me.state.tagPipeClickLonLat.lon, me.state.tagPipeClickLonLat.lat)
-            ];
-            
-            var feature = new OpenLayers.Feature.Vector(
-                    new OpenLayers.Geometry.LineString(points)
-            );
-
-            feature.attributes = mustacheInfo;
-
-             me.mustacheVectorLayer.addFeatures(feature);
-            _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
-
-            }
+                me._zoomToLonLat(me.mustacheVectorLayer);
 
         },
 
@@ -1057,7 +1090,6 @@ Oskari.clazz.define(
             var layers = me._getTagPipeLayers();
         
             for (var i in layers) {
-                /*console.info(layers[i].getLegendImage());*/
                 me._addLayerToMapById(layers[i].getId());
             }
         },
@@ -1136,6 +1168,123 @@ Oskari.clazz.define(
             if (reqBuilder) {
                 var request = reqBuilder(state); 
                 me.sandbox.request(me.instance, request);
+            }
+        },
+
+        /**
+         * [_zoomToLonLat zooms to certain coordinates]
+         * @param  {[object]} layer [op layer]
+         */
+        _zoomToLonLat: function(layer){
+            var me = this,
+            bounds = layer.getDataExtent(),
+            center = bounds.getCenterLonLat(),
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, 7, false);
+            me.sandbox.request(me.instance, mapmoveRequest);
+        },
+
+        _printGeoJSON: function(geojsonObject){
+            var me = this,
+            printoutEvent = me.sandbox.getEventBuilder('Printout.PrintableContentEvent'),
+            evt;
+
+/*            var geojsonObject = {
+              'type': 'FeatureCollection',
+              'crs': {
+                'type': 'name',
+                'properties': {
+                  'name': 'EPSG:4326'
+                }
+              },
+              'features': [
+                {
+                  'type': 'Feature',
+                  'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [[24.365500, 61.388000], [27.480500, 65.798000]]
+                  },
+                  'properties': {
+                    'text1': 'aaa',
+                    'text2': 'bbb'
+                  }
+                },
+                {
+                  'type': 'Feature',
+                  'geometry': {
+                    'type': 'Point',
+                    'coordinates': [24.365500, 61.388000]
+                  },
+                  'properties': {
+                    'text1': 'ccc',
+                    'text2': 'ddd'
+                  }
+                }
+
+              ]
+            };*/
+
+            var testOptions = {
+                'minResolution': 0,
+                'maxResolution': 1000
+            };
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
+            var params = [geojsonObject, {
+                clearPrevious: true,
+                layerOptions: testOptions,
+                centerTo: true,
+                cursor: 'zoom-in',
+                prio: 4,
+                minScale: 1451336,
+                layerId: 'TEST_VECTORLAYER',
+                featureStyle: style
+            }];
+
+            me.sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
+
+            var printObj = {
+                "type": "geojson",
+                "name": "Testi",
+                "id": "Testi",
+                "data": geojsonObject,
+                "styles": [
+                    {
+                   "name": "Style1",
+                   "styleMap": {"default": {
+                     "fontColor": "rgba(120,120,120, 0.6)",
+                     "fontFamily": "Arial",
+                     "fontSize": "12px",
+                     "fontWeight": "bold",         
+                     "fillColor": "#00ff00",
+                     "fillOpacity": 0.8,
+                     "label": "Teksti1: ${text1}\n Teksti2: ${text2}",
+                     "labelXOffset": 10,
+                     "labelYOffset": 10,
+                     "strokeColor": "#ff0000",
+                     "strokeOpacity": 1,
+                     "strokeWidth": 1,
+                     "graphicName": "square",
+                     "graphicSize" : "16"
+                     }
+                     }
+                    }
+                ]
+            };
+            if (printoutEvent) {
+                evt = printoutEvent(
+                    'MainMapModule',
+                    null,
+                    null,
+                    [printObj]
+                );
+                me.sandbox.notifyAll(evt);
             }
         },
 
