@@ -46,10 +46,13 @@ Parameters for config-object:
   <td> show </td><td> Boolean </td><td> show button </td><td> true </td>
 </tr>
 <tr>
+  <td> disabled </td><td> Boolean </td><td> add the button in disabled state </td><td> false </td>
+</tr>
+<tr>
   <td> callback </td><td> Function </td><td> button callback function </td><td> </td>
 </tr>
 <tr>
-  <td> sticky </td><td> Boolean </td><td> is button sticky </td><td> false </td>
+  <td> sticky </td><td> Boolean </td><td> does the button stay active after pressing </td><td> false </td>
 </tr>
 <tr>
   <td> activeColour </td><td> String </td><td> button active background colour </td><td> </td>

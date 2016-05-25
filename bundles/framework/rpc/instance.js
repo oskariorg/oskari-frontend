@@ -378,9 +378,7 @@ Oskari.clazz.define(
             },
             setCursorStyle: function(cursorStyle) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var element = mapModule.getMapEl();
-                jQuery(element).css('cursor',cursorStyle);
-                return cursorStyle;
+                return mapModule.setCursorStyle(cursorStyle);
             },
             sendUIEvent: function(bundleId, payload) {
                 var me = this,

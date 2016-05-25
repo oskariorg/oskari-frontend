@@ -15,6 +15,7 @@ function() {
         'toolOptions': '<div class="tool-options"></div>'
     },
     supportedProjections: null,
+    roundToDecimals: null,
     noUI: null,
     projectionTrasformationIsCheckedInModifyMode: false,
     noUiIsCheckedInModifyMode: false,
@@ -62,7 +63,6 @@ function() {
     */
     getValues: function () {
         var me = this;
-
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
@@ -71,6 +71,9 @@ function() {
             }
             if(me.noUI) {
                 pluginConfig.noUI = me.noUI;
+            }
+            if(me.toolConfig && me.toolConfig.roundToDecimals) {
+                pluginConfig.roundToDecimals = me.toolConfig.roundToDecimals;
             }
             var json = {
                 configuration: {}

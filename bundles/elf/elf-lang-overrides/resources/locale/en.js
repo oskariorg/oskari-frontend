@@ -83,7 +83,7 @@ Oskari.registerLocalization(
             "layerlist_title": "Embeddable map layers open in map window:",
             "layerlist_empty": "No embeddable map layers are open in the map window.",
             "layerlist_denied": "Non-embeddable map layers open in map window:",
-            "denied_tooltip": "These map layers cannot be included in embedded maps. Data producers have not granted permissions for embedding.",
+            "denied_tooltip": "These map layers cannot be included in embedded maps. Data producers have not granted permissions for embedding."
         },
         "layerFilter": {
             "buttons": {

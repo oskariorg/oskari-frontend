@@ -23,6 +23,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                             {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
                         ]
                     }
+                },
+                "featuredata2": {
+                    conf: {
+                    }
                 }
             }
         },
