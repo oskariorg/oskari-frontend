@@ -1,6 +1,5 @@
 div.mapplugin.indexmap {
-  text-align: left;
-  max-width: 196px; }
+  text-align: left; }
   div.mapplugin.indexmap .olControlOverviewMapElement {
     /* Hide by default, control's maximize: false doesn't seem to do anything */
     display: none;
@@ -22,6 +21,10 @@ div.mapplugin.indexmap {
     position: relative; }
     div.mapplugin.indexmap .indexmapToggle:hover {
       background: url("../images/component-indexmap_hover.png") !important; }
+  div.mapplugin.indexmap .mapplugin.ol_indexmap {
+    width: 150px !important;
+    height: 150px !important;
+    display: inline; }
 
 .right div.mapplugin.indexmap {
   text-align: right; }
@@ -49,20 +52,14 @@ div.mapplugin.indexmap {
 .olControlOverviewMapExtentRectangle {
   border: 2px dashed #f47729 !important; }
 
-div.mapplugin.indexmap .mapplugin.ol_indexmap {
-  width: 150px !important;
-  height:150px !important;
-  display: inline;}
-
 /**
   ol3 specific
  */
-
 .ol-overviewmap .ol-overviewmap-map {
   border: 1px solid #3c3c3c;
-  margin: -1px;
   height: 150px;
-  width: 150px;}
+  margin: -1px;
+  width: 150px; }
 
 .ol-overviewmap .ol-overviewmap-map, .ol-overviewmap button {
   display: inline-block; }
@@ -72,10 +69,9 @@ div.mapplugin.indexmap .mapplugin.ol_indexmap {
   width: 150px;
   height: 150px; }
 
-
 .ol-overviewmap.ol-unselectable.ol-control:not(.ol-collapsed) {
   width: 150px;
-  height: 150px;}
+  height: 150px; }
 
 .ol-overviewmap {
   /*

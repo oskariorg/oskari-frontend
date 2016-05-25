@@ -1,5 +1,9 @@
 $pluginMargin: 10px;
 
+.olImageLoadError {
+    display: none !important;
+}
+
 div.olMap {
     position : relative;
 
@@ -7,19 +11,41 @@ div.olMap {
         cursor: crosshair;
     }
 
-}
+    /*x marking the center of the map*/
+    .oskari-crosshair {
+        right: 50%;
+        bottom: 50%;
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        display: block;
+        z-index: 15000;
+    }
 
-.ol-dragzoom {
-  border-style: dashed;
-  border-color: red;
-  border-width: 3px;
-  background-color: rgba(255,255,255,0.4);
+    .oskari-crosshair-vertical-bar {
+      left: 0px;
+      top: -10px;
+      height: 21px;
+      border-left: 2px solid #000000;
+      position: absolute;
+      display: block;
+    }
+
+    .oskari-crosshair-horizontal-bar {
+      left: -10px;
+      top: 0px;
+      width: 21px;
+      border-top: 2px solid #000000;
+      position: absolute;
+      display: block;
+    }
 }
 
 div.mapplugins {
     pointer-events: none;
     position: absolute;
     text-align: center;
+    z-index: 15000;
 
     .mappluginsContainer {
         margin: 0;
@@ -142,6 +168,7 @@ div.mapplugins {
                 }
     
                 &.featuredataplugin,
+                &.mapwfs2plugin,
                 &.layerselection,
                 &.search,
                 &.tools {
@@ -167,6 +194,7 @@ div.mapplugins {
                 }
 
                 &.featuredataplugin,
+                &.mapwfs2plugin,
                 &.layerselection,
                 &.search,
                 &.tools {

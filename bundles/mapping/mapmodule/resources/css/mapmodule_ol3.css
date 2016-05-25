@@ -1,16 +1,41 @@
-.olImageLoadError {
-  display: none !important; }
-
 div.olMap {
-  position: relative; }
+  position: relative;
+  /*x marking the center of the map*/ }
   div.olMap.cursor-crosshair {
     cursor: crosshair; }
+  div.olMap .oskari-crosshair {
+    right: 50%;
+    bottom: 50%;
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    display: block;
+    z-index: 15000; }
+  div.olMap .oskari-crosshair-vertical-bar {
+    left: 0px;
+    top: -10px;
+    height: 21px;
+    border-left: 2px solid #000000;
+    position: absolute;
+    display: block; }
+  div.olMap .oskari-crosshair-horizontal-bar {
+    left: -10px;
+    top: 0px;
+    width: 21px;
+    border-top: 2px solid #000000;
+    position: absolute;
+    display: block; }
+
+.ol-dragzoom {
+  border-style: dashed;
+  border-color: red;
+  border-width: 3px;
+  background-color: rgba(255, 255, 255, 0.4); }
 
 div.mapplugins {
   pointer-events: none;
   position: absolute;
-  text-align: center;
-  z-index: 15000; }
+  text-align: center; }
   div.mapplugins .mappluginsContainer {
     margin: 0;
     padding: 0; }
@@ -30,8 +55,8 @@ div.mapplugins {
         background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       /* Note that this must also have a position for IE11:
-       * https://coderwall.com/p/s8pjpg
-       */
+                 * https://coderwall.com/p/s8pjpg
+                 */
       pointer-events: auto;
       position: relative;
       margin: 0 auto;
@@ -74,7 +99,7 @@ div.mapplugins {
       margin-left: 0; }
     div.mapplugins.top.right .mapplugin.search {
       text-align: right; }
-    div.mapplugins.top.right .mapplugin.featuredataplugin, div.mapplugins.top.right .mapplugin.mapwfs2plugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
+    div.mapplugins.top.right .mapplugin.featuredataplugin, div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search, div.mapplugins.top.right .mapplugin.tools {
       display: block;
       float: right;
       margin: 0 0 0 10px; }
@@ -82,7 +107,7 @@ div.mapplugins {
       margin-right: 0; }
     div.mapplugins.top.left .mapplugin.search {
       text-align: left; }
-    div.mapplugins.top.left .mapplugin.featuredataplugin, div.mapplugins.top.left .mapplugin.mapwfs2plugin, div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search, div.mapplugins.top.left .mapplugin.tools {
+    div.mapplugins.top.left .mapplugin.featuredataplugin, div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search, div.mapplugins.top.left .mapplugin.tools {
       display: block;
       float: left;
       margin: 0 10px 0 0; }
@@ -116,7 +141,7 @@ div.mapplugins {
     div.mapplugins.left.center {
       height: 100%;
       /* Side centers aren't used ATM
-      display: table;*/
+            display: table;*/
       display: none !important; }
       div.mapplugins.left.center .mappluginsContainer {
         display: table-cell;
@@ -131,7 +156,7 @@ div.mapplugins {
     div.mapplugins.right.center {
       height: 100%;
       /* Side centers aren't used ATM
-      display: table;*/
+            display: table;*/
       display: none !important; }
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
