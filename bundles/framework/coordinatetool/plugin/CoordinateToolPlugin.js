@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._popup = null;
         me._latInput = null;
         me._lonInput = null;
+        me._centerToCoordsBtn = null;
         me._reverseGeocodeLabel = null;
         me._dialog = null;
         me._projectionSelect = null;
@@ -139,6 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 }
             });
+            me._centerToCoordsBtn = centerToCoordsBtn;
 
             var addMarkerBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addMarkerBtn.setTitle(loc.popup.addMarkerButton);
@@ -358,6 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this;
             me._latInput.prop('disabled', disabled);
             me._lonInput.prop('disabled', disabled);
+            me._centerToCoordsBtn.setEnabled(!disabled);
             if(clearText){
                 me._latInput.val('');
                 me._lonInput.val('');
