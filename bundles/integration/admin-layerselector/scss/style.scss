@@ -329,6 +329,7 @@ div.admin-layerselector {
 
     .add-layer-record,
     .add-layer-send,
+    .add-layer-style,
     .add-class-record,
     .add-class-send,
     .add-group-record {
@@ -336,6 +337,12 @@ div.admin-layerselector {
         margin-bottom: 8px;
         overflow: hidden;
         position: relative;
+    }
+
+    .add-layer-style-import-block {
+        display:none;
+        margin: 8px;
+        border: 2pt solid blue;
     }
 
     .add-layer-separation {

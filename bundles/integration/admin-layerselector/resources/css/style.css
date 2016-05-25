@@ -221,6 +221,7 @@ div.admin-layerselector {
     min-height: 20px; }
   div.admin-layerselector .add-layer-record,
   div.admin-layerselector .add-layer-send,
+  div.admin-layerselector .add-layer-style,
   div.admin-layerselector .add-class-record,
   div.admin-layerselector .add-class-send,
   div.admin-layerselector .add-group-record {
@@ -228,6 +229,11 @@ div.admin-layerselector {
     margin-bottom: 8px;
     overflow: hidden;
     position: relative; }
+  div.admin-layerselector .add-layer-style-import-block {
+    display:none;
+    margin: 8px;
+    border: 2pt solid blue;
+  }
   div.admin-layerselector .add-layer-separation {
     margin-top: 15px; }
   div.admin-layerselector .admin-add-layer-btn {
