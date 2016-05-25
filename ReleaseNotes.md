@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.37.0
+
+### VectorLayerPlugin
+
+ol2: Click events didn't propagate properly when vector features were added from request to map. This has been fixed.
+
 ## 1.36.1
 
 ### routingService
