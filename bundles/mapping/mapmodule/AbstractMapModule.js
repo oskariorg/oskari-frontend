@@ -248,6 +248,13 @@ Oskari.clazz.define(
             },
             'Toolbar.ToolbarLoadedEvent': function() {
                 this.startLazyPlugins();
+            },
+            'RPCUIEvent': function(event) {
+                var me = this;
+                if(event.getBundleId()==='mapmodule.crosshair') {
+                    var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
+                    me.toggleCrosshair(show);
+                }
             }
         },
 
