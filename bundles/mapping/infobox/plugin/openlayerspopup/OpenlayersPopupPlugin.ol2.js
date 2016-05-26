@@ -135,7 +135,10 @@ Oskari.clazz.define(
         _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
+                sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
+                sanitizedTitle = Oskari.util.sanitize(title).data,
+                sanitizedId = Oskari.util.sanitize(id).data,
+                popupContent = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
                 font = options.font;
@@ -150,9 +153,11 @@ Oskari.clazz.define(
 
             if (refresh) {
                 popup = me._popups[id].popup;
+                var id = sanitizedId;
+
                 if (isInMobileMode) {
                     var popupType = "mobile";
-                    popup.setContent(contentDiv);
+                    popup.setContent(sanitizedContentDiv);
                 } else {
                     var popupDOM = jQuery('#' + id),
                         popupType = "desktop";
@@ -163,16 +168,16 @@ Oskari.clazz.define(
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var popupTitle = title,
-                    popupContent = contentDiv,
-                    popupType = "mobile";
+                var popupType = "mobile";
+                var id = sanitizedId;
+
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
 
                 if (font) {
                     popup.setFont(font);
                 }
-                popup.show(popupTitle, popupContent);
+                popup.show(sanitizedTitle, sanitizedContentDiv);
                 if (colourScheme) {
                     popup.setColourScheme(colourScheme);
                 }
@@ -184,7 +189,8 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                var popupType = "desktop";
+                var popupType = "desktop",
+                    id = sanitizedId;
 
                 popup = new OpenLayers.Popup(
                     id,
@@ -830,6 +836,7 @@ Oskari.clazz.define(
                         } else {
                             popup.popup.destroy();
                         }
+
                         delete this._popups[pid];
                     }
                 }
