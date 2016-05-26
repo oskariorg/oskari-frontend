@@ -144,7 +144,10 @@ Oskari.clazz.define(
          _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContentHtml = me._renderPopupContent(id, title, contentDiv, additionalTools),
+                sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
+                sanitizedTitle = Oskari.util.sanitize(title).data,
+                sanitizedId = Oskari.util.sanitize(id).data,
+                popupContentHtml = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -155,6 +158,7 @@ Oskari.clazz.define(
                 isMarker = (marker && marker.data) ? true : false,
                 positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info";
                 jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+
             if(isMarker){
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
@@ -165,12 +169,14 @@ Oskari.clazz.define(
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
             var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
+            var id = sanitizedId;
+
             popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
                     var popupType = "mobile";
-                    popup.setContent(contentDiv);
+                    popup.setContent(sanitizedContentDiv);
                 } else {
                     var popupDOM = jQuery('#' + id),
                         popupType = "desktop";
@@ -182,9 +188,7 @@ Oskari.clazz.define(
                     }
                 }
             } else if (isInMobileMode) {
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var popupTitle = title,
-                    popupContent = contentDiv,
+                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     popupType = "mobile";
 
                 popup.createCloseIcon();
@@ -193,7 +197,8 @@ Oskari.clazz.define(
                 if (font) {
                     popup.setFont(font);
                 }
-                popup.show(popupTitle, popupContent);
+
+                popup.show(sanitizedTitle, sanitizedContentDiv);
 
                 if (colourScheme) {
                     popup.setColourScheme(colourScheme);
@@ -246,7 +251,7 @@ Oskari.clazz.define(
             }
 
             me._popups[id] = {
-                title: title,
+                title: sanitizedTitle,
                 contentData: contentData,
                 lonlat: lonlat,
                 popup: popup,
