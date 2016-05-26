@@ -136,6 +136,7 @@ Oskari.registerLocalization(
             "sldStyleName":"Tyylin nimi",
             "sldFileContentDesc":"Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
             "sldFileContent":"SLD:n sisältö",
+            "sldStylesFetchError": "SLD stilen kunde inte hämtas",
             "addSldStyleDesc": "Valitse listalta, mitä tyylejä käytetään ko tasolle",
             "addSldStyle": "Sld tyylivalinta",
             "minScale": "Pienin mittakaava",

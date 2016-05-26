@@ -138,6 +138,7 @@ Oskari.registerLocalization(
             "sldFileContentDesc":"Kopiera/sätta SLD fil innehåll (xml) till tekst block",
             "sldFileContent":"SLD fil innehåll",
             "styleDesc": "Förvald stil",
+            "sldStylesFetchError": "Cou SLD styles",
             "minScale": "Minimi&shy;skala",
             "minScaleDesc": "Lagrets minimiskala (1:5669294)",
             "minScalePlaceholder": "5669294 (1:5669294)Lagrets minimiskala",
