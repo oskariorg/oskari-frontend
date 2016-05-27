@@ -22,6 +22,9 @@ Oskari.clazz.define(
             tagPipeActive: false,
             mustacheActive: false,
             mustacheType: null,
+            mustacheIsOnMap: false,
+            mustacheGeoJSON: null,
+            mustachePrintJSONarray: [],
             calculateTagTypes: ['jatevesi','hulevesi','sekaviemari'],
             allTagTypes: ['vesi_putki','maapaloposti','seinapaloposti','sprinkleri','jatevesi_putki','jatevesi_kaivo','hulevesi_putki','hulevesi_kaivo','sekaviemari_putki','sekaviemari_kaivo','muu_liitynta'],
             vesi_putki: ['tag-type','tag-address','tag-pipe-size','tag-low-pressure-level','tag-max-pressure-level'],
@@ -150,7 +153,10 @@ Oskari.clazz.define(
                     uid = item.attr('data-id'),
                     tagpipe = me._getTagPipe(parseInt(uid, 10));
                     me.state.mustacheType = tagpipe.tag_type;
-                    me._addGeoJSONFeaturesToMap(tagpipe.tag_geojson);
+                    //me._addGeoJSONFeaturesToMap(tagpipe.tag_geojson);
+                    me.state.mustachePrintJSONarray.push(tagpipe.tag_geojson);
+                    me._addFeaturesToMap(tagpipe.tag_geojson, 'MUSTACHE-TAG', false, 'label', false);
+                    me._printGeoJSON(me.state.mustachePrintJSONarray);
                 }
             );
             btn.insertTo(me.templates.item.find('div.header'));
@@ -216,6 +222,7 @@ Oskari.clazz.define(
                 me._activateNormalGFI(true);
                 me._activateNormalWFSReq(true);
                 //me._clearHighlightVectorLayer();
+                me._removeFeaturesFromMap();
 
                 me._manageHelp(false);
             });
@@ -327,7 +334,7 @@ Oskari.clazz.define(
                 success: function (data) {
                     item.remove();
                     me._fetchTagPipes(me.container);
-                    me._clearMustacheVectorLayer();
+                    //me._clearMustacheVectorLayer();
                 }
             });
         },
@@ -341,38 +348,28 @@ Oskari.clazz.define(
             list = me.templates.pipeList.clone();
 
             me.container.find("."+me.templates.pipeList.attr("class")).remove();
-            console.dir(data);
-            for(var i in data){
 
-                var geojsonObject = {
-  'type': 'FeatureCollection',
-  'crs': {
-    'type': 'name',
-    'properties': {
-      'name': 'EPSG:4326'
-    }
-  },
-  'features': [data[i]]
-};
+            for(var i in data){
 
                 var listEl = me.templates.pipeListElement.clone(),
                 listElspan = listEl.find("span"),
                 listElaOnMap = listEl.find("a.tag-pipe-show-onmap"),
-                listElaSelect = listEl.find("a.tag-pipe-select");
+                listElaSelect = listEl.find("a.tag-pipe-select"),
+                geojsonObject = me._populateGeoJSON(data[i]);
 
                 listElspan.text(data[i].id);
                 listElaOnMap.text(me._getLocalization("show_on_map"));
                 listElaOnMap.bind("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
                     //me._showHighlightedPipe(e.data.feature);
-                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null);
+                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
                 listElaSelect.text(me._getLocalization("select_tag_pipe"));
                 listElaSelect.bind("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
                     me._openForm(e, me, e.data.feature);
                     //me._showHighlightedPipe(e.data.feature);
-                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null);
+                    me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
 
                 list.append(listEl);
@@ -381,17 +378,24 @@ Oskari.clazz.define(
             me.container.find(".tag-pipe-section").append(list);
         },
 
-        _addFeaturesToMap: function(geojsonObject, layerId, clearPrevious, labelProperty){
-            var me = this;
-            console.dir(geojsonObject);
-            var geojson_format = new OpenLayers.Format.GeoJSON();
-            var features = geojson_format.read(geojsonObject);
-            console.dir(features);
-            var params = [geojsonObject, {
-                layerId: layerId, 
-                clearPrevious: clearPrevious,
-                centerTo: true,
-                featureStyle: {
+        _populateGeoJSON: function(data){
+
+            var geojsonObject = {
+                  'type': 'FeatureCollection',
+                  'crs': {
+                    'type': 'name',
+                    'properties': {
+                      'name': 'EPSG:3879'
+                    }
+                  },
+                  'features': [data]
+                };
+
+            return geojsonObject;
+        },
+
+        _getFeatureStyle: function(labelProperty){
+            return {
                     fill: {
                         color: '#ff0000'
                     },
@@ -408,11 +412,22 @@ Oskari.clazz.define(
                             color : 'rgba(255,255,255,1)',
                             width : 2
                         },
-                        labelProperty: labelProperty
-                    }
-                },
+                        labelProperty: labelProperty,
+                        labelAlign: 'lb'
+                    },
+                    labelAlign: 'lb'
+                };
+        },
+
+        _addFeaturesToMap: function(geojsonObject, layerId, clearPrevious, labelProperty, centerTo){
+            var me = this;
+
+            var params = [geojsonObject, {
+                layerId: layerId, 
+                clearPrevious: clearPrevious,
+                centerTo: centerTo,
+                featureStyle: me._getFeatureStyle(labelProperty),
                 attributes: null,
-                cursor: 'zoom-in',
                 prio: 1
             }];
 
@@ -494,7 +509,7 @@ Oskari.clazz.define(
                         value = el.find(":selected").val(),
                         form = me.container.find('form');
                         me.state.mustacheActive = false;
-                        me._clearMustacheVectorLayer();
+                        //me._clearMustacheVectorLayer();
 
                         if(value === ""){
                             me._manageHelp(true, me._getLocalization('help_redirect'));
@@ -743,13 +758,19 @@ Oskari.clazz.define(
             tagPipeWrapper.find(".tag-search-wrapper").show();
             me._activateNormalGFI(true);
             me._activateNormalWFSReq(true);
-            //me._clearHighlightVectorLayer();
-            me._manageHelp(false);
+            me._removeFeaturesFromMap();
+            me.state.mustacheIsOnMap = false;
+            me.state.mustacheGeoJSON = null;
             me.state.mustacheType = null;
-            if(me.mustacheVectorLayer !== null){
+            me._manageHelp(false);
+            me.state.mustachePrintJSONarray = [];
+            me._printGeoJSON();
+            //me._clearHighlightVectorLayer();
+           
+/*            if(me.mustacheVectorLayer !== null){
                 me.mustacheVectorLayer.destroy();
                 me.mustacheVectorLayer = null;
-            }
+            }*/
 
             // destroy form
             form.remove();
@@ -763,7 +784,7 @@ Oskari.clazz.define(
             var me = this,
             output = false;
 
-            if(me.mustacheVectorLayer !== null && me.mustacheVectorLayer.features !== 0){
+            if(me.state.mustacheIsOnMap){
                 output = true;
             }else{
                  me._openPopup(me._getLocalization('mustache_invalid'), me._getLocalization('mustache_invalid_help'));
@@ -829,9 +850,10 @@ Oskari.clazz.define(
                 data.tag_type = me.container.find(".tag-pipe-redirect-to-form select :selected").val();
 
                 //get data from vector layer
-                var geojson_format = new OpenLayers.Format.GeoJSON();
-                var geojson = geojson_format.write(me.mustacheVectorLayer.features);
-                data.tag_geojson = geojson;
+/*                var geojson_format = new OpenLayers.Format.GeoJSON();
+                var geojson = geojson_format.write(me.mustacheVectorLayer.features);*/
+                console.info(me.state.mustacheGeoJSON);
+                data.tag_geojson = me.state.mustacheGeoJSON;
 
                 if(parentLi){
                     data.tag_id = parseInt(parentLi.attr('data-id'));
@@ -1064,24 +1086,23 @@ Oskari.clazz.define(
          */
         mustachePointOnMap: function(lonlat, geojson){
             var me = this, 
-            _map = me.mapModule.getMap(),
-            mustacheInfo = me._populateMustacheInfo();
+            mustacheInfo = me._populateMustacheInfo(),
+            geojson_format = new OpenLayers.Format.GeoJSON();
 
-            if(me.mustacheVectorLayer !== null){
+/*            if(me.mustacheVectorLayer !== null){
                 me.mustacheVectorLayer.destroy();
                 me.mustacheVectorLayer = null;
             }
 
             if(me.mustacheVectorLayer === null){
                 me._createMustacheVectorLayer(mustacheInfo);
-            }
+            }*/
 
             if(geojson){
-                var geojson_format = new OpenLayers.Format.GeoJSON();
                 var geojson2point = geojson_format.parseCoords.point(geojson.features[0].geometry.coordinates[1]);
                 me.state.tagPipeClickLonLat = new OpenLayers.LonLat(geojson2point.x, geojson2point.y);
-
-                me._addGeoJSONFeaturesToMap(geojson);
+                me._addFeaturesToMap(geojson, 'MUSTACHE-TAG', true, 'label', true);
+                //me._addGeoJSONFeaturesToMap(geojson);
 
             }else{
             
@@ -1095,15 +1116,20 @@ Oskari.clazz.define(
                 );
 
                 feature.attributes = mustacheInfo;
+                var features = geojson_format.write(feature);
+                var geojsonObject = me._populateGeoJSON(JSON.parse(features));
 
-                 me.mustacheVectorLayer.addFeatures(feature);
-                _map.setLayerIndex(me.mustacheVectorLayer, 1000000);
+/*                 me.mustacheVectorLayer.addFeatures(feature);
+                _map.setLayerIndex(me.mustacheVectorLayer, 1000000);*/
 
+                me._addFeaturesToMap(geojsonObject, 'MUSTACHE-TAG', true, 'label', false);
+                me.state.mustacheIsOnMap = true;
+                me.state.mustacheGeoJSON = JSON.stringify(geojsonObject);
             }
 
         },
 
-        _addGeoJSONFeaturesToMap: function(geojson){
+/*        _addGeoJSONFeaturesToMap: function(geojson){
                 var me = this,
                 _map = me.mapModule.getMap(),
                 geojson_format = new OpenLayers.Format.GeoJSON(),
@@ -1120,7 +1146,7 @@ Oskari.clazz.define(
 
                 me._zoomToLonLat(me.mustacheVectorLayer);
 
-        },
+        },*/
 
         /**
          * [_populateMustacheInfo gets certain values from form]
@@ -1130,12 +1156,25 @@ Oskari.clazz.define(
             var me = this,
             output = {},
             form = me.container.find("form");
+            var label = "";
+            output.label = "";
+
+/*            jQuery.each(me.state[me.state.mustacheType], function(index, item) {
+                if(me.state.doNotUseInLabel.indexOf(item) == -1){
+                    label += me._getLocalization(item)+":"+form.find("input[name='"+item+"']").val();
+                }
+            });*/
 
             jQuery.each(me.state[me.state.mustacheType], function(index, item) {
                 if(me.state.doNotUseInLabel.indexOf(item) == -1){
-                    output[item] = form.find("input[name='"+item+"']").val();
+                    if(index !== 0){
+                        label += me._getLocalization(item)+":";
+                    }
+                    label += form.find("input[name='"+item+"']").val()+"\n";
                 }
             });
+
+            output.label = label;
 
             return output;
         },
@@ -1241,10 +1280,42 @@ Oskari.clazz.define(
             me.sandbox.request(me.instance, mapmoveRequest);
         },
 
-        _printGeoJSON: function(geojsonObject){
+        _printGeoJSON: function(mustachePrintJSONarray){
             var me = this,
             printoutEvent = me.sandbox.getEventBuilder('Printout.PrintableContentEvent'),
+            printOutArray = [],
             evt;
+
+            if(mustachePrintJSONarray){
+                for(var i in mustachePrintJSONarray){
+
+                    var printObj = {
+                    "type": "geojson",
+                    "name": i,
+                    "id": i,
+                    "data": mustachePrintJSONarray[i],
+                    "styles": [
+                        {
+                       "name": "MustacheStyle",
+                       "styleMap": {"default": {
+                             "fontColor": "rgba(0,0,0,1)",
+                             "fontFamily": "Arial",
+                             "fontSize": "12px",
+                             "fillOpacity": 0.8,
+                             "label": mustachePrintJSONarray[i].features[0].properties.label,
+                             "strokeColor": "#ff0000",
+                             "strokeOpacity": 1,
+                             "strokeWidth": 1,
+                             "labelAlign": "lb"
+                         }
+                         }
+                        }
+                    ]
+                    };
+                    printOutArray.push(printObj);
+
+                }
+            }
 
 /*            var geojsonObject = {
               'type': 'FeatureCollection',
@@ -1281,66 +1352,47 @@ Oskari.clazz.define(
               ]
             };*/
 
-            var testOptions = {
-                'minResolution': 0,
-                'maxResolution': 1000
-            };
-            var style = {
-                stroke: {
-                    color: 'rgba(211, 187, 27, 0.8)',
-                    width: 2
-                },
-                fill: {
-                    color: 'rgba(255,222,0, 0.6)'
-                }
-            };
-            var params = [geojsonObject, {
+/*            var params = [geojsonObject, {
                 clearPrevious: true,
-                layerOptions: testOptions,
                 centerTo: true,
                 cursor: 'zoom-in',
                 prio: 4,
-                minScale: 1451336,
-                layerId: 'TEST_VECTORLAYER',
-                featureStyle: style
+                layerId: 'PRINT_MUSTACHELAYER',
+                featureStyle: me._getFeatureStyle('label')
             }];
 
-            me.sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
+            me.sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);*/
 
-            var printObj = {
+/*            var printObj = {
                 "type": "geojson",
                 "name": "Testi",
                 "id": "Testi",
                 "data": geojsonObject,
                 "styles": [
                     {
-                   "name": "Style1",
+                   "name": "MustacheStyle",
                    "styleMap": {"default": {
-                     "fontColor": "rgba(120,120,120, 0.6)",
-                     "fontFamily": "Arial",
-                     "fontSize": "12px",
-                     "fontWeight": "bold",         
-                     "fillColor": "#00ff00",
-                     "fillOpacity": 0.8,
-                     "label": "Teksti1: ${text1}\n Teksti2: ${text2}",
-                     "labelXOffset": 10,
-                     "labelYOffset": 10,
-                     "strokeColor": "#ff0000",
-                     "strokeOpacity": 1,
-                     "strokeWidth": 1,
-                     "graphicName": "square",
-                     "graphicSize" : "16"
+                         "fontColor": "rgba(0,0,0,1)",
+                         "fontFamily": "Arial",
+                         "fontSize": "12px",
+                         "fillOpacity": 0.8,
+                         "label": geojsonObject.features[0].properties.label,
+                         "strokeColor": "#ff0000",
+                         "strokeOpacity": 1,
+                         "strokeWidth": 1,
+                         "labelAlign": "lb"
                      }
                      }
                     }
                 ]
-            };
+            };*/
+
             if (printoutEvent) {
                 evt = printoutEvent(
                     'MainMapModule',
                     null,
                     null,
-                    [printObj]
+                    printOutArray
                 );
                 me.sandbox.notifyAll(evt);
             }
@@ -1364,7 +1416,7 @@ Oskari.clazz.define(
             });
             dialog.show(title, content, [okBtn]);
             dialog.makeModal();
-        },
+        }
 
         /**
          * [createHighlightVectorLayer creates highlight vector layer to map]
@@ -1392,7 +1444,7 @@ Oskari.clazz.define(
          * @param  {[array]} mustacheInfo [data & values of inputs]
          * @return {[string]}              [label string]
          */
-        _createLabelForMustacheVector: function(mustacheInfo){
+/*        _createLabelForMustacheVector: function(mustacheInfo){
             var me = this,
             label = "";
 
@@ -1407,13 +1459,13 @@ Oskari.clazz.define(
 
             return label;
 
-        },
+        }*/
 
          /**
          * [_createMustacheVectorLayer creates highlight vector layer to map]
          * @return {[none]}
          */
-        _createMustacheVectorLayer: function(mustacheInfo){
+/*        _createMustacheVectorLayer: function(mustacheInfo){
             var me = this,
             _map = me.mapModule.getMap();
 
@@ -1442,7 +1494,7 @@ Oskari.clazz.define(
 
             _map.addLayers([me.mustacheVectorLayer]);
 
-        },
+        },*/
         /**
          * [clearHighlightVectorLayer removes all features from highlight layer]
          */
@@ -1455,12 +1507,12 @@ Oskari.clazz.define(
          /**
          * [clearHighlightVectorLayer removes all features from highlight layer]
          */
-        _clearMustacheVectorLayer: function(){
+/*        _clearMustacheVectorLayer: function(){
             var me = this;
             if(me.mustacheVectorLayer !== null){
                 me.mustacheVectorLayer.removeAllFeatures();
             }
-        }
+        }*/
 
     }, {
         extend: ['Oskari.userinterface.component.TabPanel']
