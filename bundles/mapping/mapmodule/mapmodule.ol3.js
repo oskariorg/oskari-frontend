@@ -602,9 +602,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
             styleDef.image.size = size;
           	var svg = me.getSvg(styleDef.image);
-            if(svg) {
+            
+            if(svg && (style.image && !style.image.icon)) {
                 image = new ol.style.Icon({
-              	    src: svg,
+                    src: svg,
+                    size: [size, size],
+                    imgSize: [size, size]
+                });
+                return image;
+            }
+            else if(style.image && style.image.icon) {
+                image = new ol.style.Icon({
+                    src: style.image.icon,
                     size: [size, size],
                     imgSize: [size, size]
                 });
