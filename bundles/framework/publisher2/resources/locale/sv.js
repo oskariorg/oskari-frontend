@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin":"Kartlagren meny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
+                "CrosshairTool":"Show map center",
                 "toolbarToolNames": {
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",

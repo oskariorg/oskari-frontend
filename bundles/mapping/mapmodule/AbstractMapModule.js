@@ -142,12 +142,7 @@ Oskari.clazz.define(
 
             me._map = me.createMap();
 
-            //TODO! TESTING ONLY! REMOVE!
-            //--------------------------*/
-            me._options.showCrosshair = true;
-            //--------------------------*/
-
-            if (me._options.showCrosshair) {
+            if (me._options.crosshair) {
                 me.toggleCrosshair(true);
             }            
 
