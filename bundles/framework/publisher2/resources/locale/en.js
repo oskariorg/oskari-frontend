@@ -63,7 +63,7 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "CrosshairTool":"Show map center",
+                "CrosshairTool":"Show map focal point",
                 "toolbarToolNames": {
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
