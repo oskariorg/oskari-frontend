@@ -463,8 +463,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             style.image.size = size;
 
             var svg = this.getSvg(style.image);
-            if(svg) {
+
+            if(svg && (style.image && !style.image.icon)) {
                 olStyle.externalGraphic = svg;
+            }
+            else if(style.image && style.image.icon) {
+                olStyle.externalGraphic = style.image.icon;
             }
 
             if(style.image.size) {
