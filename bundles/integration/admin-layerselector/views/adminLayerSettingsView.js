@@ -287,8 +287,10 @@ define([
                         }
                     }
                 }
-                // sld styles for all wfs layers
-                me._setupSldStyles();
+                if(layerType === 'wfslayer') {
+                    // sld styles for all wfs layers
+                    me._setupSldStyles();
+                }
             },
             _createNewModel: function (type) {
                 var sandbox = this.instance.sandbox,
@@ -1106,7 +1108,7 @@ define([
                     },
                     error: function (jqXHR) {
                         if (jqXHR.status !== 0) {
-                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').metadataReadFailure);
+                            me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin').sldStylesFetchError);
                         }
                     }
                 });

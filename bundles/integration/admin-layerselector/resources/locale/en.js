@@ -136,6 +136,7 @@ Oskari.registerLocalization(
             "sldStyleName":"Style name",
             "sldFileContentDesc":"Copy/paste SLD file content (xml) to text area",
             "sldFileContent":"SLD file content",
+            "sldStylesFetchError": "Couldn't get SLD styles",
             "addSldStyleDesc": "Select styles for the current layer",
             "addSldStyle": "Sld style selection",
             "minScale": "Minimum scale",
