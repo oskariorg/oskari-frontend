@@ -11,8 +11,11 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
      * @param {Oskari.mapframework.bundle.userguide.UserGuideBundleInstance}
      *        instance reference to component that created the tile
      */
-    function() {
+    function(instance) {
+        this.instance = instance;
         this.chart = null;
+        this.tabsData = [];
+        
     }, {
 
         /**
@@ -37,52 +40,85 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
          * @method startPlugin
          * called by host to start flyout operations
          */
-        startPlugin: function() {},
+        startPlugin: function() {
+
+            var me = this;
+            this.tabsData = {
+                "chart1": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart1Tab', me.instance),
+                "chart2": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart2Tab', me.instance),
+                "chart3": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart3Tab', me.instance)
+            };
+        },
+        /**
+         * @method stopPlugin
+         * called by host to stop flyout operations
+         */
+        stopPlugin : function() {
+        
+        },
+
+
         onOpen: function() {
             this.createUi(this.container);
+
         },
+            
+            
+        //},
+        
         /**
          * @method createUi
          * Creates the UI for a fresh start
          */
 
         createUi: function(container) {
-            if (this.chart) {
-                return;
-            }
-            // init a chart
-            this.chart = c3.generate({
-                bindto: container,
-                data: {
-                    columns: [],
-                    type:'bar',
+            var flyout = jQuery(this.container); // clear container;
+            flyout.empty();
 
-                }
-            });
-        },
-        updateUI : function(name, regions, data) {
-            if (!this.chart) {
-                // ui not on screen yet
-                return;
-            }
-            Oskari.log('StatsGraph').info('TODO: graph for indicator ' + name);
-            Oskari.log('StatsGraph').info(data);
-            this.chart.load({
-              columns: [
-                [name].concat(data),
+            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', "Tab Container for charts");
 
-              ],
-               keys: {
-                  // this doesn't seem to work really
-                 value: regions,
-               }
-            });
+            this.tabsContainer.insertTo(flyout);
             
 
 
+            for (tabId in this.tabsData) {
+                
+                if (this.tabsData.hasOwnProperty(tabId)) {
+                    tab = this.tabsData[tabId];
+                    panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                    panel.setTitle(tab.getTitle());
+                    tab.addTabContent(panel.getContainer());
+
+                    // binds tab to events
+                    if (tab.bindEvents) {
+                        tab.bindEvents();
+                    }
+                    this.tabsContainer.addPanel(panel);
+                    tab.initChart();
+                }
+            }
+
+        },
 
 
+
+
+        
+        updateUI : function(name, regions, data) {
+            Oskari.log('StatsGraph').info('TODO: graph for indicator ' + name);
+            Oskari.log('StatsGraph').info(data);
+
+
+
+
+            for (tabId in this.tabsData) {
+                if (this.tabsData.hasOwnProperty(tabId)) {
+                    tab = this.tabsData[tabId];
+                    tab.drawChart(name,regions,data);
+                }
+            }
         }
+        
     }, {
         /**
          * @property {String[]} protocol
