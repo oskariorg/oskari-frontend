@@ -124,6 +124,17 @@ Oskari.clazz.define(
             );
             btn.insertTo(me.templates.search);
 
+            btn = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
+
+            jQuery(btn.getElement()).click(
+                function (event) {
+                    me._removeFeaturesFromMap();
+                }
+            );
+            btn.insertTo(me.templates.search);
+
             //pipe list item
             me.templates.pipeListElement = jQuery(
                 '<li class="tag-pipe-list-element">' +
@@ -153,10 +164,12 @@ Oskari.clazz.define(
                     uid = item.attr('data-id'),
                     tagpipe = me._getTagPipe(parseInt(uid, 10));
                     me.state.mustacheType = tagpipe.tag_type;
+                    console.dir(me.state.mustachePrintJSONarray);
                     //me._addGeoJSONFeaturesToMap(tagpipe.tag_geojson);
                     me.state.mustachePrintJSONarray.push(tagpipe.tag_geojson);
+                    console.dir(tagpipe);
                     me._addFeaturesToMap(tagpipe.tag_geojson, 'MUSTACHE-TAG', false, 'label', false);
-                    me._printGeoJSON(me.state.mustachePrintJSONarray);
+                    //me._printGeoJSON(me.state.mustachePrintJSONarray);
                 }
             );
             btn.insertTo(me.templates.item.find('div.header'));
@@ -195,6 +208,9 @@ Oskari.clazz.define(
                 me._activateNormalGFI(false);
                 me._activateNormalWFSReq(false);
                 me._activateTagPipeLayers();
+                me._removeFeaturesFromMap();
+                me.state.mustachePrintJSONarray = [];
+                me._printGeoJSON();
 
 /*                if(me.highlightVectorLayer === null){
                     me._createHighlightVectorLayer();
@@ -437,7 +453,7 @@ Oskari.clazz.define(
 
         _removeFeaturesFromMap: function(layerId, propKey, propValue){
             var me = this;
-            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[propKey, propValue, layerId]);
+            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[]);
         },
 
         /**
