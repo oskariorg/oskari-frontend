@@ -343,6 +343,17 @@ Oskari.util = (function () {
     };
 
     /**
+     * Helper for sanitize()
+     * @private
+     * @param  {String} content
+     * @return {Element}
+     */
+    var parseXmlToElement = function(content) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(content, "text/xml");
+        return doc.documentElement;
+    }
+    /**
      * Sanitizes input and returns a DOM element containing the sanitized content that can be injected to document and shown to user.
      * Usage:
      * // handles content as text content
@@ -351,7 +362,10 @@ Oskari.util = (function () {
      * var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
      * // handles content as html, but removes script and style tags
      * var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
-     * jQuery('body').append(element).append(anotherElement).append(stylishElement);
+     * // handles content as Element - remove script-tags
+     * var domElement = sanitize(jQuery('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>')[0], true);
+     * jQuery('body').append(element).append(anotherElement).append(stylishElement).append(domElement);
+     * @param {String|Element} content content to sanitize
      * @return Element
      */
     util.sanitize = function(content, tagsToRemove) {
@@ -363,24 +377,34 @@ Oskari.util = (function () {
             // treat as text only
             return document.createTextNode(content);
         }
-        if(typeof tagsToRemove === boolean) {
+        if(typeof tagsToRemove === 'boolean') {
             // truthy check before so this must be boolean true
             // by default remove script tags
             tagsToRemove = ['script'];
         }
-
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(content, "text/xml");
+        var root = null;
+        if(typeof content === 'string') {
+            root = parseXmlToElement(content);
+        } else if(content instanceof Element) {
+            root = content;
+        } else {
+            throw new TypeError('Could\'t sanitize input ' + content);
+        }
         tagsToRemove.forEach(function(tag) {
-            var scripts = doc.getElementsByTagName(tag);
+            var scripts = root.getElementsByTagName(tag);
             for(var i = 0; i < scripts.length; ++i ) {
                 var node = scripts.item(i);
                 node.textContent = '';
+                if(typeof node.removeAttribute === 'function') {
+                    node.removeAttribute("src");
+                    node.removeAttribute("link");
+                    node.removeAttribute("href");
+                }
             }
         });
 
         // return as is as Element structure
-        return doc.documentElement;
+        return root;
     }
 
     return util;

@@ -169,11 +169,17 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
+                    var popupType = "mobile";
                     popup.setContent(contentDiv);
                 } else {
+                    var popupDOM = jQuery('#' + id),
+                        popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
                     popup.setPosition(lonlatArray);
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
+                    }
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -238,6 +244,7 @@ Oskari.clazz.define(
                     inputs.placeholder();
                 }
             }
+
             me._popups[id] = {
                 title: title,
                 contentData: contentData,
@@ -819,7 +826,14 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
-                            popup.popup.setPosition(undefined);
+                            if(typeof popup.popup.setPosition === 'function') {
+                                popup.popup.setPosition(undefined);
+                            }
+                            if (popup.popup && popup.type === "desktop") {
+                                this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
+                            } else if (popup.popup && popup.type === "mobile") {
+                                popup.popup.close();
+                            }
                             delete this._popups[pid];
                             event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
                         	sandbox.notifyAll(event);
@@ -830,8 +844,10 @@ Oskari.clazz.define(
             }
             // id specified, delete only single popup
             if (this._popups[id]) {
-                if (this._popups[id].popup) {
+                if (this._popups[id].popup && this._popups[id].type === "desktop") {
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
+                } else if (this._popups[id].popup && this._popups[id].type === "mobile") {
+                    this._popups[id].popup.close();
                 }
                 delete this._popups[id];
                 event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
