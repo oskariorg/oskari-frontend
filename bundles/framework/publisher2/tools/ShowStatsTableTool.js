@@ -17,8 +17,7 @@ function() {
      * @public
      */
     init: function (pdata) {
-        var me = this,
-            tool = me.getTool(pdata);
+        var me = this;
 
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state.gridShown') && pdata.configuration.publishedgrid.state.gridShown === true) {
             me.setEnabled(true);
@@ -89,8 +88,7 @@ function() {
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
             request,
-            elLeft,
-            statsContainer;
+            elLeft;
 
         me.state.enabled = enabled;
 
@@ -122,10 +120,8 @@ function() {
             jQuery('.publishedgrid').remove();
         }
 
-        if (enabled) {
-            if(me.__handlers['MapSizeChanged']) {
+        if (enabled && me.__handlers['MapSizeChanged']) {
                 me.__handlers.MapSizeChanged();
-            }
         }
     },
     /**
