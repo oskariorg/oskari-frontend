@@ -156,8 +156,12 @@ Oskari.clazz.define(
                 offsetY = -20,
                 mapModule = me.getMapModule(),
                 isMarker = (marker && marker.data) ? true : false,
-                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info";
-                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info",
+                popupType,
+                popupDOM,
+                popup;
+
+            jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
             if(isMarker){
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
@@ -175,11 +179,11 @@ Oskari.clazz.define(
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
-                    var popupType = "mobile";
+                    popupType = "mobile";
                     popup.setContent(sanitizedContentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id),
-                        popupType = "desktop";
+                    popupDOM = jQuery('#' + id),
+                    popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
                     popup.setPosition(lonlatArray);
@@ -188,8 +192,8 @@ Oskari.clazz.define(
                     }
                 }
             } else if (isInMobileMode) {
-                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    popupType = "mobile";
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popupType = "mobile";
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -211,7 +215,7 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                var popupType = "desktop";
+                popupType = "desktop";
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
@@ -227,7 +231,7 @@ Oskari.clazz.define(
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
 
-                var popupDOM = jQuery('#' + id);
+                popupDOM = jQuery('#' + id);
                 if (positioning) {
                     popupDOM.addClass(positioning);
                     popupDOM.find('.popupHeaderArrow').addClass(positioning);
