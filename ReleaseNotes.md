@@ -1,5 +1,25 @@
 # Release Notes
 
+## 1.37.0
+
+### VectorLayerPlugin
+
+ol2: Click events didn't propagate properly when vector features were added from request to map. This has been fixed.
+
+### Admin layerselector
+
+SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
+
+## 1.36.2
+
+### MarkersPlugin
+
+ol2 and ol3: Fixed own icon usable in request.
+
+### RPC
+
+Domain validation simplified. Localhost is always allowed as domain and the protocol is no longer considered part of the validation.
+
 ## 1.36.1
 
 ### routingService
