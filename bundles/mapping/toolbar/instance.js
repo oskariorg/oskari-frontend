@@ -247,7 +247,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
             c.addClass('toolbar_' + tbid);
             if(addHoverStyle) {
-                jQuery('<style type="text/css">'+
+                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
@@ -438,7 +438,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             }
             this.toolbars[tbid] = undefined;
             delete this.toolbars[tbid];
-
+            this.containers[tbid] = undefined;
+            delete this.containers[tbid];
+            this._toolbarConfigs[tbid] = undefined;
+            delete this._toolbarConfigs[tbid];
         },
 
         /**
@@ -464,6 +467,69 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         _addToolbar: function (tbid, data) {
             this.getToolbarContainer(tbid, data);
+        },
+        _updateToolbar: function(ptbid, data){
+            var me = this;
+            var tbid = ptbid || 'default';           
+
+            
+            if(!data) {
+                data = {};
+            }
+
+            if(!data.colours) {
+                data.colours = {
+                    hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
+                    background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
+                };
+
+            } else {
+                if(!data.colours.hover) {
+                    data.colours.hover = '#3c3c3c';
+                }
+                if(!data.colours.background) {
+                    data.colours.background = '#333438';
+                }
+            }
+            data.colours = data.colours || {
+                hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
+            };
+            
+            if(this._toolbarConfigs[tbid].createdHover === true) {
+                jQuery('style#toolbar_'+tbid+'_style').remove();
+                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
+                            'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
+                            '   background-color: ' + data.colours.hover + ';' +
+                            '}' +
+                        '</style>').appendTo('head');
+            }
+            
+            
+            this._toolbarConfigs[tbid].colours = data.colours;
+
+
+            // change toolbar toolicons
+            var c = me.containers[tbid];
+            if(c) {
+                c.find('.tool').each(function(){
+                    var button = jQuery(this);
+                    var iconCls = button.attr('data-icon');
+                    button.removeClass(iconCls + '-light');
+                    button.removeClass(iconCls + '-dark');
+
+                    var color = data.colours.background;
+                    if(button.hasClass('selected') && button.attr('data-toggle-change-icon') === 'true' && button.attr('data-active-color')) {
+                        color = button.attr('data-active-color');
+                    }
+
+                    if(Oskari.util.getColorBrightness(color) === 'light') {
+                        button.addClass(iconCls + '-light');
+                    } else {
+                        button.addClass(iconCls + '-dark');
+                    }
+                });
+            }
+
         }
     }, {
         /**

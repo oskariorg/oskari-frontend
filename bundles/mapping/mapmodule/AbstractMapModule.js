@@ -104,6 +104,14 @@ Oskari.clazz.define(
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
 
+
+        this.templates = {
+            'crosshair': jQuery(
+                '<div class="oskari-crosshair">'+
+                    '<div class="oskari-crosshair-vertical-bar"></div>'+
+                    '<div class="oskari-crosshair-horizontal-bar"></div>'+
+                '</div>') 
+        }
     }, {
         /**
          * @method init
@@ -133,6 +141,10 @@ Oskari.clazz.define(
             }
 
             me._map = me.createMap();
+
+            if (me._options.crosshair) {
+                me.toggleCrosshair(true);
+            }            
 
             // changed to resolutions based map zoom levels
             // -> calculate scales array for backward compatibility
@@ -231,6 +243,13 @@ Oskari.clazz.define(
             },
             'Toolbar.ToolbarLoadedEvent': function() {
                 this.startLazyPlugins();
+            },
+            'RPCUIEvent': function(event) {
+                var me = this;
+                if(event.getBundleId()==='mapmodule.crosshair') {
+                    var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
+                    me.toggleCrosshair(show);
+                }
             }
         },
 
@@ -1060,6 +1079,22 @@ Oskari.clazz.define(
             jQuery(element).css('cursor',cursorStyle);
             this._cursorStyle = cursorStyle;
             return this._cursorStyle;
+        },
+
+        /**
+         * @method toggleCrosshair
+         * toggles the crosshair marking the center of the map
+         */
+        toggleCrosshair: function(show) {
+            var me = this,
+                crosshair = null,
+                mapEl = me.getMapEl();
+
+            mapEl.find('div.oskari-crosshair').remove();
+            if (show) {
+                crosshair = me.templates.crosshair.clone();
+                mapEl.append(crosshair);
+            }
         },
 
 /*---------------- /THEME ------------------- */
