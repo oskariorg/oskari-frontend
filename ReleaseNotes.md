@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### RPC
+
+Domain validation simplified. Localhost is always allowed as domain and the protocol is no longer considered part of the validation.
+
 ### MarkersPlugin
 
 ol2 and ol3: Fixed own icon usable in request.

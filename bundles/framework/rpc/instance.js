@@ -437,32 +437,22 @@ Oskari.clazz.define(
                 return false;
             }
             // Allow subdomains and different ports
-            var domain = this.conf.domain,
-                ret = origin.indexOf(domain) !== -1,
-                parts;
+            var domain = this.conf.domain
 
-            // always allow from localhost
-            if(origin.indexOf('http://localhost') === 0) {
-                return true;
-            }
+            var url = document.createElement('a');
+            url.href = origin;
+            var originDomain = url.hostname;
 
-            if (ret) {
-                parts = origin.split(domain);
-                if (parts) {
-                    ret = /^https?:\/\/([a-zA-Z0-9_-]+[.])*$/.test(parts[0]);
-                    if (ret && parts.length > 1) {
-                        ret = /^(:\d+)?$/.test(parts[1]);
-                    }
-                } else {
-                    // origin must have a protocol
-                    ret = false;
+            var allowed = originDomain.endsWith(domain);
+            if(!allowed) {
+                // always allow from localhost
+                if(originDomain === 'localhost') {
+                    sb.printWarn('Origin mismatch, but allowing localhost. Published to: ' + domain);
+                    return true;
                 }
-            }
-            if(!ret) {
                 sb.printWarn('Origin not allowed for RPC: ' + origin);
             }
-
-            return ret;
+            return allowed;
         },
 
         /**
