@@ -48,6 +48,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
         button.attr('id', 'oskari_toolbar_' + pGroup + '_' + pId);
+        button.attr('data-icon', pConfig.iconCls);
+        button.attr('data-toggle-change-icon', pConfig.toggleChangeIcon);
 
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
             //if style explicitly provided, add that as well

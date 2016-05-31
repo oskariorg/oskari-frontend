@@ -105,15 +105,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             prepend: true,
                             sticky: false,
                             callback: function () {
-                                if (!reqBuilder) {
-                                    var reqBuilder = sandbox.getRequestBuilder(
-                                        'ToolSelectionRequest'
+                                if(sandbox.mapMode !== 'mapPublishMode') {
+                                    if (!reqBuilder) {
+                                        var reqBuilder = sandbox.getRequestBuilder(
+                                            'ToolSelectionRequest'
+                                        );
+                                    }
+                                    sandbox.request(
+                                        me,
+                                        reqBuilder('map_control_tool_prev')
                                     );
                                 }
-                                sandbox.request(
-                                    me,
-                                    reqBuilder('map_control_tool_prev')
-                                );
                             }
                         },
                         'history_forward': {
@@ -122,46 +124,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             tooltip: me._loc.history.next,
                             sticky: false,
                             callback: function () {
-                                if (!reqBuilder) {
-                                    var reqBuilder = sandbox.getRequestBuilder(
-                                        'ToolSelectionRequest'
+                                if(sandbox.mapMode !== 'mapPublishMode') {
+                                    if (!reqBuilder) {
+                                        var reqBuilder = sandbox.getRequestBuilder(
+                                            'ToolSelectionRequest'
+                                        );
+                                    }
+                                    sandbox.request(
+                                        me,
+                                        reqBuilder('map_control_tool_next')
                                     );
                                 }
-                                sandbox.request(
-                                    me,
-                                    reqBuilder('map_control_tool_next')
-                                );
                             }
                         },
                         'measureline': {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-line',
                             tooltip: me._loc.measure.line,
-                            sticky: true,
-                            toggleChangeIcon: true,
+                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (me.activeTool === "measureline") {
-                                    sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
-                                    me.activeTool = undefined;
-                                    var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
-                                    sandbox.request(me, toolbarRequest);
-                                } else {
-                                    if (me.activeTool === "measurearea") {
-                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
+                                if(sandbox.mapMode !== 'mapPublishMode') {
+                                    if (me.activeTool === "measureline") {
+                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
                                         me.activeTool = undefined;
+                                        var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
+                                        sandbox.request(me, toolbarRequest);
+                                    } else {
+                                        if (me.activeTool === "measurearea") {
+                                            sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
+                                            me.activeTool = undefined;
+                                        }
+                                        var rn = 'map_control_measure_tool';
+                                        if (gfiReqBuilder) {
+                                            sandbox.request(me, gfiReqBuilder(false));
+                                        }
+                                        if (!reqBuilder) {
+                                            var reqBuilder = sandbox.getRequestBuilder(
+                                                'ToolSelectionRequest'
+                                            );
+                                        }
+                                        sandbox.request(me, reqBuilder(rn));
+                                        me.activeTool = "measureline";
                                     }
-                                    var rn = 'map_control_measure_tool';
-                                    if (gfiReqBuilder) {
-                                        sandbox.request(me, gfiReqBuilder(false));
-                                    }
-                                    if (!reqBuilder) {
-                                        var reqBuilder = sandbox.getRequestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                    }
-                                    sandbox.request(me, reqBuilder(rn));
-                                    me.activeTool = "measureline";
                                 }
                             }
                         },
@@ -169,31 +175,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-area',
                             tooltip: me._loc.measure.area,
-                            sticky: true,
-                            toggleChangeIcon: true,
+                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (me.activeTool === "measurearea") {
-                                    sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
-                                    me.activeTool = undefined;
-                                    var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
-                                    sandbox.request(me, toolbarRequest);
-                                } else {
-                                    if (me.activeTool === "measureline") {
-                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
+                                if(sandbox.mapMode !== 'mapPublishMode') {
+                                    if (me.activeTool === "measurearea") {
+                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
                                         me.activeTool = undefined;
+                                        var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
+                                        sandbox.request(me, toolbarRequest);
+                                    } else {
+                                        if (me.activeTool === "measureline") {
+                                            sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
+                                            me.activeTool = undefined;
+                                        }
+                                        var rn = 'map_control_measure_area_tool';
+                                        if (gfiReqBuilder) {
+                                            sandbox.request(me, gfiReqBuilder(false));
+                                        }
+                                        if (!reqBuilder) {
+                                            var reqBuilder = sandbox.getRequestBuilder(
+                                                'ToolSelectionRequest'
+                                            );
+                                        }
+                                        sandbox.request(me, reqBuilder(rn));
+                                        me.activeTool = "measurearea";
                                     }
-                                    var rn = 'map_control_measure_area_tool';
-                                    if (gfiReqBuilder) {
-                                        sandbox.request(me, gfiReqBuilder(false));
-                                    }
-                                    if (!reqBuilder) {
-                                        var reqBuilder = sandbox.getRequestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                    }
-                                    sandbox.request(me, reqBuilder(rn));
-                                    me.activeTool = "measurearea";
                                 }
                             }
                         }
@@ -267,9 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         _createControlElement: function (mapInMobileMode) {
             var me = this,
                 el,
-                sandbox = me.getSandbox(),
-                i,
-                ilen;
+                sandbox = me.getSandbox();
 
             el = me.template.clone();
 
@@ -282,10 +288,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         teardownUI : function() {
             var me = this;
+
             //remove old element
             this.removeFromPluginContainer(this.getElement());
 
             if (me.popup) {
+                me.popup.getJqueryContent().detach();
                 me.popup.close(true);
                 me.popup = null;
             }
@@ -302,6 +310,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 // no point in drawing the ui if we are not visible
                 return;
             }
+
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
@@ -315,16 +324,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             this.teardownUI();
 
             me._element = me._createControlElement(mapInMobileMode);
+
+            var changeToolStyle = function(toolstyle, div){
+                var div = div || me.getElement(),
+                    toolStyle = toolstyle || me.getToolStyleFromMapModule();
+
+                if (!div) {
+                    return;
+                }
+                //no default exists for the menu icon, using rounded-dark instead...
+                if (!toolStyle) {
+                    toolStyle = "rounded-dark";
+                }
+
+                var imgPath = me.getImagePath(),
+                    styledImg = imgPath + 'menu-' + toolStyle + '.png',
+                    icon = div.find('.icon'),
+                    blackOrWhite = toolStyle ? toolStyle.split('-')[1] : 'dark';
+
+                var styledImgClass = 'menu-' + toolStyle;
+
+                if (toolStyle === null) {
+                    icon.removeAttr('style');
+                } else {
+                    icon.removeClass();
+                    icon.addClass('icon menu-' + toolStyle);
+                }
+
+
+            };
+
             if (!toolbarNotReady && mapInMobileMode) {
-                me.changeToolStyle(null, me._element);
+                changeToolStyle(null, me._element);
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 this.addToPluginContainer(me._element);
-                me.changeToolStyle();
+                changeToolStyle();
                 me._bindIcon();
             }
-
-
 
         },
 
@@ -456,7 +493,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             var me = this,
                 conf = me.conf,
                 mapmodule = me.getMapModule(),
-                isMobile = Oskari.util.isMobile();
+                isMobile = Oskari.util.isMobile(),
+                sandbox = me.getSandbox();
 
             var popupTitle = "Toolbar",
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
@@ -473,15 +511,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             if (isMobile) {
                 me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                me.popup.addClass('mobile');
-                me.popup.setColourScheme({
-                    'bodyBgColour': themeColours.backgroundColour
-                });
+                me.popup.addClass('mobile');               
             } else {
                 me.popup.moveTo(me.getElement(), 'bottom', true);
-                me.popup.setColourScheme({
-                    'bodyBgColour': themeColours.backgroundColour
-                });
+            }
+
+            me.popup.setColourScheme({
+                'bodyBgColour': themeColours.backgroundColour
+            });
+
+           if(sandbox.mapMode === 'mapPublishMode') {
+               var request,
+                    builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest'),
+                    mapmodule = me.getMapModule(),
+                    theme = mapmodule.getTheme(),
+                    wantedTheme = (theme === 'dark') ? 'light' : 'dark',
+                    themeColours = mapmodule.getThemeColours(wantedTheme);
+
+                if (builder) {
+                    request = builder(
+                            me.toolbarId,
+                            'update',
+                            {
+                                colours: {
+                                    hover: themeColours.hoverColour,
+                                    background: themeColours.backgroundColour
+                                }
+                            }
+                    );
+                    sandbox.request(me.getName(), request);
+
+                }
             }
 
         },
@@ -529,31 +589,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {jQuery} div
          */
         changeToolStyle: function (toolstyle, div) {
-            var me = this,
-                div = div || me.getElement(),
-                toolStyle = toolstyle || me.getToolStyleFromMapModule();
-
-            if (!div) {
-                return;
-            }
-            //no default exists for the menu icon, using rounded-dark instead...
-            if (!toolStyle) {
-                toolStyle = "rounded-dark";
-            }
-
-            var imgPath = this.getImagePath(),
-                styledImg = imgPath + 'menu-' + toolStyle + '.png',
-                icon = div.find('.icon'),
-                blackOrWhite = toolStyle ? toolStyle.split('-')[1] : 'dark';
-
-            var styledImgClass = 'menu-' + toolStyle;
-
-            if (toolStyle === null) {
-                icon.removeAttr('style');
-            } else {
-                icon.removeClass();
-                icon.addClass('icon menu-' + toolStyle);
-            }
+            var me = this;
+            me.redrawUI();
         },
 
         /**
