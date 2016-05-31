@@ -419,7 +419,7 @@ Oskari.clazz.define(
                     },
                     stroke : {
                         color: '#ff0000',
-                        width: 5
+                        width: 3
                     },
                     text : {
                         scale : 1.3,
@@ -777,6 +777,7 @@ Oskari.clazz.define(
             me.state.mustacheIsOnMap = false;
             me.state.mustacheGeoJSON = null;
             me.state.mustacheType = null;
+            me.state.mustacheActive = false;
             me._manageHelp(false);
             me.state.mustachePrintJSONarray = [];
             me._printGeoJSON();
@@ -1242,18 +1243,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * [_zoomToLonLat zooms to certain coordinates]
-         * @param  {[object]} layer [op layer]
-         */
-        _zoomToLonLat: function(layer){
-            var me = this,
-            bounds = layer.getDataExtent(),
-            center = bounds.getCenterLonLat(),
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, 7, false);
-            me.sandbox.request(me.instance, mapmoveRequest);
-        },
-
-        /**
          * [_printGeoJSON sends print request with geojson in it]
          * @param  {[array]} mustachePrintJSONarray [all geojsons]
          */
@@ -1265,33 +1254,34 @@ Oskari.clazz.define(
 
             if(mustachePrintJSONarray){
                 for(var i in mustachePrintJSONarray){
+                    for(var j in mustachePrintJSONarray[i].features){
 
-                    var printObj = {
-                    "type": "geojson",
-                    "name": i,
-                    "id": i,
-                    "data": mustachePrintJSONarray[i],
-                    "styles": [
-                        {
-                       "name": "MustacheStyle",
-                       "styleMap": {"default": {
-                             "fontColor": "rgba(0,0,0,1)",
-                             "fontFamily": "Arial",
-                             "fontSize": "12px",
-                             "fillOpacity": 0.8,
-                             "label": mustachePrintJSONarray[i].features[1].properties.label,
-                             "strokeColor": "#ff0000",
-                             "strokeOpacity": 1,
-                             "strokeWidth": 1,
-                             "labelAlign": "lb"
-                         }
-                         }
-                        }
-                    ]
-                    };
+                        var printObj = {
+                        "type": "geojson",
+                        "name": printOutArray.length + 1,
+                        "id": printOutArray.length + 1,
+                        "data": me._populateGeoJSON([mustachePrintJSONarray[i].features[j]]),
+                        "styles": [
+                            {
+                           "name": "MustacheStyle",
+                           "styleMap": {"default": {
+                                 "fontColor": "rgba(0,0,0,1)",
+                                 "fontFamily": "Arial",
+                                 "fontSize": "12px",
+                                 "fillOpacity": 0.8,
+                                 "label": mustachePrintJSONarray[i].features[j].properties.label,
+                                 "strokeColor": "#ff0000",
+                                 "strokeOpacity": 1,
+                                 "strokeWidth": 1,
+                                 "labelAlign": "lb"
+                             }
+                             }
+                            }
+                        ]
+                        };
 
-                    printOutArray.push(printObj);
-
+                        printOutArray.push(printObj);
+                    }
                 }
             }
 

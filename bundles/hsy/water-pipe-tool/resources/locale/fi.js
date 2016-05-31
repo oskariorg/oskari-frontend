@@ -23,7 +23,7 @@
                 "save_failed": "Tallennus epäonnistui",
                 "fetch_failed": "Merkintöjen hakeminen epäonnistui",
                 "tag-pipes": "Merkinnät",
-                "noMatch": "Hakusanalla ei löytynyt tuloksia",
+                "noMatch": "Hakusanalla ei löytynyt merkintöjä",
                 "show_on_map": "Näytä kartalla",
                 "select_tag_pipe": "Tee liityntä",
                 "help_start": "Klikkaa kartalta haluamaasi liittymiskohtaa",
