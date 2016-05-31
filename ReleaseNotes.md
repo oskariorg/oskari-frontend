@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### publishertoolbar
+
+Fixed publisher toolbar preview so at toolbar show selected theme. Also dsabled tools when previewing published map.
+
 ### RPC
 
 Domain validation simplified. Localhost is always allowed as domain and the protocol is no longer considered part of the validation.
