@@ -16,6 +16,8 @@ Fixed custom non-svg icons to work for markers.
 
 ol2: Click events didn't propagate properly when vector features were added from request to map for non-default layer. This has been fixed.
 
+Fixed an issue where WKT geometries didn't work with MapModulePlugin.AddFeaturesToMapRequest.
+
 ### mapmodule/ol2
 
 Feature-style with label alignment didn't work properly. This has been fixed.
