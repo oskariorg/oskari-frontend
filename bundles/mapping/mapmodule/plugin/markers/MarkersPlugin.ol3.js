@@ -503,7 +503,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     //size: me._getSizeInPixels(data.size),
                     size: data.size,
                     color: data.color,
-                    stroke: data.stroke
+                    stroke: data.stroke,
+                    icon: data.iconUrl
                 },
                 text : {
                     font: 'bold 16px Arial',

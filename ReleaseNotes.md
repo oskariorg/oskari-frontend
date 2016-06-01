@@ -1,5 +1,28 @@
 # Release Notes
 
+## 1.36.2
+
+### MarkersPlugin
+
+Fixed custom non-svg icons to work for markers.
+
+### VectorLayerPlugin
+
+ol2: Click events didn't propagate properly when vector features were added with ``MapModulePlugin.AddFeaturesToMapRequest`` to map for non-default layer. This has been fixed.
+
+Fixed an issue where WKT geometries didn't work with ``MapModulePlugin.AddFeaturesToMapRequest``.
+
+Fixed an issue where features removed with ``MapModulePlugin.RemoveFeaturesFromMapRequest`` reappeared when
+ adding new features with ``MapModulePlugin.AddFeaturesToMapRequest`` using priority option.
+
+### mapmodule/ol2
+
+Feature-style with label alignment didn't work properly. This has been fixed.
+
+### RPC
+
+Domain validation simplified. Localhost is always allowed as domain and the protocol is no longer considered part of the validation.
+
 ## 1.36.1
 
 ### routingService
