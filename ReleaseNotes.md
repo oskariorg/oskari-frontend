@@ -10,7 +10,7 @@ SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0
 
 ### MarkersPlugin
 
-ol2 and ol3: Fixed own icon usable in request.
+Fixed custom non-svg icons to work for markers.
 
 ### VectorLayerPlugin
 
