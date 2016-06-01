@@ -141,7 +141,10 @@ Oskari.clazz.define(
                 popupContent = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
-                font = options.font;
+                font = options.font,
+                id,
+                popupType,
+                popupDOM;
 
                 jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
@@ -153,14 +156,14 @@ Oskari.clazz.define(
 
             if (refresh) {
                 popup = me._popups[id].popup;
-                var id = sanitizedId;
+                id = sanitizedId;
 
                 if (isInMobileMode) {
-                    var popupType = "mobile";
+                    popupType = "mobile";
                     popup.setContent(sanitizedContentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id),
-                        popupType = "desktop";
+                    popupDOM = jQuery('#' + id);
+                    popupType = "desktop";
                     popup.setContentHTML(popupContent);
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
@@ -168,8 +171,8 @@ Oskari.clazz.define(
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var popupType = "mobile";
-                var id = sanitizedId;
+                popupType = "mobile";
+                id = sanitizedId;
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -189,8 +192,8 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                var popupType = "desktop",
-                    id = sanitizedId;
+                popupType = "desktop";
+                id = sanitizedId;
 
                 popup = new OpenLayers.Popup(
                     id,
@@ -219,7 +222,7 @@ Oskari.clazz.define(
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
 
-                var popupDOM = jQuery('#' + id);
+                popupDOM = jQuery('#' + id);
                 // Set the colour scheme if one provided
                 if (colourScheme) {
                     me._changeColourScheme(colourScheme, popupDOM, id);
@@ -845,7 +848,7 @@ Oskari.clazz.define(
             // id specified, delete only single popup
             if (this._popups[id]) {
                 if (this._popups[id].popup) {
-                    var popup = this._popups[id].popup;
+                    popup = this._popups[id].popup;
                     if(popup.type && popup.type === 'mobile') {
                         popup.close();
                     } else {

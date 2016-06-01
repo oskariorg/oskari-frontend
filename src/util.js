@@ -373,6 +373,7 @@ Oskari.util = (function () {
             // no content
             return;
         }
+        // TODO: use https://github.com/cure53/DOMPurify for implementation
         if(!tagsToRemove) {
             // treat as text only
             return document.createTextNode(content);

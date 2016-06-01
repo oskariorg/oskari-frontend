@@ -889,7 +889,7 @@ Oskari.clazz.define(
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
-                var allRows = table.find('tr[class*=filter-');
+                var allRows = table.find('tr[class*=filter-]');
                 _.each(allRows, function(item) {
                     var classNameFound = false;
                     for (var i = 0; i < filterValues.length; i++) {
