@@ -1,9 +1,10 @@
 th.asc {
-  background-image: url('../images/asc_arrow.png');
+  background-image: url("../images/asc_arrow.png");
   background-repeat: no-repeat;
   background-position: right center; }
+
 th.desc {
-  background-image: url('../images/desc_arrow.png');
+  background-image: url("../images/desc_arrow.png");
   background-repeat: no-repeat;
   background-position: right center; }
 
@@ -22,7 +23,7 @@ div.column-selector-placeholder {
 div.column-selector-title {
   margin-top: 10px;
   margin-left: 2px;
-  background-image: url('../images/desc_arrow.png');
+  background-image: url("../images/desc_arrow.png");
   background-repeat: no-repeat;
   background-position: 120px 3px;
   cursor: pointer; }
@@ -79,34 +80,38 @@ input.excelExportButton {
 
 table.oskari-grid [class*="span"] {
   float: none; }
+
 table.oskari-grid td {
   padding: 5px; }
+
 table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;
   overflow: hidden;
   border: 1px solid #E6E6E6;
-  text-overflow: ellipsis;
-  padding-left: 10px;
-  padding-right: 10px; }
+  text-overflow: ellipsis; }
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
+
 table.oskari-grid th {
+  padding: 0px;
   background-color: #F3F3F3; }
   table.oskari-grid th a {
     color: inherit;
     line-height: 28px;
     padding: 5px; }
   table.oskari-grid th.closedSubTable {
-    background-image: url('../images/icon-arrow-right.png');
+    background-image: url("../images/icon-arrow-right.png");
     background-repeat: no-repeat;
     background-position: right center; }
   table.oskari-grid th.openSubTable {
-    background-image: url('../images/icon-arrow-left.png');
+    background-image: url("../images/icon-arrow-left.png");
     background-repeat: no-repeat;
     background-position: right center; }
+
 table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
+
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
 

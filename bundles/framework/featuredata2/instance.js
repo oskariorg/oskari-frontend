@@ -270,8 +270,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
 
-                    if (layer) {
-                        this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                    if (layer && !event.getNop()) {
+                            this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                    }
+                    else if (layer && layer.isManualRefresh()) {
+                        this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
                     }
 
                 }
@@ -375,6 +378,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 } else if (event.getViewState() === "close") {
                     plugin.setEnabled(false);
+                    if (this.plugin) {
+                        this.plugin.handleCloseFlyout();
+                    }
                 } else {
                     plugin.setEnabled(true, true);
                 }

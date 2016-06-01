@@ -3,438 +3,444 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "title": "Metadata",
+        "title": "Metaúdaje",
         "desc": "",
         "layer": {
-            "name": "Metadata",
+            "name": "Metaúdaje",
             "description": "",
-            "orgName": "Metadata catalogue",
-            "inspire": "Metadata"
+            "orgName": "Metaúdajový katalóg",
+            "inspire": "Metaúdaje"
         },
         "flyout": {
-            "title": "Metadata",
-            "abstract": "Basic information",
-            "inspire": "Inspire metadata",
-            "jhs": "ISO 19115 metadata",
-            "quality": "Data quality",
-            "xml": "ISO 19139 XML file",
-            "map": "Geographic extent",
-            "pdf": "Printout",
-            "select_metadata_prompt": "Select metadata by clicking the icons.",
-            "metadata_printout_title": "METADATA PRINTOUT",
-            "linkto": "Link to this metadata",
-            "notFound": "Metadata was not found",
+            "title": "Metaúdaje",
+            "abstract": "Základné informácie",
+            "inspire": "Inspire metaúdaje",
+            "jhs": "ISO 19115 metaúdaje",
+            "quality": "Kvalita údajov",
+            "actions": "NOT TRANSLATED",
+            "xml": "ISO 19139 XML súbor",
+            "map": "Geografický rozsah",
+            "pdf": "Vytlačiť",
+            "select_metadata_prompt": "Vybrať metaúdaje kliknutím na ikony.",
+            "metadata_printout_title": "VYTLAČIŤ METAÚDAJE",
+            "linkto": "Link k týmto metaúdajom",
+            "notFound": "Metaúdaje sa nenašli",
             "codeLists": {
                 "gmd:MD_CharacterSetCode": {
                     "ucs2": {
                         "label": "UCS2",
-                        "description": "16-bit fixed size Universal Character Set, based on ISO/IEC 10646"
+                        "description": "16-bitová fixná veľkosť Univerzálneho súboru znakov (UCS), založeného na ISO/IEC 10646"
                     },
                     "ucs4": {
                         "label": "UCS4",
-                        "description": "32-bit fixed size Universal Character Set, based on ISO/IEC 10646"
+                        "description": "32-bitová fixná veľkosť Univerzálneho súboru znakov (UCS), založeného na ISO/IEC 10646"
                     },
                     "utf7": {
                         "label": "UTF7",
-                        "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+                        "description": "7-bitová variabilná veľkosť UCS prenosného formátu, založeného na ISO/IEC 10646"
                     },
                     "utf8": {
                         "label": "UTF8",
-                        "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+                        "description": "8-bitová variabilná veľkosť UCS prenosného formátu, založeného na ISO/IEC 10646"
                     },
                     "utf16": {
                         "label": "UTF16",
-                        "description": "16-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+                        "description": "16-bitová variabilná veľkosť UCS prenosného formátu, založeného na ISO/IEC 10646"
                     },
                     "8859part1": {
-                        "label": "8859 Part 1",
-                        "description": "ISO/IEC 8859-1, Information technology - 8-bit single byte coded graphic character sets - Part 1 : Latin alphabet No.1"
+                        "label": "8859 Časť 1",
+                        "description": "ISO/IEC 8859-1, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 1 : Latinská abeceda č.1"
                     },
                     "8859part2": {
-                        "label": "8859 Part 2",
-                        "description": "ISO/IEC 8859-2, Information technology - 8-bit single byte coded graphic character sets - Part 2 : Latin alphabet No.2"
+                        "label": "8859 Časť 2",
+                        "description": "ISO/IEC 8859-2, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 2 : Latinská abeceda č.2"
                     },
                     "8859part3": {
-                        "label": "8859 Part 3",
-                        "description": "ISO/IEC 8859-3, Information technology - 8-bit single byte coded graphic character sets - Part 3 : Latin alphabet No.3"
+                        "label": "8859 Časť 3",
+                        "description": "ISO/IEC 8859-3, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 3 : Latinská abeceda č.3"
                     },
                     "8859part4": {
-                        "label": "8859 Part 4",
-                        "description": "ISO/IEC 8859-4, Information technology - 8-bit single byte coded graphic character sets - Part 4 : Latin alphabet No.4"
+                        "label": "8859 Časť 4",
+                        "description": "ISO/IEC 8859-4, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 4 : Latinská abeceda č.4"
                     },
                     "8859part5": {
-                        "label": "8859 Part 5",
-                        "description": "ISO/IEC 8859-5, Information technology - 8-bit single byte coded graphic character sets - Part 5 : Latin/Cyrillic alphabet"
+                        "label": "8859 Časť 5",
+                        "description": "ISO/IEC 8859-5, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 5 : Latinská/Cyrilika abeceda"
                     },
                     "8859part6": {
-                        "label": "8859 Part 6",
-                        "description": "ISO/IEC 8859-6, Information technology - 8-bit single byte coded graphic character sets - Part 6 : Latin/Arabic alphabet"
+                        "label": "8859 Časť 6",
+                        "description": "ISO/IEC 8859-6, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 6 : Latinská/Arabská abeceda"
                     },
                     "8859part7": {
-                        "label": "8859 Part 7",
-                        "description": "ISO/IEC 8859-7, Information technology - 8-bit single byte coded graphic character sets - Part 7 : Latin/Greek alphabet"
+                        "label": "8859 Časť 7",
+                        "description": "ISO/IEC 8859-7, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 7 : Latinská/Grécka abeceda"
                     },
                     "8859part8": {
-                        "label": "8859 Part 8",
-                        "description": "ISO/IEC 8859-8, Information technology - 8-bit single byte coded graphic character sets - Part 8 : Latin/Hebrew alphabet"
+                        "label": "8859 Časť 8",
+                        "description": "ISO/IEC 8859-8, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 8 : Latinská/Hebrejská abeceda"
                     },
                     "8859part9": {
-                        "label": "8859 Part 9",
-                        "description": "ISO/IEC 8859-9, Information technology - 8-bit single byte coded graphic character sets - Part 9 : Latin alphabet No.5"
+                        "label": "8859 Časť 9",
+                        "description": "ISO/IEC 8859-9, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 9 : Latinská abeceda č.5"
                     },
                     "8859part10": {
-                        "label": "8859 Part 10",
-                        "description": "ISO/IEC 8859-10, Information technology - 8-bit single byte coded graphic character sets - Part 10 : Latin alphabet No.6"
+                        "label": "8859 Časť 10",
+                        "description": "ISO/IEC 8859-10, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 10 : Latinská abeceda č.6"
                     },
                     "8859part11": {
-                        "label": "8859 Part 11",
-                        "description": "ISO/IEC 8859-11, Information technology - 8-bit single byte coded graphic character sets - Part 11 : Latin/Thai alphabet"
+                        "label": "8859 Časť 11",
+                        "description": "ISO/IEC 8859-11, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 11 : Latinská/Thajská abeceda"
                     },
                     "8859part13": {
-                        "label": "8859 Part 13",
-                        "description": "ISO/IEC 8859-13, Information technology - 8-bit single byte coded graphic character sets - Part 13 : Latin alphabet No.7"
+                        "label": "8859 Časť 13",
+                        "description": "ISO/IEC 8859-13, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 13 : Latinská abeceda č.7"
                     },
                     "8859part14": {
-                        "label": "8859 Part 14",
-                        "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)"
+                        "label": "8859 Časť 14",
+                        "description": "ISO/IEC 8859-14, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 14 : Latinská abeceda č.8 (Keltská)"
                     },
                     "8859part15": {
-                        "label": "8859 Part 15",
-                        "description": "ISO/IEC 8859-15, Information technology - 8-bit single byte coded graphic character sets - Part 15 : Latin alphabet No.9"
+                        "label": "8859 Časť 15",
+                        "description": "ISO/IEC 8859-15, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 15 : Latinská abeceda č.9"
                     },
                     "8859part16": {
-                        "label": "8859 Part 16",
-                        "description": "ISO/IEC 8859-16, Information technology - 8-bit single byte coded graphic character sets - Part 16 : Latin alphabet No.10"
+                        "label": "8859 Časť 16",
+                        "description": "ISO/IEC 8859-16, Informačná technológia - 8-bitové jedno-bajtové kódovacie sady grafických znakov - Časť 16 : Latinská abeceda č.10"
                     },
                     "jis": {
                         "label": "JIS",
-                        "description": "Japanese code set used for electronic transmission"
+                        "description": "Japonská kódová sada používaná pre elektronický prenos"
                     },
                     "shiftJIS": {
-                        "label": "Shift JIS",
-                        "description": "Japanese code set used on MS-DOS machines"
+                        "label": "Posunutie JIS",
+                        "description": "Japonská kódová sada používaná na MS-DOS počítačoch"
                     },
                     "eucJP": {
                         "label": "EUC JP",
-                        "description": "Japanese code set used on UNIX based machines"
+                        "description": "Japonská kódová sada používaná na počítačoch podporujúcich UNIX"
                     },
                     "usAscii": {
                         "label": "US ASCII",
-                        "description": "United States ASCII code set (ISO 646 US)"
+                        "description": "Spojené štáty ASCII kódová sada (ISO 646 US)"
                     },
                     "ebcdic": {
                         "label": "EBCDIC",
-                        "description": "IBM mainframe code set"
+                        "description": "IBM mainframe kódová sada"
                     },
                     "eucKR": {
                         "label": "EUC KR",
-                        "description": "Korean code set"
+                        "description": "Kórejská kódová sada"
                     },
                     "big5": {
-                        "label": "Big 5",
-                        "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
+                        "label": "Veľká 5",
+                        "description": "tradičná čínska kódová sada používaná na Taiwane, Honk Kongu a iných územiach"
                     },
                     "GB2312": {
                         "label": "GB2312",
-                        "description": "Simplified Chinese code set"
+                        "description": "Zjednodušená čínska kódová sada"
                     }
                 },
                 "gmd:MD_ClassificationCode": {
                     "unclassified": {
-                        "label": "Unclassified",
-                        "description": "Available for general disclosure"
+                        "label": "Nezaradené",
+                        "description": "K dispozícii na všeobecné sprístupnenie"
                     },
                     "restricted": {
-                        "label": "Restricted",
-                        "description": "Not for general disclosure"
+                        "label": "Obmedzené",
+                        "description": "Nie pre všeobecné sprístupnenie"
                     },
                     "confidential": {
-                        "label": "Confidential",
-                        "description": "Available for someone who can be entrusted with information"
+                        "label": "Dôverné",
+                        "description": "K dispozícii pre niekoho, komu môžu byť zverené informácie"
                     },
                     "secret": {
-                        "label": "Secret",
-                        "description": "Kept or meant to be kept private, unknown, or hidden from all but a select group of people"
+                        "label": "Tajné",
+                        "description": "Udržiavané, alebo určené na držanie v tajnosti, nejasnosti alebo skryté od všetkých, okrem vybranej skupiny ľudí"
                     },
                     "topSecret": {
-                        "label": "Top secret",
-                        "description": "Of the highest secrecy"
+                        "label": "Prísne tajné",
+                        "description": "V najvyššej utajenosti"
                     }
                 },
                 "gmd:CI_DateTypeCode": {
                     "creation": {
-                        "label": "Creation",
-                        "description": "Date identifies when the resource was brought into existence."
+                        "label": "Vytváranie",
+                        "description": "Dátum rozpozná, kedy zdroj vznikol."
                     },
                     "publication": {
-                        "label": "Publication",
-                        "description": "Date identifies when the resource was issued."
+                        "label": "Publikovanie",
+                        "description": "Dátum rozpozná, kedy bol zdroj vydaný."
                     },
                     "revision": {
-                        "label": "Revision",
-                        "description": "Date identifies when the resource was examined or re-examined and improved or amended."
+                        "label": "Revízia",
+                        "description": "Dátum rozpozná, kedy bol zdroj preskúmaný alebo znova-preskúmaný, vylepšený alebo upravený."
                     }
                 },
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
-                        "label": "Copyright",
-                        "description": "Exclusive right to the publication, production, or sale of the rights to a literary, dramatic, musical, or artistic work, or to the use of a commercial print or label, granted by law for a specified period of time to an author, composer, artist, distributor"
+                        "label": "Autorské práva",
+                        "description": "Výhradné právo na publikácie, výrobu alebo predaj práv na literárne, dramatické, hudobné alebo umelecké práce, alebo s použitím komerčnej tlače alebo štítkom, poskytnuté zákonom na určitú dobu autorovi, skladateľ ovi, umelecovi a distribútorovi"
                     },
                     "patent": {
                         "label": "Patent",
-                        "description": "Government has granted exclusive right to make, sell, use or license an invention or discovery"
+                        "description": "Vláda udelila výhradné právo robiť, predávať, používať alebo licencovať vynález alebo objav"
                     },
                     "patentPending": {
-                        "label": "Pending patent",
-                        "description": "Produced or sold information awaiting a patent"
+                        "label": "Nerozhodnutý patent",
+                        "description": "Vyprodukovaná alebo predaná informácia čaká na patent"
                     },
                     "trademark": {
-                        "label": "Trademark",
-                        "description": "A name, symbol, or other device identifying a product, officially registered and legally restricted to the use of the owner or manufacturer"
+                        "label": "Ochranná známka",
+                        "description": "Názov, symbol, alebo iné zariadenie identifikujúce výrobok, oficiálne registrované a právne obmedzené na použitie vlastníkom alebo výrobcom"
                     },
                     "license": {
-                        "label": "License",
-                        "description": "Formal permission to do something"
+                        "label": "Licencia",
+                        "description": "Formálne povolenie niečo urobiť"
                     },
                     "intellectualPropertyRights": {
-                        "label": "Intellectual property rights",
-                        "description": "Rights to financial benefit from and control of distribution of non-tangible property that is a result of creativity"
+                        "label": "Práva duševného vlastníctva",
+                        "description": "Práva na finančný prospech a kontrola distribúcie nehmotného majetku, ktorý je výsledkom kreativity"
                     },
                     "restricted": {
-                        "label": "Restricted",
-                        "description": "Withheld from general circulation or disclosure"
+                        "label": "Obmedzené",
+                        "description": "Zadržaná z všeobecného obehu alebo zverejnenia"
                     },
                     "otherRestrictions": {
-                        "label": "Other restrictions",
-                        "description": "Limitation not listed"
+                        "label": "Iné obmedzenia",
+                        "description": "Obmedzenia nie sú uvedené"
                     }
                 },
                 "gmd:MD_ScopeCode": {
                     "attribute": {
-                        "label": "Attribute",
-                        "description": "Information applies to the attribute class"
+                        "label": "Atribút",
+                        "description": "Informácie sa vzťahujú na triedu atribút"
                     },
                     "attributeType": {
-                        "label": "Attribute type",
-                        "description": "Information applies to the characteristic of a feature"
+                        "label": "Typ atribútu",
+                        "description": "Informácie sa vzťahuje k charakteristike objektu"
                     },
                     "collectionHardware": {
-                        "label": "Collection hardware",
-                        "description": "Information applies to the collection hardware class"
+                        "label": "Zhromažďovací hardvér",
+                        "description": "Informácie sa vzťahujú na triedu zhromažďovací hardvér"
                     },
                     "collectionSession": {
-                        "label": "Collection session",
-                        "description": "Information applies to the collection session"
+                        "label": "Zhromažďovacia sekcia",
+                        "description": "Informácie sa vzťahujú na zhromažďovaciu sekciu"
                     },
                     "dataset": {
-                        "label": "Dataset",
-                        "description": "Information applies to the dataset"
+                        "label": "Súbor údajov",
+                        "description": "Informácie sa vzťahujú k súboru údajov"
                     },
                     "series": {
-                        "label": "Series",
-                        "description": "Information applies to the series"
+                        "label": "Série",
+                        "description": "Informácie sa vzťahujú k sériám"
                     },
                     "nonGeographicDataset": {
-                        "label": "Non geographic dataset",
-                        "description": "Information applies to non-geographic data"
+                        "label": "Negeografický súbor údajov",
+                        "description": "Informácie sa vzťahujú k negeografickému súboru údajov"
                     },
                     "dimensionGroup": {
-                        "label": "Dimension group",
-                        "description": "Information applies to a dimension group"
+                        "label": "Skupina rozmerov",
+                        "description": "Informácie sa vzťahujú k skupine rozmerov"
                     },
                     "feature": {
-                        "label": "Feature",
-                        "description": "Information applies to a feature"
+                        "label": "Objekt",
+                        "description": "Informácie sa vzťahujú k objektu"
                     },
                     "featureType": {
-                        "label": "Feature type",
-                        "description": "Information applies to a feature type"
+                        "label": "Typ objektu",
+                        "description": "Informácie sa vzťahujú k typu objektu"
                     },
                     "propertyType": {
-                        "label": "Property type",
-                        "description": "Information applies to a property type"
+                        "label": "Typ nehnuteľnosti",
+                        "description": "Informácie sa vzťahujú k typu nehnuteľnosti"
                     },
                     "fieldSession": {
-                        "label": "Field session",
-                        "description": "Information applies to a field session"
+                        "label": "Sekcia pole",
+                        "description": "Informácie sa vzťahujú k sekcii poľa"
                     },
                     "software": {
-                        "label": "Software",
-                        "description": "Information applies to a computer program or routine"
+                        "label": "Softvér",
+                        "description": "Informácie sa vzťahujú na počítačový program alebo rutinu"
                     },
                     "service": {
-                        "label": "Service",
-                        "description": "Information applies to a capability which a service provider entity makes available to a service user entity through a set of interfaces that define a behaviour, such as a use case"
+                        "label": "Služba",
+                        "description": "Informácie sa vzťahujú na capability, ktoré poskytovateľ služby dáva k dispozícii užívateľovi služby prostredníctvom sady rozhraní, ktoré definujú správanie, ako je napríklad prípad použitia"
                     },
                     "model": {
                         "label": "Model",
-                        "description": "Information applies to a copy or imitation of an existing or hypothetical object"
+                        "description": "Informácie sa vzťahujú na kópiu či napodobeninu existujúceho alebo hypotetického objektu"
                     },
                     "tile": {
-                        "label": "Tile",
-                        "description": "Information applies to a tile, a spatial subset of geographic data"
+                        "label": "Dlaždica",
+                        "description": "Informácie sa vzťahujú na dlaždicu, priestorovú podmnožinu geografických údajov"
                     }
                 },
                 "gmd:MD_SpatialRepresentationTypeCode": {
                     "vector": {
-                        "label": "Vector",
-                        "description": "Vector data is used to represent geographic data"
+                        "label": "Vektor",
+                        "description": "Vektorové údaje sa používajú na reprezentáciu geografických údajov"
                     },
                     "grid": {
-                        "label": "Grid",
-                        "description": "Grid data is used to represent geographic data"
+                        "label": "Mriežka",
+                        "description": "Údaje mriežky sa používajú na reprezentáciu geografických údajov"
                     },
                     "textTable": {
-                        "label": "Text, table",
-                        "description": "Textual or tabular data is used to represent geographic data"
+                        "label": "Text, tabuľka",
+                        "description": "Textové alebo tabuľkové údaje sa používajú na reprezentáciu geografických údajov"
                     },
                     "tin": {
-                        "label": "TIN",
-                        "description": "Triangulated irregular network"
+                        "label": "TNS",
+                        "description": "Triangulačná nepravidelná sieť"
                     },
                     "stereoModel": {
                         "label": "Stereo model",
-                        "description": "Three-dimensional view formed by the intersecting homologous rays of an overlapping pair of images"
+                        "description": "Trojrozmerný pohľad tvorený pretínajúcimi sa homologickými lúčmi prekrývajúcej sa dvojice obrázkov"
                     },
                     "video": {
                         "label": "Video",
-                        "description": "Scene from a video recording"
+                        "description": "Scéna z videozáznamu"
                     }
                 },
                 "gmd:MD_TopicCategoryCode": {
                     "farming": {
-                        "label": "Farming",
-                        "description": "Rearing of animals and/or cultivation of plants. Examples: agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock"
+                        "label": "Poľnohospodárstvo",
+                        "description": "Chov zvierat a / alebo pestovanie rastlín. Príklady: poľnohospodárstvo, zavlažovanie, akvakultúra, plantáže, pasenie, škodcovia a choroby, ktoré ovplyvňujú plodiny a hospodárske zvieratá"
                     },
                     "biota": {
-                        "label": "Biota",
-                        "description": "Flora and/or fauna in natural environment. Examples: wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat"
+                        "label": "Živé organizmy",
+                        "description": "Flóra a / alebo fauna v prirodzenom prostredí. Príklady: život vo voľnej prírode, vegetácia, biologické vedy, ekológia, divočina, morské živočíchy, mokrade, habitat"
                     },
                     "boundaries": {
-                        "label": "Boundaries",
-                        "description": "Legal land descriptions. Examples: political and administrative boundaries"
+                        "label": "Hranice",
+                        "description": "Právne popisy územia. Príklady: politické a administratívne hranice"
                     },
                     "climatologyMeteorologyAtmosphere": {
-                        "label": "Climatology, meteorology, atmosphere",
-                        "description": "Processes and phenomena of the atmosphere. Examples: cloud cover, weather, climate, atmospheric conditions, climate change, precipitation"
+                        "label": "Klimatológia, meteorológia, atmosféra",
+                        "description": "Procesy a stav ovzdušia. Príklady: oblačnosť, počasie, podnebie, atmosférické podmienky, zmena klímy, zrážky"
                     },
                     "economy": {
-                        "label": "Economy",
-                        "description": "Economic activities, conditions and employment. Examples: production, labour, revenue, commerce, industry, tourism and ecotourism, forestry, fisheries, commercial or subsistence hunting, exploration and exploitation of resources such as minerals, oil and gas"
+                        "label": "Hospodárstvo",
+                        "description": "Hospodárske činnosti, podmienky a zamestnanosť. Príklady: výroba, práca, príjmy, obchod, priemysel, cestovný ruch a ekoturizmus, lesníctvo, rybárstvo, komerčný lov, prieskum a využívanie zdrojov, ako sú minerály, ropa a zemný plyn"
                     },
                     "elevation": {
-                        "label": "Elevation",
-                        "description": "Height above or below sea level. Examples: altitude, bathymetry, digital elevation models, slope, derived products"
+                        "label": "Výška",
+                        "description": "Výška nad alebo pod hladinou mora. Príklady: nadmorská výška, bathymetria, digitálne výškové modely,  sklon, odvodené produkty"
                     },
                     "environment": {
-                        "label": "Environment",
-                        "description": "Environmental resources, protection and conservation. Examples: environmental pollution, waste storage and treatment, environmental impact assessment, monitoring environmental risk, nature reserves, landscape"
+                        "label": "Životné prostredie",
+                        "description": "Prírodné zdroje, ochrana a zachovanie. Príklady: znečistenie životného prostredia, skladovanie a spracovanie odpadu, posudzovanie vplyvov na životné prostredie, monitorovania rizík pre životné prostredie, prírodné rezervácie, krajina"
                     },
                     "geoscientificInformation": {
-                        "label": "Geoscientific information",
-                        "description": "Information pertaining to earth sciences. Examples: geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion"
+                        "label": "Geovedecké informácie",
+                        "description": "Informácie týkajúce sa vied o Zemi. Príklady: geofyzikálne javy a procesy, geológia, minerály, vedy zaoberajúce sa zložením, štruktúrou a pôvodom zemskými kameňmi, riziká zemetrasenia, sopečné činnosti, zosuvy pôdy, informácie o gravitácii, druhy pôd, permafrost, hydrogeológia, erózia"
                     },
                     "health": {
-                        "label": "Health",
-                        "description": "Health, health services, human ecology, and safety. Examples: disease and illness, factors affecting health, hygiene, substance abuse, mental and physical health, health services"
+                        "label": "Zdravie",
+                        "description": "Zdravie, zdravotníctvo, ľudská ekológia a bezpečnosť. Príklady: choroby a ochorenia, faktory ovplyvňujúce zdravie, hygiena, zneužívanie návykových látok, duševné a fyzické zdravie, zdravotnícke služby"
                     },
                     "imageryBaseMapsEarthCover": {
-                        "label": "Imagery base maps earth cover",
-                        "description": "Base maps. Examples: land cover, topographic maps, imagery, unclassified images, annotations"
+                        "label": "Zobrazenia základných máp zemského povrchu",
+                        "description": "Základné mapy. Príklady: krajinná pokrývka, topografické mapy, obrazy, nezaradené obrázky, anotácie"
                     },
                     "intelligenceMilitary": {
-                        "label": "Intelligence military",
-                        "description": "Military bases, structures, activities. Examples: barracks, training grounds, military transportation, information collection"
+                        "label": "Vojenská inteligencia",
+                        "description": "Vojenské základne, stavby, činnosti. Príklady: kasárne, školiace ihriská, vojenská doprava, zhromažďovanie informácií"
                     },
                     "inlandWaters": {
-                        "label": "Inland waters",
-                        "description": "Inland water features, drainage systems and their characteristics. Examples: rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods, water quality, hydrographic charts"
+                        "label": "Vnútrozemské vody",
+                        "description": "Vnútrozemské vodné objekty, drenážne systémy a ich charakteristiky. Príklady: rieky a ľadovce, soľné jazerá, plány využitia vody, priehrady, prúdy, povodne, kvalita vody, hydrografické grafy"
                     },
                     "location": {
-                        "label": "Location",
-                        "description": "Positional information and services. Examples: addresses, geodetic networks, control points, postal zones and services, place names"
+                        "label": "Poloha",
+                        "description": "Polohové informácie a služby. Príklady: adresy, geodetické siete, geodetické základy, poštové zóny a služby, názvy miest"
                     },
                     "oceans": {
-                        "label": "Oceans",
-                        "description": "Features and characteristics of salt water bodies (excluding inland waters). Examples: tides, tidal waves, coastal information, reefs"
+                        "label": "Oceány",
+                        "description": "Vlastnosti a charakteristiky slano-vodných útvarov (okrem vnútrozemských vôd). Príklady: Slapy, slapové vlny, pobrežné informácie, útesy"
                     },
                     "planningCadastre": {
-                        "label": "Planning cadastre",
-                        "description": "Information used for appropriate actions for future use of the land. Examples: land use maps, zoning maps, cadastral surveys, land ownership"
+                        "label": "Plánovací kataster",
+                        "description": "Informácie používané na vhodné postupy pre budúce využitie pozemkov. Príklady: mapy využívania pozemkov, územné mapy, katastrálne prieskumy, vlastníctvo pozemkov"
                     },
                     "society": {
-                        "label": "Society",
-                        "description": "Characteristics of society and cultures. Examples: settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information"
+                        "label": "Spoločnosť",
+                        "description": "Charakteristiky spoločnosti a kultúry. Príklady: osady, antropológia, archeológia, školstvo, tradičné viery, spôsoby a zvyky, demografické údaje, rekreačné oblasti a činnosti, posúdenie sociálneho vplyvu, kriminalita a spravodlivosť, informácie o sčítaní ľudu"
                     },
                     "structure": {
-                        "label": "Structure",
-                        "description": "Man-made construction. Examples: buildings, museums, churches, factories, housing, monuments, shops, towers"
+                        "label": "Štruktúra",
+                        "description": "Manuálne vyrobené konštrukcie. Príklady: budovy, múzeá, kostoly, továrne, obydlia, pamiatky, obchody, veže"
                     },
                     "transportation": {
-                        "label": "Transportation",
-                        "description": "Means and aids for conveying persons and/or goods. Examples: roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways"
+                        "label": "Doprava",
+                        "description": "Prostriedky a pomôcky na prepravu osôb a / alebo tovaru. Príklady: cesty, letiská / štartovacie a pristávacie dráhy, prepravné trasy, tunely, námorné mapy, umiestnenie vozidla alebo plavidla, letecké mapy, železnice"
                     },
                     "utilitiesCommunication": {
-                        "label": "Utilities communication",
-                        "description": "Energy, water and waste systems and communications infrastructure and services. Examples: hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks"
+                        "label": "Komunikačné nástroje",
+                        "description": "Energie, vody a odpadové systémy a komunikačná infraštruktúra a služby. Príklady: energia z vodných elektrární, geotermálne, solárne a jadrové zdroje energie, čistenie vody a distribúcia, zber a likvidácia odpadových vôd, distribúcia elektriny a plynu, dátová komunikácia, telekomunikácie, rádio, komunikačné siete"
                     }
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "Dataset is conformant to the specification.",
-                "qualityPassFalse": "Dataset is not conformant to the specification."
+                "qualityPassTrue": "Súbor údajov je zhodný so špecifikáciami.",
+                "qualityPassFalse": "Súbor údajov nie je zhodný so špecifikáciami."
             },
             "heading": {
-                "abstractTextData": "Abstract text (data)",
-                "abstractTextService": "Abstract text (service)",
-                "accessConstraint": "Access constraints",
-                "citationDate": "Date",
-                "classification": "Classifications",
-                "descriptiveKeyword": "Keywords",
-                "distributionFormat": "Distribution format",
-                "fileIdentifier": "File identifier",
-                "legalConstraint": "Legal constraints",
-                "lineageStatement": "Lineage statement",
-                "metadataCharacterSet": "Metadata characterset",
-                "metadataDateStamp": "Metadata date",
-                "metadataLanguage": "Metadata language",
-                "metadataOrganisation": "Organisation name",
-                "metadataStandardName": "Metadata standard name",
-                "metadataStandardVersion": "Metadata standard version",
-                "onlineResource": "Online resources",
-                "operatesOn": "Operates on",
-                "otherConstraint": "Other constraints",
-                "reportConformance": "Conformance",
-                "responsibleParty": "Responsible party",
-                "resourceIdentifier": "Resource identifier",
-                "resourceLanguage": "Resource language",
-                "scopeCode": "Resource type",
-                "serviceType": "Service type",
-                "spatialRepresentationType": "Spatial representation type",
-                "spatialResolution": "Spatial resolution",
-                "temporalExtent": "Temporal extents",
-                "topicCategory": "Topic categories",
-                "useLimitation": "Use limitations",
-                "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
-                "accuracyOfTimeMeasurement": "Accuracy of time measurement",
-                "completenessCommission": "Completeness commission",
-                "completenessOmission": "Completeness omission",
-                "conceptualConsistency": "Conceptual consistency",
-                "domainConsistency": "Domain consistency",
-                "formatConsistency": "Format consistency",
-                "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
-                "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
-                "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
-                "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
-                "temporalConsistency": "Temporal consistency",
-                "temporalValidity": "Temporal validity",
-                "thematicClassificationCorrectness": "Thematic classification correctness",
-                "topologicalConsistency": "Topological consistency"
+                "abstractTextData": "Abstraktný text (údaje)",
+                "abstractTextService": "Abstraktný text (služby)",
+                "accessConstraint": "Prístupové obmedzenia",
+                "citationDate": "Dátum",
+                "classification": "Klasifikácie",
+                "descriptiveKeyword": "Kľúčové slová",
+                "distributionFormat": "Formát distribúcie",
+                "fileIdentifier": "Identifikátor súborov",
+                "legalConstraint": "Právne obmedzenia",
+                "lineageStatement": "Vyhlásenie o pôvode",
+                "metadataCharacterSet": "Metaúdajová znaková sada",
+                "metadataDateStamp": "Dátum metaúdajov",
+                "metadataLanguage": "Jazyk metaúdajov",
+                "metadataOrganisation": "Názov organizácie",
+                "metadataStandardName": "Štandardný názov metaúdajov",
+                "metadataStandardVersion": "Štandardná verzia metaúdajov",
+                "onlineResource": "Online zdroje",
+                "operatesOn": "Funguje na",
+                "otherConstraint": "Iné obmedzenia",
+                "reportConformance": "Zhoda",
+                "responsibleParty": "Zodpovedná strana",
+                "resourceIdentifier": "Identifikátor zdroja",
+                "resourceLanguage": "Jazyk zdroja",
+                "scopeCode": "Typ zdroja",
+                "serviceType": "Typ služby",
+                "spatialRepresentationType": "Typ priestorovej reprezentácie",
+                "spatialResolution": "Priestorové rozlíšenie",
+                "temporalExtent": "Časové rozsahy",
+                "topicCategory": "Kategórie tém",
+                "useLimitation": "Obmedzenie používania",
+                "absoluteExternalPositionalAccuracy": "Absolútna vonkajšia polohová presnosť",
+                "accuracyOfTimeMeasurement": "Presnosť merania času",
+                "completenessCommission": "Úplnosť úlohy",
+                "completenessOmission": "Úplnosť opomenutia",
+                "conceptualConsistency": "Konceptuálna konzistencia",
+                "domainConsistency": "Konzistencia domény",
+                "formatConsistency": "Konzistencia formátu",
+                "griddedDataPositionalAccuracy": "Polohová presnosť mriežkových údajov",
+                "nonQuantitativeAttributeAccuracy": "Presnosť nekvantitatívnych vlastností",
+                "quantitativeAttributeAccuracy": "Presnosť kvantitatívnych vlastností",
+                "relativeInternalPositionalAccuracy": "Relatívna vnútorná polohová presnosť",
+                "temporalConsistency": "Časová konzistencia",
+                "temporalValidity": "Časová platnosť",
+                "thematicClassificationCorrectness": "Správnosť tematickej klasifikácie",
+                "topologicalConsistency": "Topologická konzistencia"
+            },
+            "layerList": {
+                "title": "NOT TRANSLATED",
+                "show": "NOT TRANSLATED",
+                "hide": "NOT TRANSLATED"
             }
         },
         "tile": {
-            "title": "Metadata",
-            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
+            "title": "Mataúdaje",
+            "tooltip": "Podmienky použitia a dostupnosť údajového súboru sú uvedené v popise metaúdajov."
         }
     }
 }

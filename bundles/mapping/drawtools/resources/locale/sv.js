@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "DrawTools",
     "value": {
-        "intersectionNotAllowed": "Polygon itself intersection is not allowed. Draw valid polygon to see the measure result."
+        "intersectionNotAllowed": "Området får inte forma en ögla. Rita ett giltigt område för att se mätningsresultatet."
     }
 }
 );

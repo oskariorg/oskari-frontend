@@ -205,6 +205,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
             var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
 
+            var options = {
+                hidePrevious: true
+            };
+
             if (moveReqBuilder) {
                 sandbox.request(this, moveReqBuilder(
                     lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
@@ -220,7 +224,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 });
                 sandbox.request(this, infoBoxReqBuilder(
                     popupId, loc.resultsTitle,
-                    contents, lonlat, true));
+                    contents, lonlat, options));
             }
         },
         /**

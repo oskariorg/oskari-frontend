@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Deze kaartlaag is privé. Klik hier om het te publiceren.",
                 "publicTooltip": "Deze kaartlaag is openbaar. Klik hier om de publicatie ongedaan te maken."
             },
+            "addCategoryFormButton": "New map layer",
             "addCategory": "Voeg kaartlaag toe",
             "editCategory": "Bewerk kaartlaag",
             "deleteCategory": "Verwijder kaartlaag",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Afstand meten",
                 "tooltip": "Afstand meten",
-                "add": "",
-                "next": "",
+                "add": "Add line",
+                "next": "Next",
                 "edit": "U kunt de lijn wijzigen door te klikken en de breekpunten te slepen.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Gebied Meten",
                 "tooltip": "Gebied Meten",
-                "add": "",
-                "next": "",
+                "add": "Add area",
+                "next": "Next",
                 "edit": "U kunt het gebied bewerken door te klikken en de breekpunten te slepen op de kant lijn.",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Link naar de afbeelding",
-                "previewLabel": "Preview afbeelding",
-                "add": "Nieuwe laag..."
+                "previewLabel": "Preview afbeelding"
             },
             "rendering": {
                 "label": "Plaats stijl",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punt stijl",
-            "tooltip": "",
+            "tooltip": "Define a style for point features.",
             "symbol": {
                 "label": "Icoon"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Lijn stijl",
-            "tooltip": "",
+            "tooltip": "Define a style for line features.",
             "style": {
                 "label": "Stijl"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Gebied stijl",
-            "tooltip": "",
+            "tooltip": "Define a style for area features.",
             "linestyle": {
                 "label": "Edge lijnstijl"
             },

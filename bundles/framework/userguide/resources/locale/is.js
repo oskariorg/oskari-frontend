@@ -3,22 +3,52 @@ Oskari.registerLocalization(
     "lang": "is",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Help",
+        "title": "Hjálp",
         "desc": "",
         "flyout": {
-            "title": "User Guide",
-            "loadingtxt": "<p>Loading the guide...</p>"
+            "title": "Notkunarleiðbeiningar",
+            "loadingtxt": "<p>Er að hlaða upp leiðbeiningunum...</p>"
         },
         "tile": {
-            "title": "User Guide"
+            "title": "Notkunarleiðbeiningar"
         },
         "error": {
-            "title": "Error!",
-            "generic": "Loading user guide failed. Please try again later."
+            "title": "Villa!",
+            "generic": "Það tókst ekki að opna notkunarleiðbeiningarnar."
         },
+        "tabs": [
+            {
+                "title": "Kortagluggi",
+                "tags": "leiðbeiningar_velkomin"
+            },
+            {
+                "title": "Kortaverkfæri",
+                "tags": "verkfæri fyrir leiðbeiningar"
+            },
+            {
+                "title": "Leita",
+                "tags": "leit í leiðbeiningum"
+            },
+            {
+                "title": "Kortalög",
+                "tags": "leiðbeiningar í kortalögum"
+            },
+            {
+                "title": "Útgáfa á korti",
+                "tags": "leiðbeiningar við útgáfu"
+            },
+            {
+                "title": "Þemakort",
+                "tags": "leiðbeiningar við þemu"
+            },
+            {
+                "title": "Greining",
+                "tags": "leiðbeiningar við greiningu"
+            }
+        ],
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "kortagluggi, notkunarleiðbeiningar",
+            "contentPart": "yfirbygging"
         }
     }
 }

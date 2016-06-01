@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 // Radio button list
                 if(!param.multi) {
                     jQuery.each(param.options, function(index, value){
-                        data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+                        data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + me.getElementLabel(param, value) + '<br>');
                     });
 
                     data.find('input').first().prop("checked", true);
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 // Checkbox list
                 else {
                     jQuery.each(param.options, function(index, value){
-                        data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + value + '<br>');
+                        data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + me.getElementLabel(param, value) + '<br>');
                     });
                 }
             } else {
@@ -82,8 +82,9 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
 
                     jQuery.each(param.selections, function(index, value){
                         var valueEl = readOnlyElement.clone();
+                        var textValue = me.getElementLabel(param, value);
                         valueEl.attr('data-value', value);
-                        valueEl.html(value);
+                        valueEl.html(textValue);
                         list.append(valueEl);
                         if(param.multi && index < param.selections.length-1) {
                             list.append(', ');
@@ -105,6 +106,32 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
             element.find('.elf_license_user_data').html(data);
 
             return element;
+        },
+        /**
+         * Returns a localised label for the license's duration options. The original value is returned for everything else.
+         */
+        getElementLabel: function(param, value) {
+            if (param.name === 'LICENSE_DURATION' && value && value.length) {
+                //value is of form P[int][D/W/M/Y]
+                var me = this,
+                    duration = value.substring(1, value.length - 1),
+                    unit = value[value.length - 1],
+                    durationLocalisation = null,
+                    durationSplit;
+
+                if (!duration || isNaN(duration)) {
+                    return value;
+                }
+                if (duration && unit) {
+                    durationLocalisation = me.instance._locale.dialog.licenseDurations[unit.toUpperCase()];
+                    if (durationLocalisation) {
+                        return duration + ' ' + durationLocalisation;
+                    } else {
+                        return value;
+                    }
+                }
+            }
+            return value;
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

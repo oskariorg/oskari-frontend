@@ -18,8 +18,23 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 4;
+        me._index = 40;
         me._name = 'MyLocationPlugin';
+
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-my-location': {
+                    iconCls: 'mobile-my-location',
+                    tooltip: '',
+                    sticky: false,
+                    show: true,
+                    callback: function (el) {
+                        me._setupLocation();
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
     }, {
         /**
          * @private @method _createControlElement
@@ -53,6 +68,9 @@ Oskari.clazz.define(
          */
         _setLayerToolsEditModeImpl: function () {
             var me = this;
+            if(!me.getElement()) {
+                return;
+            }
             if (me.inLayerToolsEditMode()) {
                 // disable icon
                 me.getElement().unbind('click');
@@ -120,6 +138,37 @@ Oskari.clazz.define(
                 }
                 mapmodule.centerMap({ lon: lon, lat : lat }, 6);
             });
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(!forced && toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (!toolbarNotReady && mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                me.refresh();
+                this.addToPluginContainer(me._element);
+            }
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

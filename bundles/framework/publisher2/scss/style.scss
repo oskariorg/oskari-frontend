@@ -289,8 +289,20 @@ div.publisher {
 div.basic_publisher div.form div.field input,
 div.field select {
     width : 100%;
-    width: unquote("80%\0/"); /* unquote for libsass bug */
+    /*
+    This used to have a defunct CSS hack for IE 10 only:
+    width: 80%\0;
+    It was never functional because SASS compiled it into single character.
+    It was removed.  
+    */
     background-color: #FFF;
+
+}
+
+div.field {
+    div.info-label {
+        font-style: italic;
+    }
 }
 
 /* Buttons */

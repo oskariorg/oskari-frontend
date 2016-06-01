@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
      *
      */
     function (config) {
+        var me = this;
         // hackhack for old configs so we don't have to remove
         // with-panbuttons from them
         this._config = config;
@@ -26,10 +27,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar';
         this._defaultLocation = 'top right';
-        this._index = 2;
+        this._index = 30;
         this._name = 'Portti2Zoombar';
         this._slider = null;
         this._suppressEvents = false;
+
+        this._mobileDefs = {
+            buttons:  {
+                'mobile-zoom-in': {
+                    iconCls: 'mobile-zoom-in',
+                    tooltip: '',
+                    sticky: false,
+                    show: true,
+                    callback: function (el) {
+                        var mapModule = me.getMapModule();
+                        var currentZoom = mapModule.getMapZoom();
+                        var maxZoomLevel = mapModule.getMaxZoomLevel();
+                        if(currentZoom<maxZoomLevel) {
+                            me.getMapModule().setZoomLevel(currentZoom+1);
+                        }
+                    }
+                },
+                'mobile-zoom-out': {
+                    iconCls: 'mobile-zoom-out',
+                    tooltip: '',
+                    sticky: false,
+                    show: true,
+                    callback: function (el) {
+                        var mapModule = me.getMapModule();
+                        var currentZoom = mapModule.getMapZoom();
+                        if(currentZoom>0) {
+                            me.getMapModule().setZoomLevel(currentZoom-1);
+                        }
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
+
+
+
         this._desktopStyles = {
             plus: {
                 css: {}
@@ -37,10 +74,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             minus: {
                 css: {}
             }
-        };
-
-        this._mobileDefs = {
-            height: 500
         };
 
         this.toolStyles = {
@@ -154,13 +187,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: mapModule.getMaxZoomLevel(),
                 value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
-                    me.getMapModule().setZoomLevel(ui.value);
+                   me.getMapModule().setZoomLevel(ui.value);
                 }
             });
 
             el.find('.pzbDiv-plus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
+                    if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') + 1
                         );
@@ -170,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             el.find('.pzbDiv-minus').bind('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    if (me._slider.slider('value') > 0) {
+                    if (me._slider && me._slider.slider('value') > 0) {
                         me.getMapModule().setZoomLevel(
                             me._slider.slider('value') - 1
                         );
@@ -235,48 +268,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             return {
                 AfterMapMoveEvent: function (event) {
                     me._setZoombarValue(event.getZoom());
-                },
-                MapSizeChangedEvent: function (evt) {
-                    me._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
-        },
-
-        /**
-         * @method  @private _handleMapSizeChanges handle map size changes
-         * @param  {Object} size {width:100, height:200}
-         * @param {Object} el jQuery element
-         */
-        _handleMapSizeChanges: function(size, el){
-            var me = this,
-                div = el || this.getElement(),
-                plus = div.find('.pzbDiv-plus'),
-                minus = div.find('.pzbDiv-minus'),
-                slider = div.find('div.slider');
-
-            if(size.height < me._mobileDefs.height) {
-                slider.hide();
-                plus.css({
-                    'background-image': 'url("' + this.getImagePath() + 'zoombar_plus_mobile.png")',
-                    'width': 43,
-                    'height': 43
-                });
-
-                minus.css({
-                    'background-image': 'url("' + this.getImagePath() + 'zoombar_minus_mobile.png")',
-                    'width': 43,
-                    'height': 43
-                });
-                div.width(43);
-
-            }
-            else {
-                slider.show();
-                plus.css(me._desktopStyles.plus.css);
-                minus.css(me._desktopStyles.minus.css);
-                div.width(18);
-            }
-
         },
 
         _setLayerToolsEditModeImpl: function () {
@@ -401,8 +394,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'height': sliderHeight + 'px'
                 });
             }
+        },
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            if(this._slider) {
+                this._slider.remove();
+                delete this._slider;
+            }
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
 
-            me._handleMapSizeChanges(mapModule.getSize(), div);
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(!forced && toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (!toolbarNotReady && mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                me.refresh();
+                this.addToPluginContainer(me._element);
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

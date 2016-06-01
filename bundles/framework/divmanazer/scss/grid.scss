@@ -115,8 +115,6 @@ table.oskari-grid {
         overflow: hidden;
         border: 1px solid #E6E6E6;
         text-overflow: ellipsis;
-        padding-left: 10px;
-        padding-right: 10px;
 
         &.hidden {
           display: none;
@@ -124,6 +122,7 @@ table.oskari-grid {
     }
 
     th {
+        padding: 0px;
         background-color: #F3F3F3;
 
         a {

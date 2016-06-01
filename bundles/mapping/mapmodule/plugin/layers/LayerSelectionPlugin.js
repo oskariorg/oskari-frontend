@@ -17,15 +17,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
         me._defaultLocation = 'top left';
-        me._index = 3;
+        me._index = 70;
         me._name = 'LayerSelectionPlugin';
 
         me.initialSetup = true;
         me.templates = {};
         me._mobileDefs = {
-            width: 500
+            buttons:  {
+                'mobile-layerselection': {
+                    iconCls: 'mobile-layers',
+                    tooltip: '',
+                    sticky: true,
+                    show: true,
+                    callback: function () {
+                        if (me.popup && me.popup.isVisible()) {
+                            var sandbox = me.getSandbox();
+                            sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                            me.popup.close(true);
+                            me.popup = null;
+                        } else {
+                            me.openSelection(true);
+                        }
+                    },
+                    toggleChangeIcon: true
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
         };
-        me.isMobile = false;
     }, {
         /**
          * @private @method _initImpl
@@ -42,13 +60,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '  <div class="header">' +
                 '    <div class="header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
+                '</div>');
+
+            me.templates.layerContent = jQuery(
                 '  <div class="content">' +
                 '    <div class="layers-content">' +
                 '        <div class="baselayers"></div>' +
                 '        <div class="layers"></div>' +
                 '    </div>' +
-                '  </div>' +
-                '</div>');
+                '  </div>');
             //same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
@@ -66,31 +86,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '<div class="layerHeader"></div>'
             );
 
-            me.templates.headerArrow = jQuery(
-                '<div class="styled-header-arrow"></div>'
-            );
             me.templates.contentHeader = jQuery(
                 '<div class="content-header">' +
                 '  <div class="content-header-title"></div>' +
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
-        },
-        /**
-         * @method  @private _handleMapSizeChanges handle map size changes
-         * @param  {Object} size {width:100, height:200}
-         * @param {Object} el jQuery element
-         */
-        _handleMapSizeChanges: function(size, el){
-            var me = this,
-                div = el || this.getElement();
-
-            if(size.width < me._mobileDefs.width) {
-                me.isMobile = true;
-
-            } else {
-                me.isMobile = false;
-            }
+            this.setupLayers();
         },
         /**
          * @method _createEventHandlers
@@ -149,18 +151,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (event._creator !== this.getName()) {
                         this.sortLayers();
                     }
-                },
-                MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
                 }
             };
         },
 
         _setLayerToolsEditModeImpl: function () {
+            if(!this.getElement()) {
+                return;
+            }
             var header = this.getElement().find('div.header');
             header.unbind('click');
-            if (this.inLayerToolsEditMode()) {
-                this.closeSelection();
+            if (this.inLayerToolsEditMode() && me.popup.isVisible()) {
+                me.popup.getJqueryContent().detach();
+                me.popup.close(true);
+                me.popup = null;
             } else {
                 this._bindHeader(header);
             }
@@ -178,8 +182,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
-            var baseLayersDiv = this.getElement().find(
-                    'div.content div.baselayers'
+            if(!this.layerContent) {
+                return;
+            }
+            var baseLayersDiv = this.layerContent.find(
+                    'div.baselayers'
                 ),
                 input;
 
@@ -198,13 +205,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         addLayer: function (layer, el) {
             if (this.layerRefs[layer.getId()]) {
+                // already added
                 return;
             }
 
-            var me = this,
-                element = el || this.getElement(),
-                content = element.find('div.content'),
-                layersDiv = content.find('div.layers'),
+            var me = this;
+
+            if (!me.layerContent) {
+                me.layerContent = me.templates.layerContent.clone();
+            }
+
+            var layersDiv = me.layerContent.find('div.layers'),
                 div = this.templates.layer.clone(),
                 input = this.templates.checkbox.clone();
 
@@ -243,9 +254,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var div = this.layerRefs[layer.getId()],
                 blnVisible = layer.isVisible(),
                 input;
-            /*if (!div) {
+            if (!div) {
                 return;
-            }*/
+            }
             input = div.find('input');
             if (blnVisible) {
                 if (!input.is(':checked')) {
@@ -315,16 +326,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         addBaseLayer: function (layer) {
             var me = this;
-            if (!layer || !layer.getId || !me.getElement()) {
+            if (!layer || !layer.getId) {
                 return;
             }
             var div = me.layerRefs[layer.getId()];
+            if (!div) {
+                return;
+            }
             if (div.parent().hasClass('baselayers')) {
                 return;
             }
-            /*if (!div) {
-                return;
-            }*/
             div.remove();
 
             var input = div.find('input');
@@ -337,9 +348,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             div.find('span').before(input);
 
-            var baseLayersDiv = me.getElement().find(
-                'div.content div.baselayers'
-            );
+            if (!me.layerContent) {
+                me.layerContent = me.templates.layerContent.clone();
+            }
+            var baseLayersDiv = me.layerContent.find('.baselayers');
 
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
@@ -393,7 +405,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'div.content div.baseLayerHeader'
                 );
                 baselayerHeader.remove();
-                baseLayersDiv.hide();
             } else {
                 this.sortLayers();
                 var checked = baseLayers.find('input:checked');
@@ -449,10 +460,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         sortLayers: function () {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
-                layersDiv = this.getElement().find('div.content div.layers'),
+                layersDiv = this.layerContent.find('div.layers'),
                 layers = layersDiv.find('div.layer').detach(),
-                baseLayersDiv = this.getElement().find(
-                    'div.content div.baselayers'
+                baseLayersDiv = this.layerContent.find(
+                    'div.baselayers'
                 ),
                 baseLayers = baseLayersDiv.find('div.layer').detach(),
                 i,
@@ -529,70 +540,70 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @method openSelection
          * Programmatically opens the plugins interface as if user had clicked it open
          */
-        openSelection: function () {
+        openSelection: function (isMobile) {
             var me = this,
                 conf = me.getConfig(),
-                div = this.getElement(),
-                icon = div.find('div.header div.header-icon'),
-                content = div.find('div.content'),
-                layersContent = div.find('.layers-content'),
-                header = div.find('div.header'),
-                mapmodule = me.getMapModule();
-                size = mapmodule.getSize(),
-                toolStyle = conf.toolStyle || me.getToolStyleFromMapModule();
+                mapmodule = me.getMapModule(),
+                div = this.getElement();
 
-            icon.removeClass('icon-arrow-white-right');
-            icon.addClass('icon-arrow-white-down');
-            content.show();
+            if (isMobile || div.hasClass('published-styled-layerselector')) {
+                var popupTitle = me._loc.title,
+                    el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
+                    topOffsetElement = jQuery('div.mobileToolbarDiv'),
+                    themeColours = mapmodule.getThemeColours();
+                me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                me.popup.createCloseIcon();
 
-            
+                me.popup.show(popupTitle, me.layerContent);
+                if (isMobile && el.length) {
+                    me.popup.moveTo(el, 'bottom', true, topOffsetElement);
+                    me.popup.onClose(function(){
+                        me.popup.getJqueryContent().detach();
+                        var sandbox = me.getSandbox();
+                        sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                    });
 
-            if(me.isMobile){
-                content.addClass('mobile');
-                header.addClass('mobile');
+                    var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.activeColour,
+                        'titleColour': themeColours.activeTextColour,
+                        'iconCls': popupCloseIcon
+                    });
+
+                    me.popup.addClass('mobile-popup');
+                } else {
+                    me.popup.moveTo(me.getElement(), 'bottom', true);
+                    var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                    me.popup.setColourScheme({
+                        'bgColour': themeColours.backgroundColour,
+                        'titleColour': themeColours.textColour,
+                        'iconCls': popupCloseIcon
+                    });
+                    me.popup.onClose(function() {
+                        me.popup.getJqueryContent().detach();
+                    });
+                }
+                me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
-                content.removeClass('mobile');
-                header.removeClass('mobile');
-            }
+                var icon = div.find('div.header div.header-icon'),
+                    header = div.find('div.header');
 
-            var layersTitle = div.find('.content-header');
-            var layersTitleHeight = 0;
-            
-            if(layersTitle.length==0){
-                layersTitle = div.find('.header');
-            }
+                icon.removeClass('icon-arrow-white-right');
+                icon.addClass('icon-arrow-white-down');
+                div.append(me.layerContent);
 
-            // Get layers title height
-            if(layersTitle.length>0){
-                layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
-            }
+                var layersTitle = div.find('.content-header');
+                var layersTitleHeight = 0;
 
-            // use default
-            if(!me.isMobile) {
-                layersContent.css('height', '');
-                layersContent.css('max-height', (size.height - layersTitleHeight) + 'px');
-            }
-            else {
-                layersContent.css('max-height', '');
-                layersContent.css('height', (size.height - layersTitleHeight) + 'px');
-            }
-        },
+                if(layersTitle.length==0){
+                    layersTitle = div.find('.header');
+                }
 
-        /**
-         * @method closeSelection
-         * Programmatically closes the plugins interface as if user had clicked it close
-         */
-        closeSelection: function (el) {
-            var element = el || this.getElement(),
-                icon = element.find('div.header div.header-icon'),
-                content = element.find('div.content'),
-                header = element.find('div.header');
-
-            icon.removeClass('icon-arrow-white-down');
-            icon.addClass('icon-arrow-white-right');
-            content.hide();
-            content.removeClass('mobile');
-            header.removeClass('mobile');
+                // Get layers title height
+                if(layersTitle.length>0){
+                    layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
+                }
+            }
         },
 
         /**
@@ -602,8 +613,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * {String} defaultBase as the selected base layers id
          */
         getBaseLayers: function () {
-            var inputs = this.getElement().find(
-                    'div.content div.baselayers div.layer input'
+            var inputs = this.layerContent.find(
+                    'div.baselayers div.layer input'
                 ),
                 layers = [],
                 checkedLayer = null,
@@ -625,12 +636,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         _bindHeader: function (header) {
             var me = this;
+
             header.bind('click', function () {
-                var content = me.getElement().find('div.content');
-                if (content.is(':hidden')) {
-                    me.openSelection();
-                } else {
+                if (me.popup && me.popup.isVisible()) {
+                    me.popup.getJqueryContent().detach();
+                    me.popup.close(true);
+                    me.popup = null;
+                    return;
+                } else if (me.getElement().find('.content')[0]) {
                     me.closeSelection();
+                } else {
+                    me.openSelection();
                 }
             });
         },
@@ -653,18 +669,81 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             me._bindHeader(header);
 
-            me.closeSelection(el);
-
-            me.setupLayers(undefined, el);
+            if (!me.layerContent) {
+                me.layerContent = me.templates.layerContent.clone();
+                me.setupLayers(undefined, el);
+            }
 
             return el;
         },
+
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+            if (this.popup) {
+                this.popup.close(true);
+            }
+        },
+
+        /**
+         * @method closeSelection
+         * Programmatically closes the plugins interface as if user had clicked it close
+         */
+        closeSelection: function (el) {
+            var element = el || this.getElement();
+            if(!element) {
+                return;
+            }
+            var icon = element.find('div.header div.header-icon');
+            var header = element.find('div.header');
+
+            icon.removeClass('icon-arrow-white-down');
+            icon.addClass('icon-arrow-white-right');
+            if (element.find('.content')[0]) {
+                element.find('.content').detach();
+            }
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(!forced && toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+            me._element = me._createControlElement();
+            if (!toolbarNotReady && mapInMobileMode) {
+                me.changeToolStyle(null, me._element);
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
+                me.refresh();
+                this.addToPluginContainer(me._element);
+            }
+        },
+
 
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
                 element = me.getElement(),
                 mapModule = me.getMapModule();
+
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
@@ -684,12 +763,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         me.changeFont(font, element);
                     }
                 }
-
-                if (conf.colourScheme) {
-                    me.changeColourScheme(conf.colourScheme, element);
-                }
             }
-            me._handleMapSizeChanges(mapModule.getSize(), element);
         },
 
         /**
@@ -708,8 +782,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var self = this,
                 header = div.find('div.header'),
-                headerArrow = this.templates.headerArrow.clone(),
-                content = div.find('div.content'),
                 contentHeader = this.templates.contentHeader.clone(),
                 resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',
@@ -718,15 +790,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             header.empty();
             if (styleName !== null) {
                 div.addClass('published-styled-layerselector');
-                content.addClass('published-styled-layerselector-content');
-                content.addClass('layerselection-styled-content');
+
                 header.addClass('published-styled-layerselector-header');
 
-                // Set the styling to the content div based on the tool style.
-                this.changeCssClasses(
-                    'oskari-publisher-layers-' + styleName,
-                    /oskari-publisher-layers-/, [content]
-                );
                 // Set the styling of the header as well since the border rounding affects them
                 this.changeCssClasses(
                     'oskari-publisher-layers-header-' + styleName,
@@ -737,30 +803,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': 'url("' + bgImg + '")'
                 });
 
-                content.find('div.content-header').remove();
-                content.find('div.styled-header-arrow').remove();
-                contentHeader.find('div.content-header-title').append(
-                    this._loc.title
-                );
-                content.prepend(contentHeader);
-                content.prepend(headerArrow);
             } else {
                 header.append(me.templates.defaultArrow.clone());
                 header.append(me._loc.title);
 
                 div.removeClass('published-styled-layerselector');
-                content.removeClass('published-styled-layerselector-content');
-                content.removeClass('layerselection-styled-content');
+
                 header.removeClass('published-styled-layerselector-header');
 
-                content.find('div.content-header').remove();
-                content.find('div.styled-header-arrow').remove();
-
-                // Set the styling to the content div based on the tool style.
-                this.changeCssClasses(
-                    '',
-                    /oskari-publisher-layers-/, [content]
-                );
                 // Set the styling of the header as well since the border rounding affects them
                 this.changeCssClasses(
                     '',
@@ -771,60 +821,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': ''
                 });
             }
-            contentHeader.find('div.content-close').on('click', function () {
-                self.closeSelection();
-            });
-            // Pretty fugly, but needed here since we're modifying the DOM and
-            // all the style changes disappear like Clint Eastwood rides into the sunset.
-            var conf = this.getConfig();
-            if (conf && conf.colourScheme) {
-                this.changeColourScheme(conf.colourScheme, this.getElement());
-            }
 
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
             );
-        },
-
-        /**
-         * Changes the colour scheme of the plugin
-         *
-         * @method changeColourScheme
-         * @param {Object} colourScheme object containing the colour settings for the plugin
-         *      {
-         *          bgColour: <the background color of the gfi header>,
-         *          titleColour: <the colour of the gfi title>,
-         *          headerColour: <the colour of the feature name>,
-         *          iconCls: <the icon class of the gfi close icon>
-         *      }
-         * @param {jQuery} div
-         */
-        changeColourScheme: function (colourScheme, div) {
-            div = div || this.getElement();
-
-            if (!div || !colourScheme) {
-                return;
-            }
-
-            // Change the colour of the header background
-            div.find('div.content-header').css({
-                'background-color': colourScheme.bgColour
-            });
-
-            // Change the colour of the arrow
-            div.find('div.styled-header-arrow').css({
-                'border-bottom-color': colourScheme.bgColour
-            });
-
-            // Change the icon class
-            var closeIcon = div.find('div.content-header div.content-close');
-            closeIcon.removeClass('icon-close').removeClass('icon-close-white');
-            closeIcon.addClass(colourScheme.iconCls);
-
-            // Change the colour of the header font
-            div.find('div.content-header div.content-header-title').css({
-                'color': colourScheme.titleColour
-            });
         },
 
         /**

@@ -461,7 +461,7 @@ define([
             * @param {Object} data saved data
             * @param {jQuery} element jQuery element
             */
-            _addLayerAjax: function(data, element){
+            _addLayerAjax: function(data, element, callback){
                 var me = this,
                     form = element.parents('.admin-add-layer'),
                     accordion = element.parents('.accordion'),
@@ -497,6 +497,9 @@ define([
                             }
                             form.remove();
 
+                            if (typeof callback === 'function') {
+                                callback();
+                            }
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
@@ -556,7 +559,7 @@ define([
              *
              * @method addLayer
              */
-            addLayer: function (e) {
+            addLayer: function (e, callback) {
                 if (e && e.stopPropagation) {
                     e.stopPropagation();
                 }
@@ -644,6 +647,7 @@ define([
                 data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
                 data.manualRefresh =  form.find("input[type='checkbox'][name='manualRefresh']:checked").val();
+                data.resolveDepth =  form.find("input[type='checkbox'][name='resolveDepth']:checked").val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -687,7 +691,7 @@ define([
 
                     btn.setHandler(function() {
                         dialog.close();
-                        me._addLayerAjax(data, element);
+                        me._addLayerAjax(data, element, callback);
                     });
 
                     cancelBtn.setHandler(function() {
@@ -697,7 +701,7 @@ define([
                     dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
                     dialog.makeModal();
                 } else {
-                    me._addLayerAjax(data, element);
+                    me._addLayerAjax(data, element, callback);
                 }
             },
             /**
@@ -749,7 +753,7 @@ define([
                         });
                     },
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
-                    success: function () {
+                    success: function (resp) {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
                             //trigger event to View.js so that it can act accordingly
@@ -827,6 +831,7 @@ define([
                 }, {
                     silent: true
                 });
+                me.model.setVersion(version);
                 me.model.set({_admin:{
                     username: user,
                     password: pw,
@@ -885,10 +890,11 @@ define([
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
                 var layerName = current.attr('data-layername'),
-                    additionalId = current.attr('data-additionalId');
+                    additionalId = current.attr('data-additionalId'),
+                    title = current.text();
                 if (layerName) {
                     // actual layer node -> populate model
-                    me.model.setupCapabilities(layerName, null, additionalId);
+                    me.model.setupCapabilities(layerName, null, additionalId, title);
                 } else {
                     // toggle class to hide submenu
                     current.toggleClass('closed');

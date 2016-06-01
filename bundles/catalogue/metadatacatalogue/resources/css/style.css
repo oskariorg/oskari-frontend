@@ -66,14 +66,17 @@ div.metadataOptions div.checkboxes {
   vertical-align: middle;
   margin-left: 130px;
   width: auto; }
+
 div.metadataOptions div.metadataRow {
   margin-bottom: 10px; }
+
 div.metadataOptions div.metadataType {
   display: table-cell;
   vertical-align: middle;
   padding-right: 10px;
   width: auto;
   white-space: nowrap; }
+
 div.metadataOptions div.rowLabel {
   display: table-cell;
   vertical-align: middle;
@@ -81,6 +84,7 @@ div.metadataOptions div.rowLabel {
   min-width: 130px;
   width: 130px;
   white-space: nowrap; }
+
 div.metadataOptions #metadataCoverageButton {
   min-width: 206px; }
 

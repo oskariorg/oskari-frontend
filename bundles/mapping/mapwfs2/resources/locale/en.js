@@ -27,7 +27,12 @@ Oskari.registerLocalization(
         },
         "information": {
             "title": "Feature Data Rendering",
-            "info": "Some of data products are not rendered automatically. <br/><br/> Pleace select an area on the map and click the Refresh button. <br/><br/> Click Feature data to see feature data on the data product."
+            "info": "There are WFS-layers on the map, which are not rendered automatically. <br/><br/> Locate and zoom in on an area, where features are located.  <br/><br/>  Feature data and features are retrieved via Feature data -button and features are rendered via Refresh-button."
+        },
+        "refresh_alert": {
+            "title": "Visibility warning",
+            "all_not_in_scale": "There are no layers to refresh, please move to a suitable zoom level and try again",
+            "all_invisible" : "There are no visible layers to refresh, please open selected layers and set visible some of current layers"
         },
         "button": {
             "cancel": "Cancel",

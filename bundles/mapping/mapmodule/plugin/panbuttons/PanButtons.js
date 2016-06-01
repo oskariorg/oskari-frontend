@@ -13,11 +13,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
      *
      */
     function (config) {
+        var me = this;
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
         this._defaultLocation = 'top right';
-        this._index = 0;
+        this._index = 20;
         this._name = 'PanButtons';
+
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-reset': {
+                    iconCls: 'mobile-reset-map-state',
+                    tooltip: '',
+                    sticky: false,
+                    show: true,
+                    callback: function (el) {
+                        if (!me.inLayerToolsEditMode()) {
+                            var requestBuilder = me.getSandbox().getRequestBuilder(
+                                'StateHandler.SetStateRequest'
+                            );
+                            if (requestBuilder) {
+                                me.getSandbox().request(me, requestBuilder());
+                            } else {
+                                me.getSandbox().resetState();
+                            }
+                        }
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
     }, {
         /**
          * @private @method _createControlElement
@@ -182,6 +207,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panButtons.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
+            }
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(!forced && toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
+
+            if (!toolbarNotReady && mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                me.refresh();
+                this.addToPluginContainer(me._element);
             }
         }
     }, {

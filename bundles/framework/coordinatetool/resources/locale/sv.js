@@ -13,31 +13,80 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "title": "Koordinater",
-                "searchButton": "Centrum karta",
-                "info": "Klicka på den plats på kartan för att se koordinaterna eller mata in koordinaterna och sök",
-                "showMouseCoordinates": "Visa musen koordinaterna"
+                "searchButton": "Fokusera kartan",
+                "addMarkerButton": "Tillägg markör",
+                "info": "Klicka på en plats på kartan för att se dess koordinater eller mata in koordinaterna och klicka på knappen \"Fokusera kartan\"",
+                "showMouseCoordinates": "Visa koordinaterna för musmarkörens position"
             },
             "compass": {
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
+            "reversegeocode": {
+                "errorTitle": "Geokodningsfel",
+                "error": "Geokodningen misslyckades. Geokoden kunde inte hämtas för den valda platsen",
+                "WHAT3WORDS_CHANNEL": {
+                    "label": "What3words: "
+                },
+                "NLS_NEAREST_FEATURE_CHANNEL" : {
+                    "label": "Adress: "
+                }
+            },
             "tooltip" : {
-                "tool": "Visa/stäng koordinaterna verktyget",
+                "tool": "Visa koordinaterna eller fokusera kartan till de valda koordinaterna",
                 "close": "Stäng"
             },
              "checkValuesDialog": {
                 "button": "OK",
-                "title": "Kontrollsummevärden",
-                "message": "Kontrollera koordinatvärdena för fälten"
+                "title": "Fel",
+                "message": "Koordinaterna er felaktiga. Kontrollera koordinatvärdena och försök igen"
             },
             "projectionChange": {
-                "header": "Change projection",
-                "projection":"Projection",
-                "confirmationMessage": "Changing the projection will return the application to it's initial state and all opened maplayers will be removed. Do you wish to continue?",
+                "header": "Byt projektion",
+                "projection":"Projektion",
+                "confirmationMessage": "Genom att byta projektion återgår applikationen till startläget och alla öppna kartlager stänges. Vill du fortsätta?",
                 "buttons": {
                     "ok": "OK",
                     "cancel": "Avbryt"
                 }
+            },
+            "coordinatesTransform": {
+                "header": "Koordinatsystem:",
+                "projections": {
+                    "EPSG:3067": "ETRS-TM35FIN-plankoordinater",
+                    "NLSFI:etrs_gk": "ETRS-GKn-plankoordinater",
+                    "NLSFI:kkj": "KKS grundkoordinatsystem",
+                    "NLSFI:ykj": "KKS enhetskoordinatsystem",
+                    "EPSG:4258": "ETRS89 geografiska (~WGS84)",
+                    "LATLON:kkj": "KKS geografiska",
+                    "EPSG:3046": "ETRS-TM34",
+                    "EPSG:3048": "ETRS-TM36",
+                    "EPSG:3873": "ETRS-GK19",
+                    "EPSG:3874": "ETRS-GK20",
+                    "EPSG:3875": "ETRS-GK21",
+                    "EPSG:3876": "ETRS-GK22",
+                    "EPSG:3877": "ETRS-GK23",
+                    "EPSG:3878": "ETRS-GK24",
+                    "EPSG:3879": "ETRS-GK25",
+                    "EPSG:3880": "ETRS-GK26",
+                    "EPSG:3881": "ETRS-GK27",
+                    "EPSG:3882": "ETRS-GK28",
+                    "EPSG:3883": "ETRS-GK29",
+                    "EPSG:3884": "ETRS-GK30",
+                    "EPSG:3885": "ETRS-GK31",
+                    "EPSG:3386": "KKJ zon 0",
+                    "EPSG:2391": "KKJ zon 1",
+                    "EPSG:2392": "KKJ zon 2",
+                    "EPSG:2394": "KKJ zon 4"
+                }
+            },
+            "cannotTransformCoordinates" : {
+                "title": "Fel",
+                "message": "Koordinaterna kunde inte omvandlas"
+            },
+            "publisher": {
+                "showTransformationTools": "Visa verktyg för koordinattransformation",
+                "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
         }
     }

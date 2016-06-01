@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     mapHeight = jQuery(window).height(),
                     mapWidth = contentMap.width(),
                     sidebar = jQuery('#sidebar:visible'),
-                    statsgrid = jQuery('.oskari-view.statsgrid:visible'),
+                    statsgrid = jQuery('.statsgrid:visible'),
                     maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
                     mapTools = jQuery('#maptools:visible');
 
@@ -161,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-            module.start(me.getSandbox());
 
             me.adjustMapSize();
 
@@ -178,16 +177,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             plugins[i].state
                         );
                         module.registerPlugin(plugins[i].instance);
-                        module.startPlugin(plugins[i].instance);
                     } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
                         me.getSandbox().printWarn(
-                            'Unable to start plugin: ' + plugins[i].id + ': ' +
+                            'Unable to register plugin: ' + plugins[i].id + ': ' +
                             e
                         );
                     }
                 }
             }
+            module.start(me.getSandbox());
         },
         /**
          * @method start
@@ -213,19 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
 
             Oskari.setSandbox(sandboxName, sandbox);
-            jQuery.ajax({
-                type: 'POST',
-                url: conf.globalMapAjaxUrl + 'action_route=GetSupportedLocales',
-                timestamp: new Date().getTime(),
-
-                success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales || []);
-                    Oskari.setDecimalSeparators(data.decimalSeparators || {});
-                },
-                error: function () {
-                    // TODO add error handling
-                }
-            });
+            Oskari.setMarkers(me.conf.svgMarkers || []);
 
             // take map div ID from config if available
             if (conf.mapElement) {
@@ -317,68 +304,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 me.mapSizeUpdateRequestHandler
             );
 
-            me._initRaphael();
-        },
-
-        /**
-         * @private @method _initRaphael
-         * Initializes Raphael library
-         *
-         *
-         */
-        _initRaphael: function () {
-            // TODO: Find a more elegant location for registering Raphael font
-            //
-            // Dot previews use icons from the JSON based font below. A copy of identical ttf
-            // file is needed by back end renderer (e.g. GeoServer). Conversion from
-            // ttf to js is achieved by cufon at http://cufon.shoqolate.com/generate/.
-            if (typeof Raphael !== 'undefined') {
-                Raphael.registerFont({
-                    w: 512,
-                    face: {
-                        'font-family': 'dot-markers',
-                        'font-weight': 400,
-                        'font-stretch': 'normal',
-                        'units-per-em': '512',
-                        'panose-1': '2 0 5 3 0 0 0 0 0 0',
-                        ascent: '480',
-                        descent: '-32',
-                        bbox: '0 -480 512 32',
-                        'underline-thickness': '0',
-                        'underline-position': '0',
-                        'unicode-range': 'U+E000-U+F000'
-                    },
-                    glyphs: {
-                        ' ': {},
-                        '\ue000': {
-                            d: '288,-426v-21,-4,-35,-2,-42,5v-2,2,-2,4,-1,7v2,5,5,10,9,18v4,8,6,13,7,15v-3,3,-9,9,-18,17v-13,12,-13,12,-19,18v-7,7,-1,15,18,24v8,4,17,7,26,8v23,5,39,3,49,-5v3,-3,4,-6,3,-9r-9,-18v-4,-9,-4,-10,-8,-18v-3,-6,-4,-9,-5,-11v2,-2,2,-3,11,-11v9,-8,9,-8,15,-14v6,-5,1,-12,-15,-20v-7,-3,-14,-5,-21,-6xm262,-256r9,-48r-12,-2r-9,50r12,0'
-                        },
-                        '\ue001': {
-                            d: '320,-427r-127,0r0,126r35,0r28,45r28,-45r36,0r0,-126'
-                        },
-                        '\ue002': {
-                            d: '256,-429v-17,0,-30,5,-42,17v-12,12,-18,26,-18,43v0,10,5,24,15,43v10,19,20,35,30,48r15,21v40,-53,60,-90,60,-112v0,-17,-6,-31,-18,-43v-12,-12,-25,-17,-42,-17xm256,-344v-7,0,-12,-2,-17,-7v-5,-5,-7,-10,-7,-17v0,-7,2,-13,7,-18v5,-5,10,-7,17,-7v7,0,13,2,18,7v5,5,7,11,7,18v0,7,-2,12,-7,17v-5,5,-11,7,-18,7'
-                        },
-                        '\ue003': {
-                            d: '262,-257r17,-71r-12,-2r-17,73r12,0xm240,-380v0,12,4,22,12,31v8,9,19,13,31,13v12,0,22,-4,31,-13v9,-9,13,-19,13,-31v0,-12,-4,-22,-13,-30v-9,-8,-19,-13,-31,-13v-12,0,-23,5,-31,13v-8,8,-12,18,-12,30'
-                        },
-                        '\ue004': {
-                            d: '262,-257r41,-169r-13,0r-40,169r12,0xm164,-427r18,45r-38,44r115,0r21,-89r-116,0'
-                        },
-                        '\ue005': {
-                            d: '196,-256v0,17,6,30,18,42v12,12,25,18,42,18v17,0,30,-6,42,-18v12,-12,18,-25,18,-42v0,-17,-6,-30,-18,-42v-12,-12,-25,-18,-42,-18v-17,0,-30,6,-42,18v-12,12,-18,25,-18,42'
-                        },
-                        '\ue006': {
-                            d: '284,-331r0,-93r-56,0r0,93r-39,0r67,75r67,-75r-39,0'
-                        },
-                        '\uf000': {
-                            d: '0,-480r512,512r-512,0r0,-512',
-                            w: 0
-                        },
-                        '\u00a0': {}
-                    }
-                });
-            }
         },
 
         /**
@@ -507,14 +432,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 rbAdd,
                 len,
                 i,
-                layer;
+                layer,
+                sandbox =  me.getSandbox(),
+                rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
+                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
             if (state.hasOwnProperty('east') && ignoreLocation !== true) {
-                me.getSandbox().getMap().moveTo(
+               sandbox.getMap().moveTo(
                     state.east,
                     state.north,
                     state.zoom
@@ -522,31 +450,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // mapmodule needed to set also param, because without it max zoomlevel check not working
-            me.getSandbox().syncMapState(true, mapmodule);
+            sandbox.syncMapState(true, mapmodule);
 
             // setting state
             if (state.selectedLayers) {
-                rbAdd = me.getSandbox().getRequestBuilder('AddMapLayerRequest');
+                rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
 
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if(oskariLayer) {
-                        oskariLayer.setVisible(layer.hidden !== true);
 
-                        if (layer.opacity || layer.opacity === 0) {
-                            oskariLayer.setOpacity(layer.opacity);
-                        }
-                        if (layer.style) {
-                            oskariLayer.selectStyle(layer.style);
-                        }
-                    }
-                    me.getSandbox().request(
+                    sandbox.request(
                         mapModuleName,
                         rbAdd(layer.id, true)
                     );
+
+                    sandbox.request(
+                        mapModuleName,
+                        rbVisible(layer.id, !layer.hidden)
+                    );
+
+                    if (layer.opacity || layer.opacity === 0) {
+                        sandbox.request(
+                            mapModuleName,
+                            rbOpacity(layer.id, layer.opacity)
+                        );
+                    }
+
+                    if (layer.style && oskariLayer) {
+                        oskariLayer.selectStyle(layer.style);
+                    }
                 }
             }
 
@@ -596,7 +531,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.getSandbox().getMap(),
+            var me = this,
+                map = this.getSandbox().getMap(),
                 selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 mapmodule = this.getMapModule(),
                 i,

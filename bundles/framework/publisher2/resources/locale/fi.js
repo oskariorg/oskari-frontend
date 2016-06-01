@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "ruotsi",
                     "en": "englanti"
                 },
-                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja teksteihin kartalla."
+                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Valinnat eivät näy esikatselukartalla.",
+                "languageChangedDisclaimer": "Huom! Valinnat eivät näy esikatselukartalla."
             },
             "size": {
                 "label": "Kartan koko",
@@ -61,6 +62,7 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
+                "CoordinateToolPlugin": "Koordinaattityökalu",
                 "toolbarToolNames": {
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
@@ -191,7 +193,7 @@ Oskari.registerLocalization(
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-). Poista kielletyt merkit ja yritä uudelleen.",
-                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
+                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
             }
         },
         "NotLoggedView": {

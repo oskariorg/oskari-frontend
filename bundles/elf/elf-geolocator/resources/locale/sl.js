@@ -21,7 +21,7 @@ Oskari.registerLocalization(
             "restrictedDesc": "Iskanje filtrirano po regijah",
             "fuzzyTitle": "Mehko iskanje",
             "fuzzyDesc": "Kraji s podobnimi imeni glede na iskalni pogoj",
-            "exonymTitle": "Iskanje po exonimu",
+            "exonymTitle": "Iskanje po eksonimu",
             "exonymDesc": "Tuja imena krajev",
             "searchButton": "Iskanje",
             "resultsTitle": "Rezultati iskanja",

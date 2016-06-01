@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Feedback dell'utente",
-            "subject": "Oggetto",
-            "subjectPlaceholder": "Titolo del tuo feedback",
             "ratingScore": "Punteggio",
             "ratingJustification": "Motivazione della valutazione"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "NOT TRANSLATED",
-            "targetIdentification": "NOT TRANSLATED",
-            "targetCode": "NOT TRANSLATED",
-            "targetCodeNotDefined": "Non definito",
-            "targetCodespace": "NOT TRANSLATED",
-            "primaryTargetCodeSpaceNotDefined": "Non definito",
-            "natureOfTarget": "NOT TRANSLATED"
+            "tabTitle": "Feedback",
+            "average": "Average rating"
         },
         "userInformation": {
             "userInformation": "Informazione sull'utente",

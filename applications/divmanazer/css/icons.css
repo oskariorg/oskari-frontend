@@ -1,9 +1,65 @@
+.add-area {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: 0px 0px !important;
+}
+
+.add-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -28px 0px !important;
+}
+
+.add-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -56px 0px !important;
+}
+
+.analysis-selection-edit {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -84px 0px !important;
+}
+
+.analysis-selection-line {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -112px 0px !important;
+}
+
+.analysis-selection-point {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -140px 0px !important;
+}
+
+.analysis-selection-remove {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -168px 0px !important;
+}
+
 .backendstatus-down {
     width: 20px;
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: 0px 0px !important;
+    background-position: -196px 0px !important;
 }
 
 .backendstatus-maintenance-pending {
@@ -11,7 +67,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -20px 0px !important;
+    background-position: -216px 0px !important;
 }
 
 .backendstatus-maintenance {
@@ -19,7 +75,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -40px 0px !important;
+    background-position: -236px 0px !important;
 }
 
 .backendstatus-ok {
@@ -27,7 +83,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -60px 0px !important;
+    background-position: -256px 0px !important;
 }
 
 .backendstatus-unknown {
@@ -35,7 +91,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -80px 0px !important;
+    background-position: -276px 0px !important;
 }
 
 .component-indexmap {
@@ -43,7 +99,7 @@
     height: 46px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -100px 0px !important;
+    background-position: -296px 0px !important;
 }
 
 .component-indexmap:hover {
@@ -51,7 +107,7 @@
     height: 46px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -100px -46px !important;
+    background-position: -296px -46px !important;
 }
 
 .component-tab-bg {
@@ -59,7 +115,7 @@
     height: 26px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -146px 0px !important;
+    background-position: -342px 0px !important;
 }
 
 .icon-area {
@@ -67,7 +123,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -147px 0px !important;
+    background-position: -343px 0px !important;
 }
 
 .icon-arrow-down {
@@ -75,7 +131,7 @@
     height: 15px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -175px 0px !important;
+    background-position: -371px 0px !important;
 }
 
 .icon-arrow-right {
@@ -83,7 +139,7 @@
     height: 15px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -188px 0px !important;
+    background-position: -384px 0px !important;
 }
 
 .icon-arrow-white-down {
@@ -91,7 +147,7 @@
     height: 15px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -201px 0px !important;
+    background-position: -397px 0px !important;
 }
 
 .icon-arrow-white-right {
@@ -99,7 +155,7 @@
     height: 15px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -214px 0px !important;
+    background-position: -410px 0px !important;
 }
 
 .icon-bubble-left {
@@ -107,7 +163,7 @@
     height: 15px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -227px 0px !important;
+    background-position: -423px 0px !important;
 }
 
 .icon-bubble-right {
@@ -115,7 +171,15 @@
     height: 21px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -247px 0px !important;
+    background-position: -443px 0px !important;
+}
+
+.icon-close-dark {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -466px 0px !important;
 }
 
 .icon-close-white {
@@ -123,7 +187,7 @@
     height: 20px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -270px 0px !important;
+    background-position: -482px 0px !important;
 }
 
 .icon-close {
@@ -131,7 +195,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -290px 0px !important;
+    background-position: -502px 0px !important;
 }
 
 .icon-close:hover {
@@ -139,7 +203,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -290px -16px !important;
+    background-position: -502px -16px !important;
 }
 
 .icon-corner-round {
@@ -147,7 +211,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -306px 0px !important;
+    background-position: -518px 0px !important;
 }
 
 .icon-corner-sharp {
@@ -155,7 +219,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -334px 0px !important;
+    background-position: -546px 0px !important;
 }
 
 .icon-double-line {
@@ -163,7 +227,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -362px 0px !important;
+    background-position: -574px 0px !important;
 }
 
 .icon-drag-corner {
@@ -171,7 +235,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -390px 0px !important;
+    background-position: -602px 0px !important;
 }
 
 .icon-drag-corner:hover {
@@ -179,7 +243,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -390px -23px !important;
+    background-position: -602px -23px !important;
 }
 
 .icon-drag {
@@ -187,7 +251,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -413px 0px !important;
+    background-position: -625px 0px !important;
 }
 
 .icon-drag:hover {
@@ -195,15 +259,79 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -413px -16px !important;
+    background-position: -625px -16px !important;
+}
+
+.icon-find-nearest-address-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -641px 0px !important;
+}
+
+.icon-find-nearest-address {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -669px 0px !important;
+}
+
+.icon-find-nearest-place-dark {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -697px 0px !important;
+}
+
+.icon-find-nearest-place {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -725px 0px !important;
+}
+
+.icon-funnel-active {
+    width: 18px;
+    height: 18px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -753px 0px !important;
 }
 
 .icon-funnel {
+    width: 18px;
+    height: 18px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -771px 0px !important;
+}
+
+.icon-geolocator {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -789px 0px !important;
+}
+
+.icon-info-area-active {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -429px 0px !important;
+    background-position: -817px 0px !important;
+}
+
+.icon-info-area {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -833px 0px !important;
 }
 
 .icon-info {
@@ -211,7 +339,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -445px 0px !important;
+    background-position: -849px 0px !important;
 }
 
 .icon-info:hover {
@@ -219,7 +347,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -445px -16px !important;
+    background-position: -849px -16px !important;
 }
 
 .icon-line-basic {
@@ -227,7 +355,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -461px 0px !important;
+    background-position: -865px 0px !important;
 }
 
 .icon-line-dashed {
@@ -235,7 +363,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -489px 0px !important;
+    background-position: -893px 0px !important;
 }
 
 .icon-line-flat_cap {
@@ -243,7 +371,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -517px 0px !important;
+    background-position: -921px 0px !important;
 }
 
 .icon-line-round_cap {
@@ -251,7 +379,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -545px 0px !important;
+    background-position: -949px 0px !important;
 }
 
 .icon-line-thin-diagonal {
@@ -259,7 +387,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -573px 0px !important;
+    background-position: -977px 0px !important;
 }
 
 .icon-line-thin-horizontal {
@@ -267,7 +395,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -601px 0px !important;
+    background-position: -1005px 0px !important;
 }
 
 .icon-line-wide-diagonal {
@@ -275,7 +403,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -629px 0px !important;
+    background-position: -1033px 0px !important;
 }
 
 .icon-line-wide-horizontal {
@@ -283,7 +411,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -657px 0px !important;
+    background-position: -1061px 0px !important;
 }
 
 .icon-line {
@@ -291,7 +419,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -685px 0px !important;
+    background-position: -1089px 0px !important;
 }
 
 .icon-maximize {
@@ -299,7 +427,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -713px 0px !important;
+    background-position: -1117px 0px !important;
 }
 
 .icon-maximize:hover {
@@ -307,7 +435,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -713px -16px !important;
+    background-position: -1117px -16px !important;
 }
 
 .icon-menu {
@@ -315,7 +443,7 @@
     height: 7px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -729px 0px !important;
+    background-position: -1133px 0px !important;
 }
 
 .icon-minimize {
@@ -323,7 +451,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -754px 0px !important;
+    background-position: -1158px 0px !important;
 }
 
 .icon-minimize:hover {
@@ -331,7 +459,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -754px -16px !important;
+    background-position: -1158px -16px !important;
 }
 
 .icon-point {
@@ -339,7 +467,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -770px 0px !important;
+    background-position: -1174px 0px !important;
 }
 
 .icon-private {
@@ -347,7 +475,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -798px 0px !important;
+    background-position: -1202px 0px !important;
 }
 
 .icon-public {
@@ -355,7 +483,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -816px 0px !important;
+    background-position: -1220px 0px !important;
 }
 
 .icon-restore {
@@ -363,7 +491,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -834px 0px !important;
+    background-position: -1238px 0px !important;
 }
 
 .icon-restore:hover {
@@ -371,7 +499,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -834px -16px !important;
+    background-position: -1238px -16px !important;
 }
 
 .icon-select-geometry {
@@ -379,7 +507,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -850px 0px !important;
+    background-position: -1254px 0px !important;
 }
 
 .icon-table {
@@ -387,7 +515,15 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -873px 0px !important;
+    background-position: -1277px 0px !important;
+}
+
+.layer-analysis {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1293px 0px !important;
 }
 
 .layer-base {
@@ -395,7 +531,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -889px 0px !important;
+    background-position: -1309px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -403,7 +539,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -905px 0px !important;
+    background-position: -1325px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -411,7 +547,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -921px 0px !important;
+    background-position: -1341px 0px !important;
 }
 
 .layer-group {
@@ -419,7 +555,47 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -937px 0px !important;
+    background-position: -1357px 0px !important;
+}
+
+.layer-newest-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1373px 0px !important;
+}
+
+.layer-newest {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1389px 0px !important;
+}
+
+.layer-publishable-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1405px 0px !important;
+}
+
+.layer-publishable {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1421px 0px !important;
+}
+
+.layer-stats-disabled {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1437px 0px !important;
 }
 
 .layer-stats {
@@ -427,7 +603,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -953px 0px !important;
+    background-position: -1453px 0px !important;
 }
 
 .layer-vector {
@@ -435,7 +611,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -969px 0px !important;
+    background-position: -1469px 0px !important;
 }
 
 .layer-wfs {
@@ -443,7 +619,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -985px 0px !important;
+    background-position: -1485px 0px !important;
 }
 
 .layer-wms {
@@ -451,7 +627,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1001px 0px !important;
+    background-position: -1501px 0px !important;
 }
 
 .layer-wmts {
@@ -459,7 +635,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1017px 0px !important;
+    background-position: -1517px 0px !important;
 }
 
 .marker-arrow {
@@ -467,7 +643,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1033px 0px !important;
+    background-position: -1533px 0px !important;
 }
 
 .marker-dot {
@@ -475,7 +651,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1061px 0px !important;
+    background-position: -1561px 0px !important;
 }
 
 .marker-flag {
@@ -483,7 +659,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1089px 0px !important;
+    background-position: -1589px 0px !important;
 }
 
 .marker-pin {
@@ -491,7 +667,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1117px 0px !important;
+    background-position: -1617px 0px !important;
 }
 
 .marker-pin2 {
@@ -499,7 +675,15 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1145px 0px !important;
+    background-position: -1645px 0px !important;
+}
+
+.marker-share {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1673px 0px !important;
 }
 
 .marker-square {
@@ -507,7 +691,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1173px 0px !important;
+    background-position: -1705px 0px !important;
 }
 
 .marker-stud {
@@ -515,7 +699,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1201px 0px !important;
+    background-position: -1733px 0px !important;
 }
 
 .marker {
@@ -523,7 +707,295 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1229px 0px !important;
+    background-position: -1761px 0px !important;
+}
+
+.mobile-close-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1793px 0px !important;
+}
+
+.mobile-close-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1825px 0px !important;
+}
+
+.mobile-info-marker-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1857px 0px !important;
+}
+
+.mobile-info-marker-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1889px 0px !important;
+}
+
+.mobile-infobox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1921px 0px !important;
+}
+
+.mobile-infobox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1953px 0px !important;
+}
+
+.mobile-layers-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1985px 0px !important;
+}
+
+.mobile-layers-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2017px 0px !important;
+}
+
+.mobile-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2049px 0px !important;
+}
+
+.mobile-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2081px 0px !important;
+}
+
+.mobile-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2113px 0px !important;
+}
+
+.mobile-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2145px 0px !important;
+}
+
+.mobile-menu-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2177px 0px !important;
+}
+
+.mobile-menu-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2209px 0px !important;
+}
+
+.mobile-my-location-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2241px 0px !important;
+}
+
+.mobile-my-location-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2273px 0px !important;
+}
+
+.mobile-next-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2305px 0px !important;
+}
+
+.mobile-next-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2337px 0px !important;
+}
+
+.mobile-north-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2369px 0px !important;
+}
+
+.mobile-north-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2401px 0px !important;
+}
+
+.mobile-previous-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2433px 0px !important;
+}
+
+.mobile-previous-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2465px 0px !important;
+}
+
+.mobile-refresh-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2497px 0px !important;
+}
+
+.mobile-refresh-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2529px 0px !important;
+}
+
+.mobile-reset-map-state-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2561px 0px !important;
+}
+
+.mobile-reset-map-state-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2593px 0px !important;
+}
+
+.mobile-search-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2625px 0px !important;
+}
+
+.mobile-search-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2657px 0px !important;
+}
+
+.mobile-selection-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2689px 0px !important;
+}
+
+.mobile-selection-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2721px 0px !important;
+}
+
+.mobile-xy-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2753px 0px !important;
+}
+
+.mobile-xy-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2785px 0px !important;
+}
+
+.mobile-zoom-in-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2817px 0px !important;
+}
+
+.mobile-zoom-in-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2849px 0px !important;
+}
+
+.mobile-zoom-out-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2881px 0px !important;
+}
+
+.mobile-zoom-out-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2913px 0px !important;
 }
 
 .myplaces-area {
@@ -531,7 +1003,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1261px 0px !important;
+    background-position: -2945px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -539,7 +1011,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1289px 0px !important;
+    background-position: -2973px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -547,7 +1019,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1321px 0px !important;
+    background-position: -3005px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -555,7 +1027,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1353px 0px !important;
+    background-position: -3037px 0px !important;
 }
 
 .myplaces-line {
@@ -563,7 +1035,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1385px 0px !important;
+    background-position: -3069px 0px !important;
 }
 
 .myplaces-point {
@@ -571,7 +1043,23 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1413px 0px !important;
+    background-position: -3097px 0px !important;
+}
+
+.refresh {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3125px 0px !important;
+}
+
+.refresh:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3125px -16px !important;
 }
 
 .selection-area {
@@ -579,7 +1067,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1441px 0px !important;
+    background-position: -3141px 0px !important;
 }
 
 .selection-area:hover {
@@ -587,7 +1075,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1441px -32px !important;
+    background-position: -3141px -32px !important;
 }
 
 .selection-circle {
@@ -595,7 +1083,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1473px 0px !important;
+    background-position: -3173px 0px !important;
 }
 
 .selection-circle:hover {
@@ -603,7 +1091,23 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1473px -32px !important;
+    background-position: -3173px -32px !important;
+}
+
+.selection-edit {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3205px 0px !important;
+}
+
+.selection-edit:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3205px -32px !important;
 }
 
 .selection-line {
@@ -611,7 +1115,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1505px 0px !important;
+    background-position: -3237px 0px !important;
 }
 
 .selection-line:hover {
@@ -619,7 +1123,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1505px -32px !important;
+    background-position: -3237px -32px !important;
 }
 
 .selection-point {
@@ -627,7 +1131,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1537px 0px !important;
+    background-position: -3269px 0px !important;
 }
 
 .selection-point:hover {
@@ -635,7 +1139,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1537px -32px !important;
+    background-position: -3269px -32px !important;
 }
 
 .selection-remove {
@@ -643,7 +1147,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1569px 0px !important;
+    background-position: -3301px 0px !important;
 }
 
 .selection-remove:hover {
@@ -651,7 +1155,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1569px -32px !important;
+    background-position: -3301px -32px !important;
 }
 
 .selection-square {
@@ -659,7 +1163,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1601px 0px !important;
+    background-position: -3333px 0px !important;
 }
 
 .selection-square:hover {
@@ -667,23 +1171,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1601px -32px !important;
-}
-
-.selection_edit {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1633px 0px !important;
-}
-
-.selection_edit:hover {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1633px -32px !important;
+    background-position: -3333px -32px !important;
 }
 
 .tool-draw-cut {
@@ -691,7 +1179,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1665px 0px !important;
+    background-position: -3365px 0px !important;
 }
 
 .tool-feature-selection {
@@ -699,15 +1187,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1700px 0px !important;
-}
-
-.tool-feature-selection:hover {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -1700px -32px !important;
+    background-position: -3400px 0px !important;
 }
 
 .tool-history-back {
@@ -715,7 +1195,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1732px 0px !important;
+    background-position: -3432px 0px !important;
 }
 
 .tool-history-forward {
@@ -723,7 +1203,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1764px 0px !important;
+    background-position: -3464px 0px !important;
 }
 
 .tool-link {
@@ -731,7 +1211,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1796px 0px !important;
+    background-position: -3496px 0px !important;
 }
 
 .tool-measure-area {
@@ -739,7 +1219,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1828px 0px !important;
+    background-position: -3528px 0px !important;
 }
 
 .tool-measure-line {
@@ -747,7 +1227,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1860px 0px !important;
+    background-position: -3560px 0px !important;
 }
 
 .tool-pan {
@@ -755,7 +1235,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1892px 0px !important;
+    background-position: -3592px 0px !important;
 }
 
 .tool-print {
@@ -763,7 +1243,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1924px 0px !important;
+    background-position: -3624px 0px !important;
 }
 
 .tool-reset {
@@ -771,7 +1251,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1956px 0px !important;
+    background-position: -3656px 0px !important;
 }
 
 .tool-save-view {
@@ -779,7 +1259,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1988px 0px !important;
+    background-position: -3688px 0px !important;
 }
 
 .tool-zoombox {
@@ -787,6 +1267,238 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2020px 0px !important;
+    background-position: -3720px 0px !important;
+}
+
+.upload-material {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3752px 0px !important;
+}
+
+.menu-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3780px 0px !important;
+}
+
+.menu-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3815px 0px !important;
+}
+
+.menu-rounded-dark {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3850px 0px !important;
+}
+
+.menu-rounded-light {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3886px 0px !important;
+}
+
+.menu-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3922px 0px !important;
+}
+
+.menu-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3957px 0px !important;
+}
+
+.mylocation-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3992px 0px !important;
+}
+
+.mylocation-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4027px 0px !important;
+}
+
+.mylocation-rounded-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4062px 0px !important;
+}
+
+.mylocation-rounded-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4097px 0px !important;
+}
+
+.mylocation-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4132px 0px !important;
+}
+
+.mylocation-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4167px 0px !important;
+}
+
+.myplaces-draw-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4202px 0px !important;
+}
+
+.myplaces-draw-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4234px 0px !important;
+}
+
+.myplaces-draw-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4266px 0px !important;
+}
+
+.myplaces-draw-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4298px 0px !important;
+}
+
+.myplaces-draw-point-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4330px 0px !important;
+}
+
+.myplaces-draw-point-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4362px 0px !important;
+}
+
+.tool-history-back-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4394px 0px !important;
+}
+
+.tool-history-back-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4426px 0px !important;
+}
+
+.tool-history-forward-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4458px 0px !important;
+}
+
+.tool-history-forward-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4490px 0px !important;
+}
+
+.tool-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4522px 0px !important;
+}
+
+.tool-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4554px 0px !important;
+}
+
+.tool-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4586px 0px !important;
+}
+
+.tool-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4618px 0px !important;
+}
+
+.tool-zoombox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4650px 0px !important;
+}
+
+.tool-zoombox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -4682px 0px !important;
 }
 

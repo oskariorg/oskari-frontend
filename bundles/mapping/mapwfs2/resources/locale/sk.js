@@ -3,37 +3,43 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "MapWfs2",
     "value": {
-        "title": "MapWfs2",
+        "title": "MapovéWfs2",
         "desc": "",
-        "default-style": "Default style",
-        "own-style": "Own style",
+        "default-style": "Predvolený štýl",
+        "own-style": "Vlastný štýl",
+        "refresh": "Obnoviť",
+        "refresh_title": "Obnov produktové údaje, ktoré sa nevykresľujú na mape automaticky.",
         "tile": {
-            "title": "MapWfs2"
+            "title": "Spravovanie produktových údajov (WFS)"
         },
         "flyout": {
-            "title": "MapWfs2",
-            "message": "MapWfs2"
+            "title": "Spravovanie produktových údajov (WFS)",
+            "message": "Spravovanie produktových údajov (WFS)"
         },
         "error": {
-            "title": "Error",
-            "connection_not_available": "Connection to the WFS background service is unavailable.",
-            "connection_broken": "Connection to the WFS background service broke down.",
-            "wfs_no_permissions": "You do not have the permission to use WFS layer {layer}.",
-            "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
-            "wfs_request_failed": "Request to WFS layer {layer} failed.",
-            "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
+            "title": "Chyba",
+            "connection_not_available": "Produktový údaj nie je dostupný. Nedá sa spojiť s WFS službou na pozadí.",
+            "connection_broken": "Produktový údaj nie je dostupný. Spojenie s WFS službou na pozadí sa prerušilo.",
+            "wfs_no_permissions": "Nemáte práva použiť produktový údaj {vrstva}.",
+            "wfs_configuring_layer_failed": "Nastavenia pre produktový údaj {vrstva} sa nedajú nakonfigurovať.",
+            "wfs_request_failed": "Žiadosť o produktový údaj {vrstva} sa nedá dokončiť.",
+            "features_parsing_failed": "Produktové údaje o objektoch {vrstva} sa nedajú získať."
+        },
+        "information": {
+            "title": "Vykreslenie objektových údajov",
+            "info": "Niektoré produktové údaje sa nevykresľujú automaticky.<br/><br/>Prosím vyberte oblasť na mape a kliknite na tlačidlo Obnoviť.<br/><br/> Kliknite na Objektové údaje, aby ste videli  údaje o produktových údajoch."
         },
         "button": {
-            "cancel": "Cancel",
-            "show": "Show places",
-            "close": "Close",
-            "edit": "Edit"
+            "cancel": "Zrušiť",
+            "show": "Zobraziť miesta",
+            "close": "Zatvoriť",
+            "edit": "Editovať"
         },
         "popup": {
-            "title": "Own style",
+            "title": "Vlastný štýl",
             "button": {
-                "cancel": "Cancel",
-                "save": "Save"
+                "cancel": "Zrušiť",
+                "save": "Uložiť"
             }
         }
     }
