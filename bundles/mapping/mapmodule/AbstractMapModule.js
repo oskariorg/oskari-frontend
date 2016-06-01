@@ -1482,7 +1482,6 @@ Oskari.clazz.define(
             }
             // marker icon not found
             else {
-                sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
                 return null;
             }
 

@@ -10,6 +10,12 @@ Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled
 
 SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
 
+## 1.36.3
+
+### UserlayerPlugin.ol3
+
+Check if scale limitations are used for layers. Previously assumed they were given. Detect if minscale equals maps max resolution and don't set limitation in such case.
+
 ## 1.36.2
 
 ### MarkersPlugin
