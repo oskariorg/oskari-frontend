@@ -4,7 +4,7 @@
 
 ### publishertoolbar
 
-Fixed publisher toolbar preview so at toolbar show selected theme. Also dsabled tools when previewing published map.
+Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled tools when previewing published map.
 
 ### RPC
 
