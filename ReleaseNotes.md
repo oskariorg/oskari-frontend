@@ -16,6 +16,10 @@ ol2 and ol3: Fixed own icon usable in request.
 
 ol2: Click events didn't propagate properly when vector features were added from request to map for non-default layer. This has been fixed.
 
+### mapmodule/ol2
+
+Feature-style with label alignment didn't work properly. This has been fixed.
+
 ### RPC
 
 Domain validation simplified. Localhost is always allowed as domain and the protocol is no longer considered part of the validation.
