@@ -292,17 +292,15 @@ Oskari.clazz.define(
                 vectorSource,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
-            if (!format) {
-                return;
-            }
-
-            if (!geometry) {
+            if (!format || !geometry) {
                 return;
             }
 
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
+
+            options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
