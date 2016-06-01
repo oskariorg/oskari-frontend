@@ -294,19 +294,27 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (geometry) {
-                // if there's no layerId provided -> Just use a generic vector layer for all.
-                if (!options.layerId) {
-                    options.layerId = 'VECTOR';
-                }
+            if (!geometry) {
+                return;
+            }
 
-                if(me.getMapModule().isValidGeoJson(geometry)) {
+            if(geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
+              return;
+            }
+            // if there's no layerId provided -> Just use a generic vector layer for all.
+            if (!options.layerId) {
+                options.layerId = 'VECTOR';
+            };
+            if (!options.attributes){
+                options.attributes = {};
+            }
+            if(!me._features[options.layerId]) {
+              me._features[options.layerId] = [];
+            }
+
                     var features = format.readFeatures(geometry);
                     //add cursor if defined so
                     if(options.cursor){
-                        if (!options.attributes){
-                          options.attributes = {};
-                        }
 
                         options.attributes['oskari-cursor'] = options.cursor;
 
@@ -450,10 +458,6 @@ Oskari.clazz.define(
                             }
                         }
                     }
-                }
-
-
-            }
         },
        /* _isValidGeometry: function(geometry) {
              var wktFormat = new ol.format.WKT();

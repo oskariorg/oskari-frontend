@@ -311,20 +311,21 @@ Oskari.clazz.define(
             if (!geometry) {
                 return;
             }
+
+            if(geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
+              return;
+            }
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
             };
-
+            if (!options.attributes){
+                options.attributes = {};
+            }
             if(!me._features[options.layerId]) {
               me._features[options.layerId] = [];
             }
-            if(me.getMapModule().isValidGeoJson(geometry)) {
                var features = format.read(geometry);
-               //if there's no layerId provided -> Just use a generic vector layer for all.
-               if (!options.layerId) {
-                   options.layerId = 'VECTOR';
-               }
                if (options.attributes && options.attributes !== null) {
                    if(features instanceof Array && geometryType === 'GeoJSON'){
                        // Remark: It is preferred to use GeoJSON properties for attributes
@@ -478,7 +479,6 @@ Oskari.clazz.define(
                        }
                    }
                }
-            }
         },
         /**
          * @method getStyle
