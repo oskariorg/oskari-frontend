@@ -228,6 +228,7 @@ Oskari.clazz.define(
                     this._map.removeLayer(me._layers[layerId]);
                     this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
+                    delete this._features[layerId];
                 }
             }
             // Removes all features from all layers
@@ -238,6 +239,7 @@ Oskari.clazz.define(
                         this._map.removeLayer(olLayer);
                         this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
+                        delete this._features[layerId];
                     }
                 }
             }

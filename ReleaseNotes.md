@@ -1,11 +1,5 @@
 # Release Notes
 
-## 1.37.0
-
-### Admin layerselector
-
-SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
-
 ## 1.36.2
 
 ### MarkersPlugin
@@ -15,6 +9,8 @@ Fixed custom non-svg icons to work for markers.
 ### VectorLayerPlugin
 
 ol2: Click events didn't propagate properly when vector features were added from request to map for non-default layer. This has been fixed.
+
+ol2 and ol3: When removing features from map to ``MapModulePlugin.RemoveFeaturesFromMapRequest``-request, removed features not really left on memory and may appear again to map when adding new features for prio option to ``MapModulePlugin.AddFeaturesToMapRequest``-request. This has been fixed.
 
 ### mapmodule/ol2
 
