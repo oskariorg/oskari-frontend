@@ -250,7 +250,7 @@ function() {
     shouldPreselectLayer: function(id){
 
         var me = this;
-        var isConfig = (me.data && me.data.configuration) ? true : false; 
+        var isConfig = (me.data && me.data.configuration) ? true : false;
         var isPlugins = (isConfig && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
         if(isPlugins) {
@@ -263,10 +263,10 @@ function() {
                     break;
                 }
             }
-            var isConfig = (toolPlugin && toolPlugin.config
+            var isPluginConfig = (toolPlugin && toolPlugin.config
                 && toolPlugin.config.baseLayers) ? true : false;
 
-            if(isConfig) {
+            if(isPluginConfig) {
                 var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
                 return isFound !== -1;
             } else {
