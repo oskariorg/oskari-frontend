@@ -55,7 +55,9 @@
                 "tag-barrage-height": "Padotuskorkeus (m)",
                 "tag-max-water-take": "Max. vedenotto",
                 "tag-min-pressure-level": "Minimipainetaso",
-                "tag-ground-height": "Maanpinnan korkeus (m)"
+                "tag-ground-height": "Maanpinnan korkeus (m)",
+                "clear-marks-from-map": "Tyhjennä kartta",
+                "show-tagpipe-onmap": "Kartalle"
             }
         },
         "save": "tallenna"

@@ -37,7 +37,7 @@ Oskari.clazz.define(
             sekaviemari_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-low-tag-height','tag-barrage-height'],
             muu_liitynta: ['tag-type','tag-address','tag-other-issue'],
             doNotUseInLabel: ['tag-address','tag-pipe-size','tag-ground-height'],
-            onlyNumberInputs: ['tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height','tag-ground-height','tag-low-tag-height','tag-barrage-height']
+            onlyNumberInputs: ['tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height','tag-ground-height','tag-low-tag-height','tag-barrage-height','tag-max-water-take','tag-min-pressure-level','tag-low-pressure-level','tag-max-pressure-level']
         };
     },{
 
@@ -125,10 +125,10 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle("Tyhjennä");
+            btn.setTitle(me._getLocalization('clear-marks-from-map'));
             jQuery(btn.getElement()).click(
                 function (event) {
-                    me._removeFeaturesFromMap('MUSTACHE-ONPRINT', null, null);
+                    me._removeFeaturesFromMap(); //'MUSTACHE-ONPRINT', null, null
                     me.state.mustachePrintJSONarray = [];
                     me._printGeoJSON();
                 }
@@ -156,7 +156,7 @@ Oskari.clazz.define(
 
             btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             btn.addClass('show-tag-on-map primary');
-            btn.setTitle("Kartalle");
+            btn.setTitle(me._getLocalization('show-tagpipe-onmap'));
             jQuery(btn.getElement()).click(
                 function (event) {
                     var target = jQuery(event.target),
@@ -428,7 +428,7 @@ Oskari.clazz.define(
                         },
                         stroke : {
                             color : 'rgba(255,255,255,1)',
-                            width : 2
+                            width : 6
                         },
                         labelProperty: labelProperty,
                         labelAlign: 'lb'
@@ -453,7 +453,6 @@ Oskari.clazz.define(
                 clearPrevious: clearPrevious,
                 centerTo: centerTo,
                 featureStyle: me._getFeatureStyle(labelProperty),
-                attributes: null,
                 prio: 1
             }];
 
@@ -469,7 +468,7 @@ Oskari.clazz.define(
          */
         _removeFeaturesFromMap: function(layerId, propKey, propValue){
             var me = this;
-            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[propKey, propValue, layerId]);
+            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',[]);
         },
 
         /**
@@ -577,26 +576,34 @@ Oskari.clazz.define(
 
                 var elclass = "";
                 if(me.state.onlyNumberInputs.indexOf(item) > -1){ elclass = 'allownumericwithdecimal'; }
-
-                me.templates.form.detailinputs = jQuery(
-                '    <label>' +
-                '        <span></span>' +
-                '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
-                '    </label>'
-                );
+                    if(item === "tag-other-issue"){
+                        me.templates.form.detailinputs = jQuery(
+                    '    <label>' +
+                    '        <span></span>' +
+                    '        <textarea rows="4" cols="20" maxlength="100" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
+                    '    </label>'
+                    );
+                }else{
+                    me.templates.form.detailinputs = jQuery(
+                    '    <label>' +
+                    '        <span></span>' +
+                    '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
+                    '    </label>'
+                    );
+                }
                 form.find('.tag-pipe-form-inner-wrapper').append(me.templates.form.detailinputs);
             });
             
             //calculate certain values into inputs
             if(me.state.calculateTagTypes.indexOf(tagType[0]) > -1){
                 form.find("[name=tag-bottom-height]").blur(function(e){
-                    form.find("[name=tag-low-tag-height]").val(parseFloat(me._calculateTagHeight(form, tagType).toFixed(2)));
-                    form.find("[name=tag-barrage-height]").val(parseFloat(me._calculateBarrageHeight(form, tagType).toFixed(2)));
+                    form.find("[name=tag-low-tag-height]").val(me._calculateTagHeight(form, tagType));
+                    form.find("[name=tag-barrage-height]").val(me._calculateBarrageHeight(form, tagType));
                 });
             }
 
             //add localization to inputs
-            form.find('input,select').each(function (index) {
+            form.find('input,select,textarea').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
                 if(el.attr("language") != null){
@@ -663,11 +670,11 @@ Oskari.clazz.define(
             btn.insertTo(buttonFieldset);
 
             form.find(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-
-            jQuery(this).val(jQuery(this).val().replace(/[^0-9\.]/g,''));
-                if ((event.which != 46 || jQuery(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-                    event.preventDefault();
-                }
+                jQuery(this).val(jQuery(this).val().replace(/[^0-9\.\-\+]/g,''));
+                if(event.key == "Backspace" || event.key == "Tab") {return;}
+                    if ((event.which != 46 || jQuery(this).val().indexOf('.') != -1)  && (event.which < 48 || event.which > 57) && (event.which != 45 || jQuery(this).val().indexOf('-') != -1) && (event.which != 43 || jQuery(this).val().indexOf('+') != -1)) {
+                        event.preventDefault();
+                    }
             });
 
             if(tagpipe){
@@ -690,7 +697,8 @@ Oskari.clazz.define(
             type = tagType[1],
             pipeSizemm = parseInt(form.find("[name=tag-pipe-size]").val()),
             pipeSize = pipeSizemm/1000,
-            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val());
+            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()),
+            output = null;
 
             if(isNaN(pipeSizemm) || isNaN(bottomHeight)){
                 return;
@@ -700,26 +708,28 @@ Oskari.clazz.define(
                 case "kaivo":
                     if(pipeSizemm > 0 && pipeSizemm <= 250){
                         //Pohjan korkeus + 150mm
-                        return bottomHeight + (150/1000);
+                        output = bottomHeight + (150/1000);
                     }else if(pipeSizemm >= 251 && pipeSizemm <= 350){
                         //Pohjan korkeus + 200 mm
-                        return bottomHeight + (200/1000);
+                        output = bottomHeight + (200/1000);
                     }else if(pipeSizemm > 350){
                         //Pohjan korkeus + 0,75 * katuviemärin halkaisija
-                        return (0.75*pipeSize) + bottomHeight;
+                        output = (0.75*pipeSize) + bottomHeight;
                     }
                 break;
 
                 case "putki":
                     if(pipeSizemm > 0 && pipeSizemm <= 500){
                         //Pohjan korkeus + 0,5 * katuviemärin halkaisija
-                        return (0.5*pipeSize) + bottomHeight;
+                        output = (0.5*pipeSize) + bottomHeight;
                     }else if(pipeSizemm > 500){
                         //Pohjan korkeus + 0,75 * katuviemärin halkaisija
-                        return (0.75*pipeSize) + bottomHeight;
+                        output = (0.75*pipeSize) + bottomHeight;
                     }
                 break;
             }
+
+            return (output > 0) ? "+" + parseFloat(output).toFixed(2) : parseFloat(output).toFixed(2);
         },
         /**
          * [_calculateBarrageHeight calculates tag height from form]
@@ -732,14 +742,16 @@ Oskari.clazz.define(
             pipeSizemm = parseInt(form.find("[name=tag-pipe-size]").val()),
             pipeSize = pipeSizemm/1000,
             bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()),
-            groundHeight = parseFloat(form.find("[name=tag-ground-height]").val());
+            groundHeight = parseFloat(form.find("[name=tag-ground-height]").val()),
+            minBarrageHeight = parseFloat(1.8),
+            output = null;
 
             switch (type) {
                 case "jatevesi":
                     if(isNaN(pipeSizemm) || isNaN(bottomHeight)){
                         return;
                     }else{
-                        return bottomHeight + pipeSize + (1000/1000);
+                        output = bottomHeight + pipeSize + (1000/1000);
                     }
                 break;
                 case "hulevesi":
@@ -747,9 +759,15 @@ Oskari.clazz.define(
                     if(isNaN(pipeSizemm) || isNaN(bottomHeight) || isNaN(groundHeight)){
                         return;
                     }else{
-                        return groundHeight + (100/1000);
+                        output = groundHeight + (100/1000);
                     }
                 break;
+            }
+
+            if(output > minBarrageHeight){
+                return "+"+parseFloat(output);
+            }else{
+                return "+"+minBarrageHeight;
             }
         },
 
@@ -812,7 +830,7 @@ Oskari.clazz.define(
             var errors = [],
                 pass;
             // check that required fields have values
-            form.find('input[required]').each(function (index) {
+            form.find('input[required], textarea[required]').each(function (index) {
                 if (!this.value.length) {
                     errors.push(
                         me._getLocalization('field_required').replace(
@@ -852,7 +870,7 @@ Oskari.clazz.define(
                 var data = {};
 
                 //get data from form
-                form.find('input[type=text]').each(function(index, value) {
+                form.find('input[type=text],textarea').each(function(index, value) {
                     var input = jQuery(this);
                     data[input.attr("name").replace(/-/g , "_")] = input.val();
                 });
@@ -904,7 +922,7 @@ Oskari.clazz.define(
 
                 me.state.mustacheType = tagpipe.tag_type;
 
-                form.find('input[type=text]').each(function(index, value) {
+                form.find('input[type=text], textarea').each(function(index, value) {
                     var input = jQuery(this);
                     var tagValue = tagpipe[input.attr("name").replace(/-/g , "_")];
 
@@ -1144,7 +1162,7 @@ Oskari.clazz.define(
                     if(index !== 0){
                         label += me._getLocalization(item)+":";
                     }
-                    label += form.find("input[name='"+item+"']").val()+"\n";
+                    label += form.find("input[name='"+item+"'],textarea[name='"+item+"']").val()+"\n";
                 }
             });
 
@@ -1268,7 +1286,10 @@ Oskari.clazz.define(
                                  "fontColor": "rgba(0,0,0,1)",
                                  "fontFamily": "Arial",
                                  "fontSize": "12px",
-                                 "fillOpacity": 0.8,
+                                 "fillOpacity": 1,
+                                 "labelOutlineColor": "white",
+                                 "labelOutlineWidth": 6,
+                                 "labelOutlineOpacity": 1,
                                  "label": mustachePrintJSONarray[i].features[j].properties.label,
                                  "strokeColor": "#ff0000",
                                  "strokeOpacity": 1,
