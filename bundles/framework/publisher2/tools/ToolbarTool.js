@@ -598,7 +598,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             for (toolName in me.drawOptions) {
                 if (me.drawOptions.hasOwnProperty(toolName) && me.drawOptions[toolName]) {
-                    return true
+                    return true;
                 }
             }
 
