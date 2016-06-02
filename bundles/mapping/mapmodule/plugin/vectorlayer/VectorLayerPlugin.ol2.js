@@ -226,7 +226,6 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(me._layers[layerId]);
-                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                     delete this._features[layerId];
                 }
@@ -237,22 +236,31 @@ Oskari.clazz.define(
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
-                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                         delete this._features[layerId];
                     }
                 }
             }
         },
-        _removeFeaturesByAttribute: function(olLayer, identifier, value, removeForSorting) {
-            var featuresToRemove = [];
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+            var me = this,
+                featuresToRemove = [];
 
             // add all features if identifier and value are missing or
             // if given -> features that have
             if (!identifier && !value) {
                 featuresToRemove = olLayer.features;
             } else {
+                // first try to find features by ol function
                 featuresToRemove = olLayer.getFeaturesByAttribute(identifier, value);
+                // if not found then check also feature data values (ol2 getFeaturesByAttribute not functionality right when features are added from GeoJSON?)
+                if(featuresToRemove === null || featuresToRemove.length === 0) {
+                  featuresToRemove = jQuery.grep(olLayer.features, function(f){
+                      var hasData = (f.data && f.data[identifier]) ? true : false;
+                      var hasWantedAttributes = (hasData && f.data[identifier] === value) ? true : false;
+                      return hasWantedAttributes;
+                  });
+                }
             }
 
             // notify other components of removal
@@ -263,18 +271,28 @@ Oskari.clazz.define(
             olLayer.removeFeatures(featuresToRemove);
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
-                var featuresPrio = this._features[this._getLayerId(olLayer.name)][0].data;
-                if (!removeForSorting) {
-                    for (key in featuresPrio) {
-                        if (featuresPrio[key].id === feature.id) {
-                            featuresPrio.splice(key, 1);
-                        }
-                    };
-                    var geojson = formatter.write([feature]);
-                    removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
-                }
+                
+                // remove from "cache"
+                me._removeFromCache(this._getLayerId(olLayer.name), feature);
+                var geojson = formatter.write([feature]);
+                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
             }
             sandbox.notifyAll(removeEvent);
+        },
+        _removeFromCache : function(layerId, feature) {
+            var storedFeatures = this._features[layerId];
+            for (var i = 0; i < storedFeatures.length; i++) {
+                var featuresInDataset = storedFeatures[i].data;
+                for (var j = 0; j < featuresInDataset.length; j++) {
+                    if(feature === featuresInDataset[j]) {
+                        featuresInDataset.splice(j, 1);
+                    }
+                }
+                if(!featuresInDataset.length) {
+                    // remove block if empty
+                    storedFeatures.splice(i, 1);
+                }
+            }
         },
         _getGeometryType: function(geometry) {
             if (typeof geometry === 'string' || geometry instanceof String) {
@@ -305,16 +323,14 @@ Oskari.clazz.define(
                 isOlLayerAdded = true,
                 styleMap = new OpenLayers.StyleMap();
 
-            if (!format) {
-                return;
-            }
-
-            if (!geometry) {
+            if (!format || !geometry) {
                 return;
             }
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
+
+            options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
@@ -358,7 +374,6 @@ Oskari.clazz.define(
             }
 
             if (options.clearPrevious === true) {
-                this._removeFeaturesByAttribute(olLayer);
                 olLayer.removeAllFeatures();
                 olLayer.refresh();
                 me._features[options.layerId] = [];
@@ -392,7 +407,6 @@ Oskari.clazz.define(
             });
 
             if (options.prio && !isNaN(options.prio)) {
-                this._removeFeaturesByAttribute(olLayer, null, null, true);
                 olLayer.removeAllFeatures();
                 olLayer.refresh();
 
