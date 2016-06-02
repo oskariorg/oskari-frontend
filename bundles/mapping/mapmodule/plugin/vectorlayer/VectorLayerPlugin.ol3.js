@@ -219,7 +219,6 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(olLayer);
-                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                     delete this._features[layerId];
                 }
@@ -230,7 +229,6 @@ Oskari.clazz.define(
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
-                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                         delete this._features[layerId];
                     }
@@ -383,7 +381,6 @@ Oskari.clazz.define(
                 //layer is already on map
                 //clear old features if defined so
                 if (options.clearPrevious === true) {
-                    this._removeFeaturesByAttribute(layer);
                     vectorSource.clear();
                     me._features[options.layerId] = [];
                 }
@@ -395,7 +392,6 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
-                    //this._removeFeaturesByAttribute(layer);
                     vectorSource.clear();
 
                     me._features[options.layerId].sort(function(a, b) {
