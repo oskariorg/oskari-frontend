@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.36.3
+
+### UserlayerPlugin.ol3
+
+Check if scale limitations are used for layers. Previously assumed they were given. Detect if minscale equals maps max resolution and don't set limitation in such case.
+
+### VectorLayerPlugin
+
+More fixing for an issue where features removed with ``MapModulePlugin.RemoveFeaturesFromMapRequest`` reappear when
+ adding new features with ``MapModulePlugin.AddFeaturesToMapRequest`` using priority option.
+
 ## 1.36.2
 
 ### MarkersPlugin

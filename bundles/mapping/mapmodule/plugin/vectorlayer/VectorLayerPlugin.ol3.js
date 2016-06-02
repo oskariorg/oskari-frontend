@@ -193,7 +193,7 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the feature attribute identifier
          * @param {String} value the feature identifier value
-         * @param {Oskari.mapframework.domain.VectorLayer} layer object OR {String} layerId
+         * @param {ol.layer.Vector} layer object OR {String} layerId
          */
         removeFeaturesFromMap: function(identifier, value, layer) {
             var me = this,
@@ -219,7 +219,6 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(olLayer);
-                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
                     delete this._features[layerId];
                 }
@@ -230,7 +229,6 @@ Oskari.clazz.define(
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
-                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
                         delete this._features[layerId];
                     }
@@ -258,16 +256,27 @@ Oskari.clazz.define(
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
                 source.removeFeature(feature);
-                var featuresPrio = this._features[olLayer.get('id')][0].data;
-                for (key in featuresPrio) {
-                    if (featuresPrio[key].get('id') === feature.get('id')) {
-                        featuresPrio.splice(key, 1);
-                    }
-                };
+                // remove from "cache"
+                this._removeFromCache(olLayer.get('id'), feature);
                 var geojson = formatter.writeFeaturesObject([feature]);
                 removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
             }
             sandbox.notifyAll(removeEvent);
+        },
+        _removeFromCache : function(layerId, feature) {
+            var storedFeatures = this._features[layerId];
+            for (var i = 0; i < storedFeatures.length; i++) {
+                var featuresInDataset = storedFeatures[i].data;
+                for (var j = 0; j < featuresInDataset.length; j++) {
+                    if(feature === featuresInDataset[j]) {
+                        featuresInDataset.splice(j, 1);
+                    }
+                }
+                if(!featuresInDataset.length) {
+                    // remove block if empty
+                    storedFeatures.splice(i, 1);
+                }
+            }
         },
         _getGeometryType: function(geometry) {
             if (typeof geometry === 'string' || geometry instanceof String) {
@@ -292,17 +301,15 @@ Oskari.clazz.define(
                 vectorSource,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
-            if (!format) {
-                return;
-            }
-
-            if (!geometry) {
+            if (!format || !geometry) {
                 return;
             }
 
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
+
+            options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
@@ -374,7 +381,6 @@ Oskari.clazz.define(
                 //layer is already on map
                 //clear old features if defined so
                 if (options.clearPrevious === true) {
-                    this._removeFeaturesByAttribute(layer);
                     vectorSource.clear();
                     me._features[options.layerId] = [];
                 }
@@ -386,7 +392,6 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
-                    //this._removeFeaturesByAttribute(layer);
                     vectorSource.clear();
 
                     me._features[options.layerId].sort(function(a, b) {
