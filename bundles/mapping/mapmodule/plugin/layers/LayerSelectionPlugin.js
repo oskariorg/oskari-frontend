@@ -544,25 +544,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement();
+                div = this.getElement(),
+                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
                     topOffsetElement = jQuery('div.mobileToolbarDiv'),
                     themeColours = mapmodule.getThemeColours();
-                me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+                me.popup = popupService.createPopup();
+                popupService.closeAllPopups(me.popup);
                 me.popup.createCloseIcon();
 
                 me.popup.show(popupTitle, me.layerContent);
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                    me.popup.onClose(function(){
+                    me.popup.onClose(function() {
                         me.popup.getJqueryContent().detach();
-                        var sandbox = me.getSandbox();
-                        sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                     });
-
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
                         'bgColour': themeColours.activeColour,

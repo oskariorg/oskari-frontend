@@ -494,8 +494,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 conf = me.conf,
                 mapmodule = me.getMapModule(),
                 isMobile = Oskari.util.isMobile(),
-                sandbox = me.getSandbox();
-
+                sandbox = me.getSandbox(),
+                popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+            
             var popupTitle = "Toolbar",
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
                 topOffsetElement = jQuery('div.mobileToolbarDiv'),
@@ -503,8 +504,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 wantedTheme = (theme === 'dark') ? 'light' : 'dark',
                 themeColours = mapmodule.getThemeColours(wantedTheme);
 
-            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            //me.popup.addClass('mobile-popup');
+            me.popup = popupService.createPopup();
+            popupService.closeAllPopups(me.popup);
             me.popup.addClass('toolbar-popup');
             me.popup.setColourScheme({"bgColour": "#e6e6e6"});
             me.popup.show(undefined, me._toolbarContent);
