@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 mobile = isMobile || Oskari.util.isMobile();
             if(!mobile &&  me.layerContent) {
-                me.layerContent.find('div.layers-content').css('height', (0.75 * size.height) + 'px');
+                me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
         _setLayerToolsEditModeImpl: function () {
