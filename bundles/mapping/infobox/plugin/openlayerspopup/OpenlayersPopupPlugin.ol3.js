@@ -146,8 +146,8 @@ Oskari.clazz.define(
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
                 sanitizedTitle = Oskari.util.sanitize(title).data,
-                sanitizedId = Oskari.util.sanitize(id).data,
-                popupContentHtml = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
+                id = Oskari.util.sanitize(id).data,
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -173,7 +173,6 @@ Oskari.clazz.define(
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
             var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
-            var id = sanitizedId;
 
             popupElement.attr('id', id);
             if (refresh) {
@@ -182,7 +181,7 @@ Oskari.clazz.define(
                     popupType = "mobile";
                     popup.setContent(sanitizedContentDiv);
                 } else {
-                    popupDOM = jQuery('#' + id),
+                    popupDOM = jQuery('#' + id);
                     popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
@@ -192,7 +191,7 @@ Oskari.clazz.define(
                     }
                 }
             } else if (isInMobileMode) {
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 popupType = "mobile";
 
                 popup.createCloseIcon();

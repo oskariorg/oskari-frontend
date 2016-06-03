@@ -137,12 +137,11 @@ Oskari.clazz.define(
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
                 sanitizedTitle = Oskari.util.sanitize(title).data,
-                sanitizedId = Oskari.util.sanitize(id).data,
-                popupContent = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
+                id = Oskari.util.sanitize(id).data,
+                popupContent = me._renderPopupContent(id, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
                 font = options.font,
-                id,
                 popupType,
                 popupDOM;
 
@@ -156,7 +155,6 @@ Oskari.clazz.define(
 
             if (refresh) {
                 popup = me._popups[id].popup;
-                id = sanitizedId;
 
                 if (isInMobileMode) {
                     popupType = "mobile";
@@ -172,7 +170,6 @@ Oskari.clazz.define(
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 popupType = "mobile";
-                id = sanitizedId;
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -193,7 +190,6 @@ Oskari.clazz.define(
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
                 popupType = "desktop";
-                id = sanitizedId;
 
                 popup = new OpenLayers.Popup(
                     id,
