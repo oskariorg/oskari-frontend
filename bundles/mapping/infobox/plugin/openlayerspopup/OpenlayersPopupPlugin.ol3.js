@@ -189,6 +189,10 @@ Oskari.clazz.define(
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
                     }
+                    if (positioning) {
+                        popupDOM.addClass(positioning);
+                        popupDOM.find('.popupHeaderArrow').addClass(positioning);
+                    }
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
