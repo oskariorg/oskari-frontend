@@ -262,6 +262,59 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulator"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Velg forekomster fra kartlaget",
+            "cancelButton": "Avbryt",
+            "clearButton": "Tøm filter",
+            "refreshButton": "Oppfrisk filteret",
+            "addFilter": "Legg til nytt filter",
+            "removeFilter": "Slett filter",
+            "bbox": {
+                "title": "Kartvindu-filter",
+                "on": "Kun den synlige forekomsten i kartvinduet",
+                "off": "Alle forekomster"
+            },
+            "clickedFeatures": {
+                "title": "Filter for valg av forekomster",
+                "label": "Kun valgte forekomster"
+            },
+            "values": {
+                "title": "Filtrér forekomster basert på egenskaper",
+                "placeholders": {
+                    "case-sensitive": "Filteret er versalsensitivt",
+                    "attribute": "Egenskap",
+                    "boolean": "Logisk operator",
+                    "operator": "Operator",
+                    "attribute-value": "Verdi"
+                },
+                "equals": "er lik",
+                "like": "er omtrentlig lik",
+                "notEquals": "er ikke lik",
+                "notLike": "er ikke omtrentlig lik",
+                "greaterThan": "er større enn",
+                "lessThan": "er mindre enn",
+                "greaterThanOrEqualTo": "er større enn eller lik",
+                "lessThanOrEqualTo": "er mindre enn eller lik"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Velg aggregert verdi",
+                "aggregateValueSelectTitle": "Bruk aggregert verdi i filteret",
+                "selectAggregateAnalyse": "Velg aggregert analyse",
+                "selectIndicator": "Velg indikator",
+                "selectReadyButton": "Klar",
+                "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
+                "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
+                "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelp av analysefunksjonen, og deretter filtrere på verdier."
+            },
+            "validation": {
+                "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
+                "attribute_missing": "Egenskapen mangler",
+                "operator_missing": "Operatoren mangler",
+                "value_missing": "Verdien mangler",
+                "boolean_operator_missing": "Logisk operator mangler"
+            }
         }
     }
 }

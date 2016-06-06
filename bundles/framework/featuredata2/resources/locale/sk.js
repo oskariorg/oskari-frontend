@@ -91,59 +91,6 @@ Oskari.registerLocalization(
                 "type-base": "Podkladová mapa",
                 "type-wms": "Mapová vrstva",
                 "type-wfs": "Produktové údaje"
-            },
-            "filter": {
-                "title": "Filter",
-                "description": "Filtrovať hodnoty na mapovej vrstve:",
-                "cancelButton": "Zrušiť",
-                "clearButton": "Vyčistiť filter",
-                "refreshButton": "Obnoviť filter",
-                "addFilter": "Pridať filter",
-                "removeFilter": "Odstrániť filter",
-                "bbox": {
-                    "title": "Mapový filter",
-                    "on": "Iba objekty viditeľné na mape",
-                    "off": "Všetky objkety"
-                },
-                "clickedFeatures": {
-                    "title": "Filter výberu objektov",
-                    "label": "Iba objekty vybrané na mape"
-                },
-                "values": {
-                    "title": "Filter výberu vlastností",
-                    "placeholders": {
-                        "case-sensitive": "Filter rozlišuje veľkosť písmen",
-                        "attribute": "Vlastnosť",
-                        "boolean": "Logický operátor",
-                        "operator": "Operátor",
-                        "attribute-value": "Hodnota"
-                    },
-                    "equals": "je rovná",
-                    "like": "je ako",
-                    "notEquals": "nie je rovná",
-                    "notLike": "nie je ako",
-                    "greaterThan": "je väčšia než",
-                    "lessThan": "je menšia než",
-                    "greaterThanOrEqualTo": "je väčšia než alebo rovná",
-                    "lessThanOrEqualTo": "je menšia než alebo rovná"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Použiť štatistické hodnoty",
-                    "aggregateValueSelectTitle": "Vybrať štatistické hodnoty",
-                    "selectAggregateAnalyse": "Vybrať vrstvu pre analýzu",
-                    "selectIndicator": "Vybrať vlastnosť",
-                    "selectReadyButton": "Zatvoriť",
-                    "getAggregateAnalysisFailed": "Štatistické hodnoty sa nedali vyvolať.",
-                    "noAggregateAnalysisPopupTitle": "Štatistické hodnoty nenájdené",
-                    "noAggregateAnalysisPopupContent": "Štatistické hodnoty sa nedajú vypočítať pre túto mapovú vrstvu. Môžete ich vypočítať pomocou funkcie Analýza"
-                },
-                "validation": {
-                    "title": "Objekty sa nedali filtrovať. Vyskytli sa nasledovné chyby:",
-                    "attribute_missing": "Chýba vlastnosť.",
-                    "operator_missing": "Chýba operátor.",
-                    "value_missing": "Chýba hodnota.",
-                    "boolean_operator_missing": "Chýba logický operátor."
-                }
             }
         },
         "gridFooter": {

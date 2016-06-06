@@ -9,10 +9,11 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
      * @method create called automatically on construction
      * @static
      */
-    function (loc, fixedOptions, psandbox) {
+    function (fixedOptions, psandbox) {
         this.sandbox = psandbox || Oskari.getSandbox();
         this.WFSLayerService = this.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        this.loc = loc;
+        this._defaultLocKey = 'FilterDialog';
+        this.loc = this._getLocalization('DivManazer');
 
         // Optionally fixed options
         this.fixedOptions = {};
@@ -116,12 +117,12 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer, clickedFeatures, selectedTemporaryFeatures);
-            popupTitle = this.loc.filter.description + " " + me._layer.getName();
+            popupTitle = this.loc.description + " " + me._layer.getName();
 
             // Create the actual popup dialog
             me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            closeButton.setTitle(this.loc.filter.cancelButton);
+            closeButton.setTitle(this.loc.cancelButton);
             closeButton.addClass('analyse-close-filter');
             closeButton.setHandler(function () {
                 me.popup.close(true);
@@ -130,7 +131,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             });
 
-            clearButton.setTitle(me.loc.filter.clearButton);
+            clearButton.setTitle(me.loc.clearButton);
             clearButton.addClass('analyse-clear-filter');
             clearButton.setHandler(function () {
                 // Sets the dialog content to its original state
@@ -140,7 +141,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             });
 
-            updateButton.setTitle(this.loc.filter.refreshButton);
+            updateButton.setTitle(this.loc.refreshButton);
             updateButton.addClass('primary');
             updateButton.addClass('analyse-update-filter');
             updateButton.setHandler(function () {
@@ -183,6 +184,24 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                cb();
             }
         },
+
+        /**
+         * @method _getLocalization
+         * Returns the localization object for the given key.
+         *
+         * @param  {String} locKey
+         *
+         * @return {Object/null}
+         */
+        _getLocalization: function (locKey) {
+            var locale = Oskari.getLocalization(locKey),
+                ret = null;
+
+            if (locale) {
+                ret = locale[this._defaultLocKey];
+            }
+            return ret;
+        },
         /**
          * Creates the content for the filter dialog popup.
          *
@@ -200,20 +219,20 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 filterOption;
 
             if (typeof this.fixedOptions.bboxSelection === "undefined" || typeof this.fixedOptions.clickedFeaturesSelection === "undefined") {
-                content.find('div.filter-selections-title').html('<h4>' + this.loc.filter.content.title + '</h4>');
+                content.find('div.filter-selections-title').html('<h4>' + this.loc.content.title + '</h4>');
             }
 
             // The BBOX filter selection
             if (typeof this.fixedOptions.bboxSelection === "undefined") {
-                filterContentBBOX.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on).prop('checked', true);
-                filterContentBBOX.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
+                filterContentBBOX.find('div.bbox-on').find('label').html(this.loc.bbox.on).prop('checked', true);
+                filterContentBBOX.find('div.bbox-off').find('label').html(this.loc.bbox.off);
                 selectionRadios.append(filterContentBBOX);
             }
 
             // Filter clicked features
             if (typeof this.fixedOptions.clickedFeaturesSelection === "undefined") {
-                filterContentClickedFeatures.find('div.clicked-features-title').html('<h4>' + this.loc.filter.clickedFeatures.title + '</h4>');
-                filterContentClickedFeatures.find('label').html(this.loc.filter.clickedFeatures.clickedFeaturesLabel);
+                filterContentClickedFeatures.find('div.clicked-features-title').html('<h4>' + this.loc.clickedFeatures.title + '</h4>');
+                filterContentClickedFeatures.find('label').html(this.loc.clickedFeatures.clickedFeaturesLabel);
                 selectionRadios.append(filterContentClickedFeatures);
             }
 
@@ -221,14 +240,14 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             // Filter clicked features
             if (typeof this.fixedOptions.clickedFeaturesSelection === "undefined") {
-                filterContentFilterByGeometry.find('#filter-by-geometry-label').html(this.loc.filter.clickedFeatures.filterByGeometryLabel);
-                filterContentFilterByGeometry.find('#filter-by-geometry-intersect-label').html(this.loc.filter.clickedFeatures.filterByGeometryIntersect);
-                filterContentFilterByGeometry.find('#filter-by-geometry-contains-label').html(this.loc.filter.clickedFeatures.filterByGeometryContains);
+                filterContentFilterByGeometry.find('#filter-by-geometry-label').html(this.loc.clickedFeatures.filterByGeometryLabel);
+                filterContentFilterByGeometry.find('#filter-by-geometry-intersect-label').html(this.loc.clickedFeatures.filterByGeometryIntersect);
+                filterContentFilterByGeometry.find('#filter-by-geometry-contains-label').html(this.loc.clickedFeatures.filterByGeometryContains);
                 selectionRadios.append(filterContentFilterByGeometry);
             }
 
             // Filter values selection
-            valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
+            valuesSelection.find('div.values-title').html('<h4>' + this.loc.values.title + '</h4>');
             // Add a filter
             filterOption = this._addAttributeFilter(layer);
             valuesSelection.append(filterOption);
@@ -313,10 +332,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             var filterByGeometryChecked = filterContentFilterByGeometry.find("input[name=analysis-filter-radio]").is(':checked'),
                 bboxOFF = filterContentBBOX.find('div.bbox-off').find("input[name=analysis-filter-radio]").is(':checked');
             if (bboxOFF) {
-                valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.bboxOff);
+                valuesSelection.find("div.values-additional-info").html(this.loc.values.info.bboxOff);
                 valuesSelection.find("div.filter-by-values-container").css({"display": "block"});
             } else if (filterByGeometryChecked) {
-                valuesSelection.find("div.values-additional-info").html(this.loc.filter.values.info.filterByGeometrySelected);
+                valuesSelection.find("div.values-additional-info").html(this.loc.values.info.filterByGeometrySelected);
                 valuesSelection.find("div.filter-by-values-container").css({"display": "none"})
             } else {
                 valuesSelection.find("div.values-additional-info").html("");
@@ -441,11 +460,11 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             var me = this,
                 filterOption = jQuery(this.__filterTemplates.filterContentOption),
                 attrSelect = filterOption.find('select.attribute'),
-                attrPlaceHolder = this.loc.filter.values.placeholders.attribute,
+                attrPlaceHolder = this.loc.values.placeholders.attribute,
                 opSelect = filterOption.find('select.operator'),
-                opPlaceHolder = this.loc.filter.values.placeholders.operator;
+                opPlaceHolder = this.loc.values.placeholders.operator;
 
-            filterOption.find('label').html(this.loc.filter.values.placeholders['case-sensitive']);
+            filterOption.find('label').html(this.loc.values.placeholders['case-sensitive']);
 
             // Appends values to the attribute select.
             this._appendOptionValues(attrSelect, attrPlaceHolder, me._getLayerAttributes(layer));
@@ -455,35 +474,35 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             this._appendOptionValues(opSelect, null, [
                 {
                     id: '=',
-                    name: this.loc.filter.values.equals
+                    name: this.loc.values.equals
                 }, {
                     id: '~=',
-                    name: this.loc.filter.values.like
+                    name: this.loc.values.like
                 }, {
                     id: '≠',
-                    name: this.loc.filter.values.notEquals
+                    name: this.loc.values.notEquals
                 }, {
                     id: '~≠',
-                    name: this.loc.filter.values.notLike
+                    name: this.loc.values.notLike
                 }, {
                     id: '>',
-                    name: this.loc.filter.values.greaterThan
+                    name: this.loc.values.greaterThan
                 }, {
                     id: '<',
-                    name: this.loc.filter.values.lessThan
+                    name: this.loc.values.lessThan
                 }, {
                     id: '≥',
-                    name: this.loc.filter.values.greaterThanOrEqualTo
+                    name: this.loc.values.greaterThanOrEqualTo
                 }, {
                     id: '≤',
-                    name: this.loc.filter.values.lessThanOrEqualTo
+                    name: this.loc.values.lessThanOrEqualTo
                 }
             ]);
 
             // Placeholder to the attribute value input.
-            filterOption.find('input[name=attribute-value]').attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
+            filterOption.find('input[name=attribute-value]').attr('placeholder', this.loc.values.placeholders['attribute-value']);
 
-            filterOption.find('input[name=case-sensitive]').attr('title', this.loc.filter.values.placeholders['case-sensitive']);
+            filterOption.find('input[name=case-sensitive]').attr('title', this.loc.values.placeholders['case-sensitive']);
 
             // Add link to filter with aggregate values if there are any
             if (this.fixedOptions.addLinkToAggregateValues === true) {
@@ -491,7 +510,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     .addClass("filter-option-aggregate")
                     .find('input[name=attribute-value]')
                     .wrap('<div class="attribute-value-block"></div>')
-                    .after('<div class="add-link"><a href="javascript:void(0)">' + this.fixedOptions.loc.filter.aggregateAnalysisFilter.addAggregateFilter + '</a></div>');
+                    .after('<div class="add-link"><a href="javascript:void(0)">' + this.loc.aggregateAnalysisFilter.addAggregateFilter + '</a></div>');
             }
 
             // Add the buttons to remove this filter and to add a new filter.
@@ -510,8 +529,8 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
         _addManageFilterOption: function (layer) {
             var manageFilterOption = jQuery(this.__filterTemplates.manageFilterOption),
                 filterContentOption = jQuery(this.__filterTemplates.filterContentOption),
-                addTitle = this.loc.filter.addFilter,
-                removeTitle = this.loc.filter.removeFilter;
+                addTitle = this.loc.addFilter,
+                removeTitle = this.loc.removeFilter;
 
             manageFilterOption.find('div.add-filter-option').attr('title', addTitle);
             manageFilterOption.find('div.remove-filter-option').attr('title', removeTitle);
@@ -607,7 +626,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          */
         _createBooleanSelect: function () {
             var boolOption = jQuery(this.__filterTemplates.filterBooleanOption),
-                boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
+                boolPlaceHolder = this.loc.values.placeholders.boolean;
 
             // Put the default boolean values to the select.
             this._appendOptionValues(boolOption, null, [
@@ -855,7 +874,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @param {Object} errors
          */
         _displayValidationErrors: function (errors) {
-            var loc = this.loc.filter.validation,
+            var loc = this.loc.validation,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 closeButton = popup.createCloseButton(this.loc.buttons.ok),
                 popupTitle = this.loc.error.title,
