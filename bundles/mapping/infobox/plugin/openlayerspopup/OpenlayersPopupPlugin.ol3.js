@@ -370,8 +370,6 @@ Oskari.clazz.define(
                     currentGroup
                     group = -1;
 
-                debugger;
-
                 var sanitizedHtml = Oskari.util.sanitize(datum.html);
 
                 contentWrapper.append(sanitizedHtml);
