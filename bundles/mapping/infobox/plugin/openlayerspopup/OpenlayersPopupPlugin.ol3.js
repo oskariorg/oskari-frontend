@@ -144,10 +144,8 @@ Oskari.clazz.define(
          _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
-                sanitizedTitle = Oskari.util.sanitize(title).data,
-                sanitizedId = Oskari.util.sanitize(id).data,
-                popupContentHtml = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
+                sanitizedTitle = Oskari.util.sanitize(title),
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -173,16 +171,15 @@ Oskari.clazz.define(
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
             var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
-            var id = sanitizedId;
 
             popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
                     popupType = "mobile";
-                    popup.setContent(sanitizedContentDiv);
+                    popup.setContent(contentDiv);
                 } else {
-                    popupDOM = jQuery('#' + id),
+                    popupDOM = jQuery('#' + id);
                     popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
@@ -196,7 +193,7 @@ Oskari.clazz.define(
                     }
                 }
             } else if (isInMobileMode) {
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 popupType = "mobile";
 
                 popup.createCloseIcon();
@@ -206,7 +203,7 @@ Oskari.clazz.define(
                     popup.setFont(font);
                 }
 
-                popup.show(sanitizedTitle, sanitizedContentDiv);
+                popup.show(sanitizedTitle, contentDiv);
 
                 if (colourScheme) {
                     popup.setColourScheme(colourScheme);
@@ -373,24 +370,27 @@ Oskari.clazz.define(
                     currentGroup
                     group = -1;
 
-                contentWrapper.append(datum.html);
+                var sanitizedHtml = Oskari.util.sanitize(datum.html);
+
+                contentWrapper.append(sanitizedHtml);
 
 	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 if (actions) {
                     _.forEach(actions, function (action) {
+                        var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === "link") {
                             actionTemplate = me._actionLink.clone();
                             link = actionTemplate.find('a');
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
-                            link.append(action.name);
+                            link.append(sanitizedActionName);
                         } else {
                             actionTemplate = me._actionButton.clone();
                             btn = actionTemplate.find('input');
                             btn.attr({
                                 contentdata: index,
-                                value: action.name
+                                value: sanitizedActionName
                             });
                         }
 
