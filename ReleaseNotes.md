@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### toolbar
+
+When adding tool button with class suffix -dark or -light these icon themes not calculated. Use this if you want use for example only light icons.
+
 ### LayerSelectionPlugin
 
 Added scrollbars for layers list.
