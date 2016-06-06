@@ -341,71 +341,13 @@ Oskari.util = (function () {
 
         return isMobile;
     };
-
     /**
-     * Helper for sanitize()
-     * @private
-     * @param  {String} content
-     * @return {Element}
+     * Sanitizes input and returns a string containing the sanitized content that can be injected to document and shown to user.
+     * @param {String} content content to sanitize
+     * @return String
      */
-    var parseXmlToElement = function(content) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(content, "text/xml");
-        return doc.documentElement;
-    }
-    /**
-     * Sanitizes input and returns a DOM element containing the sanitized content that can be injected to document and shown to user.
-     * Usage:
-     * // handles content as text content
-     * var element = sanitize('<script>alert("testing")</script>');
-     * // handles content as html, but removes script-tags
-     * var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
-     * // handles content as html, but removes script and style tags
-     * var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
-     * // handles content as Element - remove script-tags
-     * var domElement = sanitize(jQuery('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>')[0], true);
-     * jQuery('body').append(element).append(anotherElement).append(stylishElement).append(domElement);
-     * @param {String|Element} content content to sanitize
-     * @return Element
-     */
-    util.sanitize = function(content, tagsToRemove) {
-        if(!content) {
-            // no content
-            return;
-        }
-        // TODO: use https://github.com/cure53/DOMPurify for implementation
-        if(!tagsToRemove) {
-            // treat as text only
-            return document.createTextNode(content);
-        }
-        if(typeof tagsToRemove === 'boolean') {
-            // truthy check before so this must be boolean true
-            // by default remove script tags
-            tagsToRemove = ['script'];
-        }
-        var root = null;
-        if(typeof content === 'string') {
-            root = parseXmlToElement(content);
-        } else if(content instanceof Element) {
-            root = content;
-        } else {
-            throw new TypeError('Could\'t sanitize input ' + content);
-        }
-        tagsToRemove.forEach(function(tag) {
-            var scripts = root.getElementsByTagName(tag);
-            for(var i = 0; i < scripts.length; ++i ) {
-                var node = scripts.item(i);
-                node.textContent = '';
-                if(typeof node.removeAttribute === 'function') {
-                    node.removeAttribute("src");
-                    node.removeAttribute("link");
-                    node.removeAttribute("href");
-                }
-            }
-        });
-
-        // return as is as Element structure
-        return root;
+    util.sanitize = function(content) {
+        return DOMPurify.sanitize(content, {SAFE_FOR_JQUERY: true});
     }
 
     return util;

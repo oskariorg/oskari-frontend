@@ -86,7 +86,7 @@ SVG-viewport/x/y attributes don't work correctly with custom marker shapes. Don'
 ```
 Instead use width="32" height="32". This is a working version of above:
 ```
-<svg width="32" height="32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><style type="text/css">.st0 {fill: #0557d3;} .shadow {filter: drop-shadow( 0 1.2rem 1rem #333   );} .st1{fill:#FFFFFF;}</style><g><g><path class="st0" d="M26.3,11.3C26.3,5.6,21.7,1,16,1S5.7,5.6,5.7,11.3c0,2,0.6,3.8,1.5,5.4h0L16,31l8.9-14.3h0 C25.8,15.2,26.3,13.3,26.3,11.3z"/></g><circle class="st1" cx="16" cy="11.2" r="4.1"/></g></svg>
+<svg width="32" height="32" style="enable-background:new 0 0 32 32;"><style type="text/css">.st0 {fill: #0557d3;} .shadow {filter: drop-shadow( 0 1.2rem 1rem #333   );} .st1{fill:#FFFFFF;}</style><g><g><path class="st0" d="M26.3,11.3C26.3,5.6,21.7,1,16,1S5.7,5.6,5.7,11.3c0,2,0.6,3.8,1.5,5.4h0L16,31l8.9-14.3h0 C25.8,15.2,26.3,13.3,26.3,11.3z"/></g><circle class="st1" cx="16" cy="11.2" r="4.1"/></g></svg>
 ```
 
 ### Oskari builded icons overridings

@@ -18,6 +18,10 @@ Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled
 
 SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
 
+### Oskari.util.sanitize()
+
+Replaced custom implementation with DOMPurify (https://github.com/cure53/DOMPurify). Now takes just one parameter as string and returns a string.
+
 ## 1.36.3
 
 ### UserlayerPlugin.ol3
