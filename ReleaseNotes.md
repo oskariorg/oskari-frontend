@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### mapwfs2
+
+Mapwfs2 plugin now support different thems (used in publisher2).
+
 ### featuredata2
 
 Featuredata2 plugin now support different themes (used in publisher2).
