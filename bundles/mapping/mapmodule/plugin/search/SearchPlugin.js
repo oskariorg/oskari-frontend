@@ -368,14 +368,15 @@ Oskari.clazz.define(
                 content = resultsContainer.find('div.content'),
                 popupTitle = me._loc.title,
                 mapmodule = me.getMapModule(),
-                themeColours = mapmodule.getThemeColours();
+                themeColours = mapmodule.getThemeColours(),
+                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
             /*clear the existing search results*/
             if (me.popup) {
                 me.popup.close();
                 me.popup = null;
             }
-            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me.popup = popupService.createPopup();
             if (errorMsg) {
                 content.html(errorMsg);
             } else {
@@ -487,6 +488,11 @@ Oskari.clazz.define(
 
             var popupContent = resultsContainer;
             var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+            if (Oskari.util.isMobile()) {
+                //get the sticky buttons into their initial state and kill all popups
+                me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                popupService.closeAllPopups(true);
+            }
 
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();

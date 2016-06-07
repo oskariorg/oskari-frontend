@@ -278,7 +278,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 sandbox = me.getSandbox();
 
             el = me.template.clone();
-
             if (!me._toolbarContent) {
                 me._createToolbar(mapInMobileMode);
                 me._addToolButtons();
@@ -292,7 +291,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             //remove old element
             this.removeFromPluginContainer(this.getElement());
 
-            if (me.popup) {
+            if (me.popup && me.popup.isVisible()) {
                 me.popup.getJqueryContent().detach();
                 me.popup.close(true);
                 me.popup = null;
@@ -428,7 +427,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 sandbox = me.getSandbox(),
                 toolbarId = me.toolbarId,
                 addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-
             if(!addToolButtonBuilder) {
                 return;
             }
@@ -494,7 +492,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 conf = me.conf,
                 mapmodule = me.getMapModule(),
                 isMobile = Oskari.util.isMobile(),
-                sandbox = me.getSandbox();
+                sandbox = me.getSandbox(),
+                popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             var popupTitle = "Toolbar",
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
@@ -503,10 +502,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 wantedTheme = (theme === 'dark') ? 'light' : 'dark',
                 themeColours = mapmodule.getThemeColours(wantedTheme);
 
-            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            //me.popup.addClass('mobile-popup');
+            me.popup = popupService.createPopup();
             me.popup.addClass('toolbar-popup');
             me.popup.setColourScheme({"bgColour": "#e6e6e6"});
+            if (isMobile) {
+                popupService.closeAllPopups(true);
+            }
             me.popup.show(undefined, me._toolbarContent);
 
             if (isMobile) {

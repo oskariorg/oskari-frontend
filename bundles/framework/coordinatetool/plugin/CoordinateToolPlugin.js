@@ -104,9 +104,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
-                mapmodule = me.getMapModule();
+                mapmodule = me.getMapModule(),
+                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
-            me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me._popup = popupService.createPopup();
             var popupEl = me._popup.getJqueryContent().parent().parent();
             if(popupEl) {
                 popupEl.mouseover(function(){
@@ -200,6 +201,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me._popup.createCloseIcon();
+
+                popupService.closeAllPopups(true);
+                me._popup.onClose(function() {
+                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-coordinatetool'].iconCls);
+                });
+
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(el, 'bottom', true, topOffsetElement);
 
@@ -210,11 +217,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     'iconCls': popupCloseIcon
                 });
                 me._popup.addClass('mobile-popup');
-                me._popup.onClose(function(){
-                    var sandbox = me.getSandbox();
-                    var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                    sandbox.request(me, toolbarRequest);
-                });
             } else {
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
@@ -282,9 +284,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
                 me._popup.close(true);
-                var sandbox = me.getSandbox();
-                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                sandbox.request(me, toolbarRequest);
             } else {
                 if(el) {
                     el.addClass('active');

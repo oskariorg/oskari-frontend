@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### popupservice
+
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.  
+
 ### divmanazer
 
 Fixed  flyout z-index.
