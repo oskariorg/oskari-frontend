@@ -1,10 +1,8 @@
 $lightBgColor: rgba(255,255,255,0.9);
 $darkBgColor: rgba(20,20,20,0.8);
 $iconShadow: 1px 1px 2px rgba(0,0,0,0.6);
-
-.projection-transformation {
-    width: 252px;
-}
+$darkIcon: url("../images/mobile-xy-dark.png");
+$lightIcon: url("../images/mobile-xy-light.png");
 
 div.mapplugin.coordinatetool {
   border-radius: 50%;
@@ -37,7 +35,7 @@ div.mapplugin.coordinatetool {
     background-color: $darkBgColor;
 
     div.icon {
-      background-image: url("../images/mobile-xy-dark.png");
+      background-image: $darkIcon;
     }
   }
 
@@ -46,7 +44,7 @@ div.mapplugin.coordinatetool {
     background-color: $lightBgColor;
 
     div.icon {
-      background-image: url("../images/mobile-xy-light.png");
+      background-image: $lightIcon;
     }
   }
 
@@ -56,7 +54,7 @@ div.mapplugin.coordinatetool {
     background-color: $darkBgColor;
 
     div.icon {
-      background-image: url("../images/mobile-xy-dark.png");
+      background-image: $darkIcon;
     }
   }
 
@@ -66,7 +64,7 @@ div.mapplugin.coordinatetool {
     background-color: $lightBgColor;
 
     div.icon {
-      background-image: url("../images/mobile-xy-light.png");
+      background-image: $lightIcon;
     }
   }
 
@@ -80,7 +78,7 @@ div.mapplugin.coordinatetool {
     background: gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
 
     div.icon {
-      background-image: url("../images/mobile-xy-dark.png");
+      background-image: $darkIcon;
     }
   }
   /* 3d-light theme */
@@ -93,12 +91,13 @@ div.mapplugin.coordinatetool {
     background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
 
     div.icon {
-      background-image: url("../images/mobile-xy-light.png");
+      background-image: $lightIcon;
     }
   }
+}
 
-
-
+.projection-transformation {
+    width: 252px;
 }
 
 div.coordinatetool__popup {

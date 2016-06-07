@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### mylocation
+
+Changed toolstyles to use mobile icons and all different styles are now created by CSS style definations.
+
 ### coordinatetool
 
 Coordinatetool now support different styles.
