@@ -561,7 +561,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             me._updateLonLat(data);
 
-           // Change the style if in the conf
+            // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
@@ -690,7 +690,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             };
         },
-
 
         /**
          * @public @method changeToolStyle
