@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         me._reverseGeocodeNotImplementedError = false;
         me._templates = {
-            coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
+            coordinatetool: jQuery('<div class="mapplugin coordinatetool"><div class="icon"></div></div>'),
             popupContent: jQuery(
                 '<div>'+
                 '   <div class="coordinatetool__popup__content"></div>' +
@@ -415,8 +415,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             });
 
-            me._changeToolStyle(null, el);
-
             if(me._config.noUI) {
                 return null;
             }
@@ -459,6 +457,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 if (!me._config.noUI) {
                     me._element = me._createControlElement();
+                    me.refresh();
                     this.addToPluginContainer(me._element);
                 }
             }
@@ -562,9 +561,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             me._updateLonLat(data);
 
-            // Change the style if in the conf
+           // Change the style if in the conf
             if (conf && conf.toolStyle) {
-                me._changeToolStyle(conf.toolStyle, me.getElement());
+                me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                me.changeToolStyle(toolStyle, me.getElement());
             }
             return data;
         },
@@ -689,6 +691,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             };
         },
 
+
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
@@ -696,7 +699,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Object} style
          * @param {jQuery} div
          */
-        _changeToolStyle: function (style, div) {
+        changeToolStyle: function (style, div) {
             var me = this,
                 el = div || me.getElement();
 
