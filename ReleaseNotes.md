@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### divmanazer
+
+Fixed  flyout z-index.
+
 ### layerselection2, logoplugin and publishertoolbar
 
 Removed unneccassary z-index style.

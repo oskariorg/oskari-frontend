@@ -1336,7 +1336,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 zprops = {},
                 zextns = {},
                 zflyout = {},
-                min = 1600,
+                min = 16000,
                 idx,
                 e,
                 extensionInfo,
