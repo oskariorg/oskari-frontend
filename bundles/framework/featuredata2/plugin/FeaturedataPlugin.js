@@ -17,7 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._index = 90;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
-        me._fyloutOpen = undefined;
+        me._flyoutOpen = undefined;
+
         me._mobileDefs = {
             buttons:  {
                 'mobile-featuredata': {
@@ -30,12 +31,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                         if (me._flyoutOpen) {
                             var sandbox = me.getSandbox();
                             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-                            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
+
                             me._flyoutOpen = undefined;
                             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
                             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
                         } else {
+                            //kill open popups
+                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
+
                             me._openFeatureDataFlyout();
                             me._flyoutOpen = true;
                         }
@@ -161,19 +164,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         handleCloseFlyout: function () {
             var me = this,
-                sandbox = me.getSandbox();
+                sandbox = me.getSandbox(),
+                el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-featuredata');
 
             if (!me._flyoutOpen) {
                 return;
             }
-
-            var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-            sandbox.request(me, toolbarRequest);
             me._flyoutOpen = undefined;
             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
+            me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
         },
-
         /**
          * @method _refresh
          * Updates the plugins interface (hides if no featuredata layer selected)

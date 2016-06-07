@@ -544,25 +544,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 conf = me.getConfig(),
                 mapmodule = me.getMapModule(),
-                div = this.getElement();
+                div = this.getElement(),
+                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
             if (isMobile || div.hasClass('published-styled-layerselector')) {
                 var popupTitle = me._loc.title,
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
                     topOffsetElement = jQuery('div.mobileToolbarDiv'),
                     themeColours = mapmodule.getThemeColours();
-                me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+                me.popup = popupService.createPopup();
+                popupService.closeAllPopups(true);
                 me.popup.createCloseIcon();
 
                 me.popup.show(popupTitle, me.layerContent);
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                    me.popup.onClose(function(){
-                        me.popup.getJqueryContent().detach();
-                        var sandbox = me.getSandbox();
-                        sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                    me.popup.onClose(function() {
+                        me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
                     });
-
                     var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
                         'bgColour': themeColours.activeColour,
@@ -578,9 +578,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         'bgColour': themeColours.backgroundColour,
                         'titleColour': themeColours.textColour,
                         'iconCls': popupCloseIcon
-                    });
-                    me.popup.onClose(function() {
-                        me.popup.getJqueryContent().detach();
                     });
                 }
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
@@ -605,7 +602,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
-
         /**
          * @method getBaseLayers
          * Returns list of the current base layers and which one is selected
