@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### layerselection2, logoplugin and publishertoolbar
+
+Removed unneccassary z-index style.
+
 ### mapwfs2
 
 Mapwfs2 plugin now support different thems (used in publisher2).
