@@ -40,8 +40,8 @@ Oskari.registerLocalization(
                     "sv": "Swedish",
                     "en": "English"
                 },
-                "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The selection is not visible on the preview.",
-                "languageChangedDisclaimer":"Note! The selection is not visible on the preview."
+                "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
+                "languageChangedDisclaimer":"Note! The language selection is not visible on the preview."
             },
             "size": {
                 "label": "Map Size",
