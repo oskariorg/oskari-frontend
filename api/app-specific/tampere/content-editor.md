@@ -1,4 +1,4 @@
-# Admin WFS Search Channel
+# Content editor
 
 <table class="table">
 
@@ -8,7 +8,7 @@
 
 <td>ID</td>
 
-<td>AdminWfsSearchChannelBundle</td>
+<td>ContentEditor</td>
 
 </tr>
 

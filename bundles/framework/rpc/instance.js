@@ -358,7 +358,7 @@ Oskari.clazz.define(
             useState : function(state) {
                 this.sandbox.useState(state);
             },
-            getFeatures: function(layerId) {
+            getFeatures: function(includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
@@ -367,7 +367,7 @@ Oskari.clazz.define(
                 }
                 var layers = plugin.getLayerIds();
                 layers.forEach(function(id) {
-                    if(layerId === true) {
+                    if(includeFeatures === true) {
                         features[id] = plugin.getLayerFeatures(id);
                     }
                     else {

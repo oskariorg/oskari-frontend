@@ -1,8 +1,7 @@
 .tools {
   display: block;
   margin-bottom: 10px !important;
-  text-align: left;
-  z-index: 100000000 !important; }
+  text-align: left; }
   .tools .icon {
     display: inline-block;
     height: 35px;
@@ -126,3 +125,5 @@
 .divmanazerpopup.toolbar-popup.bottom.mobile {
   border: 2px solid silver;
   border-radius: 0px; }
+
+/*# sourceMappingURL=publishertoolbar.css.map */

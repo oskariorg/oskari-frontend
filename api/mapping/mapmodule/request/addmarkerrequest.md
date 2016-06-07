@@ -49,7 +49,7 @@ Parameters for data-object:
   <td> msg </td><td> String </td><td> text to be shown with marker </td><td> '' </td>
 </tr>
 <tr>
-  <td> shape </td><td> Number/Object </td><td> If used Oskari builded icons then shape is number. This number tells what icon is used. Shapes are listed below. If you want to use own icon svg then tell shape for object. 
+  <td> shape </td><td> Number/Object </td><td> If used Oskari builded icons then shape is number. This number tells what icon is used. Shapes are listed below. If you want to use own icon svg then tell shape for object.
 
 
   For example: {'shape': '<svg width="32" height="32"></svg>', 'x': 16, 'y': 16}</td><td> 2 </td>
@@ -61,25 +61,33 @@ Parameters for data-object:
 
 Marker shapes
 
-0: ![stud](/images/markers/marker-stud.png)  
-1: ![square](/images/markers/marker-square.png)  
-2: ![wide pin](/images/markers/marker-pin2.png)  
-3: ![narrow pin](/images/markers/marker-pin.png)  
-4: ![flag](/images/markers/marker-flag.png)  
-5: ![dot](/images/markers/marker-dot.png)  
-6: ![arrow](/images/markers/marker-arrow.png) 
+0: ![stud](/images/markers/marker-stud.png)
+1: ![square](/images/markers/marker-square.png)
+2: ![wide pin](/images/markers/marker-pin2.png)
+3: ![narrow pin](/images/markers/marker-pin.png)
+4: ![flag](/images/markers/marker-flag.png)
+5: ![dot](/images/markers/marker-dot.png)
+6: ![arrow](/images/markers/marker-arrow.png)
 
 ## Custom shapes
 
 **The easiest way to use custom graphics is to give a shape parameter for a object. This object paremeters are:
 - data: markerg svg data. Marker must be 32x32 pixel size.
-- x: center x point of svg image. Starting left to right.
-- y: center y point of svg image. Starting bottom to up.
+- x: center x point of svg image. Starting left to right. Requires a non-zero value, fix to use default value TBD.
+- y: center y point of svg image. Starting bottom to up. Requires a non-zero value, fix to use default value TBD.
 See this at first example.
 
 Or if you dont want to use own svg then you can also tell url to any icon file as done in the second example. In that case, the 
 size in pixels of the graphics can be controlled by the `size` parameter. The default size is 32x32 pixels. **
 
+SVG-viewport/x/y attributes don't work correctly with custom marker shapes. Don't do this:
+```
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><style type="text/css">.st0 {fill: #0557d3;} .shadow {filter: drop-shadow( 0 1.2rem 1rem #333   );} .st1{fill:#FFFFFF;}</style><g><g><path class="st0" d="M26.3,11.3C26.3,5.6,21.7,1,16,1S5.7,5.6,5.7,11.3c0,2,0.6,3.8,1.5,5.4h0L16,31l8.9-14.3h0 C25.8,15.2,26.3,13.3,26.3,11.3z"/></g><circle class="st1" cx="16" cy="11.2" r="4.1"/></g></svg>
+```
+Instead use width="32" height="32". This is a working version of above:
+```
+<svg width="32" height="32" style="enable-background:new 0 0 32 32;"><style type="text/css">.st0 {fill: #0557d3;} .shadow {filter: drop-shadow( 0 1.2rem 1rem #333   );} .st1{fill:#FFFFFF;}</style><g><g><path class="st0" d="M26.3,11.3C26.3,5.6,21.7,1,16,1S5.7,5.6,5.7,11.3c0,2,0.6,3.8,1.5,5.4h0L16,31l8.9-14.3h0 C25.8,15.2,26.3,13.3,26.3,11.3z"/></g><circle class="st1" cx="16" cy="11.2" r="4.1"/></g></svg>
+```
 
 ### Oskari builded icons overridings
 

@@ -165,6 +165,10 @@ Oskari.clazz.define(
                 return false;
             });
         },
+
+
+
+
         /**
          * @method refresh
          * Updates the plugins interface (hides if no manual load wfs layers selected)
@@ -182,7 +186,8 @@ Oskari.clazz.define(
                 countInscale = 0,
                 refresh_status1 = "all_invisible",
                 refresh_status2 = "all_not_in_scale",
-                scale = sandbox.getMap().getScale();
+                scale = sandbox.getMap().getScale(),
+                conf = me._config;
 
             if(this.getElement()) {
                 this.getElement().hide();
@@ -229,6 +234,40 @@ Oskari.clazz.define(
             }
             me.setVisible(isVisible);
 
+            // Change the style if in the conf
+            if (conf && conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                me.changeToolStyle(toolStyle, me.getElement());
+            }
+
+        },
+        /**
+         * @public @method changeToolStyle
+         * Changes the tool style of the plugin
+         *
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            var me = this,
+                el = div || me.getElement();
+
+            if (!el) {
+                return;
+            }
+
+            var styleClass = 'toolstyle-' + (style ? style : 'default');
+
+            var classList = el.attr('class').split(/\s+/);
+            for(var c=0;c<classList.length;c++){
+                var className = classList[c];
+                if(className.indexOf('toolstyle-') > -1){
+                    el.removeClass(className);
+                }
+            }
+            el.addClass(styleClass);
         },
         /**
          * @method checkManualRefreshState

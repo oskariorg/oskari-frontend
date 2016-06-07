@@ -816,7 +816,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                                 loc: loc
                             };
 
-                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', fixedOptions);
                         me.filterDialog.setUpdateButtonHandler(function (filters) {
                             // throw event to new wfs
                             var evt = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
@@ -825,7 +825,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                         });
 
                         if (me.service) {
-                            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
+                            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter', me.instance, me.filterDialog);
 
                             me.filterDialog.createFilterDialog(layer, prevJson, function () {
                                 me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
