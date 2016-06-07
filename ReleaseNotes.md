@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### featuredata2
+
+Featuredata2 plugin now support different themes (used in publisher2).
+
 ### mylocation
 
 Changed toolstyles to use mobile icons and all different styles are now created by CSS style definations.

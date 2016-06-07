@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var link = el.find('a');
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             link.html(me._loc.title);
-            me._bindLinkClick(link);
+            me._bindLinkClick(el);
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
@@ -180,7 +180,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          */
         refresh: function () {
             var me = this,
-                isVisible = me._hasFeaturedataLayers();
+                isVisible = me._hasFeaturedataLayers(),
+                conf = me._config;
 
             if(this.getElement()) {
                 this.getElement().hide();
@@ -190,6 +191,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
             me.setVisible(isVisible);
 
+            // Change the style if in the conf
+            if (conf && conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                me.changeToolStyle(toolStyle, me.getElement());
+            }
+
+        },
+        /**
+         * @public @method changeToolStyle
+         * Changes the tool style of the plugin
+         *
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            var me = this,
+                el = div || me.getElement();
+
+            if (!el) {
+                return;
+            }
+
+            var styleClass = 'toolstyle-' + (style ? style : 'default');
+
+            var classList = el.attr('class').split(/\s+/);
+            for(var c=0;c<classList.length;c++){
+                var className = classList[c];
+                if(className.indexOf('toolstyle-') > -1){
+                    el.removeClass(className);
+                }
+            }
+            el.addClass(styleClass);
         },
         showLoadingIndicator : function(blnLoad) {
             if(!this.getElement()) {
