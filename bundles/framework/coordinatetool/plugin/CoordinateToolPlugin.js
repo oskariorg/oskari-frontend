@@ -202,7 +202,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me._popup.createCloseIcon();
 
-                popupService.closeAllPopups(me.popup);
+                popupService.closeAllPopups(true);
+                me._popup.onClose(function() {
+                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-coordinatetool'].iconCls);
+                });
+
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(el, 'bottom', true, topOffsetElement);
 
@@ -280,9 +284,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
                 me._popup.close(true);
-                var sandbox = me.getSandbox();
-                var toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                sandbox.request(me, toolbarRequest);
             } else {
                 if(el) {
                     el.addClass('active');

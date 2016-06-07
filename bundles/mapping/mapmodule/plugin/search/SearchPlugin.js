@@ -488,11 +488,12 @@ Oskari.clazz.define(
 
             var popupContent = resultsContainer;
             var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+            if (Oskari.util.isMobile()) {
+                //get the sticky buttons into their initial state and kill all popups
+                me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                popupService.closeAllPopups(true);
+            }
 
-            popupService.closeAllPopups(me.popup);
-            //get the sticky buttons into their initial state
-            //methinks we probably should incorporate this with closeAllPopups someways
-            me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();
 

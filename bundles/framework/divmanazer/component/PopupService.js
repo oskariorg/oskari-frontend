@@ -66,22 +66,6 @@ Oskari.clazz.define(
          * @static @property {Object} eventHandlers
          */
         eventHandlers: {
-            /*
-            AfterMapLayerAddEvent: function (event) {
-                var me = this,
-                    layer = event._mapLayer;
-                if (layer.hasFeatureData()) {
-                    me.setWFSLayerSelection(layer, true);
-                }
-            },
-            AfterMapLayerRemoveEvent: function (event) {
-                var me = this,
-                    layer = event._mapLayer;
-                if (layer.hasFeatureData()) {
-                    me.setWFSLayerSelection(layer, false);
-                }
-            }
-            */
         },
         stop: function() {
             var me = this,
@@ -92,8 +76,6 @@ Oskari.clazz.define(
                 }
             }
         },
-
-
         /**
          * @method createPopup Creates a popup and adds to internal bookkeeping
          */
@@ -105,7 +87,7 @@ Oskari.clazz.define(
                 //add the popup to bookkeeping
                 me.popups.push(popup);
             });
-
+            
             popup.onClose(function() {
                 var found = false,
                     i;
@@ -116,30 +98,31 @@ Oskari.clazz.define(
                         break;
                     }
                 }
+                
                 if (found) {
                     me.popups[i].clearListeners();
                     me.popups.splice(i, 1);
                 }
-            });
 
+                return;
+            });
             return popup;
         },
         /**
          * @method closeAllPopups Close all registered popups.
-         * @param {Oskari.userinterface.component.Popup} except Optional. If provided, closes all other popups except the one provided.
+         * @param {bool} closeFlyouts Optional. If provided, closes all open flyouts as well.
          */
-        closeAllPopups: function(except) {
+        closeAllPopups: function(closeFlyouts) {
+            var me = this;
             _.each(this.popups, function(popup) {
+                //publisher toolbar seems to need this for the tools to stay intact...
+                popup.getJqueryContent().detach();
                 popup.close();
-            })
-        },
-        isPopupVisible: function(popup) {
-            for (var i = 0; i < this.popups.length; i++) {
-                if (popup === this.popups[i]) {
-                    return true;
-                }
-            }
+            });
 
-            return false;
+            if (closeFlyouts) {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', null]);
+            }
+            return;
         }
     });
