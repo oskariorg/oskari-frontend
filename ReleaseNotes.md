@@ -2,6 +2,12 @@
 
 ## 1.36.4
 
+### Markersplugin
+
+Fixed state-parameters to not include # as part of color. This fixes links with markers and printing while markers on map.
+Fixed an issue where clicking on map while marker popup was on screen resulted in application error.
+Fixed an issue with %-character on marker label.
+
 ### mapfull
 
 Fixed layers visibility in state handling - layer visibility is now shown correctly to user.
