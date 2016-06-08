@@ -6,6 +6,10 @@
 
 Added scrollbars for layers list.
 
+### SearchPlugin
+
+Search plugin no longer expects MarkersPlugin to be present.
+
 ## 1.36.3
 
 ### UserlayerPlugin.ol3
