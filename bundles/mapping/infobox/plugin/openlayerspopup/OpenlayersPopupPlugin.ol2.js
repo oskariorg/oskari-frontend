@@ -345,9 +345,11 @@ Oskari.clazz.define(
                     currentGroup
                     group = -1;
 
+                // Doesn't work e.g. for Elf wfs data
+                // "<div><div class="getinforesult_header"><div class="icon-bubble-left"></div><div class="getinforesult_header_title" title="wwhy-p:StandingWater (Path Parser hy-p1 )">wwhy-p:StandingWater (Path Parser hy-p1 )</div></div><table class="getinforesult_table"><tbody><tr class="odd"><td>meanDepth_nilReason</td><td><a target="_blank" href="http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown">http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown</a></td></tr><tr><td>versionId_nilReason</td><td><a target="_blank" href="http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown">http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown</a></td></tr><tr class="odd"><td>meanDepth_uom</td><td>urn:ogc:def:uom:EPSG::9001</td></tr><tr><td>beginLifespanVersion_nilReason</td><td>398</td></tr><tr class="odd"><td>equivalentScale_nilReason</td><td><a target="_blank" href="http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown">http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown</a></td></tr><tr><td>surfaceArea</td><td><a target="_blank" href="http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown">http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown</a></td></tr><tr class="odd"><td>elevation_uom</td><td>13788532.713749759</td></tr><tr><td>denominator_nilReason</td><td>urn:ogc:def:uom:EPSG::9001</td></tr><tr class="odd"><td>id</td><td><a target="_blank" href="http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown">http://inspire.ec.europa.eu/codelist/VoidReasonValue/Unknown</a></td></tr><tr><td>elevation_nilReason</td><td><a target="_blank" ...
                 var sanitizedHtml = Oskari.util.sanitize(datum.html);
 
-                contentWrapper.append(sanitizedHtml);
+                contentWrapper.append(datum.html);   //sanitizedHtml);
 
                 contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
