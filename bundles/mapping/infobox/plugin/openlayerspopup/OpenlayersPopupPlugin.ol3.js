@@ -367,10 +367,15 @@ Oskari.clazz.define(
                     actionTemplate,
                     btn,
                     link,
-                    currentGroup
-                    group = -1;
+                    currentGroup,
+                    group = -1,
+                    sanitizedHtml;
 
-                var sanitizedHtml = Oskari.util.sanitize(datum.html);
+                if (typeof datum.html === "string") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html);
+                } else if (typeof datum.html === "object") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
+                }
 
                 contentWrapper.append(sanitizedHtml);
 
