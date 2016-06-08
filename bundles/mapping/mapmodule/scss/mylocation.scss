@@ -1,6 +1,97 @@
-.mapplugin.mylocationplugin {
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    margin-bottom: 10px !important;
+$lightBgColor: rgba(255,255,255,0.9);
+$darkBgColor: rgba(20,20,20,0.8);
+$iconShadow: 1px 1px 2px rgba(0,0,0,0.6);
+$darkIcon: url("../images/mobile-my-location-dark.png");
+$lightIcon: url("../images/mobile-my-location-light.png");
+
+div.mapplugin.mylocationplugin {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  position: relative;
+  margin: 0 auto;
+  z-index: 15000;
+  margin-bottom: 10px !important;
+  box-shadow: $iconShadow;
+  -moz-box-shadow: $iconShadow;
+  -webkit-box-shadow: $iconShadow;
+  -o-box-shadow: $iconShadow;
+
+  div.icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    background-size: 20px;
+    position: relative;
+    top: 6px;
+    left: 6px;
+  }
+
+  /* default and rounded-dark theme */
+  &.toolstyle-default, &.toolstyle-rounded-dark {
+    background-color: $darkBgColor;
+
+    div.icon {
+      background-image: $darkIcon;
+    }
+  }
+
+  /* rounded-light theme */
+  &.toolstyle-rounded-light {
+    background-color: $lightBgColor;
+
+    div.icon {
+      background-image: $lightIcon;
+    }
+  }
+
+  /* sharp-dark theme */
+  &.toolstyle-sharp-dark {
+    border-radius: 0;
+    background-color: $darkBgColor;
+
+    div.icon {
+      background-image: $darkIcon;
+    }
+  }
+
+  /* sharp-light theme */
+  &.toolstyle-sharp-light {
+    border-radius: 0;
+    background-color: $lightBgColor;
+
+    div.icon {
+      background-image: $lightIcon;
+    }
+  }
+
+  /* 3d-dark theme */
+  &.toolstyle-3d-dark {
+    border-radius: 5px;
+    background: $darkBgColor;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+
+    div.icon {
+      background-image: $darkIcon;
+    }
+  }
+  /* 3d-light theme */
+  &.toolstyle-3d-light {
+    border-radius: 5px;
+    background: $lightBgColor;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+
+    div.icon {
+      background-image: $lightIcon;
+    }
+  }
 }

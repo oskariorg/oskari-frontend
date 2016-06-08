@@ -74,6 +74,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._isVisible = true;
 
             this._bringMobilePopupToTop();
+
+            me.__notifyListeners('show');
+
         },
 
         /**
@@ -408,6 +411,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this.__getListeners('close').push(callback);
         },
         /**
+         * Add listener to be called when popup is shown
+         * @param  {Function} callback function to call on show
+         */
+        onShow: function (callback) {
+            this.__getListeners('show').push(callback);
+        },
+        /**
          * Clears any listeners (registered with onClose(callback)-function).
          */
         clearListeners: function () {
@@ -534,5 +544,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     'top': (size.width - popup.height() - 10) + 'px'
                 });
             }
-        }
+        },
     });

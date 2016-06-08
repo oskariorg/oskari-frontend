@@ -2,6 +2,38 @@
 
 ## 1.37.0
 
+### mapfull
+
+Fixed layers visibility in state handling.
+
+### popupservice
+
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.
+
+### divmanazer
+
+Fixed  flyout z-index.
+
+### layerselection2, logoplugin and publishertoolbar
+
+Removed unneccassary z-index style.
+
+### mapwfs2
+
+Mapwfs2 plugin now support different thems (used in publisher2).
+
+### featuredata2
+
+Featuredata2 plugin now support different themes (used in publisher2).
+
+### mylocation
+
+Changed toolstyles to use mobile icons and all different styles are now created by CSS style definations.
+
+### coordinatetool
+
+Coordinatetool now support different styles.
+
 ### toolbar
 
 When adding tool button with class suffix -dark or -light these icon themes not calculated. Use this if you want use for example only light icons.

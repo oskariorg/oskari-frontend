@@ -368,14 +368,15 @@ Oskari.clazz.define(
                 content = resultsContainer.find('div.content'),
                 popupTitle = me._loc.title,
                 mapmodule = me.getMapModule(),
-                themeColours = mapmodule.getThemeColours();
+                themeColours = mapmodule.getThemeColours(),
+                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
             /*clear the existing search results*/
             if (me.popup) {
                 me.popup.close();
                 me.popup = null;
             }
-            me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me.popup = popupService.createPopup();
             if (errorMsg) {
                 content.html(errorMsg);
             } else {
@@ -487,6 +488,11 @@ Oskari.clazz.define(
 
             var popupContent = resultsContainer;
             var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+            if (Oskari.util.isMobile()) {
+                //get the sticky buttons into their initial state and kill all popups
+                me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+                popupService.closeAllPopups(true);
+            }
 
             me.popup.show(popupTitle, popupContent);
             me.popup.createCloseIcon();
@@ -681,12 +687,17 @@ Oskari.clazz.define(
          *
          */
         _hideSearch: function() {
-            this.getElement().find('div.results').hide();
+            var me = this;
+            me.getElement().find('div.results').hide();
             // Send hide marker request
             // This is done just so the user can get rid of the marker somehow...
-            this.getSandbox().request(
-                this.getName(),
-                this.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest')(this._searchMarkerId)
+            var requestBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (!requestBuilder) {
+                return;
+            }
+            me.getSandbox().request(
+                me.getName(),
+                requestBuilder(me._searchMarkerId)
             );
         },
         /**

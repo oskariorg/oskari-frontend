@@ -1,3 +1,7 @@
+$lightBgColor: rgba(255,255,255,0.9);
+$darkBgColor: rgba(20,20,20,0.8);
+$toolShadow: 1px 1px 2px rgba(0,0,0,0.6);
+
 /* Mixins */
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
@@ -11,7 +15,6 @@
 }
 
 .featuredata {
-
 
     div.tab-content {
         max-height: 535px;
@@ -45,7 +48,7 @@
             display: block;
         }
     }
-    
+
     div.icon-funnel {
         cursor: pointer;
     }
@@ -72,7 +75,7 @@ div.analyse-filter-popup-content div.filter-option {
             min-width: 16px;
             text-align: center;
         }
-        
+
     }
 
     &.filter-option-aggregate {
@@ -135,19 +138,89 @@ div.flyout-resizer {
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+    cursor: pointer;
     clear: both;
     display: block;
-    background: #3c3c3c;
+/*    background: #3c3c3c;*/
     @include border-radius(2px);
     line-height: 28px;
     margin: 10px auto;
     padding: 0 9px;
 
     a {
-        color: white;
         text-decoration: none;
     }
 
+    /* default and rounded-dark theme */
+    &.toolstyle-default, &.toolstyle-rounded-dark {
+        background-color: $darkBgColor;
+        a {
+            color: $lightBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* rounded-light theme */
+    &.toolstyle-rounded-light {
+        background-color: $lightBgColor;
+        a {
+            color: $darkBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* sharp-dark theme */
+    &.toolstyle-sharp-dark {
+        background-color: $darkBgColor;
+        a {
+            color: $lightBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* sharp-light theme */
+    &.toolstyle-sharp-light {
+        background-color: $lightBgColor;
+        a {
+            color: $darkBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* 3d-dark theme */
+    &.toolstyle-3d-dark {
+        background-color: $darkBgColor;
+        a {
+            color: $lightBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+    /* 3d-light theme */
+    &.toolstyle-3d-light {
+        background-color: $lightBgColor;
+        a {
+            color: $darkBgColor;
+        }
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.error a {
@@ -164,7 +237,7 @@ div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
   color: red;
 }
 
-div.tool.active { 
+div.tool.active {
     background-color: #e6e6e6;
 }
 
@@ -177,7 +250,7 @@ div.oskari-flyout.ui-draggable.mobile.oskari-detached {
     border: 2px solid rgb(192,192,192);
     min-width: 200px!important;
     max-width: 800px;
-      
+
     div.oskari-flyouttoolbar {
         background-color: rgb(230, 230, 230);
         height: 41px;

@@ -1,15 +1,71 @@
-.projection-transformation {
-  width: 252px; }
-
 div.mapplugin.coordinatetool {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
   position: relative;
   margin: 0 auto;
   z-index: 15000;
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
   margin-bottom: 10px !important;
-  background-repeat: no-repeat !important; }
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -o-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  /* default and rounded-dark theme */
+  /* rounded-light theme */
+  /* sharp-dark theme */
+  /* sharp-light theme */
+  /* 3d-dark theme */
+  /* 3d-light theme */ }
+  div.mapplugin.coordinatetool div.icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    background-size: 20px;
+    position: relative;
+    top: 6px;
+    left: 6px; }
+  div.mapplugin.coordinatetool.toolstyle-default, div.mapplugin.coordinatetool.toolstyle-rounded-dark {
+    background-color: rgba(20, 20, 20, 0.8); }
+    div.mapplugin.coordinatetool.toolstyle-default div.icon, div.mapplugin.coordinatetool.toolstyle-rounded-dark div.icon {
+      background-image: url("../images/mobile-xy-dark.png"); }
+  div.mapplugin.coordinatetool.toolstyle-rounded-light {
+    background-color: rgba(255, 255, 255, 0.9); }
+    div.mapplugin.coordinatetool.toolstyle-rounded-light div.icon {
+      background-image: url("../images/mobile-xy-light.png"); }
+  div.mapplugin.coordinatetool.toolstyle-sharp-dark {
+    border-radius: 0;
+    background-color: rgba(20, 20, 20, 0.8); }
+    div.mapplugin.coordinatetool.toolstyle-sharp-dark div.icon {
+      background-image: url("../images/mobile-xy-dark.png"); }
+  div.mapplugin.coordinatetool.toolstyle-sharp-light {
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.9); }
+    div.mapplugin.coordinatetool.toolstyle-sharp-light div.icon {
+      background-image: url("../images/mobile-xy-light.png"); }
+  div.mapplugin.coordinatetool.toolstyle-3d-dark {
+    border-radius: 5px;
+    background: rgba(20, 20, 20, 0.8);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(0.8, #4c4a4d)); }
+    div.mapplugin.coordinatetool.toolstyle-3d-dark div.icon {
+      background-image: url("../images/mobile-xy-dark.png"); }
+  div.mapplugin.coordinatetool.toolstyle-3d-light {
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: -o-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB));
+    background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB)); }
+    div.mapplugin.coordinatetool.toolstyle-3d-light div.icon {
+      background-image: url("../images/mobile-xy-light.png"); }
+
+.projection-transformation {
+  width: 252px; }
 
 div.coordinatetool__popup {
   width: 280px;
@@ -46,37 +102,4 @@ div.coordinatetool__popup {
   width: 70px;
   padding-top: 7px; }
 
-div.mapplugin.coordinatetool.toolstyle-default {
-  background-image: url("../images/coordinates-style1-dark.png"); }
-  div.mapplugin.coordinatetool.toolstyle-default .active {
-    background-image: url("../images/coordinates-style1-dark-active.png"); }
-
-div.mapplugin.coordinatetool.toolstyle-rounded-dark {
-  background-image: url("../images/coordinates-style1-dark.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-rounded-dark .active {
-    background-image: url("../images/coordinates-style1-dark-active.png") !important; }
-
-div.mapplugin.coordinatetool.toolstyle-rounded-light {
-  background-image: url("../images/coordinates-style1-light.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-rounded-light .active {
-    background-image: url("../images/coordinates-style1-light-active.png") !important; }
-
-div.mapplugin.coordinatetool.toolstyle-sharp-dark {
-  background-image: url("../images/coordinates-style2-dark.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-sharp-dark .active {
-    background-image: url("../images/coordinates-style2-dark-active.png") !important; }
-
-div.mapplugin.coordinatetool.toolstyle-sharp-light {
-  background-image: url("../images/coordinates-style2-light.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-sharp-light .active {
-    background-image: url("../images/coordinates-style2-light-active.png") !important; }
-
-div.mapplugin.coordinatetool.toolstyle-3d-dark {
-  background-image: url("../images/coordinates-style3-dark.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-3d-dark .active {
-    background-image: url("../images/coordinates-style3-dark-active.png") !important; }
-
-div.mapplugin.coordinatetool.toolstyle-3d-light {
-  background-image: url("../images/coordinates-style3-light.png") !important; }
-  div.mapplugin.coordinatetool.toolstyle-3d-light .active {
-    background-image: url("../images/coordinates-style3-light-active.png") !important; }
+/*# sourceMappingURL=coordinatetool.css.map */

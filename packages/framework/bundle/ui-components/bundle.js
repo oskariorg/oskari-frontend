@@ -62,6 +62,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/Popup.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/divmanazer/component/PopupService.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Overlay.js"
         }, {
             "type" : "text/javascript",

@@ -7,21 +7,20 @@
   line-height: 15px;
   text-align: left;
   text-shadow: 1px 0px 3px rgba(0, 0, 0, 0.5), -1px 0px 3px rgba(0, 0, 0, 0.5), 1px 0px 1px #000, -1px 0px 1px #000;
-  z-index: 100000000 !important; 
 
   a, a:hover, a:active, a:visited {
-    color: inherit; 
+    color: inherit;
   }
-  
+
   .icon {
       background-image: url('../images/pti_icon.png');
       display: inline-block;
       height: 25px;
       width: 25px;
       vertical-align: bottom;
-      cursor: pointer; 
+      cursor: pointer;
   }
-  
+
   .data-sources, .terms {
       display: inline-block;
       margin: 5px;
@@ -36,16 +35,16 @@
 
 .right .logoplugin {
   /* Right-align elements so a wide sibling plugin won't push them to the left... */
-  text-align: right; 
+  text-align: right;
 }
 
 .data-sources-dialog {
-  max-width: 400px; 
+  max-width: 400px;
   .layers h4, .data-sources-dialog .indicators h4 {
-    padding-bottom: 5px; 
+    padding-bottom: 5px;
   }
 
   .indicators {
-    margin-top: 10px; 
+    margin-top: 10px;
   }
 }
