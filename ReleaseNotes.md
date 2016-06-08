@@ -2,9 +2,13 @@
 
 ## 1.37.0
 
+### mapfull
+
+Fixed layers visibility in state handling.
+
 ### popupservice
 
-New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.  
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.
 
 ### divmanazer
 
