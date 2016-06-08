@@ -10,6 +10,10 @@ Added scrollbars for layers list.
 
 Search plugin no longer expects MarkersPlugin to be present.
 
+### FeatureData
+
+Is now properly hidden on initial UI when there are no WFS-layers on map.
+
 ## 1.36.3
 
 ### UserlayerPlugin.ol3
