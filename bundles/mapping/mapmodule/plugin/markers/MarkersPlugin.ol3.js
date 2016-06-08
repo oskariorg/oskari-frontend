@@ -521,10 +521,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     stroke : {
                     	color: '#ffffff',
                     	width: 1
-                    },
-                    labelText: decodeURIComponent(data.msg)
+                    }
                 }
             };
+            if(data.msg) {
+                try {
+                    style.text.labelText = decodeURIComponent(data.msg);
+                } catch(e) {
+                    // For some reason this is called when getting stateparameters. 
+                    // Message is not urlencoded at that point and % causes error to be thrown
+                    style.text.labelText = data.msg;
+                }
+            }
             var markerLayer = this.getMarkersLayer();
             var markerStyle = this.getMapModule().getStyle(style);
             var newMarker = new ol.Feature({id: data.id, geometry: new ol.geom.Point([data.x, data.y])});

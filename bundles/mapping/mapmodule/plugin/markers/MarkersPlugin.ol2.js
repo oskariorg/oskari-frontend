@@ -524,10 +524,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     stroke : {
                         color: '#ffffff',
                         width: 1
-                    },
-                    labelText: decodeURIComponent(data.msg)
+                    }
                 }
             };
+            if(data.msg) {
+                try {
+                    style.text.labelText = decodeURIComponent(data.msg);
+                } catch(e) {
+                    // For some reason this is called when getting stateparameters. 
+                    // Message is not urlencoded at that point and % causes error to be thrown
+                    style.text.labelText = data.msg;
+                }
+            }
 
             var markerStyle = this.getMapModule().getStyle(style);
             var markerLayer = this.getMarkersLayer();
@@ -537,22 +545,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     markerId: data.id
                 },
                 markerStyle
-                /*{
-                    externalGraphic: iconSrc,
-                    graphicWidth: me._getSizeInPixels(data.size),
-                    graphicHeight: me._getSizeInPixels(data.size),
-                    fillOpacity: 1,
-                    label: decodeURIComponent(data.msg),
-                    fontColor: '$000000',
-                    fontSize: '16px',
-                    fontFamily: 'Arial',
-                    fontWeight: 'bold',
-                    labelAlign: 'lm',
-                    labelXOffset: 8 + 2 * data.size,
-                    labelYOffset: 8,
-                    labelOutlineColor: 'white',
-                    labelOutlineWidth: 1
-                }*/
             );
             newMarker.id = data.id;
             this._markerFeatures[data.id] = newMarker;
