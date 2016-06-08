@@ -2,6 +2,10 @@
 
 ## 1.36.4
 
+### mapfull
+
+Fixed layers visibility in state handling - layer visibility is now shown correctly to user.
+
 ### LayerSelectionPlugin
 
 Added scrollbars for layers list.
