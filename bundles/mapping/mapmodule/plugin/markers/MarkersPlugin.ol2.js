@@ -344,6 +344,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         _showForm: function(clickX, clickY) {
             var me = this;
+            // if we dont set false here the user can click map again and a new popup is opened on top of the existing one
+            me._waitingUserClickToAddMarker = false;
             var lonlat = me._map.getLonLatFromPixel({
                 x : clickX,
                 y : clickY
@@ -409,7 +411,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if(toolbarRequest) {
                 sandbox.request(me, toolbarRequest());
             }
-
         },
 
         /**
