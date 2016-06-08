@@ -389,8 +389,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             });
 
             me.dotForm.setCancelHandler(function() {
+                // return to wait another click for a marker
                 me.dotForm.getDialog().close();
-                me.enableGfi(true);
+                me._waitingUserClickToAddMarker = true;
             });
         },
 
