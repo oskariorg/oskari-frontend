@@ -726,8 +726,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 markerParams = [];
             _.each(state.markers, function(marker) {
                 var str = marker.shape + FIELD_SEPARATOR +
-                    marker.size + FIELD_SEPARATOR +
-                    marker.color + FIELD_SEPARATOR +
+                    marker.size + FIELD_SEPARATOR;
+                    if(marker.color.indexOf('#') === 0) {
+                        str = str + marker.color.substring(1);
+                    } else {
+                        str = str + marker.color;
+                    }
+                    str = str  + FIELD_SEPARATOR +
                     marker.x + '_' + marker.y + FIELD_SEPARATOR +
                     encodeURIComponent(marker.msg);
                 markerParams.push(str);
