@@ -681,12 +681,17 @@ Oskari.clazz.define(
          *
          */
         _hideSearch: function() {
-            this.getElement().find('div.results').hide();
+            var me = this;
+            me.getElement().find('div.results').hide();
             // Send hide marker request
             // This is done just so the user can get rid of the marker somehow...
-            this.getSandbox().request(
-                this.getName(),
-                this.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest')(this._searchMarkerId)
+            var requestBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (!requestBuilder) {
+                return;
+            }
+            me.getSandbox().request(
+                me.getName(),
+                requestBuilder(me._searchMarkerId)
             );
         },
         /**

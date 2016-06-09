@@ -151,10 +151,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (event._creator !== this.getName()) {
                         this.sortLayers();
                     }
-                }
+                },
+                MapSizeChangedEvent: function (evt) {
+                    this._handleMapSizeChanged({width:evt.getWidth(), height:evt.getHeight()});
+                },
             };
         },
-
+        _handleMapSizeChanged: function(size, isMobile){
+            var me = this,
+                mobile = isMobile || Oskari.util.isMobile();
+            if(!mobile &&  me.layerContent) {
+                me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
+            }
+        },
         _setLayerToolsEditModeImpl: function () {
             if(!this.getElement()) {
                 return;
@@ -268,7 +277,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
+        _rebindCheckboxes: function(){
+            var me = this,
+                sandbox = this.getSandbox();
 
+            var reBind = function(el){
+                var layerId = el.attr('value');
+                var layer = sandbox.findMapLayerFromAllAvailable(layerId);
+                if(layer) {
+                    el.unbind('change');
+                    me._bindCheckbox(el,layer);
+                }
+            };
+            me.layerContent.find('input[type=radio]').each(function(){
+                var input = jQuery(this);
+                input.unbind('change');
+                input.bind('change', function (evt) {
+                    me._changedBaseLayer();
+                });
+            });
+            me.layerContent.find('input[type=checkbox]').each(function(){
+                reBind(jQuery(this));
+            });
+        },
         /**
          * @method _bindCheckbox
          * Binds given checkbox to control given layers visibility
@@ -555,6 +586,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.createCloseIcon();
 
                 me.popup.show(popupTitle, me.layerContent);
+                me.popup.addClass('mapplugin layerselectionpopup');
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
                     me.popup.onClose(function(){
@@ -586,11 +618,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
                 var icon = div.find('div.header div.header-icon'),
-                    header = div.find('div.header');
+                    header = div.find('div.header'),
+                    mapmodule = me.getMapModule(),
+                    size = mapmodule.getSize();
 
                 icon.removeClass('icon-arrow-white-right');
                 icon.addClass('icon-arrow-white-down');
                 div.append(me.layerContent);
+
+                // fix layers content height
+                me._handleMapSizeChanged(size, false);
 
                 var layersTitle = div.find('.content-header');
                 var layersTitleHeight = 0;
@@ -604,6 +641,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
                 }
             }
+
+            me._rebindCheckboxes();
         },
 
         /**

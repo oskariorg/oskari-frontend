@@ -40,8 +40,8 @@ Oskari.registerLocalization(
                     "sv": "ruotsi",
                     "en": "englanti"
                 },
-                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Valinnat eivät näy esikatselukartalla.",
-                "languageChangedDisclaimer": "Huom! Valinnat eivät näy esikatselukartalla."
+                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
+                "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
             },
             "size": {
                 "label": "Kartan koko",

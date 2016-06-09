@@ -344,6 +344,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         _showForm: function(clickX, clickY) {
             var me = this;
+            // if we dont set false here the user can click map again and a new popup is opened on top of the existing one
+            me._waitingUserClickToAddMarker = false;
             var lonlat = me._map.getLonLatFromPixel({
                 x : clickX,
                 y : clickY
@@ -387,8 +389,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             });
 
             me.dotForm.setCancelHandler(function() {
+                // return to wait another click for a marker
                 me.dotForm.getDialog().close();
-                me.enableGfi(true);
+                me._waitingUserClickToAddMarker = true;
             });
         },
 
@@ -409,7 +412,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if(toolbarRequest) {
                 sandbox.request(me, toolbarRequest());
             }
-
         },
 
         /**
@@ -522,10 +524,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     stroke : {
                         color: '#ffffff',
                         width: 1
-                    },
-                    labelText: decodeURIComponent(data.msg)
+                    }
                 }
             };
+            if(data.msg) {
+                try {
+                    style.text.labelText = decodeURIComponent(data.msg);
+                } catch(e) {
+                    // For some reason this is called when getting stateparameters. 
+                    // Message is not urlencoded at that point and % causes error to be thrown
+                    style.text.labelText = data.msg;
+                }
+            }
 
             var markerStyle = this.getMapModule().getStyle(style);
             var markerLayer = this.getMarkersLayer();
@@ -535,22 +545,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     markerId: data.id
                 },
                 markerStyle
-                /*{
-                    externalGraphic: iconSrc,
-                    graphicWidth: me._getSizeInPixels(data.size),
-                    graphicHeight: me._getSizeInPixels(data.size),
-                    fillOpacity: 1,
-                    label: decodeURIComponent(data.msg),
-                    fontColor: '$000000',
-                    fontSize: '16px',
-                    fontFamily: 'Arial',
-                    fontWeight: 'bold',
-                    labelAlign: 'lm',
-                    labelXOffset: 8 + 2 * data.size,
-                    labelYOffset: 8,
-                    labelOutlineColor: 'white',
-                    labelOutlineWidth: 1
-                }*/
             );
             newMarker.id = data.id;
             this._markerFeatures[data.id] = newMarker;
@@ -726,8 +720,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 markerParams = [];
             _.each(state.markers, function(marker) {
                 var str = marker.shape + FIELD_SEPARATOR +
-                    marker.size + FIELD_SEPARATOR +
-                    marker.color + FIELD_SEPARATOR +
+                    marker.size + FIELD_SEPARATOR;
+                    if(marker.color.indexOf('#') === 0) {
+                        str = str + marker.color.substring(1);
+                    } else {
+                        str = str + marker.color;
+                    }
+                    str = str  + FIELD_SEPARATOR +
                     marker.x + '_' + marker.y + FIELD_SEPARATOR +
                     encodeURIComponent(marker.msg);
                 markerParams.push(str);
