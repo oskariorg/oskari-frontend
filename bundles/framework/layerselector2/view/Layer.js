@@ -15,10 +15,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
-        this.backendStatus = 'OK'; // see also 'backendstatus-ok'
+        this.backendStatus = 'UNKNOWN'; // see also 'backendstatus-ok'
         this.ui = this._createLayerContainer(layer);
     }, {
-        __template: '<div class="layer"><input type="checkbox" /> ' + '<div class="layer-tools"><div class="layer-backendstatus-icon backendstatus-ok"></div>' + '<div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' +
+        __template: '<div class="layer"><input type="checkbox" /> ' + 
+                    '<div class="layer-tools">'+
+                    '   <div class="layer-backendstatus-icon backendstatus-unknown"></div>' + 
+                    '   <div class="layer-icon"></div>'+
+                    '   <div class="layer-info"></div>'+
+                    '</div>' + 
+                    '<div class="layer-title"></div>' +
         //'<div class="layer-keywords"></div>' +
         '</div>',
         /**
