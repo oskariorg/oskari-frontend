@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### mapmodule
+
+Fixed custom svg marker handling when marker offset (x or y or both) has 0.
+
 ### mapfull
 
 Fixed layers visibility in state handling.
