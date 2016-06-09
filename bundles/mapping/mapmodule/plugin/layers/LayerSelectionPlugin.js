@@ -277,7 +277,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
+        _rebindCheckboxes: function(){
+            var me = this,
+                sandbox = this.getSandbox();
 
+            var reBind = function(el){
+                var layerId = el.attr('value');
+                var layer = sandbox.findMapLayerFromAllAvailable(layerId);
+                if(layer) {
+                    el.unbind('change');
+                    me._bindCheckbox(el,layer);
+                }
+            };
+            me.layerContent.find('input[type=radio]').each(function(){
+                var input = jQuery(this);
+                input.unbind('change');
+                input.bind('change', function (evt) {
+                    me._changedBaseLayer();
+                });
+            });
+            me.layerContent.find('input[type=checkbox]').each(function(){
+                reBind(jQuery(this));
+            });
+        },
         /**
          * @method _bindCheckbox
          * Binds given checkbox to control given layers visibility
@@ -619,6 +641,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
                 }
             }
+
+            me._rebindCheckboxes();
         },
 
         /**

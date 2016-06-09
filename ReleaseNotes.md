@@ -24,6 +24,8 @@ Fixed layers visibility in state handling - layer visibility is now shown correc
 
 Added scrollbars for layers list.
 
+Fixed handling selected layers when changing mode from desktop to mobile.
+
 ### SearchPlugin
 
 Search plugin no longer expects MarkersPlugin to be present.
