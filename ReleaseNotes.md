@@ -2,6 +2,14 @@
 
 ## 1.36.4
 
+### divmanazer/Popup
+
+Popup moveTo now supports new ``center`` alignment.
+
+### coordinatetool
+
+If coordinatetool user interface is hidden (used RPC interface) then open tool popup to center of map.
+
 ### Markersplugin
 
 Fixed state-parameters to not include # as part of color. This fixes links with markers and printing while markers on map.
