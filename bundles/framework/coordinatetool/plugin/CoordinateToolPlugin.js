@@ -208,7 +208,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 });
 
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
-                me._popup.moveTo(el, 'bottom', true, topOffsetElement);
+                // move popup if el and topOffsetElement
+                if (el && el.length>0 && topOffsetElement && topOffsetElement.length>0) {
+                    me._popup.moveTo(el, 'bottom', true, topOffsetElement);
+                } else {
+                    me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
+                }
 
                 var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({

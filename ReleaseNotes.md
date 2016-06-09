@@ -16,7 +16,7 @@ New service under divmanazer, for creating popups in mobile mode as well as book
 
 ### divmanazer
 
-Fixed  flyout z-index.
+Fixed flyout z-index.
 
 ### layerselection2, logoplugin and publishertoolbar
 
@@ -42,10 +42,6 @@ Coordinatetool now support different styles.
 
 When adding tool button with class suffix -dark or -light these icon themes not calculated. Use this if you want use for example only light icons.
 
-### LayerSelectionPlugin
-
-Added scrollbars for layers list.
-
 ### publishertoolbar
 
 Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled tools when previewing published map.
@@ -57,6 +53,39 @@ SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0
 ### Oskari.util.sanitize()
 
 Replaced custom implementation with DOMPurify (https://github.com/cure53/DOMPurify). Now takes just one parameter as string and returns a string.
+
+## 1.36.4
+
+### divmanazer/Popup
+
+Popup moveTo now supports new ``center`` alignment.
+
+### coordinatetool
+
+If coordinatetool user interface is hidden (used RPC interface) then open tool popup to center of map.
+
+### Markersplugin
+
+Fixed state-parameters to not include # as part of color. This fixes links with markers and printing while markers on map.
+Fixed an issue where clicking on map while marker popup was on screen resulted in application error.
+Fixed an issue with %-character on marker label.
+
+### mapfull
+
+Fixed layers visibility in state handling - layer visibility is now shown correctly to user.
+
+### LayerSelectionPlugin
+
+Added scrollbars for layers list.
+Fixed handling selected layers when changing mode from desktop to mobile.
+
+### SearchPlugin
+
+Search plugin no longer expects MarkersPlugin to be present.
+
+### FeatureData
+
+Is now properly hidden on initial UI when there are no WFS-layers on map.
 
 ## 1.36.3
 
