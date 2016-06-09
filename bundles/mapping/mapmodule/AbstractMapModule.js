@@ -110,7 +110,7 @@ Oskari.clazz.define(
                 '<div class="oskari-crosshair">'+
                     '<div class="oskari-crosshair-vertical-bar"></div>'+
                     '<div class="oskari-crosshair-horizontal-bar"></div>'+
-                '</div>') 
+                '</div>')
         }
     }, {
         /**
@@ -144,7 +144,7 @@ Oskari.clazz.define(
 
             if (me._options.crosshair) {
                 me.toggleCrosshair(true);
-            }            
+            }
 
             // changed to resolutions based map zoom levels
             // -> calculate scales array for backward compatibility
@@ -1464,11 +1464,24 @@ Oskari.clazz.define(
             }
             // marker shape is svg
             else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
-                markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
-                svgObject = {
-                    data: markerStyle.shape.data,
+                markerStyle.shape.data) {
+                var offset = {
                     x: markerStyle.shape.x,
                     y: markerStyle.shape.y
+                };
+
+                if(isNaN(offset.x)) {
+                    offset.x = 16;
+                }
+
+                if(isNaN(offset.y)) {
+                    offset.y = 16;
+                }
+
+                svgObject = {
+                    data: markerStyle.shape.data,
+                    x: offset.x,
+                    y: offset.y
                 };
             }
             else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
