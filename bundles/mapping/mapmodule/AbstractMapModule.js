@@ -1483,8 +1483,6 @@ Oskari.clazz.define(
                     x: offset.x,
                     y: offset.y
                 };
-
-                console.log(svgObject);
             }
             else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
                 markerStyle.shape.key && markerStyle.shape.name) {
