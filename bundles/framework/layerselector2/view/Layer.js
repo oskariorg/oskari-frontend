@@ -63,8 +63,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 prevBackendStatus = this.backendStatus,
                 currBackendStatus = layer.getBackendStatus(),
                 loc = this.localization.backendStatus,
-                locForPrevBackendStatus = prevBackendStatus ? loc.prevBackendStatus : null,
-                locForCurrBackendStatus = currBackendStatus ? loc.currBackendStatus : null,
+                locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null,
+                locForCurrBackendStatus = currBackendStatus ? loc[currBackendStatus] : null,
                 clsForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.iconClass : null,
                 clsForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.iconClass : null,
                 tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null,
@@ -78,14 +78,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 this.ui.find('input').attr('disabled', 'disabled');
             }
 
-
             if (clsForPrevBackendStatus) {
                 /* update or clear */
                 if (clsForPrevBackendStatus !== clsForCurrBackendStatus) {
+                   console.log("remove class: "+newName+" "+clsForPrevBackendStatus);
                     elBackendStatus.removeClass(clsForPrevBackendStatus);
                 }
             }
             if (clsForCurrBackendStatus) {
+                console.log(newName+" "+clsForCurrBackendStatus);
                 /* update or set */
                 if (clsForPrevBackendStatus !== clsForCurrBackendStatus) {
                     elBackendStatus.addClass(clsForCurrBackendStatus);
@@ -228,6 +229,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
              * backend status
              */
             elBackendStatus = tools.find('.layer-backendstatus-icon');
+
+
+            var backendStatus = layer.getBackendStatus();
+            if (backendStatus) {
+                var iconClass = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].iconClass : null;
+                if (iconClass) {
+                    elBackendStatus.removeClass('backendstatus-unknown');
+                    elBackendStatus.addClass(iconClass);
+                    console.log("I has backEndStatus "+layer.getName()+" "+backendStatus+" "+iconClass);
+                }
+            }
             elBackendStatus.click(function () {
                 mapLayerId = layer.getId();
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [

@@ -46,8 +46,8 @@ Oskari.registerLocalization({
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informacija o statusu sloja karte nije dostupna.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

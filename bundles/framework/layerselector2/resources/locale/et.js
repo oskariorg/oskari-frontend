@@ -48,8 +48,8 @@ Oskari.registerLocalization(
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Kaardikihi oleku info pole kättesaadav.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

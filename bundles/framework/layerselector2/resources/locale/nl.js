@@ -48,8 +48,8 @@ Oskari.registerLocalization(
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "NOT TRANSLATED",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

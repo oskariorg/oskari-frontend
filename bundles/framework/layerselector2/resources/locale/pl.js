@@ -46,8 +46,8 @@ Oskari.registerLocalization({
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informacja o statusie warstwy mapy jest niedostępna.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

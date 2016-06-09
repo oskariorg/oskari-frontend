@@ -49,7 +49,7 @@ Oskari.registerLocalization(
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "bakvinnslustaða-í lagi"
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

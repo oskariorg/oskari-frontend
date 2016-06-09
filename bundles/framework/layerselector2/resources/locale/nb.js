@@ -49,7 +49,7 @@ Oskari.registerLocalization(
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {

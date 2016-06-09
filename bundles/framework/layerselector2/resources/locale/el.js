@@ -46,8 +46,8 @@ Oskari.registerLocalization({
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Πληροφορίες για την κατάσταση του επιπέδου του χάρτη δεν διατίθενται,.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
             }
         },
         "buttons": {
