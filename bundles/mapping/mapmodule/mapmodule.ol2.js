@@ -91,45 +91,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 zoomMethod: null
             });
 
-            me._setupMapEvents(map);
-
             return map;
         },
 
-        /**
-         * Add map click handler
-         * @method @private _setupMapEvents
-         */
-        _setupMapEvents: function(map){
-            var me = this;
-            //Set up a click handler
-            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-                defaultHandlerOptions: {
-                    'double': true,
-                    'stopDouble': true
-                },
-
-                initialize: function(options) {
-                    this.handlerOptions = OpenLayers.Util.extend(
-                        {}, this.defaultHandlerOptions
-                    );
-                    OpenLayers.Control.prototype.initialize.apply(
-                        this, arguments
-                    );
-                    this.handler = new OpenLayers.Handler.Click(
-                        this, {
-                            'click': function(evt){
-                                me.__sendMapClickEvent(evt);
-                            }
-                        }, this.handlerOptions
-                    );
-                }
-            });
-
-            var click = new OpenLayers.Control.Click();
-            map.addControl(click);
-            click.activate();
-        },
         _startImpl: function () {
             this.getMap().render(this.getMapElementId());
             return true;
