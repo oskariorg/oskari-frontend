@@ -4,7 +4,7 @@
 
 ### mapmodule
 
-Fixed custom svg marker handling when marker offset (x or y or both) has 0.
+Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
 
 ### mapfull
 
