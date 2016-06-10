@@ -98,33 +98,6 @@ div.admin-layerselector {
     div.admin-layerselector div.layer .layer-title,
     div.admin-layerselector div.create-layer .layer-title {
       margin-top: 4px; }
-    div.admin-layerselector div.layer div.backendstatus-down,
-    div.admin-layerselector div.create-layer div.backendstatus-down {
-      height: 20px !important;
-      margin-bottom: 2px;
-      cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-maintenance,
-    div.admin-layerselector div.create-layer div.backendstatus-maintenance {
-      height: 20px !important;
-      margin-bottom: 2px;
-      cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-ok,
-    div.admin-layerselector div.create-layer div.backendstatus-ok {
-      height: 20px !important;
-      margin-top: -2px;
-      margin-bottom: 2px;
-      cursor: pointer; }
-    div.admin-layerselector div.layer div.backendstatus-unknown,
-    div.admin-layerselector div.create-layer div.backendstatus-unknown {
-      height: 20px !important;
-      margin-bottom: 2px; }
-    div.admin-layerselector div.layer div.layer-backendstatus-icon,
-    div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
-      float: left;
-      width: 20px;
-      height: 16px;
-      margin-right: 4px;
-      background-repeat: no-repeat; }
     div.admin-layerselector div.layer div.layer-icon,
     div.admin-layerselector div.create-layer div.layer-icon {
       float: left;
@@ -230,10 +203,9 @@ div.admin-layerselector {
     overflow: hidden;
     position: relative; }
   div.admin-layerselector .add-layer-style-import-block {
-    display:none;
+    display: none;
     margin: 8px;
-    border: 2pt solid blue;
-  }
+    border: 2pt solid blue; }
   div.admin-layerselector .add-layer-separation {
     margin-top: 15px; }
   div.admin-layerselector .admin-add-layer-btn {

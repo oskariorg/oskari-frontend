@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Layer della mappa",
             "type-wfs": "Prodotti"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Il layer è attualmente disponibile",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Il layer non è attualmente disponibile",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Si verificheranno delle brevi interruzioni della disponibilità dei layers durante i prossimi giorni.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Funzionalità",
             "confirmResourceKeyChange": "Hai modificato il nome unico o l'indirizzo per questo layer. Per motivi di sicurezza le condizioni d'uso di questo layer saranno rimosse e sarà necessario impostarle di nuovo. Vuoi continuare?",
