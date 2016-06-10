@@ -2,6 +2,14 @@
 
 ## 1.37.0
 
+### core
+
+Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv : ""}, "xx"). It tries to find a localized text in object in this order:
+
+- for requested language (as optional second parameter) or current language if there is no second parameter.
+- for default language
+- As last resort anything that has a value
+
 ### mapmodule
 
 Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
