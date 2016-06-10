@@ -67,6 +67,10 @@ div.layerselector2 div.layer {
     height: 20px !important;
     margin-bottom: 2px;
     margin-top: -2px; }
+  div.layerselector2 div.layer div.backendstatus-unstable {
+    height: 20px !important;
+    margin-bottom: 2px;
+    margin-top: -2px; }
 
 div.layerselector2 div.layerGroup {
   background-color: #f3f3f3;

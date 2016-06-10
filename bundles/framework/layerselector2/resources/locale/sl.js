@@ -50,6 +50,10 @@ Oskari.registerLocalization(
             "UNKNOWN": {
                 "tooltip": "",
                 "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
