@@ -27,6 +27,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/service/StatisticsService.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/service/Cache.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/GridModeView.js"
             }, {
                 "type": "text/javascript",
@@ -39,15 +42,18 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorSelection.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParameters.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
             }, {
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
             }, {
-                "src": "../../../libraries/chosen/chosen.jquery.js",
+                "src": "../../../libraries/chosen/1.5.1/chosen.jquery.js",
                 "type": "text/javascript"
             }, {
-                "src": "../../../libraries/chosen/chosen.css",
+                "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
             }],
             "locales": [{
