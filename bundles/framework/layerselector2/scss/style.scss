@@ -85,12 +85,14 @@ div.layerselector2 {
         div.backendstatus-down {
             height: 20px !important;
             margin-bottom: 2px; 
+            margin-top: -2px; 
             cursor: pointer;
         }
 
         div.backendstatus-maintenance {
             height: 20px !important;
             margin-bottom: 2px; 
+            margin-top: -2px; 
             cursor: pointer;
         }
 
@@ -104,6 +106,13 @@ div.layerselector2 {
         div.backendstatus-unknown {
             height: 20px !important;
             margin-bottom: 2px; 
+            margin-top: -2px; 
+        }
+
+        div.backendstatus-unstable {
+            height: 20px !important;
+            margin-bottom: 2px; 
+            margin-top: -2px; 
         }
 
     }
