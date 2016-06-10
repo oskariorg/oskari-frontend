@@ -81,12 +81,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             if (clsForPrevBackendStatus) {
                 /* update or clear */
                 if (clsForPrevBackendStatus !== clsForCurrBackendStatus) {
-                   console.log("remove class: "+newName+" "+clsForPrevBackendStatus);
                     elBackendStatus.removeClass(clsForPrevBackendStatus);
                 }
             }
             if (clsForCurrBackendStatus) {
-                console.log(newName+" "+clsForCurrBackendStatus);
                 /* update or set */
                 if (clsForPrevBackendStatus !== clsForCurrBackendStatus) {
                     elBackendStatus.addClass(clsForCurrBackendStatus);
@@ -237,7 +235,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 if (iconClass) {
                     elBackendStatus.removeClass('backendstatus-unknown');
                     elBackendStatus.addClass(iconClass);
-                    console.log("I has backEndStatus "+layer.getName()+" "+backendStatus+" "+iconClass);
                 }
             }
             elBackendStatus.click(function () {
