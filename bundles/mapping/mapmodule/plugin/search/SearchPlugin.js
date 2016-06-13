@@ -866,6 +866,23 @@ Oskari.clazz.define(
             }
         },
         /**
+        * @method _stopPluginImpl
+        * Interface method for the plugin protocol.
+        * Should unregisters requesthandlers and
+        * eventlisteners.
+        *
+        *
+        */
+        _stopPluginImpl: function (sandbox) {
+            var me = this;
+            // Remove search results
+            if (me.popup) {
+                me.popup.close();
+                me.popup = null;
+            }
+            this.removeFromPluginContainer(this.getElement());
+        },
+        /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
          * @param {Boolean} mapInMobileMode is map in mobile mode
