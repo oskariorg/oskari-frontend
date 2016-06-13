@@ -341,8 +341,8 @@ Oskari.clazz.define(
                                 return true;
                             });
 
-                        if (hit && cursor) {
-                            jTarget.css('cursor', cursor);
+                        if (hit && options.cursor) {
+                            jTarget.css('cursor', options.cursor);
                         } else {
                             jTarget.css('cursor', originalCursor);
                         }
