@@ -61,7 +61,6 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             'double': true,
             'stopDouble': true
         };
-        clickOptions = {};
         this.handlers.click = new OpenLayers.Handler.Click(
             this, clickCallbacks, clickOptions
         );
