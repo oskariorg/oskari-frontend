@@ -944,7 +944,6 @@ Oskari.clazz.define(
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
-
             if (Oskari.util.isMobile()) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
@@ -954,14 +953,26 @@ Oskari.clazz.define(
             }
 
             if (modeChanged) {
-                var sortedList = this._getSortedPlugins();
-                _.each(sortedList, function(plugin) {
-                    if (plugin && typeof plugin.redrawUI === 'function') {
-                        plugin.redrawUI(me.getMobileMode(), modeChanged);
-                    }
-                });
+                me.redrawPluginUIs(modeChanged);
             }
             me._adjustMobileMapSize();
+        },
+        /**
+         * @method redrawPluginUIs
+         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar. 
+         * Basically just redraws the whole toolbar with the tools in correct order.
+         * 
+         * @param {boolean} modeChanged whether there was a transition between mobile <> desktop
+         *
+         */
+        redrawPluginUIs: function(modeChanged) {
+            var me = this,
+                sortedList = me._getSortedPlugins();
+            _.each(sortedList, function(plugin) {
+                if (plugin && typeof plugin.redrawUI === 'function') {
+                    plugin.redrawUI(me.getMobileMode(), modeChanged);
+                }
+            });
         },
         /**
          * Get a sorted list of plugins. This is used to control order of elements in the UI.
