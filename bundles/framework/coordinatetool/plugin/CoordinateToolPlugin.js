@@ -79,6 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             },
             buttonGroup: 'mobile-toolbar'
         };
+        me._decimalSeparator = Oskari.getDecimalSeparator();
     }, {
         /**
          * Get popup-
@@ -260,6 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
                 lat = lat.toFixed(0);
+                lat = lat.toFixed(0);
                 lon = lon.toFixed(0);
             }
             if(reqBuilder) {
@@ -270,7 +272,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var marker = {
                     x: data.lonlat.lon,
                     y: data.lonlat.lat,
-                    msg: msg
+                    msg: msg,
+                    size: 5,
+                    color: 'ee9900'
                 };
                 me._sandbox.request(this, reqBuilder(marker));
             }
@@ -487,6 +491,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 var lat = parseFloat(data.lonlat.lat).toFixed(roundToDecimals);
                 var lon = parseFloat(data.lonlat.lon).toFixed(roundToDecimals);
+                lat = me.formatNumber(lat, me._decimalSeparator);
+                lon = me.formatNumber(lon, me._decimalSeparator);
 
                 // from server
                 if(isSupported && isDifferentProjection && !me._coordinateTransformationExtension._coordinatesFromServer) {
@@ -648,7 +654,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(!me._showMouseCoordinates) {
                         me._checkSpinnerVisibility();
 
-                        me.refresh(me._getInputsData());
+                        me.refresh();
 
                         if(me._getPreciseTransform){
                             me._getTransformedCoordinatesFromServer(null, false, true);
@@ -728,6 +734,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             var lon = me._lonInput.val(),
                 lat = me._latInput.val();
+
+            lon = me.formatNumber(lon, '.');
+            lat = me.formatNumber(lat, '.');
+
             if(lon.indexOf('~') >= 0) {
                 lon = lon.replace('~', '');
             }
@@ -752,6 +762,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             };
             return data;
+        },
+        formatNumber: function(coordinate, decimalSeparator) {
+            coordinate = coordinate.replace('.', decimalSeparator);
+            coordinate = coordinate.replace(',', decimalSeparator);
+            return coordinate;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
