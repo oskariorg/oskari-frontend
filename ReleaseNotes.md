@@ -10,6 +10,8 @@ Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv 
 - for default language
 - As last resort anything that has a value
 
+Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
 ### mapmodule
 
 Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
