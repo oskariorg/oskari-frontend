@@ -1,11 +1,11 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.GridModeView
+ * @class Oskari.statistics.statsgrid.GridModeView
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultView class.
  *
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
+Oskari.clazz.define('Oskari.statistics.statsgrid.GridModeView',
     /**
      * @static constructor function
      */
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
          * @return {String} implementation name
          */
         getName: function () {
-            return 'Oskari.statistics.bundle.statsgrid.GridModeView';
+            return 'Oskari.statistics.statsgrid.GridModeView';
         },
         /**
          * @method startPlugin

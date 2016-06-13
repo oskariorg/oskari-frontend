@@ -1,10 +1,7 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.StatisticsService
- * Methods for sending out events to display data in the grid
- * and to create a visualization of the data on the map.
- * Has a method for sending the requests to backend as well.
+ * @class Oskari.statistics.statsgrid.Cache
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Cache',
+Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
 
     /**
      * @method create called automatically on construction

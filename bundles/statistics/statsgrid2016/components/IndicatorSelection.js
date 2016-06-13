@@ -1,9 +1,10 @@
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.IndicatorSelection', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(sandbox) {
 	this.sb = sandbox;
-	this.service = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
+	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
 	__templates : {
 		main : _.template('<div></div>'),
+		selections : _.template('<div class="statsgrid-indicator-selections"></div>'),
 		select : _.template('<div><label>${name}<select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
@@ -31,20 +32,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.IndicatorSelection', fun
 			no_results_text: "Oops, nothing found!"
 		});
 		this.populateIndicators(indicatorSelector, dsSelector.val());
+		var selectionsContainer = jQuery(this.__templates.selections());
+		main.append(selectionsContainer);
 
-		var params = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.IndicatorParameters', this.sb);
+		var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.sb);
 		dsSelector.on('change', function() {
 			params.clean();
 			me.populateIndicators(indicatorSelector, jQuery(this).val());
 		});
 
 		indicatorSelector.on('change', function() {
-			params.indicatorSelected(el, dsSelector.val(), jQuery(this).val());
+			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val());
 		});
 	},
 	populateIndicators : function(select, datasrc) {
 		var me = this;
 		select.trigger('chosen:close');
+		var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+            spinner.insertTo(select);
+            spinner.start();
 		this.service.getIndicatorList(datasrc, function(err, indicators) {
 			if(err) {
 				// notify error!!
@@ -57,9 +63,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.IndicatorSelection', fun
 					name : Oskari.getLocalized(ind.name)
 				}));
 			});
-			// let chosen know options has been updated
-			select.trigger("liszt:updated");
+			// let chosen know options has been updated (liszt:updated is only needed for old chosen version)
+			//select.trigger("liszt:updated");
 			select.trigger("chosen:updated");
+            spinner.stop();
 		});
 	}
 

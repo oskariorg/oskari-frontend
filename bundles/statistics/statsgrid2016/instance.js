@@ -1,12 +1,12 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance
+ * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultExtension class.
  *
  */
 Oskari.clazz.define(
-    'Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance',
+    'Oskari.statistics.statsgrid.StatsGridBundleInstance',
     /**
      * @static constructor function
      */
@@ -18,7 +18,7 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            viewClazz: 'Oskari.statistics.bundle.statsgrid.StatsView'
+            viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
         this.state = {
             indicators: [],
@@ -28,7 +28,7 @@ Oskari.clazz.define(
         afterStart: function (sandbox) {
             var me = this;
             // create the StatisticsService for handling ajax calls and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', sandbox);
+            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox);
             sandbox.registerService(statsService);
             me.statsService = statsService;
 

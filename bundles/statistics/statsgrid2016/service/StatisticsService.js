@@ -1,10 +1,7 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.StatisticsService
- * Methods for sending out events to display data in the grid
- * and to create a visualization of the data on the map.
- * Has a method for sending the requests to backend as well.
+ * @class Oskari.statistics.statsgrid.StatisticsService
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
+Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
 
     /**
      * @method create called automatically on construction
@@ -14,12 +11,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
 
     function (sandbox) {
         this.sandbox = sandbox;
-        this.cache = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.Cache');
+        this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
+        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         // pushed from instance
         this.datasources = [];
     }, {
         __name: "StatsGrid.StatisticsService",
-        __qname: "Oskari.statistics.bundle.statsgrid.StatisticsService",
+        __qname: "Oskari.statistics.statsgrid.StatisticsService",
 
         getQName: function () {
             return this.__qname;
@@ -28,15 +26,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         getName: function () {
             return this.__name;
         },
-
-        getRegionsets : function() {
-            // get statslayers from sandbox -> id + name
-            return [{
-                id : 1,
-                name : "moi"
-            }];
+        getStateService : function() {
+            return this.state;
         },
-
         addDatasource : function(ds) {
             if(!ds) {
                 // log error message
@@ -76,7 +68,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
          * Returns regionsets that are available to user.
          * Based on maplayers of type STATS.
          */
-        getRegionsets : function() {
+        getRegionsets : function(includeOnlyIds) {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layers = service.getLayersOfType('STATS');
             if(!layers) {
@@ -89,6 +81,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                     name : regionset.getName()
                 });
             });
+
+            if(includeOnlyIds) {
+                return _.filter(list, function(reg) {
+                    return includeOnlyIds.indexOf(reg.id) !== -1;
+                });
+            }
             return list;
         },
         /**

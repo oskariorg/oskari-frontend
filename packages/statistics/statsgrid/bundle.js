@@ -1,9 +1,9 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.StatsGridBundle
+ * @class Oskari.statistics.statsgrid.StatsGridBundle
  *
  * Definitpation for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
+Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
     /**
      * @method create called automatically on construction
      * @static
@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
 
     }, {
         "create": function () {
-            return Oskari.clazz.create("Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance",
+            return Oskari.clazz.create("Oskari.statistics.statsgrid.StatsGridBundleInstance",
                 'statsgrid');
         }
     }, {
@@ -25,6 +25,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/service/StatisticsService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/service/StateService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/service/Cache.js"
@@ -46,6 +49,12 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/IndicatorEvent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/RegionsetChangedEvent.js"
             }, {
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
@@ -98,4 +107,4 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
 
     });
 
-Oskari.bundle_manager.installBundleClass("statsgrid", "Oskari.statistics.bundle.statsgrid.StatsGridBundle");
+Oskari.bundle_manager.installBundleClass("statsgrid", "Oskari.statistics.statsgrid.StatsGridBundle");

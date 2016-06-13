@@ -1,9 +1,12 @@
 
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Datatable', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 	this.sb = sandbox;
-	this.service = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
+	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
 	render : function(el) {
 		el.append('TBD: data');
+	},
+	onEvent : function(event) {
+
 	}
 });
