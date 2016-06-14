@@ -32,6 +32,10 @@ Fixed flyout z-index.
 
 Removed unneccassary z-index style.
 
+### publisher2
+
+(x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon. 
+
 ### mapwfs2
 
 Mapwfs2 plugin now support different thems (used in publisher2).
