@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				selections.forEach(function(select) {
 					values.selections[select.attr('name')] = select.val()
 				});
-				me.service.getState().addIndicator(datasrc, indId, values.selections);
+				me.service.getStateService().addIndicator(datasrc, indId, values.selections);
 			});
 			btn.insertTo(cont);
             spinner.stop();

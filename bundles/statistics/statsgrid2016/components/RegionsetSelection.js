@@ -22,7 +22,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 		rsSelector.chosen({ disable_search_threshold: 10 });
 
 		rsSelector.on('change', function() {
-			me.service.getState().setRegionset(jQuery(this).val());
+			me.service.getStateService().setRegionset(jQuery(this).val());
 		});
+		me.service.getStateService().setRegionset(rsSelector.val());
 	}
 });
