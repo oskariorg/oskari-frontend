@@ -360,11 +360,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 return;
             }
 
+            //when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
+            if (allKnown && !me._mapLayerService.isAllLayersLoaded()) {
+                return;
+            }
+
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
 
             var ajaxUrl = me.getAjaxUrl(null, allKnown);
-
             jQuery.ajax({
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
@@ -491,6 +495,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             if (allKnown) {
                 me._pendingAjaxQuery.timestamp = null;
                 me.backendStatus = {};
+
+                //if all map layers have been loaded, there's no point in _not_ updating their statuses...?
+                //this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
+                if (me._mapLayerService.isAllLayersLoaded()) {
+                    // If too many have changed, just ask to do a bulk update
+                    evt = evtBuilder();
+                    sandbox.notifyAll(evt);
+                }
             } else {
                 edLen = eventData.length;
 

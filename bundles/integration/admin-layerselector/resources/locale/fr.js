@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Couche cartographique",
             "type-wfs": "Produit issu des données"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "La couche cartographique n'est pas disponible actuellement",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "La couche cartographique n'est pas disponible actuellement",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Il y aura de courtes interruptions dans la disponibilité de la couche cartographique au cours des prochains jours.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capacités",
             "confirmResourceKeyChange": "Vous avez modifié le nom unique ou l'adresse d'interface pour cette couche cartographique. Pour des raisons de sécurité, les droits des utilisateurs sur cette couche cartographique vont être supprimés, et vous allez devoir les assigner à nouveau. Souhaitez-vous continuer ?",

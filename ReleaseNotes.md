@@ -18,6 +18,16 @@ ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY,
 
 Oskari.app.setApplicationSetup() now setup markers for setMarkers() function.
 
+### core
+
+Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv : ""}, "xx"). It tries to find a localized text in object in this order:
+
+- for requested language (as optional second parameter) or current language if there is no second parameter.
+- for default language
+- As last resort anything that has a value
+
+Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
 ### mapmodule
 
 #### ol2 and ol3
@@ -47,6 +57,10 @@ Fixed flyout z-index.
 ### layerselection2, logoplugin and publishertoolbar
 
 Removed unneccassary z-index style.
+
+### publisher2
+
+(x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
 
 ### mapwfs2
 

@@ -1,0 +1,58 @@
+#contentMap.statsgrid-contentMap {
+  position: relative; }
+
+.oskariui-mode-content {
+  height: 100%;
+  background-color: white; }
+
+.oskariui-mode-content.statsgrid-mode {
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0; }
+
+.oskariui-left {
+  float: left; }
+
+.oskariui-center {
+  float: left; }
+
+.statsgrid_100 {
+  height: 100%; }
+
+.statsgrid {
+  min-width: 100%;
+  min-height: 100%;
+  height: 100%; }
+  .statsgrid .statsgrid-table {
+    min-height: 80%;
+    height: 80%; }
+
+form.add-indicator fieldset {
+  border: 0;
+  margin: 0;
+  padding: 10px; }
+form.add-indicator fieldset legend {
+  font-weight: bold; }
+form.add-indicator fieldset label {
+  clear: left;
+  float: left;
+  display: block;
+  width: 150px; }
+form.add-indicator fieldset input, form.add-indicator fieldset select {
+  clear: right;
+  display: block;
+  float: left;
+  margin-left: 0; }
+form.add-indicator fieldset button {
+  float: right;
+  margin-left: 15px; }
+form.add-indicator fieldset textarea {
+  display: block;
+  height: 100px;
+  width: 100%;
+  margin-bottom: 5px;
+  clear: both; }
+

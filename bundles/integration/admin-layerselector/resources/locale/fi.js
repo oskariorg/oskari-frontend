@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Karttataso on saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Karttataso ei ole saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Karttatason saatavuudessa on tiedossa katkoksia lähipäivinä.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "confirmResourceKeyChange": "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
