@@ -80,7 +80,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 return errors;
             });
             me.fields.name.field.setRequired(true, me.loc.error.name);
-            me.fields.name.field.setContentCheck(true, me.loc.error.nameIllegalCharacters);
+            me.fields.name.field.setValidator(function (inputField) {
+                var value = inputField.getValue(),
+                    name = inputField.getName(),
+                    sanitizedValue,
+                    errors = [];
+                inputField.setValue(value);
+                sanitizedValue = Oskari.util.sanitize(value);
+                if (sanitizedValue !== value) {
+                    errors.push({
+                        field: name,
+                        error: me.loc.error.nameIllegalCharacters
+                    });
+                    return errors;
+                }
+                return errors;
+            });
 
             if (pData.metadata) {
                 // set initial values
