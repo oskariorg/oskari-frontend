@@ -33,7 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             color: 'ffde00',
             msg: '',
             shape: 2,
-            size: 1,
             transient: false
         };
         me._strokeStyle = {
@@ -472,23 +471,23 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
-                if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
-                    iconSrc = data.iconUrl;
+                if ((typeof data.shape !== 'undefined') && (data.shape !== null)) {
+                    iconSrc = data.shape;
                     if (jQuery.isNumeric(markerData.size)) {
                         size = data.size;
                     } else {
                         size = me._defaultIconUrlSize;
                     }
+
                 } else {
                     // Construct image
-                    //size = this._getSizeInPixels(data.size);
                     size = data.size;
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
-                //size = this._getSizeInPixels(data.size);
                 size = data.size;
             }
+
             if (typeof data.color === 'string') {
                 if(data.color.charAt(0)!=='#') {
                     data.color = '#' + data.color;
@@ -505,10 +504,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var style = {
                 image : {
-                    shape: data.shape,
-                    icon: data.iconUrl,
-                    size: data.size,
                     color: data.color,
+                    size: data.size,
+                    shape: data.shape,
+                    offsetX: data.offsetX,
+                    offsetY: data.offsetY,
                     stroke: data.stroke,
                     opacity: 1
                 },
@@ -531,7 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 try {
                     style.text.labelText = decodeURIComponent(data.msg);
                 } catch(e) {
-                    // For some reason this is called when getting stateparameters. 
+                    // For some reason this is called when getting stateparameters.
                     // Message is not urlencoded at that point and % causes error to be thrown
                     style.text.labelText = data.msg;
                 }

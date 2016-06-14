@@ -420,28 +420,35 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
+            var me = this;
             var style = jQuery.extend(true, {}, styleDef);
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
+
             var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
-            style.image.size = size;
+            olStyle.graphicWidth = size;
+            olStyle.graphicHeight = size;
 
-            var svg = this.getSvg(style.image);
-
-            if(svg && (style.image && !style.image.icon)) {
+            // If svg marker
+            if(me.isSvg(style.image)) {
+                var svg = this.getSvg(style.image);
                 olStyle.externalGraphic = svg;
             }
-            else if(style.image && style.image.icon) {
-                olStyle.externalGraphic = style.image.icon;
+            // else if external graphic
+            else if(style.image && style.image.shape) {
+                olStyle.externalGraphic = style.image.shape;
+                olStyle.graphicWidth = style.image.size || 32;
+                olStyle.graphicHeight = style.image.size || 32;
+                var offsetX = (!isNaN(style.image.offsetX))  ? style.image.offsetX : 16;
+                var offsetY = (!isNaN(style.image.offsetY))  ? style.image.offsetY : 16;
+                olStyle.graphicXOffset = -offsetX;
+                olStyle.graphicYOffset = -(32 - offsetY);
             }
 
-            if(style.image.size) {
-                olStyle.graphicWidth = size;
-                olStyle.graphicHeight = size;
-            }
             if(style.image.opacity) {
                 olStyle.fillOpacity = style.image.opacity;
             }
+
             if(style.stroke) {
                 if(style.stroke.color) {
                     olStyle.strokeColor = style.stroke.color;
