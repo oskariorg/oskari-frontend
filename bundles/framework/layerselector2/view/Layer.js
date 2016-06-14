@@ -20,7 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' + 
                     '<div class="layer-tools">'+
-                    '   <div class="layer-backendstatus-icon backendstatus-unknown"></div>' + 
+                    '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' + 
                     '   <div class="layer-icon"></div>'+
                     '   <div class="layer-info"></div>'+
                     '</div>' + 
@@ -70,7 +70,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null,
                 tipForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.tooltip : null,
                 elBackendStatus = this.ui.find('.layer-backendstatus-icon');
-
             this.ui.find('.layer-title').html(newName);
 
             /* set sticky */
@@ -228,13 +227,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
              */
             elBackendStatus = tools.find('.layer-backendstatus-icon');
 
-
             var backendStatus = layer.getBackendStatus();
             if (backendStatus) {
                 var iconClass = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].iconClass : null;
+                var tooltip = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].tooltip : null;
                 if (iconClass) {
                     elBackendStatus.removeClass('backendstatus-unknown');
                     elBackendStatus.addClass(iconClass);
+                    elBackendStatus.attr('title', tooltip);
                 }
             }
             elBackendStatus.click(function () {
