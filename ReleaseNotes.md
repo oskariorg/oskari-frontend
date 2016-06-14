@@ -2,13 +2,39 @@
 
 ## 1.37.0
 
+### routingService
+
+Changed default routing markers offset properties from x and y to offsetX and offsetY.
+
+### MarkersPlugin
+
+``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
+
+ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
+- offsetX, calculated pixels from left to right. This is number.
+- offsetY, calculated pixels from bottom to up. This is number.
+
+### Oskari application loading
+
+Oskari.app.setApplicationSetup() now setup markers for setMarkers() function.
+
 ### mapmodule
 
+#### ol2 and ol3
+
 Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
+
+Added support offset for external graphics.
+
+Added new ``isSvg`` function to check at if data has svg.
+
+Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
 ### mapfull
 
 Fixed layers visibility in state handling.
+
+Removed defaults markers adding (now application loading do it).
 
 ### popupservice
 

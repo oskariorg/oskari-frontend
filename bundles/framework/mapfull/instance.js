@@ -210,9 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             me.core = core;
             me.sandbox = sandbox;
 
-
             Oskari.setSandbox(sandboxName, sandbox);
-            Oskari.setMarkers(me.conf.svgMarkers || []);
 
             // take map div ID from config if available
             if (conf.mapElement) {

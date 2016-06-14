@@ -1435,39 +1435,56 @@ Oskari.clazz.define(
 
 
 /* --------------- SVG MARKER ------------------------ */
+        isSvg: function(style){
+            if(!isNaN(style.shape)) {
+                return true;
+            }
+            // marker shape is svg
+            else if((typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg')>-1))  {
+                return true;
+            }
+            // Marker is welknown named svg marker
+            else if( typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.key && style.shape.name) {
+                return true;
+            }
+
+            return false;
+        },
         /**
          * Gets the svg marker to be used draw marker
          * @method  @public getSvg
-         * @param  {Object} markerStyle marker style
+         * @param  {Object} style marker style
          * @return {String} marget svg image format
          */
-        getSvg: function(markerStyle){
+        getSvg: function(style){
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
                 svgObject = null,
                 isWellknownMarker = false;
 
             // marker shape is number --> find it from Oskari.getMarkers()
-            if(!isNaN(markerStyle.shape)) {
+            if(!isNaN(style.shape)) {
                 var markers = Oskari.getMarkers();
-                svgObject = markers[markerStyle.shape];
+                svgObject = markers[style.shape];
                 if(!svgObject) {
                     svgObject = markers[this._defaultMarker.shape];
                 }
 
-                if(markerStyle.color) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', markerStyle.color);
+                if(style.color) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', style.color);
                 }
-                if(markerStyle.stroke) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', markerStyle.stroke);
+                if(style.stroke) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', style.stroke);
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
-                markerStyle.shape.data) {
+            else if((typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg')>-1 )) {
                 var offset = {
-                    x: markerStyle.shape.x,
-                    y: markerStyle.shape.y
+                    x: style.offsetX || style.shape.x,
+                    y: style.offsetY || style.shape.y
                 };
 
                 if(isNaN(offset.x)) {
@@ -1479,14 +1496,15 @@ Oskari.clazz.define(
                 }
 
                 svgObject = {
-                    data: markerStyle.shape.data,
-                    x: offset.x,
-                    y: offset.y
+                    data: style.shape.data || style.shape,
+                    offsetX: offset.x,
+                    offsetY: offset.y
                 };
             }
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
-                markerStyle.shape.key && markerStyle.shape.name) {
-                svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
+            // Marker is welknown named svg marker
+            else if( typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.key && style.shape.name) {
+                svgObject = this.getWellknownStyle(style.shape.key, style.shape.name);
                 if(svgObject === null) {
                     sandbox.printWarn('Not identified wellknown marker shape. Not handled getSvg.');
                     return null;
@@ -1502,9 +1520,9 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
-            if(isWellknownMarker && markerStyle.shape.color) {
-                marker.find('.normal-color').attr('fill', markerStyle.shape.color);
-                var shadowRgb = Oskari.util.hexToRgb(markerStyle.shape.color);
+            if(isWellknownMarker && style.shape.color) {
+                marker.find('.normal-color').attr('fill', style.shape.color);
+                var shadowRgb = Oskari.util.hexToRgb(style.shape.color);
                 shadowRgb.r -= 30;
                 shadowRgb.g -= 30;
                 shadowRgb.b -= 30;
@@ -1523,11 +1541,9 @@ Oskari.clazz.define(
 
             var markerHTML = marker.outerHTML();
 
-
-
-            if(markerStyle.size) {
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
+            if(style.size) {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', style.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', style.size);
             } else {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
@@ -1559,24 +1575,27 @@ Oskari.clazz.define(
             }
 
             var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
-            var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && marker.data.shape.data) ? true : false;
+            var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))) ? true : false;
 
             var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
 
-
             var markerDetails = {
-                x: 16,
-                y: 16
+                offsetX: 16,
+                offsetY: 16
             };
 
             if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){
                 markerDetails = Oskari.getMarkers()[marker.data.shape];
             } else if(isCustomMarker) {
-                markerDetails = marker.data.shape;
+                markerDetails = {
+                    data: marker.data.shape.data,
+                    offsetX: marker.data.shape.x || marker.data.offsetX,
+                    offsetY: marker.data.shape.x || marker.data.offsetY
+                }
             }
 
-            var dx = !isNaN(markerDetails.x) ? markerDetails.x : 16;
-            var dy = !isNaN(markerDetails.y) ? markerDetails.y : 16;
+            var dx = !isNaN(markerDetails.offsetX) ? markerDetails.offsetX : 16;
+            var dy = !isNaN(markerDetails.offsetY) ? markerDetails.offsetY : 16;
 
             var diff = markerSize/32;
 
@@ -1611,8 +1630,8 @@ Oskari.clazz.define(
             var htmlObject = jQuery(svgObject.data);
             var defaultCenter = this._defaultMarker.size / 2;
 
-            var dx = !isNaN(svgObject.x) ? svgObject.x : 16;
-            var dy = !isNaN(svgObject.y) ? svgObject.y : 16;
+            var dx = !isNaN(svgObject.offsetX) ? svgObject.offsetX : 16;
+            var dy = !isNaN(svgObject.offsetY) ? svgObject.offsetY : 16;
 
             var x = defaultCenter - dx;
             var y = defaultCenter - (defaultCenter - dy);
