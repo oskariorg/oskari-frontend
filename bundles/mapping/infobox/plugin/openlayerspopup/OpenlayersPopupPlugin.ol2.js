@@ -121,9 +121,19 @@ Oskari.clazz.define(
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
 
+            if (currPopup && !refresh) {
+                if (me._popups[id].type === "mobile") {
+                    me._popups[id].popup.dialog.remove();
+                    me._popups[id].popup.__notifyListeners('close');
+                } else {
+                    me.close(id);
+                }
+                
+                delete me._popups[id];
+            }
+
             if (refresh) {
-                contentData = me._getChangedContentData(
-                    currPopup.contentData.slice(), contentData.slice());
+                contentData = currPopup.contentData.concat(contentData);
                 currPopup.contentData = contentData;
             }
             me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, options, refresh, additionalTools, marker);
@@ -453,71 +463,6 @@ Oskari.clazz.define(
             if(!link.is('a') || link.parents('.getinforesult_table').length) {
                 evt.stopPropagation();
             }
-        },
-
-        /**
-         * Merges the given new data to the old data.
-         * If there's a fragment with the same layerId in both,
-         * the new one replaces it.
-         *
-         * @method _getChangedContentData
-         * @private
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _getChangedContentData: function (oldData, newData) {
-            oldData = oldData || [];
-            newData = newData || [];
-            var nLen = newData.length,
-                oLen = oldData.length;
-
-            for (var i = 0; i < oLen; i += 1) {
-                for (var j = 0; j < nLen; j += 1) {
-                    if (newData[j].layerId &&
-                        newData[j].layerId === oldData[i].layerId) {
-                        oldData[i] = newData[j];
-                        newData.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-
-            return this._mergeContentData(oldData, newData);
-        },
-
-        /**
-         * Merge content data
-         * @method  @private_mergeContentData
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _mergeContentData: function(oldData, newData){
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen,
-                found,
-                notSameData = [];
-
-            for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                found = false;
-                for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                    if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
-                        found = true;
-                    }
-                }
-
-                if(!found){
-                    notSameData.push(newData[j]);
-                }
-            }
-
-            retData = oldData.concat(notSameData);
-
-            return retData;
         },
 
         /**
