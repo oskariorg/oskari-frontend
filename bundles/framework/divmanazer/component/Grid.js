@@ -1218,7 +1218,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 numericValue,
                 split = pAttribute.split('.'); // if not found, try subtable
 
-            if (typeof nameA === 'undefined') {
+            if (typeof nameA === 'undefined' && split.length > 1) {
                 nameA = a[split[0]][split[1]];
             }
             if (!nameA) {

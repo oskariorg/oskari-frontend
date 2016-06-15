@@ -115,10 +115,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             }
             // TODO: call GetRegions with parameter regionset=regionset
             // use first param as error indicator - null == no error
-            callback(null, [{
-                "id" : "regionid",
-                "name" : "region name"
-            }]);
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                data : {
+                    regionset : regionset
+                },
+                url: this.sandbox.getAjaxUrl('GetRegions'),
+                success: function (pResp) {
+                    callback(null, pResp.regions);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error loading regions');
+                }
+            });
         },
         /**
          * Calls callback with a list of indicators for the datasource.
@@ -212,17 +222,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorData : function(ds, indicator, params, regionset, callback) {
-            if(!ds ||!indicator || typeof callback !== 'function') {
+            if(!ds ||!indicator || !regionset || typeof callback !== 'function') {
                 // log error message
                 return;
             }
-            // TODO: call GetIndicatorData with parameters:
+            // call GetIndicatorData with parameters:
             // - datasource=ds
             // - indicator=indicator
             // - selectors=serialized params
             // - regionset = regionset
             // use first param as error indicator - null == no error
-            callback(null, { "regionid" : "data" });
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                data : {
+                    datasource : ds,
+                    indicator : indicator,
+                    regionset : regionset,
+                    selectors : JSON.stringify(params || {})
+                },
+                url: this.sandbox.getAjaxUrl('GetIndicatorData'),
+                success: function (pResp) {
+                    callback(null, pResp);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback('Error loading indicator data');
+                }
+            });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
