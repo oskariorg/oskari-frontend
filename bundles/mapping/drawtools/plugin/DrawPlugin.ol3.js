@@ -17,7 +17,7 @@ Oskari.clazz.define(
         this._styles = {};
         this._drawLayers = {};
         this._idd = 0;
-        this._tooltipClassForMeasure = 'tooltip-measure';
+        this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
         this._featuresValidity = {};
         this._draw = {};
