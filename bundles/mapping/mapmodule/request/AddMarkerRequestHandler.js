@@ -16,6 +16,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         // Else format old data to new forma and inform user about this
         else {
         	this.sandbox.printWarn('AddMarkerRequest data is debricated format, formatted this to the new format before processing request. Please check your request!');
+            var shape  = null;
+            if(data.iconUrl) {
+                shape = data.iconUrl;
+            } else if(data.shape && data.shape.data){
+                shape = data.shape.data;
+            }
         	newData = {
         		// Allready supported properties
         		x: data.x,
@@ -25,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         		size: data.size,
         		stoke: data.stroke,
         		// Converted properties
-        		shape: (data.iconUrl) ? data.iconUrl : data.shape.data,
+        		shape: shape,
         		offsetX: (data.shape && data.shape.x) ? data.shape.x : null,
         		offsetY: (data.shape && data.shape.y) ? data.shape.y : null
         	};
