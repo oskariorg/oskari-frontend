@@ -445,7 +445,7 @@ Oskari.clazz.define(
                     if (typeof actionObject.action === 'function') {
                         actionObject.action();
                     } else {
-                        event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
+                        var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
                         sandbox.notifyAll(event);
                     }
                 }
