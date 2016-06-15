@@ -79,6 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             },
             buttonGroup: 'mobile-toolbar'
         };
+        me._decimalSeparator = Oskari.getDecimalSeparator();
     }, {
         /**
          * Get popup-
@@ -270,7 +271,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var marker = {
                     x: data.lonlat.lon,
                     y: data.lonlat.lat,
-                    msg: msg
+                    msg: msg,
+                    size: 5,
+                    color: 'ee9900'
                 };
                 me._sandbox.request(this, reqBuilder(marker));
             }
@@ -442,6 +445,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            if (!this.hasUI()) {
+                return;
+            }
+
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
@@ -453,7 +460,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return true;
             }
             this.teardownUI();
-
             if (!toolbarNotReady && mapInMobileMode) {
                 if (!me._config.noUI) {
                     this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
@@ -465,6 +471,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     this.addToPluginContainer(me._element);
                 }
             }
+        },
+
+        hasUI: function() {
+            return this._config.noUI ? false : true; 
         },
 
         /**
@@ -487,6 +497,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 var lat = parseFloat(data.lonlat.lat).toFixed(roundToDecimals);
                 var lon = parseFloat(data.lonlat.lon).toFixed(roundToDecimals);
+                lat = me.formatNumber(lat, me._decimalSeparator);
+                lon = me.formatNumber(lon, me._decimalSeparator);
 
                 // from server
                 if(isSupported && isDifferentProjection && !me._coordinateTransformationExtension._coordinatesFromServer) {
@@ -648,7 +660,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(!me._showMouseCoordinates) {
                         me._checkSpinnerVisibility();
 
-                        me.refresh(me._getInputsData());
+                        me.refresh();
 
                         if(me._getPreciseTransform){
                             me._getTransformedCoordinatesFromServer(null, false, true);
@@ -728,6 +740,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             var lon = me._lonInput.val(),
                 lat = me._latInput.val();
+
+            lon = me.formatNumber(lon, '.');
+            lat = me.formatNumber(lat, '.');
+
             if(lon.indexOf('~') >= 0) {
                 lon = lon.replace('~', '');
             }
@@ -752,6 +768,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             };
             return data;
+        },
+        formatNumber: function(coordinate, decimalSeparator) {
+            coordinate = coordinate.replace('.', decimalSeparator);
+            coordinate = coordinate.replace(',', decimalSeparator);
+            return coordinate;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

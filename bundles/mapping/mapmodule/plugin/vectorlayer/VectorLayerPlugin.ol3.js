@@ -309,6 +309,13 @@ Oskari.clazz.define(
                 return;
             }
 
+            if(geometryType !== 'GeoJSON' && typeof geometry === 'object') {
+                for(var key in geometry) {
+                    me._updateFeature(options, key, geometry[key]);
+                }
+                return;
+            }
+
             options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
@@ -468,14 +475,48 @@ Oskari.clazz.define(
                 }
             }
         },
-        /* _isValidGeometry: function(geometry) {
-              var wktFormat = new ol.format.WKT();
-              if(wktFormat.writeGeometry(geometry)) {
-                 return true;
-              } else {
-                 return false;
-              }
-         },*/
+         /**
+         * @method _updateFeature
+         * @public
+         * Updates feature's style
+         *
+         * @param {Object} options additional options
+         * @param {String} propertyName
+         * @param {String} value
+         */
+        _updateFeature: function(options, propertyName, value) {
+            var layers = {layer: options.layerId};
+            var features = {};
+            features[propertyName] = [value];
+            var featuresMatchingQuery = this.getFeaturesMatchingQuery(layers, features);
+            var feature = featuresMatchingQuery[0];
+            if(feature) {
+                if(options.featureStyle) {
+                   this.setupFeatureStyle(options, feature);
+                }
+                var formatter = this._supportedFormats['GeoJSON'];
+                var addEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpAdd();
+                var errorEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
+                var highlighted = feature.get('highlighted');
+                if(highlighted){
+                    feature.set('highlighted', false);
+                } else {
+                    feature.set('highlighted', true);
+                }
+                var geojson = formatter.writeFeaturesObject([feature]);
+                var event = addEvent;
+                if(!feature.getGeometry()) {
+                    event = errorEvent;
+                }
+                event.addFeature(feature.getId(), geojson, options.layerId);
+                if(errorEvent.hasFeatures()) {
+                    this.getSandbox().notifyAll(errorEvent);
+                }
+                if(addEvent.hasFeatures()) {
+                    this.getSandbox().notifyAll(addEvent);
+                }
+            }
+        },
         /**
          * Raises the marker layer above the other layers
          *
