@@ -1325,7 +1325,7 @@ Oskari = (function () {
             }
 
             if(config) {
-                // wrap to acceptable format 
+                // wrap to acceptable format
                 var configName = recData.bundleinstancename || recData.bundlename;
                 var tmp = {};
                 tmp[configName] = config;
@@ -1379,6 +1379,9 @@ Oskari = (function () {
             }
             if(typeof Oskari.setDecimalSeparator === 'function') {
                 Oskari.setDecimalSeparator(setup.env.decimalSeparator);
+            }
+            if(typeof Oskari.setMarkers === 'function') {
+                Oskari.setMarkers(setup.env.svgMarkers || []);
             }
         },
 

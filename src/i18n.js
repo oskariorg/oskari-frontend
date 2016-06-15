@@ -247,4 +247,30 @@
     O.getDecimalSeparator =  function () {
         return decimalSeparator || ',';
     };
+
+    /**
+     * Returns a string from localized content.
+     */
+     O.getLocalized = function (locale, lang) {
+        if (typeof locale !== 'object') {
+            return locale;
+        }
+        if (!lang) {
+            lang = Oskari.getLang();
+        }
+        var value = locale[lang];
+        if(!value) {
+            value = locale[Oskari.getDefaultLanguage()];
+        }
+        if(!value) {
+            for(var key in locale) {
+                if(locale[key]) {
+                    // any locale will do at this point
+                    return locale[key];
+                }
+            }
+
+        }
+        return value;
+    };
 }(Oskari));

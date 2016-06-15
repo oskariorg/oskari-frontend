@@ -601,9 +601,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var image = {};
             var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
             styleDef.image.size = size;
-          	var svg = me.getSvg(styleDef.image);
 
-            if(svg && (style.image && !style.image.icon)) {
+            if(me.isSvg(style.image)) {
+                var svg = me.getSvg(styleDef.image);
                 image = new ol.style.Icon({
                     src: svg,
                     size: [size, size],
@@ -611,11 +611,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 });
                 return image;
             }
-            else if(style.image && style.image.icon) {
+            else if(style.image && style.image.shape) {
+                var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
+                var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
                 image = new ol.style.Icon({
-                    src: style.image.icon,
-                    size: [size, size],
-                    imgSize: [size, size]
+                    src: style.image.shape,
+                    anchorYUnits: 'pixels',
+                    anchorXUnits: 'pixels',
+                    anchorOrigin: 'bottom-left',
+                    anchor: [offsetX,offsetY]
                 });
                 return image;
             }

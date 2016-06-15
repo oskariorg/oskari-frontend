@@ -36,10 +36,10 @@ Parameters for styles object:
   <td> object key</td><td>wellknown marker name</td><td> </td>
 </tr>
 <tr>
-  <td> x</td><td>marker center x in pixel (from left to right)</td><td> </td>
+  <td> offsetX</td><td>marker center x in pixel (from left to right)</td><td> </td>
 </tr>
 <tr>
-  <td> y</td><td>marker center y in pixel (from bottom to top)</td><td> </td>
+  <td> offsetY</td><td>marker center y in pixel (from bottom to top)</td><td> </td>
 </tr>
 <tr>
   <td> data</td><td>svg marker data. Svg marker must be a 32 x 32 pixel size. Svg elements can also contains ``shading-color`` or ``normal-color`` classes. ``shading-color`` class is used to find element to add shading color if marker is added and color is defined (shading color autamaticallyt calculated). ``normal-color`` class is used to find element to add marker color.</td><td> </td>

@@ -2,9 +2,49 @@
 
 ## 1.37.0
 
+### routingService
+
+Changed default routing markers offset properties from x and y to offsetX and offsetY.
+
+### MarkersPlugin
+
+``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
+
+ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
+- offsetX, calculated pixels from left to right. This is number.
+- offsetY, calculated pixels from bottom to up. This is number.
+
+### Oskari application loading
+
+Oskari.app.setApplicationSetup() now setup markers for setMarkers() function.
+
+### core
+
+Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv : ""}, "xx"). It tries to find a localized text in object in this order:
+
+- for requested language (as optional second parameter) or current language if there is no second parameter.
+- for default language
+- As last resort anything that has a value
+
+Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
+### mapmodule
+
+#### ol2 and ol3
+
+Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
+
+Added support offset for external graphics.
+
+Added new ``isSvg`` function to check at if data has svg.
+
+Changed ``getSvg`` funtion to support new offsetX and offsetY params.
+
 ### mapfull
 
 Fixed layers visibility in state handling.
+
+Removed defaults markers adding (now application loading do it).
 
 ### popupservice
 
@@ -12,11 +52,15 @@ New service under divmanazer, for creating popups in mobile mode as well as book
 
 ### divmanazer
 
-Fixed  flyout z-index.
+Fixed flyout z-index.
 
 ### layerselection2, logoplugin and publishertoolbar
 
 Removed unneccassary z-index style.
+
+### publisher2
+
+(x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
 
 ### mapwfs2
 
@@ -38,10 +82,6 @@ Coordinatetool now support different styles.
 
 When adding tool button with class suffix -dark or -light these icon themes not calculated. Use this if you want use for example only light icons.
 
-### LayerSelectionPlugin
-
-Added scrollbars for layers list.
-
 ### publishertoolbar
 
 Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled tools when previewing published map.
@@ -53,6 +93,39 @@ SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0
 ### Oskari.util.sanitize()
 
 Replaced custom implementation with DOMPurify (https://github.com/cure53/DOMPurify). Now takes just one parameter as string and returns a string.
+
+## 1.36.4
+
+### divmanazer/Popup
+
+Popup moveTo now supports new ``center`` alignment.
+
+### coordinatetool
+
+If coordinatetool user interface is hidden (used RPC interface) then open tool popup to center of map.
+
+### Markersplugin
+
+Fixed state-parameters to not include # as part of color. This fixes links with markers and printing while markers on map.
+Fixed an issue where clicking on map while marker popup was on screen resulted in application error.
+Fixed an issue with %-character on marker label.
+
+### mapfull
+
+Fixed layers visibility in state handling - layer visibility is now shown correctly to user.
+
+### LayerSelectionPlugin
+
+Added scrollbars for layers list.
+Fixed handling selected layers when changing mode from desktop to mobile.
+
+### SearchPlugin
+
+Search plugin no longer expects MarkersPlugin to be present.
+
+### FeatureData
+
+Is now properly hidden on initial UI when there are no WFS-layers on map.
 
 ## 1.36.3
 
