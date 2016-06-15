@@ -129,9 +129,18 @@ Oskari.clazz.define(
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
 
+            if (currPopup && !refresh) {
+                if (me._popups[id].type === "mobile") {
+                    me._popups[id].popup.dialog.remove();
+                    me._popups[id].popup.__notifyListeners('close');
+                } else {
+                    me.close(id);
+                }
+                delete me._popups[id];
+            }
+
             if (refresh) {
-                contentData = me._getChangedContentData(
-                    currPopup.contentData.slice(), contentData.slice());
+                contentData = currPopup.contentData.concat(contentData);
                 currPopup.contentData = contentData;
             }
 
@@ -462,40 +471,6 @@ Oskari.clazz.define(
                     evt.stopPropagation();
                 }
             };
-        },
-
-        /**
-         * Merges the given new data to the old data.
-         * If there's a fragment with the same layerId in both,
-         * the new one replaces it.
-         *
-         * @method _getChangedContentData
-         * @private
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _getChangedContentData: function (oldData, newData) {
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen;
-
-            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                    if (newData[j].layerId &&
-                        newData[j].layerId === oldData[i].layerId) {
-                        oldData[i] = newData[j];
-                        newData.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-
-            retData = oldData.concat(newData);
-
-            return retData;
         },
 
         /**

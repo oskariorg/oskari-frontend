@@ -15,6 +15,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         // pushed from instance
         this.datasources = [];
+        // attach on, off, trigger functions
+        Oskari.makeObservable(this);
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",
@@ -25,6 +27,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
 
         getName: function () {
             return this.__name;
+        },
+        notifyOskariEvent : function(event) {
+            this.trigger(event.getName(), event);
         },
         getStateService : function() {
             return this.state;
@@ -57,7 +62,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 return this.datasources;
             }
             var found = null;
-            datasources.forEach(function(ds) {
+            this.datasources.forEach(function(ds) {
                 if(ds.id === id) {
                     found = ds;
                 }
@@ -81,11 +86,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                     name : regionset.getName()
                 });
             });
-
-            if(includeOnlyIds) {
-                return _.filter(list, function(reg) {
+            var singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
+            if(singleValue) {
+                // wrap to an array
+                includeOnlyIds = [includeOnlyIds];
+            }
+            if(_.isArray(includeOnlyIds)) {
+                var result = _.filter(list, function(reg) {
                     return includeOnlyIds.indexOf(reg.id) !== -1;
                 });
+                if(singleValue) {
+                    // if requested with single value, unwrap result from array
+                    return result.length ? result[0] : null;
+                }
+                return result;
             }
             return list;
         },

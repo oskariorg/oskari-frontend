@@ -38,6 +38,12 @@ Oskari.clazz.define(
             this.getTile().setEnabled(this.hasData());
         },
         eventHandlers: {
+            'StatsGrid.IndicatorEvent' : function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.RegionsetChangedEvent' : function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */

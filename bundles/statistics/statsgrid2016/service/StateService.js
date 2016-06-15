@@ -25,21 +25,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
-            this.regionset = regionset;
+            this.regionset = Number(regionset);
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
-            this.getSandbox().notifyAll(eventBuilder(regionset, previousSet));
+            this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
         },
         addIndicator : function(datasrc, indicator, selections) {
-            this.indicators.push({
-                datasource : datasrc,
-                indicator : indicator,
+            var ind = {
+                datasource : Number(datasrc),
+                indicator : Number(indicator),
                 selections : selections,
                 hash : this._getIndicatorHash(datasrc, indicator, selections)
-            });
+            };
+
+            this.indicators.push(ind);
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
-            this.getSandbox().notifyAll(eventBuilder(datasrc, indicator, selections));
+            this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
         },
         removeIndicator : function(datasrc, indicator, selections) {
             var newIndicators = [];
@@ -52,7 +54,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.indicators = newIndicators;
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
-            this.getSandbox().notifyAll(eventBuilder(datasrc, indicator, selections, true));
+            this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
         },
         _getIndicatorHash : function(datasrc, indicator, selections) {
             return datasrc + '_' + indicator + '_' + JSON.stringify(selections);
