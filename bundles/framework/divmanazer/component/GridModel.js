@@ -37,6 +37,13 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
             return this.fields;
         },
         /**
+         * Use to assign field order
+         * @param {String[]} fields
+         */
+        setFields: function (fields) {
+            this.fields = fields;
+        },
+        /**
          * @method setIdField
          * If not given, first field in data will be used
          * @param {String} pField name of the field that will be used as an id field
