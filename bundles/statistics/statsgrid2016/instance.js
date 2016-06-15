@@ -50,7 +50,7 @@ Oskari.clazz.define(
             'userinterface.ExtensionUpdatedEvent': function (event) {
 
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
-                    // not me -> do nothing
+                    // not me/no data -> do nothing
                     return;
                 }
 
