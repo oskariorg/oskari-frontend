@@ -64,6 +64,12 @@
                     isSub : false }) %>
             </div>
         </div>
+        <% if(capabilities.layersWithRemarks)  { %>
+        <div class="add-layer-input-area">
+            <div class="add-layer-text"><%= instance.getLocalization('admin').capabilitiesRemarks %></div>
+            <input type="hidden" id="add-layer-remark" value="<%= instance.getLocalization('admin').capabilitiesRemarks %>" />
+        </div>
+        <% } %>
     </div>
 <% } %>
 
