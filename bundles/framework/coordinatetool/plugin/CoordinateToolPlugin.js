@@ -261,7 +261,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
                 lat = lat.toFixed(0);
-                lat = lat.toFixed(0);
                 lon = lon.toFixed(0);
             }
             if(reqBuilder) {
