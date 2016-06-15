@@ -442,6 +442,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function(mapInMobileMode, forced) {
+            if (!this.hasUI()) {
+                return;
+            }
+
             var me = this;
             var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
@@ -453,7 +457,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return true;
             }
             this.teardownUI();
-
             if (!toolbarNotReady && mapInMobileMode) {
                 if (!me._config.noUI) {
                     this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
@@ -465,6 +468,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     this.addToPluginContainer(me._element);
                 }
             }
+        },
+
+        hasUI: function() {
+            return this._config.noUI ? false : true; 
         },
 
         /**
