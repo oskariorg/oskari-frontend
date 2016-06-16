@@ -23,12 +23,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getName: function () {
             return this.__name;
         },
+        getRegionset : function() {
+            return this.regionset;
+        },
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+        },
+        getIndicators : function() {
+            return this.indicators;
         },
         addIndicator : function(datasrc, indicator, selections) {
             var ind = {

@@ -230,6 +230,7 @@ Oskari.clazz.define(
             if(options.isFinished) {
                 isFinished = options.isFinished;
             }
+
             var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
             me._sandbox.notifyAll(event);
         },
@@ -394,6 +395,10 @@ Oskari.clazz.define(
         drawingEndEvent: function(options, shape) {
             var me = this;
             me._draw[me._id].on('drawend', function(evt) {
+                var eventOptions = {
+                    isFinished: true
+                };
+                me.sendDrawingEvent(me._id, eventOptions);
                 me._showIntersectionWarning = true;
                 me.pointerMoveHandler();
                 me._mode = '';
@@ -405,6 +410,7 @@ Oskari.clazz.define(
                 if(options.modifyControl !== false) {
                     me.addModifyInteraction(me._layerId, shape, options);
                 }
+
             });
         },
          /**
@@ -753,13 +759,13 @@ Oskari.clazz.define(
         getFeatures: function (layerId) {
             var me = this,
                 features = [];
-                var featuresFromLayer = me._drawLayers[layerId].getSource().getFeatures();
-                _.each(featuresFromLayer, function (f) {
-                    features.push(f);
-                });
-                if(me._sketch && layerId === 'DrawLayer') {
-                    features.push(me._sketch);
-                }
+            var featuresFromLayer = me._drawLayers[layerId].getSource().getFeatures();
+            _.each(featuresFromLayer, function (f) {
+                features.push(f);
+            });
+            if(me._sketch && layerId === me._shape + 'DrawLayer') {
+                features.push(me._sketch);
+            }
             return features;
         },
         /**

@@ -44,6 +44,7 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Nykyisen kartan koordinaatisto ei ole tuettuna palvelun capabilities tiedoissa",
             "confirmResourceKeyChange": "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
             "confirmDeleteLayerGroup": "Karttatasoryhmä poistetaan. Haluatko jatkaa?",
             "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",

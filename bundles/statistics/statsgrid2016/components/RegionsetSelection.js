@@ -16,14 +16,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 		main.append(jQuery(this.__templates.select({name : 'Regionset', clazz : 'stats-regionset-selector', placeholder : ''})));
 		// chosen works better when it has context for the element, get a new reference for chosen
 		var rsSelector = main.find('.stats-regionset-selector');
-		this.service.getRegionsets().forEach(function(ds) {
-			rsSelector.append(me.__templates.option(ds));
+		this.service.getRegionsets().forEach(function(regionset) {
+			rsSelector.append(me.__templates.option(regionset));
 		});
 		rsSelector.chosen({ disable_search_threshold: 10 });
 
 		rsSelector.on('change', function() {
-			me.service.getStateService().setRegionset(jQuery(this).val());
+			var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
+			var value = jQuery(this).val();
+			log.info('Selected region ' + value);
+			me.service.getStateService().setRegionset(value);
 		});
-		me.service.getStateService().setRegionset(rsSelector.val());
+		this.service.getStateService().setRegionset(rsSelector.val());
 	}
 });

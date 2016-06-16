@@ -44,6 +44,7 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Kart CRS är inte understödja i service capabilities",
             "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
             "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
             "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
