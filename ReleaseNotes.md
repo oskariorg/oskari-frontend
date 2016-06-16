@@ -2,6 +2,10 @@
 
 ## 1.37.0
 
+### ScalebarPlugin ol3
+
+Fixed scaleline width to match map units / measuring line results.
+
 ### routingService
 
 Changed default routing markers offset properties from x and y to offsetX and offsetY.
