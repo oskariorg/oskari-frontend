@@ -100,7 +100,9 @@ Oskari.clazz.define(
             }
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
-
+            if(me._sketch) {
+                jQuery('.' + me._sketch.getId()).remove();
+            }
             me._shape = shape;
             me._buffer = options.buffer;
             me._id = id;
@@ -410,7 +412,7 @@ Oskari.clazz.define(
                 if(options.modifyControl !== false) {
                     me.addModifyInteraction(me._layerId, shape, options);
                 }
-
+                me._sketch = null;
             });
         },
          /**
