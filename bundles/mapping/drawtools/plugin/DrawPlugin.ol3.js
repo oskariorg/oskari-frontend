@@ -17,12 +17,13 @@ Oskari.clazz.define(
         this._styles = {};
         this._drawLayers = {};
         this._idd = 0;
-        this._tooltipClassForMeasure = 'tooltip-measure';
+        this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
         this._featuresValidity = {};
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
+        this._showIntersectionWarning = false;
         this._defaultStyle = {
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -370,6 +371,7 @@ Oskari.clazz.define(
         drawStartEvent: function(options) {
             var me = this;
             me._draw[me._id].on('drawstart', function(evt) {
+                me._showIntersectionWarning = false;
                 // stop modify iteraction while draw-mode is active
                 if(options.modifyControl) {
                      me.removeInteractions(me._modify, me._id);
@@ -397,6 +399,8 @@ Oskari.clazz.define(
                     isFinished: true
                 };
                 me.sendDrawingEvent(me._id, eventOptions);
+                me._showIntersectionWarning = true;
+                me.pointerMoveHandler();
                 me._mode = '';
                 if(options.allowMultipleDrawing === false) {
                     me.stopDrawing(me._id, false);
@@ -425,7 +429,7 @@ Oskari.clazz.define(
                     me._sketch.setStyle(me._styles['intersect']);
                     me._featuresValidity[me._sketch.getId()] = false;
                 } else {
-                    if(me._sketch) {
+                    if(me._sketch && geometry.getArea()>0) {
                         if(me._mode === 'draw') {
                             me._sketch.setStyle(me._styles['draw']);
                         } else {
@@ -453,8 +457,11 @@ Oskari.clazz.define(
                   tooltipCoord = geom.getInteriorPoint().getCoordinates();
                   // for Polygon-drawing checking itself-intersection
                   if(me._featuresValidity[me._sketch.getId()]===false) {
-                      output = me._loc.intersectionNotAllowed;
-                      me._area = output;
+                    output = "";
+                    if(me._showIntersectionWarning) {
+                        output = me._loc.intersectionNotAllowed;
+                        me._area = output;
+                    }
                   }
                 } else if (geom instanceof ol.geom.LineString) {
                   output = me.getLineLength(geom);
@@ -465,6 +472,11 @@ Oskari.clazz.define(
                       if(o.id === me._sketch.getId()) {
                           var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
                           ii.html(output);
+                          if(output==="") {
+                            ii.addClass('withoutText')
+                          } else {
+                            ii.removeClass('withoutText');
+                          }
                           o.setPosition(tooltipCoord);
                       }
                     });
@@ -567,6 +579,7 @@ Oskari.clazz.define(
                 me.modifyFeatureChangeEventCallback = null;
             }
             me._modify[me._id].on('modifystart', function() {
+                me._showIntersectionWarning = false;
                 me._mode = 'modify';
 
                 me.modifyFeatureChangeEventCallback = function(evt) {
@@ -588,8 +601,8 @@ Oskari.clazz.define(
 
             });
             me._modify[me._id].on('modifyend', function() {
+                me._showIntersectionWarning = true;
                 me._mode = '';
-
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             });
@@ -700,9 +713,9 @@ Oskari.clazz.define(
             if(geometry && geometry.getType()==='Polygon') {
                 area = geometry.getArea();
                 if(area < 10000) {
-                    area = area.toFixed(0) + " m2";
+                    area = area.toFixed(0) + " m<sup>2</sup>";
                 } else if(area > 1000000) {
-                    area = (area/1000000).toFixed(2) + " km2";
+                    area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
                 } else {
                     area = (area/10000).toFixed(2) + " ha";
                 }

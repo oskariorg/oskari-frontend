@@ -3,7 +3,11 @@
 This document describes changes to the public API from Oskari frontend perspective (requests, events, conf/state, services). RPC-developers can check if the request/event API has changed
 when the service provider gives notice about Oskari version being upgraded. Oskari bundle/core-developers can check for changes in the bundles they depend on.
 
-Each addition is tagged with [add], [mod] or [rem] telling if it's a new feature, modifies the current functionality or if something has been removed. [rpc] tag indicates that the change affects RPC API.
+Each addition is tagged with [add], [mod], [rem] telling if it's a new feature, modifies the current functionality or if something has been removed.
+
+Some extra tags:
+- [rpc] tag indicates that the change affects RPC API
+- [breaking] tag indicates that the change is not backwards compatible
 
 ## 1.37
 
@@ -34,7 +38,7 @@ For example:
 ```
 
 Custom SVG icon changes:
-- shape -property object not needed. Tell here now the svg data, for example '<svg>...</svg>'
+- shape -property object not needed. Tell here now the svg data, for example ```<svg>...</svg>```
 - offsetX, tell here where marker icon center x point should be. If not setted used 16 (center point)
 - offsetY, tell here where marker icon center y point should be. If not setted used 16 (center point)
 
@@ -53,7 +57,7 @@ For example:
         channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, MARKER_ID]);
 ```
 
-Old request also working well but user that uses old way request and these properties are informed to warning log messages.
+Old request also working well but user that uses old way request and these properties are informed to warning log messages. ```Old way requests it's recommended to switch to the new format.```
 
 ## 1.36
 

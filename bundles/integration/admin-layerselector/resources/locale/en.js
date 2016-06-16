@@ -44,6 +44,7 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "The map layer group will be removed. Do you want to continue?",
             "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",

@@ -62,6 +62,8 @@ Removed unneccassary z-index style.
 
 (x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
 
+Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported. 
+
 ### mapwfs2
 
 Mapwfs2 plugin now support different thems (used in publisher2).
@@ -89,6 +91,9 @@ Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled
 ### Admin layerselector
 
 SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
+
+CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to 
+show, that current map Crs is unsupported in the requested service.
 
 ### Oskari.util.sanitize()
 

@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
          * Overlays an element
          * @param {String} elementSelector, selector for element to overlay
          */
-        overlay: function (elementSelector) {
+        overlay: function (elementSelector, addSpinner) {
             var me = this,
                 targetSelector = elementSelector,
                 targets;
@@ -36,6 +36,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
             _.forEach(me._overlays, function (overlay) {
                 overlay.target.append(overlay.overlay);
+                if(addSpinner) {
+                    var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+                    spinner.insertTo(overlay.overlay);
+                    spinner.start();
+                    overlay.spinner = spinner;
+                }
             });
             me._setupSizeAndLocation();
             _.forEach(me._overlays, function (overlay) {
@@ -79,6 +85,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             var me = this;
             _.forEach(me._overlays, function (overlay) {
                overlay.overlay.remove();
+               if(overlay.spinner) {
+                    overlay.spinner.stop();
+               }
             });
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
