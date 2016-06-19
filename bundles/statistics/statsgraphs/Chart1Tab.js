@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
     function (instance, localization) {
         this.conf = instance.conf;
         this.instance = instance;
-        this.template = jQuery('<div id="chart1"></div>');
+        this.template = jQuery('<div id="chart1" style="overflow: auto; resize: both; padding-right:40px;padding-left:40px; "></div>');
         this.loc = localization;
     }, {
         getTitle: function () {
@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             var content = this.template.clone();
             container.append(content);
         },
+      
 
 
         initChart: function() {
@@ -33,7 +34,20 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 data: {
                     columns: [],
                     type:'bar'
-                }
+                },
+                subchart: {
+                    show: true
+                },
+                size: {
+                    height: 400,
+                },
+                padding: {
+                    right: 20,
+
+                },
+
+
+
             });
         },
 
@@ -52,6 +66,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     value: regions
                 }
             });
+        },
+
+        removeChart: function() {
+            this.chart = null;
         }
     });
 

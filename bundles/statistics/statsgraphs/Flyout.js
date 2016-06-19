@@ -42,25 +42,26 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
          * called by host to start flyout operations
          */
         startPlugin: function () {
-
             var me = this;
             this.tabsData = {
                 "chart1": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart1Tab', me.instance),
                 "chart2": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart2Tab', me.instance),
                 "chart3": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart3Tab', me.instance),
+                "chart4": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart4Tab', me.instance),
             };
         },
-        /**
-         * @method stopPlugin
-         * called by host to stop flyout operations
-         */
-
-
 
         onOpen: function () {
             this.createUi(this.container);
+        },
 
-
+        onClose: function () {
+            for (tabId in this.tabsData) {
+                if (this.tabsData.hasOwnProperty(tabId)) {
+                    tab = this.tabsData[tabId];
+                    tab.removeChart();
+                }
+            }
         },
 
 
@@ -72,20 +73,13 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
          */
 
         createUi: function (container) {
-
-
             var flyout = jQuery(this.container); // clear container;
             flyout.empty();
-
 
             this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', "Tab Container for charts");
             this.tabsContainer.insertTo(flyout);
 
-
-
             for (tabId in this.tabsData) {
-
-
                 if (this.tabsData.hasOwnProperty(tabId)) {
 
                     tab = this.tabsData[tabId];
@@ -96,25 +90,18 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
                     // binds tab to events
                     if (tab.bindEvents) {
                         tab.bindEvents();
-
-
                     }
 
                     this.tabsContainer.addPanel(panel);
                     tab.initChart();
-
                 }
-
             }
-
-
         },
-        
-
 
         updateUI: function (name, regions, data) {
-            Oskari.log('StatsGraph').info('TODO: graph for indicator ' + name);
-            Oskari.log('StatsGraph').info(data);
+            Oskari.log('StatsGraph').info('indicator name ' + name);
+            Oskari.log('StatsGraph').info('data parameter'+data);
+            Oskari.log('StatsGraph').info('data parameter'+regions);
 
 
             for (tabId in this.tabsData) {
