@@ -1,5 +1,5 @@
 /**
- * @class Oskari.statistics.statsgrid.StatisticsService
+ * @class Oskari.statistics.statsgrid.StateService
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
