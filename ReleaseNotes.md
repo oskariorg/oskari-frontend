@@ -20,6 +20,10 @@ DotForm now use defaultmarker for visuliazation if wanted marker not found.
 - named style allready exists: merge styles and override exiting style if exist
 - sanitized adding, remove unwanted tags, scripts, so on.
 
+### MarkersPlugin
+
+Sanitize request added markers.
+
 ## 1.37.0
 
 ### jQuery selector removes more specific
