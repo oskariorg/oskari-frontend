@@ -249,6 +249,140 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                     callback('Error loading indicator data');
                 }
             });
+        },
+        /*
+    Convenience method to get the complete dataset for current selections. Hides the callback hell.
+{
+    regionset : {
+        id : 1234,
+        name : "Municipalities"
+    },
+    indicators : [
+        {
+            datasource : {
+                id : 12,
+                name : "SotkaNet"
+            },
+            id : 346,
+            name : "indicator name",
+            selections : {
+                sex : 'male',
+                year : '1993'
+            },
+            hash : 'unique id for ds, id and selections'
+        }
+    ],
+    data : [
+        {
+            id : 2353,
+            name : "municipality name",
+            values : {
+                hash1 : value of indicator with hash1,
+                hash2 : value of indicator with hash2
+            }
+        }
+    ]
+}
+         */
+        getCurrentDataset : function(callback) {
+            var me = this;
+            if(typeof callback !== 'function') {
+                // TODO: log error
+                return;
+            }
+            var setId = this.getStateService().getRegionset();
+            if(!setId) {
+                callback("No regionset selected");
+                return;
+            }
+            var regionset = this.getRegionsets(setId);
+            var response = {
+                regionset : {
+                    id : setId,
+                    name : regionset.name
+                },
+                indicators : [],
+                data : []
+            };
+            var indicators = this.getStateService().getIndicators();
+            this.getRegions(setId, function(err, regions) {
+                if(err) {
+                    callback("Couldn't get regions", response);
+                    return;
+                }
+
+                regions.forEach(function(reg) {
+                    response.data.push({
+                        id : reg.id,
+                        name : reg.name,
+                        values : {}
+                    });
+                });
+                if(!indicators.length) {
+                    // no indicators, just respond with regions
+                    callback(null, response);
+                    return;
+                }
+                // figure out ui names and data for indicators
+                var count = 0;
+                var errors = 0;
+                var done = function() {
+                    if(errors) {
+                        callback('Error populating indicators', response);
+                        return;
+                    }
+                    callback(null, response);
+                };
+                indicators.forEach(function(ind) {
+                    var metadata = {
+                        datasource : {
+                            id : ind.datasource,
+                            name : me.getDatasource(ind.datasource).name
+                        },
+                        id : ind.indicator,
+                        name : "N/A",
+                        selections : ind.selections,
+                        hash : ind.hash
+                    };
+                    response.indicators.push(metadata);
+                    // inProgress is a flag for detecting if both async ops have completed
+                    var inProgress = true;
+                    count++;
+                    me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                        if(err) {
+                            errors++;
+                            return;
+                        }
+                        metadata.name = Oskari.getLocalized(indicator.name);
+                        // detect if this indicator is fully populated
+                        if(!inProgress) {
+                            count--;
+                        }
+                        inProgress = false;
+                        if(count === 0) {
+                            done();
+                        }
+                    });
+
+                    me.getIndicatorData(ind.datasource, ind.indicator, ind.selections, setId, function(err, indicatorData) {
+                        if(err) {
+                            errors++;
+                            return;
+                        }
+                        response.data.forEach(function(item) {
+                            item.values[ind.hash] = indicatorData[item.id];
+                        });
+                        // detect if this indicator is fully populated
+                        if(!inProgress) {
+                            count--;
+                        }
+                        inProgress = false;
+                        if(count === 0) {
+                            done();
+                        }
+                    });
+                });
+            });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
