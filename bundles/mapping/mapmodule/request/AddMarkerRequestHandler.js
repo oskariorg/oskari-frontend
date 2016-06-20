@@ -32,10 +32,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         		stoke: data.stroke,
         		// Converted properties
         		shape: shape,
-        		offsetX: (data.shape && data.shape.x) ? data.shape.x : null,
-        		offsetY: (data.shape && data.shape.y) ? data.shape.y : null
+        		offsetX: (data.shape && data.shape.x && !isNaN(data.shape.x)) ? data.shape.x : null,
+        		offsetY: (data.shape && data.shape.y && !isNaN(data.shape.y)) ? data.shape.y : null
         	};
     	}
+
+        // validations
+        if(newData.x) {
+            newData.x = parseFloat(Oskari.util.sanitize(newData.x));
+        }
+        if(newData.y) {
+            newData.y = parseFloat(Oskari.util.sanitize(newData.y));
+        }
+        if(newData.color) {
+            newData.color = Oskari.util.sanitize(newData.color);
+        }
+        if(newData.msg) {
+            newData.msg = Oskari.util.sanitize(newData.msg);
+        }
+        if(newData.size) {
+            newData.size = parseFloat(Oskari.util.sanitize(newData.size));
+        }
+        if(newData.stroke) {
+            newData.stroke = Oskari.util.sanitize(newData.stroke);
+        }
+        if(newData.shape) {
+            newData.shape = Oskari.util.sanitize(newData.shape);
+        }
+        if(newData.offsetX) {
+            newData.offsetX = parseFloat(Oskari.util.sanitize(newData.offsetX));
+        }
+        if(newData.offsetY) {
+            newData.offsetY = parseFloat(Oskari.util.sanitize(newData.offsetY));
+        }
         this.markersPlugin.addMapMarker(newData, request.getID());
     }
 }, {
