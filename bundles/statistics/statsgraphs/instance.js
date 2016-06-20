@@ -40,17 +40,10 @@ Oskari.clazz.define(
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
                 // TODO: react to event
+                this._handleDataChangeEvent();
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
-                var setId = this.service.getStateService().getRegionset();
-                var regionset = this.service.getRegionsets(setId);
-                // TODO: react to regionset change
-            },
-            /**
-             * @method MapStats.StatsVisualizationChangeEvent
-             */
-            'StatsGrid.StatsDataChangedEvent': function (event) {
-                this._handleDataChangeEvent(event);
+                this._handleDataChangeEvent();
             }
         },
 
@@ -86,19 +79,32 @@ Oskari.clazz.define(
             console.log(event.getName(), event);
         },
 */
-        /**
-         * Saves params to the state and sends them to the print service as well.
-         *
-         * @method _afterStatsVisualizationChangeEvent
-         * @private
-         * @param {Object} event
-         */
-        _handleDataChangeEvent: function (event) {
-            var me = this,
-                params = event.getParams(),
-                layer = event.getLayer();
-            this.getFlyout().updateUI(
-                params.CUR_COL.field, params.VIS_CODES, params.COL_VALUES);
+        _handleDataChangeEvent: function () {
+
+            var me = this;
+            var regionSetId = this.service.getStateService().getRegionset();
+            //var regionset = this.service.getRegionsets(regionSetId);
+            var selectedList = this.service.getStateService().getIndicators();
+            if(!selectedList.length) {
+                // TODO: teardown any existing charts
+                return;
+            }
+            // latest indicator
+            var ind = selectedList[selectedList.length -1];
+            this.service.getRegions(regionSetId, function(err, regions) {
+                me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, regionSetId, function(err, indicatorData) {
+                    var values = [];
+                    regions.forEach(function(reg) {
+                        values.push(indicatorData[reg.id]);
+                    });
+
+                    me.service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                        var ds = me.service.getDatasource(ind.datasource).name;
+                        var name = ds + ' - ' + Oskari.getLocalized(indicator.name);
+                        me.getFlyout().updateUI(name, regions, values);
+                    });
+                });
+            });
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultExtension']

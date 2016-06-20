@@ -102,12 +102,23 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
             Oskari.log('StatsGraph').info('indicator name ' + name);
             Oskari.log('StatsGraph').info('data parameter'+data);
             Oskari.log('StatsGraph').info('data parameter'+regions);
+            var sanitized = [];
+
+            // c3 doesn't like null/undefined -> map to zero
+            data.forEach(function(item) {
+                if(item) {
+                    sanitized.push(item);
+                }
+                else {
+                    sanitized.push(0);
+                }
+            });
 
 
             for (tabId in this.tabsData) {
                 if (this.tabsData.hasOwnProperty(tabId)) {
                     tab = this.tabsData[tabId];
-                    tab.drawChart(name, regions, data);
+                    tab.drawChart(name, regions, sanitized);
                 }
             }
         }

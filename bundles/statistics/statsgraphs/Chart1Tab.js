@@ -21,18 +21,19 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             var content = this.template.clone();
             container.append(content);
         },
-      
 
-
-        initChart: function() {
+        initChart: function(regions, data) {
             if (this.chart) {
+                // ui not on screen yet
+                this.chart = this.removeChart();
+            }
+            if(!arguments.length) {
                 return;
             }
-
             this.chart = c3.generate({
                 bindto: "#chart1",
                 data: {
-                    columns: [],
+                    columns: [data],
                     type:'bar'
                 },
                 subchart: {
@@ -45,30 +46,51 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     right: 20,
 
                 },
-
-
-
-            });
-        },
-
-        drawChart: function(name,regions,data) {
-            if (!this.chart) {
-                // ui not on screen yet
-                return;
-            }
-
-            this.chart.load({
-                columns: [
-                    [name].concat(data),
-                ],
-                keys: {
-                    // this doesn't seem to work really
-                    value: regions
+                axis : {
+                    x : {
+                        type : 'category',
+                        categories : regions
+                    }
                 }
             });
         },
 
+        drawChart: function(name,regions,data) {
+            var regionNames = [];
+            var itemsToSort = [];
+            regions.forEach(function(reg, index) {
+                regionNames.push(reg.name);
+                itemsToSort.push({
+                    regionId : reg.id,
+                    name : reg.name,
+                    value : data[index]
+
+                });
+            });
+
+            itemsToSort.sort(function(a, b) {
+                return a.value - b.value;
+            });
+            var sortedRegions = [];
+            var sortedValues = [];
+
+            itemsToSort.forEach(function(item) {
+                sortedRegions.push(item.name);
+                sortedValues.push(item.value);
+            });
+
+            /*
+            // maybe save reference to latest data shown on chart
+            this.latestData = itemsToSort;
+            // so we can map an c3 event.index of hover/click to region id
+            this.latestData[event.index].regionId
+*/
+
+            this.initChart(sortedRegions, [name].concat(sortedValues));
+        },
+
         removeChart: function() {
+            this.chart = this.chart.destroy();
             this.chart = null;
         }
     });
