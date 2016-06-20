@@ -121,7 +121,11 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
                     tab.drawChart(name, regions, sanitized);
                 }
             }
+        },
+        chartDataChanged : function(data) {
+            this.tabsData.chart1.showChart(data);
         }
+
 
     }, {
         /**

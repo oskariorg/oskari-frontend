@@ -82,6 +82,16 @@ Oskari.clazz.define(
         _handleDataChangeEvent: function () {
 
             var me = this;
+
+            this.service.getCurrentDataset(function(err, data) {
+                if(err) {
+                    console.warn(err);
+                    return;
+                }
+                me.getFlyout().chartDataChanged(data);
+            });
+
+/*
             var regionSetId = this.service.getStateService().getRegionset();
             //var regionset = this.service.getRegionsets(regionSetId);
             var selectedList = this.service.getStateService().getIndicators();
@@ -105,6 +115,7 @@ Oskari.clazz.define(
                     });
                 });
             });
+*/
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultExtension']
