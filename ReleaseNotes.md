@@ -12,6 +12,14 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 DotForm now use defaultmarker for visuliazation if wanted marker not found.
 
+### abstractmapmodule
+
+``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
+
+``registerWellknownStyle`` function now handles following scenarius:
+- named style allready exists: merge styles and override exiting style if exist
+- sanitized adding, remove unwanted tags, scripts, so on.
+
 ## 1.37.0
 
 ### jQuery selector removes more specific
