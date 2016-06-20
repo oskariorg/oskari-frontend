@@ -23,6 +23,7 @@ Oskari.clazz.define(
     }, {
         afterStart: function (sandbox) {
             var me = this;
+            this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
             /*
             // FOR DEBUGGING
             var sb = this.getSandbox();
@@ -37,6 +38,14 @@ Oskari.clazz.define(
             */
         },
         eventHandlers: {
+            'StatsGrid.IndicatorEvent' : function(evt) {
+                // TODO: react to event
+            },
+            'StatsGrid.RegionsetChangedEvent' : function(evt) {
+                var setId = this.service.getStateService().getRegionset();
+                var regionset = this.service.getRegionsets(setId);
+                // TODO: react to regionset change
+            },
             /**
              * @method MapStats.StatsVisualizationChangeEvent
              */
@@ -44,6 +53,33 @@ Oskari.clazz.define(
                 this._handleDataChangeEvent(event);
             }
         },
+
+        /**
+         * @method registerMapClickHandler
+         * Registers the map click handler so we can pass the clicks to flyout.
+         */
+        registerMapClickHandler: function () {
+            if (this.eventHandlers.MapClickedEvent) {
+                return;
+            }
+            this.eventHandlers.MapClickedEvent = function (event) {
+                alert("map clicked");
+                this.plugins['Oskari.userinterface.Flyout'].onMapClick(
+                    event.getLonLat()
+                );
+            };
+            this.sandbox.registerForEventByName(this, 'MapClickedEvent');
+        },
+
+        /**
+         * @method unregisterMapClickHandler
+         * Unregisters the map click handler
+         */
+        unregisterMapClickHandler: function () {
+            delete this.eventHandlers.MapClickedEvent;
+            this.sandbox.unregisterFromEventByName(this, 'MapClickedEvent');
+        },
+
         /*
         // FOR DEBUGGING
         onEvent: function(event) {
