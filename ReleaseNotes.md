@@ -8,6 +8,10 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 *New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
 
+### divmanazer/visualization-form
+
+DotForm now use defaultmarker for visuliazation if wanted marker not found.
+
 ## 1.37.0
 
 ### jQuery selector removes more specific
