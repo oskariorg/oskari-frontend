@@ -1,6 +1,33 @@
 # Release Notes
 
+## 1.38.0
+
+### core
+
+Fixed Oskari.util.isNumber to return false if checked value is null.
+
+*New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
+
+### divmanazer/visualization-form
+
+DotForm now use defaultmarker for visuliazation if wanted marker not found.
+
+### abstractmapmodule
+
+``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
+
+``registerWellknownStyle`` function now handles following scenarius:
+- named style allready exists: merge styles and override exiting style if exist
+- sanitized adding, remove unwanted tags, scripts, so on.
+
 ## 1.37.0
+
+### jQuery selector removes more specific
+
+Fixed jQuery selectors more specific for following bundles:
+- integration/admin-layerselector
+- framework/publisher2
+- framework/divmanazer
 
 ### ScalebarPlugin ol3
 
@@ -66,7 +93,7 @@ Removed unneccassary z-index style.
 
 (x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
 
-Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported. 
+Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported.
 
 ### mapwfs2
 
@@ -96,7 +123,7 @@ Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled
 
 SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
 
-CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to 
+CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to
 show, that current map Crs is unsupported in the requested service.
 
 ### Oskari.util.sanitize()

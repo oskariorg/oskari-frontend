@@ -959,9 +959,9 @@ Oskari.clazz.define(
         },
         /**
          * @method redrawPluginUIs
-         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar. 
+         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar.
          * Basically just redraws the whole toolbar with the tools in correct order.
-         * 
+         *
          * @param {boolean} modeChanged whether there was a transition between mobile <> desktop
          *
          */
@@ -1415,9 +1415,56 @@ Oskari.clazz.define(
          * @param  {Object} styles styles object
          */
         registerWellknownStyle: function(key, styles) {
-            var me = this;
+            var me = this,
+                sandbox = this.getSandbox();
+
             if(key && styles){
-                me._wellknownStyles[key] = styles;
+                var styleKey = Oskari.util.sanitize(key);
+                var sanitizedStyles = {};
+                var added = 0;
+
+                for(var name in styles) {
+                    var styleName = Oskari.util.sanitize(name);
+                    var style = styles[name];
+
+                    // if supported style format. Currently now supported only svg.
+                    if(style && typeof style.data === 'string' && style.data.indexOf('<svg')>-1) {
+                        if(!sanitizedStyles[styleKey]){
+                            sanitizedStyles[styleKey] = {};
+                        }
+                        sanitizedStyles[styleKey][styleName] = {
+                            offsetX: (style.offsetX !== null && Oskari.util.isNumber(style.offsetX)) ? parseFloat(Oskari.util.sanitize(style.offsetX)) : null,
+                            offsetY: (style.offsetY !== null && Oskari.util.isNumber(style.offsetY)) ? parseFloat(Oskari.util.sanitize(style.offsetY)) : null,
+                            data: (style.data !== null) ? Oskari.util.sanitize(style.data) : null
+                        };
+
+                        if(styleName && !sanitizedStyles[styleKey][styleName].data) {
+                            delete sanitizedStyles[styleKey][styleName];
+                        } else {
+                            added++;
+                        }
+                    }
+                }
+
+                if(added === 0) {
+                    sandbox.printWarn('Cannot add wellknown style for key=' + key + ', please check request!');
+                    delete sanitizedStyles[styleKey];
+                }
+
+                if(styleKey && sanitizedStyles[styleKey]) {
+                    if(me._wellknownStyles[styleKey]){
+                        sandbox.printWarn('Founded allready added wellknown style for key=' + key + ', merging styles');
+                        for(var name in sanitizedStyles[styleKey]) {
+                            if(me._wellknownStyles[styleKey][name]) {
+                                sandbox.printWarn('Founded allready added wellknown style for key=' + key + ' and style name='+name+', replacing style');
+                            }
+                            me._wellknownStyles[styleKey][name] = sanitizedStyles[styleKey][name];
+                        }
+                    }
+                    else {
+                        me._wellknownStyles[styleKey] = sanitizedStyles[styleKey];
+                    }
+                }
             }
         },
 
@@ -1430,13 +1477,21 @@ Oskari.clazz.define(
          * @return {Object} returns styles for wanted key or if defined also style name return only wanted style
          */
         getWellknownStyle: function(key, style) {
-            var me = this;
-            if(!me._wellknownStyles[key]) {
-                return null;
+            var me = this,
+                sandbox = this.getSandbox();
+
+            if(!me._wellknownStyles[key] && !style) {
+                sandbox.printWarn('Not found wellknown markers for key=' + key + ', returning default markers');
+                return Oskari.getMarkers();
             }
 
             if(key && style){
-                return me._wellknownStyles[key][style]
+                if(me._wellknownStyles[key] && me._wellknownStyles[key][style]) {
+                    return me._wellknownStyles[key][style]
+                } else {
+                    sandbox.printWarn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
+                    return Oskari.getDefaultMarker();
+                }
             } else {
                 return me._wellknownStyles[key];
             }
@@ -1480,7 +1535,7 @@ Oskari.clazz.define(
                 var markers = Oskari.getMarkers();
                 svgObject = markers[style.shape];
                 if(!svgObject) {
-                    svgObject = markers[this._defaultMarker.shape];
+                    svgObject = Oskari.getDefaultMarker();
                 }
 
                 if(style.color) {
@@ -1595,8 +1650,13 @@ Oskari.clazz.define(
                 offsetY: 16
             };
 
-            if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){
-                markerDetails = Oskari.getMarkers()[marker.data.shape];
+            if(isMarker && isMarkerShape){
+                if(marker.data.shape < Oskari.getMarkers().length) {
+                    markerDetails = Oskari.getMarkers()[marker.data.shape];
+                }
+                else {
+                    markerDetails = Oskari.getDefaultMarker();
+                }
             } else if(isCustomMarker) {
                 markerDetails = {
                     data: marker.data.shape.data,

@@ -33,6 +33,9 @@ Oskari.util = (function () {
     * @param {Boolean} keepLeadingZero, need keep leading zero
     */
     util.isNumber = function(value, keepLeadingZero) {
+        if(value === null) {
+            return false;
+        }
         var reg = new RegExp('^[-+]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?$'),
             isNumber = true,
             i;
