@@ -23,6 +23,7 @@ Oskari.clazz.define(
     }, {
         afterStart: function (sandbox) {
             var me = this;
+            this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
             /*
             // FOR DEBUGGING
             var sb = this.getSandbox();
@@ -37,6 +38,14 @@ Oskari.clazz.define(
             */
         },
         eventHandlers: {
+            'StatsGrid.IndicatorEvent' : function(evt) {
+                // TODO: react to event
+            },
+            'StatsGrid.RegionsetChangedEvent' : function(evt) {
+                var setId = this.service.getStateService().getRegionset();
+                var regionset = this.service.getRegionsets(setId);
+                // TODO: react to regionset change
+            },
             /**
              * @method MapStats.StatsVisualizationChangeEvent
              */
