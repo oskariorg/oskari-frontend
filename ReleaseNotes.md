@@ -2,6 +2,17 @@
 
 ## 1.37.0
 
+### Infobox
+
+- Infobox content and title are now sanitized before adding them to DOM
+- Infobox doesn't check anymore if the content is same than in the infobox exiting in the same location where the new one would be added
+
+### DrawingEvent
+
+Event now shows also the sketch in geojson-parameter, and isFinished-parameter is true when user finishes feature, not only when drawing is finished.
+
+Event shows area and length always in meters and unit is not shown anymore.
+
 ### ScalebarPlugin ol3
 
 Fixed scaleline width to match map units / measuring line results.
