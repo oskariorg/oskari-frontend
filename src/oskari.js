@@ -31,7 +31,7 @@
  *
  */
 Oskari = (function () {
-    var oskariVersion = "1.37.0";
+    var oskariVersion = "1.38.0";
 
     var isDebug = false,
         isConsole = window.console && window.console.debug,
@@ -1668,14 +1668,6 @@ Oskari = (function () {
         getMarkers: function() {
             return this.markers || [];
         },
-
-        /**
-         * @public @static @method Oskari.getDefaultMarker
-         * @return {Object} default marker
-         */
-        getDefaultMarker: function(){
-            return (this.markers.length>=3) ? this.markers[2] : this.markers[0];
-        }
     };
 
     /* Oskari1BuilderAPI */
