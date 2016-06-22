@@ -324,8 +324,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             for (var i = 0; i < resolutions.length; i += 1) {
                 var calculatedScale = OpenLayers.Util.getScaleFromResolution(
                     resolutions[i],
-                    // always calculate to meters
-                    'm'
+                    this._options.units
                 );
                 calculatedScale = calculatedScale * 10000;
                 calculatedScale = Math.round(calculatedScale);
