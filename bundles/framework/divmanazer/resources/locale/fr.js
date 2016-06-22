@@ -140,13 +140,13 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Modifier le style d'entité point",
+                "dot": "Modifier le style d'entité ponctuelle",
                 "area": "Modifier le style d'entité surfacique",
                 "line": "Modifier le style d'entité linéaire"
             },
             "dot": {
                 "title": "Style d'entité point",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités ponctuelles",
                 "symbol": {
                     "label": "Icône"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Style d'entité linéaire",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités linéaires",
                 "style": {
                     "label": "tiret"
                 },
@@ -196,12 +196,12 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Style d'entité surfacique",
-                "tooltip": "",
+                "tooltip": "Définir un style pour les entités surfaciques",
                 "linestyle": {
                     "label": "trait pointillé"
                 },
                 "linecap": {
-                    "label": "Extrêmités de ligne"
+                    "label": "Extrémités de ligne"
                 },
                 "linecorner": {
                     "label": "Coins de ligne"
@@ -243,7 +243,7 @@ Oskari.registerLocalization(
                     "title": "Paramètres supplémentaires",
                     "dataSource": "Source des données",
                     "metadata": "Lien des métadonnées",
-                    "export_selection": "Export only selected features"
+                    "export_selection": "N'exporter que les entités sélectionnées"
                 },
                 "columns": {
                     "title": "Colonnes",
@@ -261,6 +261,64 @@ Oskari.registerLocalization(
                     "semicolon": "Point-virgule",
                     "tabulator": "Touche de tabulation"
                 }
+            }
+        },
+        "FilterDialog": {
+            "title": "Filtre",
+            "description": "Sélectionnez les entités depuis la couche cartographique :",
+            "cancelButton": "Annuler",
+            "clearButton": "Effacer le filtre",
+            "refreshButton": "Rafraîchir le filtre",
+            "addFilter": "Ajouter un nouveau filtre",
+            "removeFilter": "Supprimer le filtre",
+            "bbox": {
+                "title": "Filtre de la fenêtre de la carte",
+                "on": "Seule l'entité visible sur la fenêtre de la carte.",
+                "off": "Toutes les entités"
+            },
+            "clickedFeatures": {
+                "title": "Filtre de sélection d'entité",
+                "label": "Uniquement les entités sélectionnées sur la carte."
+            },
+            "values": {
+                "title": "Filtrer les entités par données attributaires",
+                "placeholders": {
+                    "case-sensitive": "Le filtre est sensible à la casse.",
+                    "attribute": "Attribut",
+                    "boolean": "Opérateur logique",
+                    "operator": "Opérateur",
+                    "attribute-value": "Valeur"
+                },
+                "info": {
+                    "bboxOff": "",
+                    "filterByGeometrySelected": ""
+                },
+                "equals": "est égal(e) à",
+                "like": "est comme",
+                "notEquals": "n’est pas égal(e) à",
+                "notLike": "est différent(e) de",
+                "greaterThan": "est supérieur(e) à",
+                "lessThan": "est inférieur(e) à",
+                "greaterThanOrEqualTo": "est supérieur(e) ou égal(e) à",
+                "lessThanOrEqualTo": "est inférieur(e) ou égal(e) à"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Sélectionnez la valeur globale",
+                "aggregateValueSelectTitle": "Utilisez la valeur globale dans le filtre",
+                "selectAggregateAnalyse": "Sélectionnez l’analyse globale",
+                "selectIndicator": "Sélectionnez l’indicateur",
+                "selectReadyButton": "Prêt",
+                "getAggregateAnalysisFailed": "Impossible de trouver les données agrégées",
+                "noAggregateAnalysisPopupTitle": "L’analyse agrégée n’a pas trouvé",
+                "noAggregateAnalysisPopupContent": "Vous n’avez réalisé aucune analyse globale. Vous pouvez créer vos propres données globales par la fonction d'analyse puis utiliser des valeurs lors du filtrage."
+            },
+            "validation": {
+                "title": "Le filtre n’a pas pu être rafraîchi en raison des erreurs suivantes :",
+                "attribute_missing": "L’attribut est manquant.",
+                "operator_missing": "L’opérateur est manquant.",
+                "value_missing": "La valeur est manquante.",
+                "boolean_operator_missing": "L’opérateur logique est manquant.",
+                "bbox_selected_with_no_properties": ""
             }
         }
     }

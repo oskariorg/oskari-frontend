@@ -113,6 +113,8 @@ Oskari.clazz.define(
                 '<div class="metadataResultHeader">' +
                 '  <div class="panelHeader resultTitle"></div>' +
                 '  <div class="panelHeader resultLinks">' +
+                '    <a href="JavaScript:void(0);" class="showDatasets filter-link" data-value="dataset,series"></a>' +
+                '    <a href="JavaScript:void(0);" class="showServices filter-link" data-value="service"></a>' +
                 '    <a href="JavaScript:void(0);" class="showLink"></a>' +
                 '    <a href="JavaScript:void(0);" class="modifyLink"></a>' +
                 '  </div>' +
@@ -763,7 +765,6 @@ Oskari.clazz.define(
          */
         _showResults: function (metadataCatalogueContainer, data) {
             var me = this;
-
             me.lastResult = data.results;
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                 searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
@@ -781,6 +782,7 @@ Oskari.clazz.define(
             showLink.click(function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
+                resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
             modifyLink.html(me.getLocalization('modifySearch'));
@@ -796,6 +798,12 @@ Oskari.clazz.define(
                 resultPanel.show();
                 return;
             }
+
+            var showDatasetsLink = resultHeader.find('.showDatasets');
+            showDatasetsLink.html(me.getLocalization('showDatasets'));
+
+            var showServicessLink = resultHeader.find('.showServices');
+            showServicessLink.html(me.getLocalization('showServices'));
 
             // render results
             var table = me.templates.resultTable.clone(),
@@ -872,6 +880,30 @@ Oskari.clazz.define(
             resultPanel.append(table);
             optionPanel.hide();
             resultPanel.show();
+
+
+            //filter functionality
+            resultHeader.find('.filter-link').on('click', function(event) {
+                var filterValues = jQuery(event.currentTarget).data('value').split(',');
+                //hide filterlinks and show "show all"-link
+                resultHeader.find('.filter-link').hide();
+                resultHeader.find('.showLink').show();
+
+                var allRows = table.find('tr[class*=filter-]');
+                _.each(allRows, function(item) {
+                    var classNameFound = false;
+                    for (var i = 0; i < filterValues.length; i++) {
+                        if (jQuery(item).hasClass('filter-'+filterValues[i])) {
+                            classNameFound = true;
+                        }
+                    }
+
+                    if (!classNameFound) {
+                        jQuery(item).hide();
+                    }
+
+                });
+            });
         },
 
         _populateResultTable: function (resultsTableBody) {
@@ -914,6 +946,11 @@ Oskari.clazz.define(
                     row = results[i];
                     resultContainer = me.templates.resultTableRow.clone();
                     resultContainer.addClass('res' + i);
+
+                    //resultcontainer filtering
+                    if (row.natureofthetarget) {
+                        resultContainer.addClass('filter-'+row.natureofthetarget);
+                    }
                     resultContainer.data('resultId', row.id);
                     cells = resultContainer.find('td').not('.spacer');
                     titleText = row.name;
@@ -922,17 +959,25 @@ Oskari.clazz.define(
                         titleText = titleText + ', ' + row.organization;
                     }
 
-                    // Include identi
+                    // Include identification
                     var identification = row.identification;
                     var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
                     var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
+                    var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
                     if(isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
                         if(!locIdentificationCode) {
                             locIdentificationCode = identification.code;
                         }
 
-                        titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date + ')';
+                        //only add the date for certain types of targets
+                        if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
+                            titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
+                            if (isUpdateFrequency) {
+                                titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
+                            }
+                            titleText += ')';
+                        }
                     }
                     // Add title
                     jQuery(cells[0]).append(titleText);

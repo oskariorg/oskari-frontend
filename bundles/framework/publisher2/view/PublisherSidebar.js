@@ -86,6 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             container.find('div.header div.icon-close').bind(
                 'click',
                 function () {
+                    me._editToolLayoutOff();
                     me.instance.setPublishMode(false);
                 }
             );

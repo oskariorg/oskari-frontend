@@ -3,60 +3,49 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "catalogue.bundle.metadatafeedback",
     "value": {
-        "title": "Metadata",
+        "title": "Métadonnées",
         "desc": "",
         "userFeedback": {
-            "userFeedback": "User feedback",
-            "subject": "Subject",
-            "subjectPlaceholder": "Title for your feedback item",
-            "ratingScore": "Rating score",
-            "ratingJustification": "Rating justification"
+            "userFeedback": "Retour utilisateur",
+            "ratingScore": "Note globale",
+            "ratingJustification": "Explication de la note"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specification",
-            "targetIdentification": "Target identification",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "Not defined.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Not defined.",
-            "natureOfTarget": "Nature of the target"
+            "tabTitle": "Commentaire",
+            "average": "Note moyenne"
         },
         "userInformation": {
-            "userInformation": "User information",
-            "userDetails": "User details",
-            "userName": "User name:",
-            "contactRole": "User Role:",
-            "ciRoleUser": "User",
-            "ciRoleResourceProvider": "Resource Provider",
-            "ciRoleCustodian": "Researcher",
-            "ciRoleOwner": "Owner",
+            "userInformation": "Informations sur l'utilisateur",
+            "userDetails": "Données utilisateur",
+            "userName": "Nom d'utilisateur",
+            "contactRole": "Fonction",
+            "ciRoleUser": "Utilisateur",
+            "ciRoleResourceProvider": "Fournisseur de ressources",
+            "ciRoleCustodian": "Chercheur",
+            "ciRoleOwner": "Propriétaire",
             "ciRoleSponsor": "Sponsor",
-            "ciRoleDistributor": "Distributor",
-            "ciRoleOriginator": "Originator",
-            "ciRolePointOfContact": "PointOfContact",
-            "ciRolePrincipalInvestigator": "PrincipalInvestigator",
-            "ciRoleProcessor": "Processor",
-            "ciRolePublisher": "Publisher",
-            "ciRoleAuthor": "Author",
-            "ciRoleCollaborator": "Collaborator"
+            "ciRoleDistributor": "Distributeur",
+            "ciRoleOriginator": "Créateur",
+            "ciRolePointOfContact": "PointDeContact",
+            "ciRolePrincipalInvestigator": "EnquêteurPrincipal",
+            "ciRoleProcessor": "Processeur",
+            "ciRolePublisher": "Éditeur",
+            "ciRoleAuthor": "Auteur",
+            "ciRoleCollaborator": "Collaborateur"
         },
         "actionButtons": {
-            "save": "Save",
-            "cancel": "Cancel"
+            "save": "Enregistrer",
+            "cancel": "Annuler"
         },
         "errorPopup": {
-            "title": "Error!",
-            "savingTheFeedbackFailed": "Saving the feedback failed.",
-            "formValidationFailed": "Validation of form failed.",
+            "title": "Erreur",
+            "savingTheFeedbackFailed": "Votre avis n'a pas pu être enregistré",
+            "formValidationFailed": "Le formulaire n'a pas pu être validé. Vérifiez les données entrées et recommencez.",
             "okButtonText": "OK"
         },
         "successPopup": {
-            "title": "Success!",
-            "savingTheFeedbackSuccesful": "Saving the feedback was succesful."
+            "title": "Merci",
+            "savingTheFeedbackSuccesful": "Votre avis a bien été enregistré."
         }
     }
 }

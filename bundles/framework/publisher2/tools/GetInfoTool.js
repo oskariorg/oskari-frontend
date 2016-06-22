@@ -88,7 +88,8 @@ function() {
     },
     init: function(data) {
         var me = this;
-        if (data && data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+        var isConf = (data && data.configuration && data.configuration.mapfull) ? true : false;
+        if (isConf && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
             var tool = this.getTool();
             _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
                 if (tool.id === plugin.id) {
@@ -212,7 +213,7 @@ function() {
         template.find('label').html(colourLabel);
 
         // Set the button handler
-        template.find('button').html(buttonLabel).on('click', function (e) {
+        template.find('button').html(buttonLabel).on('click', function () {
             if(me.isColourDialogOpen === false) {
                 me._openColourDialog(jQuery(this));
             }
@@ -261,7 +262,7 @@ function() {
      *
      * @method _openColourDialog
      */
-    _openColourDialog: function (target) {
+    _openColourDialog: function () {
         var me = this,
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
@@ -310,7 +311,7 @@ function() {
             // Create the inputs for custom colour
             if ('custom' === colours[i].val) {
                 customColourButton = jQuery('<button>' + me.__instance._localization.BasicView.layout.fields.colours.buttonLabel + '</button>');
-                // FIXME don't create functions inside a loop
+
                 customColourButton.click(function () {
                     colourInput.find('input[type=radio]').attr('checked', 'checked');
                     me._createCustomColoursPopup();
@@ -320,19 +321,18 @@ function() {
         }
 
         // Things to do when the user changes the colour scheme:
-        content.find('input[name=colour]').change(function (e) {
+        content.find('input[name=colour]').change(function () {
             selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
-            // * change the preview gfi
+            // change the preview gfi
             me._changeGfiColours(selectedColour, content);
-            // * change the value of the colour scheme input in the layout panel
+            // change the value of the colour scheme input in the layout panel
             colourName = me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val];
             jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(colourName).attr('data-colour-code', selectedColour.val);
             me.values.colourScheme = selectedColour;
-            // * notify others of the changed colour scheme
+            // notify others of the changed colour scheme
             me._sendColourSchemeChangedEvent(selectedColour);
         });
 
-        //popup.moveTo(target);
         popup.show(title, content, [closeButton]);
         this._colourSchemePopup = popup;
         me.isColourDialogOpen = true;
@@ -352,7 +352,6 @@ function() {
             featureDesc = me.__instance._localization.BasicView.layout.popup.gfiDialog.featureDesc,
             linkUrl = window.location;
         // Templates
-        // FIXME get GFI template from GFI plugin
         var dialogContent = jQuery('<div></div>'),
             header = jQuery('<div class="popupTitle"></div>'),
             headerWrapper = jQuery('<div class="popupHeader"></div>'),

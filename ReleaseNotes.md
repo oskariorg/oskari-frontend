@@ -1,5 +1,130 @@
 # Release Notes
 
+## 1.37.0
+
+### Infobox
+
+Infobox content and title are now sanitized before adding them to DOM.
+
+Streamlined InfoBox.ShowInfoBoxRequest handling. Id refers always to a specific popup.
+If request is sent with the same id that already exists in UI, the existing one is updated:
+- If location is the same, content is added to the existing popup
+- If location is different, the existing popup is deleted and new popup is added with given parameters
+
+### drawtools ol3
+
+Some fixes made for displaying measure result on the map.
+
+DrawingEvent now includes the sketch in geojson-parameter and isFinished-parameter is true when user finishes a geometry, not only when drawing is finished (relevant when drawing multi geometries). DrawingEvent shows area and length always in meters and unit is not shown anymore.
+
+### routingService
+
+Changed default routing markers offset properties from x and y to offsetX and offsetY.
+
+### core
+
+Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv : ""}, "xx"). It tries to find a localized text in object in this order:
+
+- for requested language (as optional second parameter) or current language if there is no second parameter.
+- for default language
+- As last resort anything that has a value
+
+Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
+Oskari.app.setApplicationSetup() now setup markers for setMarkers() function. Markers have been moved from mapfull config to env-part of GetAppSetup response.
+
+Oskari.util.sanitize() functionality has changed! Custom implementation has been replaced with DOMPurify (https://github.com/cure53/DOMPurify).
+Now takes just one parameter as string and returns a string.
+
+### mapfull
+
+Fixed layers visibility in state handling.
+
+### mapmodule
+
+#### ol2 and ol3
+
+Fixed custom svg marker handling when marker offset (x or y or both) has 0 or null.
+
+Added support offset for external graphics.
+
+Added new ``isSvg`` function to check at if data has svg.
+
+Changed ``getSvg`` funtion to support new offsetX and offsetY params.
+
+#### ol2  map scales
+
+Map scales computation improved for earth CRS  e.g. EPSG:4326
+
+Map scales computation in ol3 is/was correct for earth CRS
+
+#### ScalebarPlugin ol3
+
+Fixed scaleline width to match map units / measuring line results.
+
+#### MarkersPlugin
+
+``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
+
+ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
+- offsetX, calculated pixels from left to right. This is number.
+- offsetY, calculated pixels from bottom to up. This is number.
+
+### popupservice
+
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping. Usable when all popups need to be closed when a feature is activated.
+
+### Fixed z-index for functionalities
+
+Fixed divmanazer flyout z-index.
+
+Removed unneccessary z-index style: layerselection2, logoplugin and publishertoolbar
+
+### publisher2
+
+(x) icon exit behaviour improved. Exiting publisher with X-icon or cancel-button now do the same things.
+Previously map controls were in the unstable state if publishing was canceled via (x) icon.
+
+Embedded map name validator now allows more freedom in naming.
+
+Publisher config can now include default configuration for tools selectable to embedded maps. Coordinatetool is the first one to utilize this to
+ allow coordinate transformations to be included in embedded maps.
+
+### mapwfs2
+
+Mapwfs2 plugins now support different themes (used in publisher2).
+
+### featuredata2
+
+Featuredata2 plugin now support different themes (used in publisher2).
+
+### mylocation
+
+Changed toolstyles to use mobile icons and all different styles are now created by CSS style definations.
+
+### coordinatetool
+
+Coordinatetool now support different styles.
+
+Coordinate transformation from one coordinate system to another can be added to the coordinatetool. Supported projections must be listed in bundle configuration.
+
+Coordinate decimal separation is now done based on UI locale. For example finnish language uses comma and english uses dot.
+
+### toolbar
+
+When adding tool button with class suffix -dark or -light these icon themes not calculated. Use this if you want use for example only light icons.
+
+### publishertoolbar
+
+Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled tools when previewing published map.
+
+### Admin layerselector
+
+SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
+
+CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to 
+show, that current map Crs is unsupported in the requested service.
+
 ## 1.36.4
 
 ### divmanazer/Popup
@@ -23,7 +148,6 @@ Fixed layers visibility in state handling - layer visibility is now shown correc
 ### LayerSelectionPlugin
 
 Added scrollbars for layers list.
-
 Fixed handling selected layers when changing mode from desktop to mobile.
 
 ### SearchPlugin

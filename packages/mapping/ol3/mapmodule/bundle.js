@@ -170,7 +170,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol3.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap_ol3.css"
                 },
                 // ScaleBar
                 {
@@ -178,7 +178,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol3.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar_ol3.css"
                 },
                 // Markers plugin
                 {
@@ -420,7 +420,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule_ol3.css"
                 }
                 
             ],

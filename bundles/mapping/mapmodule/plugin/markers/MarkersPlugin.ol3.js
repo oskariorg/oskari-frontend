@@ -502,12 +502,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var style = {
                 image : {
-                    shape: data.shape,
-                    //size: me._getSizeInPixels(data.size),
-                    size: data.size,
                     color: data.color,
-                    stroke: data.stroke,
-                    icon: data.iconUrl
+                    size: data.size,
+                    shape: data.shape,
+                    offsetX: data.offsetX,
+                    offsetY: data.offsetY,
+                    stroke: data.stroke
                 },
                 text : {
                     font: 'bold 16px Arial',
@@ -528,7 +528,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 try {
                     style.text.labelText = decodeURIComponent(data.msg);
                 } catch(e) {
-                    // For some reason this is called when getting stateparameters. 
+                    // For some reason this is called when getting stateparameters.
                     // Message is not urlencoded at that point and % causes error to be thrown
                     style.text.labelText = data.msg;
                 }

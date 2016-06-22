@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Couche cartographique",
                 "type-wfs": "Produit des données"
             },
+            "refresh_load": {
+                "tooltip": "Rafraichir les données de la couche cartographique. Les données ne sont pas automatiquement mises à jour sur la carte."
+            },
             "filter": {
                 "title": "Filtre",
                 "description": "Sélectionnez les entités depuis la couche cartographique :",
@@ -90,7 +93,7 @@ Oskari.registerLocalization(
                     "selectIndicator": "Sélectionnez l’indicateur",
                     "selectReadyButton": "Prêt",
                     "getAggregateAnalysisFailed": "Impossible de trouver les données agrégées.",
-                    "noAggregateAnalysisPopupTitle": "L’analyse globale n’a pas  trouvé",
+                    "noAggregateAnalysisPopupTitle": "Valeurs statistiques non trouvées",
                     "noAggregateAnalysisPopupContent": "Vous n’avez réalisé aucune analyse agrégée. Vous pouvez créer vos propres données globales par la fonction d'analyse puis utiliser des valeurs lors du filtrage."
                 },
                 "validation": {

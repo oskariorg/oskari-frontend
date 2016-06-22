@@ -65,6 +65,14 @@ Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
                 "lang" : "sl",
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/sl.js"
+            }, {
+                "lang" : "nb",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/nb.js"
+            }, {
+                "lang" : "fr",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/fr.js"
             }
         ]
     },

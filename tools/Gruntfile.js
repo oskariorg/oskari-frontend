@@ -125,11 +125,6 @@ module.exports = function (grunt) {
                     src: '../bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise.js',
                     dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise.js'
                 },
-                // The requirejs should come from the root project.
-                /*{
-                    src: '../libraries/requirejs/require-2.1.15.js',
-                    dest: 'Oskari/libraries/requirejs/require-2.1.15.js'
-                },*/
                 {
                     src: '../bundles/statistics/statsgrid.polymer/libs/web-animations-js/web-animations-next-lite.min.js',
                     dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/web-animations-js/web-animations-next-lite.min.js'
@@ -265,13 +260,6 @@ module.exports = function (grunt) {
             options = {
                 targetDir: '../dist/<%= version %>' + appName,
                 appIconsDir : config.substring(0, last) + '/icons'
-                /*
-                iconDirectoryPath: config.substring(0, last) + '/icons',
-                resultImageName: '../dist/<%= version %>' + appName + '/icons/icons.png',
-                resultCSSName: '../dist/<%= version %>' + appName + '/css/icons.css',
-                spritePathInCSS: '../icons',
-                defaultIconDirectoryPath: defaultIconDirectoryPath
-                */
             };
             files = [];
             copyFiles = {
@@ -294,7 +282,7 @@ module.exports = function (grunt) {
                     dest: dest
                 });
                 // modify css-sprite to use parent icons instead
-                options.iconDirectoryPath = options.appIconsDir.replace(appName, parentAppName);
+                options.appIconsDir = options.appIconsDir.replace(appName, parentAppName);
             }
 
             // add files to be copied

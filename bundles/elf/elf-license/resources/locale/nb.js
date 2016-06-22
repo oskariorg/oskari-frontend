@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Feil ved henting av lisensinformasjon",
                 "message": "Kan ikke hente lisensinformasjon"
             },
-            "failedGetLicenseInformation": {
-                "title": "Henting av lisensinformasjon feilet",
-                "message": "Kan ikke koble til lisensserver"
-            },
             "cannotGetLicensePrice": {
                 "title": "Fant ikke lisenspris",
                 "message": "Kan ikke hente lisenspris"
@@ -58,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Legg inn lisensdetaljer, alle obligatoriske felt er merket med stjerne (*). Trykk på 'Neste' for å se sammendrag av lisens og pris. Velg 'Forrige' hvis du vil se flere lisensmodeller. Du kan stoppe bestillingen ved å trykke på 'Lukk'.",
                 "summary": "Les lisensen og akseptér ved å trykke på 'Fullfør'.  Trykk på 'Tilbake'-knappen hvis du vil forandre på noe som er fylt inn. Du kan også stoppe bestillingen ved å trykke på 'Lukk'-knappen.",
                 "orderDetails": "Se din lisensbestilling ovenfor. Lukk dialogen ved å trykke på 'Lukk'-knappen. Trykk på 'Deaktiver lisens' hvis du vil deaktivere bestillingen."
-            },
-            "concludeSuccessTitle": "Fullføring av lisensen var vellykket.",
-            "conclude": {
-                "title": "Lisensbestilling, detaljer",
-                "productid": "Produkt",
-                "licenseid": "Lisens",
-                "validto": "Gyldig til"
             },
             "deactivateConfirm": {
                 "title": "Deaktiver lisens",

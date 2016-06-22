@@ -342,58 +342,6 @@ Oskari.registerLocalization(
                 "analyse": "Tee analyysi",
                 "data": "Lisää karttatasoja"
             },
-            "filter": {
-                "title": "Kohteiden suodatus",
-                "description": "Suodata kohteita tasolta:",
-                "cancelButton": "Peruuta",
-                "clearButton": "Tyhjennä",
-                "refreshButton": "Päivitä",
-                "addFilter": "Lisää",
-                "removeFilter": "Poista",
-                "content": {
-                    "title": "Maantieteellisesti"
-                },
-                "bbox": {
-                    "on": "Vain kartalla näkyvät kohteet",
-                    "off": "Kaikki kohteet"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Vain kartalta valitut kohteet",
-                    "filterByGeometryLabel": "Vain kohteet, jotka:",
-                    "filterByGeometryIntersect": "leikkaavat valittua kohdetta",
-                    "filterByGeometryContains": "ovat valitun kohteen sisällä"
-                },
-                "values": {
-                    "title": "Ominaisuustietojen perusteella",
-                    "placeholders": {
-                        "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
-                        "attribute": "Ominaisuustieto",
-                        "boolean": "Looginen operaattori",
-                        "operator": "Operaattori",
-                        "attribute-value": "Arvo"
-                    },
-                    "info": {
-                        "bboxOff": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\".",
-                        "filterByGeometrySelected": "Voit tehdä suodatuksia ominaisuustietojen perusteella vain, jos maantieteellisessä suodatuksessa valittuna on \"Kaikki kohteet\"."
-                    },
-                    "equals": "on yhtäsuuri kuin",
-                    "like": "on likimäärin yhtäsuuri kuin",
-                    "notEquals": "on erisuuri kuin",
-                    "notLike": "on likimäärin erisuuri kuin",
-                    "greaterThan": "on suurempi kuin",
-                    "lessThan": "on pienempi kuin",
-                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
-                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
-                },
-                "validation": {
-                    "title": "Korjaa seuraavat virheet ja yritä uudelleen:",
-                    "attribute_missing": "Ominaisuustieto puuttuu. Valitse ominaisuustieto ja yritä uudelleen.",
-                    "operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
-                    "value_missing": "Arvo puuttuu. Anna arvo ja yritä uudelleen",
-                    "boolean_operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
-                    "bbox_selected_with_no_properties": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\"."
-                }
-            },
             "help": "Ohje",
             "success": {
                 "layerAdded": {
@@ -500,20 +448,6 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Virhe",
                 "generic": "Järjestelmässä tapahtui virhe."
-            }
-        },
-        "layer": {
-            "filter": {
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Käytä tunnuslukua",
-                    "aggregateValueSelectTitle": "Valitse käytettävät tunnusluvut",
-                    "selectAggregateAnalyse": "Valitse analyysitaso",
-                    "selectIndicator": "Valitse ominaisuustieto",
-                    "selectReadyButton": "Sulje",
-                    "getAggregateAnalysisFailed": "Tunnuslukujen haku epäonnistui.",
-                    "noAggregateAnalysisPopupTitle": "Kyseiselle tasolle ei ole laskettu tunnuslukuja.",
-                    "noAggregateAnalysisPopupContent": "Kyseiselle tasolle ei ole laskettu tunnuslukuja. Voit laskea tunnusluvut haluamallesi aineistolle Analyysi-toiminnon avulla. Tämän jälkeen tunnusluvut ovat käytettävissä suodatuksessa."
-                }
             }
         }
     }

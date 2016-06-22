@@ -35,6 +35,10 @@ Oskari.clazz.define(
             },
             buttonGroup: 'mobile-toolbar'
         };
+
+        me._templates = {
+            plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
+        }
     }, {
         /**
          * @private @method _createControlElement
@@ -45,9 +49,8 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var el = jQuery(
-                    '<div class="mapplugin mylocationplugin icon mylocation-rounded-dark"></div>'
-                ),
+            var me = this,
+                el = me._templates.plugin.clone(),
                 me = this;
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
@@ -118,9 +121,9 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'mylocation-' + (style ? style : 'rounded-dark');
+            var styleClass = 'toolstyle-' + (style ? style : 'rounded-dark');
 
-            me.changeCssClasses(styleClass, /^mylocation-/, [el]);
+            me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
         },
 
         /**

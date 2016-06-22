@@ -245,57 +245,6 @@ Oskari.registerLocalization({
                 "analyse": "Analizza",
                 "data": "Aggiungi dati"
             },
-            "filter": {
-                "title": "Filtri",
-                "description": "Filtro per il layer ",
-                "clearButton": "Cancella filtri",
-                "refreshButton": "Aggiorna filtri",
-                "addFilter": "Aggiungi un nuovo filtro",
-                "removeFilter": "Rimuovi filtri",
-                "content": {
-                    "title": "NOT TRANSLATED"
-                },
-                "bbox": {
-                    "on": "In uso",
-                    "off": "Non in uso"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Includi solo le feature selezionate",
-                    "filterByGeometryLabel": "NOT TRANSLATED",
-                    "filterByGeometryIntersect": "NOT TRANSLATED",
-                    "filterByGeometryContains": "NOT TRANSLATED"
-                },
-                "values": {
-                    "title": "Filter",
-                    "placeholders": {
-                        "case-sensitive": "",
-                        "attribute": "Attributo",
-                        "boolean": "Operatore logico",
-                        "operator": "Operatore",
-                        "attribute-value": "Valore"
-                    },
-                    "info": {
-                        "bboxOff":"NOT TRANSLATED",
-                        "filterByGeometrySelected":"NOT TRANSLATED"
-                    },
-                    "equals": "=",
-                    "like": "~=",
-                    "notEquals": "≠",
-                    "notLike": "~≠",
-                    "greaterThan": ">",
-                    "lessThan": "<",
-                    "greaterThanOrEqualTo": "≥",
-                    "lessThanOrEqualTo": "≤"
-                },
-                "validation": {
-                    "title": "I seguenti errori impediscono l'aggiornamento del filtro:",
-                    "attribute_missing": "Manca l'attributo",
-                    "operator_missing": "Manca l'operatore",
-                    "value_missing": "Manca il valore",
-                    "boolean_operator_missing": "Manca l'operatore logico",
-                    "bbox_selected_with_no_properties":"NOT TRANSLATED"
-                }
-            },
             "help": "Help",
             "success": {
                 "layerAdded": {

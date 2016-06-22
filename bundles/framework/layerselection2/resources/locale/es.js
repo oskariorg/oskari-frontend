@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Capa",
                 "type-wfs": "Producto de datos"
             },
+            "refresh_load": {
+                "tooltip": "refrescar los datos de la capa del mapa.los datos no se actualizan automaticamente en el mapa"
+            },
             "filter": {
                 "title": "Filtro",
                 "description": "Seleccionar los objetos geográficos de la capa del mapa",

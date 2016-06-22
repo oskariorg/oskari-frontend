@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Medir distancia",
                 "tooltip": "Medir distancia",
-                "add": "",
-                "next": "",
+                "add": "Add line",
+                "next": "Next",
                 "edit": "Puede editar la línea haciendo clic y arrastrando los vértices",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Medir area",
                 "tooltip": "Medir area",
-                "add": "",
-                "next": "",
+                "add": "Add area",
+                "next": "Next",
                 "edit": "Puede editar el área haciendo clic y arrastrando los vértices de la línea de borde",
                 "noResult": "0 m²"
             },
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Estilo de punto",
-            "tooltip": "",
+            "tooltip": "Definir un estilo para los objetos puntuales",
             "symbol": {
                 "label": "Icono"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Estilo de línea",
-            "tooltip": "",
+            "tooltip": "definir un estilo para los objetos lineales",
             "style": {
                 "label": "Estilo"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Estilo de área",
-            "tooltip": "",
+            "tooltip": "definir un estilo para los objetos superficiales",
             "linestyle": {
                 "label": "Estilo de línea de borde"
             },

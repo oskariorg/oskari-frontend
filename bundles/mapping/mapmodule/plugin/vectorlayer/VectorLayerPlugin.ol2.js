@@ -326,7 +326,6 @@ Oskari.clazz.define(
             if (!format || !geometry) {
                 return;
             }
-
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }

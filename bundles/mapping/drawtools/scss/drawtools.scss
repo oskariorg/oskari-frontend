@@ -1,0 +1,16 @@
+.drawplugin-tooltip-measure {
+	font-size: 14px;
+	max-width: 330px;
+	background: rgba(0, 0, 0, 0.7);
+	border-radius: 4px;
+	color: white;
+	padding: 2px 5px;
+	pointer-events: none;
+	&.withoutText {
+    	padding: 0px;
+	}
+	&::selection {
+		background: transparent;
+	}
+}
+

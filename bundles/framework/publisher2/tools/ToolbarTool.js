@@ -99,10 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             if(pluginConf.buttons) {
                 //if there are no selected tools in configuration, select them all when tools are selected
                 for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName)) {
-                        if (pluginConf.buttons.indexOf(toolName) === -1) {
-                            me.selectedOptions[toolName] = false;
-                        }
+                    if (me.selectedOptions.hasOwnProperty(toolName) && pluginConf.buttons.indexOf(toolName) === -1) {
+                        me.selectedOptions[toolName] = false;
                     }
                 }
             }
@@ -118,10 +116,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 me._storedData.publishedmyplaces2Config = _.cloneDeep(conf.publishedmyplaces2.conf);
                 var drawToolsConfig = me._storedData.publishedmyplaces2Config.myplaces;
                 for (toolName in drawToolsConfig) {
-                    if (drawToolsConfig.hasOwnProperty(toolName)) {
-                        if (!drawToolsConfig[toolName]) {
-                            me.drawOptions[toolName] = false;
-                        }
+                    if (drawToolsConfig.hasOwnProperty(toolName) && !drawToolsConfig[toolName]) {
+                        me.drawOptions[toolName] = false;
                     }
                 }
                 if (me._hasSelectedDrawTool()) {
@@ -166,10 +162,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
 
             for (toolName in me.selectedOptions) {
-                if (me.selectedOptions.hasOwnProperty(toolName)) {
-                    if (me.selectedOptions[toolName]) {
-                        buttons.push(toolName);
-                    }
+                if (me.selectedOptions.hasOwnProperty(toolName) && me.selectedOptions[toolName]) {
+                    buttons.push(toolName);
                 }
             }
 
@@ -188,8 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             // we want toolbar always with no default tools
             retValue.configuration.toolbar = { conf : {"history": false,"basictools": false,"viewtools": false } };
-
-            var selectedDrawTools = me._hasSelectedDrawTool();
 
             //PublishedMyPlaces is not supported with ol3
 
@@ -275,10 +267,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             };
 
             var options,
-                i,
-                ilen,
-                toolName,
-                isChecked;
+                toolName;
+
             if (enabled) {
                 tool._isPluginStarted = true;
 
@@ -286,7 +276,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 for (toolName in me.selectedOptions) {
                     if (me.selectedOptions.hasOwnProperty(toolName)) {
-                        //toolButton = me.selectedOptions[toolName];
                         // create checkbox
                         var selectTool = jQuery(me.templates.toolOption).clone();
                         selectTool.find('label')
@@ -306,39 +295,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 }
 
+
                 // show drawing controls for admin users
-                //TODO: PublishedMyPlaces is not supported with ol3!
-                /*
-                if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
-                    //if there is not yet config for publishedmyplaces, create one to be used further
-                    if (!me.publishedmyplaces2Config) {
-                        me.publishedmyplaces2Config = _.cloneDeep(me.defaultStateConfigs['publishedmyplaces2Config']);
-                    }
-
-                    var isChecked = me._hasSelectedDrawTool();
-                    var selectTool = jQuery(me.templates.toolOption).clone();
-                    selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.__loc.toolbarToolNames.drawTools);
-                    selectTool.find('input').attr('id', 'tool-opt-drawing');
-
-                    var toolElement = selectTool.find('input');
-
-                    selectTool.find('input').attr('checked', isChecked);
-
-                    selectTool.find('input').change(function () {
-                        // Note! "this" refers to the checkbox element that has been changed
-                        me._toggleDrawTools(this, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                    });
-
-
-                    // execute toolElement change function when checked
-                    if (isChecked) {
-                        me._toggleDrawTools(toolElement, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                    }
-
-                    options.append(selectTool);
-
-                }
-                */
+                me._checkAdminDrawControls();
                 tool.toolContainer.find(".extraOptions").append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
@@ -371,6 +330,42 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
 
         },
+        _checkAdminDrawControls: function(){
+            var me = this;
+            // show drawing controls for admin users
+                //TODO: PublishedMyPlaces is not supported with ol3!
+                /*
+                if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
+                    //if there is not yet config for publishedmyplaces, create one to be used further
+                    if (!me.publishedmyplaces2Config) {
+                        me.publishedmyplaces2Config = _.cloneDeep(me.defaultStateConfigs['publishedmyplaces2Config']);
+                    }
+
+                    var isChecked = me._hasSelectedDrawTool();
+                    var selectTool = jQuery(me.templates.toolOption).clone();
+                    selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.__loc.toolbarToolNames.drawTools);
+                    selectTool.find('input').attr('id', 'tool-opt-drawing');
+
+                    var toolElement = selectTool.find('input');
+
+                    selectTool.find('input').attr('checked', isChecked);
+
+                    selectTool.find('input').change(function () {
+                        // Note! "this" refers to the checkbox element that has been changed
+                        me._toggleDrawTools(this, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
+                    });
+
+
+                    // execute toolElement change function when checked
+                    if (isChecked) {
+                        me._toggleDrawTools(toolElement, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
+                    }
+
+                    options.append(selectTool);
+
+                }
+                */
+        },
         /**
          *  Manages drawlayer options in checked and unchecked cases
          *
@@ -383,10 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          */
         _toggleDrawTools: function (element, toolName, groupName, toolOption) {
             var me = this,
-                buttonGroup,
                 toolButton,
-                i,
-                ilen,
                 toolElement,
                 addLayerButton,
                 addSelectLayerButton,
@@ -394,9 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 optionSettings,
                 optionSetting,
                 checkbox = jQuery(element),
-                isChecked = checkbox.is(':checked'),
-                isToolChecked,
-                request;
+                isChecked = checkbox.is(':checked');
 
             if (isChecked) {
                 layerSelect = me._updateDrawLayerSelection();
@@ -554,7 +544,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addSelectLayerButton.setTitle(this.__loc.layers.addselect);
-            addSelectLayerButton.setHandler(function (event) {
+            addSelectLayerButton.setHandler(function () {
                 var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer, false);
                 me.__sandbox.request(me.__instance, request);
                 // this intentionally refers to the current DOM element
@@ -595,10 +585,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var me = this;
 
             for (toolName in me.selectedOptions) {
-                if (me.selectedOptions.hasOwnProperty(toolName)) {
-                    if (me.selectedOptions[toolName]) {
-                        return true;
-                    }
+                if (me.selectedOptions.hasOwnProperty(toolName) && me.selectedOptions[toolName]) {
+                    return true;
                 }
             }
 
@@ -609,10 +597,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var me = this;
 
             for (toolName in me.drawOptions) {
-                if (me.drawOptions.hasOwnProperty(toolName)) {
-                    if (me.drawOptions[toolName]) {
-                        return true;
-                    }
+                if (me.drawOptions.hasOwnProperty(toolName) && me.drawOptions[toolName]) {
+                    return true;
                 }
             }
 
@@ -626,10 +612,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             if(me.__plugin) {
                 //send remove request per active button
                 for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName)) {
-                        if (toolName) {
-                            me.__plugin.removeToolButton(toolName);
-                        }
+                    if (me.selectedOptions.hasOwnProperty(toolName) && toolName) {
+                        me.__plugin.removeToolButton(toolName);
                     }
                 }
                 if(me.__sandbox){

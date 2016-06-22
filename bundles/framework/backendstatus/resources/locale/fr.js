@@ -3,20 +3,20 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "BackendStatus",
     "value": {
-        "title": "Backend Status",
+        "title": "Statut Back-End",
         "desc": "",
         "feedback": {
             "missing_backendstatus_status": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Couches cartographiques",
+                "message": "Les informations d'état de cette couche cartographique ne sont pas disponibles."
             },
             "missing_backendstatus_information": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Couches cartographiques",
+                "message": "Les informations d'état de cette couche cartographique ne sont pas disponibles."
             },
             "missing_backendstatus_infourl": {
-                "title": "Map layers",
-                "message": "The status information for this map layer is not available."
+                "title": "Couches cartographiques",
+                "message": "Les informations d'état de cette couche cartographique ne sont pas disponibles."
             }
         }
     }

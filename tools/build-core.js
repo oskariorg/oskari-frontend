@@ -6,11 +6,11 @@ var fs = require('fs');
 var os = require('os');
 var UglifyJS = require('uglify-js');
 
-
 var files = [
 	'../libraries/requirejs/require-2.2.0.min.js',
 	'../libraries/requirejs/text-plugin-2.0.14.js',
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
+    '../libraries/dompurify/purify_0.8.0.min.js',
 	'../src/polyfills.js',
 	'../src/oskari.js',
     '../src/logger.js',

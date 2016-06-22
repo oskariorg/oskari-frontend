@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Korta lag",
             "type-wfs": "Gögn"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Kortalagið er til.",
-                "iconClass": "bakvinnsla-í lagi"
-            },
-            "DOWN": {
-                "tooltip": "Kortalagið er ekki til.",
-                "iconClass": "bakvinnsla-niðri"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Það verður stutt hlé á framboði á kortalögum á næstu dögum.",
-                "iconClass": "bakvinnsla-viðhald"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "bakvinnsla-í lagi"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Færni",
             "confirmResourceKeyChange": "Nafninu eða slóðinni fyrir þetta kortalg hefur verið breytt. Af öryggisástæðum munu notendaréttindin fyrir kortalagið vera fjarlægð og þú þarft að búa þau til aftur. Viltu halda áfram?",
