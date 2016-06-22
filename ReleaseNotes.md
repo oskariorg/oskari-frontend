@@ -55,6 +55,12 @@ Added new ``isSvg`` function to check at if data has svg.
 
 Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
+#### ol2  map scales
+
+Map scales computation improved for earth CRS  e.g. EPSG:4326
+
+Map scales computaion in ol3 is/was correct for earth CRS 
+
 ### mapfull
 
 Fixed layers visibility in state handling.
