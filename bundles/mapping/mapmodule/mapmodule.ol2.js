@@ -321,6 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function (resolutions) {
+
             for (var i = 0; i < resolutions.length; i += 1) {
                 var calculatedScale = OpenLayers.Util.getScaleFromResolution(
                     resolutions[i],
