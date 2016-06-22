@@ -202,7 +202,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
                 //Why this.sideContentEditor is null?
+                if(this.sandbox.findRegisteredModuleInstance("ContentEditor").sideContentEditor){
                 this.sandbox.findRegisteredModuleInstance("ContentEditor").sideContentEditor.prepareRequest(evt.getDrawing());
+                }
             },
             WFSFeatureGeometriesEvent: function (evt)
             {
