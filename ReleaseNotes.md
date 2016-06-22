@@ -4,38 +4,22 @@
 
 ### Infobox
 
-- Infobox content and title are now sanitized before adding them to DOM
-- Infobox doesn't check anymore if the content is same than in the infobox exiting in the same location where the new one would be added
+Infobox content and title are now sanitized before adding them to DOM.
 
-### DrawingEvent
-
-Event now shows also the sketch in geojson-parameter, and isFinished-parameter is true when user finishes feature, not only when drawing is finished.
-
-Event shows area and length always in meters and unit is not shown anymore.
-
-### ScalebarPlugin ol3
-
-Fixed scaleline width to match map units / measuring line results.
+Streamlined InfoBox.ShowInfoBoxRequest handling. Id refers always to a specific popup.
+If request is sent with the same id that already exists in UI, the existing one is updated:
+- If location is the same, content is added to the existing popup
+- If location is different, the existing popup is deleted and new popup is added with given parameters
 
 ### drawtools ol3
 
 Some fixes made for displaying measure result on the map.
 
+DrawingEvent now includes the sketch in geojson-parameter and isFinished-parameter is true when user finishes a geometry, not only when drawing is finished (relevant when drawing multi geometries). DrawingEvent shows area and length always in meters and unit is not shown anymore.
+
 ### routingService
 
 Changed default routing markers offset properties from x and y to offsetX and offsetY.
-
-### MarkersPlugin
-
-``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
-
-ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
-- offsetX, calculated pixels from left to right. This is number.
-- offsetY, calculated pixels from bottom to up. This is number.
-
-### Oskari application loading
-
-Oskari.app.setApplicationSetup() now setup markers for setMarkers() function.
 
 ### core
 
@@ -46,6 +30,15 @@ Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv 
 - As last resort anything that has a value
 
 Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
+Oskari.app.setApplicationSetup() now setup markers for setMarkers() function. Markers have been moved from mapfull config to env-part of GetAppSetup response.
+
+Oskari.util.sanitize() functionality has changed! Custom implementation has been replaced with DOMPurify (https://github.com/cure53/DOMPurify).
+Now takes just one parameter as string and returns a string.
+
+### mapfull
+
+Fixed layers visibility in state handling.
 
 ### mapmodule
 
@@ -63,37 +56,43 @@ Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
 Map scales computation improved for earth CRS  e.g. EPSG:4326
 
-Map scales computation in ol3 is/was correct for earth CRS 
+Map scales computation in ol3 is/was correct for earth CRS
 
-### mapfull
+#### ScalebarPlugin ol3
 
-Fixed layers visibility in state handling.
+Fixed scaleline width to match map units / measuring line results.
 
-Removed defaults markers adding (now application loading do it).
+#### MarkersPlugin
+
+``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
+
+ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
+- offsetX, calculated pixels from left to right. This is number.
+- offsetY, calculated pixels from bottom to up. This is number.
 
 ### popupservice
 
-New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping. Usable when all popups need to be closed when a feature is activated.
 
-### divmanazer
+### Fixed z-index for functionalities
 
-Fixed flyout z-index.
+Fixed divmanazer flyout z-index.
 
-### layerselection2, logoplugin and publishertoolbar
-
-Removed unneccassary z-index style.
+Removed unneccessary z-index style: layerselection2, logoplugin and publishertoolbar
 
 ### publisher2
 
-(x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
+(x) icon exit behaviour improved. Exiting publisher with X-icon or cancel-button now do the same things.
+Previously map controls were in the unstable state if publishing was canceled via (x) icon.
 
-Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported. 
+Embedded map name validator now allows more freedom in naming.
 
-User can now add coordinate transformation functionality to the coordinatetool if suppoted projections are included into publisher2 bundle config.
+Publisher config can now include default configuration for tools selectable to embedded maps. Coordinatetool is the first one to utilize this to
+ allow coordinate transformations to be included in embedded maps.
 
 ### mapwfs2
 
-Mapwfs2 plugin now support different thems (used in publisher2).
+Mapwfs2 plugins now support different themes (used in publisher2).
 
 ### featuredata2
 
@@ -107,9 +106,9 @@ Changed toolstyles to use mobile icons and all different styles are now created 
 
 Coordinatetool now support different styles.
 
-Coordinate transformation from one coordinate system to another can be added to the coordinatetool. Supported projections must be listed in bundle configuration. 
+Coordinate transformation from one coordinate system to another can be added to the coordinatetool. Supported projections must be listed in bundle configuration.
 
-UI in finnish language uses now comma for coordinate's desimal separation (instead of dot).
+Coordinate decimal separation is now done based on UI locale. For example finnish language uses comma and english uses dot.
 
 ### toolbar
 
@@ -125,10 +124,6 @@ SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0
 
 CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to 
 show, that current map Crs is unsupported in the requested service.
-
-### Oskari.util.sanitize()
-
-Replaced custom implementation with DOMPurify (https://github.com/cure53/DOMPurify). Now takes just one parameter as string and returns a string.
 
 ## 1.36.4
 
