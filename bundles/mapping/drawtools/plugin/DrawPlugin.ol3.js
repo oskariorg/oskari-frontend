@@ -215,7 +215,7 @@ Oskari.clazz.define(
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
             var data = {
-                lenght : me._length,
+                length : me._length,
                 area : me._area,
                 buffer: me._buffer,
                 bufferedGeoJson: bufferedGeoJson,
@@ -453,35 +453,57 @@ Oskari.clazz.define(
             evt = evt || {};
             var tooltipCoord = evt.coordinate;
             if (me._sketch) {
-                var output;
+                var output,
+                    area,
+                    length;
                 var geom = (me._sketch.getGeometry());
                 if (geom instanceof ol.geom.Polygon) {
-                  output = me.getPolygonArea(geom);
-                  tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                  // for Polygon-drawing checking itself-intersection
-                  if(me._featuresValidity[me._sketch.getId()]===false) {
-                    output = "";
-                    if(me._showIntersectionWarning) {
-                        output = me._loc.intersectionNotAllowed;
-                        me._area = output;
+                    area = me.getPolygonArea(geom);
+                    if(area < 10000) {
+                        area = area.toFixed(0) + " m<sup>2</sup>";
+                    } else if(area > 1000000) {
+                        area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
+                    } else {
+                        area = (area/10000).toFixed(2) + " ha<sup>2</sup>";
                     }
-                  }
+                    if (area) {
+                        area = area.replace(".", ",");
+                    }
+                    output = area;
+                    tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                    // for Polygon-drawing checking itself-intersection
+                    if(me._featuresValidity[me._sketch.getId()]===false) {
+                        output = "";
+                        if(me._showIntersectionWarning) {
+                            output = me._loc.intersectionNotAllowed;
+                            me._area = output;
+                        }
+                    }
                 } else if (geom instanceof ol.geom.LineString) {
-                  output = me.getLineLength(geom);
-                  tooltipCoord = geom.getLastCoordinate();
+                    length = me.getLineLength(geom);
+                    if(length < 1000) {
+                        length = length.toFixed(0) + " m";
+                    } else {
+                        length = (length/1000).toFixed(3) + " km";
+                    }
+                    if (length) {
+                        length = length.replace(".", ",");
+                    }
+                    output = length;
+                    tooltipCoord = geom.getLastCoordinate();
                 }
                 if(me._options.showMeasureOnMap && tooltipCoord) {
                     me._map.getOverlays().forEach(function (o) {
-                      if(o.id === me._sketch.getId()) {
-                          var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
-                          ii.html(output);
-                          if(output==="") {
-                            ii.addClass('withoutText')
-                          } else {
-                            ii.removeClass('withoutText');
-                          }
-                          o.setPosition(tooltipCoord);
-                      }
+                        if(o.id === me._sketch.getId()) {
+                            var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                            ii.html(output);
+                            if(output==="") {
+                                ii.addClass('withoutText')
+                            } else {
+                                ii.removeClass('withoutText');
+                            }
+                            o.setPosition(tooltipCoord);
+                        }
                     });
                 }
              }
@@ -715,18 +737,9 @@ Oskari.clazz.define(
             var area = 0;
             if(geometry && geometry.getType()==='Polygon') {
                 area = geometry.getArea();
-                if(area < 10000) {
-                    area = area.toFixed(0) + " m<sup>2</sup>";
-                } else if(area > 1000000) {
-                    area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
-                } else {
-                    area = (area/10000).toFixed(2) + " ha";
-                }
-            }
-            if(area) {
-                area = area.replace(".", ",");
                 this._area = area;
             }
+
             return area;
         },
         /**
@@ -740,14 +753,6 @@ Oskari.clazz.define(
             var length = 0;
             if(geometry && geometry.getType()==='LineString') {
                 length = geometry.getLength();
-                if(length < 1000) {
-                    length = length.toFixed(0) + " m";
-                } else {
-                    length = (length/1000).toFixed(3) + " km";
-                }
-            }
-            if(length) {
-                length = length.replace(".", ",");
                 this._length = length;
             }
             return length;

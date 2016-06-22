@@ -24,6 +24,10 @@ DotForm now use defaultmarker for visuliazation if wanted marker not found.
 
 Sanitize request added markers.
 
+### VectorLayerPlugin ol3
+
+Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
+
 ## 1.37.0
 
 ### jQuery selector removes more specific
@@ -33,9 +37,24 @@ Fixed jQuery selectors more specific for following bundles:
 - framework/publisher2
 - framework/divmanazer
 
+### Infobox
+
+- Infobox content and title are now sanitized before adding them to DOM
+- Infobox doesn't check anymore if the content is same than in the infobox exiting in the same location where the new one would be added
+
+### DrawingEvent
+
+Event now shows also the sketch in geojson-parameter, and isFinished-parameter is true when user finishes feature, not only when drawing is finished.
+
+Event shows area and length always in meters and unit is not shown anymore.
+
 ### ScalebarPlugin ol3
 
 Fixed scaleline width to match map units / measuring line results.
+
+### drawtools ol3
+
+Some fixes made for displaying measure result on the map.
 
 ### routingService
 
@@ -75,6 +94,12 @@ Added new ``isSvg`` function to check at if data has svg.
 
 Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
+#### ol2  map scales
+
+Map scales computation improved for earth CRS  e.g. EPSG:4326
+
+Map scales computation in ol3 is/was correct for earth CRS 
+
 ### mapfull
 
 Fixed layers visibility in state handling.
@@ -99,6 +124,8 @@ Removed unneccassary z-index style.
 
 Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported.
 
+User can now add coordinate transformation functionality to the coordinatetool if suppoted projections are included into publisher2 bundle config.
+
 ### mapwfs2
 
 Mapwfs2 plugin now support different thems (used in publisher2).
@@ -114,6 +141,10 @@ Changed toolstyles to use mobile icons and all different styles are now created 
 ### coordinatetool
 
 Coordinatetool now support different styles.
+
+Coordinate transformation from one coordinate system to another can be added to the coordinatetool. Supported projections must be listed in bundle configuration. 
+
+UI in finnish language uses now comma for coordinate's desimal separation (instead of dot).
 
 ### toolbar
 

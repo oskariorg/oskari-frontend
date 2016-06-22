@@ -117,7 +117,7 @@ function() {
             if (me.__started === true) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
-            jQuery('.publishedgrid').remove();
+            me.statsContainer.remove();
         }
 
         if (enabled && me.__handlers['MapSizeChanged']) {
