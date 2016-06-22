@@ -40,9 +40,13 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
+                <!-- 
+                    Chrome autofill workaround: http://stackoverflow.com/questions/15738259/disabling-chrome-autofill
+                    tested with chrome v. 51.0.2704.103 m
+                -->
                 <input type="password" id="add-layer-password" class="add-layer-input long"
                        placeholder="<%= instance.getLocalization('admin').password %>"
-                       value="<%= model.getPassword() %>" />
+                       value="<%= model.getPassword() %>" autocomplete="new-password" />
                 <div class="icon-close"></div>
             </div>
         </div>
