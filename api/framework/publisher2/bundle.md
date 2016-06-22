@@ -44,21 +44,28 @@ Some configuration is needed for URLs:
     "fi": "/fi/login",
     "sv": "/sv/login"
   },
-  "registerUrl": "/register"
+  "registerUrl": "/register",
+  "toolsConfig" : {
+    "<tool>" : {
+      ...
+    }
+  }
 }
 ```
+Toolsconfig can be used to configure bundle configurations for tools that are user selectable. Most configs can be included in the publish-template, but this makes publisher more versatile and allows different views in the same Oskari instance to have different preselected tool configurations. When initializing publisher tools the configuration is passed to the tool based on tool name. First one to utilize this feature is coordinatetool where you can specify projections transform support to be included in embedded maps. 
 
-If coordinate transformation must to be added to the coordinatetool, the database will needed the following sql-script:
-
+Example for coordinatetool:
 ```javascript
-update portti_view_bundle_seq set config = '{toolsConfig :  {
+{
+  "toolsConfig" :  {
       "coordinatetool" : {
           "supportedProjections": ["EPSG:3067", "NLSFI:etrs_gk", "NLSFI:ykj", "EPSG:4258", "LATLON:kkj", "EPSG:3046", "EPSG:3048", "EPSG:3873", "EPSG:3874", "EPSG:3875", "EPSG:3876", "EPSG:3877", "EPSG:3878", "EPSG:3879", "EPSG:3880", "EPSG:3881", "EPSG:3882", "EPSG:3883", "EPSG:3884", "EPSG:3885"]
           "roundToDecimals": 6,
           "isReverseGeocode" : true,
           "reverseGeocodingIds" : "WHAT3WORDS_CHANNEL"
       }
-}}' WHERE bundle_id = (select id from portti_bundle where name = 'publisher2' and view_id = ?)
+  }
+}
 ```
 
 ## Bundle Panels
@@ -77,13 +84,7 @@ Panel contains following fields:
 
 ## Map size panel
 
-The second panel has some predefined size options for the map. Map size change is communicated as a "mode" change to the publisher tools.
-The currently selected map mode is transmitted to all panels where have implemented setMode(mode) function and there panel handles this mode change.
-For example PanelMapTools handles this so at this call setMode(mode) function to all tools where have a implemented setMode() function.
-
-Currently supported modes are:
-* mobile
-* full
+The second panel has some predefined size options for the map. Tools can react to size changes. Size is communicated by changing the preview map-window size which triggers  MapSizeChangedEvent.
 
 ### Tool panels
 
@@ -112,7 +113,6 @@ getTool: function() {
 * getName(): This is used to show tool name in checkbox label. 
 * isDisplayedInMode(mode): This is used for checking if tool is showed in mode (mobile/full).
 * isDisplayed(): This is used to check at is the tool displayed. For example, depending on the state of map or depending of selected layers (ShowStatsTableTool).
-* setMode(mode): This sets tool to wanted mode (see Map size panel).
 * getGroup(): This is used to get tool group (what panel tool appears)
 * getIndex(): This is used to get tool index in group. A smaller number is upper and higher number is lower.
 * getAllowedLocations(): This is used to get tool allowed locations.
