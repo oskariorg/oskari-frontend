@@ -17,10 +17,6 @@ Event shows area and length always in meters and unit is not shown anymore.
 
 Fixed scaleline width to match map units / measuring line results.
 
-### VectorLayerPlugin ol3
-
-Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
-
 ### drawtools ol3
 
 Some fixes made for displaying measure result on the map.
@@ -67,7 +63,7 @@ Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
 Map scales computation improved for earth CRS  e.g. EPSG:4326
 
-Map scales computaion in ol3 is/was correct for earth CRS 
+Map scales computation in ol3 is/was correct for earth CRS 
 
 ### mapfull
 
