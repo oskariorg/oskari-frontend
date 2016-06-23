@@ -26,6 +26,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
         this._filterJson = null;
+        this._WMSLayerId;
+        this._internalWmsOpened = false;
 
         this.localization = Oskari.getLocalization('MapWfs2');
     }, {
@@ -271,6 +273,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
                 return this._styles.concat([style]);
             }
             return this._styles;
+        },
+        /**
+         * @method setWMSLayerId
+         * @param {String} id
+         * Unique identifier for map layer used to reference the WMS layer,
+         * which is linked to WFS layer for to use for rendering
+         */
+        setWMSLayerId: function (id) {
+            this._WMSLayerId = id;
+
+        },
+        /**
+         * @method getWMSLayerId
+         * @return {String}
+         * Unique identifier for map layer used to reference the WMS layer,
+         * which is linked to WFS layer for to use for rendering
+         * (e.g. MapLayerService)
+         */
+        getWMSLayerId: function () {
+            return this._WMSLayerId;
+        },
+        /**
+         * @method setInternalWmsOpened
+         * @param {Boolean} opened
+         * true, if  WFS layer linked WMS layer (_WMSLayerId) is opened without user action
+         */
+        setInternalWmsOpened: function (opened) {
+            this._internalWmsOpened = opened;
+
+        },
+        /**
+         * @method getInternalWmsOpened
+         * @return {Boolean}
+         * true, if WFS layer linked WMS layer (_WMSLayerId) is opened without user action
+         * (e.g. MapLayerService)
+         */
+        getInternalWmsOpened: function () {
+            return this._internalWmsOpened;
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]
