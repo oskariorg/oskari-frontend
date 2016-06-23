@@ -49,10 +49,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
 
             var touContentLink = content.find('div.tou a');
             touContentLink.append(me.loc.touLink);
-            touContentLink.bind('click', function () {
-                me._showTermsOfUse();
-                return false;
-            });
+            if(me.conf.termsOfUseUrl && me.conf.termOfUseUrl.indexOf('http')>-1) {
+                touContentLink.attr('target', '_blank');
+                touContentLink.attr('href', me.conf.termsOfUseUrl);
+            } else {
+                touContentLink.bind('click', function () {
+                    me._showTermsOfUse();
+                    return false;
+                });
+            }
 
             var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             continueButton.addClass('primary');
