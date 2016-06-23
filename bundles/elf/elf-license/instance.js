@@ -487,7 +487,7 @@ function () {
             me._locale.dialog.loginShort +
             '</div>' +
             '<div style="margin-top:20px;"><a href="http://locationframework.eu/content/registration" target="_blank">'+me._locale.dialog.registerLinkText+'</a></div>');
-    }
+    },
     /**
      * Show license deactivate params dialog
      * @method _showLicenseDeactivateParams
