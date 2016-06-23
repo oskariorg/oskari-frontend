@@ -75,7 +75,8 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "Palvelun URL-osoite: {serviceurl}",
             "licenceConcluded": {
                 "message": "Lisenssin tilaus onnistui. Tarkista lisenssin tiedot alta:"
-            }
+            },
+            "registerLinkText": "Rekisteröidy"
         },
         "buttons": {
             "close": "Sulje",

@@ -70,7 +70,8 @@ Oskari.registerLocalization(
                 "W":"weeks",
                 "M": "months",
                 "Y": "years"
-            }
+            },
+            "registerLinkText": "Register"
         },
         "buttons": {
             "close": "Close",

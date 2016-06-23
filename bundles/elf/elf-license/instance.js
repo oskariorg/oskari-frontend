@@ -461,7 +461,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                me._showLoginInfo(title);
             }
         }
 
@@ -480,6 +480,14 @@ function () {
         }
 
     },
+    _showLoginInfo: function(element){
+        var me = this,
+            html = jQuery('<div>')
+        element.html('<div>' +
+            me._locale.dialog.loginShort +
+            '</div>' +
+            '<div style="margin-top:20px;"><a href="http://locationframework.eu/content/registration" target="_blank">'+me._locale.dialog.registerLinkText+'</a></div>');
+    }
     /**
      * Show license deactivate params dialog
      * @method _showLicenseDeactivateParams
@@ -680,7 +688,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                 me._showLoginInfo(title);
             }
         }
 
@@ -733,7 +741,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                 me._showLoginInfo(title);
             }
         }
         var licenseDialogLink = jQuery("<a>"+me._locale.getLicenseText+"</a>");
