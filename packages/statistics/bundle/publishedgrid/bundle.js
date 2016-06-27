@@ -128,10 +128,10 @@ function() {
             "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
             "type" : "text/javascript"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.jquery.js",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
             "type" : "text/javascript"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.css",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.css",
             "type" : "text/css"
         }],
         "locales" : [{

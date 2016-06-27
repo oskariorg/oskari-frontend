@@ -464,19 +464,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {{Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getNewestLayers: function (count) {
-            var me = this,
-                list = [],
-                i,
-                layer,
-                layersWhereCreatedDate,
-                newestToOldestLayers;
+            var list = [],
+                i;
 
-            
-            layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer, indeksi) {
+            var layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer) {
                 return  layer._created !== null && !isNaN(layer._created.getTime());
             });
-            
-            newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
+
+            var newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
                 if(a.getCreated()>b.getCreated()) {
                     return -1;
                 } else if(a.getCreated()<b.getCreated()) {
@@ -486,9 +481,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
 
             });
-            
+
             for (i = 0; i<newestToOldestLayers.length; i++) {
-                list.push(newestToOldestLayers[i]);                
+                list.push(newestToOldestLayers[i]);
                 if(list.length === count) {
                     break;
                 }

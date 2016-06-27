@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             this._scalebar = new ol.control.ScaleLine({
                 target: el[0]
             });
+
             this.getMap().addControl(this._scalebar);
             return el;
         }

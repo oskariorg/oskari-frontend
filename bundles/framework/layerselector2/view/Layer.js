@@ -15,10 +15,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
-        this.backendStatus = 'OK'; // see also 'backendstatus-ok'
+        this.backendStatus = 'UNKNOWN'; // see also 'backendstatus-ok'
         this.ui = this._createLayerContainer(layer);
     }, {
-        __template: '<div class="layer"><input type="checkbox" /> ' + '<div class="layer-tools"><div class="layer-backendstatus-icon backendstatus-ok"></div>' + '<div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' +
+        __template: '<div class="layer"><input type="checkbox" /> ' + 
+                    '<div class="layer-tools">'+
+                    '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' + 
+                    '   <div class="layer-icon"></div>'+
+                    '   <div class="layer-info"></div>'+
+                    '</div>' + 
+                    '<div class="layer-title"></div>' +
         //'<div class="layer-keywords"></div>' +
         '</div>',
         /**
@@ -57,21 +63,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 prevBackendStatus = this.backendStatus,
                 currBackendStatus = layer.getBackendStatus(),
                 loc = this.localization.backendStatus,
-                locForPrevBackendStatus = prevBackendStatus ? loc.prevBackendStatus : null,
-                locForCurrBackendStatus = currBackendStatus ? loc.currBackendStatus : null,
+                locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null,
+                locForCurrBackendStatus = currBackendStatus ? loc[currBackendStatus] : null,
                 clsForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.iconClass : null,
                 clsForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.iconClass : null,
                 tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null,
                 tipForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.tooltip : null,
                 elBackendStatus = this.ui.find('.layer-backendstatus-icon');
-
             this.ui.find('.layer-title').html(newName);
 
             /* set sticky */
             if (layer.isSticky()) {
                 this.ui.find('input').attr('disabled', 'disabled');
             }
-
 
             if (clsForPrevBackendStatus) {
                 /* update or clear */
@@ -222,6 +226,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
              * backend status
              */
             elBackendStatus = tools.find('.layer-backendstatus-icon');
+
+            var backendStatus = layer.getBackendStatus();
+            if (backendStatus) {
+                var iconClass = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].iconClass : null;
+                var tooltip = me.localization.backendStatus[backendStatus] ? me.localization.backendStatus[backendStatus].tooltip : null;
+                if (iconClass) {
+                    elBackendStatus.removeClass('backendstatus-unknown');
+                    elBackendStatus.addClass(iconClass);
+                    elBackendStatus.attr('title', tooltip);
+                }
+            }
             elBackendStatus.click(function () {
                 mapLayerId = layer.getId();
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [

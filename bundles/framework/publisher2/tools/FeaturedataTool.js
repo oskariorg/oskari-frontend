@@ -62,7 +62,7 @@ function() {
             json.configuration[me.bundleName] = {
                 conf: pluginConfig,
                 state: {}
-            }
+            };
             return json;
         } else {
             return null;

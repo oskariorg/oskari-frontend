@@ -91,59 +91,6 @@ Oskari.registerLocalization(
                 "type-base": "Background map",
                 "type-wms": "Map layer",
                 "type-wfs": "Data product"
-            },
-            "filter": {
-                "title": "Filter",
-                "description": "Filter values on map layer:",
-                "cancelButton": "Cancel",
-                "clearButton": "Clear filter",
-                "refreshButton": "Refresh filter",
-                "addFilter": "Add filter",
-                "removeFilter": "Remove filter",
-                "bbox": {
-                    "title": "Map filter",
-                    "on": "Only features visible on the map",
-                    "off": "All features"
-                },
-                "clickedFeatures": {
-                    "title": "Feature filter",
-                    "label": "Only features selected on the map"
-                },
-                "values": {
-                    "title": "Attribute filter",
-                    "placeholders": {
-                        "case-sensitive": "Filter is case-sensitive",
-                        "attribute": "Attribute",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Value"
-                    },
-                    "equals": "on yhtäsuuri kuin",
-                    "like": "on likimäärin yhtäsuuri kuin",
-                    "notEquals": "on erisuuri kuin",
-                    "notLike": "on likimäärin erisuuri kuin",
-                    "greaterThan": "on suurempi kuin",
-                    "lessThan": "on pienempi kuin",
-                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
-                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Use statistical values",
-                    "aggregateValueSelectTitle": "Select Statistical Values",
-                    "selectAggregateAnalyse": "Select analysis layer",
-                    "selectIndicator": "Select property",
-                    "selectReadyButton": "Close",
-                    "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
-                    "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
-                    "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
-                },
-                "validation": {
-                    "title": "Features could not be filtered. The following errors occurred:",
-                    "attribute_missing": "The attribute is missing.",
-                    "operator_missing": "The operator is missing.",
-                    "value_missing": "The value is missing.",
-                    "boolean_operator_missing": "The logical operator is missing."
-                }
             }
         },
         "gridFooter": {

@@ -129,9 +129,18 @@ Oskari.clazz.define(
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
 
+            if (currPopup && !refresh) {
+                if (me._popups[id].type === "mobile") {
+                    me._popups[id].popup.dialog.remove();
+                    me._popups[id].popup.__notifyListeners('close');
+                } else {
+                    me.close(id);
+                }
+                delete me._popups[id];
+            }
+
             if (refresh) {
-                contentData = me._getChangedContentData(
-                    currPopup.contentData.slice(), contentData.slice());
+                contentData = currPopup.contentData.concat(contentData);
                 currPopup.contentData = contentData;
             }
 
@@ -144,10 +153,8 @@ Oskari.clazz.define(
          _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                sanitizedContentDiv = Oskari.util.sanitize(contentDiv[0], true),
-                sanitizedTitle = Oskari.util.sanitize(title).data,
-                sanitizedId = Oskari.util.sanitize(id).data,
-                popupContentHtml = me._renderPopupContent(sanitizedId, sanitizedTitle, jQuery(sanitizedContentDiv), additionalTools),
+                sanitizedTitle = Oskari.util.sanitize(title),
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -156,8 +163,12 @@ Oskari.clazz.define(
                 offsetY = -20,
                 mapModule = me.getMapModule(),
                 isMarker = (marker && marker.data) ? true : false,
-                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info";
-                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+                positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : "no-position-info",
+                popupType,
+                popupDOM,
+                popup;
+
+            jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
             if(isMarker){
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
@@ -169,27 +180,30 @@ Oskari.clazz.define(
                 options.mobileBreakpoints = me._mobileBreakpoints;
             }
             var isInMobileMode = this._isInMobileMode(options.mobileBreakpoints);
-            var id = sanitizedId;
 
             popupElement.attr('id', id);
             if (refresh) {
                 popup = me._popups[id].popup;
                 if (isInMobileMode) {
-                    var popupType = "mobile";
-                    popup.setContent(sanitizedContentDiv);
+                    popupType = "mobile";
+                    popup.setContent(contentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id),
-                        popupType = "desktop";
+                    popupDOM = jQuery('#' + id);
+                    popupType = "desktop";
                     jQuery('.olPopup').empty();
                     jQuery('.olPopup').html(popupContentHtml);
                     popup.setPosition(lonlatArray);
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
                     }
+                    if (positioning) {
+                        popupDOM.addClass(positioning);
+                        popupDOM.find('.popupHeaderArrow').addClass(positioning);
+                    }
                 }
             } else if (isInMobileMode) {
-                var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    popupType = "mobile";
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                popupType = "mobile";
 
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
@@ -198,7 +212,7 @@ Oskari.clazz.define(
                     popup.setFont(font);
                 }
 
-                popup.show(sanitizedTitle, sanitizedContentDiv);
+                popup.show(sanitizedTitle, contentDiv);
 
                 if (colourScheme) {
                     popup.setColourScheme(colourScheme);
@@ -211,7 +225,7 @@ Oskari.clazz.define(
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                var popupType = "desktop";
+                popupType = "desktop";
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
@@ -227,7 +241,7 @@ Oskari.clazz.define(
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
 
-                var popupDOM = jQuery('#' + id);
+                popupDOM = jQuery('#' + id);
                 if (positioning) {
                     popupDOM.addClass(positioning);
                     popupDOM.find('.popupHeaderArrow').addClass(positioning);
@@ -362,27 +376,35 @@ Oskari.clazz.define(
                     actionTemplate,
                     btn,
                     link,
-                    currentGroup
-                    group = -1;
+                    currentGroup,
+                    group = -1,
+                    sanitizedHtml;
 
-                contentWrapper.append(datum.html);
+                if (typeof datum.html === "string") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html);
+                } else if (typeof datum.html === "object") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
+                }
+
+                contentWrapper.append(sanitizedHtml);
 
 	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 if (actions) {
                     _.forEach(actions, function (action) {
+                        var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === "link") {
                             actionTemplate = me._actionLink.clone();
                             link = actionTemplate.find('a');
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
-                            link.append(action.name);
+                            link.append(sanitizedActionName);
                         } else {
                             actionTemplate = me._actionButton.clone();
                             btn = actionTemplate.find('input');
                             btn.attr({
                                 contentdata: index,
-                                value: action.name
+                                value: sanitizedActionName
                             });
                         }
 
@@ -431,7 +453,7 @@ Oskari.clazz.define(
                         if (typeof actionObject.action === 'function') {
                             contentData[i].actions[value]();
                         } else {
-                            event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
+                            var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
                             sandbox.notifyAll(event);
                         }
                     }
@@ -449,40 +471,6 @@ Oskari.clazz.define(
                     evt.stopPropagation();
                 }
             };
-        },
-
-        /**
-         * Merges the given new data to the old data.
-         * If there's a fragment with the same layerId in both,
-         * the new one replaces it.
-         *
-         * @method _getChangedContentData
-         * @private
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _getChangedContentData: function (oldData, newData) {
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen;
-
-            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                    if (newData[j].layerId &&
-                        newData[j].layerId === oldData[i].layerId) {
-                        oldData[i] = newData[j];
-                        newData.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-
-            retData = oldData.concat(newData);
-
-            return retData;
         },
 
         /**

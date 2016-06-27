@@ -91,59 +91,6 @@ Oskari.registerLocalization(
                 "type-base": "Bakgrunnskort",
                 "type-wms": "Kortalag",
                 "type-wfs": "Gagnaafurð"
-            },
-            "filter": {
-                "title": "Sía",
-                "description": "Veldu fitjurnar úr kortalaginu.",
-                "cancelButton": "Hætta við",
-                "clearButton": "Hreinsa síu",
-                "refreshButton": "Endurnýja síu",
-                "addFilter": "Bæta við nýrri síu",
-                "removeFilter": "Eyða síu",
-                "bbox": {
-                    "title": "Kortasjársía",
-                    "on": "Aðeins fitjan sem er sýnileg í kortasjá.",
-                    "off": "Allar fitjur."
-                },
-                "clickedFeatures": {
-                    "title": "Fitjuvalssía.",
-                    "label": "Aðeins fitjur sem eru valdar á kortinu."
-                },
-                "values": {
-                    "title": "Sía fitjur eftir eigindum gagna",
-                    "placeholders": {
-                        "case-sensitive": "Sían er háð há- og lágstöfum",
-                        "attribute": "Eigindi",
-                        "boolean": "Rökvirkir",
-                        "operator": "Virkir",
-                        "attribute-value": "Gildi"
-                    },
-                    "equals": "er jafnt og",
-                    "like": "er eins og",
-                    "notEquals": "er ekki jafnt og",
-                    "notLike": "er ekki eins og",
-                    "greaterThan": "er stærri en",
-                    "lessThan": "er minni en",
-                    "greaterThanOrEqualTo": "er stærri en eða jafn stór og",
-                    "lessThanOrEqualTo": "er minni en eða jafn stór og"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Veldu heildargildi",
-                    "aggregateValueSelectTitle": "Nota heildargildi í síu",
-                    "selectAggregateAnalyse": "Velja heildargreiningu",
-                    "selectIndicator": "Velja vísi",
-                    "selectReadyButton": "Tilbúið",
-                    "getAggregateAnalysisFailed": "Ekki var hægt að finna heildargögnin.",
-                    "noAggregateAnalysisPopupTitle": "Ekki var hægt að finna heildargreininguna.",
-                    "noAggregateAnalysisPopupContent": "Þú hefur ekki gert heildargreiningu. Þú getur búið til þín eigin heildargögn í greiningartólinu og notað síðan gildi þegar þú síar."
-                },
-                "validation": {
-                    "title": "Ekki var hægt að uppfæra síu vegna eftirfarandi mistaka:",
-                    "attribute_missing": "Eigindi vantar.",
-                    "operator_missing": "Virkjann vantar.",
-                    "value_missing": "Gildi vantar.",
-                    "boolean_operator_missing": "Rökvirkjann vantar."
-                }
             }
         },
         "gridFooter": {

@@ -207,8 +207,7 @@ Oskari.clazz.define(
 
         addFilterFunctionality: function (event, layer) {
             var me = this,
-                prevJson,
-                loc = this.instance.getLocalization('layer'),
+                prevJson;
 
                 // this is needed to add the functionality to filter with aggregate analyse values
                 // if value is true, the link to filter with aggregate analyse values is added to dialog
@@ -217,12 +216,10 @@ Oskari.clazz.define(
             var fixedOptions = {
                 bboxSelection: true,
                 clickedFeaturesSelection: false,
-                addLinkToAggregateValues: isAggregateValueAvailable,
-                loc: loc
+                addLinkToAggregateValues: isAggregateValueAvailable
             };
             me.filterDialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.FilterDialog',
-                loc,
                 fixedOptions
             );
 
@@ -236,7 +233,6 @@ Oskari.clazz.define(
                 me.aggregateAnalyseFilter = Oskari.clazz.create(
                     'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                     me.instance,
-                    me.instance.getLocalization('layer'),
                     me.filterDialog
                 );
 

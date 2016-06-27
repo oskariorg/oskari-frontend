@@ -54,8 +54,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
             //if style explicitly provided, add that as well
             var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
+
             button.addClass(pConfig.iconCls);
-            button.addClass(pConfig.iconCls + style);
+            if(!me._isAllreadyThemedIcon(pConfig)) {
+                button.addClass(pConfig.iconCls + style);
+            }
         } else if (me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
             ///TODO: this is the "old" way of handling stuff (as seen on the old realiable publisher1).
             //Remove, once we've migrated stuff into using the new way (=style info as part of the toolbar's config).
@@ -257,8 +260,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
                 if(btn.toggleChangeIcon === true) {
                     // Remove button light and dark icons
-                    button.removeClass(btn.iconCls + '-light');
-                    button.removeClass(btn.iconCls + '-dark');
+                    me._removeIconThemes(button, btn);
                     me._changeButtonIconTheme(btn, button, btn.activeColour);
                 }
             }
@@ -283,15 +285,27 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._addHoverIcon(btn,toolbarConfig,button);
         }
     },
-
     _addHoverIcon: function(btnConfig,toolbarConfig,buttonEl){
+        var me = this;
         if(!btnConfig || !btnConfig.iconCls || !toolbarConfig || !buttonEl || toolbarConfig.createdHover === false) {
             return;
         }
-        buttonEl.removeClass(btnConfig.iconCls + '-light');
-        buttonEl.removeClass(btnConfig.iconCls + '-dark');
+        me._removeIconThemes(buttonEl, btnConfig);
+
         var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
         buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
+    },
+    _removeIconThemes: function(btnEl, btnConfig){
+        var me = this;
+        if(!btnConfig || !btnConfig.iconCls || !btnEl) {
+            return;
+        }
+        var iconCls = btnConfig.iconCls;
+        if(me._isAllreadyThemedIcon(btnConfig)) {
+            iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-dark'));
+        }
+        btnEl.removeClass(iconCls + '-light');
+        btnEl.removeClass(iconCls + '-dark');
     },
     /**
      * Add button theme
@@ -301,12 +315,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @param {Object} buttonEl  button jQuery element
      */
     _addButtonTheme: function(btnConfig, toolbarConfig, buttonEl){
+        var me = this;
         if(!btnConfig || !btnConfig.iconCls || !buttonEl) {
             return;
         }
-        buttonEl.removeClass(btnConfig.iconCls + '-light');
-        buttonEl.removeClass(btnConfig.iconCls + '-dark');
-        if(toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
+        me._removeIconThemes(buttonEl, btnConfig);
+
+        if(me._isAllreadyThemedIcon(btnConfig)) {
+            buttonEl.addClass(btnConfig.iconCls);
+        } else if(toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
             if(Oskari.util.getColorBrightness(toolbarConfig.colours.background) === 'light') {
                 buttonEl.addClass(btnConfig.iconCls + '-light');
             } else {
@@ -317,7 +334,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
         }
     },
+    _isAllreadyThemedIcon: function(btnConfig){
+        var isButtonConfig = (btnConfig && btnConfig.iconCls) ? true : false;
+        var isLightTheme = (btnConfig.iconCls.indexOf('light') > -1) ? true : false;
+        var isDarkTheme = (btnConfig.iconCls.indexOf('dark') > -1) ? true : false;
 
+        if(!isButtonConfig) {
+            return false;
+        } else if(isLightTheme || isDarkTheme) {
+            return true;
+        } else {
+            return false;
+        }
+    },
     /**
      * Change button icon theme
      * @method  @priavate _changeButtonIconTheme
@@ -325,11 +354,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @param  {Object} buttonEl  button jQuery element
      */
     _changeButtonIconTheme: function(btnConfig, buttonEl, color){
+        var me = this;
         if(!btnConfig || !btnConfig.activeColour || !buttonEl) {
             return;
         }
 
-        if(Oskari.util.isLightColor(color)) {
+        if(me._isAllreadyThemedIcon(btnConfig)) {
+            //buttonEl.addClass(btnConfig.iconCls);
+            var iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-dark'));
+            if(buttonEl.hasClass('selected')) {
+                if(Oskari.util.isLightColor(color)) {
+                    buttonEl.addClass(iconCls + '-light');
+                } else {
+                    buttonEl.addClass(iconCls + '-dark');
+                }
+            } else {
+                buttonEl.addClass(btnConfig.iconCls);
+            }
+        } else if(Oskari.util.isLightColor(color)) {
             buttonEl.addClass(btnConfig.iconCls + '-light');
         } else {
             buttonEl.addClass(btnConfig.iconCls + '-dark');
@@ -353,8 +395,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             if(btn.activeColour) {
                 button.css('background-color', '');
                 button.removeClass('selected');
-                button.removeClass(btn.iconCls + '-light');
-                button.removeClass(btn.iconCls + '-dark');
+                me._removeIconThemes(button, btn);
             }
 
             var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);

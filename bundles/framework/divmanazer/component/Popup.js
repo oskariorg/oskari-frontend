@@ -74,6 +74,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._isVisible = true;
 
             this._bringMobilePopupToTop();
+
+            me.__notifyListeners('show');
+
         },
 
         /**
@@ -228,7 +231,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Options for #moveTo() alignment parameter
          * @static
          */
-        alignment: ['left', 'right', 'top', 'bottom'],
+        alignment: ['left', 'right', 'top', 'bottom', 'center'],
         /**
          * @method moveTo
          * Removes the popup after given time has passed
@@ -242,7 +245,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 align = 'right',
                 //get the position of the target element
                 tar = jQuery(target),
-                pos = tar.offset();
+                pos = tar.offset(),
+                parent = jQuery(window);
 
             if (!tar || tar.length === 0 || !pos) {
                 // couldn't find target - aborting
@@ -273,7 +277,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             } else if (align === 'bottom') {
                 top = (top + targetHeight) + 5;
                 left = left + (targetWidth / 2) - (dialogWidth / 2);
+            } else if (align === 'center') {
+                top = top + (targetHeight / 2) - (dialogHeight / 2);
+                left = left + (targetWidth / 2) - (dialogWidth / 2);
             }
+
             top = Math.min(top, windowHeight - dialogHeight);
 
             if (left < 0) {
@@ -291,8 +299,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             me.dialog.addClass(alignment);
 
             // Check at if popup is outside screen from right
-            if(jQuery(window).width() < (me.dialog.width() + left)) {
-                left = jQuery(window).width() - me.dialog.width();
+            if(parent.width() < (me.dialog.width() + left)) {
+                left = parent.width() - me.dialog.width();
             }
 
             //move dialog to correct location
@@ -406,6 +414,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         onClose: function (callback) {
             this.__getListeners('close').push(callback);
+        },
+        /**
+         * Add listener to be called when popup is shown
+         * @param  {Function} callback function to call on show
+         */
+        onShow: function (callback) {
+            this.__getListeners('show').push(callback);
         },
         /**
          * Clears any listeners (registered with onClose(callback)-function).
@@ -534,5 +549,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     'top': (size.width - popup.height() - 10) + 'px'
                 });
             }
-        }
+        },
     });

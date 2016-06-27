@@ -91,59 +91,6 @@ Oskari.registerLocalization(
                 "type-base": "Taustakartta",
                 "type-wms": "Karttataso",
                 "type-wfs": "Tietotuote"
-            },
-            "filter": {
-                "title": "Valitse kohteita",
-                "description": "Valitse kohteita karttatasolta:",
-                "cancelButton": "Poistu",
-                "clearButton": "Tyhjennä valinnat",
-                "refreshButton": "Päivitä valinnat",
-                "addFilter": "Lisää uusi ehto",
-                "removeFilter": "Poista ehto",
-                "bbox": {
-                    "title": "Ikkunarajaus",
-                    "on": "Ota mukaan vain kartalla näkyvät kohteet.",
-                    "off": "Ota mukaan kaikki kohteet."
-                },
-                "clickedFeatures": {
-                    "title": "Kohderajaus",
-                    "label": "Ota mukaan vain kartalta valitut kohteet."
-                },
-                "values": {
-                    "title": "Valitse kohteet seuraavien ehtojen perusteella:",
-                    "placeholders": {
-                        "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
-                        "attribute": "Ominaisuustieto",
-                        "boolean": "Looginen operaattori",
-                        "operator": "Operaattori",
-                        "attribute-value": "Arvo"
-                    },
-                    "equals": "on yhtäsuuri kuin",
-                    "like": "on likimäärin yhtäsuuri kuin",
-                    "notEquals": "on erisuuri kuin",
-                    "notLike": "on likimäärin erisuuri kuin",
-                    "greaterThan": "on suurempi kuin",
-                    "lessThan": "on pienempi kuin",
-                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
-                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Käytä tunnuslukua",
-                    "aggregateValueSelectTitle": "Valitse käytettävät tunnusluvut",
-                    "selectAggregateAnalyse": "Valitse analyysitaso",
-                    "selectIndicator": "Valitse ominaisuustieto",
-                    "selectReadyButton": "Sulje",
-                    "getAggregateAnalysisFailed": "Tunnuslukujen haku epäonnistui.",
-                    "noAggregateAnalysisPopupTitle": "Tunnuslukuja ei löytynyt",
-                    "noAggregateAnalysisPopupContent": "Kyseiselle tasolle ei ole laskettu tunnuslukuja. Voit laskea tunnusluvut haluamallesi aineistolle Analyysi-toiminnon avulla.."
-                },
-                "validation": {
-                    "title": "Suodatusta ei voitu tehdä. Antamissasi tiedoissa on puutteita:",
-                    "attribute_missing": "Ominaisuustieto puuttuu.",
-                    "operator_missing": "Operaattori puuttuu.",
-                    "value_missing": "Arvo puuttuu.",
-                    "boolean_operator_missing": "Looginen operaattori puuttuu."
-                }
             }
         },
         "gridFooter": {

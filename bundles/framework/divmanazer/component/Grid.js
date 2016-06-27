@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorList = jQuery('<ul/>', {});
         this.templateColumnSelectorListItem = jQuery('<li>' +
             '<div>' +
-            '<input type="checkbox"/>' +
+            '<input type="checkbox" class="oskari-divmanazer-component-grid"/>' +
             '<label></label>' +
             '</div>' +
             '</li>'
@@ -648,7 +648,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
-            jQuery('input.column-selector-list-item').remove();
+            // FIXME check this how can be more spefied selctor?
+            jQuery('input.oskari-divmanazer-component-grid').remove();
             // Open or close the checkbox dropdown list
             me.visibleColumnSelector.click(function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
@@ -1218,7 +1219,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 numericValue,
                 split = pAttribute.split('.'); // if not found, try subtable
 
-            if (typeof nameA === 'undefined') {
+            if (typeof nameA === 'undefined' && split.length > 1) {
                 nameA = a[split[0]][split[1]];
             }
             if (!nameA) {
