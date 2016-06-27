@@ -49,9 +49,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
 
             var touContentLink = content.find('div.tou a');
             touContentLink.append(me.loc.touLink);
-            if(me.conf.termsOfUseUrl && me.conf.termOfUseUrl.indexOf('http')>-1) {
+            if(me.instance.conf && me.instance.conf.termsOfUseUrl && me.instance.conf.termOfUseUrl.indexOf('http')>-1) {
                 touContentLink.attr('target', '_blank');
-                touContentLink.attr('href', me.conf.termsOfUseUrl);
+                touContentLink.attr('href', me.instance.conf.termsOfUseUrl);
             } else {
                 touContentLink.bind('click', function () {
                     me._showTermsOfUse();
