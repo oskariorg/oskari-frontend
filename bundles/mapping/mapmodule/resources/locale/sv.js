@@ -58,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Egenskaper",
                 "description": "Beskrivning",
                 "link": "URL-address",
-                "name": "Namn"
+                "name": "Namn",
+                "noAttributeData": "Inga attributer att visa, vänligen öppna objektuppgifterna för att se de dolda attributerna."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
