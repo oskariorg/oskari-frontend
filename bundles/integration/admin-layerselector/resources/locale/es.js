@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "capa de mapa",
             "type-wfs": "producto de dtos"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "la capa del mapa está disponible",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "la capa del mapa no está disponible",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Habrá descansos en la disponibilidad de la capa de mapa durante los próximos días",
-                "iconClass": "backendstatus-mantenimiento"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "confirmResourceKeyChange": "Ha cambiado el nombre único o la dirección de la interfaz de esta capa de mapa. Por razones de  seguridad se eliminarán los derechos del usuario para esta capa de mapa y debe ponerlos otra vez. ¿Desea continuar?",

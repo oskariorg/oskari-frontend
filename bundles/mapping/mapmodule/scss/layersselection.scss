@@ -1,12 +1,13 @@
 /* Mixins */
 div.mapplugin.layerselection {
+  clear:both;
   height: 37px;
   overflow: visible;
   max-width: 200px;
-  z-index: 100000000000000 !important; 
+  z-index: 15001 !important;
 
   div.content {
-    background-color: white; 
+    background-color: white;
     max-height: 95%;
 
     div.layers-content {
@@ -29,40 +30,40 @@ div.mapplugin.layerselection {
       color: #FFFFFF;
       text-align: left;
       height: 25px;
-      padding: 5px;    
+      padding: 5px;
 
       .content-close {
         display: inline-block;
         float: right;
-        cursor: pointer; 
+        cursor: pointer;
       }
 
       div.content-header-title {
         display: inline-block;
         float: left;
-        padding: 5px; 
+        padding: 5px;
       }
     }
 
     div.baseLayerHeader, div.layerHeader {
       background-color: #E6E6E6;
       padding: 10px;
-      text-align: left; 
+      text-align: left;
     }
 
     div.layer {
       margin: 5px 0;
       text-align: left;
-      clear: both; 
+      clear: both;
       input {
         margin-right: 10px;
-        float: left; 
+        float: left;
       }
 
       span {
         display: block;
         margin-left: 30px;
-        word-break: break-word; 
+        word-break: break-word;
       }
     }
 
@@ -74,12 +75,12 @@ div.mapplugin.layerselection {
       border-top: 10px solid transparent;
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
-      border-bottom: 10px solid #333438; 
+      border-bottom: 10px solid #333438;
     }
   }
 
   div.layers, div.baselayers {
-    padding: 10px; 
+    padding: 10px;
   }
 
   div.header {
@@ -91,7 +92,7 @@ div.mapplugin.layerselection {
     div.header-icon {
       display: inline-block;
       margin-right: 4px;
-      vertical-align: middle; 
+      vertical-align: middle;
     }
 
     &.mobile {
@@ -103,7 +104,7 @@ div.mapplugin.layerselection {
   }
 
   div.header:hover {
-    color: #ff9100; 
+    color: #ff9100;
   }
 
   div.layerselection-styled-content {
@@ -121,7 +122,7 @@ div.mapplugin.layerselection {
     border-radius: 15px;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
+    background-clip: padding-box;
   }
 
   .oskari-publisher-layers-sharp-dark, .oskari-publisher-layers-sharp-light {
@@ -129,7 +130,7 @@ div.mapplugin.layerselection {
     -moz-border-radius: 0;
     -o-border-radius: 0;
     -ms-border-radius: 0;
-    border-radius: 0; 
+    border-radius: 0;
   }
 
   .oskari-publisher-layers-3d-dark, .oskari-publisher-layers-3d-light {
@@ -140,7 +141,7 @@ div.mapplugin.layerselection {
     border-radius: 3px;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
+    background-clip: padding-box;
   }
 
   .oskari-publisher-layers-header-rounded-dark, .oskari-publisher-layers-header-rounded-light {
@@ -151,7 +152,7 @@ div.mapplugin.layerselection {
     border-radius: 13px 13px 0 0;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
+    background-clip: padding-box;
   }
 
   .oskari-publisher-layers-header-sharp-dark, .oskari-publisher-layers-header-sharp-light {
@@ -159,7 +160,7 @@ div.mapplugin.layerselection {
     -moz-border-radius: 0;
     -o-border-radius: 0;
     -ms-border-radius: 0;
-    border-radius: 0; 
+    border-radius: 0;
   }
 
   .oskari-publisher-layers-header-3d-dark, .oskari-publisher-layers-header-3d-light {
@@ -170,12 +171,12 @@ div.mapplugin.layerselection {
     border-radius: 1px 1px 0 0;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
+    background-clip: padding-box;
   }
 }
 
 .published-styled-layerselector {
-  position: relative !important; 
+  position: relative !important;
 }
 
 .published-styled-layerselector-header {
@@ -183,7 +184,7 @@ div.mapplugin.layerselection {
   height: 38px !important;
   padding: 0px !important;
   background-color: transparent !important;
-  float: right !important; 
+  float: right !important;
 }
 
 .published-styled-layerselector-content {
@@ -198,12 +199,27 @@ div.mapplugin.layerselection {
 /* Hacketyhack, we need to keep the popup on screen */
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content {
   left: 0px !important;
-  right: auto !important; 
+  right: auto !important;
   &.mobile {
     top: 0 !important;
   }
 }
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
-    margin-left: 12px !important; 
+    margin-left: 12px !important;
+}
+
+div.mapplugin {
+  &.layerselectionpopup  {
+    div.content {
+      div.baseLayerHeader, div.layerHeader {
+        font-weight: bold;
+        padding-bottom: 6px;
+      }
+
+      div.layerHeader {
+        padding-top: 10px;
+      }
+    }
+  }
 }

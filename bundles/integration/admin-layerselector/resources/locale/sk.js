@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Mapová vrstva",
             "type-wfs": "Údajový produkt"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Mapová vrstva je momentálne prístupná.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Mapová vrstva je momentálne neprístupná.",
-                "iconClass": "backendstatus-dole"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Vyskytnú sa krátke časové úseky v priebehu nasledovných dní, kedy budú mapové vrstvy nedostupné.",
-                "iconClass": "backendstatus-údržba"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Spôsobilosť",
             "confirmResourceKeyChange": "Zmenili ste jedinečný názov alebo adresu rozhrania pre túto mapovú vrstvu. Z bezpečnostných dôvodov budú odobrané používateľské práva pre túto mapovú vrstvu a musíte ich nastaviť znovu. Chcete pokračovať?",

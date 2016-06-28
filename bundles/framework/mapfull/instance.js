@@ -210,9 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             me.core = core;
             me.sandbox = sandbox;
 
-
             Oskari.setSandbox(sandboxName, sandbox);
-            Oskari.setMarkers(me.conf.svgMarkers || []);
 
             // take map div ID from config if available
             if (conf.mapElement) {
@@ -384,9 +382,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var sb = this.getSandbox();
             var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
             var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
+            var popupService = Oskari.clazz.create('Oskari.userinterface.component.PopupService', sb);
 
             services.push(mapLayerService);
             services.push(searchService);
+            services.push(popupService);
 
             // DisableDevelopmentModeEnhancement
             if (conf.disableDevelopmentMode === 'true') {
@@ -461,7 +461,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-
+                    if(oskariLayer) {
+                        oskariLayer.setVisible(!layer.hidden);
+                    }
                     sandbox.request(
                         mapModuleName,
                         rbAdd(layer.id, true)

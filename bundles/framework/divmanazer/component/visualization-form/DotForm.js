@@ -157,6 +157,7 @@ Oskari.clazz.define(
             };
 
             var markers = Oskari.getMarkers();
+
             for (var i=0;i<markers.length;i++) {
                 btnContainer = this.templateSymbolButton.clone();
 
@@ -459,6 +460,9 @@ Oskari.clazz.define(
             var marker = previewTemplate.find('#marker');
 
             var iconObj = Oskari.getMarkers()[me.values.shape];
+            if(!iconObj) {
+                iconObj = Oskari.getDefaultMarker();
+            }
             if(!iconObj){
                 preview.empty();
                 return;

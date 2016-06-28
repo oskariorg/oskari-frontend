@@ -136,7 +136,7 @@ function() {
      *
      * @returns {Object} jQuery element
      */
-    getExtraOptions: function (toolContainer) {
+    getExtraOptions: function () {
         var me = this;
             backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
         if(!me._backgroundLayerSelector) {
@@ -250,7 +250,8 @@ function() {
     shouldPreselectLayer: function(id){
 
         var me = this;
-        var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
+        var isConfig = (me.data && me.data.configuration) ? true : false;
+        var isPlugins = (isConfig && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
         if(isPlugins) {
             var plugins = me.data.configuration.mapfull.conf.plugins;
@@ -262,10 +263,10 @@ function() {
                     break;
                 }
             }
-            var isConfig = (toolPlugin && toolPlugin.config
+            var isPluginConfig = (toolPlugin && toolPlugin.config
                 && toolPlugin.config.baseLayers) ? true : false;
 
-            if(isConfig) {
+            if(isPluginConfig) {
                 var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
                 return isFound !== -1;
             } else {

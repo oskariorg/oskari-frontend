@@ -171,9 +171,14 @@ define([
              * @method createLayerSelect
              */
             createLayerSelect: function (e) {
-                jQuery('.add-layer-wrapper').remove();
-                jQuery('.admin-add-group').remove();
-                jQuery('.layer-type-wrapper').remove();
+                 var me = this,
+                    element = jQuery(e.currentTarget),
+                    addLayerWrappers = element.parents('.add-layer-wrapper'),
+                    addGroups = element.parents('.admin-add-group'),
+                    layerTypeWrappers =  element.parents('.layer-type-wrapper');
+                addLayerWrappers.remove();
+                addGroups.remove();
+                layerTypeWrappers.remove();
 
                 var layerType = e.currentTarget.value;
                 if (layerType === 'base' || layerType === 'groupMap') {

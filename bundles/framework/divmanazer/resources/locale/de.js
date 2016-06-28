@@ -262,6 +262,59 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulator"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Auswahl in der Kartenebene treffen.",
+            "cancelButton": "Abbrechen",
+            "clearButton": "Filter zurücksetzen",
+            "refreshButton": "Filter aktualisieren",
+            "addFilter": "Neuen Filter hinzufügen",
+            "removeFilter": "Filter löschen",
+            "bbox": {
+                "title": "Filter Kartenausschnitt",
+                "on": "Nur sichtbare Objekte im Kartenausschnitt.",
+                "off": "Alle Objekte."
+            },
+            "clickedFeatures": {
+                "title": "Filter Objektauswahl",
+                "label": "Nur die markierten Objekte in der Karte."
+            },
+            "values": {
+                "title": "Objekte nach Attributen auswählen",
+                "placeholders": {
+                    "case-sensitive": "Der Filter beachtet Groß- und Kleinschreibung.",
+                    "attribute": "Attribut",
+                    "boolean": "logischer Operator",
+                    "operator": "Operator",
+                    "attribute-value": "Wert"
+                },
+                "equals": "gleich",
+                "like": "ähnlich",
+                "notEquals": "ungleich",
+                "notLike": "unähnlich",
+                "greaterThan": "größer",
+                "lessThan": "kleiner",
+                "greaterThanOrEqualTo": "größer oder gleich",
+                "lessThanOrEqualTo": "kleiner oder gleich"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Gesamtwert auswählen",
+                "aggregateValueSelectTitle": "Gesamtwert im Filter verwenden",
+                "selectAggregateAnalyse": "Gesamtanalyse auswählen",
+                "selectIndicator": "Indikator auswählen",
+                "selectReadyButton": "Bereit",
+                "getAggregateAnalysisFailed": "Die aggregierten Daten können nicht gefunden werden.",
+                "noAggregateAnalysisPopupTitle": "Die aggregierte Analyse kann nicht gefunden werden.",
+                "noAggregateAnalysisPopupContent": "Es wurde keine Gesamtanalyse durchgeführt. Daten können durch die Analysefunktion aggregiert und mit Hilfe von Werten gefiltert werden."
+            },
+            "validation": {
+                "title": "Der Filter kann aufgrund folgender Fehler nicht aktualisiert werden:",
+                "attribute_missing": "Das Attribut fehlt.",
+                "operator_missing": "Der Operator fehlt.",
+                "value_missing": "Der Wert fehlt.",
+                "boolean_operator_missing": "Der logische Operator fehlt."
+            }
         }
     }
 }

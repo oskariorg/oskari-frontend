@@ -483,7 +483,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
                     instance: this
@@ -491,6 +490,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
+
+            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            if (Oskari.util.isMobile()) {
+                mapModule.redrawPluginUIs(true);
+            }
         }
     }, {
         /**

@@ -406,7 +406,24 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 buttonConf.toolbarid = toolbar;
                 sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }
-        }
+        },
+
+        /**
+         * Set a tool's mobile icon back to it's initial state after popup closing.
+         */
+        _resetMobileIcon: function(el, iconCls) {
+            var me = this,
+                restoreCls;
+
+            el.css('background-color', '');
+            el.removeClass('selected');
+            el.removeClass(iconCls + '-light');
+            el.removeClass(iconCls + '-dark');
+
+            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls+'-light' : iconCls+'-dark';
+            el.addClass(restoreCls);
+        },
+
     }, {
         /**
          * @static @property {String[]} protocol

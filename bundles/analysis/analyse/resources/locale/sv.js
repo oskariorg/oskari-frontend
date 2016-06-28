@@ -343,58 +343,6 @@ Oskari.registerLocalization(
                 "analyse": "Gör analys",
                 "data": "Mera kartlager"
             },
-            "filter": {
-                "title": "Filtrering",
-                "description": "Filtrera objekt från analyslager:",
-                "cancelButton": "Avbryt",
-                "clearButton": "Töm filter",
-                "refreshButton": "Uppdatera filter",
-                "addFilter": "Tilllägg",
-                "removeFilter": "Ta bort",
-                "content": {
-                    "title": "Geografisk filter"
-                },
-                "bbox": {
-                    "on": "Endast objekt som syns på kartan",
-                    "off": "Alla objekt"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Endast objekt som utvalda på kartan",
-                    "filterByGeometryLabel": "Endast objekt som:",
-                    "filterByGeometryIntersect": "klipper utvalda objekt",
-                    "filterByGeometryContains": "är inom utvalda objekt"
-                },
-                "values": {
-                    "title": "På grund av attribut data",
-                    "placeholders": {
-                        "case-sensitive": "Bokstavsstorlek verkar på val.",
-                        "attribute": "Attribut",
-                        "boolean": "Logisk operator",
-                        "operator": "Operator",
-                        "attribute-value": "Värde"
-                    },
-                    "info": {
-                        "bboxOff": "Utan geografisk filter analys riktas sig alla objekt. Tillsätt en attributfilter eller välj \"endast objekt som visas på kartan\".",
-                        "filterByGeometrySelected": "Du kan filtrera attributer endast om du använder inte filter för valda objekt."
-                    },
-                    "equals": "är lika med",
-                    "like": "är ungefär lika med",
-                    "notEquals": "är inte lika med",
-                    "notLike": "är inte ungefär lika med",
-                    "greaterThan": "är större än",
-                    "lessThan": "är mindre än",
-                    "greaterThanOrEqualTo": "är större än eller lika med",
-                    "lessThanOrEqualTo": "är mindre än eller lika med"
-                },
-                "validation": {
-                    "title": "Fixa följande fel och försök igen:",
-                    "attribute_missing": "Attribute saknas. Välj en attribut.",
-                    "operator_missing": "Operator saknas. Välj en operator.",
-                    "value_missing": "Värde saknas. Välj ett värde.",
-                    "boolean_operator_missing": "Logisk operator saknas. Välj en logisk operator.",
-                    "bbox_selected_with_no_properties": "Utan geografisk filter alla objekt ska tas med i analys. Tilllägg en attributfilter eller välj \"Endast objekt som syns på kartan\"."
-                }
-            },
             "help": "Anvisning",
             "success": {
                 "layerAdded": {

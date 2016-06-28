@@ -11,6 +11,12 @@ Show infobox on map.
 
 Requests infobox to be shown on a map in certain location with certain content.
 
+Infobox features:
+
+- Id refers always to a specific popup. If request is sent with the same id that already exists in UI, the existing one is updated:
+ - If location is the same, content is added to the existing popup
+ - If location is different, the existing popup is deleted and new popup is added with given parameters
+
 ## Parameters
 
 All the parameters are wrapped inside one array.

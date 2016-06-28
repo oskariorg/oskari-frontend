@@ -429,7 +429,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/polymer/"
+						"bundlePath": "../../../packages/statistics/"
 					},
 					"geostats": {
 						"bundlePath": "../../../packages/libraries/bundle/"

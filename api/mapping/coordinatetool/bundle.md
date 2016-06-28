@@ -6,11 +6,14 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatetool.plugin.
 * shows coordinates on mouse location
 * shows coordinates on mouse map click
 * center map to given coordinates
+* add marker with given coordinates
+* as optional functionality coordinate transformation form one coordinate system to another can be added to the coordinatetool (configuration is needed)
 
 
 ## Screenshot
 
 ![screenshot](coordinatetool.png)
+![screenshot](coordinateToolNew.png)
 
 
 ## Bundle configuration
@@ -40,6 +43,17 @@ No configuration is required, but there is few possible configurations:
 ````    
 {"supportedProjections":{"EPSG:3035":"482333d1-f0d0-4410-aa65-60db4e45b853","EPSG:3857":"1d65e6cc-4ac7-4dab-8a94-76b3dd632307"}}
 ````
+
+- Option to configure coordinate transformation tool:
+
+{
+    "supportedProjections": [
+        "EPSG:3067", "NLSFI:etrs_gk", "NLSFI:ykj", "EPSG:4258", "LATLON:kkj", "EPSG:3046", "EPSG:3048", "EPSG:3873", "EPSG:3874",
+        "EPSG:3875", "EPSG:3876", "EPSG:3877", "EPSG:3878", "EPSG:3879", "EPSG:3880", "EPSG:3881", "EPSG:3882", "EPSG:3883", "EPSG:3884", "EPSG:3885"
+    ]
+}
+
+
 ## Requests the bundle sends out
 
 <table class="table">
