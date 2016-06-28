@@ -74,38 +74,41 @@ Oskari.clazz.define(
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions();
 
-                if (oskariLayer.isRealtime()) {
-                    var date = new Date();
-                    defaultParams.time = date.toISOString();
-                }
+                if(oskariLayer.getLayerType() === 'wms') {
 
-                if (oskariLayer.getMaxScale() || oskariLayer.getMinScale()) {
-                    // use resolutions instead of scales to minimize chance of transformation errors
-                    var layerResolutions = mapModule.calculateLayerResolutions(oskariLayer.getMaxScale(), oskariLayer.getMinScale());
-                    defaultOptions.resolutions = layerResolutions;
-                }
-
-                // override default params and options from layer
-                var key;
-                for (key in layerParams) {
-                    if (layerParams.hasOwnProperty(key)) {
-                        defaultParams[key] = layerParams[key];
+                    if (oskariLayer.isRealtime()) {
+                        var date = new Date();
+                        defaultParams.time = date.toISOString();
                     }
-                }
-                for (key in layerOptions) {
-                    if (layerOptions.hasOwnProperty(key)) {
-                        defaultOptions[key] = layerOptions[key];
+
+                    if (oskariLayer.getMaxScale() || oskariLayer.getMinScale()) {
+                        // use resolutions instead of scales to minimize chance of transformation errors
+                        var layerResolutions = mapModule.calculateLayerResolutions(oskariLayer.getMaxScale(), oskariLayer.getMinScale());
+                        defaultOptions.resolutions = layerResolutions;
                     }
+
+                    // override default params and options from layer
+                    var key;
+                    for (key in layerParams) {
+                        if (layerParams.hasOwnProperty(key)) {
+                            defaultParams[key] = layerParams[key];
+                        }
+                    }
+                    for (key in layerOptions) {
+                        if (layerOptions.hasOwnProperty(key)) {
+                            defaultOptions[key] = layerOptions[key];
+                        }
+                    }
+
+                    var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
+                    openLayer.opacity = layer.getOpacity() / 100;
+
+                    mapModule.addLayer(openLayer, !keepLayerOnTop);
+                    // gather references to layers
+                    olLayers.push(openLayer);
+
+                    sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
                 }
-
-                var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
-                openLayer.opacity = layer.getOpacity() / 100;
-
-                mapModule.addLayer(openLayer, !keepLayerOnTop);
-                // gather references to layers
-                olLayers.push(openLayer);
-
-                sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
 
             });
             // store reference to layers
