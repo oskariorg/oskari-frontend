@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### publisher2
+
+Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
+
 ### core
 
 Fixed Oskari.util.isNumber to return false if checked value is null.
