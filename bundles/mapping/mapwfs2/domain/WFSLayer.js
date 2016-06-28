@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._customStyle = null;
         this._filterJson = null;
         this._WMSLayerId;
-        this._internalWmsOpened = false;
+        this._internalOpened = false;
 
         this.localization = Oskari.getLocalization('MapWfs2');
     }, {
@@ -293,24 +293,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getWMSLayerId: function () {
             return this._WMSLayerId;
-        },
-        /**
-         * @method setInternalWmsOpened
-         * @param {Boolean} opened
-         * true, if  WFS layer linked WMS layer (_WMSLayerId) is opened without user action
-         */
-        setInternalWmsOpened: function (opened) {
-            this._internalWmsOpened = opened;
-
-        },
-        /**
-         * @method getInternalWmsOpened
-         * @return {Boolean}
-         * true, if WFS layer linked WMS layer (_WMSLayerId) is opened without user action
-         * (e.g. MapLayerService)
-         */
-        getInternalWmsOpened: function () {
-            return this._internalWmsOpened;
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]
