@@ -42,6 +42,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorClose = jQuery(
             '<div class="icon-close close-selector-button"></div>'
         );
+        this.templateTool = jQuery('<div></div>');
         this.dataSource = null;
         this.metadataLink = null;
         this.exportButton = null;
@@ -55,6 +56,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showExcelExporter = false;
         this.resizableColumns = false;
         this.uiNames = {};
+        this.columnTools = {};
         this.valueRenderer = {};
 
         /* last sort parameters are saved so we can change sort direction if the
@@ -153,6 +155,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setColumnUIName: function (fieldName, uiName) {
             this.uiNames[fieldName] = uiName;
+        },
+        /**
+         * @method setColumnTools
+         * Sets tools that should be shown on column
+         *
+         * @param {String} fieldName field name we want to replace in UI
+         * @param {Object[]} listOfTools tools that should be rendered for the column
+         */
+        setColumnTools: function (fieldName, listOfTools) {
+            this.columnTools[fieldName] = listOfTools;
         },
         /**
          * @method setColumnValueRenderer
@@ -503,6 +515,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
+                var tools = this.columnTools[baseKey] || [];
                 if (!uiName) {
                     uiName = fieldName;
                 } else if (fieldName !== fullFieldNames[i][key]) {
@@ -519,6 +532,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                    me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
                 } else if (fullFieldNames[i].type === 'object') {
                     if (dataArray.length > 2) {
                         header.addClass('closedSubTable');
@@ -556,6 +570,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
+        },
+        /**
+         * Adds any tools the user might have configured to the column header
+         * @param  {jQuery} header container to add to
+         * @param  {Object[]} tools  array of items with name and callback
+         * @param  {String} field  column name for the callback parameter
+         */
+        __attachHeaderTools : function(header, tools, field) {
+            var me = this;
+            tools.forEach(function(tool) {
+                var tpl = me.templateTool.clone();
+                tpl.append(tool.name);
+                if(tool.callback) {
+                    tpl.on('click', function() {
+                        tool.callback(field);
+                    });
+                }
+                header.append(tpl);
+            });
         },
 
         /**

@@ -21,6 +21,17 @@ Events sent are:
 - 'column.selected' with clicked columns/fields name as string payload.
 - 'sort' with a payload like { column : 'clicked columns/fields name', ascending : true }
 
+Grid now allows to set tools for columns. These are given like:
+
+```javascript
+	grid.setColumnTools('field name' [{
+		name : 'Say hi',
+		callback : function(value) {
+			alert('Hello from ' + value);
+		}
+	}]);
+```
+
 ### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
