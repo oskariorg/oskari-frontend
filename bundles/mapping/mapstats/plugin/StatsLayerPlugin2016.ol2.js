@@ -89,8 +89,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             }
             // reset params
             mapLayer.mergeNewParams({
-                VIS_NAME: layer.getLayerName(),
-                VIS_ATTR: attrs.regionIdTag,
+                VIS_NAME: '',
+                VIS_ATTR: '',
                 VIS_CLASSES: '',
                 VIS_COLORS: ''
             });
