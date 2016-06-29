@@ -645,11 +645,9 @@ Oskari.clazz.define(
          */
         mapLayerAddHandler: function (event) {
             var me = this,
-                wmsLayer,
                 connection = me.getConnection(),
                 layer = event.getMapLayer(),
-                styleName = null,
-                mapLayerService;
+                styleName = null;
 
             if (layer.hasFeatureData()) {
                 if (connection.isLazy() && !connection.isConnected()) {
@@ -673,18 +671,8 @@ Oskari.clazz.define(
                     me.__typeNormal
                 );
 
-                // add WMS layer, if configured for wfs rendering
-                layer.setInternalWmsOpened(false);
-                // Remove linked wms layer, if it is not opened internally and reopen it internally
-                if(layer.getWMSLayerId() && me.getSandbox().findMapLayerFromSelectedMapLayers(layer.getWMSLayerId())){
-                    me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);
-                }
-                if(layer.getWMSLayerId()) {
-                    mapLayerService = me.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-                    me.getSandbox().postRequestByName('AddMapLayerRequest', [layer.getWMSLayerId(), true]);
-                    layer.setInternalWmsOpened(true);
-                    mapLayerService.makeLayerSticky(layer.getWMSLayerId(), true);
-                }
+                // add e.g. WMS layer, if configured as linked layer for wfs rendering
+                me._addLinkedLayer(layer);
 
                 // send together
                 connection.get().batch(function () {
@@ -702,7 +690,6 @@ Oskari.clazz.define(
          */
         mapLayerRemoveHandler: function (event) {
             var me = this,
-                mapLayerService,
                 layer = event.getMapLayer();
 
             if (layer.hasFeatureData()) {
@@ -713,12 +700,8 @@ Oskari.clazz.define(
                 // remove from OL
                 me.removeMapLayerFromMap(layer);
 
-                // Remove linked wms layer, if it is opened internally
-                if(layer.getWMSLayerId() && layer.getInternalWmsOpened()){
-                    mapLayerService = me.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-                    mapLayerService.makeLayerSticky(layer.getWMSLayerId(), false);
-                    me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);
-                }
+                // remove linked layer  e.g. wms layer for wfs rendering
+                me._removeLinkedLayer(layer);
 
 
                 // clean tiles for printing
@@ -870,7 +853,7 @@ Oskari.clazz.define(
                 this.refresh();
 
                 // linked WMS layer
-                if(layer.getWMSLayerId() && layer.getInternalWmsOpened()){
+                if(layer.getWMSLayerId()){
                     me.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getWMSLayerId(), layer.isVisible()]);
                 }
             }
@@ -895,7 +878,7 @@ Oskari.clazz.define(
                 layer.setOpacity(opacity);
             });
             // linked WMS layer
-            if(layer.getWMSLayerId() && layer.getInternalWmsOpened()){
+            if(layer.getWMSLayerId() ){
                 me.getSandbox().postRequestByName('ChangeMapLayerOpacityRequest', [layer.getWMSLayerId(), layer.getOpacity()]);
             }
         },
@@ -1936,6 +1919,50 @@ Oskari.clazz.define(
         },
         hasUI: function() {
             return false;
+        },
+        /*
+        * add WMS layer as linked layer, if configured for wfs rendering
+         */
+        _addLinkedLayer: function(layer) {
+            var me = this,
+                linkedLayer = null,
+                mapLayerService;
+
+            // Remove linked wms layer, if it is not opened internally and reopen it internally
+            if(layer.getWMSLayerId() && me.getSandbox().findMapLayerFromSelectedMapLayers(layer.getWMSLayerId())){
+                me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);
+            }
+            if(layer.getWMSLayerId()) {
+                mapLayerService = me.getSandbox().getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
+                linkedLayer = mapLayerService.findMapLayer(layer.getWMSLayerId());
+                if(linkedLayer){
+                    linkedLayer.setLinkedLayer(true);
+                }
+                me.getSandbox().postRequestByName('AddMapLayerRequest', [layer.getWMSLayerId(), true]);
+                mapLayerService.makeLayerSticky(layer.getWMSLayerId(), true);
+            }
+        },
+        /*
+         * remove WMS layer, if it was linked to wfs layer and configured for wfs rendering
+         */
+        _removeLinkedLayer: function(layer) {
+            var me = this,
+                linkedLayer = null,
+                mapLayerService;
+
+            // Remove linked wms layer, if it is opened internally
+            if(layer.getWMSLayerId()){
+                mapLayerService = me.getSandbox().getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
+                linkedLayer = mapLayerService.findMapLayer(layer.getWMSLayerId());
+                if(linkedLayer){
+                    linkedLayer.setLinkedLayer(false);
+                }
+                me.getSandbox().postRequestByName('RemoveMapLayerRequest', [layer.getWMSLayerId()]);
+            }
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

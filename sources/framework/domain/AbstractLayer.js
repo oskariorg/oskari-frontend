@@ -61,6 +61,9 @@ Oskari.clazz.define(
         /* visible layer switch off enable/disable */
         me._isSticky = null;
 
+        /* is linked layer ('sublayer') - no UI in layer selection */
+        me._isLinkedLayer = null;
+
         me._inspireName = null;
         me._organizationName = null;
         me._dataUrl = null;
@@ -842,6 +845,21 @@ Oskari.clazz.define(
          */
         isSticky: function () {
             return this._isSticky;
+        },
+        /**
+         * @method setLinkedlayer
+         * True if layer is linked to other layer as 'sublayer'
+         * @param {Boolean} isLinkedLayer
+         */
+        setLinkedLayer: function (isLinkedLayer) {
+            this._isLinkedLayer = isLinkedLayer;
+        },
+        /**
+         * @method isLinkedlayer
+         * True if layer is linked to other layer as 'sublayer'
+         */
+        isLinkedLayer: function () {
+            return this._isLinkedLayer;
         },
         /**
          * @method setQueryable

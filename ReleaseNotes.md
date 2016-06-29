@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### publisher2
+
+Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
+
 ### core
 
 Fixed Oskari.util.isNumber to return false if checked value is null.
@@ -12,7 +16,7 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 DotForm now use defaultmarker for visuliazation if wanted marker not found.
 
-### abstractmapmodule
+### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
 
@@ -20,11 +24,15 @@ DotForm now use defaultmarker for visuliazation if wanted marker not found.
 - named style allready exists: merge styles and override exiting style if exist
 - sanitized adding, remove unwanted tags, scripts, so on.
 
-### MarkersPlugin
+#### AbstractMapLayerPlugin
+
+getOLMapLayers() now accepts Oskari layer id as parameter as well as the layer object.
+
+#### MarkersPlugin
 
 Sanitize request added markers.
 
-### VectorLayerPlugin ol3
+#### VectorLayerPlugin ol3
 
 Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
 

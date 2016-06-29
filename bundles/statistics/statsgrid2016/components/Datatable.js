@@ -76,14 +76,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 		var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
 		var src = this.service.getDatasource(datasrc);
 		log.info('Indicator added ', src, indId, selections);
-		var me = this;
-		this.service.getIndicatorData(datasrc, indId, selections, this.getCurrentRegionset(), function(err, data) {
-			if(err) {
-				log.warn('Error getting indicator data', datasrc, indId, selections, me.getCurrentRegionset());
-				return;
-			}
-			me.handleRegionsetChanged(me.getCurrentRegionset());
-		});
+		this.handleRegionsetChanged(this.getCurrentRegionset());
 	},
 	handleIndicatorRemoved: function(datasrc, indId, selections) {
 		var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
@@ -99,8 +92,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 			data[reg.id] = {};
 		});
 		var done = function(data) {
-			var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-			log.info(data);
+			//var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+			//log.info(data);
 			var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
 			model.setIdField('region');
 			for(var region in data) {

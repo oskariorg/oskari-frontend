@@ -204,7 +204,7 @@ Oskari.clazz.define(
                     layerId = layer.get('id');
                 } else if (_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
-                }debugger;
+                }
                 olLayer = me._layers[layerId];
 
                 if (!olLayer) {
