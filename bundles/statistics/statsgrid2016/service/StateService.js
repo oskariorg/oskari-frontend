@@ -27,6 +27,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getRegionset : function() {
             return this.regionset;
         },
+        selectRegion : function(region) {
+            // notify only for now
+            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
+            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
+        },
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
