@@ -13,6 +13,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         this.sandbox = sandbox;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
+        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', sandbox);
+        this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         // pushed from instance
         this.datasources = [];
         // attach on, off, trigger functions
@@ -33,6 +35,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         },
         getStateService : function() {
             return this.state;
+        },
+        getClassificationService : function() {
+            return this.classification;
+        },
+        getColorService : function() {
+            return this.colors;
         },
         addDatasource : function(ds) {
             if(!ds) {

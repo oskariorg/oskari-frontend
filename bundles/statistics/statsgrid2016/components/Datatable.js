@@ -76,12 +76,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 		var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
 		var src = this.service.getDatasource(datasrc);
 		log.info('Indicator added ', src, indId, selections);
-		this.handleRegionsetChanged(this.getCurrentRegionset());
-		/*
+		var me = this;
 		this.service.getIndicatorData(datasrc, indId, selections, this.getCurrentRegionset(), function(err, data) {
-			debugger;
+			if(err) {
+				log.warn('Error getting indicator data', datasrc, indId, selections, me.getCurrentRegionset());
+				return;
+			}
+			me.handleRegionsetChanged(me.getCurrentRegionset());
 		});
-		*/
 	},
 	handleIndicatorRemoved: function(datasrc, indId, selections) {
 		var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
