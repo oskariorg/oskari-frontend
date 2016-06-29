@@ -34,12 +34,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             var log = Oskari.log('StatsGrid.ColorService');
 
             var getArray = function(item) {
+                // 2 colors is the first set and index starts at 0 -> -2
                 var index = count - 2;
                 if(index < 0 || index >= item.colors.length) {
                     // might want to throw an exception here
                     return null;
                 }
-                return item.colors[index]
+                return item.colors[index].split(',');
             }
             var value;
             var typeMatch;
