@@ -53,7 +53,7 @@ Oskari.clazz.define(
                 layers.push(layer);
             }
 
-            layers.forEach(function(oskariLayer) {
+            layers.forEach(function (oskariLayer) {
 
                 // default params and options
                 var defaultParams = {
@@ -62,7 +62,7 @@ Oskari.clazz.define(
                         id: oskariLayer.getId(),
                         styles: oskariLayer.getCurrentStyle().getName(),
                         format: 'image/png',
-                        version : oskariLayer.getVersion() || '1.1.1'
+                        version: oskariLayer.getVersion() || '1.1.1'
                     },
                     defaultOptions = {
                         layerId: oskariLayer.getLayerName(),
@@ -74,41 +74,44 @@ Oskari.clazz.define(
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions();
 
-                if(oskariLayer.getLayerType() === 'wms') {
-
-                    if (oskariLayer.isRealtime()) {
-                        var date = new Date();
-                        defaultParams.time = date.toISOString();
-                    }
-
-                    if (oskariLayer.getMaxScale() || oskariLayer.getMinScale()) {
-                        // use resolutions instead of scales to minimize chance of transformation errors
-                        var layerResolutions = mapModule.calculateLayerResolutions(oskariLayer.getMaxScale(), oskariLayer.getMinScale());
-                        defaultOptions.resolutions = layerResolutions;
-                    }
-
-                    // override default params and options from layer
-                    var key;
-                    for (key in layerParams) {
-                        if (layerParams.hasOwnProperty(key)) {
-                            defaultParams[key] = layerParams[key];
-                        }
-                    }
-                    for (key in layerOptions) {
-                        if (layerOptions.hasOwnProperty(key)) {
-                            defaultOptions[key] = layerOptions[key];
-                        }
-                    }
-
-                    var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
-                    openLayer.opacity = layer.getOpacity() / 100;
-
-                    mapModule.addLayer(openLayer, !keepLayerOnTop);
-                    // gather references to layers
-                    olLayers.push(openLayer);
-
-                    sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
+                // Sub layers could be different types
+                if (oskariLayer.getLayerType() !== 'wms') {
+                    return;
                 }
+
+                if (oskariLayer.isRealtime()) {
+                    var date = new Date();
+                    defaultParams.time = date.toISOString();
+                }
+
+                if (oskariLayer.getMaxScale() || oskariLayer.getMinScale()) {
+                    // use resolutions instead of scales to minimize chance of transformation errors
+                    var layerResolutions = mapModule.calculateLayerResolutions(oskariLayer.getMaxScale(), oskariLayer.getMinScale());
+                    defaultOptions.resolutions = layerResolutions;
+                }
+
+                // override default params and options from layer
+                var key;
+                for (key in layerParams) {
+                    if (layerParams.hasOwnProperty(key)) {
+                        defaultParams[key] = layerParams[key];
+                    }
+                }
+                for (key in layerOptions) {
+                    if (layerOptions.hasOwnProperty(key)) {
+                        defaultOptions[key] = layerOptions[key];
+                    }
+                }
+
+                var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
+                openLayer.opacity = layer.getOpacity() / 100;
+
+                mapModule.addLayer(openLayer, !keepLayerOnTop);
+                // gather references to layers
+                olLayers.push(openLayer);
+
+                sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
+
 
             });
             // store reference to layers
