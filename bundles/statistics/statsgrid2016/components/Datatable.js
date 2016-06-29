@@ -8,9 +8,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 		main : _.template('<div class="stats-table"></div>')
 	},
 	render : function(el) {
+		var me = this;
 		var main = jQuery(this.__templates.main());
 		this.mainEl = main;
 		this.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+		this.grid.on('column.selected', function(indicatorHash) {
+			// only notify if clicked column was not region
+			if(indicatorHash !== 'region') {
+				me.service.getStateService().setActiveIndicator(indicatorHash);
+			}
+		});
+		/*
+		this.grid.on('sort', function(value) {
+			// maybe trigger an event to sort graphs?
+			console.log('sort:', value);
+		});
+		*/
 
 		el.append(main);
 	},
