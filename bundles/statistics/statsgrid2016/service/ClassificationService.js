@@ -93,6 +93,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stddev : stats.stddev(),
                 cov : stats.cov()
             };
+            response.getGroups = function() {
+                var groups = [];
+                // make groups.length equal to opts.count and each item is an array
+                for(var i =0; i < opts.count; ++i) {
+                    groups.push([]);
+                }
+                for(var region in indicatorData) {
+                    var index = stats.getRangeNum(indicatorData[region]);
+                    groups[index].push(region);
+                }
+                return groups;
+            };
             // functions in response
             response.getIndex = function(value) {
                 return stats.getRangeNum(value);
