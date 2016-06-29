@@ -37,6 +37,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getIndicators : function() {
             return this.indicators;
         },
+        setActiveIndicator : function(indicatorHash) {
+            var me = this;
+            var previous = this.activeIndicator;
+            if(previous && previous.hash === indicatorHash) {
+                // trying to set the same, do nothing
+                return;
+            }
+            // reset previous
+            me.activeIndicator = null;
+            this.indicators.forEach(function(ind) {
+                if(ind.hash === indicatorHash) {
+                    me.activeIndicator = ind;
+                }
+            });
+            // get a default if requested was not found
+            if(!this.activeIndicator) {
+                this.activeIndicator = this.getActiveIndicator();
+            }
+
+            // notify
+            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
+            this.sandbox.notifyAll(eventBuilder(this.activeIndicator, previous));
+        },
         getActiveIndicator : function() {
             if(this.activeIndicator) {
                 // return selected indicator
@@ -47,9 +70,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 // no indicators present -> null
                 return null;
             }
-            // set active to latest
-            this.activeIndicator = this.indicators[this.indicators.length - 1];
-            return this.getActiveIndicator();
+            // return latest if not set
+            return this.indicators[this.indicators.length - 1];
         },
         addIndicator : function(datasrc, indicator, selections) {
             var ind = {
@@ -58,13 +80,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 selections : selections,
                 hash : this.getHash(datasrc, indicator, selections)
             };
-            // set the latest as active indicator
-            this.activeIndicator = ind;
-
             this.indicators.push(ind);
+
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
+
+            // set the latest as active indicator
+            this.setActiveIndicator(ind.hash);
+
             return ind;
         },
         removeIndicator : function(datasrc, indicator, selections) {
@@ -84,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
             if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
                 // active was the one removed -> reset active
-                this.activeIndicator = null;
+                this.setActiveIndicator();
             }
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
