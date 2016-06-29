@@ -71,8 +71,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             var a = stats.getClassQuantile(opts.count);
             var response = {};
 
-//            stats.setColors(['#e2dee6', '#c2abdd', '#9d87b6', '#735a8f', '#3d2e4e']);
-
             if (opts.method === 'jenks') {
                 // Luonnolliset välit
                 response.bounds = stats.getJenks(opts.count);
@@ -84,11 +82,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 response.bounds = stats.getEqInterval(opts.count);
             }
             response.ranges = stats.ranges;
-            // TODO: stuff...
-            response.createLegend = function(colors, title) {
-                stats.setColors(colors);
-                return stats.getHtmlLegend(null, title, true, null, opts.mode);
-            };
             response.stats = {
                 min : stats.min(),
                 max : stats.max(),
@@ -99,6 +92,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 variance : stats.variance(),
                 stddev : stats.stddev(),
                 cov : stats.cov()
+            };
+            // functions in response
+            response.getIndex = function(value) {
+                return stats.getRangeNum(value);
+            };
+            // TODO: do we need createLegend?
+            response.createLegend = function(colors, title) {
+                stats.setColors(colors);
+                return stats.getHtmlLegend(null, title || '', true, null, opts.mode);
             };
             return response;
         },
