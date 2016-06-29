@@ -19,8 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
             }
         });
         this.grid.addSelectionListener(function(grid, region) {
-            console.log('selection:', arguments);
-            grid.select(region);
+            me.service.getStateService().selectRegion(region);
         });
         /*
         this.grid.on('sort', function(value) {
@@ -154,6 +153,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
     },
     __bindToEvents : function() {
         var me = this;
+        var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
             if(event.isRemoved()) {
                 me.handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
@@ -162,9 +162,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
             }
         });
         this.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
-            var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
             log.info('Region changed! ', event.getRegionset());
             me.handleRegionsetChanged(event.getRegionset());
         });
+        this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
+            log.info('Region selected! ', event.getRegion());
+            if(me.getCurrentRegionset() !== event.getRegionset()) {
+                // shouldn't be the case ever
+                me.handleRegionsetChanged(event.getRegionset());
+            }
+            me.grid.select(event.getRegion());
+        });
+
     }
 });
