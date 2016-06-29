@@ -1120,6 +1120,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             return selection;
         },
         /**
+         * @method selectColumn
+         * Sets "selected" class to the column header
+         * @param {String} value id for the column to be selected
+         */
+        selectColumn: function (value) {
+            // remove selection from headers
+            this.table.find('th').removeClass('selected');
+            // add selection to the one specified
+            this.table.find('th.' + value).addClass('selected');
+        },
+        /**
          * @method getTable
          * Returns the grid table.
          *

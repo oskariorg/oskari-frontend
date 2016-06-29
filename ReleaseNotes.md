@@ -24,12 +24,18 @@ Events sent are:
 Grid now allows to set tools for columns. These are given like:
 
 ```javascript
-	grid.setColumnTools('field name' [{
-		name : 'Say hi',
-		callback : function(value) {
-			alert('Hello from ' + value);
-		}
-	}]);
+grid.setColumnTools('field name' [{
+	name : 'Say hi',
+	callback : function(value) {
+		alert('Hello from ' + value);
+	}
+}]);
+```
+
+Grid has a new function for highlighting columns (no default style for selection):
+
+```javascript
+grid.selectColumn('column name');
 ```
 
 ### mapmodule
