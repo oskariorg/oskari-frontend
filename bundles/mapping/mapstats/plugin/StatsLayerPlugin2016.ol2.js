@@ -55,14 +55,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 'StatsGrid.RegionsetChangedEvent' : function (event) {
                     this.handleRegionsetChanged(event.getRegionset());
                 },
-                'StatsGrid.IndicatorEvent' : function (event) {
-                    if(event.isRemoved()) {
-                        //this.handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
+                'StatsGrid.ActiveIndicatorChangedEvent' : function (event) {
+                    var ind = event.getCurrent();
+                    if(!ind) {
+                        // last indicator was removed -> no active indicators
+                        this.handleIndicatorRemoved();
                     } else {
-                        this.handleIndicatorAdded(event.getDatasource(), event.getIndicator(), event.getSelections());
+                        // active indicator changed -> update map
+                        this.handleIndicatorChanged(ind.datasource, ind.indicator, ind.selections);
                     }
                 }
             };
+        },
+        getMapLayerForCurrentRegionset : function() {
+            var service = this.getService();
+            if(!service) {
+                // not available yet
+                return;
+            }
+            var state = service.getStateService();
+            // setup visualization
+            var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(state.getRegionset());
+            var mapLayer = this.getOLMapLayers(layer);
+            if(mapLayer.length) {
+                return mapLayer[0];
+            }
+            return null;
+        },
+        handleIndicatorRemoved: function() {
+            var mapLayer = this.getMapLayerForCurrentRegionset();
+            if(!mapLayer) {
+                return;
+            }
+            // reset params
+            mapLayer.mergeNewParams({
+                VIS_NAME: layer.getLayerName(),
+                VIS_ATTR: attrs.regionIdTag,
+                VIS_CLASSES: '',
+                VIS_COLORS: ''
+            });
         },
         handleRegionsetChanged: function(newSetId) {
             // 1) add new layer to map or bring existing layer on top
@@ -96,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 this.renderActiveIndicator();
             }
         },
-        handleIndicatorAdded: function(datasrc, indicatorId, selections) {
+        handleIndicatorChanged: function(datasrc, indicatorId, selections) {
             // TODO: setup visualization
             this.renderActiveIndicator();
         },
@@ -112,13 +143,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             if(!ind) {
                 return;
             }
-            // TODO: setup visualization
+            // setup visualization
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(state.getRegionset());
-            var mapLayer = this.getOLMapLayers(layer);
-            if(mapLayer.length) {
-                mapLayer = mapLayer[0];
-            }
-            else {
+            var mapLayer = this.getMapLayerForCurrentRegionset();
+            if(!mapLayer) {
                 return;
             }
             // TODO: get all statslayers on map?
@@ -203,25 +231,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openLayer);
             this.renderActiveIndicator();
-        },
-
-        _afterStatsVisualizationChangeEvent: function (event) {
-            var layer = event.getLayer(),
-                params = event.getParams(),
-                mapLayer = this.getFirstOLMapLayer(layer);
-
-            this.featureAttribute = params.VIS_ATTR;
-
-            if (mapLayer !== null && mapLayer !== undefined) {
-                mapLayer.mergeNewParams({
-                    VIS_ID: params.VIS_ID,
-                    VIS_NAME: params.VIS_NAME,
-                    VIS_ATTR: params.VIS_ATTR, // This must be the name of the attribute that has the values.
-                    VIS_CLASSES: params.VIS_CLASSES,
-                    VIS_COLORS: params.VIS_COLORS,
-                    LAYERS: params.VIS_NAME
-                });
-            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
