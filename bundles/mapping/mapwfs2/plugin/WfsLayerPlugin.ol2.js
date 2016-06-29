@@ -690,8 +690,6 @@ Oskari.clazz.define(
          */
         mapLayerRemoveHandler: function (event) {
             var me = this,
-                mapLayerService,
-                linkedLayer,
                 layer = event.getMapLayer();
 
             if (layer.hasFeatureData()) {
