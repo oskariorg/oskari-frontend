@@ -28,8 +28,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 		var regionset = this.service.getRegionsets(setId);
 		var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
 		overlay.overlay(this.mainEl, true);
-		var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-		log.info('Region changed! ', regionset);
 		this.service.getRegions(setId, function(err, regions) {
 			me.createModel(regions, function(model) {
 				me.updateModel(model, regions);
@@ -139,6 +137,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
 			}
 		});
 		this.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
+			var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+			log.info('Region changed! ', event.getRegionset());
 			me.handleRegionsetChanged(event.getRegionset());
 		});
 	}
