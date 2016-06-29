@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.sandbox = sandbox;
         this.indicators = [];
         this.regionset = null;
+        this.activeIndicator = null;
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -36,33 +37,61 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getIndicators : function() {
             return this.indicators;
         },
+        getActiveIndicator : function() {
+            if(this.activeIndicator) {
+                // return selected indicator
+                // TODO: maybe check that it still is in the indicators array?
+                return this.activeIndicator;
+            }
+            if(!this.indicators.length) {
+                // no indicators present -> null
+                return null;
+            }
+            // set active to latest
+            this.activeIndicator = this.indicators[this.indicators.length - 1];
+            return this.getActiveIndicator();
+        },
         addIndicator : function(datasrc, indicator, selections) {
             var ind = {
                 datasource : Number(datasrc),
                 indicator : Number(indicator),
                 selections : selections,
-                hash : this._getIndicatorHash(datasrc, indicator, selections)
+                hash : this.getHash(datasrc, indicator, selections)
             };
+            // set the latest as active indicator
+            this.activeIndicator = ind;
 
             this.indicators.push(ind);
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
+            return ind;
         },
         removeIndicator : function(datasrc, indicator, selections) {
+            var me = this;
             var newIndicators = [];
-            var hash = this._getIndicatorHash(datasrc, indicator, selections);
+            var hash = this.getHash(datasrc, indicator, selections);
+            var removedIndicator = null;
             this.indicators.forEach(function(ind) {
                 if(ind.hash !== hash) {
                     newIndicators.push(ind);
                 }
+                else {
+                    removedIndicator = ind;
+                }
             });
             this.indicators = newIndicators;
+
+            if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
+                // active was the one removed -> reset active
+                this.activeIndicator = null;
+            }
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
+            return removedIndicator;
         },
-        _getIndicatorHash : function(datasrc, indicator, selections) {
+        getHash : function(datasrc, indicator, selections) {
             return datasrc + '_' + indicator + '_' + JSON.stringify(selections);
         }
 
