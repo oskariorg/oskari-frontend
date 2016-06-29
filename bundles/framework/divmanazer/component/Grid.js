@@ -61,6 +61,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * same column is sorted again
          */
         this.lastSort = null;
+        Oskari.makeObservable(this);
     }, {
         /**
          * @method setDataModel
@@ -399,6 +400,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // header reference needs some closure magic to work here
             headerClosureMagic = function (scopedValue) {
                 return function () {
+                    me.trigger('column.selected', scopedValue);
                     // reference to sort link element
                     var linky = jQuery(this),
                         // get previous selection
@@ -430,6 +432,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     for (j = 0; j < selection.length; j += 1) {
                         me.select(selection[j][idField], true);
                     }
+                    me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
                     return false;
                 };
             };

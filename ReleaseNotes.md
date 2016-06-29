@@ -12,9 +12,14 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 *New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
 
-### divmanazer/visualization-form
+### divmanazer
 
-DotForm now use defaultmarker for visuliazation if wanted marker not found.
+DotForm now use default marker for visualization if requested marker is not found.
+
+Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
+Events sent are:
+- 'column.selected' with clicked columns/fields name as string payload.
+- 'sort' with a payload like { column : 'clicked columns/fields name', ascending : true }
 
 ### mapmodule
 
