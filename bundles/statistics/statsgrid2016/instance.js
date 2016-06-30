@@ -47,6 +47,9 @@ Oskari.clazz.define(
             'StatsGrid.RegionSelectedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */

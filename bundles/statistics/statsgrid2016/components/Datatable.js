@@ -174,5 +174,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
             me.grid.select(event.getRegion());
         });
 
+        this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+            var current = event.getCurrent();
+            log.info('Active indicator changed! ', current);
+            if(current) {
+                me.grid.selectColumn(current.hash);
+            }
+        });
+
+
     }
 });
