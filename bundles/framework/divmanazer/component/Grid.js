@@ -565,11 +565,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     header.addClass('hidden');
                 }
 
-                header.addClass(fullFieldNames[i].baseKey);
+                header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
                 header.data('key', fullFieldNames[i].baseKey);
                 header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
+        },
+        /**
+         * Format value to usable css class.
+         * @param  {String} value column field name
+         * @return {String}       value with problematic characters removed/replaced
+         */
+        __getHeaderClass : function(value) {
+            // replace " with empty string so html doesn't break
+            var result = value.split("\"").join("");
+            result = result.split(":").join("");
+            result = result.split(",").join("_");
+            result = result.split(".").join("_");
+            result = result.split("{").join("_");
+            result = result.split("}").join("_");
+            return result;
         },
         /**
          * Adds any tools the user might have configured to the column header
@@ -1128,7 +1143,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // remove selection from headers
             this.table.find('th').removeClass('selected');
             // add selection to the one specified
-            this.table.find('th.' + value).addClass('selected');
+            this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
         },
         /**
          * @method getTable

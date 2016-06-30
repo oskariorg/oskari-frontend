@@ -38,6 +38,8 @@ Grid has a new function for highlighting columns (no default style for selection
 grid.selectColumn('column name');
 ```
 
+Grid previously used field name as class for table headers. Now the name is processed to remove problematic characters before using as css class.
+
 ### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
