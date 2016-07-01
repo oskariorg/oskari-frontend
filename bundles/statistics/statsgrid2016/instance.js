@@ -50,6 +50,10 @@ Oskari.clazz.define(
             'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'UIChangeEvent' : function() {
+                // tear down when receiving the event
+                this.getView().prepareMode(false);
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */
