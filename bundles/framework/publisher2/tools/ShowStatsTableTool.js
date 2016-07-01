@@ -117,7 +117,9 @@ function() {
             if (me.__started === true) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
-            me.statsContainer.remove();
+            if(me.statsContainer) {
+                me.statsContainer.remove();
+            }
         }
 
         if (enabled && me.__handlers['MapSizeChanged']) {
