@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
         var done = function() {
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl);
+            me.grid.contentScroll(true);
         };
         if(!indicators.length) {
             done();
