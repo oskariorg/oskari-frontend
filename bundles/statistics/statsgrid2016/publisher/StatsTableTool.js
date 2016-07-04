@@ -116,7 +116,7 @@ function() {
     },
     getValues: function() {
         var me = this,
-            statsGridState = me.__sandbox.getStatefulComponents().statsgrid.state || {};
+            statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup publishedgrid
         // otherwise always return the state even if grid is not selected so
