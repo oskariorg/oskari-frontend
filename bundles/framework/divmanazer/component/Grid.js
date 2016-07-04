@@ -1343,6 +1343,54 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data = String(data);
             }
             return data;
+        },
+        //http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+        contentScroll : function(follow) {
+            var me = this;
+            if(this.__scrollSortFunc) {
+                this.off('sort', this.__scrollSortFunc);
+                this.__scrollSortFunc = null;
+            }
+            this.__scrollSortFunc = function() {
+                me.contentScroll(follow);
+            };
+            this.on('sort', this.__scrollSortFunc);
+            this.table.find('thead').css('display', 'block');
+            this.table.find('tbody').css({
+                'display' : 'block',
+                'overflow' : 'auto'
+            });
+            var dataCells = this.table.find('tbody tr:first').children();
+            this.table.find('thead tr').children().each(function(i, header) {
+                jQuery(header).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            dataCells.each(function(i, cell) {
+                jQuery(cell).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            var headerHeight = this.table.find('thead').height();
+            var pixelsFromTop = me.table[0].getBoundingClientRect().top;
+            var setHeight = function(force) {
+                var newTop = me.table[0].getBoundingClientRect().top;
+                if(!force && pixelsFromTop === newTop) {
+                    return;
+                }
+                pixelsFromTop = newTop;
+                var parentHeight = me.table.parent().parent().height();
+                me.table.find('tbody').height((parentHeight-headerHeight-pixelsFromTop) + 'px');
+            }
+            setHeight(true);
+            if(follow === true) {
+                clearInterval(this.sizeInterval);
+                this.sizeInterval = setInterval(setHeight, 1000);
+            }
         }
     }
 );

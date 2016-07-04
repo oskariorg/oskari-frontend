@@ -40,6 +40,11 @@ grid.selectColumn('column name');
 
 Grid previously used field name as class for table headers. Now the name is processed to remove problematic characters before using as css class.
 
+Grid can now be configured to scroll the content area *experimental feature* (true as param will follow element container size changes and recalculate the scrollable area height with interval)
+```javascript
+grid.contentScroll(true);
+```
+
 ### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
