@@ -52,7 +52,7 @@ Oskari.clazz.define(
             },
             'UIChangeEvent' : function() {
                 // tear down when receiving the event
-                this.getView().prepareMode(false);
+                this.getView().prepareMode(false, this.getConfiguration());
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
@@ -66,7 +66,7 @@ Oskari.clazz.define(
 
                 var isShown = event.getViewState() !== 'close';
 
-                this.getView().prepareMode(isShown);
+                this.getView().prepareMode(isShown, this.getConfiguration());
             },
             /**
              * @method MapLayerEvent
