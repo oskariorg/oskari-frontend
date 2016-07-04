@@ -83,32 +83,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 me = this,
                 data,
                 dataTemplate,
-                extentEnvelope,
                 i,
                 identification,
                 imgObj,
                 identificationTemplate,
                 url;
-
-            // We can prolly only show one extent at a time...
-            for (i = 0; i < metadataJson.identifications.length; i += 1) {
-                identification = metadataJson.identifications[i];
-                if (identification.envelopes) {
-                    extentEnvelope = identification.envelopes[0];
-                }
-            }
-
-            /*
-             * Let's post Envelope to some layer
-             */
-            if (extentEnvelope) {
-                me.instance.showExtentOnMap(
-                    uuid,
-                    extentEnvelope,
-                    metadataJson
-                );
-            }
-
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
                 dataQualities: [],

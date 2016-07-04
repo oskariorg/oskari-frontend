@@ -233,8 +233,7 @@ function () {
         me._progressSpinner.insertTo(panel.html);
         me._progressSpinner.start();
 
-        //license info is the first / only item under the metadata's onlineresources. At least sometimes. This is hardly a bullet-proof solution...
-        var licenseUrl = metadataModel.onlineResources[0].url;
+        var licenseUrl = metadataModel.license;
         me.licenseService.doLicenseInformationSearch({
             id: licenseUrl
         }, function (response) {

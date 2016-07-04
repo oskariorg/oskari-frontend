@@ -116,17 +116,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               </ul>' +
                     '           </td>'+
                     '       </tr>'+
-                    //TODO: need to dig this stuff up from "somewhere"
-                    /*
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
-                    '           <td>TODO</td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.crs+'</td>'+
-                    '           <td>TODO</td>'+
-                    '       </tr>'+
-                    */
+                    '       <% if (geom) { %>'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
+                    '               <td>'+
+                    '                   <a href="javascript:void(0)" class="metadata_coverage_bbox_link">'+
+                                            this.locale.coverage.showBBOX +
+                    '                   </a>'+
+                    '               </td>'+
+                    '           </tr>'+
+                    '       <% } %>'+
                     '   </table>'+
                     '   <hr class="elf-metadata-divider">'+
                     '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
@@ -232,18 +231,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           </td>'+
                     '       </tr>'+
                     '   </table>'+
-/*                    
-                    //TODO: once we get the feedback stars
-                    '   <hr class="elf-metadata-divider">'+
-                    '   <h2>'+this.locale.heading.dataQuality+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
-                                //TODO: feedbackstars
-                    '           <td>*****</td>'+ 
-                    '       </tr>'+
-                    '   </table>'+
-*/                    
+                    
+                    '   <% if (score && amount) { %>'+
+                    '       <div class="metadatatab-rating-container">'+
+                    '       <hr class="elf-metadata-divider">'+
+                    '       <h2>'+this.locale.heading.dataQuality+'</h2>'+
+                    '       <table class="elf-metadata-table-no-border">'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
+                    '               <td>'+
+                    '                   <div class="metadata-feedback-rating ratingInfo"></div>'+
+                    '               </td>'+ 
+                    '           </tr>'+
+                    '       </table>'+
+                    '       </div>'+
+                    '   <% } %>'+
                     '</article>'
                 ),
                 'quality': _.template(
@@ -528,6 +530,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
                         continue;
                     }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
@@ -639,8 +647,40 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     links = entry;
                 }
             }
+            if(!me.instance.conf.hideShowCoverageLink || me.instance.conf.hideShowCoverageLink !== true) {
+                if (me._model.geom) {
+                    entry = jQuery('<a/>');
+                    entry.addClass('metadata_coverage_bbox_link');
+                    entry.attr('href','javascript:void(0)');
+                    entry.html(me.instance._locale.flyout.coverage.showBBOX);
+                    
+
+                    if(links){
+                        links = links.add(entry);
+                    } else {
+                        links = entry;
+                    }
+                }
+            }
             me.addActions(links);
+
+            //Add click handler for the show coverage - link (under both metadata tab & actions tab)
+            jQuery('.metadata_coverage_bbox_link').on('click', function() {
+                me.toggleCoverage(jQuery(this));
+            });
+
+            //set rating stars if available (amount of feedbacks given > 0)
+            if (me._model.amount) {
+                //obtain a reference to metadatafeedback, which contains the rating functionality... Update rating stars if exists...
+                var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
+                if (metadataFeedbackBundle) {
+                    jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getMetadataRating(me._model));
+                } else {
+                    jQuery('div.metadatatab-rating-container').hide();
+                }
+            }
         },
+
         /**
          * @method addActions
          *
@@ -654,7 +694,42 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container.append('<br/>');
             });
         },
+        toggleCoverage: function(entry) {
+            var me = this,
+                coverageVisible = entry.hasClass('metadata-coverage-visible');
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
 
+            if (coverageVisible) {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .removeClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.showBBOX);
+
+                var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rn, null);
+            } else {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .addClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.removeBBOX);
+
+                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                me.instance.sandbox.postRequestByName(rn, [me._model.geom, {
+                    layerId: 'METADATACATALOGUE_VECTORLAYER',
+                    clearPrevious: true,
+                    layerOptions: null,
+                    centerTo: true,
+                    featureStyle: style
+                }]);
+            }
+
+        },
         renderMapLayerList: function() {
             var me = this,
                 container = me._tabs['actions'].getContainer(),
