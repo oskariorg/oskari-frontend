@@ -20,10 +20,6 @@ Oskari.clazz.define(
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
             viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
-        this.state = {
-            indicators: [],
-            layerId: null
-        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -91,13 +87,52 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
+            state = state || {};
+            var service = this.statsService.getStateService();
+            service.reset();
+            if(state.regionset) {
+                service.setRegionset(state.regionset);
+            }
+            if(state.indicators) {
+                state.indicators.forEach(function(ind) {
+                    service.addIndicator(ind.ds, ind.id, ind.selections);
+                });
+            }
+            if(state.active) {
+                service.setActiveIndicator(state.active);
+            }
         },
 
+            /*
+            indicators : [{
+             ds: 1,
+             id : 2,
+             selections : {
+                sex : male,
+                year : 1991
+             }
+            }],
+            active : "1_2_{sex:male,year:1991}"
+            regionset : 6
+            */
         getState: function () {
-            return {
+            var service = this.statsService.getStateService();
+            var state = {
                 indicators : [],
-                regionset : null
+                regionset : service.getRegionset()
             };
+            service.getIndicators().forEach(function(ind) {
+                state.indicators.push({
+                    ds : ind.datasource,
+                    id : ind.indicator,
+                    selections : ind.selections
+                });
+            });
+            var active = service.getActiveIndicator();
+            if(active) {
+                state.active = active.hash
+            }
+            return state;
         }
 
     }, {

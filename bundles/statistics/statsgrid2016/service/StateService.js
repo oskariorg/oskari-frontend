@@ -24,13 +24,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getName: function () {
             return this.__name;
         },
+        reset : function() {
+            var me = this;
+            this.indicators.forEach(function(ind) {
+                me.removeIndicator(ind.datasource, ind.indicator, ind.selections);
+            });
+            this.selectRegion();
+            this.setRegionset();
+        },
         getRegionset : function() {
             return this.regionset;
-        },
-        selectRegion : function(region) {
-            // notify only for now
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
@@ -38,6 +41,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+        },
+        selectRegion : function(region) {
+            // notify only for now
+            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
+            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
         getIndicators : function() {
             return this.indicators;
