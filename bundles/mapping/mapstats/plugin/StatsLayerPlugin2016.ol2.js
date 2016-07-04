@@ -76,8 +76,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             var state = service.getStateService();
             // setup visualization
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(state.getRegionset());
+            if(!layer) {
+                this.handleRegionsetChanged();
+                return;
+            }
             var mapLayer = this.getOLMapLayers(layer);
-            if(mapLayer.length) {
+            if(mapLayer && mapLayer.length) {
                 return mapLayer[0];
             }
             return null;
@@ -96,6 +100,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             });
         },
         handleRegionsetChanged: function(newSetId) {
+            if(!newSetId) {
+                var service = this.getService();
+                if(!service) {
+                    // not available yet
+                    return;
+                }
+                var state = service.getStateService();
+                newSetId = state.getRegionset();
+            }
+            if(!newSetId) {
+                return;
+            }
+
             // 1) add new layer to map or bring existing layer on top
             // 2) remove other statslayers from map
             // 3) render the new layer with active indicator
