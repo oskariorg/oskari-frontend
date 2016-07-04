@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
         */
 
         el.append(main);
+        this.handleRegionsetChanged();
     },
     getCurrentRegionset : function() {
         return this.service.getStateService().getRegionset();
@@ -39,6 +40,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
     handleRegionsetChanged: function(setId) {
         if(!setId) {
             setId = this.getCurrentRegionset();
+        }
+        if(!setId) {
+            return;
         }
         var me = this;
         var regionset = this.service.getRegionsets(setId);
