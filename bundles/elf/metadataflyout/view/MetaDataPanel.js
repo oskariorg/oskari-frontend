@@ -126,6 +126,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               </td>'+
                     '           </tr>'+
                     '       <% } %>'+
+
+                    '       <% if (typeof referenceSystems !== "undefined" && referenceSystems.length) {%>'+
+                    '       <tr>'+
+                    '           <td>'+
+                                    this.locale.tableHeaders.datasetInformation.crs+
+                    '           </td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(referenceSystems, function(referenceSystem) { %>'+
+                    '                   <li><%=referenceSystem%></li>' +
+                    '               <% }); %>'+
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <% } %>'+
                     '   </table>'+
                     '   <hr class="elf-metadata-divider">'+
                     '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
@@ -232,7 +247,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '       </tr>'+
                     '   </table>'+
                     
-                    '   <% if (score && amount) { %>'+
+                    '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>'+
                     '       <div class="metadatatab-rating-container">'+
                     '       <hr class="elf-metadata-divider">'+
                     '       <h2>'+this.locale.heading.dataQuality+'</h2>'+
