@@ -97,7 +97,7 @@ function() {
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
                 me.__instance
             );
-            if(statsLayer){
+            if(statsLayer) {
                 request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
@@ -122,8 +122,8 @@ function() {
             }
         }
 
-        if (enabled && me.__handlers['MapSizeChanged']) {
-                me.__handlers.MapSizeChanged();
+        if (me.__handlers['MapSizeChanged']) {
+            me.__handlers.MapSizeChanged();
         }
     },
     /**
