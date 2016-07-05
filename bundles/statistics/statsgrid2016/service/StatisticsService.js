@@ -145,7 +145,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {
-                    me.cache.put(cacheKey, pResp.regions);
                     me.cache.respondToQueue(cacheKey, null, pResp.regions);
                 },
                 error: function (jqXHR, textStatus) {
@@ -184,7 +183,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
-                    me.cache.put(cacheKey, pResp.indicators);
                     me.cache.respondToQueue(cacheKey, null, pResp.indicators);
                 },
                 error: function (jqXHR, textStatus) {
@@ -199,11 +197,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorMetadata : function(ds, indicator, callback) {
-            if(!ds ||!indicator || typeof callback !== 'function') {
+            if(!ds || !indicator || typeof callback !== 'function') {
                 // log error message
                 return;
             }
             var me = this;
+            var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
+                return;
+            }
+            if(this.cache.addToQueue(cacheKey, callback)) {
+                // request already in progress
+                return;
+            }
             // call GetIndicatorMetadata with parameter datasource=ds and indicator=indicator
             // use first param as error indicator - null == no error
             jQuery.ajax({
@@ -215,10 +222,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorMetadata'),
                 success: function (pResp) {
-                    callback(null, pResp);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error loading indicators');
+                    me.cache.respondToQueue(cacheKey, 'Error loading indicator metadata');
                 }
             });
         },
@@ -233,6 +240,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 // log error message
                 return;
             }
+            var me = this;
+            var data = {
+                datasource : ds,
+                indicator : indicator,
+                regionset : regionset,
+                selectors : JSON.stringify(params || {})
+            };
+            var cacheKey = 'GetIndicatorData_' + JSON.stringify(data);
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
+                return;
+            }
+            if(this.cache.addToQueue(cacheKey, callback)) {
+                // request already in progress
+                return;
+            }
             // call GetIndicatorData with parameters:
             // - datasource=ds
             // - indicator=indicator
@@ -242,18 +265,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
-                data : {
-                    datasource : ds,
-                    indicator : indicator,
-                    regionset : regionset,
-                    selectors : JSON.stringify(params || {})
-                },
+                data : data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    callback(null, pResp);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error loading indicator data');
+                    me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
         },
@@ -314,7 +332,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             var indicators = this.getStateService().getIndicators();
             this.getRegions(setId, function(err, regions) {
                 if(err) {
-                    callback("Couldn't get regions", response);
+                    callback(err, response);
                     return;
                 }
 
