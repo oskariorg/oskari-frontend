@@ -47,6 +47,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
         this._maplayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
+        this.asyncTabs = {};
         /**
          * @static @private @property _templates HTML/underscore templates for the User Interface
          */
@@ -536,7 +537,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
-            var additionalTabsFound = false;
+            var asyncTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
 
@@ -562,23 +563,23 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
-                    } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
-                        additionalTabsFound = true;
-                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                    } else if (me.asyncTabs && me.asyncTabs[tabId] && me.asyncTabs[tabId].tabActivatedCallback) {
+                        asyncTabsFound = true;
+                        var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
                     }
+                    
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
-
                 }
             }
 
             /*add the tab change event listener only once.*/
-            if (additionalTabsFound) {
+            if (asyncTabsFound) {
                 me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
-                        if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
-                            me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
                         }
                     }
                 });
@@ -606,6 +607,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         },
         /**
          * @public method addTabs
+         * The "synchronous" way of adding tabs by external bundles (=external bundles have already finished loading before rendering this)
          *
          * @param {Object} tabsJSON
          * {
@@ -624,11 +626,58 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function(tabsJSON) {
-            //TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
-            me._additionalTabs = tabsJSON;
+            me.asyncTabs = tabsJSON;
             for (var tabId in tabsJSON) {
                 me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
+            }
+        },
+        addTabsAsync: function(tabsJSON) {
+            var me = this,
+                model = me._model;
+
+            for (var tabId in tabsJSON) {
+                me.asyncTabs[tabId] = tabsJSON[tabId];
+                if (tabsJSON.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
+                        continue;
+                    }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
+                    //feedback tab added asynchronously -> also get and reveal the ratings under metadata tab...
+                    if (tabId === 'feedback' && model.amount) {
+                        me.getMetadataTabRatingStars();
+                    }
+
+                    var entry = Oskari.clazz.create(
+                        'Oskari.userinterface.component.TabPanel'
+                    );
+                    entry.setId(tabId);
+
+                    if (tabsJSON[tabId].tabActivatedCallback) {
+                        var newTabTitle = tabsJSON[tabId].title ? tabsJSON[tabId].title : "";
+                        entry.setTitle(newTabTitle);
+                    }
+                    me._tabContainer.addPanel(entry);
+                    me._tabs[tabId] = entry;
+                }
+            }
+
+            if (!me._tabContainer.tabChangeListeners || me._tabContainer.tabChangeListeners.length === 0) {
+                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                    if (newTab && newTab.getId() && !newTab.content) {
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        }
+                    }
+                });
             }
         },
 
@@ -686,16 +735,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             //set rating stars if available (amount of feedbacks given > 0)
             if (me._model.amount) {
-                //obtain a reference to metadatafeedback, which contains the rating functionality... Update rating stars if exists...
-                var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
-                if (metadataFeedbackBundle) {
-                    jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getMetadataRating(me._model));
-                } else {
-                    jQuery('div.metadatatab-rating-container').hide();
-                }
+                me.getMetadataTabRatingStars();
             }
         },
-
+        getMetadataTabRatingStars: function() {
+            var me = this;
+            //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
+            var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
+            if (metadataFeedbackBundle) {
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getMetadataRating(me._model));
+                jQuery('div.metadatatab-rating-container').show();
+            } else {
+                jQuery('div.metadatatab-rating-container').hide();
+            }
+        },
         /**
          * @method addActions
          *

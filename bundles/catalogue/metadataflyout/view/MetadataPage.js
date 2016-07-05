@@ -61,14 +61,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     me.locale,
                     model
                 );
-
-                if (me.additionalTabs && !jQuery.isEmptyObject(me.additionalTabs)) {
-                    panel.addTabs(me.additionalTabs);
+                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                    panel.addTabs(me.asyncTabs);
                 }
 
                 me.addPanel(panel);
                 panel.init(i === 0);
             }
+        },
+
+        addTabsAsync: function(data) {
+            var me = this;
+            _.each(me.panels, function(panel) {
+                  panel.addTabsAsync(data);
+            });
         },
 
         /**
