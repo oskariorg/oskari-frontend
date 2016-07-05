@@ -6,9 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
     /**
      * @method create called automatically on construction
      * @static
-     *
      */
-
     function (sandbox) {
         this.sandbox = sandbox;
         this.allowedMethods = ['jenks', 'quantile', 'equal']; // , 'manual'
@@ -63,7 +61,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
                 throw new Error('Non-numeric data not supported for now');
             }
-
 
             var stats = new geostats(list);
             stats.setPrecision(opts.precision);
