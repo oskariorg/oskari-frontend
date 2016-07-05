@@ -55,7 +55,6 @@ Oskari.clazz.define(
             // loop all layers and add these on the map
             for (var i = 0, ilen = layers.length; i < ilen; i++) {
                 var _layer = layers[i];
-                var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
                 var defaultParams = {
                         'LAYERS': _layer.getLayerName(),
                         'TRANSPARENT': true,
