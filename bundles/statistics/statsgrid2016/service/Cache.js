@@ -43,11 +43,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
         /**
          * Finds a queue with the given key and calls the functions that are in the queue with the err and response param values.
          * Clears the queue after so functions are only called once.
+         * Also caches the response if it's not an error
          * @param  {String} key      id for the queue
          * @param  {String} err      Error message when there is one
          * @param  {Object} response pretty much anything that needs to be passed to the callbacks as result
          */
         respondToQueue : function(key, err, response) {
+            if(!err) {
+                this.put(key, response);
+            }
             var queueKey = 'queue_' + key;
             var callbacks = this.get(queueKey);
             callbacks.forEach(function(cb) {
