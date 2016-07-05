@@ -10,7 +10,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.GridModeView',
      * @static constructor function
      */
 
-    function () {}, {
+    function () {
+        this.isVisible = false;
+    }, {
         /**
          * @method getName
          * @return {String} implementation name
@@ -41,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.GridModeView',
             var me = this;
             // Do not enter the mode if it's already on.
             if (!me.isVisible || !isShown) {
-                me.isVisible = !! isShown;
+                me.isVisible = !!isShown;
             }
             if(isShown) {
                 this.showMode();
