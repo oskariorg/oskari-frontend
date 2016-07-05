@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### infobox ol2 ja ol3
+
+Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
+
 ### publisher2
 
 Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
