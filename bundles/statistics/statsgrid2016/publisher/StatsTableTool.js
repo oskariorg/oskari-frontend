@@ -123,6 +123,8 @@ function() {
         //  publishedgrid gets the information it needs to render map correctly
         var statslayerOnMap = this._getStatsLayer();
         if(statslayerOnMap && statsGridState) {
+            // without view = true -> the sidepanel is not shown when the statsgrid bundle starts
+            statsGridState.view = me.state.enabled;
             return {
                 configuration: {
                     statsgrid: {
