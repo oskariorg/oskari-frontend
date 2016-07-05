@@ -32,6 +32,9 @@ Oskari.clazz.define(
             statsService.addDatasource(conf.sources);
 
             this.getTile().setEnabled(this.hasData());
+            if(this.state) {
+                this.setState(this.state);
+            }
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
@@ -61,7 +64,6 @@ Oskari.clazz.define(
                 }
 
                 var isShown = event.getViewState() !== 'close';
-
                 this.getView().prepareMode(isShown, this.getConfiguration());
             },
             /**
@@ -101,25 +103,40 @@ Oskari.clazz.define(
             if(state.active) {
                 service.setActiveIndicator(state.active);
             }
+            // if state says view was visible fire up the UI, otherwise close it
+            var sandbox = this.getSandbox();
+            var uimode = state.view ? 'attach' : 'close';
+            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
 
             /*
-            indicators : [{
-             ds: 1,
-             id : 2,
-             selections : {
-                sex : male,
-                year : 1991
-             }
-            }],
-            active : "1_2_{sex:male,year:1991}"
-            regionset : 6
+ {
+     "indicators": [{
+         "ds": 1,
+         "id": 5,
+         "selections": {
+             "sex": "male",
+             "year": "1991"
+         }
+     }, {
+         "ds": 1,
+         "id": 6,
+         "selections": {
+             "sex": "male",
+             "year": "1994"
+         }
+     }],
+     "regionset": 7,
+     "active": "1_6_{\"sex\":\"male\",\"year\":\"1994\"}",
+     "view" : true
+ }
             */
         getState: function () {
             var service = this.statsService.getStateService();
             var state = {
                 indicators : [],
-                regionset : service.getRegionset()
+                regionset : service.getRegionset(),
+                view : this.getView().isVisible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({
