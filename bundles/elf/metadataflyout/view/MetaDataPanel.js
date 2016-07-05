@@ -803,7 +803,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container = me._tabs['actions'].getContainer(),
                 layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
                 layerListHeader;
-
             container.find('table.metadataSearchResult').remove();
             container.append(me._templates['layerList']());
 
@@ -848,11 +847,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 labelText = me.locale.layerList.hide;
             }
             return labelText;
-        },
-        _toggleMetadataCoverage: function() {
-            var me = this;
-            me._model;
-
         },
         isLayerSelected: function(layer) {
             var me = this,
