@@ -24,6 +24,8 @@ function() {
             this.addContent(this.getEl(), config);
         }
         else {
+            // TODO: should teardown the components so they don't listen to events etc
+            // after that the components can be just recreated instead of saving a ref to the old ones
             this.getLeftColumn().removeClass('statsgrid_100');
             this.getEl().empty();
             this.getEl().remove();
