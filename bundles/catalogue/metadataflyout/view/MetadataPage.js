@@ -26,6 +26,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         locale.languages =
             Oskari.getLocalization('DivManazer').LanguageSelect.languages;
 
+        this.asyncTabs = {};
+
     }, {
         init: function () {},
 
@@ -72,9 +74,18 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
         addTabsAsync: function(data) {
             var me = this;
-            _.each(me.panels, function(panel) {
-                  panel.addTabsAsync(data);
-            });
+
+            if (me.panels && me.panels.length) {
+                _.each(me.panels, function(panel) {
+                      panel.addTabsAsync(data);
+                });
+            } else {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        me.asyncTabs[key] = data[key];
+                    }
+                }
+            }
         },
 
         /**
