@@ -6,9 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
     /**
      * @method create called automatically on construction
      * @static
-     *
      */
-
     function (sandbox) {
         this.sandbox = sandbox;
         this.indicators = [];
@@ -24,6 +22,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getName: function () {
             return this.__name;
         },
+        /**
+         * Resets the current state and sends events about the changes.
+         * Removes all selected indicators, selected region and regionset is set to undefined
+         */
         reset : function() {
             var me = this;
             this.indicators.forEach(function(ind) {
@@ -32,9 +34,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.selectRegion();
             this.setRegionset();
         },
+        /**
+         * Returns id of the current regionset
+         * @return {Number} id of current regionset
+         */
         getRegionset : function() {
             return this.regionset;
         },
+        /**
+         * Sets the current regionset and sends out event notifying about the change
+         * @param {Number|String} regionset id of the selected regionset
+         */
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
@@ -42,14 +52,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
         },
+        /**
+         * Selects the region. Only sends out an event for now, selected region is not tracked by the service.
+         * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
+         */
         selectRegion : function(region) {
             // notify only for now
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
             this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
+        /**
+         * Returns an array of objects containing details (datasource, id, selections) of currently selected indicators.
+         * @return {Object[]} currently selected indicators
+         */
         getIndicators : function() {
             return this.indicators;
         },
+        /**
+         * Sets the active indicator and sends an event about the change
+         * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
+         */
         setActiveIndicator : function(indicatorHash) {
             var me = this;
             var previous = this.activeIndicator;
@@ -75,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         /**
          * Returns object describing the active indicator or null if there are no indicators selected.
-         * @return {Object} 
+         * @return {Object} null if no active indicator or an object with indicator details
          */
         getActiveIndicator : function() {
             if(this.activeIndicator) {
