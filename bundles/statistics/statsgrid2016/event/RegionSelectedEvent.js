@@ -1,5 +1,6 @@
 /**
- * Region is selected in grid for example
+ * Region is selected in statsgrid.
+ * Components showing regions can update a "highlighted" region.
  *
  * @class Oskari.statistics.statsgrid.event.RegionSelectedEvent
  */
@@ -37,7 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionSelectedEvent',
         },
         /**
          * Region id
-         * @return {Number}
+         * @return {Number[]}
          */
         getSelection : function() {
             return this.currentSelection;
