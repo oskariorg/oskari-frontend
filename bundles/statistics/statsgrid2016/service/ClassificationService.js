@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * }
          * Options can include:
          * {
-         *    count : <number between 2-11 - defaults to 5>,
+         *    count : <number between 2-9 - defaults to 5>,
          *    method : <one of 'jenks', 'quantile', 'equal' - defaults to 'jenks'>,
          *    mode : <one of 'distinct', 'discontinuous' - defaults to 'distinct'>,
          *    precission : <undefined or integer between 0-20 - defaults to undefined>
