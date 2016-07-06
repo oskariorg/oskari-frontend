@@ -73,6 +73,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.activeIndicator, previous));
         },
+        /**
+         * Returns object describing the active indicator or null if there are no indicators selected.
+         * @return {Object} 
+         */
         getActiveIndicator : function() {
             if(this.activeIndicator) {
                 // return selected indicator
@@ -86,6 +90,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // return latest if not set
             return this.indicators[this.indicators.length - 1];
         },
+        /**
+         * Adds indicator to selected indicators. Triggers event to notify about change
+         * and sets the added indicator as the active one triggering another event.
+         * @param  {Number} datasrc    datasource id
+         * @param  {Number} indicator  indicator id
+         * @param  {Object} selections object containing the parameters for the indicator
+         * @return {Object}            an object describing the added indicator (includes parameters as an object)
+         */
         addIndicator : function(datasrc, indicator, selections) {
             var ind = {
                 datasource : Number(datasrc),
@@ -104,6 +116,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
             return ind;
         },
+        /**
+         * Remove an indicator from selected indicators. Triggers event to notify about change
+         * and if the removed indicator was the active one, resets the active indicator triggering another event.
+         * @param  {Number} datasrc    datasource id
+         * @param  {Number} indicator  indicator id
+         * @param  {Object} selections object containing the parameters for the indicator
+         * @return {Object}            an object describing the removed indicator (includes parameters as an object)
+         */
         removeIndicator : function(datasrc, indicator, selections) {
             var me = this;
             var newIndicators = [];
@@ -128,6 +148,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
             return removedIndicator;
         },
+        /**
+         * Returns a string that can be used to identify an indicator including selections.
+         * Shouldn't be parsed to detect which indicator is in question, but used as a simple
+         * token to identify a selected indicator or set an active indicator
+         * @param  {Number} datasrc    datasource id
+         * @param  {Number} indicator  indicator id
+         * @param  {Object} selections object containing the parameters for the indicator
+         * @return {String}            an unique id for the parameters
+         */
         getHash : function(datasrc, indicator, selections) {
             return datasrc + '_' + indicator + '_' + JSON.stringify(selections);
         }
