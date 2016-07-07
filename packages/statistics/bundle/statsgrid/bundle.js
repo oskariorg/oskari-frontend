@@ -7,6 +7,7 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
     /**
      * @method create called automatically on construction
      * @static
+     * 
      */
 
     function () {
@@ -96,6 +97,12 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/UserIndicatorsTab.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/publisher/ShowStatsTableTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/publisher/ClassifyTool.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/statistics/statsgrid/resources/css/style.css"

@@ -432,19 +432,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 tools = jQuery('#maptools'),
                 i;
 
-            // check if statsgrid mode is on
-            // -> disable statsgrid mode
-            var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                layer,
-                request;
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                if (layer.getLayerType() === "stats") {
-                    request = me.sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
-                    me.sandbox.request(me.getName(), request);
-                    break;
-                }
-            }
+            // trigger an event letting other bundles know we require the whole UI
+            var eventBuilder = this.sandbox.getEventBuilder('UIChangeEvent');
+            this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+
             if (blnEnabled) {
 
                 map.addClass('mapPrintoutMode');

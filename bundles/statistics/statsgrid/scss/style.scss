@@ -154,8 +154,8 @@
 
         /* Make chosen fit in a bit better */
         /* TODO move this to either chosen override css or forms.css */
-        .chzn-container-single {
-            .chzn-single {
+        .chosen-container-single {
+            .chosen-single {
                 height: 34px;
                 line-height: 35px;
 
@@ -165,7 +165,7 @@
 
             }
 
-            .chzn-single-with-drop {
+            .chosen-single-with-drop {
 
                 div b {
                     background-position: -16px 8px;
@@ -173,7 +173,7 @@
 
             }
 
-            .chzn-single, .chzn-single-with-drop {
+            .chosen-single, .chosen-single-with-drop {
                 @include background-gradient(#fefefe, #e3e3e3);
             }
 

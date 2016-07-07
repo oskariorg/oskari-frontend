@@ -1,5 +1,5 @@
 /**
- * Sends data of the open indicators.
+ * Used to notify that an indicator has been added to or removed from selected indicators.
  *
  * @class Oskari.statistics.statsgrid.event.IndicatorEvent
  */

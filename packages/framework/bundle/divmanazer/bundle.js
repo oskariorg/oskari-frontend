@@ -68,6 +68,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/event/ExtensionUpdatedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/event/UIChangeEvent.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Accordion.js"
             }, {
                 "type": "text/javascript",

@@ -245,7 +245,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 dialog.close(true);
                 me.dialog = null;
             });
+            dialog.onClose(function () {
+                me.popupOpen = false;
+            });
             dialog.show(title, template, [cancelBtn, okBtn]);
+            me.popupOpen = true;
             // we dont want key events to bubble up...
             dialog.dialog.on('keyup', function (e) {
                 e.stopPropagation();
@@ -350,7 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 link.append(name);
                 link.bind('click', function () {
                     var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-                    if (rb) {
+                    if (rb && !me.popupOpen) {
                         var req = rb(data.state);
                         req.setCurrentViewId(data.id);
                         sandbox.request(instance, req);
@@ -366,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 link.append(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
-                    if (view) {
+                    if (view && !me.popupOpen) {
                         me._editView(view);
                     }
                     return false;
@@ -380,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 link.append(name);
                 link.bind('click', function () {
                     var view = me._getViewById(data.id);
-                    if (view) {
+                    if (view && !me.popupOpen) {
                         me._confirmDelete(view);
                     }
                     return false;
@@ -480,8 +484,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 me._deleteView(view);
                 dialog.close();
             });
+            dialog.onClose(function () {
+                me.popupOpen = false;
+            });
             var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
             dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
+            me.popupOpen = true;
             dialog.makeModal();
         },
         /**

@@ -195,6 +195,13 @@ Oskari.clazz.define(
          * @return {Object[]} map engine implementation object for maplayers
          */
         getOLMapLayers: function (layer) {
+            if(typeof layer === 'number' || typeof layer === 'string') {
+                // if number or string -> find corresponding layer from selected
+                layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layer);
+            }
+            if(!layer) {
+                return null;
+            }
             if (!this.isLayerSupported(layer)) {
                 return null;
             }
