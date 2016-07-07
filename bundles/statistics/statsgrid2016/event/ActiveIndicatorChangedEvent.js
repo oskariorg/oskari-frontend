@@ -1,5 +1,6 @@
 /**
- * Notifies when an indicator has been selected (in grid etc)
+ * Notifies when an indicator has been selected (in grid etc).
+ * Components listing indicators should update a "highlighted" indicator if needed.
  *
  * @class Oskari.statistics.statsgrid.event.ActiveIndicatorChangedEvent
  */

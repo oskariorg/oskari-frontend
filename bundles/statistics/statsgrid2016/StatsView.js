@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatsView',
  * @static constructor function
  */
 function() {
+    this.__components = null;
 }, {
     /**
      * Show content
@@ -23,6 +24,8 @@ function() {
             this.addContent(this.getEl(), config);
         }
         else {
+            // TODO: should teardown the components so they don't listen to events etc
+            // after that the components can be just recreated instead of saving a ref to the old ones
             this.getLeftColumn().removeClass('statsgrid_100');
             this.getEl().empty();
             this.getEl().remove();
@@ -41,6 +44,9 @@ function() {
         });
     },
     getComponents : function(config) {
+        if(this.__components) {
+            return this.__components;
+        }
         var sb = this.instance.getSandbox();
         config = config || {};
         var comps = [];
@@ -53,6 +59,7 @@ function() {
         if(config.grid !== false) {
             comps.push(Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb));
         }
+        this.__components = comps;
         return comps;
     }
 }, {

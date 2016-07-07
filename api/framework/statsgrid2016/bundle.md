@@ -1,6 +1,6 @@
 # statsgrid2016
 
-Statistics data display. This will replace the statsgrid bundle spesification when it has the comparable functionalities implemented.
+Statistics data display. This will replace the statsgrid bundle spesification when the implementation has the comparable functionalities as the current one. The bundle depends on mapstats-bundle that provides support for statslayer layertype.
 
 ## Description
 
@@ -79,7 +79,7 @@ By default displays a split panel next to the map that includes an indicator sel
     <td>userinterface.AddExtensionRequest</td><td> Registers as part of the UI </td>
   </tr>
   <tr>
-    <td>userinterface.UpdateExtensionRequest</td><td> To open and close the UI when setting a state </td>
+    <td>userinterface.UpdateExtensionRequest</td><td> To open and close the UI programmatically on state change/UIChangeEvent</td>
   </tr>
 </table>
 
@@ -94,6 +94,26 @@ By default displays a split panel next to the map that includes an indicator sel
     <td>userinterface.ExtensionUpdatedEvent</td>
     <td>Enters/exits the statistics mode.</td>
   </tr>
+  <tr>
+    <td>UIChangeEvent</td>
+    <td>Removes the statsgrid UI from the screen when this event is received.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.IndicatorEvent</td>
+    <td>UI grid is updated based on the event.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.RegionsetChangedEvent</td>
+    <td>UI grid is updated based on the event.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.RegionSelectedEvent</td>
+    <td>UI grid is updated based on the event. The corresponding row is highlighted.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ActiveIndicatorChangedEvent</td>
+    <td>UI grid is updated based on the event. The corresponding column is highlighted.</td>
+  </tr>
 </table>
 
 ## Dependencies
@@ -106,6 +126,11 @@ By default displays a split panel next to the map that includes an indicator sel
     <td> Oskari mapmodule</td>
     <td> Expects to be present in the application setup </td>
     <td> To control maplayers as regionsets via requests </td>
+  </tr>
+  <tr>
+    <td> Oskari mapstats </td>
+    <td> Expects to be present in the application setup </td>
+    <td> Provides support for statslayer layertype which are used as regionsets </td>
   </tr>
   <tr>
     <td> Oskari divmanazer</td>

@@ -50,8 +50,9 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             'UIChangeEvent' : function() {
-                // tear down when receiving the event
-                this.getView().prepareMode(false, this.getConfiguration());
+                // close/tear down tge ui when receiving the event
+                var sandbox = this.getSandbox();
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
