@@ -169,6 +169,10 @@ Oskari.clazz.define(
                 var isShown = event.getViewState() !== 'close';
                 view.prepareMode(isShown, null, true);
             },
+            'UIChangeEvent' : function() {
+                // tear down when receiving the event
+                this.getView().prepareMode(false);
+            },
             /**
              * @method MapStats.StatsVisualizationChangeEvent
              */

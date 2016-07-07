@@ -6,9 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
     /**
      * @method create called automatically on construction
      * @static
-     *
      */
-
     function (sandbox) {
         this.sandbox = sandbox;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
@@ -26,10 +24,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         getQName: function () {
             return this.__qname;
         },
-
         getName: function () {
             return this.__name;
         },
+        /**
+         * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.
+         * Usage: service.on('StatsGrid.RegionsetChangedEvent', function(evt) {});
+         *
+         * statsgrid/instance.js registers eventhandlers and calls this to let components know about events.
+         * @param  {Oskari.mapframework.event.Event} event event that needs to be propagated to components
+         */
         notifyOskariEvent : function(event) {
             this.trigger(event.getName(), event);
         },
@@ -121,7 +125,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 // log error message
                 return;
             }
-            // TODO: call GetRegions with parameter regionset=regionset
+            var me = this;
+            var cacheKey = 'GetRegions_' + regionset;
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
+                return;
+            }
+            if(this.cache.addToQueue(cacheKey, callback)) {
+                // request already in progress
+                return;
+            }
+            // call GetRegions with parameter regionset=regionset
             // use first param as error indicator - null == no error
             jQuery.ajax({
                 type: "GET",
@@ -131,10 +145,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {
-                    callback(null, pResp.regions);
+                    me.cache.respondToQueue(cacheKey, null, pResp.regions);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error loading regions');
+                    me.cache.respondToQueue(cacheKey, 'Error loading regions');
                 }
             });
         },
@@ -149,23 +163,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 return;
             }
             var cacheKey = 'GetIndicatorList_' + ds;
-            var cached = this.cache.get(cacheKey);
-            if(cached) {
-                callback(null, cached);
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
                 return;
             }
-
-            var queueKey = 'queueGetIndicatorList_' + ds;
-            var queue = this.cache.get(queueKey);
-            if(!queue) {
-                queue = [];
-            }
-            queue.push(callback);
-            this.cache.put(queueKey, queue);
-            if(queue.length > 1) {
+            if(this.cache.addToQueue(cacheKey, callback)) {
                 // request already in progress
                 return;
             }
+
             var me = this;
             // call GetIndicatorList with parameter datasource=ds
             // use first param as error indicator - null == no error
@@ -177,19 +183,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
-                    me.cache.put(cacheKey, pResp.indicators);
-                    var callbacks = me.cache.get(queueKey);
-                    callbacks.forEach(function(cb) {
-                        cb(null, pResp.indicators);
-                    });
-                    me.cache.put(queueKey, null);
+                    me.cache.respondToQueue(cacheKey, null, pResp.indicators);
                 },
                 error: function (jqXHR, textStatus) {
-                    var callbacks = me.cache.get(queueKey);
-                    callbacks.forEach(function(cb) {
-                        cb('Error loading indicators');
-                    });
-                    me.cache.put(queueKey, null);
+                    me.cache.respondToQueue(cacheKey, 'Error loading indicators');
                 }
             });
         },
@@ -200,11 +197,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorMetadata : function(ds, indicator, callback) {
-            if(!ds ||!indicator || typeof callback !== 'function') {
+            if(!ds || !indicator || typeof callback !== 'function') {
                 // log error message
                 return;
             }
             var me = this;
+            var cacheKey = 'GetIndicatorMetadata_' + ds + '_' + indicator;
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
+                return;
+            }
+            if(this.cache.addToQueue(cacheKey, callback)) {
+                // request already in progress
+                return;
+            }
             // call GetIndicatorMetadata with parameter datasource=ds and indicator=indicator
             // use first param as error indicator - null == no error
             jQuery.ajax({
@@ -216,10 +222,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorMetadata'),
                 success: function (pResp) {
-                    callback(null, pResp);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error loading indicators');
+                    me.cache.respondToQueue(cacheKey, 'Error loading indicator metadata');
                 }
             });
         },
@@ -234,6 +240,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 // log error message
                 return;
             }
+            var me = this;
+            var data = {
+                datasource : ds,
+                indicator : indicator,
+                regionset : regionset,
+                selectors : JSON.stringify(params || {})
+            };
+            var cacheKey = 'GetIndicatorData_' + JSON.stringify(data);
+            if(this.cache.tryCachedVersion(cacheKey, callback)) {
+                // found a cached response
+                return;
+            }
+            if(this.cache.addToQueue(cacheKey, callback)) {
+                // request already in progress
+                return;
+            }
             // call GetIndicatorData with parameters:
             // - datasource=ds
             // - indicator=indicator
@@ -243,18 +265,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
-                data : {
-                    datasource : ds,
-                    indicator : indicator,
-                    regionset : regionset,
-                    selectors : JSON.stringify(params || {})
-                },
+                data : data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    callback(null, pResp);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback('Error loading indicator data');
+                    me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
         },
@@ -315,7 +332,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             var indicators = this.getStateService().getIndicators();
             this.getRegions(setId, function(err, regions) {
                 if(err) {
-                    callback("Couldn't get regions", response);
+                    callback(err, response);
                     return;
                 }
 

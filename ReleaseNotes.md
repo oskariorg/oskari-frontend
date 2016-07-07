@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### infobox ol2 ja ol3
+
+Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
+
 ### publisher2
 
 Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
@@ -12,11 +16,40 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 *New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
 
-### divmanazer/visualization-form
+### divmanazer
 
-DotForm now use defaultmarker for visuliazation if wanted marker not found.
+DotForm now use default marker for visualization if requested marker is not found.
 
-### abstractmapmodule
+Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
+Events sent are:
+- 'column.selected' with clicked columns/fields name as string payload.
+- 'sort' with a payload like { column : 'clicked columns/fields name', ascending : true }
+
+Grid now allows to set tools for columns. These are given like:
+
+```javascript
+grid.setColumnTools('field name' [{
+	name : 'Say hi',
+	callback : function(value) {
+		alert('Hello from ' + value);
+	}
+}]);
+```
+
+Grid has a new function for highlighting columns (no default style for selection):
+
+```javascript
+grid.selectColumn('column name');
+```
+
+Grid previously used field name as class for table headers. Now the name is processed to remove problematic characters before using as css class.
+
+Grid can now be configured to scroll the content area *experimental feature* (true as param will follow element container size changes and recalculate the scrollable area height with interval)
+```javascript
+grid.contentScroll(true);
+```
+
+### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
 
@@ -24,11 +57,15 @@ DotForm now use defaultmarker for visuliazation if wanted marker not found.
 - named style allready exists: merge styles and override exiting style if exist
 - sanitized adding, remove unwanted tags, scripts, so on.
 
-### MarkersPlugin
+#### AbstractMapLayerPlugin
+
+getOLMapLayers() now accepts Oskari layer id as parameter as well as the layer object.
+
+#### MarkersPlugin
 
 Sanitize request added markers.
 
-### VectorLayerPlugin ol3
+#### VectorLayerPlugin ol3
 
 Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
 

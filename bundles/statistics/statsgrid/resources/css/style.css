@@ -13,12 +13,6 @@
     top: 0;
     bottom: 0; }
 
-.oskariui-left {
-  float: left; }
-
-.oskariui-center {
-  float: left; }
-
 .statsgrid_100 {
   height: 100%; }
 
@@ -76,14 +70,14 @@
       width: 200px; }
     .statsgrid .selector-cont select.parameter {
       width: 100px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single {
+    .statsgrid .selector-cont .chosen-container-single .chosen-single {
       height: 34px;
       line-height: 35px; }
-      .statsgrid .selector-cont .chzn-container-single .chzn-single div b {
+      .statsgrid .selector-cont .chosen-container-single .chosen-single div b {
         background-position: 0px 8px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop div b {
+    .statsgrid .selector-cont .chosen-container-single .chosen-single-with-drop div b {
       background-position: -16px 8px; }
-    .statsgrid .selector-cont .chzn-container-single .chzn-single, .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop {
+    .statsgrid .selector-cont .chosen-container-single .chosen-single, .statsgrid .selector-cont .chosen-container-single .chosen-single-with-drop {
       background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e3e3e3));
       background: -moz-linear-gradient(top, #fefefe, #e3e3e3);
       background: -ms-linear-gradient(top, #fefefe, #e3e3e3);

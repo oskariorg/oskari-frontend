@@ -146,23 +146,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         },
 
         /**
-         * @private @method _calculateGridWidth
-         * Calculates a sensible width for statsgrid (but doesn't set it...)
+         * @private @method _calculateLeftComponentsWidth
+         * Calculates a sensible width for components on the left panel (but doesn't set it...)
          */
-        _calculateGridWidth: function () {
+        _calculateLeftComponentsWidth: function () {
             var sandbox = Oskari.getSandbox('sandbox'),
                 columns,
                 width = 160;
             // TODO: do not reference statsgrid directly...
-            // perhaps save indicators to a service that can be referenced or something
-            // get state of statsgrid
-            var statsGrid = sandbox.getStatefulComponents().statsgrid;
+            // publisher-tools should provide information if they need screen estate from map
+            var statsGrid = sandbox.getStatefulComponents().statsgrid || { state : {} };
 
-            if (statsGrid &&
-                statsGrid.state &&
-                statsGrid.state.selectedIndicators !== null &&
-                statsGrid.state.selectedIndicators !== undefined) {
-
+            if (statsGrid.state.selectedIndicators) {
                 //indicators + municipality (name & code)
                 columns = statsGrid.state.selectedIndicators.length + 2;
                 //grid column width is 80 by default
@@ -174,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
         /**
          * @private @method _adjustDataContainer
-         * This horrific thing is what sets the statsgrid, container and map size.
+         * This horrific thing is what sets the left panel components, container and map size.
          */
         _adjustDataContainer: function () {
             var me = this,
@@ -183,15 +178,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 content = jQuery('#contentMap'),
                 container = content.find('.row-fluid'),
                 dataContainer = container.find('.oskariui-left'),
-                gridWidth = me._calculateGridWidth(),
-                gridHeight = 0,
                 mapContainer = container.find('.oskariui-center'),
                 mapDiv = me.mapmodule.getMapEl(),
                 mapWidth,
                 mapHeight,
                 totalWidth = size.width,
                 totalHeight = size.height,
-                statsContainer = jQuery('.publishedgrid');
+                hasLeftComps = !!dataContainer.children().length,
+                leftPanelWidth = 0;
 
             if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
                 if(!container.length) {
@@ -205,44 +199,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 totalHeight = jQuery(window).height();
             }
 
-            dataContainer.toggleClass('oskari-closed', !me.isDataVisible);
-
-            if (statsContainer.length>0) {
+            if (hasLeftComps) {
                 dataContainer.removeClass('oskari-closed');
-                gridHeight = totalHeight;
+                leftPanelWidth = me._calculateLeftComponentsWidth();
             } else {
                 dataContainer.addClass('oskari-closed');
-                gridWidth = 0;
             }
-
-            mapWidth = (totalWidth - gridWidth) + 'px';
+            mapWidth = (totalWidth - leftPanelWidth) + 'px';
             mapHeight = totalHeight + 'px';
-            gridWidth = gridWidth + 'px';
-            gridHeight = gridHeight + 'px';
+            leftPanelWidth = leftPanelWidth + 'px';
 
             dataContainer.css({
-                'width': gridWidth,
-                'height': gridHeight,
-                'float': 'left'
-            }).addClass('published-grid-left');
+                'width': leftPanelWidth,
+                'height': mapHeight
+            });
+            if (hasLeftComps) {
+                // this is usually statsgrid
+                dataContainer.children().height(mapHeight);
+            }
 
             mapContainer.css({
                 'width': mapWidth,
-                'height': mapHeight,
-                'float': 'left'
-            }).addClass('published-grid-center');
+                'height': mapHeight
+            });
 
             mapDiv.width(mapWidth);
             mapDiv.height(mapHeight);
 
-            if (statsContainer.length>0) {
-                statsContainer.height(mapHeight);
-            }
-
-            // TODO grid plugin?
-            if (me.gridPlugin) {
-                me.gridPlugin.setGridHeight();
-            }
             // notify map module that size has changed
             me._updateMapModuleSize();
         },

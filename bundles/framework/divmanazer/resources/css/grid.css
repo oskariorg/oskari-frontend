@@ -1,13 +1,16 @@
-th.asc {
+table.oskari-grid th.asc {
   background-image: url("../images/asc_arrow.png");
   background-repeat: no-repeat;
   background-position: right center; }
 
-th.desc {
+table.oskari-grid th.desc {
   background-image: url("../images/desc_arrow.png");
   background-repeat: no-repeat;
   background-position: right center; }
 
+table.oskari-grid tr.selected {
+  background-color: #FDF8D9; 
+}
 div.column-selector-placeholder {
   border-style: none;
   float: left;

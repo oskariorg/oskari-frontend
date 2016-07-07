@@ -10,7 +10,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.GridModeView',
      * @static constructor function
      */
 
-    function () {}, {
+    function () {
+        this.isVisible = false;
+    }, {
         /**
          * @method getName
          * @return {String} implementation name
@@ -37,18 +39,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.GridModeView',
          * @method prepareMode
          * @param {Boolean} isShown True to enter the mode, false to exit the mode
          */
-        prepareMode: function (isShown) {
+        prepareMode: function (isShown, config) {
             var me = this;
             // Do not enter the mode if it's already on.
             if (!me.isVisible || !isShown) {
-                me.isVisible = !! isShown;
+                me.isVisible = !!isShown;
             }
             if(isShown) {
                 this.showMode();
             } else {
                 this.closeMode();
             }
-            this.showContent(isShown);
+            this.showContent(isShown, config);
         },
         /**
          * Sets the DOM to the mode and updates the map size.
