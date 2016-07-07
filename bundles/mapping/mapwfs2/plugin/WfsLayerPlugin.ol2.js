@@ -818,7 +818,6 @@ Oskari.clazz.define(
             if (!layer.hasFeatureData()) {
                 return;
             }
-
             this.getIO().setMapLayerStyle(
                 layer.getId(),
                 layer.getCurrentStyle().getName()
@@ -938,7 +937,6 @@ Oskari.clazz.define(
             if (!layerID) {
                 return;
             }
-
 
             // update cache
             me.refreshCaches();
@@ -1476,12 +1474,14 @@ Oskari.clazz.define(
             openLayer.opacity = _layer.getOpacity() / 100;
 
             // override redraw with tile cache flush
-            var orginalRedraw = openLayer.redraw;
+
+            var originalRedraw = openLayer.redraw;
             openLayer.redraw = function(forced) {
+                var value = originalRedraw.apply(openLayer, arguments);
                 if(forced) {
-                    me.deleteTileCache(_layer.getId(), _layer.getCurrentStyle().getName());
+                    openLayer.removeBackBuffer();
                 }
-                return orginalRedraw.apply(openLayer, arguments);
+                return value;
             }
 
             this.getMap().addLayer(openLayer);
