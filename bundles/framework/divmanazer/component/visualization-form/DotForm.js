@@ -21,9 +21,9 @@ Oskari.clazz.define(
         this.messageEnabled = false;
 
         this.values = {
-            size: this.defaultValues.size,
-            color: this.defaultValues.color,
-            shape: this.defaultValues.shape,
+            size: this.defaultValues.size || 1,
+            color: this.defaultValues.color || 'ffde00',
+            shape: this.defaultValues.shape || 2,
             message: ''
         };
 
@@ -467,7 +467,8 @@ Oskari.clazz.define(
                 preview.empty();
                 return;
             }
-            var size = 20+this.values.size*5;
+
+            var size = 20 + this.values.size * 5;
 
             var iconSvg = jQuery(iconObj.data);
             iconSvg.attr({
