@@ -988,6 +988,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.addStyle(defaultStyle);
                 layer.selectStyle(defaultStyle.getName());
             }
+            if (layer.getLayerType() === 'wfs') {
+                //style none -> not rendered in transport
+                var locNoneStyle = layer.localization['none-style'];
+                var noneStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+                noneStyle.setName("oskari_none");
+                noneStyle.setTitle(locNoneStyle);
+                noneStyle.setLegend("");
+                layer.addStyle(noneStyle);
+            }
 
             return layer;
         },

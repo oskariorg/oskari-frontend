@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Default style",
         "own-style": "Own style",
+        "none-style": "None",
         "refresh": "Refresh",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
