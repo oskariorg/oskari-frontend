@@ -814,19 +814,21 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
-            if (event.getMapLayer().hasFeatureData()) {
-                // render "normal" layer with new style
-                var OLLayer = this.getOLMapLayer(
-                    event.getMapLayer(),
-                    this.__typeNormal
-                );
-                OLLayer.redraw();
-
-                this.getIO().setMapLayerStyle(
-                    event.getMapLayer().getId(),
-                    event.getMapLayer().getCurrentStyle().getName()
-                );
+            var layer = event.getMapLayer();
+            if (!layer.hasFeatureData()) {
+                return;
             }
+
+            this.getIO().setMapLayerStyle(
+                layer.getId(),
+                layer.getCurrentStyle().getName()
+            );
+            // render "normal" layer with new style
+            var OLLayer = this.getOLMapLayer(
+                event.getMapLayer(),
+                this.__typeNormal
+            );
+            OLLayer.redraw(true);
         },
 
         /**
@@ -837,25 +839,26 @@ Oskari.clazz.define(
             var layer = event.getMapLayer(),
                 me = this;
 
-            if (layer.hasFeatureData()) {
-                this.getIO().setMapLayerVisibility(
-                    layer.getId(),
-                    layer.isVisible()
+            if (!layer.hasFeatureData()) {
+                return;
+            }
+            this.getIO().setMapLayerVisibility(
+                layer.getId(),
+                layer.isVisible()
+            );
+
+            if (layer.isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
+                this.getSandbox().printDebug(
+                    'sending deferred setLocation'
                 );
+                this.mapMoveHandler(layer.getId());
+            }
+            // Update manual refresh button visibility
+            this.refresh();
 
-                if (layer.isVisible() && this.getConfig() && this.getConfig().deferSetLocation) {
-                    this.getSandbox().printDebug(
-                        'sending deferred setLocation'
-                    );
-                    this.mapMoveHandler(layer.getId());
-                }
-                // Update manual refresh button visibility
-                this.refresh();
-
-                // linked WMS layer
-                if(layer.getWMSLayerId()){
-                    me.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getWMSLayerId(), layer.isVisible()]);
-                }
+            // linked WMS layer
+            if(layer.getWMSLayerId()){
+                me.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getWMSLayerId(), layer.isVisible()]);
             }
         },
 
@@ -1471,6 +1474,15 @@ Oskari.clazz.define(
                 defaultOptions
             );
             openLayer.opacity = _layer.getOpacity() / 100;
+
+            // override redraw with tile cache flush
+            var orginalRedraw = openLayer.redraw;
+            openLayer.redraw = function(forced) {
+                if(forced) {
+                    me.deleteTileCache(_layer.getId(), _layer.getCurrentStyle().getName());
+                }
+                return orginalRedraw.apply(openLayer, arguments);
+            }
 
             this.getMap().addLayer(openLayer);
         },
