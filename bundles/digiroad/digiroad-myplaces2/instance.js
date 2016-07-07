@@ -130,7 +130,7 @@ function() {
     start : function() {
 
         // Should this not come as a param?
-        var sandbox = Oskari.$('sandbox');
+        var sandbox = Oskari.getSandbox();
         this.sandbox = sandbox;
 
         var me = this;

@@ -79,7 +79,7 @@ Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundleInstance",
 
             me.started = true;
 
-            var sandbox = Oskari.$("sandbox");
+            var sandbox = Oskari.getSandbox();
             me.sandbox = sandbox;
 
             var conf = me.conf;

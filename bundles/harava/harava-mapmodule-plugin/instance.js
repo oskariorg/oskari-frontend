@@ -55,7 +55,7 @@ function() {
 
     	me.started = true;
 
-    	var sandbox = Oskari.$("sandbox");
+    	var sandbox = Oskari.getSandbox();
         me.sandbox = sandbox;
 
         var conf = me.conf;

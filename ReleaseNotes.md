@@ -16,6 +16,8 @@ Fixed Oskari.util.isNumber to return false if checked value is null.
 
 *New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
 
+Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+
 ### divmanazer
 
 DotForm now use default marker for visualization if requested marker is not found.
