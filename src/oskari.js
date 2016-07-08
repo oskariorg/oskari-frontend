@@ -343,19 +343,6 @@ Oskari = (function () {
             bundleInstance = null;
 
             return bundleInstance;
-        },
-
-        /**
-         * @public @method on
-         * Trigger registration
-         *
-         * @param {Object}                   config
-         * @param {function(Bundle_manager)} callback Callback function
-         * @param {string}                   info
-         *
-         */
-        on: function (config, callback, info) {
-            this.triggers.push(new Bundle_trigger(config, callback, info));
         }
     };
 
