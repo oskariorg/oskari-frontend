@@ -12,11 +12,9 @@ Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link 
 
 ### core
 
-Fixed Oskari.util.isNumber to return false if checked value is null.
-
-Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
-
-Major internal restructuring of Oskari/src files.
+- Fixed Oskari.util.isNumber to return false if checked value is null.
+- Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+- Major internal restructuring of Oskari/src files.
 
 ### Deprecations and removals
 
@@ -25,9 +23,8 @@ Major internal restructuring of Oskari/src files.
 
 ### New functions
 
-``Oskari.getDefaultMarker`` function return default Oskari marker.
-
-``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
+- ``Oskari.getDefaultMarker`` function return default Oskari marker.
+- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
 
 ### divmanazer
 
@@ -35,8 +32,8 @@ DotForm now use default marker for visualization if requested marker is not foun
 
 Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
 Events sent are:
-- 'column.selected' with clicked columns/fields name as string payload.
-- 'sort' with a payload like { column : 'clicked columns/fields name', ascending : true }
+- ``column.selected`` with clicked columns/fields name as string payload.
+- ``sort`` with a payload like { column : 'clicked columns/fields name', ascending : true }
 
 Grid now allows to set tools for columns. These are given like:
 
