@@ -7,7 +7,6 @@
             return;
         }
 
-
         // setter
         if (key && value) {
             var currentValue = collection[key];

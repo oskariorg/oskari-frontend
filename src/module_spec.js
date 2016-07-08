@@ -1,23 +1,6 @@
 
 (function(o){
 	var cs = o.clazz;
-    /* Oskari1BuilderAPI */
-
-    /* Oskari1Builder class module  */
-
-    var oskari1BuilderSerial = (function () {
-        var serials = {};
-        return {
-            get: function (type) {
-                if (!serials[type]) {
-                    serials[type] = 1;
-                } else {
-                    serials[type] += 1;
-                }
-                return serials[type];
-            }
-        };
-    }());
 
     /* @class Oskari.ModuleSpec
      * Helper class instance of which is returned from oskari 2.0 api
@@ -52,7 +35,7 @@
             var classInfo = cs.category(
                 this.className,
                 categoryName ||
-                    (['__', oskari1BuilderSerial.get('Category')].join('_')),
+                    (['__', o.seq.nextVal('Category')].join('_')),
                 prototype
             );
             this.classInfo = classInfo;
@@ -72,7 +55,7 @@
             var classInfo = cs.category(
                 this.className,
                 categoryName ||
-                    (['__', oskari1BuilderSerial.get('Category')].join('_')),
+                    (['__', o.seq.nextVal('Category')].join('_')),
                 prototype
             );
             this.classInfo = classInfo;

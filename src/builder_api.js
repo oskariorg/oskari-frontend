@@ -1,5 +1,5 @@
 (function(o){
-
+    /* Oskari1BuilderAPI */
     var Oskari1BuilderAPI = o;
     var fcd = {
         bundles : {},
@@ -29,7 +29,7 @@
             className = [
                 'Oskari',
                 '_',
-                oskari1BuilderSerial.get('Class')
+                o.seq.nextVal('Class')
             ].join('.');
         } else {
             classInfo = cs.lookup(className);
@@ -171,7 +171,7 @@
         }
 
         if (!bundleId) {
-            bundleId = (['__', oskari1BuilderSerial.get('Bundle')].join('_'));
+            bundleId = (['__', o.seq.nextVal('Bundle')].join('_'));
         }
 
         rv = Oskari1BuilderAPI.cls(className, function () {}, {
