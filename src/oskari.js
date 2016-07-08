@@ -51,71 +51,11 @@ Oskari = (function () {
     //mode has no effect since require loader
     var mode = 'default';
 
-
     /**
      * singleton instance of the class system
      */
     var class_singleton = new O2ClassSystem(),
         cs = class_singleton;
-
-    /**
-     * @class Oskari.Bundle_trigger
-     *
-     * @param {Object}                   config   Config
-     * @param {function(Bundle_manager)} callback Callback function
-     * @param {string}                   info     Info
-     *
-     */
-    var Bundle_trigger = function (config, callback, info) {
-        this.config = config;
-        this.callback = callback;
-        this.fired = false;
-        this.info = info;
-    };
-
-    Bundle_trigger.prototype = {
-
-        /**
-         * @public @method execute
-         * Executes a trigger callback based on bundle state
-         *
-         * @param {Bundle_manager} manager        Bundle manager
-         * @param {Object}         bundle         Bundle
-         * @param {Object}         bundleInstance Bundle instance
-         * @param {string}         info           Info
-         *
-         */
-        execute: function (manager, bundle, bundleInstance, info) {
-            var me = this,
-                p,
-                srcState,
-                callback;
-
-            if (me.fired) {
-                return;
-            }
-
-            for (p in me.config['Import-Bundle']) {
-                if (me.config['Import-Bundle'].hasOwnProperty(p)) {
-                    srcState = manager.bundleSourceStates[p];
-                    if (!srcState || srcState.state !== 1) {
-                        manager.log(
-                            'Trigger not fired due ' + p + ' for ' +
-                                info || this.info
-                        );
-                        return;
-                    }
-                }
-            }
-            me.fired = true;
-            manager.log('Posting trigger');
-            callback = this.callback;
-
-            window.setTimeout(function () {
-                callback(manager);
-            }, 0);
-        }
-    };
 
     /* legacy Bundle_manager */
 
@@ -139,8 +79,6 @@ Oskari = (function () {
 
         /* CACHE for statuses */
         me.bundleStates = {};
-
-        me.triggers = [];
 
         me.loaderStateListeners = [];
     };
@@ -227,7 +165,7 @@ Oskari = (function () {
 
             me.bundleDefinitions[biid] = bundleDefinition;
             me.sources[biid] = srcFiles;
-            me.postChange(null, null, 'bundle_definition_loaded');
+            //postChange(null, null, 'bundle_definition_loaded');
         },
 
         /**
@@ -281,44 +219,6 @@ Oskari = (function () {
         },
 
         /**
-         * @public @method postChange
-         * Posts a notification to bundles and bundle instances.
-         *
-         * @param {Object=} bundle         Bundle
-         * @param {Object=} bundleInstance Bundle instance
-         * @param {string}  info           Info
-         *
-         */
-        postChange: function (bundle, bundleInstance, info) {
-            var me = this,
-                i,
-                instance,
-                bndl;
-
-            if (info === null || info === undefined) {
-                throw new TypeError('postChange(): Missing info');
-            }
-
-            me._update(bundle, bundleInstance, info);
-            // bundles
-            for (i in me.bundles) {
-                if (me.bundles.hasOwnProperty(i)) {
-                    bndl = me.bundles[i];
-                    bndl.update(me, bundle, bundleInstance, info);
-                }
-            }
-            // and instances
-            for (i in me.bundleInstances) {
-                if (me.bundleInstances.hasOwnProperty(i)) {
-                    instance = me.bundleInstances[i];
-                    if (instance) {
-                        instance.update(me, bundle, bundleInstance, info);
-                    }
-                }
-            }
-        },
-
-        /**
          * @public @method createBundle
          * Creates a Bundle (NOTE NOT an instance of bundle)
          * implid, bundleid most likely same value
@@ -365,38 +265,8 @@ Oskari = (function () {
                 state: true,
                 bundlImpl: biid
             };
-            this.postChange(bundle, null, 'bundle_created');
+            //postChange(bundle, null, 'bundle_created');
             return bundle;
-        },
-
-        /**
-         * @private @method _update
-         * Fires any pending bundle or bundle instance triggers
-         *
-         * @param {Object} bundle         Bundle
-         * @param {Object} bundleInstance Bundle instance
-         * @param {string} info           Info
-         *
-         */
-        _update: function (bundle, bundleInstance, info) {
-            // resolves any bundle dependencies
-            // this must be done before any starts
-            // TO-DO
-            // - bind package exports and imports
-            // - bind event imports and exports
-            // - bind request exports ( and imports)
-            // - bind any Namespaces (== Globals imported )
-            // - fire any pending triggers
-            var me = this,
-                n,
-                t;
-
-            me.log('Update called with info ' + info);
-
-            for (n = 0; n < me.triggers.length; n += 1) {
-                t = me.triggers[n];
-                t.execute(me);
-            }
         },
 
         /**
@@ -449,7 +319,7 @@ Oskari = (function () {
 
             this.bundleInstances[bundleInstanceId] = bundleInstance;
 
-            this.postChange(bundle, bundleInstance, 'instance_created');
+            //postChange(bundle, bundleInstance, 'instance_created');
             return bundleInstance;
         },
 
