@@ -18,6 +18,11 @@ Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
 
 Major internal restructuring of Oskari/src files.
 
+### Deprecations and removals
+
+- sandbox.printDebug/printWarn/printError() has been deprecated - use Oskari.log('MyComp').debug()/warn()/error() instead.
+- core.printDebug/printWarn/printError() has been REMOVED - use Oskari.log('MyComp').debug()/warn()/error() instead.
+
 ### New functions
 
 ``Oskari.getDefaultMarker`` function return default Oskari marker.

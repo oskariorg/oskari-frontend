@@ -62,7 +62,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
                     'state': components[bundleid].getState()
                 };
             } else {
-                this.sandbox.printWarn('Stateful component ' + bundleid + ' doesnt have getState()');
+                Oskari.log('Sandbox').warn('Stateful component ' + bundleid + ' doesnt have getState()');
             }
         }
         return state;

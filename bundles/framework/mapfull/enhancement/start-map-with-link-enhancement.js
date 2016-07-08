@@ -3,7 +3,10 @@
  * This sets map domain object values according to (optional) query string parameters.
  * Note that this not set the actual map implementation state, only the domain object.
  */
-Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement',
+(function(Oskari) {
+
+    var log = Oskari.log('Core');
+    Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement',
 
     /**
      * @method create called automatically on construction
@@ -16,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
          * @param {Oskari.mapframework.core.Core} core
          */
         enhance: function(core) {
-            core.printDebug('Checking if map is started with link...');
+            log.debug('Checking if map is started with link...');
 
             var coord = core.getRequestParameter('coord'),
                 zoomLevel = core.getRequestParameter('zoomLevel'),
@@ -54,10 +57,10 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
             var longitude = splittedCoord[0],
                 latitude = splittedCoord[1];
             if (longitude === null || latitude === null) {
-                core.printDebug('Could not parse link location. Skipping.');
+                log.debug('Could not parse link location. Skipping.');
                 return;
             }
-            core.printDebug('This is startup by link, moving map...');
+            log.debug('This is startup by link, moving map...');
             core.getMap().moveTo(longitude, latitude, zoomLevel);
         }
     }, {
@@ -67,3 +70,4 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
          */
         'protocol': ['Oskari.mapframework.enhancement.Enhancement']
     });
+}(Oskari));

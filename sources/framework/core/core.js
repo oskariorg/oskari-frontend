@@ -6,7 +6,10 @@
  * TODO: Move handlers (and events as well as requests) to handler bundles with
  * registrable handlers
  */
-Oskari.clazz.define('Oskari.mapframework.core.Core',
+(function(Oskari) {
+    var log = Oskari.log('Core');
+
+    Oskari.clazz.define('Oskari.mapframework.core.Core',
 
     /**
      * @method create called automatically on construction
@@ -61,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          *            array of enhancements that should be executed before starting map
          */
         init: function (services) {
-            this.printDebug('Initializing core...');
+            log.debug('Initializing core...');
             services = services || [];
             var sandbox = this._sandbox,
                 s;
@@ -74,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             }
 
             // build up domain
-            this.printDebug('Sandbox ready, building up domain...');
+            log.debug('Sandbox ready, building up domain...');
             this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             // run all enhancements
@@ -83,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             ];
             this._doEnhancements(this.enhancements);
 
-            this.printDebug('Modules started. Core ready.');
+            log.debug('Modules started. Core ready.');
         },
 
         /**
@@ -170,9 +173,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             if (handlerFunc) {
                 return handlerFunc(this, request);
             } else {
-                this.printWarn('!!!');
-                this.printWarn('  There is no handler for');
-                this.printWarn('  \'' + request.getName() + '\'');
+                log.warn('!!!');
+                log.warn('  There is no handler for');
+                log.warn('  \'' + request.getName() + '\'');
                 return false;
             }
         },
@@ -213,10 +216,10 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          */
         addRequestHandler: function (requestName, handlerClsInstance) {
             if (!handlerClsInstance) {
-                this.printWarn('Adding non-existent handler for', requestName);
+                log.warn('Adding non-existent handler for', requestName);
             }
             if (this.externalHandlerCls[requestName]) {
-                this.printWarn('Overriding an existing requesthandler for', requestName);
+                log.warn('Overriding an existing requesthandler for', requestName);
             }
             this.externalHandlerCls[requestName] = handlerClsInstance;
         },
@@ -246,7 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             var qname = this._availableRequestsByName[name],
                 p;
             if (!qname) {
-                this.printDebug('#!#!# ! Updating request metadata...');
+                log.debug('#!#!# ! Updating request metadata...');
                 var allRequests = Oskari.clazz.protocol('Oskari.mapframework.request.Request');
                 for (p in allRequests) {
                     if (allRequests.hasOwnProperty(p)) {
@@ -255,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                         this._availableRequestsByName[reqname] = p;
                     }
                 }
-                this.printDebug('#!#!# ! Finished Updating request metadata...');
+                log.debug('#!#!# ! Finished Updating request metadata...');
                 qname = this._availableRequestsByName[name];
             }
 
@@ -272,17 +275,17 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             var qname = this._getQNameForRequest(requestName),
                 ret;
             if (!qname) {
-                this.printWarn('No qname found for', requestName);
+                log.warn('No qname found for', requestName);
                 return undefined;
             }
             var handlerFunc = this.__getRequestHandlerFunction(requestName);
             if(!handlerFunc) {
-                this.printWarn('Request ' + requestName + ' defined, but handler not registered. Perhaps timing issue?');
+                log.warn('Request ' + requestName + ' defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
             ret = Oskari.clazz.builder(qname);
             if (!ret) {
-                this.printWarn('No request builder found for', requestName);
+                log.warn('No request builder found for', requestName);
             }
             return ret;
         },
@@ -297,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         _getQNameForEvent: function (name) {
             var qname = this._availableEventsByName[name];
             if (!qname) {
-                this.printDebug('#!#!# ! Updating event metadata...');
+                log.debug('#!#!# ! Updating event metadata...');
 
                 var allRequests = Oskari.clazz.protocol('Oskari.mapframework.event.Event'),
                     p;
@@ -309,7 +312,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                         this._availableEventsByName[reqname] = p;
                     }
                 }
-                this.printDebug('#!#!# ! Finished Updating event metadata...');
+                log.debug('#!#!# ! Finished Updating event metadata...');
                 qname = this._availableEventsByName[name];
             }
 
@@ -326,12 +329,12 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             var qname = this._getQNameForEvent(eventName),
                 ret;
             if (!qname) {
-                this.printWarn('No qname found for', eventName);
+                log.warn('No qname found for', eventName);
                 return undefined;
             }
             ret = Oskari.clazz.builder(qname);
             if (!ret) {
-                this.printWarn('No event builder found for', eventName);
+                log.warn('No event builder found for', eventName);
             }
             return ret;
         },
@@ -350,38 +353,6 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          */
         enableDebug: function () {
             this._debug = true;
-        },
-
-        /**
-         * @method printDebug
-         * Prints given text to browser console
-         */
-        printDebug: function () {
-            if (this._debug && window.console) {
-                if (window.console.debug && window.console.debug.apply) {
-                    window.console.debug.apply(window.console, arguments);
-                } else if (window.console.log && window.console.log.apply) {
-                    window.console.log.apply(window.console, arguments);
-                }
-            }
-        },
-
-        /**
-         * Prints given error text to browser console
-         */
-        printError: function () {
-            if (window.console && window.console.error && window.console.error.apply) {
-                window.console.error.apply(window.console, arguments);
-            }
-        },
-
-        /**
-         * Prints given warn text to browser console
-         */
-        printWarn: function () {
-            if (window.console && window.console.warn && window.console.warn.apply) {
-                window.console.warn.apply(window.console, arguments);
-            }
         },
 
         /**
@@ -487,3 +458,4 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             objTo._creator = objFrom._creator;
         }
     });
+}(Oskari));
