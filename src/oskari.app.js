@@ -32,7 +32,9 @@
      * FACADE will have only a couple of methods which trigger alotta operations
      */
     Bundle_facade.prototype = {
-
+        // FIXME: Only builder_api.js uses bundles/ bundleInstances. Maybe get rid of them?
+        bundles : {},
+        bundleInstances : {},
         /**
          * @public @method getBundleInstanceConfigurationByName
          * Returns configuration for instance by bundleinstancename

@@ -1,15 +1,16 @@
 (function(o){
-    /* Oskari1BuilderAPI */
-    var Oskari1BuilderAPI = o;
-    var fcd = {
-        bundles : {},
-        bundleInstances : {},
-        getBundleInstanceConfigurationByName : function() {
-            console.log('config called');
-            return {};
-        }
-    };
+    if(!o) {
+        // can't add functions if no Oskari ref
+        return;
+    }
 
+    var _baseClassFor = {
+        extension: 'Oskari.userinterface.extension.EnhancedExtension',
+        bundle: 'Oskari.mapframework.bundle.extension.ExtensionBundle',
+        tile: 'Oskari.userinterface.extension.EnhancedTile',
+        flyout: 'Oskari.userinterface.extension.EnhancedFlyout',
+        view: 'Oskari.userinterface.extension.EnhancedView'
+    };
     /**
      * @public @method cls
      * Entry point to new class API.
@@ -22,7 +23,7 @@
      *
      * @return {Object}               Class instance
      */
-    Oskari1BuilderAPI.cls = function (className, constructor, proto, metas) {
+    o.cls = function (className, constructor, proto, metas) {
         var classInfo;
 
         if (!className) {
@@ -32,11 +33,11 @@
                 o.seq.nextVal('Class')
             ].join('.');
         } else {
-            classInfo = cs.lookup(className);
+            classInfo = o.clazz.lookup(className);
         }
 
         if (!(classInfo && classInfo._constructor && !constructor)) {
-            classInfo = cs.define(
+            classInfo = o.clazz.define(
                 className,
                 constructor || function () {},
                 proto,
@@ -44,16 +45,15 @@
             );
         }
 
-        return cs.create('Oskari.ModuleSpec', classInfo, className);
-
+        return o.clazz.create('Oskari.ModuleSpec', classInfo, className);
     };
 
     /**
      * @public @method loc
      * Oskari1Builder helper to register localisation
      */
-    Oskari1BuilderAPI.loc = function () {
-        return o.registerLocalization.apply(Oskari1BuilderAPI, arguments);
+    o.loc = function () {
+        return o.registerLocalization.apply(o, arguments);
     };
 
     /**
@@ -66,7 +66,7 @@
      *
      * @return
      */
-    Oskari1BuilderAPI.eventCls = function (eventName, constructor, proto) {
+    o.eventCls = function (eventName, constructor, proto) {
         var className,
             rv;
 
@@ -75,7 +75,7 @@
         }
 
         className = 'Oskari.event.registry.' + eventName;
-        rv = Oskari1BuilderAPI.cls(
+        rv = o.cls(
             className,
             constructor,
             proto,
@@ -103,7 +103,7 @@
      *
      * @return {Object}
      */
-    Oskari1BuilderAPI.requestCls = function (requestName, constructor, proto) {
+    o.requestCls = function (requestName, constructor, proto) {
         var className,
             rv;
 
@@ -112,7 +112,7 @@
         }
 
         className = 'Oskari.request.registry.' + requestName;
-        rv = Oskari1BuilderAPI.cls(
+        rv = o.cls(
             className,
             constructor,
             proto,
@@ -130,13 +130,6 @@
         return rv;
     };
 
-    Oskari1BuilderAPI._baseClassFor = {
-        extension: 'Oskari.userinterface.extension.EnhancedExtension',
-        bundle: 'Oskari.mapframework.bundle.extension.ExtensionBundle',
-        tile: 'Oskari.userinterface.extension.EnhancedTile',
-        flyout: 'Oskari.userinterface.extension.EnhancedFlyout',
-        view: 'Oskari.userinterface.extension.EnhancedView'
-    };
 
     /**
      * @public @static @method Oskari.extensionCls O2 api for extension classes
@@ -145,13 +138,13 @@
      *
      * @return
      */
-    Oskari1BuilderAPI.extensionCls = function (className) {
+    o.extensionCls = function (className) {
         if (className === null || className === undefined) {
             throw new TypeError('extensionCls(): Missing className');
         }
 
-        return Oskari1BuilderAPI.cls(className).extend(
-            this._baseClassFor.extension
+        return o.cls(className).extend(
+            _baseClassFor.extension
         );
     };
 
@@ -163,7 +156,7 @@
      *
      * @return {Object}           Bundle instance
      */
-    Oskari1BuilderAPI.bundleCls = function (bundleId, className) {
+    o.bundleCls = function (bundleId, className) {
         var rv;
 
         if (className === null || className === undefined) {
@@ -174,10 +167,10 @@
             bundleId = (['__', o.seq.nextVal('Bundle')].join('_'));
         }
 
-        rv = Oskari1BuilderAPI.cls(className, function () {}, {
+        rv = o.cls(className, function () {}, {
             update: function () {}
         }, {
-            protocol: ['Oskari.bundle.Bundle', this._baseClassFor.bundle],
+            protocol: ['Oskari.bundle.Bundle', _baseClassFor.bundle],
             manifest: {
                 'Bundle-Identifier': bundleId
             }
@@ -188,7 +181,7 @@
 
         rv.loc = function (properties) {
             properties.key = this.___bundleIdentifier;
-            Oskari1BuilderAPI.registerLocalization(properties);
+            o.registerLocalization(properties);
             return rv;
         };
 
@@ -200,15 +193,15 @@
                 configProps,
                 ip;
 
-            if (!fcd.bundles[bid]) {
+            if (!o.app.bundles[bid]) {
                 bundle = bm.createBundle(bid, bid);
                 fcd.bundles[bid] = bundle;
             }
 
             bundleInstance = bm.createInstance(bid);
-            fcd.bundleInstances[bid] = bundleInstance;
+            o.app.bundleInstances[bid] = bundleInstance;
 
-            configProps = fcd.getBundleInstanceConfigurationByName(bid);
+            configProps = o.app.getBundleInstanceConfigurationByName(bid);
             if (configProps) {
                 for (ip in configProps) {
                     if (configProps.hasOwnProperty(ip)) {
@@ -220,7 +213,7 @@
             return bundleInstance;
         };
         rv.stop = function () {
-            var bundleInstance = fcd.bundleInstances[this.___bundleIdentifier];
+            var bundleInstance = o.app.bundleInstances[this.___bundleIdentifier];
 
             return bundleInstance.stop();
         };
@@ -234,13 +227,13 @@
      *
      * @return
      */
-    Oskari1BuilderAPI.flyoutCls = function (className) {
+    o.flyoutCls = function (className) {
         if (className === null || className === undefined) {
             throw new TypeError('flyoutCls(): Missing className');
         }
 
-        return Oskari1BuilderAPI.cls(className).extend(
-            this._baseClassFor.flyout
+        return o.cls(className).extend(
+            _baseClassFor.flyout
         );
     };
 
@@ -251,12 +244,12 @@
      *
      * @return
      */
-    Oskari1BuilderAPI.tileCls = function (className) {
+    o.tileCls = function (className) {
         if (className === null || className === undefined) {
             throw new TypeError('tileCls(): Missing className');
         }
 
-        return Oskari1BuilderAPI.cls(className).extend(this._baseClassFor.tile);
+        return o.cls(className).extend(_baseClassFor.tile);
     };
 
     /**
@@ -266,11 +259,11 @@
      *
      * @return
      */
-    Oskari1BuilderAPI.viewCls = function (className) {
+    o.viewCls = function (className) {
         if (className === null || className === undefined) {
             throw new TypeError('viewCls(): Missing className');
         }
 
-        return Oskari1BuilderAPI.cls(className).extend(this._baseClassFor.view);
+        return o.cls(className).extend(_baseClassFor.view);
     };
 }(Oskari));
