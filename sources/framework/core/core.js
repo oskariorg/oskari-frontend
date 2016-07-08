@@ -26,11 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         // Sandbox that handles communication
         this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
 
-        // bw comp support - this should be removed 
-        if (!Oskari.$('sandbox')) {
-            Oskari.$('sandbox', this._sandbox);
-        }
-
         // array of services available
         this._services = [];
         this._servicesByQName = {};
