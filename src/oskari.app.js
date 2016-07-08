@@ -76,20 +76,27 @@
             var loader = Oskari.loader([recData], config);
             loader.processSequence(callback);
         },
-        loadAppSetup : function(url, params, errorCB) {
+        /**
+         * Convenience function to load appsetup from url with given params and startup the Oskari app.
+         * @param  {String}   url       Url to load the appsetup json from
+         * @param  {Object}   params    Optional parameters to pass for the request
+         * @param  {Function} errorCB   Optional callback for handling error
+         * @param  {Function} successCB Optional callback that is called when the application has started
+         */
+        loadAppSetup : function(url, params, errorCB, successCB) {
             var me = this;
             jQuery.ajax({
                 type : 'GET',
                 dataType : 'json',
-                data : params,
+                data : params || {},
                 url: url,
                 success : function(setup) {
                     me.setApplicationSetup(setup);
-                    me.startApplication();
+                    me.startApplication(successCB);
                 },
                 error : function(jqXHR) {
                     if(typeof errorCB === 'function') {
-                        error(jqXHR);
+                        errorCB(jqXHR);
                     }
                 }
             });
@@ -126,8 +133,6 @@
 
         /**
          * @public @method getApplicationSetup
-         *
-         *
          * @return {Object} Application setup
          */
         getApplicationSetup: function () {
@@ -136,9 +141,7 @@
 
         /**
          * @public @method setConfiguration
-         *
          * @param {Object} config Config
-         *
          */
         setConfiguration: function (config) {
             this.appConfig = config;
@@ -146,8 +149,6 @@
 
         /**
          * @public @method getConfiguration
-         *
-         *
          * @return {Object}
          */
         getConfiguration: function () {
