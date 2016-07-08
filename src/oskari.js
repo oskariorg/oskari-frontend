@@ -987,7 +987,7 @@ Oskari = (function () {
         installBundleClass: function (biid, className) {
             var clazz = Oskari.clazz.create(className);
             if(clazz) {
-            	// Oskari.bundle is the new registry for requirejs loader
+                // Oskari.bundle is the new registry for requirejs loader
                 Oskari.bundle(biid, {
                     clazz : clazz,
                     metadata : cs.getMetadata(className).meta
@@ -1415,10 +1415,10 @@ Oskari = (function () {
             return this.appConfig;
         },
 
-	    startApplication: function (callback) {
-	        var loader = Oskari.loader(this.appSetup.startupSequence, this.appConfig);
-	        loader.processSequence(callback);
-	    },
+        startApplication: function (callback) {
+            var loader = Oskari.loader(this.appSetup.startupSequence, this.appConfig);
+            loader.processSequence(callback);
+        },
 
         /**
          * @method stopApplication
