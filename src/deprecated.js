@@ -46,7 +46,8 @@
 	     */
 	    $ : function (name, value) {
 	        return dollarStore.data(name, value);
-	    }
+	    },
+	    setSandbox : function (name, sandbox) {}
 	};
 	var attachWarning = function(name) {
 		return function() {

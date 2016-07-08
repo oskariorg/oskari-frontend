@@ -20,6 +20,7 @@ var files = [
     '../src/store.js',
     '../src/events.js',
     '../src/util.js',
+    '../src/sandbox_factory.js',
     '../src/i18n.js',
     // class system
     '../src/O2ClassSystem.js',

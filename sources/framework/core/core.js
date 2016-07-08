@@ -24,10 +24,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         this._map = null;
 
         // Sandbox that handles communication
-        this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
+        // this._sandbox is inserted when sandbox is created by src/sandbox_factory.
 
-        // array of services available
-        this._services = [];
         this._servicesByQName = {};
 
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
@@ -62,14 +60,12 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {Oskari.mapframework.enhancement.Enhancement[]} enhancements
          *            array of enhancements that should be executed before starting map
          */
-        init: function (services, enhancements) {
+        init: function (services) {
             this.printDebug('Initializing core...');
-
+            services = services || [];
             var sandbox = this._sandbox,
                 s;
 
-            // Store variables for later use
-            this._services = services;
             // Register services
             if (services) {
                 for (s = 0; s < services.length; s += 1) {
@@ -82,7 +78,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             // run all enhancements
-            this.enhancements = enhancements;
+            this.enhancements = [
+                Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement')
+            ];
             this._doEnhancements(this.enhancements);
 
             this.printDebug('Modules started. Core ready.');
@@ -270,7 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {String} name - name of the request
          * @return {Function} builder method for given request name or undefined if not found
          */
-        getRequestBuilder: function (requestName) {            
+        getRequestBuilder: function (requestName) {
             var qname = this._getQNameForRequest(requestName),
                 ret;
             if (!qname) {
