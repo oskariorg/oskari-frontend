@@ -14,9 +14,15 @@ Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link 
 
 Fixed Oskari.util.isNumber to return false if checked value is null.
 
-*New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
-
 Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+
+Major internal restructuring of Oskari/src files.
+
+### New functions
+
+``Oskari.getDefaultMarker`` function return default Oskari marker.
+
+``Oskari.seq.nextVal()`` returns a sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
 
 ### divmanazer
 
