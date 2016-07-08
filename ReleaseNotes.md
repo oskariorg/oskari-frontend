@@ -27,7 +27,7 @@ Major internal restructuring of Oskari/src files.
 
 ``Oskari.getDefaultMarker`` function return default Oskari marker.
 
-``Oskari.seq.nextVal()`` returns a sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
+``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
 
 ### divmanazer
 
