@@ -5,52 +5,57 @@
 	};
 
 	var mode = 'default';
-    /**
-     * @public @static @method Oskari.setLoaderMode
-     * @param {string} m Loader mode
-     */
-    o.setLoaderMode =  function (m) {
-    	warn('setLoaderMode');
-    	mode = m;
-    };
-
-    /**
-     * @public @method Oskari.getLoaderMode
-     * @return {string} Loader mode
-     */
-    o.getLoaderMode = function () {
-    	warn('getLoaderMode');
-        return mode;
-    };
-
-    /**
-     * @public @method Oskari.setPreloaded
-     * @deprecated No longer has any effect. Remove calls to it. Will be removed in 1.38 or later.
-     */
-    o.setPreloaded = function () {
-    	warn('setPreloaded');
-    };
-
-    o.purge = function () {
-    	warn('purge');
-    };
-
     var domMgr;
-    o.getDomManager = function () {
-    	warn('getDomManager');
-        return domMgr;
-    };
-    o.setDomManager =  function (dm) {
-    	warn('setDomManager');
-		domMgr = dm;
-    };
-
     var dollarStore = o.createStore();
-    /**
-     * @public @method Oskari.$
-     * @return {}
-     */
-    o.$ = function (name, value) {
-        return dollarStore.data(name, value);
-    };
+	var funcs = {
+
+	    /**
+	     * @public @static @method Oskari.setLoaderMode
+	     * @param {string} m Loader mode
+	     */
+	    setLoaderMode :  function (m) {
+	    	mode = m;
+	    },
+
+	    /**
+	     * @public @method Oskari.getLoaderMode
+	     * @return {string} Loader mode
+	     */
+	    getLoaderMode : function () {
+	        return mode;
+	    },
+
+	    /**
+	     * @public @method Oskari.setPreloaded
+	     * @deprecated No longer has any effect. Remove calls to it. Will be removed in 1.38 or later.
+	     */
+	    setPreloaded : function () {},
+
+	    purge : function () {},
+
+	    getDomManager : function () {
+	        return domMgr;
+	    },
+	    setDomManager :  function (dm) {
+			domMgr = dm;
+	    },
+
+	    /**
+	     * @public @method Oskari.$
+	     * @return {}
+	     */
+	    $ : function (name, value) {
+	        return dollarStore.data(name, value);
+	    }
+	};
+	var attachWarning = function(name) {
+		return function() {
+			warn(name);
+			return funcs[name].apply(o, arguments);
+		};
+	}
+	// attach to Oskari with a warning message wrapping
+	for(var key in funcs) {
+		o[key] = attachWarning(key);
+	}
 }(Oskari));
