@@ -82,8 +82,9 @@
          * @param  {Object}   params    Optional parameters to pass for the request
          * @param  {Function} errorCB   Optional callback for handling error
          * @param  {Function} successCB Optional callback that is called when the application has started
+         * @param  {Function} modifyCB  Optional callback that is called appsetup is loaded, but before it's used by Oskari
          */
-        loadAppSetup : function(url, params, errorCB, successCB) {
+        loadAppSetup : function(url, params, errorCB, successCB, modifyCB) {
             var me = this;
             jQuery.ajax({
                 type : 'GET',
@@ -91,6 +92,9 @@
                 data : params || {},
                 url: url,
                 success : function(setup) {
+                    if(typeof modifyCB ==='function') {
+                        modifyCB(setup);
+                    }
                     me.setApplicationSetup(setup);
                     me.startApplication(successCB);
                 },
