@@ -449,26 +449,6 @@ Oskari = (function () {
         },
 
         /**
-         * @public @static @method Oskari.getDomManager
-         *
-         *
-         * @return DOM Manager
-         */
-        getDomManager: function () {
-            return domMgr;
-        },
-
-        /**
-         * @public @static @method Oskari.setDomManager
-         *
-         * @param dm DOM Manager
-         *
-         */
-        setDomManager: function (dm) {
-            domMgr = dm;
-        },
-
-        /**
          * @public @static @method Oskari.getSandbox
          *
          * @param  {string=} sandboxName Sandbox name
