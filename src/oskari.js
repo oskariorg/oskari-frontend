@@ -31,9 +31,8 @@
  *
  */
 Oskari = (function () {
-    var oskariVersion = "1.38.0";
-
     var isDebug = false;
+    var markers = [];
 
     // ga is basically O2ClassSystem._global / oskari.clazz._global
     var globals = {};
@@ -48,29 +47,11 @@ Oskari = (function () {
     };
     var cs = {};
 
-    // Oskari1API
-
-    /**
-     * @static @property Oskari
-     */
-    var Oskari = {
-        //bundle_manager: bm,
-        VERSION : oskariVersion,
-        markers: [],
-
-        /**
-         * @public @method Oskari.$
-         *
-         *
-         * @return {}
-         */
-        '$': function () {
-            return ga.apply(cs, arguments);
-        },
+    return {
+        VERSION : "1.38.0",
 
         /**
          * @public @method Oskari.setDebugMode
-         *
          * @param {boolean} d Debug mode on/off
          *
          */
@@ -79,10 +60,23 @@ Oskari = (function () {
         },
 
         /**
+         * @public @static @method Oskari.setMarkers
+         * @param {Array} markers markers
+         */
+        setMarkers: function(markers) {
+            markers = markers || [];
+        },
+        /**
+         * @public @static @method Oskari.getMarkers
+         * @return {Array} markers markers
+         */
+        getMarkers: function() {
+            return markers;
+        },
+
+        /*
          * @public @static @method Oskari.getSandbox
-         *
          * @param  {string=} sandboxName Sandbox name
-         *
          * @return {Object}              Sandbox
          */
         getSandbox: function (sandboxName) {
@@ -99,32 +93,6 @@ Oskari = (function () {
          */
         setSandbox: function (sandboxName, sandbox) {
             return ga.apply(cs, [sandboxName || 'sandbox', sandbox]);
-        },
-
-        /**
-         * @public @static @method Oskari.setMarkers
-         * @param {Array} markers markers
-         */
-        setMarkers: function(markers) {
-            this.markers = markers;
-        },
-        /**
-         * @public @static @method Oskari.getMarkers
-         * @return {Array} markers markers
-         */
-        getMarkers: function() {
-            return this.markers || [];
         }
     };
-
-
-    /**
-     * Let's register Oskari as a Oskari global
-     */
-    //ga.apply(cs, ['Oskari', Oskari1LegacyAPI]);
-
-    /*
-     * window.bundle = Oskari1LegacyAPI; window.Oskari = Oskari1LegacyAPI;
-     */
-    return Oskari;
 }());

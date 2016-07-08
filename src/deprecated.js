@@ -44,4 +44,13 @@
     	warn('setDomManager');
 		domMgr = dm;
     };
+
+    var dollarStore = o.createStore();
+    /**
+     * @public @method Oskari.$
+     * @return {}
+     */
+    o.$ = function (name, value) {
+        return dollarStore.data(name, value);
+    };
 }(Oskari));
