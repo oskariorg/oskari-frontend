@@ -12,6 +12,7 @@ var files = [
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
     '../libraries/dompurify/purify_0.8.0.min.js',
 	'../src/polyfills.js',
+    '../src/O2ClassSystem.js',
 	'../src/oskari.js',
     '../src/logger.js',
     '../src/store.js',
