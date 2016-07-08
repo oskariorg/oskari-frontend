@@ -1,5 +1,5 @@
 
-(function(){
+(function(o){
     /**
      * Registers O2ClassSystem as global so Oskari can build on it
      */
@@ -700,5 +700,5 @@
             return this.globals[key];
         }
     };
-    window.O2ClassSystem = O2ClassSystem;
-}());
+    o.clazz = new O2ClassSystem();
+}(Oskari));

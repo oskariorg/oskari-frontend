@@ -12,15 +12,19 @@ var files = [
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
     '../libraries/dompurify/purify_0.8.0.min.js',
 	'../src/polyfills.js',
-    '../src/O2ClassSystem.js',
 	'../src/oskari.js',
     '../src/logger.js',
+    '../src/O2ClassSystem.js',
+    '../src/bundle_manager.js',
+    '../src/module_spec.js',
+    '../src/builder_api.js',
     '../src/store.js',
     '../src/events.js',
     '../src/i18n.js',
 	'../src/util.js',
 	'../src/loader.js',
-    '../src/oskari.app.js'
+    '../src/oskari.app.js',
+    '../src/deprecated.js'
 ];
 
 try {
