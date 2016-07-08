@@ -8,7 +8,9 @@ Fixed infobox title height if title contains long text. Now the title will incre
 
 ### publisher2
 
-Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
+URL for a terms of use page can now be configured in publisher2 conf (conf.termOfUseUrl).
+If the value starts with 'http' the page is opened to a new window.
+Otherwise GetArticlesByTag action route is used to fetch contents as before.
 
 ### core
 
