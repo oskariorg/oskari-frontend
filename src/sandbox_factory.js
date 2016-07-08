@@ -12,6 +12,8 @@
     var wannabeCore = null;
     var sandboxStore = o.createStore({
         defaultValue : function(sandboxName) {
+            // Notice that these are not part of the core.
+            // FIXME: move wannabe-core and sandbox files from being loaded mapfull with to be part of the core
             var newCore = false;
             if(!wannabeCore) {
                 wannabeCore = o.clazz.create('Oskari.mapframework.core.Core');
