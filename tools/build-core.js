@@ -19,7 +19,8 @@ var files = [
     '../src/events.js',
     '../src/i18n.js',
 	'../src/util.js',
-	'../src/loader.js'
+	'../src/loader.js',
+    '../src/oskari.app.js'
 ];
 
 try {
