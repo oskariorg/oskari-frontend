@@ -11,6 +11,7 @@
         flyout: 'Oskari.userinterface.extension.EnhancedFlyout',
         view: 'Oskari.userinterface.extension.EnhancedView'
     };
+    var bundleInstances = {};
     /**
      * @public @method cls
      * Entry point to new class API.
@@ -195,11 +196,11 @@
 
             if (!o.app.bundles[bid]) {
                 bundle = bm.createBundle(bid, bid);
-                fcd.bundles[bid] = bundle;
+                o.bundle(bid, bundle);
             }
 
             bundleInstance = bm.createInstance(bid);
-            o.app.bundleInstances[bid] = bundleInstance;
+            bundleInstances[bid] = bundleInstance;
 
             configProps = o.app.getBundleInstanceConfigurationByName(bid);
             if (configProps) {
@@ -213,7 +214,7 @@
             return bundleInstance;
         };
         rv.stop = function () {
-            var bundleInstance = o.app.bundleInstances[this.___bundleIdentifier];
+            var bundleInstance = bundleInstances[this.___bundleIdentifier];
 
             return bundleInstance.stop();
         };
