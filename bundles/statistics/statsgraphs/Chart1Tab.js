@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
     function (instance, localization) {
         this.conf = instance.conf;
         this.instance = instance;
-        this.template = jQuery('<div id="chart1" style="overflow: auto; resize: both; padding-right:40px;padding-left:40px; "></div>');
+        this.template = jQuery('<div id="chart1" style=" width:100%; height: 100%; overflow: auto; resize: both; padding-right:40px;padding-left:40px; "></div>');
         this.loc = localization;
     }, {
         getTitle: function () {
@@ -36,8 +36,70 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     columns: data,
                     type:'bar'
                 },
+                grid: {
+                    x: {
+                        show: true
+                    }
+                },
                 subchart: {
                     show: true
+
+                },
+                size: {
+                    height: 400,
+                },
+                padding: {
+                    right: 20,
+
+                },
+                axis : {
+                    x : {
+                        type : 'category',
+                        categories : regions,
+                        tick: {
+
+                            multiline: false,
+                            culling: {
+                                max: 5 // the number of tick texts will be adjusted to less than this value
+                            }
+                        },
+
+                    }
+                },
+                subchart: {
+                    show: true,
+
+                }
+            });
+
+//hacking way of creating charts ..Try to find better way!
+            this.chart = c3.generate({
+                bindto: "#chart2",
+                data: {
+                    columns: data,
+                    type:'line'
+
+                },
+                size: {
+                    height: 400,
+                },
+                padding: {
+                    right: 20,
+
+                },
+                axis : {
+                    x : {
+                        type : 'category',
+                        categories : regions
+                    }
+                }
+            });
+            this.chart = c3.generate({
+                bindto: "#chart3",
+                data: {
+                    columns: data,
+                    type:'scatter'
+
                 },
                 size: {
                     height: 400,
