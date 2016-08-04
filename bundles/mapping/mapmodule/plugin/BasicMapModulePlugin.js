@@ -422,8 +422,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
 
             restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls+'-light' : iconCls+'-dark';
             el.addClass(restoreCls);
-        },
-
+        }
     }, {
         /**
          * @static @property {String[]} protocol

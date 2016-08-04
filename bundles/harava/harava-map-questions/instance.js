@@ -133,7 +133,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
             }
 
             me.started = true;
-            var sandbox = Oskari.$("sandbox");
+            var sandbox = Oskari.getSandbox();
             me.sandbox = sandbox;
 
             var conf = me.conf;
@@ -241,7 +241,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @param {OpenLayers.Event} evt
          */
         "onPopupClose": function (evt) {
-            var sandbox = Oskari.$("sandbox");
+            var sandbox = Oskari.getSandbox();
             var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
             me.plugin.onPopupClose();
             me.showTools();

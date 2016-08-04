@@ -549,5 +549,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     'top': (size.width - popup.height() - 10) + 'px'
                 });
             }
-        },
+        }
     });

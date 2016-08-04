@@ -8,13 +8,25 @@ Fixed infobox title height if title contains long text. Now the title will incre
 
 ### publisher2
 
-Terms of url can now tell in publisher2 conf (termOfUseUrl property). This link is opened from new page.
+URL for a terms of use page can now be configured in publisher2 conf (conf.termOfUseUrl).
+If the value starts with 'http' the page is opened to a new window.
+Otherwise GetArticlesByTag action route is used to fetch contents as before.
 
 ### core
 
-Fixed Oskari.util.isNumber to return false if checked value is null.
+- Fixed Oskari.util.isNumber to return false if checked value is null.
+- Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+- Major internal restructuring of Oskari/src files.
 
-*New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
+### Deprecations and removals
+
+- sandbox.printDebug/printWarn/printError() has been deprecated - use Oskari.log('MyComp').debug()/warn()/error() instead.
+- core.printDebug/printWarn/printError() has been REMOVED - use Oskari.log('MyComp').debug()/warn()/error() instead.
+
+### New functions
+
+- ``Oskari.getDefaultMarker`` function return default Oskari marker.
+- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
 
 ### divmanazer
 
@@ -22,8 +34,8 @@ DotForm now use default marker for visualization if requested marker is not foun
 
 Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
 Events sent are:
-- 'column.selected' with clicked columns/fields name as string payload.
-- 'sort' with a payload like { column : 'clicked columns/fields name', ascending : true }
+- ``column.selected`` with clicked columns/fields name as string payload.
+- ``sort`` with a payload like { column : 'clicked columns/fields name', ascending : true }
 
 Grid now allows to set tools for columns. These are given like:
 
@@ -68,6 +80,21 @@ Sanitize request added markers.
 #### VectorLayerPlugin ol3
 
 Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
+
+## 1.37.1
+
+### mapwmts/WmtsLayerService ol2
+
+Now support to reserve coordinate order if layer has configured ``reverseMatrixIdsCoordinates`` attribute JSON and this contains used matrixid property with true value.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseMatrixIdsCoordinates': {
+      'matrixIdName':true
+    }
+  }
+```
 
 ## 1.37.0
 

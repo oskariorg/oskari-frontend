@@ -464,7 +464,7 @@ Oskari.clazz.define(
                     } else if(area > 1000000) {
                         area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
                     } else {
-                        area = (area/10000).toFixed(2) + " ha<sup>2</sup>";
+                        area = (area/10000).toFixed(2) + " ha";
                     }
                     if (area) {
                         area = area.replace(".", ",");

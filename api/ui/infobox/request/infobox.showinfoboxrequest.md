@@ -6,6 +6,7 @@ Show infobox on map.
 
 - show search result on map
 - show data on map on certain location
+- show infobox for marker
 
 ## Description
 

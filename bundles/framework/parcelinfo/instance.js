@@ -86,7 +86,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance",
             me.started = true;
 
             // Should this not come as a param?
-            var sandbox = Oskari.$('sandbox');
+            var sandbox = Oskari.getSandbox();
             me.setSandbox(sandbox);
 
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');

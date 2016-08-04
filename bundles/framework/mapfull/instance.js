@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance
  *
- * Initializes Oskari core and starts a map window application. Much of the map related properties
+ * Initializes Oskari map window application. Much of the map related properties
  * and initial state are read from bundle configuration/state.
  *
  * See bundle documentation at http://www.oskari.org/trac/wiki/DocumentationBundleMapfull
@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
      */
     function () {
         this.__name = 'mapfull';
-        this.core = null;
         this.sandbox = null;
         this.mapmodule = null;
         /**
@@ -202,15 +201,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         start: function () {
             var me = this,
                 conf = me.conf || {},
-                core = Oskari.clazz.create('Oskari.mapframework.core.Core'),
-                sandbox = core.getSandbox(),
-                sandboxName = conf.sandbox || 'sandbox';
+                sandbox = Oskari.getSandbox(conf.sandbox);
 
             me._handleProjectionDefs(conf.projectionDefs);
-            me.core = core;
             me.sandbox = sandbox;
-
-            Oskari.setSandbox(sandboxName, sandbox);
 
             // take map div ID from config if available
             if (conf.mapElement) {
@@ -225,16 +219,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
 
             // create services & enhancements
-            var services = me._createServices(conf),
-                enhancements = [];
-
-            enhancements.push(
-                Oskari.clazz.create(
-                    'Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'
-                )
-            );
-
-            core.init(services, enhancements);
+            var services = me._createServices(conf);
+            services.forEach(function(service) {
+                sandbox.registerService(service);
+            });
 
             // need to create ui before parsing layers because layerplugins register modelbuilders
             me._createUi();
@@ -366,11 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         /**
          * @private @method _createServices
          * Setup services for this application.
-         * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in
-         * WMTS support and if conf.disableDevelopmentMode == 'true' -> disables
-         * debug messaging and initializes
-         * Oskari.mapframework.service.UsageSnifferService to provide feedback
-         * to server about map usage.
+         * Mainly MapLayerService, SearchService and PopupService
          *
          * @param {Object} conf
          *    JSON configuration for the application
@@ -388,10 +372,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             services.push(searchService);
             services.push(popupService);
 
-            // DisableDevelopmentModeEnhancement
-            if (conf.disableDevelopmentMode === 'true') {
-                me.core.disableDebug();
-            }
             return services;
         },
 
