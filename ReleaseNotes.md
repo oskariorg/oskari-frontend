@@ -81,6 +81,21 @@ Sanitize request added markers.
 
 Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
 
+## 1.37.1
+
+### mapwmts/WmtsLayerService ol2
+
+Now support to reserve coordinate order if layer has configured ``reverseMatrixIdsCoordinates`` attribute JSON and this contains used matrixid property with true value.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseMatrixIdsCoordinates': {
+      'matrixIdName':true
+    }
+  }
+```
+
 ## 1.37.0
 
 ### jQuery selector removes more specific
