@@ -1,5 +1,20 @@
 # Release Notes
 
+## 1.37.1
+
+### mapwmts/WmtsLayerService ol2
+
+Now support to reserve coordinate order if layer has configured ``reverseMatrixIdsCoordinates`` attribute JSON and this contains used matrixid property with true value.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseMatrixIdsCoordinates': {
+      'matrixIdName':true
+    }
+  }
+```
+
 ## 1.37.0
 
 ### Infobox
@@ -122,7 +137,7 @@ Fixed publisher toolbar preview so at toolbar show selected theme. Also disabled
 
 SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0) in admin layer selector.
 
-CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to 
+CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to
 show, that current map Crs is unsupported in the requested service.
 
 ## 1.36.4
