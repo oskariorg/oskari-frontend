@@ -25,14 +25,22 @@ Oskari = (function () {
          * @param {Array} markers markers
          */
         setMarkers: function(markers) {
-            markers = markers || [];
+            Oskari.markers = markers || [];
         },
         /**
          * @public @static @method Oskari.getMarkers
          * @return {Array} markers markers
          */
         getMarkers: function() {
-            return markers;
+            return Oskari.markers;
+        },
+
+        /**
+         * @public @static @method Oskari.getDefaultMarker
+         * @return {Object} default marker
+         */
+        getDefaultMarker: function(){
+            return (this.markers.length>=3) ? this.markers[2] : this.markers[0];
         }
     };
 }());

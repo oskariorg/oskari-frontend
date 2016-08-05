@@ -129,6 +129,7 @@
             if(typeof Oskari.setDecimalSeparator === 'function') {
                 Oskari.setDecimalSeparator(setup.env.decimalSeparator);
             }
+
             if(typeof Oskari.setMarkers === 'function') {
                 Oskari.setMarkers(setup.env.svgMarkers || []);
             }
