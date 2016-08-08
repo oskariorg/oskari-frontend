@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### DrawPlugin.ol3
+
+Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
+
 ### infobox ol2 ja ol3
 
 Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
