@@ -271,7 +271,7 @@ Oskari.clazz.define(
             olLayer.removeFeatures(featuresToRemove);
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
-                
+
                 // remove from "cache"
                 me._removeFromCache(this._getLayerId(olLayer.name), feature);
                 var geojson = formatter.write([feature]);

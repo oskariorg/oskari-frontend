@@ -512,7 +512,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             if (isMobile) {
                 me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                me.popup.addClass('mobile');               
+                me.popup.addClass('mobile');
             } else {
                 me.popup.moveTo(me.getElement(), 'bottom', true);
             }

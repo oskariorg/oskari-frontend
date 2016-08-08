@@ -474,7 +474,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         hasUI: function() {
-            return this._config.noUI ? false : true; 
+            return this._config.noUI ? false : true;
         },
 
         /**

@@ -17,7 +17,7 @@ Oskari.clazz.define(
     function (sandbox) {
         var me = this,
             p;
-        
+
         me.popups = [];
 
         me.sandbox = sandbox;
@@ -87,7 +87,7 @@ Oskari.clazz.define(
                 //add the popup to bookkeeping
                 me.popups.push(popup);
             });
-            
+
             popup.onClose(function() {
                 var found = false,
                     i;
@@ -98,7 +98,7 @@ Oskari.clazz.define(
                         break;
                     }
                 }
-                
+
                 if (found) {
                     me.popups[i].clearListeners();
                     me.popups.splice(i, 1);
