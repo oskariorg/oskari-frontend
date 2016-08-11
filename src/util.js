@@ -440,8 +440,8 @@ Oskari.util = (function () {
                 var m1 = parseInt((p1 - d1) * 60);
                 var s1 = (p1 - d1 - m1/60) * 3600;
                 s1 = parseFloat(s1).toFixed(3);
-                //s1 = '' + s1;
-                //s1 = s1.replace('.', Oskari.getDecimalSeparator());
+                s1 = '' + s1;
+                s1 = s1.replace('.', Oskari.getDecimalSeparator());
                 dms1 = d1 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m1 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s1 + coordChars.CHAR_SEC;
             } else {
                 dms1 = point[0];
@@ -455,8 +455,8 @@ Oskari.util = (function () {
                 var m2 = parseInt((p2 - d2) * 60);
                 var s2 = (p2 - d2 - m2/60) * 3600;
                 s2 = parseFloat(s2).toFixed(3);
-                //s2 = '' + s2;
-                //s2 = s2.replace('.', Oskari.getDecimalSeparator());
+                s2 = '' + s2;
+                s2 = s2.replace('.', Oskari.getDecimalSeparator());
                 dms2 = d2 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m2 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s2 + coordChars.CHAR_SEC;
             } else {
                 dms2 = point[1];
