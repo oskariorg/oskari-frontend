@@ -15,7 +15,7 @@ Oskari.registerLocalization(
                 "title": "Koordinater",
                 "searchButton": "Fokusera kartan",
                 "addMarkerButton": "Tillägg markör",
-                "info": "Klicka på en plats på kartan för att se dess koordinater eller mata in koordinaterna och klicka på knappen \"Fokusera kartan\"",
+                "info": "Mata in koordinaterna eller peka på platsen på kartan.",
                 "showMouseCoordinates": "Visa koordinaterna för musmarkörens position"
             },
             "compass": {

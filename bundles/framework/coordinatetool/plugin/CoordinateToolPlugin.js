@@ -517,7 +517,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                     lon = lon.replace(/,/g,'.');
 
-                    var degreePoint = Oskari.util.coordinateDecimaltoDegree([lon,lat], me._getProjectionDecimals());
+                    var degreePoint = Oskari.util.coordinateMetricToDegrees([lon,lat], me._getProjectionDecimals());
                     lon = degreePoint[0];
                     lat = degreePoint[1];
                 }
@@ -762,9 +762,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var projection = checkedProjection || selectedProjection;
             var conf = me._config;
 
-            var isProjShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format) ? true : false;
-            var isDegrees = (isProjShowConfig && conf.projectionShowFormat[projection].format === 'degree') ? true : false;
+            var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format) ? true : false;
+            var isDegrees = (isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') ? true : false;
 
+            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.format === 'string') ? true : false;
+            if(!isProjectionShowConfig && isAllProjectionConfig) {
+                isDegrees = (conf.projectionShowFormat.format === 'degrees') ? true : false;
+            }
             return isDegrees;
         },
         /**
@@ -779,8 +783,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var projection = checkedProjection || selectedProjection;
             var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number') ? true : false;
             var decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : 0;
-            if(!isProjectionShowConfig && conf.roundToDecimals) {
+            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number') ? true : false;
+
+            if(!isProjectionShowConfig && isAllProjectionConfig) {
+                decimals = conf.projectionShowFormat.decimals;
+            }
+            else if(!isProjectionShowConfig && conf.roundToDecimals) {
                 decimals = conf.roundToDecimals;
+                me.getSandbox().printWarn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
+                    'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
             }
             return decimals;
         },
@@ -793,13 +804,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var lon = me._lonInput.val(),
                 lat = me._latInput.val();
 
-            if(Oskari.util.coordinateIsDegree([lon,lat]) && me._allowDegrees()) {
-                var dec = Oskari.util.coordinateDegreetoDecimal([lon,lat], me._getProjectionDecimals());
+            if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat], me._getProjectionDecimals());
                 lon = dec[0];
                 lat = dec[1];
             }
-            else if(Oskari.util.coordinateIsDegree([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
-                var dec = Oskari.util.coordinateDegreetoDecimal([lon,lat], me._getProjectionDecimals(me._previousProjection));
+            else if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
+                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
                 lon = dec[0];
                 lat = dec[1];
             }
