@@ -31,6 +31,9 @@ Otherwise GetArticlesByTag action route is used to fetch contents as before.
 
 - ``Oskari.getDefaultMarker`` function return default Oskari marker.
 - ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
+- ``Oskari.util.coordinateMetricToDegrees`` function convert metric coordinate to degrees (degree, minute and seconds).
+- ``Oskari.util.coordinateDegreesToMetric`` function convert degree coordinate to metric
+- ``Oskari.util.coordinateIsDegrees`` function check is coordinate is degrees
 
 ### divmanazer
 
