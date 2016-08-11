@@ -351,7 +351,7 @@ Oskari.util = (function () {
      * @return String
      */
     util.sanitize = function(content) {
-        return DOMPurify.sanitize(content, {SAFE_FOR_JQUERY: true});
+        return DOMPurify.sanitize(content, {SAFE_FOR_JQUERY: true, ADD_ATTR: ['target']});
     };
 
     var validCoordinates = function(point) {
