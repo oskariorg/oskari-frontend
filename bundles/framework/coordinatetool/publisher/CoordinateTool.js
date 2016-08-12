@@ -66,14 +66,21 @@ function() {
         if(me.state.enabled) {
             var pluginConfig = this.getPlugin().getConfig();
             pluginConfig.instance = null;
+            delete pluginConfig.instance;
+
             if(me.supportedProjections) {
                 pluginConfig.supportedProjections = me.supportedProjections;
             }
             if(me.noUI) {
                 pluginConfig.noUI = me.noUI;
             }
-            if(me.toolConfig && me.toolConfig.roundToDecimals) {
-                pluginConfig.roundToDecimals = me.toolConfig.roundToDecimals;
+            if(me.roundToDecimals) {
+                pluginConfig.noUI = me.roundToDecimals;
+            }
+            if(me.toolConfig){
+                for(var configName in me.toolConfig) {
+                    pluginConfig[configName] = me.toolConfig[configName];
+                }
             }
             var json = {
                 configuration: {}
