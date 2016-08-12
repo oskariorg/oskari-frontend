@@ -435,11 +435,11 @@ Oskari.util = (function () {
             // first coordinate
             var dms1 = NaN;
             if(!coordinateDMSDecode(point[0])) {
-                var p1 = parseFloat(point[0]).toFixed(roundToDecimals);
+                var p1 = parseFloat(point[0]);
                 var d1 =  parseInt(p1);
                 var m1 = parseInt((p1 - d1) * 60);
                 var s1 = (p1 - d1 - m1/60) * 3600;
-                s1 = parseFloat(s1).toFixed(3);
+                s1 = parseFloat(s1).toFixed(roundToDecimals);
                 s1 = '' + s1;
                 s1 = s1.replace('.', Oskari.getDecimalSeparator());
                 dms1 = d1 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m1 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s1 + coordChars.CHAR_SEC;
@@ -450,11 +450,11 @@ Oskari.util = (function () {
             // second coordinate
             var dms2 = NaN;
             if(!coordinateDMSDecode(point[1])) {
-                var p2 = parseFloat(point[1]).toFixed(roundToDecimals);
+                var p2 = parseFloat(point[1]);
                 var d2 =  parseInt(p2);
                 var m2 = parseInt((p2 - d2) * 60);
                 var s2 = (p2 - d2 - m2/60) * 3600;
-                s2 = parseFloat(s2).toFixed(3);
+                s2 = parseFloat(s2).toFixed(roundToDecimals);
                 s2 = '' + s2;
                 s2 = s2.replace('.', Oskari.getDecimalSeparator());
                 dms2 = d2 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m2 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s2 + coordChars.CHAR_SEC;
