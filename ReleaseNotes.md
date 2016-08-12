@@ -16,6 +16,8 @@ URL for a terms of use page can now be configured in publisher2 conf (conf.termO
 If the value starts with 'http' the page is opened to a new window.
 Otherwise GetArticlesByTag action route is used to fetch contents as before.
 
+Fixed CoordinateTool config saving when using publisher2 template configs.
+
 ### core
 
 - Fixed Oskari.util.isNumber to return false if checked value is null.
