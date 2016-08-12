@@ -15,7 +15,6 @@ function() {
         'toolOptions': '<div class="tool-options"></div>'
     },
     supportedProjections: null,
-    roundToDecimals: null,
     noUI: null,
     projectionTrasformationIsCheckedInModifyMode: false,
     noUiIsCheckedInModifyMode: false,
@@ -68,19 +67,24 @@ function() {
             pluginConfig.instance = null;
             delete pluginConfig.instance;
 
-            if(me.supportedProjections) {
-                pluginConfig.supportedProjections = me.supportedProjections;
-            }
-            if(me.noUI) {
-                pluginConfig.noUI = me.noUI;
-            }
-            if(me.roundToDecimals) {
-                pluginConfig.noUI = me.roundToDecimals;
-            }
             if(me.toolConfig){
                 for(var configName in me.toolConfig) {
                     pluginConfig[configName] = me.toolConfig[configName];
+                    // Not save supportedProjections if is not checked
+                    if(configName === 'supportedProjections' && !me.supportedProjections) {
+                        pluginConfig[configName] = null;
+                        delete pluginConfig[configName];
+                    }
+                    // Not save noUI if is not checked
+                    if(configName === 'noUI' && !me.noUI) {
+                        pluginConfig[configName] = null;
+                        delete pluginConfig[configName];
+                    }
                 }
+            }
+
+            if(me.noUI) {
+                pluginConfig.noUI = me.noUI;
             }
             var json = {
                 configuration: {}
