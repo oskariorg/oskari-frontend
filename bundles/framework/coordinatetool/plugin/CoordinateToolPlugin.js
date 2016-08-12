@@ -148,17 +148,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             addMarkerBtn.setTitle(loc.popup.addMarkerButton);
 
             addMarkerBtn.setHandler(function() {
-                data = me._getInputsData();
+                var data = me._getInputsData();
+                var markerData = me._getInputsData();
+
+                var lon = me._lonInput.val(),
+                    lat = me._latInput.val();
+                var msg = null;
+                if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                    msg = {
+                        lat: lat,
+                        lon: lon
+                    };
+                }
 
                 if(!me._getPreciseTransform) {
-                    me._addMarker(data);
+                    me._addMarker(data, msg);
                     me._centerMapToSelectedCoordinates(data);
                 } else {
                     if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
-                        me._addMarker(data);
+                        me._addMarker(data, msg);
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._getTransformedCoordinatesFromServer(data, true, false, true);
+                        me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
                     }
                 }
 
@@ -253,7 +264,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * Add marker according to the coordinates given in coordinate popup.
          * @method  @private _addMarker
          */
-        _addMarker: function(data){
+        _addMarker: function(data, messageData){
             var me = this,
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
                 inputData = me._getInputsData(),
@@ -265,7 +276,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lon = lon.toFixed(0);
             }
             if(reqBuilder) {
-                var msg = lat + ', ' + lon;
+                var msgLon = (messageData && messageData.lon) ? messageData.lon : lon;
+                var msgLat = (messageData && messageData.lat) ? messageData.lat : lat;
+                var msg = msgLat + ', ' + msgLon;
                 if(me._config.supportedProjections) {
                     msg += ' (' + jQuery("#projection option:selected" ).text() + ')';
                 }
@@ -322,14 +335,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param  {Object} data       data
          * @param  {Boolean} showMarker show marker
          */
-        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap){
+        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap, markerMessageData){
             var me = this,
                 loc = me._locale,
                 fromProj = me._projectionSelect.val(),
                 toProj = me._mapmodule.getProjection(),
                 successCb = function(data) {
                     if(showMarker) {
-                        me._addMarker(data);
+                        me._addMarker(data, markerMessageData);
                     }
 
                     if(showMarker || centerMap) {
