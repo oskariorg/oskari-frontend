@@ -75,7 +75,7 @@ Oskari.registerLocalization(
             "MarkersPlugin": {
                 "buttons": {
                     "add": "Tee karttamerkintä.",
-                    "clear": "Poista kaikki merkinnät."
+                    "clear": "Poista kaikki merkinnät"
                 },
                 "form": {
                     "title": "Karttamerkinnän esitystapa",
