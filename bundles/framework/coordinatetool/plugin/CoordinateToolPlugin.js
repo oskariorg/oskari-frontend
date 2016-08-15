@@ -517,27 +517,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._coordinateTransformationExtension._coordinatesFromServer = false;
                 }
 
+                lat = lat + '';
+                lon = lon + '';
+                if(lat.indexOf('~') === 0) {
+                    lat = lat.substring(1, lat.length);
+                }
+                lat = lat.replace(/,/g,'.');
+                if(lon.indexOf('~') === 0) {
+                    lon = lon.substring(1, lat.length);
+                }
+                lon = lon.replace(/,/g,'.');
+
                 // Need to show degrees ?
                 if(me._allowDegrees()) {
-                    lat = lat + '';
-                    lon = lon + '';
-                    if(lat.indexOf('~') === 0) {
-                        lat = lat.substring(1, lat.length);
-                    }
-                    lat = lat.replace(/,/g,'.');
-                    if(lon.indexOf('~') === 0) {
-                        lon = lon.substring(1, lat.length);
-                    }
-                    lon = lon.replace(/,/g,'.');
-
                     var degreePoint = Oskari.util.coordinateMetricToDegrees([lon,lat], me._getProjectionDecimals());
                     lon = degreePoint[0];
                     lat = degreePoint[1];
-                } else {
+                }
+                // Otherwise show meter units
+                else if(!isNaN(lat) && !isNaN(lon)) {
+                    lat = parseFloat(lat);
+                    lon = parseFloat(lon);
                     lat = lat.toFixed(me._getProjectionDecimals());
                     lon = lon.toFixed(me._getProjectionDecimals());
                     lat = me.formatNumber(lat, me._decimalSeparator);
                     lon = me.formatNumber(lon, me._decimalSeparator);
+                } else {
+                    return;
                 }
                 me._latInput.val(lat);
                 me._lonInput.val(lon);
