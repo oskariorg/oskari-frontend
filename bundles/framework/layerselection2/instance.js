@@ -128,6 +128,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             if (!handler)
                 return;
 
+            // Skip events, if internally linked layer
+            if(typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer() ){
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+                return;
+            }
+
             return handler.apply(this, [event]);
 
         },

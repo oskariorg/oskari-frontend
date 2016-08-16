@@ -177,10 +177,12 @@ Oskari.clazz.define(
                 me.removeInteractions(me._modify, id);
                 me.setVariablesToNull();
                 me._map.un('pointermove', me.pointerMoveHandler, me);
-               //enable gfi
+                //enable gfi
                 if (me._gfiReqBuilder) {
                     me._sandbox.request(me, me._gfiReqBuilder(true));
                 }
+
+
             }
         },
         /**
@@ -464,7 +466,7 @@ Oskari.clazz.define(
                     } else if(area > 1000000) {
                         area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
                     } else {
-                        area = (area/10000).toFixed(2) + " ha<sup>2</sup>";
+                        area = (area/10000).toFixed(2) + " ha";
                     }
                     if (area) {
                         area = area.replace(".", ",");
@@ -689,6 +691,10 @@ Oskari.clazz.define(
             this._shape = null;
             this._buffer= null;
             this._id = null;
+            // Remove measure result from map
+            if(this._sketch) {
+               jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
+            }
             this._sketch = null;
             this._layerId = null;
         },

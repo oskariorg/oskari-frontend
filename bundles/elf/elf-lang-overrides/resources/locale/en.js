@@ -149,6 +149,6 @@ Oskari.registerLocalization({
                     "conformance":"Conformance"
                 }
             }
-        }        
+        }
     }
 }, true);

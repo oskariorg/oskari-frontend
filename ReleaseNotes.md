@@ -1,5 +1,99 @@
 # Release Notes
 
+## 1.38.0
+
+### DrawPlugin.ol3
+
+Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
+
+### infobox ol2 ja ol3
+
+Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
+
+### publisher2
+
+URL for a terms of use page can now be configured in publisher2 conf (conf.termOfUseUrl).
+If the value starts with 'http' the page is opened to a new window.
+Otherwise GetArticlesByTag action route is used to fetch contents as before.
+
+Fixed CoordinateTool config saving when using publisher2 template configs.
+
+### core
+
+- Fixed Oskari.util.isNumber to return false if checked value is null.
+- Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+- Major internal restructuring of Oskari/src files.
+
+### Deprecations and removals
+
+- sandbox.printDebug/printWarn/printError() has been deprecated - use Oskari.log('MyComp').debug()/warn()/error() instead.
+- core.printDebug/printWarn/printError() has been REMOVED - use Oskari.log('MyComp').debug()/warn()/error() instead.
+
+### New functions
+
+- ``Oskari.getDefaultMarker()`` function return default Oskari marker.
+- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``.
+- ``Oskari.util.coordinateMetricToDegrees()`` function convert metric coordinate to degrees (degree, minute and seconds).
+- ``Oskari.util.coordinateDegreesToMetric()`` function convert degree coordinate to metric.
+- ``Oskari.util.coordinateIsDegrees()`` function check is coordinate is degrees.
+
+### Modifications
+
+- ``Oskari.util.sanitize()`` Allows now target attribute.
+
+### divmanazer
+
+DotForm now use default marker for visualization if requested marker is not found.
+
+Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
+Events sent are:
+- ``column.selected`` with clicked columns/fields name as string payload.
+- ``sort`` with a payload like { column : 'clicked columns/fields name', ascending : true }
+
+Grid now allows to set tools for columns. These are given like:
+
+```javascript
+grid.setColumnTools('field name' [{
+	name : 'Say hi',
+	callback : function(value) {
+		alert('Hello from ' + value);
+	}
+}]);
+```
+
+Grid has a new function for highlighting columns (no default style for selection):
+
+```javascript
+grid.selectColumn('column name');
+```
+
+Grid previously used field name as class for table headers. Now the name is processed to remove problematic characters before using as css class.
+
+Grid can now be configured to scroll the content area *experimental feature* (true as param will follow element container size changes and recalculate the scrollable area height with interval)
+```javascript
+grid.contentScroll(true);
+```
+
+### mapmodule
+
+``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
+
+``registerWellknownStyle`` function now handles following scenarius:
+- named style allready exists: merge styles and override exiting style if exist
+- sanitized adding, remove unwanted tags, scripts, so on.
+
+#### AbstractMapLayerPlugin
+
+getOLMapLayers() now accepts Oskari layer id as parameter as well as the layer object.
+
+#### MarkersPlugin
+
+Sanitize request added markers.
+
+#### VectorLayerPlugin ol3
+
+Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
+
 ## 1.37.1
 
 ### mapwmts/WmtsLayerService ol2
@@ -16,6 +110,13 @@ Example layer attribute configuration:
 ```
 
 ## 1.37.0
+
+### jQuery selector removes more specific
+
+Fixed jQuery selectors more specific for following bundles:
+- integration/admin-layerselector
+- framework/publisher2
+- framework/divmanazer
 
 ### Infobox
 

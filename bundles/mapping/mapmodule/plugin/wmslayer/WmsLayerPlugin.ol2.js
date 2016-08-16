@@ -53,7 +53,7 @@ Oskari.clazz.define(
                 layers.push(layer);
             }
 
-            layers.forEach(function(oskariLayer) {
+            layers.forEach(function (oskariLayer) {
 
                 // default params and options
                 var defaultParams = {
@@ -62,7 +62,7 @@ Oskari.clazz.define(
                         id: oskariLayer.getId(),
                         styles: oskariLayer.getCurrentStyle().getName(),
                         format: 'image/png',
-                        version : oskariLayer.getVersion() || '1.1.1'
+                        version: oskariLayer.getVersion() || '1.1.1'
                     },
                     defaultOptions = {
                         layerId: oskariLayer.getLayerName(),
@@ -73,6 +73,11 @@ Oskari.clazz.define(
                     },
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions();
+
+                // Sub layers could be different types
+                if (oskariLayer.getLayerType() !== 'wms') {
+                    return;
+                }
 
                 if (oskariLayer.isRealtime()) {
                     var date = new Date();
@@ -106,6 +111,7 @@ Oskari.clazz.define(
                 olLayers.push(openLayer);
 
                 sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
+
 
             });
             // store reference to layers

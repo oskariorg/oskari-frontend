@@ -75,7 +75,9 @@ jQuery(document).ready(function () {
                 jQuery('#mapdiv').append('Unable to start');
                 return;
             }
+
             app.setApplicationSetup(appSetup);
+
             app.startApplication(function () {
                 var sb = Oskari.getSandbox();
                 gfiParamHandler(sb);

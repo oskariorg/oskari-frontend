@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         me.state = state;
         me.dotForm = null;
         me._markers = {};
+        me._unVisibleMarkers = {};
         me._markerFeatures = {};
         me._nextMarkerId = 0;
         me._svg = false;
@@ -95,6 +96,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 ),
                 'MapModulePlugin.RemoveMarkersRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.RemoveMarkersRequestHandler',
+                    sandbox,
+                    me
+                ),
+                'MapModulePlugin.MarkerVisibilityRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.MarkerVisibilityRequestHandler',
                     sandbox,
                     me
                 )
@@ -281,8 +287,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          * Removes all markers from the layer
          * @param {Boolean} suppressEvent true to suppress from sending event
+         * @param {String} optionalMarkerId marker id
+         * @param {Boolean} notCleanUnvisibleMarkers true to not clean unvisibled markers
          */
-        removeMarkers: function(suppressEvent, optionalMarkerId) {
+        removeMarkers: function(suppressEvent, optionalMarkerId, notCleanUnvisibleMarkers) {
             var me = this,
                 sandbox = me.getSandbox(),
                 markerLayer = this.getMarkersLayer();
@@ -300,6 +308,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me._markers = {};
                 delete me._markerFeatures;
                 me._markerFeatures = {};
+                if(!notCleanUnvisibleMarkers) {
+                    delete me._unVisibleMarkers;
+                    me._unVisibleMarkers = {};
+                }
             }
             // remove single marker
             else {
@@ -315,6 +327,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 delete me._markers[optionalMarkerId];
                 me._markerFeatures[optionalMarkerId] = null;
                 delete me._markerFeatures[optionalMarkerId];
+                if(!notCleanUnvisibleMarkers) {
+                    me._unVisibleMarkers[optionalMarkerId] = null;
+                    delete me._unVisibleMarkers[optionalMarkerId];
+                }
             }
 
             if (!suppressEvent) {
@@ -466,7 +482,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 // event is suppressed as this is "modify"
                 this.removeMarkers(true, data.id);
             }
-
+            // Check if marker is unvisible
+            if(this._unVisibleMarkers[data.id]) {
+                this._unVisibleMarkers[data.id] = null;
+                delete this._unVisibleMarkers[data.id];
+            }
 
             // Image data already available
             var iconSrc = null;
@@ -564,6 +584,56 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     'AfterAddMarkerEvent'
                 )(data, data.id);
                 me.getSandbox().notifyAll(addEvent);
+            }
+        },
+
+        /**
+         * Change map marker visibility.
+         * @method  @public changeMapMarkerVisibility
+         * @param  {Boolean} visible  visibility is marker visible or not. True if show marker, else false.
+         * @param  {String} markerId  optional marker id for marker to change it's visibility, all markers visibility changed if not given. If a marker with same id
+         *                  exists, it will be changed visibility.
+         */
+        changeMapMarkerVisibility: function(visible, markerId){
+            // Check hiding for wanted marker
+            if(!visible && markerId) {
+                if (this._markers[markerId]) {
+                    this._unVisibleMarkers[markerId] = _.cloneDeep(this._markers[markerId]);
+                    // remove if found
+                    // event is suppressed as this is "modify"
+                    this.removeMarkers(true, markerId, true);
+                    delete this._markers[markerId];
+                }
+            }
+            // Check hiding for all markers
+            else if(!visible) {
+                for(var key in this._markers) {
+                    this._unVisibleMarkers[key] = _.cloneDeep(this._markers[key]);
+                    // remove if found
+                    // event is suppressed as this is "modify"
+                    this.removeMarkers(true, key, true);
+                    delete this._markers[key];
+                }
+            }
+            // Check showing for wanted marker
+            else if(visible && markerId){
+                if (this._unVisibleMarkers[markerId]) {
+                    this._markers[markerId] = _.cloneDeep(this._unVisibleMarkers[markerId]);
+                    // remove if found
+                    // event is suppressed as this is "modify"
+                    this.addMapMarker(this._markers[markerId], markerId, true);
+                    delete this._unVisibleMarkers[markerId];
+                }
+            }
+            // Check showing for all markers
+            else if(visible){
+                for(var key in this._unVisibleMarkers) {
+                    this._markers[key] = _.cloneDeep(this._unVisibleMarkers[key]);
+                    // remove if found
+                    // event is suppressed as this is "modify"
+                    this.addMapMarker(this._markers[key], key, true);
+                    delete this._unVisibleMarkers[key];
+                }
             }
         },
 

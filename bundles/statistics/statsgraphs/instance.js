@@ -23,6 +23,7 @@ Oskari.clazz.define(
     }, {
         afterStart: function (sandbox) {
             var me = this;
+            this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
             /*
             // FOR DEBUGGING
             var sb = this.getSandbox();
@@ -37,32 +38,84 @@ Oskari.clazz.define(
             */
         },
         eventHandlers: {
-            /**
-             * @method MapStats.StatsVisualizationChangeEvent
-             */
-            'StatsGrid.StatsDataChangedEvent': function (event) {
-                this._handleDataChangeEvent(event);
+            'StatsGrid.IndicatorEvent' : function(evt) {
+                // TODO: react to event
+                this._handleDataChangeEvent();
+            },
+            'StatsGrid.RegionsetChangedEvent' : function(evt) {
+                this._handleDataChangeEvent();
             }
         },
+
+        /**
+         * @method registerMapClickHandler
+         * Registers the map click handler so we can pass the clicks to flyout.
+         */
+        registerMapClickHandler: function () {
+            if (this.eventHandlers.MapClickedEvent) {
+                return;
+            }
+            this.eventHandlers.MapClickedEvent = function (event) {
+                alert("map clicked");
+                this.plugins['Oskari.userinterface.Flyout'].onMapClick(
+                    event.getLonLat()
+                );
+            };
+            this.sandbox.registerForEventByName(this, 'MapClickedEvent');
+        },
+
+        /**
+         * @method unregisterMapClickHandler
+         * Unregisters the map click handler
+         */
+        unregisterMapClickHandler: function () {
+            delete this.eventHandlers.MapClickedEvent;
+            this.sandbox.unregisterFromEventByName(this, 'MapClickedEvent');
+        },
+
         /*
         // FOR DEBUGGING
         onEvent: function(event) {
             console.log(event.getName(), event);
         },
 */
-        /**
-         * Saves params to the state and sends them to the print service as well.
-         *
-         * @method _afterStatsVisualizationChangeEvent
-         * @private
-         * @param {Object} event
-         */
-        _handleDataChangeEvent: function (event) {
-            var me = this,
-                params = event.getParams(),
-                layer = event.getLayer();
-            this.getFlyout().updateUI(
-                params.CUR_COL.field, params.VIS_CODES, params.COL_VALUES);
+        _handleDataChangeEvent: function () {
+
+            var me = this;
+
+            this.service.getCurrentDataset(function(err, data) {
+                if(err) {
+                    console.warn(err);
+                    return;
+                }
+                me.getFlyout().chartDataChanged(data);
+            });
+
+/*
+            var regionSetId = this.service.getStateService().getRegionset();
+            //var regionset = this.service.getRegionsets(regionSetId);
+            var selectedList = this.service.getStateService().getIndicators();
+            if(!selectedList.length) {
+                // TODO: teardown any existing charts
+                return;
+            }
+            // latest indicator
+            var ind = selectedList[selectedList.length -1];
+            this.service.getRegions(regionSetId, function(err, regions) {
+                me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, regionSetId, function(err, indicatorData) {
+                    var values = [];
+                    regions.forEach(function(reg) {
+                        values.push(indicatorData[reg.id]);
+                    });
+
+                    me.service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                        var ds = me.service.getDatasource(ind.datasource).name;
+                        var name = ds + ' - ' + Oskari.getLocalized(indicator.name);
+                        me.getFlyout().updateUI(name, regions, values);
+                    });
+                });
+            });
+*/
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultExtension']

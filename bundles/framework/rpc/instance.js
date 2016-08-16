@@ -177,6 +177,7 @@ Oskari.clazz.define(
                     'MapModulePlugin.GetFeatureInfoRequest',
                     'MapModulePlugin.MapLayerVisibilityRequest',
                     'MapModulePlugin.RemoveMarkersRequest',
+                    'MapModulePlugin.MarkerVisibilityRequest',
                     'MapMoveRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',

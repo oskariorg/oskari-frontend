@@ -9,6 +9,63 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.38
+
+#### [add] [rpc] New MapModulePlugin.MarkerVisibilityRequest Request
+
+Use this request to show/hide added marker from map.
+
+Hide wanted marker from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false, 'TEST_MARKER_ID']);
+```
+
+Hide all markers from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false]);
+```
+
+Show wanted marker from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true, 'TEST_MARKER_ID']);
+```
+
+Show all markers from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true]);
+```
+
+#### [mod] [rpc] MapModulePlugin.AddFeaturesToMapRequest
+
+If some feature's style must be updated (for example for highlighting it on click), the first parameter of request should be key-value-object that identifiers the specific feature existing on the map. Request will check if the feature with given property exists on the map and will update its style according to the style given in the options object.
+
+```javascript
+var featureProperty = {'id': 'F1'}; // key is feature property name, value is the property matching value to style
+var options = {
+    featureStyle: {
+        fill: {
+            color: '#ff0000'
+        },
+        stroke : {
+            color: '#ff0000',
+            width: 5
+        },
+        text : {
+            scale : 1.3,
+            fill : {
+                color : 'rgba(0,0,0,1)'
+            },
+            stroke : {
+                color : 'rgba(255,255,255,1)',
+                width : 2
+            }
+        }
+    },
+    layerId: 'VECTOR'
+};
+channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [featureProperty, options]);
+ ```
+
 ## 1.37
 
 ### mapmodule

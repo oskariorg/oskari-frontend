@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           </td>'+
                     '       </tr>'+
                     '   </table>'+
-/*                    
+/*
                     //TODO: once we get the feedback stars
                     '   <hr class="elf-metadata-divider">'+
                     '   <h2>'+this.locale.heading.dataQuality+'</h2>'+
@@ -240,10 +240,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '       <tr>'+
                     '           <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
                                 //TODO: feedbackstars
-                    '           <td>*****</td>'+ 
+                    '           <td>*****</td>'+
                     '       </tr>'+
                     '   </table>'+
-*/                    
+*/
                     '</article>'
                 ),
                 'quality': _.template(

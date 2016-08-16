@@ -50,7 +50,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 
 		/* sandbox */
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.$(sandboxName);
+		var sandbox = Oskari.getSandbox(sandboxName);
         me.sandbox = sandbox;
 
         // register to sandbox as a module

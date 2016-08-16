@@ -39,7 +39,7 @@
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
 	                "mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
+	                    "bundlePath": "../../../packages/mapping/ol2/"
 	                },
 	                "mapanalysis": {
 	                    "bundlePath": "../../../packages/framework/bundle/"

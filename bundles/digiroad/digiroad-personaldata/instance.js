@@ -84,7 +84,7 @@ function() {
 
 		me.started = true;
 
-		var sandbox = Oskari.$("sandbox");
+		var sandbox = Oskari.getSandbox();
 		me.sandbox = sandbox;
 		this.viewService = Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
 
