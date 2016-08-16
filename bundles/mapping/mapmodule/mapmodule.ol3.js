@@ -323,7 +323,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
-
             if(!targetSRS) {
                 targetSRS = this.getProjection();
             }
@@ -341,6 +340,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                       lat : transformed[1]
                   };
             }
+
+            var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+            log.warn('SrsName not supported!');
             throw new Error('SrsName not supported!');
         },
         /**

@@ -5,7 +5,7 @@
  */
 Oskari = (function () {
     var isDebug = false;
-    var markers = [];
+    var _markers = [];
 
     return {
         VERSION : "1.39.0",
@@ -25,14 +25,14 @@ Oskari = (function () {
          * @param {Array} markers markers
          */
         setMarkers: function(markers) {
-            Oskari.markers = markers || [];
+            _markers = markers || [];
         },
         /**
          * @public @static @method Oskari.getMarkers
          * @return {Array} markers markers
          */
         getMarkers: function() {
-            return Oskari.markers;
+            return _markers;
         },
 
         /**
