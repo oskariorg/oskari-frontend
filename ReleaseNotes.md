@@ -2,6 +2,10 @@
 
 ## 1.38.0
 
+### DrawPlugin.ol3
+
+Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
+
 ### infobox ol2 ja ol3
 
 Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
@@ -11,6 +15,8 @@ Fixed infobox title height if title contains long text. Now the title will incre
 URL for a terms of use page can now be configured in publisher2 conf (conf.termOfUseUrl).
 If the value starts with 'http' the page is opened to a new window.
 Otherwise GetArticlesByTag action route is used to fetch contents as before.
+
+Fixed CoordinateTool config saving when using publisher2 template configs.
 
 ### core
 
@@ -25,8 +31,15 @@ Otherwise GetArticlesByTag action route is used to fetch contents as before.
 
 ### New functions
 
-- ``Oskari.getDefaultMarker`` function return default Oskari marker.
-- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``
+- ``Oskari.getDefaultMarker()`` function return default Oskari marker.
+- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``.
+- ``Oskari.util.coordinateMetricToDegrees()`` function convert metric coordinate to degrees (degree, minute and seconds).
+- ``Oskari.util.coordinateDegreesToMetric()`` function convert degree coordinate to metric.
+- ``Oskari.util.coordinateIsDegrees()`` function check is coordinate is degrees.
+
+### Modifications
+
+- ``Oskari.util.sanitize()`` Allows now target attribute.
 
 ### divmanazer
 

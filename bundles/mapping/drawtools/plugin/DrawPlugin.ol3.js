@@ -177,10 +177,12 @@ Oskari.clazz.define(
                 me.removeInteractions(me._modify, id);
                 me.setVariablesToNull();
                 me._map.un('pointermove', me.pointerMoveHandler, me);
-               //enable gfi
+                //enable gfi
                 if (me._gfiReqBuilder) {
                     me._sandbox.request(me, me._gfiReqBuilder(true));
                 }
+
+
             }
         },
         /**
@@ -689,6 +691,10 @@ Oskari.clazz.define(
             this._shape = null;
             this._buffer= null;
             this._id = null;
+            // Remove measure result from map
+            if(this._sketch) {
+               jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
+            }
             this._sketch = null;
             this._layerId = null;
         },

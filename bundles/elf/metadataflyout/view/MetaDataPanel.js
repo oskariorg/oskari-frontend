@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           </td>'+
                     '       </tr>'+
                     '   </table>'+
-                    
+
                     '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>'+
                     '       <div class="metadatatab-rating-container">'+
                     '       <hr class="elf-metadata-divider">'+
@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
                     '               <td>'+
                     '                   <div class="metadata-feedback-rating ratingInfo"></div>'+
-                    '               </td>'+ 
+                    '               </td>'+
                     '           </tr>'+
                     '       </table>'+
                     '       </div>'+
@@ -568,7 +568,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
                     }
-                    
+
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
                 }
@@ -717,7 +717,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     entry.addClass('metadata_coverage_bbox_link');
                     entry.attr('href','javascript:void(0)');
                     entry.html(me.instance._locale.flyout.coverage.showBBOX);
-                    
+
 
                     if(links){
                         links = links.add(entry);

@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart4Tab',
                     },
 
 
-                    /* 
+                    /*
                     onmouseover: function (e) {
                         var k = ".c3-shape-"+ e.index;
                         //make the clicked bar opacity 1
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart4Tab',
                     right: 20,
 
                 },
-                
+
                 axis: {
                     rotated: true
                 },

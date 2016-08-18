@@ -242,7 +242,7 @@ Oskari.clazz.define(
                 'AddMapLayerRequest',
                 [newSelectionId, false]
             );
-            
+
             // - move new selection to bottom (see layerselection._layerOrderChanged(item))
             me.getSandbox().postRequestByName(
                 'RearrangeSelectedMapLayerRequest',

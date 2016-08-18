@@ -264,7 +264,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                     '</style>').appendTo('head');
             }
             */
-            
+
             if(!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
                     createdHover: (addHoverStyle && showHover) ? true : false,
@@ -470,9 +470,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         },
         _updateToolbar: function(ptbid, data){
             var me = this;
-            var tbid = ptbid || 'default';           
+            var tbid = ptbid || 'default';
 
-            
+
             if(!data) {
                 data = {};
             }
@@ -494,7 +494,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             data.colours = data.colours || {
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
-            
+
             if(this._toolbarConfigs[tbid].createdHover === true) {
                 jQuery('style#toolbar_'+tbid+'_style').remove();
                 jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
@@ -503,8 +503,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                             '}' +
                         '</style>').appendTo('head');
             }
-            
-            
+
+
             this._toolbarConfigs[tbid].colours = data.colours;
 
 
