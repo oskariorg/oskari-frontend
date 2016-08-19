@@ -375,7 +375,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 if (isMyPlace) {
                     markup = me.formatters.myplace(feat);
                 } else {
-                    markup = me._json2html(feat);
+                    if (!jQuery.isEmptyObject(feat)) {
+                        markup = me._json2html(feat);
+                    } else {
+                        markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
+                    }
                 }
             } else {
                 markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
