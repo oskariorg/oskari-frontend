@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.39.0
+
+IE9 will not be a supported browser anymore.
+
 ## 1.38.0
 
 ### DrawPlugin.ol3
