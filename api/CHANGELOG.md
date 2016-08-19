@@ -11,6 +11,30 @@ Some extra tags:
 
 ## 1.38
 
+#### [add] [rpc] New MapModulePlugin.MarkerVisibilityRequest Request
+
+Use this request to show/hide added marker from map.
+
+Hide wanted marker from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false, 'TEST_MARKER_ID']);
+```
+
+Hide all markers from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false]);
+```
+
+Show wanted marker from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true, 'TEST_MARKER_ID']);
+```
+
+Show all markers from map:
+```javascript
+channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true]);
+```
+
 #### [mod] [rpc] MapModulePlugin.AddFeaturesToMapRequest
 
 If some feature's style must be updated (for example for highlighting it on click), the first parameter of request should be key-value-object that identifiers the specific feature existing on the map. Request will check if the feature with given property exists on the map and will update its style according to the style given in the options object.

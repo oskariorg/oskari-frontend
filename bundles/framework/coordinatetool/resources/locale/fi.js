@@ -15,7 +15,7 @@ Oskari.registerLocalization(
                 "title": "Koordinaatit",
                 "searchButton": "Keskitä kartta",
                 "addMarkerButton": "Lisää merkintä",
-                "info": "Klikkaa sijaintia kartalla nähdäksesi sen koordinaatit tai syötä koordinaatit ja paina \"Keskitä kartta\".",
+                "info": "Syötä koordinaatit tai osoita piste kartalta.",
                 "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit."
             },
             "compass": {

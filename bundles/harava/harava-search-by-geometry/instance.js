@@ -78,7 +78,7 @@ function() {
 
     	me.started = true;
 
-    	var sandbox = Oskari.$("sandbox");
+    	var sandbox = Oskari.getSandbox();
         me.sandbox = sandbox;
 
         sandbox.register(me);

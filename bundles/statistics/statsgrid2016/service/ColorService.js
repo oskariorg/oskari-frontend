@@ -10,6 +10,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
      */
 
     function () {
+        var me = this;
+        this.colorsets.forEach(function(item) {
+            me.limits.name.push(item.name);
+        });
+        this.limits.defaultType = this.colorsets[0].type;
+        this.limits.defaultName = this.colorsets[0].name;
     }, {
         __name: "StatsGrid.ColorService",
         __qname: "Oskari.statistics.statsgrid.ColorService",
@@ -20,26 +26,43 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         getName: function () {
             return this.__name;
         },
+        // Limits should be used when creating UI for color selection
+        limits : {
+            type : ['div', 'seq', 'qual'],
+            // defaultType is set in constructor
+            defaultType : undefined,
+            // names are populated in constructor
+            name : [],
+            // defaultName is set in constructor
+            defaultName : undefined,
+            count : {
+                min : 2,
+                // some colorsets have 11 values, some only go to 9
+                // Should take out the extras if we only provide 9
+                max : 9
+            }
+        },
         /**
          * Tries to return an array of colors where length equals count parameter.
          * If such set is not available, returns null if array with requested count is not available
          * @param  {Number} count number of colors requested
          * @param  {String} type  optional type, supports 'div', 'seq' or 'qual', defaults to 'div'
          * @param  {String} name  optional name, defaults to 'BrBG'
-         * @return {Strin[]}      array of hex-values as colors
+         * @return {String[]}     array of hex-strings as colors like ["d8b365","5ab4ac"]
          */
         getColorset : function(count, type, name) {
-            type = type || 'div';
-            name = name || 'BrBG';
+            type = type || this.limits.defaultType;
+            name = name || this.limits.defaultName;
             var log = Oskari.log('StatsGrid.ColorService');
 
             var getArray = function(item) {
+                // 2 colors is the first set and index starts at 0 -> -2
                 var index = count - 2;
                 if(index < 0 || index >= item.colors.length) {
                     // might want to throw an exception here
                     return null;
                 }
-                return item.colors[index]
+                return item.colors[index].split(',');
             }
             var value;
             var typeMatch;

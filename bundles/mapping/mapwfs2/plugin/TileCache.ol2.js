@@ -50,7 +50,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
             if (!dataByLayerId) {
                 return;
             }
-
+            if(style === undefined) {
+                this.data[layerId] = null;
+                delete this.data[layerId];
+            }
             var dataByStyle = dataByLayerId[style];
             if (!dataByStyle) {
                 return;

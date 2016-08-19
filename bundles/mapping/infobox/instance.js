@@ -63,7 +63,7 @@ function() {
 		}
 		me.started = true;
 		// Should this not come as a param?
-		var sandbox = Oskari.$('sandbox');
+		var sandbox = Oskari.getSandbox();
 		sandbox.register(me);
 		me.setSandbox(sandbox);
 

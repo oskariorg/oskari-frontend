@@ -49,10 +49,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
 
             var touContentLink = content.find('div.tou a');
             touContentLink.append(me.loc.touLink);
-            if(me.instance.conf && me.instance.conf.termsOfUseUrl && me.instance.conf.termsOfUseUrl.indexOf('http')>-1) {
+            var conf = me.instance.conf || {};
+            var url = me.instance.sandbox.getLocalizedProperty(conf.termsOfUseUrl) || '';
+            if(url.indexOf('http') === 0) {
+                // starts with http - use as a link
                 touContentLink.attr('target', '_blank');
-                touContentLink.attr('href', me.instance.conf.termsOfUseUrl);
+                touContentLink.attr('href', url);
             } else {
+                // otherwise use tags to get article content
                 touContentLink.bind('click', function () {
                     me._showTermsOfUse();
                     return false;

@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         var sandbox = psandbox || Oskari.getSandbox(),
             label,
             input;
-        sandbox.printWarn('Oskari.userinterface.component.FormInput is deprecated, please use Oskari.userinterface.component.TextInput instead.');
+        Oskari.log('Oskari.userinterface.component.FormInput').warn('Deprecated - please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
         this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');

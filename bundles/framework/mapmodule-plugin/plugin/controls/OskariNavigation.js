@@ -53,9 +53,9 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
                 me.mapmodule.__sendMapClickEvent(evt);
                 return true;
             }
-            
+
         };
-            
+
         // </custom hooking>
         var clickOptions = {
             'double': true,

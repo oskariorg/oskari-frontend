@@ -1,7 +1,8 @@
 /**
- * Sends data of the open indicators.
+ * Used to notify that the regionset has changed in statsgrid and any region
+ *  listing or region specific data should be updated to show the selected regionset.
  *
- * @class Oskari.statistics.statsgrid.event.IndicatorEvent
+ * @class Oskari.statistics.statsgrid.event.RegionsetChangedEvent
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionsetChangedEvent',
     /**
