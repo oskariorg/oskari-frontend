@@ -4,6 +4,12 @@
 
 IE9 will not be a supported browser anymore.
 
+## 1.38.1
+
+### DrawPlugin.ol3
+
+fixed area / line measurement, when the projection units are degrees
+
 ## 1.38.0
 
 ### DrawPlugin.ol3
