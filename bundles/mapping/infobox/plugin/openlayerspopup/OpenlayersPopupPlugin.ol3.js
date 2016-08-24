@@ -230,7 +230,8 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    positioning: positioning,
+                    //start with ol default positioning
+                    positioning: null,
                     offset: [offsetX, offsetY],
                     autoPan: true
                 });
@@ -278,13 +279,6 @@ Oskari.clazz.define(
                 type: popupType
             };
 
-            if (me.adaptable && !isInMobileMode) {
-                if (positioning && positioning !== 'no-position-info') {
-                    me._adaptPopupSizeWithPositioning(id, refresh);
-                } else {
-                    me._adaptPopupSize(id, refresh);
-                }
-            }
 
             // Fix popup header height to match title content height if using desktop popup
             if(title && !isInMobileMode) {
@@ -309,6 +303,15 @@ Oskari.clazz.define(
                 popupHeaderEl.height(fixedHeight);
             }
 
+            if (me.adaptable && !isInMobileMode) {
+                if (positioning && positioning !== 'no-position-info') {
+                    me._adaptPopupSizeWithPositioning(id, refresh);
+                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3) 
+                    popup.setPositioning(positioning);
+                } else {
+                    me._adaptPopupSize(id, refresh);
+                }
+            }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
@@ -634,8 +637,17 @@ Oskari.clazz.define(
                 'width': '100%',
                 'height': '100%'
             });
-        },
 
+            var wrapper = content.find('.contentWrapper');
+            popup.css({
+                'height': 'auto',
+                'width': 'auto',
+                'min-width': '300px',
+                'max-width': maxWidth + 'px',
+                'overflow' : 'visible',
+                'z-index': '16000'
+            });
+        },
         /**
          * @method _panMapToShowPopup
          * @private
