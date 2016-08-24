@@ -103,8 +103,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
-//console.log("popup, id = "+id+" "+title+" "+contentData);
             var me = this,
                 currPopup = me._popups[id],
                 lon = null,
@@ -649,7 +647,8 @@ Oskari.clazz.define(
             var wrapper = content.find('.contentWrapper');
             popup.css({
                 'height': 'auto',
-                'width': 'auto',
+                //just have some initial width, other than auto, so that we don't get ridiculous widths with wide content
+                'width': '1px',
                 'min-width': '300px',
                 'max-width': maxWidth + 'px',
                 'overflow' : 'visible',
