@@ -2,7 +2,11 @@
 
 ## 1.39.0
 
-IE9 will not be a supported browser anymore.
+``IE9`` will not be a supported browser anymore.
+
+### Flyout tile modifications
+
+All tiles has now own bundleintance named class. Removed also tile id's.
 
 ## 1.38.1
 
