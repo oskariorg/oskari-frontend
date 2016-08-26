@@ -103,7 +103,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var me = this,
                 currPopup = me._popups[id],
                 lon = null,
@@ -191,15 +190,18 @@ Oskari.clazz.define(
                 } else {
                     popupDOM = jQuery('#' + id);
                     popupType = "desktop";
-                    jQuery('.olPopup').empty();
-                    jQuery('.olPopup').html(popupContentHtml);
+                    jQuery(popup.getElement()).empty();
+                    jQuery(popup.getElement()).html(popupContentHtml);
                     popup.setPosition(lonlatArray);
-                    if (colourScheme) {
-                        me._changeColourScheme(colourScheme, popupDOM, id);
-                    }
                     if (positioning) {
+                        popupDOM.removeClass(positioning);
+                        popupDOM.find('.popupHeaderArrow').removeClass(positioning);
+
                         popupDOM.addClass(positioning);
                         popupDOM.find('.popupHeaderArrow').addClass(positioning);
+                    }
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
                     }
                 }
             } else if (isInMobileMode) {
@@ -230,7 +232,8 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    positioning: positioning,
+                    //start with ol default positioning
+                    positioning: null,
                     offset: [offsetX, offsetY],
                     autoPan: true
                 });
@@ -278,13 +281,6 @@ Oskari.clazz.define(
                 type: popupType
             };
 
-            if (me.adaptable && !isInMobileMode) {
-                if (positioning && positioning !== 'no-position-info') {
-                    me._adaptPopupSizeWithPositioning(id, refresh);
-                } else {
-                    me._adaptPopupSize(id, refresh);
-                }
-            }
 
             // Fix popup header height to match title content height if using desktop popup
             if(title && !isInMobileMode) {
@@ -309,6 +305,19 @@ Oskari.clazz.define(
                 popupHeaderEl.height(fixedHeight);
             }
 
+            if (me.adaptable && !isInMobileMode) {
+                if (positioning && positioning !== 'no-position-info') {
+                    me._adaptPopupSizeWithPositioning(id, refresh);
+                    //if refresh, we need to reset the positioning 
+                    if (refresh) {
+                        popup.setPositioning(null);
+                    }
+                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3) 
+                    popup.setPositioning(positioning);
+                } else {
+                    me._adaptPopupSize(id, refresh);
+                }
+            }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
@@ -634,8 +643,18 @@ Oskari.clazz.define(
                 'width': '100%',
                 'height': '100%'
             });
-        },
 
+            var wrapper = content.find('.contentWrapper');
+            popup.css({
+                'height': 'auto',
+                //just have some initial width, other than auto, so that we don't get ridiculous widths with wide content
+                'width': '1px',
+                'min-width': '300px',
+                'max-width': maxWidth + 'px',
+                'overflow' : 'visible',
+                'z-index': '16000'
+            });
+        },
         /**
          * @method _panMapToShowPopup
          * @private

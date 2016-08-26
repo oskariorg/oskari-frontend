@@ -507,15 +507,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var lat = parseFloat(data.lonlat.lat);
                 var lon = parseFloat(data.lonlat.lon);
 
-                // from server
-                if(isSupported && isDifferentProjection && !me._coordinateTransformationExtension._coordinatesFromServer) {
-                    lat = '~' + lat;
-                    lon = '~' + lon;
+                lat = lat + '';
+                lon = lon + '';
+                if(lat.indexOf('~') === 0) {
+                    lat = lat.substring(1, lat.length);
                 }
-                // not from server
-                else {
-                    me._coordinateTransformationExtension._coordinatesFromServer = false;
+                lat = lat.replace(/,/g,'.');
+                if(lon.indexOf('~') === 0) {
+                    lon = lon.substring(1, lat.length);
                 }
+                lon = lon.replace(/,/g,'.');
 
                 lat = lat + '';
                 lon = lon + '';
@@ -545,6 +546,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 } else {
                     return;
                 }
+
+                 // Not from server
+                if(isSupported && isDifferentProjection && !me._coordinateTransformationExtension._coordinatesFromServer) {
+                    lat = '~' + lat;
+                    lon = '~' + lon;
+                }
+                // From server, change flag to false
+                else {
+                    me._coordinateTransformationExtension._coordinatesFromServer = false;
+                }
+
                 me._latInput.val(lat);
                 me._lonInput.val(lon);
             }
@@ -582,13 +594,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(jqXHR.status === 501) {
                         me._reverseGeocodeNotImplementedError = true;
                     }
-                    var messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    var messageJSON;
+                    try{
+                        messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    } catch(err){}
                     var message = me._instance.getName() + ': Cannot reverse geocode';
                     if(messageJSON && messageJSON.error) {
                         message = me._instance.getName() + ': ' + messageJSON.error;
                     }
 
-                    me._sandbox.printWarn(message);
+                    Oskari.log(message);
                 },data.lonlat.lon, data.lonlat.lat);
 
         },
