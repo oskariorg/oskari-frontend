@@ -42,6 +42,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             // get help content
             this.helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
+
+            var tile = this.getTile();
+            var cel = tile.container;
+
+            if (!cel.hasClass('userguide')) {
+                cel.addClass('userguide');
+            }
         },
         /**
          * @property {Object} eventHandlers

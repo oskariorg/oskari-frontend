@@ -88,8 +88,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
          */
         refresh: function () {
             var cel = this.container;
-            var idEl = cel.children('.oskari-tile-title');
-            idEl.attr("id", 'oskari_analysis_analyse_tile_title');
+
+            if (!cel.hasClass('analyse')) {
+                cel.addClass('analyse');
+            }
         },
 
         clickHandler: function (extensionState) {

@@ -83,8 +83,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
          */
         refresh: function () {
             var cel = this.container;
-            var idEl = cel.children('.oskari-tile-title');
-            idEl.attr("id", 'oskari_personaldata_tile_title');
+
+            if (!cel.hasClass('personaldata')) {
+                cel.addClass('personaldata');
+            }
         }
     }, {
         /**

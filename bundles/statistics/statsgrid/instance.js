@@ -28,6 +28,13 @@ Oskari.clazz.define(
         afterStart: function (sandbox) {
             var me = this;
 
+            var tile = this.plugins['Oskari.userinterface.Tile']
+            var cel = tile.container;
+
+            if (!cel.hasClass('statsgrid')) {
+                cel.addClass('statsgrid');
+            }
+
             var tooltipRequestHandler = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler',
                 me

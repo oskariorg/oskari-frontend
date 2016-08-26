@@ -86,18 +86,11 @@ Oskari.clazz.define(
          * Creates the UI for a fresh start
          */
         refresh: function () {
-            var me = this,
-                instance = me.instance,
-                cel = me.container,
-                idEl = cel.children('.oskari-tile-title'),
-                tpl = me.template,
-                sandbox = instance.getSandbox();
+            var cel = this.container;
 
-            // var status = cel.children('.oskari-tile-status');
-            idEl.attr('id', 'oskari_search_tile_title');
-            //        status.empty();
-            //        status.append('(' + layers.length + ')');
-
+            if (!cel.hasClass('search')) {
+                cel.addClass('search');
+            }
         }
     }, {
         /**

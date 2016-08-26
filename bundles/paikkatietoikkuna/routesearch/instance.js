@@ -9,6 +9,14 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance',
     function () {},
     {
+        afterStart: function(sandbox){
+            var tile = this.getTile();
+            var cel = tile.container;
+
+            if (!cel.hasClass('routesearch')) {
+                cel.addClass('routesearch');
+            }
+        },
         /**
          * @method getName
          * @return {String} the name for the component

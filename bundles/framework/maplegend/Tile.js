@@ -75,7 +75,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * @method refresh
          * Creates the UI for a fresh start
          */
-        refresh: function () {}
+        refresh: function () {
+            var cel = this.container;
+
+            if (!cel.hasClass('maplegend')) {
+                cel.addClass('maplegend');
+            }
+        }
     }, {
         /**
          * @property {String[]} protocol
