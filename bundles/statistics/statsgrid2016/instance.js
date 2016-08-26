@@ -35,6 +35,13 @@ Oskari.clazz.define(
             if(this.state) {
                 this.setState(this.state);
             }
+
+            var tile = this.getTile();
+            var cel = tile.container;
+
+            if (!cel.hasClass('statsgrid2016')) {
+                cel.addClass('statsgrid2016');
+            }
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {

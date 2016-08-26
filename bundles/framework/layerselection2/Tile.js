@@ -124,7 +124,6 @@ function(instance) {
         var me = this;
         var instance = me.instance;
         var cel = this.container;
-        var tpl = this.template;
 
         var sandbox = instance.getSandbox();
         var layers = sandbox.findAllSelectedMapLayers();
@@ -132,10 +131,11 @@ function(instance) {
 
         var status = this.container.children('.oskari-tile-status');
         status.addClass('icon-bubble-right');
-        status.attr("id", 'oskari_layerselection2_tile_countselectedlayers');
         status.html(layerCount);
-        var idEl = cel.children('.oskari-tile-title');
-        idEl.attr("id", 'oskari_layerselection2_tile_title');
+
+        if (!cel.hasClass('layerselection2')) {
+            cel.addClass('layerselection2');
+        }
         this.notifyUser();
     }
 }, {

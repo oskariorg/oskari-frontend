@@ -95,17 +95,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Tile',
          */
         refresh : function () {
             "use strict";
-            /*
-            var me = this,
-                instance = me.instance,
-                tpl = this.template,
-                sandbox = instance.getSandbox(),
-                cel = me.container,
-                status = cel.children('.oskari-tile-status');
-            */
+            var cel = this.container;
 
-            // status.empty();
-            // status.append('(' + layers.length + ')');
+            if (!cel.hasClass('admin-layerrights')) {
+                cel.addClass('admin-layerrights');
+            }
         }
     }, {
         /**
