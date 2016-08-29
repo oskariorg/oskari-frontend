@@ -37,39 +37,15 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart4Tab',
                     type:'bar',
 
                     //These are the events.
-
                    onclick: function(e) {
                         var k = ".c3-shape-"+ e.index;
                         //make the clicked bar opacity 1
                         d3.selectAll(k).style({"opacity":1,'stroke': 'red', 'stroke-width': 4} )
                         event.stopPropagation()
-                    },
-
-
-                    /*
-                    onmouseover: function (e) {
-                        var k = ".c3-shape-"+ e.index;
-                        //make the clicked bar opacity 1
-                        d3.selectAll(k).style("fill", "red")
-                    },
-                    onmouseout: function (e) {
-                        var k = ".c3-shape-"+ e.index;
-                        //make the clicked bar opacity 1
-                        d3.selectAll(k).style("fill", "yellow")
-                    },
-
-
-
-
-                    color: function (color, d) {
-                        return d.value > 150 ? "yellow" : "blue";
-
                     }
-                    */
                 },
                 padding: {
-                    right: 20,
-
+                    right: 20
                 },
 
                 axis: {
@@ -91,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart4Tab',
 
             this.chart.load({
                 columns: [
-                    [name].concat(data),
+                    [name].concat(data)
                 ],
                 keys: {
                     // this doesn't seem to work really

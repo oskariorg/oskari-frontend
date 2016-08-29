@@ -34,9 +34,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart2Tab',
                 },
 
                 padding: {
-                    right: 20,
-
-                },
+                    right: 20
+                }
 
             });
         },
@@ -49,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart2Tab',
 
             this.chart.load({
                 columns: [
-                    [name].concat(data),
+                    [name].concat(data)
                 ],
                 keys: {
                     // this doesn't seem to work really
