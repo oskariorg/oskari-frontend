@@ -12,6 +12,10 @@
 
 - Removed outside javascript file call
 
+### Flyout tile modifications
+
+All tiles has now own bundle id and intance id named class. Removed also tile id's.
+
 ## 1.38.1
 
 ### DrawPlugin.ol3
