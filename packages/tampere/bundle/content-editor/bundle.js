@@ -22,7 +22,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/tampere/content-editor/instance.js"     
+            "src": "../../../../bundles/tampere/content-editor/instance.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/view/SideContentEditor.js"
