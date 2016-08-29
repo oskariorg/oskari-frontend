@@ -119,13 +119,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 sandbox.request(this, request);
             }
-
-            var tile = this.getTile();
-            var cel = tile.container;
-
-            if (!cel.hasClass('publisher2')) {
-                cel.addClass('publisher2');
-            }
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding

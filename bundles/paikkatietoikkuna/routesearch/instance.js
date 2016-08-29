@@ -10,12 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
     function () {},
     {
         afterStart: function(sandbox){
-            var tile = this.getTile();
-            var cel = tile.container;
 
-            if (!cel.hasClass('routesearch')) {
-                cel.addClass('routesearch');
-            }
         },
         /**
          * @method getName

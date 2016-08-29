@@ -45,8 +45,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * Interface method implementation, calls #refresh()
          */
         startPlugin: function () {
-            //"use strict";
+            this._addTileStyleClasses();
             this.refresh();
+        },
+
+        _addTileStyleClasses: function() {
+            var isContainer = (this.container && this.instance.mediator) ? true : false;
+            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
+            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+
+            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                this.container.addClass(this.instance.mediator.instanceId);
+            }
+            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                this.container.addClass(this.instance.mediator.bundleId);
+            }
         },
         /**
          * @method stopPlugin
@@ -93,10 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * Creates the UI for a fresh start
          */
         refresh: function () {
-	        var cel = this.container;
-	        if (!cel.hasClass('layerselector2')) {
-                cel.addClass('layerselector2');
-            }
         }
     }, {
         /**
