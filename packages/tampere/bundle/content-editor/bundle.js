@@ -34,10 +34,10 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
             "src": "../../../../bundles/tampere/content-editor/request/ShowContentEditorRequestHandler.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/tampere/content-editor/datepicker-fi.js"
+            "src": "../../../../libraries/datepicker/resources/locale/datepicker-fi.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/tampere/content-editor/datepicker-en-GB.js"
+            "src": "../../../../libraries/datepicker/resources/locale/datepicker-en-GB.js"
         }, {
             "type": "text/css",
             "src": "../../../../bundles/tampere/content-editor/resources/css/style.css"
