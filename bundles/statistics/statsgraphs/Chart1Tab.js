@@ -40,11 +40,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     show: true
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
-
+                    right: 20
                 },
                 axis : {
                     x : {
@@ -54,40 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 }
             });
         },
-        /*
-        Data is in this format:
-{
-    regionset : {
-        id : 1234,
-        name : "Municipalities"
-    },
-    indicators : [
-        {
-            datasource : {
-                id : 12,
-                name : "SotkaNet"
-            },
-            id : 346,
-            name : "indicator name",
-            selections : {
-                sex : 'male',
-                year : '1993'
-            },
-            hash : 'unique id for ds, id and selections'
-        }
-    ],
-    data : [
-        {
-            id : 2353,
-            name : "municipality name",
-            values : {
-                hash1 : value of indicator with hash1,
-                hash2 : value of indicator with hash2
-            }
-        }
-    ]
-}
-         */
+
         showChart : function(data) {
             var list = data.indicators;
             if(!list.length) {
@@ -116,13 +82,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             for(var hash in sortedValues) {
                 values.push(me.sanitize(sortedValues[hash]));
             }
-
-            /*
-            // maybe save reference to latest data shown on chart
-            this.latestData = itemsToSort;
-            // so we can map an c3 event.index of hover/click to region id
-            this.latestData[event.index].regionId
-*/
 
             this.initChart(sortedRegions, values);
 
