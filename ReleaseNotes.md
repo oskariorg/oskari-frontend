@@ -21,6 +21,10 @@ if(browser.msie) {
 }
 ```
 
+## jQuery.browser checks removed
+
+All jQuery.browser check are removed or replaced Oskari.util.getBrowser -function.
+
 ## 1.38.1
 
 ### DrawPlugin.ol3
