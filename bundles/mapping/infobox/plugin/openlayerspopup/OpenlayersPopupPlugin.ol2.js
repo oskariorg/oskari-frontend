@@ -587,8 +587,8 @@ Oskari.clazz.define(
                 'position': 'absolute',
                 'z-index': '16000'
             });
-
-            if (jQuery.browser.msie) {
+            var browser = Oskari.util.getBrowser();
+            if (browser.msie) {
                 // allow scrolls to appear in IE, but not in any other browser
                 // instead add some padding to the wrapper to make it look better
                 wrapper.css({

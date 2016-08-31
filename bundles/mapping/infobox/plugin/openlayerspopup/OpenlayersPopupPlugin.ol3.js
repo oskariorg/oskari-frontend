@@ -308,11 +308,11 @@ Oskari.clazz.define(
             if (me.adaptable && !isInMobileMode) {
                 if (positioning && positioning !== 'no-position-info') {
                     me._adaptPopupSizeWithPositioning(id, refresh);
-                    //if refresh, we need to reset the positioning 
+                    //if refresh, we need to reset the positioning
                     if (refresh) {
                         popup.setPositioning(null);
                     }
-                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3) 
+                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
                     popup.setPositioning(positioning);
                 } else {
                     me._adaptPopupSize(id, refresh);
@@ -607,7 +607,8 @@ Oskari.clazz.define(
                 'z-index': '16000'
             });
 
-            if (jQuery.browser.msie) {
+            var browser = Oskari.util.getBrowser();
+            if (browser.msie) {
                 // allow scrolls to appear in IE, but not in any other browser
                 // instead add some padding to the wrapper to make it look better
                 wrapper.css({
