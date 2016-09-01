@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.38.2
+
+### core
+
+- Fixed reference to markers variable
+- Fixed default marker reference
+- bundle.mediator now include instanceId in addition to bundleId
+
 ## 1.38.1
 
 ### DrawPlugin.ol3
