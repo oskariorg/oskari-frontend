@@ -8,6 +8,10 @@
 - Fixed default marker reference
 - bundle.mediator now include instanceId in addition to bundleId
 
+### sandbox
+
+- Removed outside javascript file call
+
 ## 1.38.1
 
 ### DrawPlugin.ol3
