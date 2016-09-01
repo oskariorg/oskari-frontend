@@ -8,7 +8,7 @@ Oskari = (function () {
     var _markers = [];
 
     return {
-        VERSION : "1.38.0",
+        VERSION : "1.38.2",
 
         /**
          * @public @method Oskari.setDebugMode
