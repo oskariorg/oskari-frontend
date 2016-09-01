@@ -733,8 +733,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 me.toggleCoverage(jQuery(this));
             });
 
-            //set rating stars if available (amount of feedbacks given > 0)
-            if (me._model.amount) {
+            //set rating stars if available (an administrator has rated the metadata)
+            if (me._model.latestAdminRating) {
                 me.getMetadataTabRatingStars();
             }
         },
@@ -743,7 +743,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
             var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
             if (metadataFeedbackBundle) {
-                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getMetadataRating(me._model));
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+"&nbsp;");
                 jQuery('div.metadatatab-rating-container').show();
             } else {
                 jQuery('div.metadatatab-rating-container').hide();
