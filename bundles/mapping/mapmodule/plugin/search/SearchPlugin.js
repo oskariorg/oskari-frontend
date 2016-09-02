@@ -456,7 +456,8 @@ Oskari.clazz.define(
                         jQuery(cells[2]).attr('title', type).append(type);
 
                         // IE hack to get scroll bar on tbody element
-                        if (jQuery.browser.msie) {
+                        var browser = Oskari.util.getBrowser();
+                        if (browser.msie) {
                             row.append(jQuery('<td style="width: 0px;"></td>'));
                         }
 
@@ -510,142 +511,6 @@ Oskari.clazz.define(
                 me.popup.addClass('mobile-popup');
                 me.popup.moveTo(me.getElement(), 'bottom', true, mapmodule.getMobileDiv());
                 me.popup.getJqueryContent().parent().parent().css('left', 0);
-            }
-        },
-        /**
-         * @private @method _showResults
-         *
-         * Renders the results of the search or shows an error message if nothing was found.
-         * Coordinates and zoom level of the searchresult item is written in data-href
-         * attribute in the tr tag of search result HTML table. Also binds click listeners to <tr> tags.
-         * Listener reads the data-href attribute and calls #_resultClicked with it for click handling.
-         *
-         * @param {Object} msg
-         *          Result JSON returned by search functionality
-         */
-        _showResults_old: function(msg) {
-            // check if there is a problem with search string
-            var errorMsg = msg.error,
-                me = this,
-                resultsContainer = me.resultsContainer.clone(),
-                header = resultsContainer.find('div.header'),
-                content = resultsContainer.find('div.content');
-
-            if (me._uiMode === "mobile") {
-                me.getElement().parent().parent().append(resultsContainer);
-            } else {
-                me.getElement().append(resultsContainer);
-            }
-
-            if (errorMsg) {
-                content.html(errorMsg);
-                resultsContainer.show();
-                return;
-            }
-
-            // success
-            var totalCount = msg.totalCount,
-                lat,
-                lon,
-                zoom;
-
-            me.results = msg.locations;
-
-            if (totalCount === 0) {
-                content.html(this._loc.noresults);
-                resultsContainer.show();
-            } else if (totalCount === 1) {
-                // only one result, show it immediately
-                lon = msg.locations[0].lon;
-                lat = msg.locations[0].lat;
-                zoom = msg.locations[0].zoomLevel;
-                if(msg.locations[0].zoomScale) {
-                    zoom = {scale : msg.locations[0].zoomScale};
-                }
-
-                me.getSandbox().request(
-                    me.getName(),
-                    me.getSandbox().getRequestBuilder(
-                        'MapMoveRequest'
-                    )(lon, lat, zoom, false)
-                );
-                me._setMarker(msg.locations[0]);
-            } else {
-
-                // many results, show all
-                var table = me.templateResultsTable.clone(),
-                    tableBody = table.find('tbody'),
-                    i,
-                    clickFunction = function() {
-                        me._resultClicked(
-                            me.results[parseInt(
-                                jQuery(this).attr('data-location'),
-                                10
-                            )]
-                        );
-                        return false;
-                    };
-
-                for (i = 0; i < totalCount; i += 1) {
-                    if (i >= 100) {
-                        tableBody.append(
-                            '<tr>' +
-                            '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
-                            '</tr>'
-                        );
-                        break;
-                    }
-                    var resultItem = msg.locations[i];
-                    lon = resultItem.lon;
-                    lat = resultItem.lat;
-                    zoom = resultItem.zoomLevel;
-                    if(resultItem.zoomScale) {
-                        zoom = {scale : resultItem.zoomScale};
-                    }
-                    var row = me.templateResultsRow.clone(),
-                        name = resultItem.name,
-                        municipality = resultItem.village,
-                        type = resultItem.type,
-                        cells = row.find('td'),
-                        xref = jQuery(cells[0]).find('a');
-                    row.attr('data-location', i);
-                    xref.attr('data-location', i);
-                    xref.attr('title', name);
-                    xref.append(name);
-                    xref.click(clickFunction);
-
-                    jQuery(cells[1]).attr('title', municipality).append(municipality);
-                    jQuery(cells[2]).attr('title', type).append(type);
-
-                    // IE hack to get scroll bar on tbody element
-                    if (jQuery.browser.msie) {
-                        row.append(jQuery('<td style="width: 0px;"></td>'));
-                    }
-
-                    tableBody.append(row);
-                }
-
-                if (!(me.getConfig() && me.getConfig().toolStyle)) {
-                    tableBody.find(':odd').addClass('odd');
-                }
-
-                content.html(table);
-                resultsContainer.show();
-
-                // Change the font of the rendered table as well
-                var conf = me.getConfig();
-                if (conf) {
-                    if (conf.font) {
-                        me.changeFont(conf.font, content);
-                    }
-                    if (conf.toolStyle) {
-                        header.remove();
-                        me.changeResultListStyle(
-                            conf.toolStyle,
-                            resultsContainer
-                        );
-                    }
-                }
             }
         },
 

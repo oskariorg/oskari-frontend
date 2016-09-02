@@ -40,7 +40,7 @@ Oskari = (function () {
          * @return {Object} default marker
          */
         getDefaultMarker: function(){
-            return (this.markers.length>=3) ? this.markers[2] : this.markers[0];
+            return (_markers.length>=3) ? _markers[2] : _markers[0];
         }
     };
 }());

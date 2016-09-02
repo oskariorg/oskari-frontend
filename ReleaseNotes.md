@@ -2,7 +2,28 @@
 
 ## 1.39.0
 
-IE9 will not be a supported browser anymore.
+## IE 9 not supported
+
+``IE9`` will not be a supported browser anymore.
+
+### Flyout tile modifications
+
+All tiles has now own bundle id and intance id named class. Removed also tile id's.
+
+### core
+
+#### New functions
+- ``Oskari.util.getBrowser()`` function, return object what tells some browser info (version, name). Can be usefull to check at if browser is webkit/blink/gecko/msie/msedge.
+```javascript
+var browser = Oskari.util.getBrowser();
+if(browser.msie) {
+  alert('I am IE');
+}
+```
+
+## jQuery.browser checks removed
+
+All jQuery.browser check are removed or replaced Oskari.util.getBrowser -function.
 
 ## 1.38.1
 

@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
                     }
                 };
             };
-            // Help popups (PORTTISK-812)
+            // Help popups
             content.find('[helptags]').each(function (i, e) {
                 var btn = jQuery(e),
                     taglist = btn.attr("helptags");

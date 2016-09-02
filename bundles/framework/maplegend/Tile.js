@@ -36,7 +36,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * Interface method implementation, calls #refresh()
          */
         startPlugin: function () {
+            this._addTileStyleClasses();
             this.refresh();
+        },
+        _addTileStyleClasses: function() {
+            var isContainer = (this.container && this.instance.mediator) ? true : false;
+            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
+            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+
+            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                this.container.addClass(this.instance.mediator.instanceId);
+            }
+            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                this.container.addClass(this.instance.mediator.bundleId);
+            }
         },
         /**
          * @method stopPlugin
@@ -75,7 +88,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * @method refresh
          * Creates the UI for a fresh start
          */
-        refresh: function () {}
+        refresh: function () {
+        }
     }, {
         /**
          * @property {String[]} protocol

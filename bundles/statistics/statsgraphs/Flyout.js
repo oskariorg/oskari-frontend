@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
                 "chart1": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart1Tab', me.instance),
                 "chart2": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart2Tab', me.instance),
                 "chart3": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart3Tab', me.instance),
-                "chart4": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart4Tab', me.instance),
+                "chart4": Oskari.clazz.create('Oskari.mapframework.statsgraphs.Chart4Tab', me.instance)
             };
         },
 

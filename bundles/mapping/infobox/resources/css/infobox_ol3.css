@@ -60,7 +60,7 @@ div.popupHeaderArrow.top-center {
   position: absolute;
   left: 50%;
   top: 0;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: -10px; }
 
 div.olPopup {
@@ -79,7 +79,7 @@ div.olPopup {
   div.olPopup.bottom-center {
     margin-bottom: -10px; }
   div.olPopup.top-center {
-    margin-top: 25px; }
+    margin-top: 30px; }
 
 div.infoboxPopupNoMargin {
   margin: 0 !important;
