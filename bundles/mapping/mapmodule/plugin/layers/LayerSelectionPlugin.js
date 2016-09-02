@@ -565,6 +565,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.addBaseLayer(layers[i]);
                 }
             }
+            me.sortLayers();
         },
 
         /**
