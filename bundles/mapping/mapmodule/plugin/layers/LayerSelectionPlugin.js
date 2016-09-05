@@ -489,6 +489,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * changed every time the active one is changed.
          */
         sortLayers: function () {
+            if(!this.layerContent) {
+                // not on screen yet
+                return;
+            }
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
                 layersDiv = this.layerContent.find('div.layers'),
