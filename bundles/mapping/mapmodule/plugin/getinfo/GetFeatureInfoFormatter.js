@@ -360,21 +360,29 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
 
         result = _.map(data.features, function (feature) {
-            var feat = _.chain(fields)
-                .zip(feature)
-                .filter(function (pair) {
-                    return !_.contains(hiddenFields, _.first(pair));
-                })
-                .foldl(function (obj, pair) {
-                    obj[_.first(pair)] = _.last(pair);
-                    return obj;
-                }, {})
-                .value();
+            if (fields.length) {
+                var feat = _.chain(fields)
+                    .zip(feature)
+                    .filter(function (pair) {
+                        return !_.contains(hiddenFields, _.first(pair));
+                    })
+                    .foldl(function (obj, pair) {
+                        obj[_.first(pair)] = _.last(pair);
+                        return obj;
+                    }, {})
+                    .value();
 
-            if (isMyPlace) {
-                markup = me.formatters.myplace(feat);
+                if (isMyPlace) {
+                    markup = me.formatters.myplace(feat);
+                } else {
+                    if (!jQuery.isEmptyObject(feat)) {
+                        markup = me._json2html(feat);
+                    } else {
+                        markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
+                    }
+                }
             } else {
-                markup = me._json2html(feat);
+                markup = "<table><tr><td>"+me._loc.noAttributeData+"</td></tr></table>";
             }
             return {
                 markup: markup,
@@ -383,6 +391,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 type: type,
                 isMyPlace: isMyPlace
             };
+
         });
 
         return result;
@@ -413,7 +422,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             valueDiv,
             innerTable,
             i;
-
         for (key in node) {
             if (node.hasOwnProperty(key)) {
                 value = node[key];

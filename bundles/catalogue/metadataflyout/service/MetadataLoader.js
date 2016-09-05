@@ -6,8 +6,9 @@
  */
 Oskari.clazz.define(
     'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader',
-    function (baseUrl) {
-        this.baseUrl = baseUrl;
+    function (options) {
+        this.baseUrl = options.baseUrl;
+        this.srs = options.srs;
     }, {
         /**
          * @public @method getCSWData
@@ -30,9 +31,9 @@ Oskari.clazz.define(
             if (err) {
                 throw new TypeError(err);
             }
-
             uri = this.baseUrl + 'action_route=GetCSWData&uuid=' + uuid +
-                '&lang=' + lang;
+                '&lang=' + lang +
+                '&srs='+this.srs;
 
             jQuery.ajax({
                 url: uri,

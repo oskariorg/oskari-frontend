@@ -18,6 +18,10 @@ Oskari.registerLocalization({
             "quality":"Data quality",
             "actions":"Actions",
             "xml": "ISO 19139 XML file",
+            "coverage": {
+                "removeBBOX": "Hide coverage area",
+                "showBBOX": "Show coverage area"
+            },
             "map": "Geographic extent",
             "pdf": "Printout",
             "select_metadata_prompt": "Select metadata by clicking the icons.",
