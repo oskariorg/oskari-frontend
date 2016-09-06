@@ -20,12 +20,16 @@ div.findbycoordinates__popup {
     }
 
     div.content {
-        overflow-x: hidden;
+        max-height: 400px;
+        overflow: hidden;
+
+        &.show-scroll {
+            overflow-y: auto;
+        }
     }
 }
 
 .findbycoordinates__popup__content {
-    overflow: auto;
     width: 400px;
 
     .channel_result {

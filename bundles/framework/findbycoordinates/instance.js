@@ -279,13 +279,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     }
                     me._markerMaxIndex = 0;
                 });
-                me._popup.makeDraggable();
+
                 me._popup.addClass('findbycoordinates__popup');
                 me._popup.setColourScheme({
                     'bgColour': themeColours.backgroundColour,
                     'titleColour': themeColours.textColour,
                     'iconCls': popupCloseIcon
                 });
+
+                me._popup.makeDraggable();
+
+                // If there is more than 2 results then add scrolls
+                if(results.locations.length>2) {
+                    me._popup.getJqueryContent().addClass('show-scroll');
+                }
 
                 // Loop results
                 for(var i=0, resultsCount=results.locations.length; i<resultsCount;i++) {
