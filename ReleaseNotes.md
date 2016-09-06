@@ -2,6 +2,10 @@
 
 ## 1.38.2
 
+### divmanazer/Popup
+
+Now if setted draggable then dragging work to drag popup header.
+
 ### findbycoordinates
 
 Findbycoordinates now supports to show all search results.
