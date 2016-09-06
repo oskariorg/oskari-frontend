@@ -3,10 +3,6 @@ div.reverse-geocode {
     cursor: crosshair;
 }
 
-div.findbycoordinates__popup div.close-icon {
-    cursor: pointer;
-}
-
 div.findbycoordinates__popup div.content {
     max-height: 400px;
     overflow: hidden;
