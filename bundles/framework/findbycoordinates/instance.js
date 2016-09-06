@@ -16,13 +16,29 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             active: false
         };
         this.searchUrl = undefined;
+        this._popup = null;
+        this._logger = Oskari.log('findbycoordinates');
     }, {
         __name : 'findbycoordinates',
         __templates : {
-            item : _.template('<h3>${ name }</h3>' +
-                   '<h3>${ info }</h3>' +
-                   '<p>${ lat }, ${ lon }</p>')
+            item : _.template('<h3>${ channel }</h3>' +
+                   '<div class="description">${ description }</div>'+
+                   '<div class="result"><div>${ name }</div>' +
+                   '<div>${ info }</div>' +
+                   '<div>${ lon }, ${ lat }</div></div>'),
+            popup: jQuery('<div class="findbycoordinates__popup__content"></div>'),
+            popupChannelResult: jQuery('<div class="channel_result"><h3 class="channel_id"></h3><div class="channel_description"></div><div class="channel__results"></div></div>'),
+            popupResult: _.template('<div class="resultmarker"><img src="${ marker }" alt="marker"></img></div>'+
+                '<div class="nameinfo">'+
+                '   <div class="name">${ name }</div>'+
+                '   <div class="info">${ info }</div>'+
+                '   <div class="lonlat">${ lon }, ${ lat }</div>'+
+                '</div>'+
+                '<div class="none"></div>')
         },
+        __colors: ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
+            '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
+            ],
         getName : function () {
             return this.__name;
         },
@@ -169,7 +185,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lat: lonlat.lat
             }, function (response) {
                 if (response) {
-                    me.handleResponse(response.locations);
+                    me.handleResponse(response);
                 }
                 me.stopTool();
                 me.selectDefaultTool();
@@ -188,43 +204,157 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @param  {Object} result
          */
         handleResponse: function (results) {
-            if (!results || !results.length) {
+            if (!results || results.totalCount < 1) {
                 return;
             }
 
             var me = this,
                 loc = this.getLocalization(),
-                sandbox = this.getSandbox(),
-                popupId = "findbycoordinates-search-result";
-            // get the location from first. This is error prone since locations may differ a bit
-            // Maybe find another way of doing this like a generic popup with markers for each location?
-            var lonlat =  {
-                lon: results[0].lon,
-                lat: results[0].lat
-            };
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
-            var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
+                sandbox = this.getSandbox();
 
-            var options = {
-                hidePrevious: true
-            };
+            // If there is only one response then show Infobox
+            if(results.totalCount === 1) {
+                var popupId = "findbycoordinates-search-result";
+                var result = results.locations[0];
 
-            if (moveReqBuilder) {
-                sandbox.request(this, moveReqBuilder(
-                    lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
-                    false, sandbox.getMap().getSrsName()));
-            }
-            if (infoBoxReqBuilder) {
-                var contents = [];
-                results.forEach(function(result) {
+                // get the location from first. This is error prone since locations may differ a bit
+                // Maybe find another way of doing this like a generic popup with markers for each location?
+                var lonlat =  {
+                    lon: result.lon,
+                    lat: result.lat
+                };
+                var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
+                var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
+
+                var options = {
+                    hidePrevious: true
+                };
+
+                if (moveReqBuilder) {
+                    sandbox.request(this, moveReqBuilder(
+                        lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
+                        false, sandbox.getMap().getSrsName()));
+                }
+                if (infoBoxReqBuilder) {
+                    var contents = [];
                     contents.push(me.__getInfoBoxHtml(result));
+                    sandbox.request(this, infoBoxReqBuilder(
+                        popupId, loc.resultsTitle,
+                        contents, lonlat, options));
+                }
+            }
+            // If there is more than one results then show results in popup
+            else {
+                var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService'),
+                    popupContent = me.__templates.popup.clone(),
+                    popupLocation = 'right',
+                    popupName = 'findbycoordinatespopup',
+                    mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    themeColours = mapmodule.getThemeColours(),
+                    closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined,
+                    oskariMarkers = Oskari.getMarkers(),
+                    markersLength = oskariMarkers.length,
+                    colorsLength = me.__colors.length,
+                    shapeIndex = 0,
+                    colorIndex = 0,
+                    addMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
+                    removeMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest'),
+                    MARKER_ID_PREFIX = 'findbycoordinates_';
+
+                // Close button
+                closeBtn.setTitle(loc.close);
+                closeBtn.setHandler(function() {
+                    me._popup.close();
                 });
-                contents.sort(function(a,b ) {
-                    return a.prio < b.prio;
+
+                // Create popup
+                me._popup = popupService.createPopup();
+                me._popup.createCloseIcon();
+                me._popup.onClose(function () {
+                    if (removeMarkerRequestBuilder) {
+                        for(var i=0;i<=me._markerMaxIndex;i++) {
+                            sandbox.request(me, removeMarkerRequestBuilder(MARKER_ID_PREFIX + i));
+                        }
+                    }
+                    me._markerMaxIndex = 0;
                 });
-                sandbox.request(this, infoBoxReqBuilder(
-                    popupId, loc.resultsTitle,
-                    contents, lonlat, options));
+                me._popup.makeDraggable();
+                me._popup.addClass('findbycoordinates__popup');
+                me._popup.setColourScheme({
+                    'bgColour': themeColours.backgroundColour,
+                    'titleColour': themeColours.textColour,
+                    'iconCls': popupCloseIcon
+                });
+
+                // Loop results
+                for(var i=0, resultsCount=results.locations.length; i<resultsCount;i++) {
+                    if(i >= markersLength * colorsLength) {
+                        // If all markers and colors are used hten log warn and break results.
+                        this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.')
+                        break;
+                    }
+                    var result = results.locations[i];
+                    var channelId = result.channelId;
+                    var channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+'"]');
+                    var color = me.__colors[colorIndex];
+
+                    if(channelResults.length === 0) {
+                        channelResults = me.__templates.popupChannelResult.clone();
+                        channelResults.find('.channel_id').html(loc.channels[channelId] || channelId);
+                        channelResults.find('.channel_description').html(loc.channelDescriptions[channelId] || '');
+                        channelResults.attr('data-channel-id', channelId);
+
+                        // FIXME: remove this if/else block when server return prio ordered results. Then use always append.
+                        if(result.village) {
+                            popupContent.prepend(channelResults);
+                        } else {
+                            popupContent.append(channelResults);
+                        }
+                    }
+
+                    var markerSvg = mapmodule.getSvg({
+                        shape:shapeIndex,
+                        color: color,
+                        stroke: '#000000'
+                    });
+
+                    var data = {
+                        name: result.name || '',
+                        info: result.village || '',
+                        marker: markerSvg,
+                        lon: result.lon,
+                        lat: result.lat
+                    };
+
+                    var markerData = {
+                        x: result.lon,
+                        y: result.lat,
+                        color: color,
+                        msg : '',
+                        shape: shapeIndex,
+                        size: 3,
+                        stroke: '#000000'
+                    };
+
+                    channelResults.find('.channel__results').append(this.__templates.popupResult(data));
+                    if (addMarkerRequestBuilder) {
+                        sandbox.request(this, addMarkerRequestBuilder(markerData, MARKER_ID_PREFIX + i));
+                        me._markerMaxIndex = i;
+                    }
+                    colorIndex+=1;
+                    if(colorIndex>colorsLength-1) {
+                        colorIndex = 0;
+                        shapeIndex+=1;
+                    }
+
+                }
+
+                me._popup.show(loc.popupTitle, popupContent, [closeBtn]);
+
+                me._popup.moveTo(jQuery('#oskari_toolbar_selectiontools_findbycoordinates'), popupLocation, true);
+                me._popup.adaptToMapSize(sandbox, popupName);
+
             }
         },
         /**
@@ -236,11 +366,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
+            var me = this,
+                loc = this.getLocalization();
             var data = {
                 name : result.name,
-                info : result.village || result.type || "",
+                channel : loc.channels[result.channelId] || result.channelId,
+                info : result.village || '',
                 lon : result.lon,
-                lat : result.lat
+                lat : result.lat,
+                description: loc.channelDescriptions[result.channelId] || ''
             };
             return {
                 // use higher priority for ones with "village" info more than ones that don't

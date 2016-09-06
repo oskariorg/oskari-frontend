@@ -2,6 +2,12 @@
 
 ## 1.38.2
 
+### findbycoordinates
+
+Findbycoordinates now supports to show all search results.
+- If only one result found then show it in infobox.
+- If more than one results found, then open their to Oskari popup and add markers of all results.
+
 ### mapmodule
 
 Fixed AddMarkerRequestHandler error when using shape 0 then default marker is used.

@@ -9,10 +9,15 @@ Oskari.registerLocalization(
             "tooltip": "Sök närmaste adress genom att klicka kartan."
         },
         "resultsTitle": "Sökresultat",
-        "grid": {
-            "address": "Adress",
-            "coordinates": "Koordinater"
-        }
+        "close": "Stäng",
+        "channels" : {
+            "WHAT3WORDS_CHANNEL": "what3words (SV)",
+            "NLS_NEAREST_FEATURE_CHANNEL": "Närmaste adress"
+        },
+        "channelDescriptions" : {
+            "WHAT3WORDS_CHANNEL": "what3words är en unik kombination av bara 3 ord som identifierar en ruta på 3 m x 3 m var som helst på planeten."
+        },
+        "popupTitle": "Sökresultat"
     }
 }
 );

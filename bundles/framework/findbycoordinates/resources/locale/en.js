@@ -8,7 +8,16 @@ Oskari.registerLocalization(
         "tool": {
             "tooltip": "Click a point on the map. As a result you will get coordinates in the point and the nearest address."
         },
-        "resultsTitle": "Search results"
+        "resultsTitle": "Search results",
+        "close": "Close",
+        "channels" : {
+            "WHAT3WORDS_CHANNEL": "what3words (EN)",
+            "NLS_NEAREST_FEATURE_CHANNEL": "Nearest address"
+        },
+        "channelDescriptions" : {
+            "WHAT3WORDS_CHANNEL": "what3words is a unique combination of just 3 words that identifies a 3mx3m square, anywhere on the planet."
+        },
+        "popupTitle": "Search results"
     }
 }
 );

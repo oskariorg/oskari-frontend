@@ -13,3 +13,57 @@
 div.reverse-geocode {
     cursor: crosshair;
 }
+
+div.findbycoordinates__popup {
+    div.close-icon {
+        cursor: pointer;
+    }
+
+    div.content {
+        overflow-x: hidden;
+    }
+}
+
+.findbycoordinates__popup__content {
+    overflow: auto;
+    width: 400px;
+
+    .channel_result {
+        .channel_description {
+            font-style: italic;
+            width: 90%;
+            margin-left: 12px;
+        }
+
+        .channel__results {
+            .nameinfo {
+                float: left;
+                padding: 4px;
+            }
+
+            .resultmarker {
+                float: left;
+                padding: 4px;
+                width: 64px;
+                height: 64px;
+            }
+
+            .none {
+                clear: both;
+            }
+        }
+    }
+}
+
+#oskari_findbycoordinates-search-result_contentWrapper {
+    .description {
+        font-style: italic;
+        width: 90%;
+        margin-left: 12px;
+        margin-bottom: 12px;
+    }
+
+    .result {
+        margin-left: 24px;
+    }
+}
