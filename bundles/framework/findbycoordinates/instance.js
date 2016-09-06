@@ -21,18 +21,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
     }, {
         __name : 'findbycoordinates',
         __templates : {
-            item : _.template('<h3>${ channel }</h3>' +
-                   '<div class="description">${ description }</div>'+
-                   '<div class="result"><div>${ name }</div>' +
-                   '<div>${ info }</div>' +
-                   '<div>${ lon }, ${ lat }</div></div>'),
+            item : jQuery('<div>' +
+                    '<h3></h3>' +
+                    '<div class="description"></div>'+
+                    '<div class="result">'+
+                    '   <div class="name"></div>' +
+                    '   <div class="info"></div>' +
+                    '   <div class="lonlat"></div>' +
+                    '</div>'+
+                    '</div>'),
             popup: jQuery('<div class="findbycoordinates__popup__content"></div>'),
             popupChannelResult: jQuery('<div class="channel_result"><h3 class="channel_id"></h3><div class="channel_description"></div><div class="channel__results"></div></div>'),
-            popupResult: _.template('<div class="resultmarker"><img src="${ marker }" alt="marker"></img></div>'+
+            popupResult: jQuery('<div class="resultmarker"><img alt="marker"></img></div>'+
                 '<div class="nameinfo">'+
-                '   <div class="name">${ name }</div>'+
-                '   <div class="info">${ info }</div>'+
-                '   <div class="lonlat">${ lon }, ${ lat }</div>'+
+                '   <div class="name"></div>'+
+                '   <div class="info"></div>'+
+                '   <div class="lonlat"></div>'+
                 '</div>'+
                 '<div class="none"></div>')
         },
@@ -326,14 +330,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         stroke: '#000000'
                     });
 
-                    var data = {
-                        name: result.name || '',
-                        info: result.village || '',
-                        marker: markerSvg,
-                        lon: result.lon,
-                        lat: result.lat
-                    };
-
                     var markerData = {
                         x: result.lon,
                         y: result.lat,
@@ -344,7 +340,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         stroke: '#000000'
                     };
 
-                    channelResults.find('.channel__results').append(this.__templates.popupResult(data));
+                    var resultRow = this.__templates.popupResult.clone();
+                    resultRow.find('img').attr('src', markerSvg);
+                    resultRow.find('.name').html(result.name || '');
+                    resultRow.find('.info').html(result.village || '');
+                    resultRow.find('.lonlat').html(result.lon + ', ' + result.lat);
+
+                    channelResults.find('.channel__results').append(resultRow);
                     if (addMarkerRequestBuilder) {
                         sandbox.request(this, addMarkerRequestBuilder(markerData, MARKER_ID_PREFIX + i));
                         me._markerMaxIndex = i;
@@ -375,19 +377,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         __getInfoBoxHtml: function (result) {
             var me = this,
                 loc = this.getLocalization();
-            var data = {
-                name : result.name,
-                channel : loc.channels[result.channelId] || result.channelId,
-                info : result.village || '',
-                lon : result.lon,
-                lat : result.lat,
-                description: loc.channelDescriptions[result.channelId] || ''
-            };
+
+            var item = this.__templates.item.clone();
+            item.find('h3').html(loc.channels[result.channelId] || result.channelId);
+            item.find('.description').html(loc.channelDescriptions[result.channelId] || '');
+            item.find('.name').html(result.name);
+            item.find('.info').html(result.village || '');
+            item.find('.lonlat').html(result.lon + ', ' + result.lat);
             return {
                 // use higher priority for ones with "village" info more than ones that don't
                 // this way "nice-to-know" features like "what 3 words" are at the bottom
                 prio : (result.village) ? 1 : -1,
-                html : this.__templates.item(data)
+                html : item
             };
         }
     }, {
