@@ -2,6 +2,10 @@
 
 ## 1.38.2
 
+### mapmodule
+
+Fixed AddMarkerRequestHandler error when using shape 0 then default marker is used.
+
 ### core
 
 - Fixed reference to markers variable
