@@ -167,7 +167,6 @@ Oskari.clazz.define(
                     }
                 }
             }
-
             if (allowedRequests === null || allowedRequests === undefined) {
                 allowedRequests = ['InfoBox.ShowInfoBoxRequest',
                     'InfoBox.HideInfoBoxRequest',
@@ -190,7 +189,8 @@ Oskari.clazz.define(
                     'MyLocationPlugin.GetUserLocationRequest',
                     'DrawTools.StartDrawingRequest',
                     'DrawTools.StopDrawingRequest',
-                    'MapModulePlugin.ZoomToFeaturesRequest'];
+                    'MapModulePlugin.ZoomToFeaturesRequest',
+                    'MapModulePlugin.MapLayerUpdateRequest'];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!

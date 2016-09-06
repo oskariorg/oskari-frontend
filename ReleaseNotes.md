@@ -2,6 +2,37 @@
 
 ## 1.39.0
 
+## RPC - new request available
+
+``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
+
+Note! When OpenLayers3 is used, GET requests longer than 2048 bytes will be automatically transformed to async ajax POST-requests and proxied. Thus the service itself also has to support http POST-method.
+
+OpenLayers2 will always use GET-requests and will fail, if the GET-request's length exceeds the allowed maximum.
+
+```javascript
+sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true, {
+    SLD_BODY: 
+        '<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">'+
+        '    <NamedLayer>'+
+        '    <Name>oskari:kunnat2013</Name>'+
+        '    <UserStyle>'+
+        '    <Title>SLD Cook Book: Simple polygon</Title>'+
+        '    <FeatureTypeStyle>'+
+        '    <Rule>'+
+        '    <PolygonSymbolizer>'+
+        '    <Fill>'+
+        '    <CssParameter name="fill">#000080</CssParameter>'+
+        '    </Fill>'+
+        '    </PolygonSymbolizer>'+
+        '    </Rule>'+
+        '    </FeatureTypeStyle>'+
+        '    </UserStyle>'+
+        '    </NamedLayer>'+
+        '    </StyledLayerDescriptor>'
+}]);
+```
+
 ## IE 9 not supported
 
 ``IE9`` will not be a supported browser anymore.
