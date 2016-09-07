@@ -69,26 +69,7 @@ Oskari.clazz.define(
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
                         visibility: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
-                        buffer: 0,
-                        maxGetUrlLength: 100,
-                        //async: true,
-                        tileOptions: {
-                        	maxGetUrlLength: 2048
-                        }
-                        /*
-                        getURL: function(bounds) {
-							var url = OpenLayers.Layer.WMS.prototype.getURL.call( this, bounds );                        	
-								console.log("Way long. "+url.length);
-
-							//long url, proxy request (and post too).
-							if (url.length > this.options.tileOptions.maxGetUrlLength) {
-								url = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile&url="+url;
-
-							}
-							console.log(url);
-							return url;
-                        }
-                        */
+                        buffer: 0
                     },
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions();
@@ -120,8 +101,6 @@ Oskari.clazz.define(
                         defaultOptions[key] = layerOptions[key];
                     }
                 }
-//tileOptions: {maxGetUrlLength: 2048}
-                debugger;
 
                 var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + oskariLayer.getId(), oskariLayer.getWmsUrls(), defaultParams, defaultOptions);
                 openLayer.opacity = layer.getOpacity() / 100;
