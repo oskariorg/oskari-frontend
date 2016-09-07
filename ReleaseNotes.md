@@ -2,6 +2,10 @@
 
 ## 1.38.2
 
+### mapfull
+
+Fixed statsgrid width checking when calculate map size.
+
 ### divmanazer/Popup
 
 Now if setted draggable then dragging work to drag popup header.
