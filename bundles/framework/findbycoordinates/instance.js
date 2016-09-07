@@ -346,18 +346,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     }
                     result = results.locations[i];
                     var channelId = result.channelId,
-                        channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+'"]'),
+                        lang = (result.lang && typeof result.lang ==='string') ? result.lang.toUpperCase() : '',
+                        langText = (lang !== '') ? ' (' + lang + ')': '',
+                        channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+lang +'"]'),
                         color = me.__colors[colorIndex];
 
                     if(channelResults.length === 0) {
                         channelResults = me.__templates.popupChannelResult.clone();
-                        channelResults.find('.channel_id').html(loc.channels[channelId] || channelId);
+                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId) + langText );
                         if(loc.channelDescriptions[channelId]) {
                             channelResults.find('.channel_description').attr('title', loc.channelDescriptions[channelId]);
                         } else {
                             channelResults.find('.channel_description').hide();
                         }
-                        channelResults.attr('data-channel-id', channelId);
+                        channelResults.attr('data-channel-id', channelId+lang);
 
                         // FIXME: remove this if/else block when server return prio ordered results. Then use always append.
                         if(result.village) {
@@ -419,10 +421,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         __getInfoBoxHtml: function (result) {
             var me = this,
-                loc = this.getLocalization();
+                loc = this.getLocalization(),
+                lang = (result.lang && typeof result.lang ==='string') ? ' (' + result.lang.toUpperCase() + ')' : '';
 
             var item = this.__templates.item.clone();
-            item.find('.channel_id').html(loc.channels[result.channelId] || result.channelId);
+            item.find('.channel_id').html((loc.channels[result.channelId] || result.channelId) + lang);
             if(loc.channelDescriptions[result.channelId]) {
                 item.find('.channel_description').attr('title', loc.channelDescriptions[result.channelId]);
             } else {
