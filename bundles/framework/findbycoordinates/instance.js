@@ -360,13 +360,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                             channelResults.find('.channel_description').hide();
                         }
                         channelResults.attr('data-channel-id', channelId+lang);
-
-                        // FIXME: remove this if/else block when server return prio ordered results. Then use always append.
-                        if(result.village) {
-                            popupContent.prepend(channelResults);
-                        } else {
-                            popupContent.append(channelResults);
-                        }
+                        popupContent.append(channelResults);
                     }
 
                     var markerSvg = mapmodule.getSvg({
