@@ -146,9 +146,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method stopTool
          */
         stopTool: function () {
-            this.tool.active = false;
+            var me = this,
+                sandbox = this.getSandbox(),
+                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+            if(spinnerRequestBuilder) {
+                sandbox.request(this, spinnerRequestBuilder(false));
+            }
+            me.tool.active = false;
             jQuery('#mapdiv').removeClass('findbycoordinates-cursor');
-            this.enableGFI(true);
+            me.enableGFI(true);
         },
         /**
          * @method enableGfi
@@ -212,7 +218,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @param  {Object} lonlat
          */
         __handleMapClick: function (lonlat) {
-            var me = this;
+            var me = this,
+                sandbox = this.getSandbox(),
+                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+
+            if(spinnerRequestBuilder) {
+                sandbox.request(this, spinnerRequestBuilder(true));
+            }
 
             this.searchService.doSearch({
                 lon: lonlat.lon,
@@ -227,6 +239,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
+
                 me.stopTool();
                 me.selectDefaultTool();
             });
