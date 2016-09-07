@@ -133,9 +133,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method startTool
          */
         startTool: function () {
-            this.tool.active = true;
-            jQuery('#mapdiv').addClass('reverse-geocode');
-            this.enableGFI(false);
+            var me = this;
+            me.tool.active = true;
+            jQuery('#mapdiv').addClass('findbycoordinates-cursor');
+            me._hidePopups();
+            me.enableGFI(false);
         },
         /**
          * Stops the tool
@@ -145,7 +147,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         stopTool: function () {
             this.tool.active = false;
-            jQuery('#mapdiv').removeClass('reverse-geocode');
+            jQuery('#mapdiv').removeClass('findbycoordinates-cursor');
             this.enableGFI(true);
         },
         /**
@@ -186,10 +188,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 sandbox.request(this, toolBarReq);
             }
         },
+        /**
+         * @method  @private _hidePopups Hide popups
+         */
         _hidePopups: function(){
             var me = this,
                 sandbox = this.getSandbox(),
-                infoBoxHideReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
+                infoBoxHideReqBuilder = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest');
 
             if(me._popup){
                 me._popup.close();
@@ -208,7 +213,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         __handleMapClick: function (lonlat) {
             var me = this;
-            me._hidePopups();
 
             this.searchService.doSearch({
                 lon: lonlat.lon,
