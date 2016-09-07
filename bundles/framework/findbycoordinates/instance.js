@@ -18,21 +18,34 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         this.searchUrl = undefined;
         this._popup = null;
         this._logger = Oskari.log('findbycoordinates');
+        this.POPUP_ID = "findbycoordinates-search-result";
     }, {
         __name : 'findbycoordinates',
         __templates : {
             item : jQuery('<div>' +
-                    '<h3></h3>' +
-                    '<div class="description"></div>'+
-                    '<div class="result">'+
-                    '   <div class="name"></div>' +
-                    '   <div class="info"></div>' +
-                    '   <div class="lonlat"></div>' +
-                    '</div>'+
-                    '</div>'),
+                '   <div class="channel_header">'+
+                '       <h3 class="channel_id"></h3>'+
+                '   </div>'+
+                '   <div class="channel_description icon-info"></div>'+
+                '   <div class="none"></div>'+
+                '   <div class="result">'+
+                '       <div class="name"></div>' +
+                '       <div class="info"></div>' +
+                '       <div class="lonlat"></div>' +
+                '   </div>'+
+                '</div>'),
             popup: jQuery('<div class="findbycoordinates__popup__content"></div>'),
-            popupChannelResult: jQuery('<div class="channel_result"><h3 class="channel_id"></h3><div class="channel_description"></div><div class="channel__results"></div></div>'),
-            popupResult: jQuery('<div class="resultmarker"><img alt="marker"></img></div>'+
+            popupChannelResult: jQuery('<div class="channel_result">'+
+                '   <div class="channel_header">'+
+                '       <h3 class="channel_id"></h3>'+
+                '   </div>'+
+                '   <div class="channel_description icon-info"></div>'+
+                '   <div class="none"></div>'+
+                '   <div class="channel__results"></div>'+
+                '</div>'),
+            popupResult: jQuery('<div class="resultmarker">'+
+                '   <img alt="marker"></img>'+
+                '</div>'+
                 '<div class="nameinfo">'+
                 '   <div class="name"></div>'+
                 '   <div class="info"></div>'+
@@ -173,6 +186,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 sandbox.request(this, toolBarReq);
             }
         },
+        _hidePopups: function(){
+            var me = this,
+                sandbox = this.getSandbox(),
+                infoBoxHideReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
+
+            if(me._popup){
+                me._popup.close();
+            }
+            if(infoBoxHideReqBuilder) {
+                sandbox.request(this, infoBoxHideReqBuilder(me.POPUP_ID));
+            }
+        },
         /**
          * Sends the search request to the search service
          * and handles the response.
@@ -183,6 +208,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         __handleMapClick: function (lonlat) {
             var me = this;
+            me._hidePopups();
 
             this.searchService.doSearch({
                 lon: lonlat.lon,
@@ -214,25 +240,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
 
             var me = this,
                 loc = this.getLocalization(),
-                sandbox = this.getSandbox();
+                sandbox = this.getSandbox(),
+                result;
 
             // If there is only one response then show Infobox
             if(results.totalCount === 1) {
-                var popupId = "findbycoordinates-search-result";
-                var result = results.locations[0];
-
-                // get the location from first. This is error prone since locations may differ a bit
-                // Maybe find another way of doing this like a generic popup with markers for each location?
-                var lonlat =  {
-                    lon: result.lon,
-                    lat: result.lat
-                };
-                var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
-                var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
-
-                var options = {
-                    hidePrevious: true
-                };
+                result = results.locations[0];
+                var lonlat = {
+                        lon: result.lon,
+                        lat: result.lat
+                    },
+                    moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+                    infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                    options = {
+                        hidePrevious: true
+                    };
 
                 if (moveReqBuilder) {
                     sandbox.request(this, moveReqBuilder(
@@ -243,7 +265,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     var contents = [];
                     contents.push(me.__getInfoBoxHtml(result));
                     sandbox.request(this, infoBoxReqBuilder(
-                        popupId, loc.resultsTitle,
+                        me.POPUP_ID, loc.resultsTitle,
                         contents, lonlat, options));
                 }
             }
@@ -302,18 +324,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 for(var i=0, resultsCount=results.locations.length; i<resultsCount;i++) {
                     if(i >= markersLength * colorsLength) {
                         // If all markers and colors are used hten log warn and break results.
-                        this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.')
+                        this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.');
                         break;
                     }
-                    var result = results.locations[i];
-                    var channelId = result.channelId;
-                    var channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+'"]');
-                    var color = me.__colors[colorIndex];
+                    result = results.locations[i];
+                    var channelId = result.channelId,
+                        channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+'"]'),
+                        color = me.__colors[colorIndex];
 
                     if(channelResults.length === 0) {
                         channelResults = me.__templates.popupChannelResult.clone();
                         channelResults.find('.channel_id').html(loc.channels[channelId] || channelId);
-                        channelResults.find('.channel_description').html(loc.channelDescriptions[channelId] || '');
+                        if(loc.channelDescriptions[channelId]) {
+                            channelResults.find('.channel_description').attr('title', loc.channelDescriptions[channelId]);
+                        } else {
+                            channelResults.find('.channel_description').hide();
+                        }
                         channelResults.attr('data-channel-id', channelId);
 
                         // FIXME: remove this if/else block when server return prio ordered results. Then use always append.
@@ -379,8 +405,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 loc = this.getLocalization();
 
             var item = this.__templates.item.clone();
-            item.find('h3').html(loc.channels[result.channelId] || result.channelId);
-            item.find('.description').html(loc.channelDescriptions[result.channelId] || '');
+            item.find('.channel_id').html(loc.channels[result.channelId] || result.channelId);
+            if(loc.channelDescriptions[result.channelId]) {
+                item.find('.channel_description').attr('title', loc.channelDescriptions[result.channelId]);
+            } else {
+                item.find('.channel_description').hide();
+            }
             item.find('.name').html(result.name);
             item.find('.info').html(result.village || '');
             item.find('.lonlat').html(result.lon + ', ' + result.lat);

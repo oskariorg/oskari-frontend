@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "resultsTitle": "Sökresultat",
         "close": "Stäng",
         "channels" : {
-            "WHAT3WORDS_CHANNEL": "what3words (SV)",
+            "WHAT3WORDS_CHANNEL": "what3words",
             "NLS_NEAREST_FEATURE_CHANNEL": "Närmaste adress"
         },
         "channelDescriptions" : {

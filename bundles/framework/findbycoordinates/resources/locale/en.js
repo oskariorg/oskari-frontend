@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "resultsTitle": "Search results",
         "close": "Close",
         "channels" : {
-            "WHAT3WORDS_CHANNEL": "what3words (EN)",
+            "WHAT3WORDS_CHANNEL": "what3words",
             "NLS_NEAREST_FEATURE_CHANNEL": "Nearest address"
         },
         "channelDescriptions" : {

@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "resultsTitle": "Hakutulokset",
         "close": "Sulje",
         "channels" : {
-            "WHAT3WORDS_CHANNEL": "what3words (FI)",
+            "WHAT3WORDS_CHANNEL": "what3words",
             "NLS_NEAREST_FEATURE_CHANNEL": "Lähin osoite"
         },
         "channelDescriptions" : {
