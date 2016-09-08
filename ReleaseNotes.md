@@ -2,6 +2,10 @@
 
 ## 1.38.2
 
+### infobox
+
+In mobilemode the overlay under popup is now semi-transparent instead of transparent to better indicate that the popup is modal.
+
 ### mapfull
 
 Fixed statsgrid width checking when calculate map size.
