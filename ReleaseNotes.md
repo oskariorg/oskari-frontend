@@ -50,7 +50,7 @@ fixed area / line measurement, when the projection units are degrees
 
 Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
 
-### infobox ol2 ja ol3
+### infobox ol2 and ol3
 
 Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
 
