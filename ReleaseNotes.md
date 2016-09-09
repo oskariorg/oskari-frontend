@@ -37,10 +37,6 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
 }]);
 ```
 
-### Flyout tile modifications
-
-All tiles has now own bundle id and intance id named class. Removed also tile id's.
-
 ### jQuery.browser checks removed
 
 All jQuery.browser check are removed in preparation for jQuery update.
@@ -78,7 +74,10 @@ Fixed AddMarkerRequestHandler error when using shape 0 then default marker is us
 ### sandbox
 
 - Removed outside javascript file call
->>>>>>> 366bd01047bfe95bd258b3060f0e343610b4073d
+
+### Flyout tile modifications
+
+All tiles has now own bundle id and intance id named class. Removed also tile id's.
 
 ## 1.38.1
 
