@@ -467,23 +467,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 'z-index': '16000'
             });
 
-            var browser = Oskari.util.getBrowser();
-            if (browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                content.css({
-                    'height': height
-                });
-            }
-
-            //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
-
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            content.css({
+                'height': height
+            });
         },
 
         /**

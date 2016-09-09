@@ -124,7 +124,7 @@ Oskari.clazz.define(
                     widthLeft: 5,
                     widthRight: 44
                 }
-            }
+            };
 
             me.service = Oskari.clazz.create(
                 'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
@@ -454,12 +454,6 @@ Oskari.clazz.define(
 
                         jQuery(cells[1]).attr('title', municipality).append(municipality);
                         jQuery(cells[2]).attr('title', type).append(type);
-
-                        // IE hack to get scroll bar on tbody element
-                        var browser = Oskari.util.getBrowser();
-                        if (browser.msie) {
-                            row.append(jQuery('<td style="width: 0px;"></td>'));
-                        }
 
                         tableBody.append(row);
                     }

@@ -103,8 +103,8 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-            var me = this,
-                currPopup = me._popups[id],
+
+            var currPopup = me._popups[id],
                 lon = null,
                 lat = null,
                 marker = null;
@@ -250,7 +250,7 @@ Oskari.clazz.define(
                 if (positioning) {
                     popupDOM.addClass(positioning);
                     popupDOM.find('.popupHeaderArrow').addClass(positioning);
-                };
+                }
 
                 // Set the colour scheme if one provided
                 if (colourScheme) {
@@ -291,7 +291,7 @@ Oskari.clazz.define(
                     top: 0,
                     left: 0,
                     height: 0
-                }
+                };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
                 popupHeaderChildrens.each(function(){
@@ -607,24 +607,15 @@ Oskari.clazz.define(
                 'z-index': '16000'
             });
 
-            var browser = Oskari.util.getBrowser();
-            if (browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                var isOverThanMax = height > maxHeight ? true : false;
-                content.css({
-                    'height': height
-                });
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            var isOverThanMax = height > maxHeight ? true : false;
+            content.css({
+                'height': height
+            });
 
-                if(!isOverThanMax) {
-                    popup.css('min-height', 'inherit');
-                }
+            if(!isOverThanMax) {
+                popup.css('min-height', 'inherit');
             }
         },
         _adaptPopupSizeWithPositioning: function (olPopupId, isOld) {

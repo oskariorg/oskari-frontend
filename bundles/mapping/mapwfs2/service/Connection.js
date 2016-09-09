@@ -117,10 +117,9 @@ Oskari.clazz.define(
          * Get browser information
          */
         getBrowser: function () {
-            var browser = Oskari.util.getBrowser();
             this.browser = {
                 name: 'unknown',
-                versionNum: parseInt(browser.version, 10)
+                versionNum: 0
             };
         },
 

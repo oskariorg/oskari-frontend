@@ -12,7 +12,7 @@ OpenLayers2 will always use GET-requests and will fail, if the GET-request's len
 
 ```javascript
 sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true, {
-    SLD_BODY: 
+    SLD_BODY:
         '<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">'+
         '    <NamedLayer>'+
         '    <Name>oskari:kunnat2013</Name>'+
@@ -41,20 +41,9 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
 
 All tiles has now own bundle id and intance id named class. Removed also tile id's.
 
-### core
-
-#### New functions
-- ``Oskari.util.getBrowser()`` function, return object what tells some browser info (version, name). Can be usefull to check at if browser is webkit/blink/gecko/msie/msedge.
-```javascript
-var browser = Oskari.util.getBrowser();
-if(browser.msie) {
-  alert('I am IE');
-}
-```
-
 ## jQuery.browser checks removed
 
-All jQuery.browser check are removed or replaced Oskari.util.getBrowser -function.
+All jQuery.browser check are removed.
 
 ## 1.38.1
 
