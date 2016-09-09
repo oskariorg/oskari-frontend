@@ -126,7 +126,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
     },
 
-
     /**
      * @method init
      * This is called when flyout is ready and something needs to be executed

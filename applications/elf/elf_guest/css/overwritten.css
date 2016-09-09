@@ -1,43 +1,45 @@
 table td {
-	text-align: left;
-	vertical-align: top;
+    text-align: left;
+    vertical-align: top;
 }
 
 table {
-	border-top-width: 0px;
+    border-top-width: 0px;
 }
+
 @media screen {
-    div.search input[type=button] {
-         width: 128px !important ;
-    }
     body {
         margin: 0;
         padding: 0;
         height: 100%;
-        font: 14px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif
+        font: (14px / 16px) "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
     }
+
     #mapdiv {
         width: 100%;
         height: 100%;
     }
+
     #mapdiv.elf-reverse-geocode {
         cursor: crosshair !important;
     }
+
     #mapdivB {
         width: 100%;
         height: 100%;
     }
-    #maptools {
 
+    #maptools {
         height: 100%;
         position: absolute;
         top: 0;
         width: 170px;
-        overflow:auto;
+        overflow: auto;
         z-index: 2;
         background-color: #0099CB;
         margin-top: 0px;
     }
+
     #contentMap {
         height: 100%;
         margin-left: 170px;
@@ -47,25 +49,28 @@ table {
         border: 0;
     }
 
-    
     .oskari-tile {
-	height: auto !important;
-	min-height: 31px !important;
-        line-height: 15px !important;	
+        height: auto !important;
+        min-height: 31px !important;
+        line-height: 15px !important;
     }
+
     .oskari-tile-closed {
         background-color: #0099CB !important;
         border-bottom: 1px solid #0099CB !important;
         border-top: 1px solid white !important;
     }
+
     .oskari-tile-attached {
         background-color: white !important;
         border-bottom: 1px solid white !important;
         border-top: 1px solid #0099CB !important;
     }
+
     .oskari-flyouttoolbar {
         background-color: #0099CB !important;
     }
+
     .oskari-flyout-title {
         color: white !important;
     }
@@ -75,17 +80,19 @@ table {
         width: 100%;
         overflow: hidden;
         background-color: white;
-        background-image: url('ELF_web_logo_small.jpg');
+        background-image: url("ELF_web_logo_small.jpg");
         background-repeat: no-repeat;
     }
 
     .default-selectiontools {
-        display:none !important;
+        display: none !important;
     }
+
     .marker-share {
         display: none !important;
     }
-    .tool-print{
+
+    .tool-print {
         display: none !important;
     }
 
@@ -93,19 +100,17 @@ table {
         display: none !important;
     }
 
-
-    
-/*    li.layer {
-        height: 120px !important;
-    }
-*/
+    /*    li.layer {
+            height: 120px !important;
+        }
+    */
     div.oskari-flyout {
         min-height: 220px !important;
     }
+
     .oskariui-center {
         margin: 0px !important;
     }
-
 }
 
 .elf-lang-selector .langSelection a.btn {
@@ -131,14 +136,13 @@ table {
     color: #369;
 }
 
-
 .logoplugin .icon {
-	background-image: url('ELF-logo-small.png') !important;
-	display: inline-block;
-	height: 25px;
-	width: 25px;
-	vertical-align: bottom;
-	cursor: pointer;
+    background-image: url("ELF-logo-small.png") !important;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    vertical-align: bottom;
+    cursor: pointer;
     float: left;
 }
 
@@ -149,7 +153,6 @@ table {
 .logoplugin .data-sources {
     float: left;
 }
-
 
 div.layerselection2 div.object-data {
     display: none !important;
@@ -173,12 +176,12 @@ div.mapplugin.scalebar {
 
 div.layerselection2 .icon-funnel {
     visibility: hidden !important;
-    display:none !important;
+    display: none !important;
 }
 
 .featuredata div.icon-funnel {
     visibility: hidden !important;
-    display:none !important;
+    display: none !important;
 }
 
 div.admin-layerselector .show-add-class {
@@ -192,8 +195,6 @@ div.admin-layerselector .show-add-class {
 }
 */
 
-
-
 /*metadataflyout overrides*/
 hr.elf-metadata-divider {
     border: 1px solid #e6e6e6;
@@ -201,6 +202,6 @@ hr.elf-metadata-divider {
 }
 
 table.elf-metadata-table-no-border td {
-    border: none!important;
+    border: none !important;
     width: 50%;
 }

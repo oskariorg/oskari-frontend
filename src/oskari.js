@@ -8,7 +8,7 @@ Oskari = (function () {
     var _markers = [];
 
     return {
-        VERSION : "1.38.0",
+        VERSION : "1.38.2",
 
         /**
          * @public @method Oskari.setDebugMode
@@ -40,7 +40,7 @@ Oskari = (function () {
          * @return {Object} default marker
          */
         getDefaultMarker: function(){
-            return (this.markers.length>=3) ? this.markers[2] : this.markers[0];
+            return (_markers.length>=3) ? _markers[2] : _markers[0];
         }
     };
 }());

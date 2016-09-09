@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Tile',
          * Creates the UI for a fresh start
          */
         refresh: function () {
+
         },
         disable: function () {
             this.container.addClass('disabled');

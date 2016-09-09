@@ -92,7 +92,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Creates the UI for a fresh start
          */
         refresh: function () {
-            //"use strict";
+            var cel = this.container;
+
+            if (!cel.hasClass('admin-users')) {
+                cel.addClass('admin-users');
+            }
         }
     }, {
         /**

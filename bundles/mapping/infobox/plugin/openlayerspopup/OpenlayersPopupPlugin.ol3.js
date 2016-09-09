@@ -331,7 +331,6 @@ Oskari.clazz.define(
         },
         _showInMobileMode: function (popup) {
             popup.makeModal();
-            popup.overlay._overlays[0].overlay.css({opacity: 0});
             popup.overlay.followResizing(true);
             popup.overlay.bindClickToClose();
             popup.overlay.onClose(function () {

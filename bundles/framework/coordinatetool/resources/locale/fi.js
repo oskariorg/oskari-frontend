@@ -26,7 +26,7 @@ Oskari.registerLocalization(
                 "errorTitle": "Reverse geokoodaus virhe",
                 "error": "Osoitetulle paikalle ei saatu haettua geokoodausta",
                 "WHAT3WORDS_CHANNEL": {
-                    "label": "What3words: "
+                    "label": "what3words: "
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL" : {
                     "label": "Osoite: "
