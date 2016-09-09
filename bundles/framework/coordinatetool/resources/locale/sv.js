@@ -26,7 +26,7 @@ Oskari.registerLocalization(
                 "errorTitle": "Geokodningsfel",
                 "error": "Geokodningen misslyckades. Geokoden kunde inte hämtas för den valda platsen",
                 "WHAT3WORDS_CHANNEL": {
-                    "label": "What3words: "
+                    "label": "what3words: "
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL" : {
                     "label": "Adress: "

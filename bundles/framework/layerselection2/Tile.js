@@ -45,7 +45,20 @@ function(instance) {
      * Interface method implementation, calls #refresh()
      */
     startPlugin : function() {
+        this._addTileStyleClasses();
         this.refresh();
+    },
+    _addTileStyleClasses: function() {
+        var isContainer = (this.container && this.instance.mediator) ? true : false;
+        var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
+        var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+
+        if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+            this.container.addClass(this.instance.mediator.instanceId);
+        }
+        if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+            this.container.addClass(this.instance.mediator.bundleId);
+        }
     },
     /**
      * @method stopPlugin
@@ -123,8 +136,6 @@ function(instance) {
     refresh : function() {
         var me = this;
         var instance = me.instance;
-        var cel = this.container;
-        var tpl = this.template;
 
         var sandbox = instance.getSandbox();
         var layers = sandbox.findAllSelectedMapLayers();
@@ -132,10 +143,8 @@ function(instance) {
 
         var status = this.container.children('.oskari-tile-status');
         status.addClass('icon-bubble-right');
-        status.attr("id", 'oskari_layerselection2_tile_countselectedlayers');
         status.html(layerCount);
-        var idEl = cel.children('.oskari-tile-title');
-        idEl.attr("id", 'oskari_layerselection2_tile_title');
+
         this.notifyUser();
     }
 }, {

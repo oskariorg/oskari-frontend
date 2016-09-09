@@ -1,12 +1,56 @@
 # Release Notes
 
+## 1.38.2
+
+### infobox
+
+In mobilemode the overlay under popup is now semi-transparent instead of transparent to better indicate that the popup is modal.
+
+### mapfull
+
+Fixed statsgrid width checking when calculate map size.
+
+### divmanazer/Popup
+
+Now if setted draggable then dragging work to drag popup header.
+
+### findbycoordinates
+
+Findbycoordinates now supports to show all search results.
+- If only one result found then show it in infobox.
+- If more than one results found, then open their to Oskari popup and add markers of all results.
+
+### mapmodule
+
+Fixed AddMarkerRequestHandler error when using shape 0 then default marker is used.
+
+### core
+
+- Fixed reference to markers variable
+- Fixed default marker reference
+- bundle.mediator now include instanceId in addition to bundleId
+
+### sandbox
+
+- Removed outside javascript file call
+
+### Flyout tile modifications
+
+All tiles has now own bundle id and intance id named class. Removed also tile id's.
+
+## 1.38.1
+
+### DrawPlugin.ol3
+
+fixed area / line measurement, when the projection units are degrees
+
 ## 1.38.0
 
 ### DrawPlugin.ol3
 
 Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
 
-### infobox ol2 ja ol3
+### infobox ol2 and ol3
 
 Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
 

@@ -49,6 +49,8 @@ Oskari.clazz.define(
                 }
             }
         };
+
+        this.wgs84Sphere = new ol.Sphere(6378137);
     },
     {
         /**
@@ -738,14 +740,23 @@ Oskari.clazz.define(
          *
          * @param {ol.geom.Geometry} geometry
          * @return {String} area: measure result icluding 'km2'/'ha' text
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getPolygonArea: function(geometry) {
             var area = 0;
-            if(geometry && geometry.getType()==='Polygon') {
-                area = geometry.getArea();
-                this._area = area;
+            if (geometry && geometry.getType()==='Polygon') {
+                var sourceProj = this._map.getView().getProjection();
+                if (sourceProj.getUnits() === "degrees") {
+                    var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
+                    var coordinates = geom.getLinearRing(0).getCoordinates();
+                    area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
+                } else {
+                    area = geometry.getArea();
+                }
             }
-
+            this._area = area;
             return area;
         },
         /**
@@ -754,13 +765,26 @@ Oskari.clazz.define(
          *
          * @param {ol.geom.Geometry} geometry
          * @return {String} length: measure result icluding 'm'/'km' text
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getLineLength: function(geometry) {
             var length = 0;
             if(geometry && geometry.getType()==='LineString') {
-                length = geometry.getLength();
-                this._length = length;
+                var sourceProj = this._map.getView().getProjection();
+                if (sourceProj.getUnits() === "degrees") {
+                    var coordinates = geometry.getCoordinates();
+                    for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                        length += this.wgs84Sphere.haversineDistance(c1, c2);
+                    }
+                } else {
+                    length = geometry.getLength();
+                }   
             }
+            this._length = length;
             return length;
         },
         /**

@@ -69,7 +69,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     mapHeight = jQuery(window).height(),
                     mapWidth = contentMap.width(),
                     sidebar = jQuery('#sidebar:visible'),
-                    statsgrid = jQuery('.statsgrid:visible'),
+                    // FIXME: this must be done different way in future
+                    statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile)'),
                     maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
                     mapTools = jQuery('#maptools:visible');
 
