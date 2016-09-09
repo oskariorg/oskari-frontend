@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         var newData = {};
 
 		// Request data is allready to new format
-        if(data && !data.iconUrl && data.shape && typeof data.shape !== 'object') {
+        if(data && !data.iconUrl && (data.shape || typeof data.shape === 'number') && typeof data.shape !== 'object') {
         	newData = data;
         }
-        // Else format old data to new forma and inform user about this
+        // Else format old data to new form and inform user about this
         else {
         	this.sandbox.printWarn('AddMarkerRequest data is debricated format, formatted this to the new format before processing request. Please check your request!');
             var shape  = null;
@@ -21,6 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
                 shape = data.iconUrl;
             } else if(data.shape && data.shape.data){
                 shape = data.shape.data;
+            } else if(data.shape) {
+                shape = data.shape;
             }
         	newData = {
         		// Allready supported properties

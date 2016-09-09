@@ -475,7 +475,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeDraggable: function (options) {
             var me = this,
                 dragOptions = options ? options : {
-                scroll: false
+                scroll: false,
+                handle: '.popupHeader'
             };
             me.dialog.css('position', 'absolute');
             me.dialog.draggable(dragOptions);
