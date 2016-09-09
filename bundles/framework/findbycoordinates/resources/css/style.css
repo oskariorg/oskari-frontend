@@ -1,3 +1,70 @@
 /* Mixins */
-div.reverse-geocode {
-  cursor: crosshair; }
+/* Cursor when tool activated */
+div.findbycoordinates-cursor {
+    cursor: crosshair;
+}
+
+/* More than one result popup styles */
+div.findbycoordinates__popup div.content {
+    max-height: 400px;
+    overflow: hidden;
+}
+
+div.findbycoordinates__popup div.content.show-scroll {
+    overflow-y: auto;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content {
+    width: 400px;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .channel_header {
+    float: left;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .channel_description {
+    float: left;
+    margin-left: 12px;
+    margin-top: 3px;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .none {
+    clear: both;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .channel__results .nameinfo {
+    float: left;
+    padding: 4px;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .channel__results .resultmarker {
+    float: left;
+    padding: 4px;
+    width: 64px;
+    height: 64px;
+}
+
+div.findbycoordinates__popup .findbycoordinates__popup__content .channel_result .channel__results .none {
+    clear: both;
+}
+
+/* One result popup styles */
+#oskari_findbycoordinates-search-result_contentWrapper .channel_header {
+    float: left;
+}
+
+#oskari_findbycoordinates-search-result_contentWrapper .channel_description {
+    float: left;
+    margin-left: 12px;
+    margin-top: 3px;
+}
+
+#oskari_findbycoordinates-search-result_contentWrapper .none {
+    clear: both;
+}
+
+#oskari_findbycoordinates-search-result_contentWrapper .result {
+    margin-left: 24px;
+}
+
+/*# sourceMappingURL=style.css.map */

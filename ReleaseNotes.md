@@ -2,7 +2,11 @@
 
 ## 1.39.0
 
-## RPC - new request available
+### IE 9 not supported
+
+``IE9`` will not be a supported browser anymore.
+
+### RPC - new request available
 
 ``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
 
@@ -33,10 +37,6 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
 }]);
 ```
 
-## IE 9 not supported
-
-``IE9`` will not be a supported browser anymore.
-
 ### Flyout tile modifications
 
 All tiles has now own bundle id and intance id named class. Removed also tile id's.
@@ -44,6 +44,7 @@ All tiles has now own bundle id and intance id named class. Removed also tile id
 ### core
 
 #### New functions
+
 - ``Oskari.util.getBrowser()`` function, return object what tells some browser info (version, name). Can be usefull to check at if browser is webkit/blink/gecko/msie/msedge.
 ```javascript
 var browser = Oskari.util.getBrowser();
@@ -52,9 +53,43 @@ if(browser.msie) {
 }
 ```
 
-## jQuery.browser checks removed
+### jQuery.browser checks removed
 
-All jQuery.browser check are removed or replaced Oskari.util.getBrowser -function.
+All jQuery.browser check are removed or replaced Oskari.util.getBrowser -function in preparation for jQuery update.
+
+## 1.38.2
+
+### infobox
+
+In mobilemode the overlay under popup is now semi-transparent instead of transparent to better indicate that the popup is modal.
+
+### mapfull
+
+Fixed statsgrid width checking when calculate map size.
+
+### divmanazer/Popup
+
+Draggable handle in popup has been changed to header (as in flyout) instead of the whole popup.
+
+### findbycoordinates
+
+Findbycoordinates now supports to show all search results.
+- If only one result found then show it in infobox.
+- If more than one results found, then open their to Oskari popup and add markers of all results.
+
+### mapmodule
+
+Fixed AddMarkerRequestHandler error when using shape 0 then default marker is used.
+
+### core
+
+- Fixed reference to markers variable
+- Fixed default marker reference
+- bundle.mediator now include instanceId in addition to bundleId
+
+### sandbox
+
+- Removed outside javascript file call
 
 ## 1.38.1
 
@@ -68,7 +103,7 @@ fixed area / line measurement, when the projection units are degrees
 
 Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
 
-### infobox ol2 ja ol3
+### infobox ol2 and ol3
 
 Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
 
