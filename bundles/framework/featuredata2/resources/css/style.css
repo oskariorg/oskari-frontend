@@ -61,6 +61,7 @@ div.analyse-filter-popup-content div.filter-option {
 
 div.oskariTabs .tabsHeader ul li a {
   display: inline-block; }
+
 div.oskariTabs .tabsHeader ul li .union-filter {
   display: inline-block;
   margin-right: 10px; }
@@ -171,4 +172,9 @@ div.oskari-flyout.ui-draggable.mobile.oskari-detached {
     div.oskari-flyout.ui-draggable.mobile.oskari-detached div.oskari-flyouttoolbar div.oskari-flyoutheading {
       display: none; }
 
-/*# sourceMappingURL=style.css.map */
+div.featuredata-go-to-location {
+  width: 16px;
+  height: 16px;
+  margin-left: 50%;
+  margin-top: 50%;
+  background-image: url("../images/featuredata-go-to-location.png"); }

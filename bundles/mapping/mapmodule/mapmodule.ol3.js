@@ -685,7 +685,57 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.text = textStyleJSON.labelText;
             }
             return new ol.style.Text(text);
-        }
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+console.log("ol3 tööt");
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                mapboundsArea,
+                boundsArea;
+
+            if (!feature) {
+                return;
+            }
+
+            if (feature && feature.geometry && feature.geometry.getBounds()) {
+                //should we get the centroid of the bbox instead? Probably.
+                centroid = feature.geometry.getCentroid();
+                bounds = feature.geometry.getBounds();
+                mapBounds = me.getMap().getExtent();
+                mapBoundsArea = mapBounds.toGeometry().getArea();
+                boundsArea = bounds.toGeometry().getArea();
+
+                return {
+                    'x': centroid.x,
+                    'y': centroid.y,
+                    'bounds': bounds, 
+                    'mapBounds': mapBounds, 
+                    'mapBoundsArea': mapBoundsArea, 
+                    'boundsArea': boundsArea
+                }
+            }
+
+            return null;         
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new OpenLayers.Format.WKT(),
+                feature = wktFormat.read(wkt);
+
+            return feature;
+        }       
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

@@ -408,7 +408,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapMoveEvent': function() {
                 var me = this;
                 me.plugin.mapStatusChanged();
-            }
+            },
+
+            WFSFeatureGeometriesEvent: null
         },
 
         /**
@@ -495,6 +497,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             if (Oskari.util.isMobile()) {
                 mapModule.redrawPluginUIs(true);
             }
+
+            this.mapModule = mapModule;
         }
     }, {
         /**

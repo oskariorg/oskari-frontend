@@ -26,6 +26,8 @@ Oskari.clazz.define(
         this.selectedTab = null;
         this.active = false;
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
+
+        this.templateLocateOnMap = jQuery('<div class="featuredata-go-to-location"></div>');
         // Resizability of the flyout
         this.resizable = true;
         // Is layout currently resizing?
@@ -38,6 +40,13 @@ Oskari.clazz.define(
         for (p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
                 this.template[p] = jQuery(this.__templates[p]);
+            }
+        }
+
+
+        for (t in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(t)) {
+                me.sandbox.registerForEventByName(me, t);
             }
         }
     }, {
@@ -477,10 +486,13 @@ Oskari.clazz.define(
                     features = layer.getActiveFeatures().slice(0),
                     selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
 
+//console.log(features);
+
                 me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
+                fields.unshift('locate_on_map');
                 hiddenFields.push('__fid');
                 hiddenFields.push('__centerX');
                 hiddenFields.push('__centerY');
@@ -568,10 +580,49 @@ Oskari.clazz.define(
 
                     panel.grid = grid;
                 }
+                model.fields.push('');
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
                     grid.setNumericField(field, me._fixedDecimalCount);
                 });
+
+                //custom renderer for locating feature on map
+                panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
+                    var div = me.templateLocateOnMap.clone();
+                    div.on('click', function(event) {
+
+
+                        var fid = data.__fid;
+                        var feature = null;
+                        //create the eventhandler for this particular fid
+                        me.instance.eventHandlers["WFSFeatureGeometriesEvent"] = function(event) {
+                            var wkts = event.getGeometries(),
+                                wkt;
+                            for (var i = 0; i < wkts.length; i++) {
+                                if (wkts[i][0] === fid) {
+                                    wkt = wkts[i][1];
+                                    break;
+                                }
+                            }
+                            var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
+                            if (viewportInfo) {
+                                console.log(viewportInfo.mapBoundsArea+" "+viewportInfo.boundsArea);
+                                if (viewportInfo.mapBoundsArea > viewportInfo.boundsArea) {
+                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false])
+                                } else {
+                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds])
+                                }
+                            }
+                            me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                            me.instance.eventHandlers["WFSFeatureGeometriesEvent"] = null;
+                        }
+                        me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                    });
+                    return div;
+                });
+
+
+
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
@@ -589,7 +640,6 @@ Oskari.clazz.define(
 
                 // Extra header message on top of grid
                 this._appendHeaderMessage(panel, locales, layer);
-
             }
         },
         setGridOpacity: function (layer, opacity) {
@@ -722,6 +772,7 @@ Oskari.clazz.define(
          * Notifies components that a selection was made
          */
         _handleGridSelect: function (layer, dataId, keepCollection) {
+            console.log("_handleGridSelect");
             var sandbox = this.instance.sandbox,
                 featureIds = [dataId],
                 builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
@@ -744,6 +795,7 @@ Oskari.clazz.define(
          *
          */
         featureSelected: function (event) {
+            console.log("featureSelectedEvent");
             if (!this.active) {
                 return;
             }
