@@ -28,6 +28,13 @@ Oskari.clazz.define(
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
 
         this.templateLocateOnMap = jQuery('<div class="featuredata-go-to-location"></div>');
+        this.locateOnMapIcon = 2;
+        this.colors = {
+            locateOnMap: {
+                active: '#ffde00',
+                normal: '#000000'
+            }
+        };
         // Resizability of the flyout
         this.resizable = true;
         // Is layout currently resizing?
@@ -35,16 +42,18 @@ Oskari.clazz.define(
         // The size of the layout has been changed (needed when changing tabs)
         this.resized = false;
 
+        this.locateOnMapFID = null;
+
         // templates
         this.template = {};
-        for (p in this.__templates) {
+        for (var p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
                 this.template[p] = jQuery(this.__templates[p]);
             }
         }
 
 
-        for (t in this.eventHandlers) {
+        for (var t in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(t)) {
                 me.sandbox.registerForEventByName(me, t);
             }
@@ -486,8 +495,6 @@ Oskari.clazz.define(
                     features = layer.getActiveFeatures().slice(0),
                     selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
 
-//console.log(features);
-
                 me._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
@@ -504,6 +511,8 @@ Oskari.clazz.define(
                     panel.locales = locales;
                     panel.propertiesChanged = true;
                 }
+
+                var visibleFields = [];
 
                 if (!panel.grid || panel.propertiesChanged) {
                     panel.propertiesChanged = false;
@@ -558,10 +567,7 @@ Oskari.clazz.define(
                     };
 
                     // filter out certain fields
-                    var visibleFields = [],
-                        i;
-
-                    for (i = 0; i < fields.length; i += 1) {
+                    for (var i = 0; i < fields.length; i += 1) {
                         if (!contains(hiddenFields, fields[i])) {
                             visibleFields.push(fields[i]);
                         }
@@ -589,13 +595,46 @@ Oskari.clazz.define(
                 //custom renderer for locating feature on map
                 panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
                     var div = me.templateLocateOnMap.clone();
+                    var fid = data.__fid;
+                    div.attr('data-fid', fid);
+
+                    var markers = Oskari.getMarkers();
+                    var normalIcon = markers[me.locateOnMapIcon];
+                    var normalIconObj = jQuery(normalIcon.data);
+                    normalIconObj.find('path').attr({
+                        fill: me.colors.locateOnMap.normal,
+                        stroke: '#000000'
+                    });
+                    normalIconObj.attr({
+                        x: 0,
+                        y: 0
+                    });
+                    var activeIcon = markers[me.locateOnMapIcon];
+                    var activeIconObj = jQuery(activeIcon.data);
+                    activeIconObj.find('path').attr({
+                        fill: me.colors.locateOnMap.active,
+                        stroke: '#000000'
+                    });
+                    activeIconObj.attr({
+                        x: 0,
+                        y: 0
+                    });
+
+                    div.html(normalIconObj.outerHTML());
+
+                    if(me.locateOnMapFID !== null && me.locateOnMapFID !== undefined && fid === me.locateOnMapFID) {
+                        div.html(activeIconObj.outerHTML());
+                    }
+
                     div.on('click', function(event) {
+                        // Save clicked feature fid to check centered status
+                        me.locateOnMapFID  = fid;
+                        jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
+                        jQuery(this).html(activeIconObj.outerHTML());
 
-
-                        var fid = data.__fid;
                         var feature = null;
                         //create the eventhandler for this particular fid
-                        me.instance.eventHandlers["WFSFeatureGeometriesEvent"] = function(event) {
+                        me.instance.eventHandlers.WFSFeatureGeometriesEvent = function(event) {
                             var wkts = event.getGeometries(),
                                 wkt;
                             for (var i = 0; i < wkts.length; i++) {
@@ -606,17 +645,17 @@ Oskari.clazz.define(
                             }
                             var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
                             if (viewportInfo) {
-                                console.log(viewportInfo.mapBoundsArea+" "+viewportInfo.boundsArea);
                                 if (viewportInfo.mapBoundsArea > viewportInfo.boundsArea) {
-                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false])
+                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
                                 } else {
-                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds])
+                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
                                 }
                             }
                             me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
-                            me.instance.eventHandlers["WFSFeatureGeometriesEvent"] = null;
-                        }
+                            me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
+                        };
                         me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
+
                     });
                     return div;
                 });
