@@ -539,9 +539,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
             if (feature && feature.geometry && feature.geometry.getBounds()) {
-                //should we get the centroid of the bbox instead? Probably.
-                centroid = feature.geometry.getCentroid();
                 bounds = feature.geometry.getBounds();
+                centroid = bounds.toGeometry().getCentroid();
                 mapBounds = me.getMap().getExtent();
                 mapBoundsArea = mapBounds.toGeometry().getArea();
                 boundsArea = bounds.toGeometry().getArea();
