@@ -691,7 +691,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param {String} wkt Well known text representation of the geometry
          */
         getViewPortForGeometry: function(wkt) {
-console.log("ol3 tööt");
             if (!wkt) {
                 return null;
             }
@@ -706,23 +705,25 @@ console.log("ol3 tööt");
             if (!feature) {
                 return;
             }
+            if (feature && feature.getGeometry() && feature.getGeometry().getExtent()) {
+                var map = me.getMap();
+                bounds = feature.getGeometry().getExtent();
+                centroid = ol.extent.getCenter(bounds);
+                mapBounds = map.getView().calculateExtent(map.getSize());
+                mapBoundsArea = ol.geom.Polygon.fromExtent(mapBounds).getArea();
+                boundsArea = ol.geom.Polygon.fromExtent(bounds).getArea();
 
-            if (feature && feature.geometry && feature.geometry.getBounds()) {
-                //should we get the centroid of the bbox instead? Probably.
-                centroid = feature.geometry.getCentroid();
-                bounds = feature.geometry.getBounds();
-                mapBounds = me.getMap().getExtent();
-                mapBoundsArea = mapBounds.toGeometry().getArea();
-                boundsArea = bounds.toGeometry().getArea();
-
-                return {
-                    'x': centroid.x,
-                    'y': centroid.y,
+                //x,y -> 0,1 : true for 3067, might not be true for some other projection...fffffff
+                var ret = {
+                    'x': centroid[0],
+                    'y': centroid[1],
                     'bounds': bounds, 
                     'mapBounds': mapBounds, 
                     'mapBoundsArea': mapBoundsArea, 
                     'boundsArea': boundsArea
-                }
+                };
+
+                return ret;
             }
 
             return null;         
@@ -731,8 +732,8 @@ console.log("ol3 tööt");
          * @method getFeatureFromWKT
          */
         getFeatureFromWKT: function(wkt) {
-            var wktFormat = new OpenLayers.Format.WKT(),
-                feature = wktFormat.read(wkt);
+            var wktFormat = new ol.format.WKT(),
+                feature = wktFormat.readFeature(wkt);
 
             return feature;
         }       
