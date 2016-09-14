@@ -47,7 +47,7 @@ $normalFontLineHeightMultiplier: 1.5;
     line-height: $size * $normalFontLineHeightMultiplier;
 }
 
-/* Resets */
+// Resets
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
 img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
@@ -65,8 +65,10 @@ footer, header, nav, section, audio, video {
     display: block;
 }
 
-a img {
-    border: 0;
+a {
+    img {
+        border: 0;
+    }
 }
 
 html, body {
@@ -76,7 +78,7 @@ html, body {
 html {
     font-size: 100%;
     -webkit-overflow-scrolling: touch;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -ms-text-size-adjust: 100%;
@@ -89,7 +91,7 @@ body {
 }
 
 body, button, input, select, textarea {
-    @include normal-font($normalFontLineHeightMultiplier);
+    @include normal-font($normalFontSize);
 }
 
 em {
@@ -100,8 +102,7 @@ strong {
     font-weight: bold;
 }
 
-/* Links */
-
+// Links
 a {
     color: $primaryHighlightColor;
 
@@ -110,12 +111,15 @@ a {
     }
 }
 
-#content a:hover {
-    color: $primaryHighlightHoverColor;
+#content {
+    a {
+        &:hover {
+            color: $primaryHighlightHoverColor;
+        }
+    }
 }
 
-/* Selection colours */
-
+// Selection colours
 ::selection {
     background: $highlightColor;
 }
@@ -124,23 +128,24 @@ a {
     background: $highlightColor;
 }
 
-img::selection {
-    background: transparent;
+img {
+    &::selection {
+        background: transparent;
+    }
+
+    &::-moz-selection {
+        background: transparent;
+    }
 }
 
-img::-moz-selection {
-    background: transparent;
-}
-
-/* Default Layout */
-
-/* Servlet version */
-/* Logo is only in the portal version afaik so this could be moved there? */
+// Default Layout
+// Servlet version
+// Logo is only in the portal version afaik so this could be moved there?
 #logo {
     padding: 30px 0 35px 10px;
 
     p {
-        /* FIXME change p to h3 to get rid of font-size and color */
+        //FIXME change p to h3 to get rid of font-size and color
         font-size: 17px;
         color: $baseTextColor;
         text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -148,27 +153,27 @@ img::-moz-selection {
     }
 }
 
-/* Sidebar is only in the portal version afaik so this could be moved there? */
+// Sidebar is only in the portal version afaik so this could be moved there?
 #sidebar {
-    font-family: Arial,ÔÇï sans-serif;
+    font-family: Arial,​ sans-serif;
     line-height: 12.6px;
     width: 200px;
 }
 
-/* Content is only in the portal version afaik so this could be moved there? */
+// Content is only in the portal version afaik so this could be moved there?
 #content {
     width: 760px;
     padding-left: 20px;
 }
 
-/* Wrapper is only in the portal version afaik so this could be moved there? */
+// Wrapper is only in the portal version afaik so this could be moved there?
 #wrapper {
     background: url("../images/bg_wrapper.png") repeat-y top left;
     overflow: hidden;
     min-width: 980px;
 }
 
-/* Portal version */
+// Portal version
 .mml-map {
     #logo {
         &.no-hover {
@@ -204,12 +209,16 @@ img::-moz-selection {
     }
 
     #wrapper {
-        background: #fff;
+        background: $lightTextColor;
         padding-left: 40px;
+    }
+
+    .maincontainer {
+        padding: 0;
     }
 }
 
-/* Portal menu list */
+// Portal menu list
 #mainmenu {
     width: 200px;
     border-top: 1px solid #ffe964;
@@ -217,7 +226,7 @@ img::-moz-selection {
     list-style: none;
 }
 
-/* Portal menu root level list item */
+// Portal menu root level list item
 li.mainlevel {
     &.child-selected, &.active {
         text-decoration: underline;
@@ -229,7 +238,7 @@ li.mainlevel {
         cursor: pointer;
         font-size: 11px;
         font-weight: bold;
-        color: #3c3c3c;
+        color: $baseTextColor;
         text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
         text-transform: uppercase;
         text-decoration: none;
@@ -237,25 +246,25 @@ li.mainlevel {
         border-bottom: 1px solid #ffe964;
 
         &:hover {
-            color: #fff;
+            color: $lightTextColor;
             background-color: #333438;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.85);
         }
 
         &.expand {
             background: transparent url("../images/sidebar_arrow.png") 172px 10px no-repeat;
+        }
 
-            &:hover {
-                color: #fff;
-                background-color: #333438;
-                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.85);
-                background-position: 172px -33px;
-            }
+        &:hover {
+            color: $lightTextColor;
+            background-color: #333438;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.85);
+            background-position: 172px -33px;
         }
     }
 }
 
-/* Portal menu 'flyout', i.e. sublevel list element */
+// Portal menu 'flyout', i.e. sublevel list element
 .flyoutmenu {
     display: none;
     position: absolute;
@@ -280,7 +289,7 @@ li.mainlevel {
     }
 }
 
-/* Portal menu's actual menu container... */
+// Portal menu's actual menu container...
 #side-bar-bottom {
     &.hidden {
         position: absolute;
@@ -316,7 +325,7 @@ li.mainlevel {
         border-right: none;
     }
 
-    > a {
+    & > a {
         color: #ffdb00;
         font-size: 15px;
         line-height: 19px;
@@ -338,13 +347,13 @@ li.mainlevel {
     padding-top: 8px;
     margin-left: 0;
 
-    > li {
+    & > li {
         font-size: 13px;
         line-height: 18px;
         padding: 5px 0 0 0;
 
         a {
-            color: #fff;
+            color: $lightTextColor;
             text-decoration: none;
 
             &.active {
@@ -366,7 +375,7 @@ li.mainlevel {
     text-indent: -1em;
     color: #ffdb00;
 
-    > li {
+    & > li {
         line-height: 16px;
         padding: 3px 0;
 
@@ -384,13 +393,13 @@ li.mainlevel {
     }
 }
 
-/* Portal menu sign in div */
+// Portal menu sign in div
 .sign-in {
     font-size: 0.95em;
     padding: 10px 10px 10px 20px;
 }
 
-/* Login link (inside sign in div...) */
+// Login link (inside sign in div...)
 #log-in {
     color: #383838;
     text-decoration: none;
@@ -402,17 +411,17 @@ li.mainlevel {
     }
 }
 
-/* Portal menu search form */
+// Portal menu search form
 #searchForm {
     padding: 40px 20px 10px 20px;
 }
 
-/* Portal menu search input field */
+// Portal menu search input field
 .site-search {
     width: 112px;
     padding: 6px 8px;
     color: #878787;
-    background-color: #fff;
+    background-color: $lightTextColor;
     border-top: 1px solid #f0ba00;
     border-right: 1px solid #f0ba00;
     border-bottom: 1px solid #ffef59;
@@ -433,35 +442,37 @@ li.mainlevel {
     background: transparent url("../images/magnify.png") 8px 9px no-repeat;
 }
 
-/* Portal menu language selection list */
-ul#lang {
-    list-style-type: none;
-    width: 100%;
-    overflow: hidden;
-    padding-bottom: 20px;
+// Portal menu language selection list
+ul {
+    &#lang {
+        list-style-type: none;
+        width: 100%;
+        overflow: hidden;
+        padding-bottom: 20px;
 
-    li {
-        float: left;
+        li {
+            float: left;
 
-        a {
-            color: #383838;
-            text-decoration: none;
-            padding-right: 6px;
+            a {
+                color: #383838;
+                text-decoration: none;
+                padding-right: 6px;
 
-            &:hover {
-                color: #ff9900;
+                &:hover {
+                    color: #ff9900;
+                }
             }
         }
-    }
 
-    span {
-        padding-right: 2px;
-        color: #F0BA00;
+        span {
+            padding-right: 2px;
+            color: #F0BA00;
+        }
     }
 }
 
-/* Main content area elements */
-/* Portal breadcrumb */
+// Main content area elements
+// Portal breadcrumb
 #breadcrumb {
     padding: 15px 20px;
     list-style-type: none;
@@ -498,16 +509,16 @@ ul#lang {
     }
 }
 
-/* ? */
+// ?
 #quicksearch {
     width: 680px;
     height: 185px;
     padding: 15px 20px 20px 20px;
-    border-top: 5px solid #0091ff;
+    border-top: 5px solid $primaryHighlightColor;
     background: transparent url("../images/quicksearch.jpg") no-repeat;
 }
 
-/* ? */
+// ?
 .qs-bg {
     width: 360px;
     padding: 12px 0 0 10px;
@@ -521,7 +532,7 @@ ul#lang {
 .maincontainer {
     padding: 30px 0 30px 20px;
     border-top: 5px solid #ffdb00;
-    color: #3c3c3c;
+    color: $baseTextColor;
 
     p, ul, ol {
         padding-bottom: 15px;
@@ -560,10 +571,6 @@ ul#lang {
     ul {
         margin-left: 20px;
     }
-}
-
-.mml-map .maincontainer {
-    padding: 0;
 }
 
 .no-top {
@@ -611,6 +618,19 @@ h3 {
     }
 }
 
+h4 {
+    font-size: 15px;
+    line-height: 22px;
+    padding-bottom: 17px;
+}
+
+h5 {
+    font-size: 11px;
+    line-height: 42px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+
 .lift {
     border-top-width: 5px;
     border-top-style: solid;
@@ -624,7 +644,7 @@ h3 {
     }
 
     &.blue {
-        border-top-color: #0091ff;
+        border-top-color: $primaryHighlightColor;
     }
 
     &.in-portlet {
@@ -658,19 +678,6 @@ h3 {
     }
 }
 
-h4 {
-    font-size: 15px;
-    line-height: 22px;
-    padding-bottom: 17px;
-}
-
-h5 {
-    font-size: 11px;
-    line-height: 42px;
-    text-transform: uppercase;
-    padding-bottom: 10px;
-}
-
 .tc-title {
     border-style: solid;
     border-top-width: 5px;
@@ -683,15 +690,15 @@ h5 {
 }
 
 .tc-content {
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
-    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColor;
+    border-left: 1px solid $borderColor;
     padding: 10px;
 }
 
 .textcontainer {
     .blue {
-        border-top-color: #0091ff;
+        border-top-color: $primaryHighlightColor;
         background-color: #cce9ff;
     }
 
@@ -721,10 +728,10 @@ h5 {
         margin-left: 0;
         padding-left: 10px;
         text-indent: -10px;
-        color: #0091ff;
+        color: $primaryHighlightColor;
 
         a {
-            color: #3c3c3c;
+            color: $baseTextColor;
             text-decoration: none;
         }
 
@@ -734,7 +741,7 @@ h5 {
     }
 }
 
-/* ? */
+// ?
 .footer-column {
     ul {
         font-size: 13px;
@@ -744,37 +751,41 @@ h5 {
         margin-left: 0;
         padding-left: 10px;
         text-indent: -10px;
-        color: #0091ff;
+        color: $primaryHighlightColor;
 
         &.no-bullet {
             padding-left: 0;
             text-indent: 0;
-            color: #3c3c3c;
+            color: $baseTextColor;
 
-            li:before {
-                content: "";
+            li {
+                &:before {
+                    content: "";
+                }
             }
         }
 
         a {
-            color: #3c3c3c;
+            color: $baseTextColor;
             text-decoration: none;
         }
 
-        li:before {
-            content: "\00BB\0020";
+        li {
+            &:before {
+                content: "\00BB\0020";
+            }
         }
     }
 }
 
 table {
-    /* Cells should have 10px of vertical padding so we reach 28px in total */
+    // Cells should have 10px of vertical padding so we reach 28px in total
     @include normal-font(12px);
 
     margin: 0 0 20px 0;
     width: 100%;
     border-collapse: collapse;
-    border-top: 1px solid #3c3c3c;
+    border-top: 1px solid $baseTextColor;
 
     &.table-simple, &.mmlTable {
         border-top: 0px;
@@ -801,7 +812,7 @@ table {
     td {
         padding: 8px 0 7px 0;
         text-align: center;
-        border-bottom: 1px solid #e6e6e6;
+        border-bottom: 1px solid $borderColor;
     }
 
     th, thead td {
@@ -813,8 +824,10 @@ table {
             border-bottom: none;
         }
 
-        td:first-child {
-            text-align: left;
+        td {
+            &:first-child {
+                text-align: left;
+            }
         }
     }
 }
@@ -828,11 +841,11 @@ table {
         padding: 10px 20px;
 
         &:first-child {
-            border-left: 1px solid #e6e6e6;
+            border-left: 1px solid $borderColor;
         }
 
         &:last-child {
-            border-right: 1px solid #e6e6e6;
+            border-right: 1px solid $borderColor;
         }
     }
 
@@ -842,7 +855,7 @@ table {
 
     tr {
         &:last-child td {
-            border-bottom: 1px solid #e6e6e6;
+            border-bottom: 1px solid $borderColor;
         }
 
         &:nth-child(odd) td {
@@ -851,11 +864,11 @@ table {
 
         td {
             &:first-child {
-                border-left: 1px solid #e6e6e6;
+                border-left: 1px solid $borderColor;
             }
 
             &:last-child {
-                border-right: 1px solid #e6e6e6;
+                border-right: 1px solid $borderColor;
             }
         }
     }
@@ -891,7 +904,7 @@ table {
 
 .code-block {
     margin: 10px 0;
-    border: 1px solid #e6e6e6;
+    border: 1px solid $borderColor;
 }
 
 .code-header, .code-content {
@@ -901,17 +914,17 @@ table {
 
 .code-header {
     background-color: #fff7d3;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid $borderColor;
 }
 
-/*Portal footer. TODO three different footers, clean this up...*/
+// Portal footer. TODO three different footers, clean this up...
 ul.footer-wrp {
-    border-top: 5px solid #e6e6e6;
+    border-top: 5px solid $borderColor;
     display: block;
     list-style: none;
-    color: #0091FF;
+    color: $primaryHighlightColor;
 
-    &:after {
+    &after {
         visibility: hidden;
         display: block;
         font-size: 0;
@@ -935,7 +948,7 @@ ul.footer-wrp {
 
     ul {
         list-style: none;
-        color: #0091FF;
+        color: $primaryHighlightColor;
     }
 
     li {
@@ -1003,6 +1016,17 @@ footer {
         clear: both;
         height: 0;
     }
+
+    .footer-list-wrp {
+        min-height: 10px;
+        width: 160px;
+        float: left;
+        margin: 0 0 0 20px;
+
+        &:first-child {
+            margin-left: 10px;
+        }
+    }
 }
 
 .footer .heading-wrp .inner-wrp {
@@ -1017,19 +1041,8 @@ footer {
     }
 }
 
-#footer .footer-list-wrp {
-    min-height: 10px;
-    width: 160px;
-    float: left;
-    margin: 0 0 0 20px;
-
-    &:first-child {
-        margin-left: 10px;
-    }
-}
-
-/* Forms */
-/* Used in the Oskari side as well */
+// Forms
+// Used in the Oskari side as well
 .button {
     display: inline-block;
     vertical-align: baseline;
@@ -1057,14 +1070,14 @@ footer {
 .whitebutton {
     color: #454545;
     border: solid 1px #b7b7b7;
-    text-shadow: -1px -1px 1px rgba(255, 255, 255, 1);
+    text-shadow: -1px -1px 1px white;
     background: #fefefe;
 
     @include background-gradient(#FEFEFE, #E3E3E3);
 
     &:hover {
         color: #454545;
-        background: #fff;
+        background: $lightTextColor;
 
         @include background-gradient(#FEFEFE, #D9D9D9);
     }
@@ -1079,7 +1092,7 @@ footer {
 }
 
 .bluebutton {
-    color: #fff;
+    color: $lightTextColor;
     border: solid 1px #2670b5;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
     background: #3996ed;
@@ -1087,7 +1100,7 @@ footer {
     @include background-gradient(#3A97EE, #217AD4);
 
     &:hover {
-        color: #fff;
+        color: $lightTextColor;
 
         @include background-gradient(#59ABF8, #2B8DF0);
     }
@@ -1100,12 +1113,27 @@ footer {
     }
 }
 
-input[type=email], input[type=number], input[type=tel], input[type=text], input[type=password], input[type=search], input[type=url], textarea {
+input[type=email], input[type=number], input[type=tel], input[type=text], input[type=password], input[type=search], input[type=url] {
     @include border-radius(4px);
 
     border: solid 1px #b7b7b7;
 
     @include box-shadow(inset 3px 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+textarea {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    border: solid 1px #b7b7b7;
+    -webkit-box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .clearbutton {
@@ -1128,7 +1156,7 @@ select {
     @include background-gradient(#FEFEFE, #E3E3E3);
 }
 
-/* Common helper classes */
+// Common helper classes
 .floatleft {
     float: left;
 }
@@ -1157,7 +1185,7 @@ select {
     margin: 0;
 }
 
-/* Contain floats: nicola"sgallagher.com/micro-clearfix-hack/ */
+// Contain floats: nicola"sgallagher.com/micro-clearfix-hack/
 .clearfix {
     zoom: 1;
 
@@ -1171,8 +1199,8 @@ select {
     }
 }
 
-/*liferay admin tools*/
-/*tpl-templates*/
+// liferay admin tools
+// tpl-templates
 .aui-dd-drop-active-valid {
     background: gray;
 }
@@ -1213,7 +1241,7 @@ select {
     padding-left: 0px;
 }
 
-/*drop-zones*/
+// drop-zones
 .portlet {
     margin: 0 0 15px;
 }
@@ -1222,7 +1250,7 @@ select {
     margin-bottom: 20px;
 }
 
-/* Portal menu 'toggle' (i.e. the yellow bar on the left of the oskari menu) */
+// Portal menu 'toggle' (i.e. the yellow bar on the left of the oskari menu)
 .sidebar-toggle {
     background-color: #FFDE00;
     height: 100%;
@@ -1231,4 +1259,15 @@ select {
     top: 0;
     width: 200px;
     z-index: 3;
+}
+
+#contentMap {
+    margin-left: 170px !important;
+}
+
+#maptools {
+    width: 170px !important;
+    height: 100% !important;
+    overflow: auto;
+    position: fixed !important;
 }
