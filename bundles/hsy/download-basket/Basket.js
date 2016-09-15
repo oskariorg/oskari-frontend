@@ -34,8 +34,8 @@ Oskari.clazz.define(
                 '</form>'
             )
         };
-        
-    },{ 
+
+    },{
         startBasket: function(){
             this.setContent(this.createUi());
         },
@@ -47,7 +47,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this;
-            
+
             //Wrapper
             me._templates.basketWrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
             me._templates.main.append(me._templates.basketWrapper);
@@ -76,7 +76,7 @@ Oskari.clazz.define(
                 me.instance.addBasketNotify();
             });
             empty.insertTo(me._templates.basketButtons);
-            
+
             var prev = Oskari.clazz.create('Oskari.userinterface.component.Button');
             prev.addClass('primary prev');
             prev.setTitle(me._getLocalization('basket-prev'));
@@ -86,7 +86,7 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-wrapper').show();
                 jQuery('.oskari__download-basket-buttons').find('input.prev').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.send').hide();
-                jQuery('.oskari__download-basket-user-info').hide(); 
+                jQuery('.oskari__download-basket-user-info').hide();
             });
             prev.insertTo(me._templates.basketButtons);
 
@@ -99,7 +99,7 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-wrapper').hide();
                 jQuery('.oskari__download-basket-buttons').find('input.prev').show();
                 jQuery('.oskari__download-basket-buttons').find('input.send').show();
-                jQuery('.oskari__download-basket-user-info').show(); 
+                jQuery('.oskari__download-basket-user-info').show();
             });
             next.insertTo(me._templates.basketButtons);
 
@@ -145,19 +145,19 @@ Oskari.clazz.define(
                 };
 
                 downloadDetails.push(details);
-            
+
             });
             var strDownloadDetails = JSON.stringify(downloadDetails);
-            
-            var userDetails = {     
-                    email: jQuery('.oskari__download-basket-user-info').find('input.email').val() 
+
+            var userDetails = {
+                    email: jQuery('.oskari__download-basket-user-info').find('input.email').val()
             };
             var strUserDetails = JSON.stringify(userDetails);
-            
-            var ajaxUrl = me._sandbox.getAjaxUrl(); 
-            
+
+            var ajaxUrl = me._sandbox.getAjaxUrl();
+
             jQuery.ajax({
-                beforeSend : function(x) {              
+                beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/json;charset=UTF-8");
                     }
@@ -183,7 +183,7 @@ Oskari.clazz.define(
                             me._getLocalization('error-in-downloading')
                         );
                     }
-                    
+
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
@@ -202,7 +202,7 @@ Oskari.clazz.define(
                 dataType : 'json',
                 url : ajaxUrl + 'action_route=DownloadAll'
             });
-            
+
         },
 
         /**

@@ -24,7 +24,7 @@ Oskari.clazz.define(
             helptemplate: jQuery('<div class="oskari__download-basket-help"><p></p></div>'),
             tempbasket: jQuery('<div class="oskari__download-basket-temp-basket"><p></p></div>')
         };
-       
+
     },{
         startCropping: function(){
              this.setContent(this.createUi());
@@ -108,10 +108,10 @@ Oskari.clazz.define(
 
                 croppingBtn.insertTo(me._templates.buttons);
             });
-            
+
             me._templates.buttons.find('p').text(me._getLocalization('choose-cropping-mode'));
             me._templates.main.append(me._templates.buttons);
-            
+
             //Help text
             me._templates.main.append(me._templates.helptemplate);
             me._templates.helptemplate.find('p').text(me._getLocalization('choose-wanted-areas-from-map'));
@@ -146,7 +146,7 @@ Oskari.clazz.define(
 
             me._templates.main.append(me._templates.tempbasket);
             me._templates.tempbasket.hide();
-            
+
             //Create vector layer for  user selections
             if(me.croppingVectorLayer === null){
                 me.createCroppingVectorLayer();
@@ -163,7 +163,7 @@ Oskari.clazz.define(
             reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
 
             if (reqBuilder) {
-                var request = reqBuilder(state); 
+                var request = reqBuilder(state);
                 me._sandbox.request(me.instance, request);
             }
         },
@@ -177,7 +177,7 @@ Oskari.clazz.define(
             reqBuilder = me._sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
 
             if (reqBuilder) {
-                var request = reqBuilder(state); 
+                var request = reqBuilder(state);
                 me._sandbox.request(me.instance, request);
             }
         },
@@ -218,7 +218,7 @@ Oskari.clazz.define(
                                 irregular: true
                             }
             });
-            
+
             _map.addControl(me.reqularControl);
 
         },
@@ -238,11 +238,11 @@ Oskari.clazz.define(
                 return n;
               }
             });
-            
+
             //Rect cropping mode
             var regular = {
                 name : me._getLocalization('rect-cropping'),
-                rect : true, 
+                rect : true,
                 getName: function(){
                     return this.name;
                 },
@@ -261,7 +261,21 @@ Oskari.clazz.define(
 
             return croppingLayers;
         },
-
+        /**
+         * [getUrlParams find parameters by name]
+         * @param  {[String]} uri       [uri for search]
+         * @param  {[String]} paramName [parameters name]
+         * @return {[String]}           [right parameter value]
+         */
+        getUrlParams: function(uri, paramName){
+            var me = this;
+            var queryString = {};
+            uri.replace(
+                new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+                function($0, $1, $2, $3) { queryString[$1] = $3; }
+            );
+            return  queryString[paramName];
+        },
         /**
          * [croppingLayersHighlight Highlights clicked cropping area/areas]
          * @param  {[string]} x      [Clicked on map X]
@@ -278,9 +292,11 @@ Oskari.clazz.define(
             layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
             layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
             layerName = jQuery('.cropping-btn.selected').data('layerName'),
-            layerUrl = jQuery('.cropping-btn.selected').data('layerUrl'),
+            layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'),'id'),
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
             layerNameLang = jQuery('.cropping-btn.selected').val();
+
+            console.info();
 
             jQuery.ajax({
                 type: "POST",
@@ -348,7 +364,7 @@ Oskari.clazz.define(
          */
         disableAllCroppingLayers: function(map){
             var me = this;
-            
+
              var layer = map.getLayersByName("download-basket-cropping-layer");
              if(layer.length > 0){
                  map.removeLayer(layer[0]);
@@ -513,7 +529,7 @@ Oskari.clazz.define(
                 jQuery.each( croppedAreaFeatures, function( feature_key, feature_value ) {
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = layer_value.getLayerUrl();
+                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id');
                     basketObject.cropLayerName = feature_value.attributes.layerName;
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;
@@ -576,7 +592,7 @@ Oskari.clazz.define(
 
                 componentClone.attr("data-identifiers", JSON.stringify(identifiers));
 
-                componentClone.find('.download-basket__component-layer-name').text(basketObject.layerNameLang); 
+                componentClone.find('.download-basket__component-layer-name').text(basketObject.layerNameLang);
                 componentClone.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
                 componentClone.find('.basket__content-cropping>span').text(basketObject.cropLayerNameLang);
 
@@ -626,14 +642,14 @@ Oskari.clazz.define(
                 //for WFS layer
                /* if(!layer.isFeatureInfoEnabled()) {
                     continue;
-                }   */        
+                }   */
                 if(!layer.isVisible()) {
                     continue;
                 }
                 if(layer._type=='BASE_LAYER'){
                     continue;
                 }
-                
+
                 if(layer._layerType=='WMTS'){
                     continue;
                 }
