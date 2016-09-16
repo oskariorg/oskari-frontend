@@ -6,6 +6,10 @@
 
 ``IE9`` will not be a supported browser anymore.
 
+### metadatacatalogue 
+
+Updated the functionality of the "Limit the search area on the map" button. 
+
 ### RPC - new request available
 
 ``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
