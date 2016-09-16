@@ -30,11 +30,41 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             if(!arguments.length) {
                 return;
             }
+
+
             this.chart = c3.generate({
                 bindto: "#chart1",
                 data: {
                     columns: data,
-                    type:'bar'
+                    type:'bar',
+                    onclick: function (d, element) {
+                        //give the id and index of the latest data set.
+
+                        console.log("onclick latest data", element);
+                    },
+                    onmouseover: function (d) {
+
+                        //var k = ".c3-shape-" + d.index;
+                        //make the bar red
+                        //d3.selectAll(k).style("fill", "red");
+                        //event.stopPropagation();
+                        console.log("onmouseover latest data d", d);
+
+                        //make all teh bar opacity 0.1
+                        d3.selectAll(".c3-shape").style("opacity", 0.5);
+                        var k = ".c3-shape-" + d.index;
+                        //make the clicked bar opacity 1
+                        d3.selectAll(k).style("opacity", 1)
+                        event.stopPropagation()
+
+                        },
+                    onmouseout: function (d) {
+                        d3.selectAll(".c3-shape").style("opacity", 1);
+
+                        //var k = ".c3-shape-" + d.index;
+                        //make the clicked bar opacity
+                        //d3.selectAll(k).style("fill",'#1f77b4');
+                        console.log("onmouseout latest data", d); },
                 },
                 grid: {
                     x: {
@@ -78,6 +108,14 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 data: {
                     columns: data,
                     type:'line'
+                },
+                grid: {
+                    x: {
+                        show: true
+                    }
+                },
+                subchart: {
+                    show: true
 
                 },
                 size: {
@@ -90,8 +128,20 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 axis : {
                     x : {
                         type : 'category',
-                        categories : regions
+                        categories : regions,
+                        tick: {
+
+                            multiline: false,
+                            culling: {
+                                max: 5 // the number of tick texts will be adjusted to less than this value
+                            }
+                        },
+
                     }
+                },
+                subchart: {
+                    show: true,
+
                 }
             });
             this.chart = c3.generate({
@@ -99,7 +149,11 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 data: {
                     columns: data,
                     type:'scatter'
-
+                },
+                grid: {
+                    x: {
+                        show: true
+                    }
                 },
                 size: {
                     height: 400,
@@ -111,9 +165,18 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 axis : {
                     x : {
                         type : 'category',
-                        categories : regions
+                        categories : regions,
+                        tick: {
+
+                            multiline: false,
+                            culling: {
+                                max: 5 // the number of tick texts will be adjusted to less than this value
+                            }
+                        },
+
                     }
-                }
+                },
+                
             });
         },
         /*
@@ -150,6 +213,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
     ]
 }
          */
+        
         showChart : function(data) {
             var list = data.indicators;
             if(!list.length) {
@@ -164,7 +228,16 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             var sortedRegions = [];
             var sortedValues = {};
             list.forEach(function(ind) {
-                sortedValues[ind.hash] = [ind.name + ' ' + JSON.stringify(ind.selections)];
+                //This is for readable selectors like year:1994 sex: male
+                var txt = "";
+                var sel = ind.selections;
+                var x;
+                for (x in sel) {
+                    if (sel.hasOwnProperty(x)) {
+                        txt += x +": " + sel[x] + " ";
+                    }
+                }
+                sortedValues[ind.hash] = [ind.name + ' ' + txt];
             });
 
             itemsToSort.forEach(function(item) {
@@ -178,13 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             for(var hash in sortedValues) {
                 values.push(me.sanitize(sortedValues[hash]));
             }
-
-            /*
-            // maybe save reference to latest data shown on chart
-            this.latestData = itemsToSort;
-            // so we can map an c3 event.index of hover/click to region id
-            this.latestData[event.index].regionId
-*/
+            
 
             this.initChart(sortedRegions, values);
 
@@ -229,9 +296,12 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 sortedValues.push(item.value);
             });
 
+
+
             /*
             // maybe save reference to latest data shown on chart
             this.latestData = itemsToSort;
+            Answer:It is now done on mouse events. In each mouse events it logs  the data to console so it can be used.
             // so we can map an c3 event.index of hover/click to region id
             this.latestData[event.index].regionId
 */
@@ -240,7 +310,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
         },
 
         removeChart: function() {
-            this.chart = this.chart.destroy();
+            //this.chart = this.chart.destroy();
+            //Maybe i can find better way on close
             this.chart = null;
         }
     });

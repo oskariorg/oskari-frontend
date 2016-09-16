@@ -175,7 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart2Tab',
         },
 
         removeChart: function() {
-            this.chart = this.chart.destroy();
             this.chart = null;
         }
     });
