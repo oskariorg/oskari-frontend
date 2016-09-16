@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorList = jQuery('<ul/>', {});
         this.templateColumnSelectorListItem = jQuery('<li>' +
             '<div>' +
-            '<input type="checkbox"/>' +
+            '<input type="checkbox" class="oskari-divmanazer-component-grid"/>' +
             '<label></label>' +
             '</div>' +
             '</li>'
@@ -42,6 +42,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorClose = jQuery(
             '<div class="icon-close close-selector-button"></div>'
         );
+        this.templateTool = jQuery('<div></div>');
         this.dataSource = null;
         this.metadataLink = null;
         this.exportButton = null;
@@ -55,12 +56,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showExcelExporter = false;
         this.resizableColumns = false;
         this.uiNames = {};
+        this.columnTools = {};
         this.valueRenderer = {};
 
         /* last sort parameters are saved so we can change sort direction if the
          * same column is sorted again
          */
         this.lastSort = null;
+        Oskari.makeObservable(this);
     }, {
         /**
          * @method setDataModel
@@ -152,6 +155,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setColumnUIName: function (fieldName, uiName) {
             this.uiNames[fieldName] = uiName;
+        },
+        /**
+         * @method setColumnTools
+         * Sets tools that should be shown on column
+         *
+         * @param {String} fieldName field name we want to replace in UI
+         * @param {Object[]} listOfTools tools that should be rendered for the column
+         */
+        setColumnTools: function (fieldName, listOfTools) {
+            this.columnTools[fieldName] = listOfTools;
         },
         /**
          * @method setColumnValueRenderer
@@ -399,6 +412,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // header reference needs some closure magic to work here
             headerClosureMagic = function (scopedValue) {
                 return function () {
+                    me.trigger('column.selected', scopedValue);
                     // reference to sort link element
                     var linky = jQuery(this),
                         // get previous selection
@@ -430,6 +444,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     for (j = 0; j < selection.length; j += 1) {
                         me.select(selection[j][idField], true);
                     }
+                    me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
                     return false;
                 };
             };
@@ -497,6 +515,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
+                var tools = this.columnTools[baseKey] || [];
                 if (!uiName) {
                     uiName = fieldName;
                 } else if (fieldName !== fullFieldNames[i][key]) {
@@ -513,6 +532,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                    me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
                 } else if (fullFieldNames[i].type === 'object') {
                     if (dataArray.length > 2) {
                         header.addClass('closedSubTable');
@@ -545,11 +565,51 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     header.addClass('hidden');
                 }
 
-                header.addClass(fullFieldNames[i].baseKey);
+                header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
+                if(me.__selectedColumn === fullFieldNames[i].baseKey) {
+                    header.addClass('selected');
+                }
                 header.data('key', fullFieldNames[i].baseKey);
                 header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
+        },
+        /**
+         * Format value to usable css class.
+         * @param  {String} value column field name
+         * @return {String}       value with problematic characters removed/replaced
+         */
+        __getHeaderClass : function(value) {
+            if(!value) {
+                return value;
+            }
+            // replace " with empty string so html doesn't break
+            var result = value.split("\"").join("");
+            result = result.split(":").join("");
+            result = result.split(",").join("_");
+            result = result.split(".").join("_");
+            result = result.split("{").join("_");
+            result = result.split("}").join("_");
+            return result;
+        },
+        /**
+         * Adds any tools the user might have configured to the column header
+         * @param  {jQuery} header container to add to
+         * @param  {Object[]} tools  array of items with name and callback
+         * @param  {String} field  column name for the callback parameter
+         */
+        __attachHeaderTools : function(header, tools, field) {
+            var me = this;
+            tools.forEach(function(tool) {
+                var tpl = me.templateTool.clone();
+                tpl.append(tool.name);
+                if(tool.callback) {
+                    tpl.on('click', function() {
+                        tool.callback(field);
+                    });
+                }
+                header.append(tpl);
+            });
         },
 
         /**
@@ -648,7 +708,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
-            jQuery('input.column-selector-list-item').remove();
+            // FIXME check this how can be more spefied selctor?
+            jQuery('input.oskari-divmanazer-component-grid').remove();
             // Open or close the checkbox dropdown list
             me.visibleColumnSelector.click(function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
@@ -1080,6 +1141,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             return selection;
         },
         /**
+         * @method selectColumn
+         * Sets "selected" class to the column header
+         * @param {String} value id for the column to be selected
+         */
+        selectColumn: function (value) {
+            // remove selection from headers
+            this.table.find('th').removeClass('selected');
+            // add selection to the one specified
+            this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
+            this.__selectedColumn = value;
+        },
+        /**
          * @method getTable
          * Returns the grid table.
          *
@@ -1270,6 +1343,54 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data = String(data);
             }
             return data;
+        },
+        //http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+        contentScroll : function(follow) {
+            var me = this;
+            if(this.__scrollSortFunc) {
+                this.off('sort', this.__scrollSortFunc);
+                this.__scrollSortFunc = null;
+            }
+            this.__scrollSortFunc = function() {
+                me.contentScroll(follow);
+            };
+            this.on('sort', this.__scrollSortFunc);
+            this.table.find('thead').css('display', 'block');
+            this.table.find('tbody').css({
+                'display' : 'block',
+                'overflow' : 'auto'
+            });
+            var dataCells = this.table.find('tbody tr:first').children();
+            this.table.find('thead tr').children().each(function(i, header) {
+                jQuery(header).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            dataCells.each(function(i, cell) {
+                jQuery(cell).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            var headerHeight = this.table.find('thead').height();
+            var pixelsFromTop = me.table[0].getBoundingClientRect().top;
+            var setHeight = function(force) {
+                var newTop = me.table[0].getBoundingClientRect().top;
+                if(!force && pixelsFromTop === newTop) {
+                    return;
+                }
+                pixelsFromTop = newTop;
+                var parentHeight = me.table.parent().parent().height();
+                me.table.find('tbody').height((parentHeight-headerHeight-pixelsFromTop) + 'px');
+            }
+            setHeight(true);
+            if(follow === true) {
+                clearInterval(this.sizeInterval);
+                this.sizeInterval = setInterval(setHeight, 1000);
+            }
         }
     }
 );

@@ -140,11 +140,15 @@ Oskari.clazz.define(
                 p;
 
             this.sandbox = sandbox;
-
+            this.mapmodule = this.sandbox.findRegisteredModuleInstance("MainMapModule");
             /* loader */
             this.loader = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader',
-                sandbox.getAjaxUrl()
+                {
+                    baseUrl: sandbox.getAjaxUrl(),
+                    srs: me.mapmodule.getProjection()
+
+                }
             );
 
             sandbox.register(this);
@@ -350,50 +354,6 @@ Oskari.clazz.define(
                 'userinterface.UpdateExtensionRequest', [this, 'detach']
             );
         },
-
-        /**
-         *  @method showExtentOnMap
-         */
-        showExtentOnMap: function (uuid, env, atts) {
-            var me = this,
-                sandbox = me.getSandbox();
-            if (!env) {
-                return;
-            }
-
-            var feats = [],
-                n,
-                vals,
-                e,
-                ep,
-                ef;
-
-            for (n = 0; n < env.length; n += 1) {
-                vals = env[n];
-                e = new OpenLayers.Bounds(
-                    vals.westBoundLongitude,
-                    vals.southBoundLatitude,
-                    vals.eastBoundLongitude,
-                    vals.northBoundLatitude
-                );
-                ep = e.toGeometry();
-                ef = new OpenLayers.Feature.Vector(ep);
-                ef.attributes = atts || ef.attributes;
-                feats.push(ef);
-            }
-
-            var evt = sandbox.getEventBuilder('FeaturesAvailableEvent')(
-                me.layer,
-                feats,
-                'application/nlsfi-x-openlayers-feature',
-                Oskari.getSandbox().getMap().getSrsName(),
-                //"EPSG:3067",
-                'replace'
-            );
-
-            me.sandbox.notifyAll(evt);
-        },
-
         /**
          * @method setState
          * @param {Object} state bundle state as JSON

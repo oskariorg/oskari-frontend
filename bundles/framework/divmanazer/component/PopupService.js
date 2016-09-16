@@ -17,7 +17,7 @@ Oskari.clazz.define(
     function (sandbox) {
         var me = this,
             p;
-        
+
         me.popups = [];
 
         me.sandbox = sandbox;
@@ -87,7 +87,7 @@ Oskari.clazz.define(
                 //add the popup to bookkeeping
                 me.popups.push(popup);
             });
-            
+
             popup.onClose(function() {
                 var found = false,
                     i;
@@ -98,7 +98,7 @@ Oskari.clazz.define(
                         break;
                     }
                 }
-                
+
                 if (found) {
                     me.popups[i].clearListeners();
                     me.popups.splice(i, 1);
@@ -113,7 +113,6 @@ Oskari.clazz.define(
          * @param {bool} closeFlyouts Optional. If provided, closes all open flyouts as well.
          */
         closeAllPopups: function(closeFlyouts) {
-            var me = this;
             _.each(this.popups, function(popup) {
                 //publisher toolbar seems to need this for the tools to stay intact...
                 popup.getJqueryContent().detach();

@@ -741,7 +741,7 @@ Oskari.clazz.define(
          */
         toggleParentFlyout: function(optionPanel, searchResultWindow, mapDiv){
             var me = this;
-            var menuBtn = jQuery('#oskari_search_tile_title').parent();
+            var menuBtn = jQuery('.search').parent();
             if(optionPanel.parents('.oskari-flyout').is(':visible')){
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-attached').addClass('oskari-closed');
                 menuBtn.removeClass('oskari-tile-attached"').addClass('oskari-tile-closed');

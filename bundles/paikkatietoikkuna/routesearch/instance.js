@@ -9,6 +9,9 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance',
     function () {},
     {
+        afterStart: function(sandbox){
+
+        },
         /**
          * @method getName
          * @return {String} the name for the component

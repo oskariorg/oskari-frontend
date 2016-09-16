@@ -55,7 +55,6 @@ Oskari.clazz.define(
             // loop all layers and add these on the map
             for (var i = 0, ilen = layers.length; i < ilen; i++) {
                 var _layer = layers[i];
-                var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
                 var defaultParams = {
                         'LAYERS': _layer.getLayerName(),
                         'TRANSPARENT': true,
@@ -135,7 +134,97 @@ Oskari.clazz.define(
                     styles : layer.getCurrentStyle().getName()
                 });
             });
-        }
+        },
+        updateLayerParams: function(layer, forced, params) {
+            var me = this,
+            	sandbox = this.getSandbox(),
+            	i,
+            	olLayerList,
+                count,
+                usePostMethod = false,
+                count = 0,
+                proxyUrl = null;
+            if (!layer) {
+                return;
+            }
+
+            if (params && layer.isLayerOfType("WMS")) {
+                olLayerList = this.mapModule.getOLMapLayers(layer.getId());
+
+                if (olLayerList) {
+                    count = olLayerList.length;
+                    for (i = 0; i < count; i++) {
+                    		var layerSource = olLayerList[i].getSource();
+                    		//TileWMS -> original is ol.source.TileWMS.getTileLoadFunction
+                    		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
+                    			var originalTileLoadFunction = new ol.source.TileWMS().getTileLoadFunction();
+								layerSource.setTileLoadFunction(function(image, src) {
+									if (src.length >= 2048) {
+										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
+										me._imagePostFunction(image, src, proxyUrl);	
+									} else {
+										originalTileLoadFunction.apply(this, arguments);
+									}
+								});
+                    		} 
+                    		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
+                    		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
+                    			var originalImageLoadFunction = new ol.source.ImageWMS().getImageLoadFunction();
+								layerSource.setImageLoadFunction(function(image, src) {
+									if (src.length >= 2048) {
+										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
+										me._imagePostFunction(image, src, proxyUrl);	
+									} else {
+										originalImageLoadFunction.apply(this, arguments);
+									}
+								});
+                    		}
+                        olLayerList[i].getSource().updateParams(params);
+                    }
+                }
+            } 
+        },
+        /**
+         * @method @private _imagePostFunction
+         * Issue a POST request to load a tile's source
+         *
+         * http://gis.stackexchange.com/questions/175057/openlayers-3-wms-styling-using-sld-body-and-post-request
+         */
+		_imagePostFunction: function(image, src, proxyUrl) {
+			var img = image.getImage();
+			if (typeof window.btoa === 'function') {
+				var xhr = new XMLHttpRequest();
+			  	//GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
+			  	var dataEntries = src.split("&");
+			  	var params = "";
+			  	//i === 0 -> the actual url, skip. Everything after that is params.
+			  	for (var i = 1 ; i< dataEntries.length ; i++){
+			    	params = params + "&"+dataEntries[i];
+			  	}
+			 	xhr.open('POST', proxyUrl, true);
+
+			  	xhr.responseType = 'arraybuffer';
+			  	xhr.onload = function(e) {
+		    		if (this.status === 200) {
+						var uInt8Array = new Uint8Array(this.response);
+						var i = uInt8Array.length;
+						var binaryString = new Array(i);
+						while (i--) {
+							binaryString[i] = String.fromCharCode(uInt8Array[i]);
+						}
+						var data = binaryString.join('');
+						var type = xhr.getResponseHeader('content-type');
+						if (type.indexOf('image') === 0) {
+							img.src = 'data:' + type + ';base64,' + window.btoa(data);
+						}
+					}
+				};
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.send(params);
+			} else {
+			  img.src = src;
+			}
+		}
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

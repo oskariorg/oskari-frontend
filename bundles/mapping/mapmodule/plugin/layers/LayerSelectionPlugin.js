@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 },
                 MapSizeChangedEvent: function (evt) {
                     this._handleMapSizeChanged({width:evt.getWidth(), height:evt.getHeight()});
-                },
+                }
             };
         },
         _handleMapSizeChanged: function(size, isMobile){
@@ -252,6 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 layersDiv.parent().find('.layerHeader').remove();
                 layersDiv.before(header);
             }
+            me.sortLayers();
         },
 
         /**
@@ -488,7 +489,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * Note that baselayers are in alphabetical order as their order is
          * changed every time the active one is changed.
          */
-        sortLayers: function () {
+        sortLayers: function (forced) {
+            if(!this.layerContent) {
+                // not on screen yet
+                return;
+            }
+            var me = this;
+            if(!forced) {
+                // this is called multiple times in sequence.
+                // just do it once after calls have stopped for a while
+                clearTimeout(this._sortTimer);
+                this._sortTimer = setTimeout(function() {
+                    me.sortLayers(true);
+                }, 500);
+                return;
+            }
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 selectedBaseLayers = [],
                 layersDiv = this.layerContent.find('div.layers'),

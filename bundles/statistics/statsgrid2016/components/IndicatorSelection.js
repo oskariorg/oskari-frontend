@@ -49,7 +49,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(s
 		var me = this;
 		select.trigger('chosen:close');
 		var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-        spinner.insertTo(select);
+		// selects parent is the label tag, labels parent is the div containing label + dropdown
+        spinner.insertTo(select.parent().parent());
         spinner.start();
 		this.service.getIndicatorList(datasrc, function(err, indicators) {
 			if(err) {

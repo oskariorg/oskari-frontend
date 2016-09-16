@@ -148,17 +148,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             addMarkerBtn.setTitle(loc.popup.addMarkerButton);
 
             addMarkerBtn.setHandler(function() {
-                data = me._getInputsData();
+                var data = me._getInputsData();
+                var markerData = me._getInputsData();
 
-                 if(!me._getPreciseTransform) {
-                    me._addMarker(data);
+                var lon = me._lonInput.val(),
+                    lat = me._latInput.val();
+                var msg = null;
+                if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                    msg = {
+                        lat: lat,
+                        lon: lon
+                    };
+                }
+
+                if(!me._getPreciseTransform) {
+                    me._addMarker(data, msg);
                     me._centerMapToSelectedCoordinates(data);
                 } else {
                     if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
-                        me._addMarker(data);
+                        me._addMarker(data, msg);
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._getTransformedCoordinatesFromServer(data, true, false, true);
+                        me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
                     }
                 }
 
@@ -253,18 +264,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * Add marker according to the coordinates given in coordinate popup.
          * @method  @private _addMarker
          */
-        _addMarker: function(data){
+        _addMarker: function(data, messageData){
             var me = this,
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
-                lat = parseFloat(me._latInput.val()),
-                lon = parseFloat(me._lonInput.val());
+                inputData = me._getInputsData(),
+                lat = parseFloat(inputData.lonlat.lat),
+                lon = parseFloat(inputData.lonlat.lon);
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
                 lat = lat.toFixed(0);
                 lon = lon.toFixed(0);
             }
             if(reqBuilder) {
-                var msg = lat + ', ' + lon;
+                var msgLon = (messageData && messageData.lon) ? messageData.lon : lon;
+                var msgLat = (messageData && messageData.lat) ? messageData.lat : lat;
+                var msg = msgLat + ', ' + msgLon;
                 if(me._config.supportedProjections) {
                     msg += ' (' + jQuery("#projection option:selected" ).text() + ')';
                 }
@@ -321,14 +335,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param  {Object} data       data
          * @param  {Boolean} showMarker show marker
          */
-        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap){
+        _getTransformedCoordinatesFromServer: function(data, showMarker, swapProjections, centerMap, markerMessageData){
             var me = this,
                 loc = me._locale,
                 fromProj = me._projectionSelect.val(),
                 toProj = me._mapmodule.getProjection(),
                 successCb = function(data) {
                     if(showMarker) {
-                        me._addMarker(data);
+                        me._addMarker(data, markerMessageData);
                     }
 
                     if(showMarker || centerMap) {
@@ -336,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
 
                     if(!centerMap) {
-                        me._updateLonLat(data);
+                        me._updateLonLat(data, true);
                     }
                     me._progressSpinner.stop();
                 },
@@ -474,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         hasUI: function() {
-            return this._config.noUI ? false : true; 
+            return this._config.noUI ? false : true;
         },
 
         /**
@@ -485,30 +499,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _updateLonLat: function(data){
             var me = this,
-                conf = me._config,
-                roundToDecimals = 0;
+                conf = me._config;
 
-            if(conf && conf.roundToDecimals) {
-                roundToDecimals = conf.roundToDecimals;
-            }
             if (me._latInput && me._lonInput) {
                 var isSupported = (conf && _.isArray(conf.supportedProjections)) ? true : false;
                 var isDifferentProjection = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() && data.lonlat.lat!=0 && data.lonlat.lon!=0) ? true : false;
+                var lat = parseFloat(data.lonlat.lat);
+                var lon = parseFloat(data.lonlat.lon);
 
-                var lat = parseFloat(data.lonlat.lat).toFixed(roundToDecimals);
-                var lon = parseFloat(data.lonlat.lon).toFixed(roundToDecimals);
-                lat = me.formatNumber(lat, me._decimalSeparator);
-                lon = me.formatNumber(lon, me._decimalSeparator);
+                lat = lat + '';
+                lon = lon + '';
+                if(lat.indexOf('~') === 0) {
+                    lat = lat.substring(1, lat.length);
+                }
+                lat = lat.replace(/,/g,'.');
+                if(lon.indexOf('~') === 0) {
+                    lon = lon.substring(1, lat.length);
+                }
+                lon = lon.replace(/,/g,'.');
 
-                // from server
+                lat = lat + '';
+                lon = lon + '';
+                if(lat.indexOf('~') === 0) {
+                    lat = lat.substring(1, lat.length);
+                }
+                lat = lat.replace(/,/g,'.');
+                if(lon.indexOf('~') === 0) {
+                    lon = lon.substring(1, lat.length);
+                }
+                lon = lon.replace(/,/g,'.');
+
+                // Need to show degrees ?
+                if(me._allowDegrees()) {
+                    var degreePoint = Oskari.util.coordinateMetricToDegrees([lon,lat], me._getProjectionDecimals());
+                    lon = degreePoint[0];
+                    lat = degreePoint[1];
+                }
+                // Otherwise show meter units
+                else if(!isNaN(lat) && !isNaN(lon)) {
+                    lat = parseFloat(lat);
+                    lon = parseFloat(lon);
+                    lat = lat.toFixed(me._getProjectionDecimals());
+                    lon = lon.toFixed(me._getProjectionDecimals());
+                    lat = me.formatNumber(lat, me._decimalSeparator);
+                    lon = me.formatNumber(lon, me._decimalSeparator);
+                } else {
+                    return;
+                }
+
+                 // Not from server
                 if(isSupported && isDifferentProjection && !me._coordinateTransformationExtension._coordinatesFromServer) {
                     lat = '~' + lat;
                     lon = '~' + lon;
                 }
-                // not from server
+                // From server, change flag to false
                 else {
                     me._coordinateTransformationExtension._coordinatesFromServer = false;
                 }
+
                 me._latInput.val(lat);
                 me._lonInput.val(lon);
             }
@@ -546,13 +594,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if(jqXHR.status === 501) {
                         me._reverseGeocodeNotImplementedError = true;
                     }
-                    var messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    var messageJSON;
+                    try{
+                        messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                    } catch(err){}
                     var message = me._instance.getName() + ': Cannot reverse geocode';
                     if(messageJSON && messageJSON.error) {
                         message = me._instance.getName() + ': ' + messageJSON.error;
                     }
 
-                    me._sandbox.printWarn(message);
+                    Oskari.log(message);
                 },data.lonlat.lon, data.lonlat.lat);
 
         },
@@ -572,7 +623,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if(me._getPreciseTransform) {
                 try {
                     var changeToProjection = jQuery("#projection option:selected").val();
-                    data = me._coordinateTransformationExtension.transformCoordinates(data, me._previousProjection, changeToProjection);
+                    var fromProjection =  me.getMapModule().getProjection();
+                    if(me._projectionChanged) {
+                        fromProjection = me._previousProjection;
+                        me._projectionChanged = false;
+                    }
+                    data = me._coordinateTransformationExtension.transformCoordinates(data, fromProjection, changeToProjection);
                 } catch(error) {}
             }
             me._updateLonLat(data);
@@ -733,13 +789,70 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             el.addClass(styleClass);
         },
+        /**
+         * @method  @private _allowDegrees is degrees allowed to input fields
+         * @param {String] checkedProjection projection to checked
+         * @return {Boolean} is allowed
+         */
+        _allowDegrees: function(checkedProjection){
+            var me = this;
+
+            var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
+            var projection = checkedProjection || selectedProjection;
+            var conf = me._config;
+
+            var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format) ? true : false;
+            var isDegrees = (isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') ? true : false;
+
+            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.format === 'string') ? true : false;
+            if(!isProjectionShowConfig && isAllProjectionConfig) {
+                isDegrees = (conf.projectionShowFormat.format === 'degrees') ? true : false;
+            }
+            return isDegrees;
+        },
+        /**
+         * @method  @private _getProjectionDecimals Get projection decimals
+         * @param {String] checkedProjection projection to checked
+         * @return {Integer} decimals
+         */
+        _getProjectionDecimals: function(checkedProjection){
+            var me = this;
+            var conf = me._config;
+            var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
+            var projection = checkedProjection || selectedProjection;
+            var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number') ? true : false;
+            var decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : 0;
+            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number') ? true : false;
+
+            if(!isProjectionShowConfig && isAllProjectionConfig) {
+                decimals = conf.projectionShowFormat.decimals;
+            }
+            else if(!isProjectionShowConfig && conf.roundToDecimals) {
+                decimals = conf.roundToDecimals;
+                me.getSandbox().printWarn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
+                    'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
+            }
+            return decimals;
+        },
         _getInputsData: function() {
             var me = this;
+
             if(!me._lonInput || !me._latInput) {
                 return;
             }
             var lon = me._lonInput.val(),
                 lat = me._latInput.val();
+
+            if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
+                lon = dec[0];
+                lat = dec[1];
+            }
+            else if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
+                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
+                lon = dec[0];
+                lat = dec[1];
+            }
 
             lon = me.formatNumber(lon, '.');
             lat = me.formatNumber(lat, '.');
@@ -770,6 +883,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return data;
         },
         formatNumber: function(coordinate, decimalSeparator) {
+            if(typeof coordinate !== 'string') {
+                coordinate = coordinate + '';
+            }
             coordinate = coordinate.replace('.', decimalSeparator);
             coordinate = coordinate.replace(',', decimalSeparator);
             return coordinate;

@@ -15,7 +15,7 @@ Oskari.registerLocalization(
                 "title": "Coordinates",
                 "searchButton": "Center map",
                 "addMarkerButton": "Add marker",
-                "info": "Click a location on the map to view the coordinates or enter coordinates and click 'Center map'.",
+                "info": "Type coordinates or click a point on the map.",
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
@@ -26,7 +26,7 @@ Oskari.registerLocalization(
                 "errorTitle": "Reverse geocoding error",
                 "error": "Error to get reverse geocode for the current position",
                 "WHAT3WORDS_CHANNEL": {
-                    "label": "What3words: "
+                    "label": "what3words: "
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL": {
                     "label": "Address: "

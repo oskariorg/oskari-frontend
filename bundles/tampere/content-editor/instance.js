@@ -66,8 +66,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
-                p,
-                loc = this.getLocalization();
+                p;
 
             if (me.started) {
                 return;
@@ -89,10 +88,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
             me._createUi();
-
 
             // create request handlers
             me.showContentEditorRequestHandler = Oskari.clazz.create(
@@ -201,8 +198,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         		}
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
-                //Why this.sideContentEditor is null?
-                this.sandbox.findRegisteredModuleInstance("ContentEditor").sideContentEditor.prepareRequest(evt.getDrawing());
+                if ('ContentEditorDrawPlugin' !== evt.getCreatorId()) {
+                    return;
+                }
+                this.sideContentEditor.prepareRequest(evt.getDrawing());
             },
             WFSFeatureGeometriesEvent: function (evt)
             {
@@ -290,7 +289,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * (re)creates the UI
          */
         _createUi: function () {
-            var me = this;
         },
 
         /**
@@ -302,8 +300,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         setEditorMode: function (blnEnabled, layerId) {
             var me = this,
                 map = jQuery('#contentMap'),
-                request,
-                requestBuilder;
+                request;
             if (blnEnabled) {
                 me.oskariLang = Oskari.getLang();
 
@@ -341,7 +338,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 if (me.sandbox._mapMode === 'mapContentEditorMode') {
                     delete me.sandbox._mapMode;
                 }
-                //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+
                 request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
 

@@ -64,14 +64,16 @@ Oskari.clazz.define(
                 link.append(name);
                 link.bind('click', function () {
                     // add analysis layer to map on name click
-                    var request = addMLrequestBuilder(
-                        layer.getId(),
-                        false,
-                        layer.isBaseLayer()
-                    );
-                    sandbox.request(me.instance, request);
-                    me.handleBounds(layer);
-                    return false;
+                    if (!me.popupOpen) {
+                        var request = addMLrequestBuilder(
+                            layer.getId(),
+                            false,
+                            layer.isBaseLayer()
+                        );
+                        sandbox.request(me.instance, request);
+                        me.handleBounds(layer);
+                        return false;
+                    }
                 });
                 return link;
             };
@@ -82,9 +84,11 @@ Oskari.clazz.define(
                     layer = data.layer;
                 link.append(name);
                 link.bind('click', function () {
-                    // delete analysis layer
-                    me._confirmDeleteAnalysis(data);
-                    return false;
+                    if (!me.popupOpen) {
+                        // delete analysis layer
+                        me._confirmDeleteAnalysis(data);
+                        return false;
+                    }
                 });
                 return link;
             };
@@ -194,6 +198,9 @@ Oskari.clazz.define(
                 me._deleteAnalysis(data.layer);
                 dialog.close();
             });
+            dialog.onClose(function () {
+                me.popupOpen = false;
+            });
 
             dialog.show(
                 me.loc.title,
@@ -203,6 +210,7 @@ Oskari.clazz.define(
                     okBtn
                 ]
             );
+            me.popupOpen = true;
 
             dialog.makeModal();
         },

@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var format = new OpenLayers.Format.WMTSCapabilities();
         var getCapsUrl = this.sandbox.getAjaxUrl() + 'action_route=GetLayerCapabilities';
         var caps = this.getCapabilities(url);
+
         if(caps) {
             // return with cached capabilities
             var wmtsLayer = format.createLayer(caps, me.__getLayerConfig(caps, layer));
@@ -69,6 +70,31 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 url : getCapsUrl,
                 success : function(response) {
                     var caps = format.read(response);
+
+                    // Check if need reverse matrixset top left coordinates.
+                    // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
+                    // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
+                    var isTileMatrixSets = (caps && caps.contents && caps.contents.tileMatrixSets) ? true : false;
+                    if(isTileMatrixSets) {
+                        var matrixSets = caps.contents.tileMatrixSets;
+                        for(var key in matrixSets) {
+                            var isReverseAttribute = (typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]) ? true : false;
+
+                            if(isReverseAttribute ) {
+                                var matrixSet = matrixSets[key];
+                                for (var i=0;i<matrixSet.matrixIds.length;i++){
+                                    var matrix = matrixSet.matrixIds[i];
+                                    var reversedTopLeftCorner = {
+                                        lon: matrix.topLeftCorner.lat,
+                                        lat: matrix.topLeftCorner.lon
+                                    };
+                                    matrix.topLeftCorner = reversedTopLeftCorner;
+                                }
+                            }
+                        }
+                    }
+
+
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },

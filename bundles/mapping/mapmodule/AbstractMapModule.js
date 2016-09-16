@@ -103,6 +103,7 @@ Oskari.clazz.define(
 
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
+        this.log = Oskari.log('AbstractMapModule');
 
 
         this.templates = {
@@ -121,7 +122,7 @@ Oskari.clazz.define(
          */
         init: function (sandbox) {
             var me = this;
-            sandbox.printDebug(
+            this.log.debug(
                 'Initializing oskari map module...#############################################'
             );
 
@@ -169,7 +170,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            sandbox.printDebug('Starting ' + this.getName());
+            this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins
             Oskari.on('app.start', function(details) {
@@ -359,7 +360,7 @@ Oskari.clazz.define(
         getMapEl: function () {
             var mapDiv = jQuery('#' + this.getMapElementId());
             if (!mapDiv.length) {
-                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
+                this.log.warn('mapDiv not found with #' + this._mapDivId);
             }
             return mapDiv;
         },
@@ -496,7 +497,7 @@ Oskari.clazz.define(
                     function (errors) {
                         // if users just ignores/closes the browser dialog
                         // -> error handler won't be called in most browsers
-                        sandbox.printWarn('Error getting user location', errors);
+                        me.log.warn('Error getting user location', errors);
                         // notify callback and event without lonlat to signal failure
                         sandbox.notifyAll(evtBuilder());
                         if(typeof callback === 'function') {
@@ -787,7 +788,7 @@ Oskari.clazz.define(
                     if(typeof layersPlugin.preselectLayers !== 'function') {
                         continue;
                     }
-                    sandbox.printDebug('preselecting ' + p);
+                    this.log.debug('preselecting ' + p);
                     layersPlugin.preselectLayers(layers);
                 }
             }
@@ -1169,7 +1170,7 @@ Oskari.clazz.define(
          */
         setLayerPlugin: function (id, plug) {
             if (id === null || id === undefined || !id.length) {
-                this._sandbox.printWarn(
+                this.log.warn(
                     'Setting layer plugin', plug, 'with a non-existent ID:', id
                 );
             }
@@ -1228,7 +1229,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             plugin.setMapModule(this);
             var pluginName = plugin.getName();
-            sandbox.printDebug(
+            this.log.debug(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
@@ -1245,7 +1246,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug(
+            this.log.debug(
                 '[' + this.getName() + ']' + ' Unregistering ' + pluginName
             );
             plugin.unregister();
@@ -1263,7 +1264,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
                 var tryAgainLater = plugin.startPlugin(sandbox);
                 if(tryAgainLater && typeof plugin.redrawUI === 'function') {
@@ -1271,7 +1272,7 @@ Oskari.clazz.define(
                 }
             } catch (e) {
                 // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                sandbox.printWarn(
+                this.log.warn(
                     'Unable to start plugin: ' + pluginName + ': ' +
                     e
                 );
@@ -1292,7 +1293,7 @@ Oskari.clazz.define(
                 var tryAgainLater = plugin.redrawUI(me.getMobileMode(), !!force);
                 if(tryAgainLater) {
                     if(force) {
-                        me.getSandbox().printWarn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
+                        me.log.warn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
                     }
                     me.lazyStartPlugins.push(plugin);
                 }
@@ -1308,7 +1309,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.stopPlugin(sandbox);
         },
         /**
@@ -1447,16 +1448,16 @@ Oskari.clazz.define(
                 }
 
                 if(added === 0) {
-                    sandbox.printWarn('Cannot add wellknown style for key=' + key + ', please check request!');
+                    me.log.warn('Cannot add wellknown style for key=' + key + ', please check request!');
                     delete sanitizedStyles[styleKey];
                 }
 
                 if(styleKey && sanitizedStyles[styleKey]) {
                     if(me._wellknownStyles[styleKey]){
-                        sandbox.printWarn('Founded allready added wellknown style for key=' + key + ', merging styles');
+                        me.log.warn('Founded allready added wellknown style for key=' + key + ', merging styles');
                         for(var name in sanitizedStyles[styleKey]) {
                             if(me._wellknownStyles[styleKey][name]) {
-                                sandbox.printWarn('Founded allready added wellknown style for key=' + key + ' and style name='+name+', replacing style');
+                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+name+', replacing style');
                             }
                             me._wellknownStyles[styleKey][name] = sanitizedStyles[styleKey][name];
                         }
@@ -1481,7 +1482,7 @@ Oskari.clazz.define(
                 sandbox = this.getSandbox();
 
             if(!me._wellknownStyles[key] && !style) {
-                sandbox.printWarn('Not found wellknown markers for key=' + key + ', returning default markers');
+                this.log.warn('Not found wellknown markers for key=' + key + ', returning default markers');
                 return Oskari.getMarkers();
             }
 
@@ -1489,7 +1490,7 @@ Oskari.clazz.define(
                 if(me._wellknownStyles[key] && me._wellknownStyles[key][style]) {
                     return me._wellknownStyles[key][style]
                 } else {
-                    sandbox.printWarn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
+                    this.log.warn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
                     return Oskari.getDefaultMarker();
                 }
             } else {
@@ -1572,7 +1573,7 @@ Oskari.clazz.define(
                 style.shape.key && style.shape.name) {
                 svgObject = this.getWellknownStyle(style.shape.key, style.shape.name);
                 if(svgObject === null) {
-                    sandbox.printWarn('Not identified wellknown marker shape. Not handled getSvg.');
+                    this.log.warn('Not identified wellknown marker shape. Not handled getSvg.');
                     return null;
                 }
                 isWellknownMarker = true;
@@ -1728,7 +1729,7 @@ Oskari.clazz.define(
            htmlObject.find('path').attr(attr,value);
 
            if(htmlObject.find('path').length>1) {
-              sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+              this.log.warn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
            }
 
            return htmlObject.outerHTML();
@@ -2068,7 +2069,7 @@ Oskari.clazz.define(
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
                     if (!layersPlugin) {
-                        me.getSandbox().printWarn(
+                        me.log.warn(
                             'LayerPlugins has no entry for "' + p + '"'
                         );
                     }
@@ -2155,6 +2156,27 @@ Oskari.clazz.define(
             }
             //checkig other things, will be added later...
             return false;
+        },
+        /**
+         * @method handleMapLayerUpdateRequest
+         * Update layer params and force update (wms) or force redraw for other layer types
+         * @param layerId
+         * @param {boolean} forced
+         * @param {Object} params
+         */
+        handleMapLayerUpdateRequest: function(layerId, forced, params) {
+            var me = this,
+            	sandbox = me.getSandbox(),
+            	layerPlugins = me.getLayerPlugins(),
+            	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+
+            _.each(layerPlugins, function (plugin) {
+                // true if either plugin doesn't have the function or says the layer is supported.
+                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
+                if (_.isFunction(plugin.updateLayerParams) && isSupported) {
+                    plugin.updateLayerParams(layer, forced, params);
+                }
+            });
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

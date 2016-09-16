@@ -208,8 +208,7 @@ Oskari.clazz.define(
                 newSelection =
                     me.getSandbox().findMapLayerFromSelectedMapLayers(
                         newSelectionId
-                    ),
-                isBaseLayer = true;
+                    );
 
             if (newSelectionId === currentSelection.attr('data-layerId')) {
                 // user clicked already selected option, do nothing
@@ -237,13 +236,13 @@ Oskari.clazz.define(
                     me.getSandbox().findMapLayerFromAllAvailable(
                         newSelectionId
                     );
-                isBaseLayer = (newSelection ? newSelection.isBaseLayer() : true);
             }
 
             me.getSandbox().postRequestByName(
                 'AddMapLayerRequest',
-                [newSelectionId, false, isBaseLayer]
+                [newSelectionId, false]
             );
+
             // - move new selection to bottom (see layerselection._layerOrderChanged(item))
             me.getSandbox().postRequestByName(
                 'RearrangeSelectedMapLayerRequest',

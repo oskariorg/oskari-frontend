@@ -253,8 +253,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 return;
             }
 
-            var windowWidth = jQuery(window).height(),
-                windowHeight = jQuery(window).height(),
+            var windowHeight = jQuery(window).height(),
                 targetWidth = tar.outerWidth(),
                 targetHeight = tar.outerHeight(),
                 dialogWidth = me.dialog.outerWidth(),
@@ -476,7 +475,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeDraggable: function (options) {
             var me = this,
                 dragOptions = options ? options : {
-                scroll: false
+                scroll: false,
+                handle: '.popupHeader'
             };
             me.dialog.css('position', 'absolute');
             me.dialog.draggable(dragOptions);
@@ -549,5 +549,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     'top': (size.width - popup.height() - 10) + 'px'
                 });
             }
-        },
+        }
     });

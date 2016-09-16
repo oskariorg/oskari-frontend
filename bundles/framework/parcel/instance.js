@@ -145,7 +145,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             this.templateLinks = jQuery('<a href="JavaScript:void(0);" class="language">' + loc.language +
                 '</a>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="guide">' + loc.guide + '</a>');
             // Should this not come as a param?
-            var sandbox = Oskari.$('sandbox'),
+            var sandbox = Oskari.getSandbox(),
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 me = this,
                 i,

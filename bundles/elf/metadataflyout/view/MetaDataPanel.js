@@ -47,6 +47,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
         this._maplayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
+        this.asyncTabs = {};
         /**
          * @static @private @property _templates HTML/underscore templates for the User Interface
          */
@@ -116,17 +117,31 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '               </ul>' +
                     '           </td>'+
                     '       </tr>'+
-                    //TODO: need to dig this stuff up from "somewhere"
-                    /*
+                    '       <% if (geom) { %>'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
+                    '               <td>'+
+                    '                   <a href="javascript:void(0)" class="metadata_coverage_bbox_link">'+
+                                            this.locale.coverage.showBBOX +
+                    '                   </a>'+
+                    '               </td>'+
+                    '           </tr>'+
+                    '       <% } %>'+
+
+                    '       <% if (typeof referenceSystems !== "undefined" && referenceSystems.length) {%>'+
                     '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
-                    '           <td>TODO</td>'+
+                    '           <td>'+
+                                    this.locale.tableHeaders.datasetInformation.crs+
+                    '           </td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(referenceSystems, function(referenceSystem) { %>'+
+                    '                   <li><%=referenceSystem%></li>' +
+                    '               <% }); %>'+
+                    '               </ul>' +
+                    '           </td>'+
                     '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.crs+'</td>'+
-                    '           <td>TODO</td>'+
-                    '       </tr>'+
-                    */
+                    '       <% } %>'+
                     '   </table>'+
                     '   <hr class="elf-metadata-divider">'+
                     '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
@@ -232,18 +247,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           </td>'+
                     '       </tr>'+
                     '   </table>'+
-/*                    
-                    //TODO: once we get the feedback stars
-                    '   <hr class="elf-metadata-divider">'+
-                    '   <h2>'+this.locale.heading.dataQuality+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
-                                //TODO: feedbackstars
-                    '           <td>*****</td>'+ 
-                    '       </tr>'+
-                    '   </table>'+
-*/                    
+
+                    '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>'+
+                    '       <div class="metadatatab-rating-container">'+
+                    '       <hr class="elf-metadata-divider">'+
+                    '       <h2>'+this.locale.heading.dataQuality+'</h2>'+
+                    '       <table class="elf-metadata-table-no-border">'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
+                    '               <td>'+
+                    '                   <div class="metadata-feedback-rating ratingInfo"></div>'+
+                    '               </td>'+
+                    '           </tr>'+
+                    '       </table>'+
+                    '       </div>'+
+                    '   <% } %>'+
                     '</article>'
                 ),
                 'quality': _.template(
@@ -519,7 +537,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
-            var additionalTabsFound = false;
+            var asyncTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
 
@@ -528,6 +546,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
                         continue;
                     }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
@@ -539,23 +563,23 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
-                    } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
-                        additionalTabsFound = true;
-                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                    } else if (me.asyncTabs && me.asyncTabs[tabId] && me.asyncTabs[tabId].tabActivatedCallback) {
+                        asyncTabsFound = true;
+                        var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
                     }
+
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
-
                 }
             }
 
             /*add the tab change event listener only once.*/
-            if (additionalTabsFound) {
+            if (asyncTabsFound) {
                 me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
-                        if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
-                            me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
                         }
                     }
                 });
@@ -583,6 +607,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         },
         /**
          * @public method addTabs
+         * The "synchronous" way of adding tabs by external bundles (=external bundles have already finished loading before rendering this)
          *
          * @param {Object} tabsJSON
          * {
@@ -601,11 +626,58 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function(tabsJSON) {
-            //TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
-            me._additionalTabs = tabsJSON;
+            me.asyncTabs = tabsJSON;
             for (var tabId in tabsJSON) {
                 me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
+            }
+        },
+        addTabsAsync: function(tabsJSON) {
+            var me = this,
+                model = me._model;
+
+            for (var tabId in tabsJSON) {
+                me.asyncTabs[tabId] = tabsJSON[tabId];
+                if (tabsJSON.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
+                        continue;
+                    }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
+                    //feedback tab added asynchronously -> also get and reveal the ratings under metadata tab...
+                    if (tabId === 'feedback' && model.amount) {
+                        me.getMetadataTabRatingStars();
+                    }
+
+                    var entry = Oskari.clazz.create(
+                        'Oskari.userinterface.component.TabPanel'
+                    );
+                    entry.setId(tabId);
+
+                    if (tabsJSON[tabId].tabActivatedCallback) {
+                        var newTabTitle = tabsJSON[tabId].title ? tabsJSON[tabId].title : "";
+                        entry.setTitle(newTabTitle);
+                    }
+                    me._tabContainer.addPanel(entry);
+                    me._tabs[tabId] = entry;
+                }
+            }
+
+            if (!me._tabContainer.tabChangeListeners || me._tabContainer.tabChangeListeners.length === 0) {
+                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                    if (newTab && newTab.getId() && !newTab.content) {
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        }
+                    }
+                });
             }
         },
 
@@ -639,7 +711,43 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     links = entry;
                 }
             }
+            if(!me.instance.conf.hideShowCoverageLink || me.instance.conf.hideShowCoverageLink !== true) {
+                if (me._model.geom) {
+                    entry = jQuery('<a/>');
+                    entry.addClass('metadata_coverage_bbox_link');
+                    entry.attr('href','javascript:void(0)');
+                    entry.html(me.instance._locale.flyout.coverage.showBBOX);
+
+
+                    if(links){
+                        links = links.add(entry);
+                    } else {
+                        links = entry;
+                    }
+                }
+            }
             me.addActions(links);
+
+            //Add click handler for the show coverage - link (under both metadata tab & actions tab)
+            jQuery('.metadata_coverage_bbox_link').on('click', function() {
+                me.toggleCoverage(jQuery(this));
+            });
+
+            //set rating stars if available (an administrator has rated the metadata)
+            if (me._model.latestAdminRating) {
+                me.getMetadataTabRatingStars();
+            }
+        },
+        getMetadataTabRatingStars: function() {
+            var me = this;
+            //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
+            var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
+            if (metadataFeedbackBundle) {
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+"&nbsp;");
+                jQuery('div.metadatatab-rating-container').show();
+            } else {
+                jQuery('div.metadatatab-rating-container').hide();
+            }
         },
         /**
          * @method addActions
@@ -654,13 +762,47 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container.append('<br/>');
             });
         },
+        toggleCoverage: function(entry) {
+            var me = this,
+                coverageVisible = entry.hasClass('metadata-coverage-visible');
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
 
+            if (coverageVisible) {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .removeClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.showBBOX);
+
+                var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rn, null);
+            } else {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .addClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.removeBBOX);
+
+                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                me.instance.sandbox.postRequestByName(rn, [me._model.geom, {
+                    layerId: 'METADATACATALOGUE_VECTORLAYER',
+                    clearPrevious: true,
+                    layerOptions: null,
+                    centerTo: true,
+                    featureStyle: style
+                }]);
+            }
+
+        },
         renderMapLayerList: function() {
             var me = this,
                 container = me._tabs['actions'].getContainer(),
                 layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
                 layerListHeader;
-
             container.find('table.metadataSearchResult').remove();
             container.append(me._templates['layerList']());
 
@@ -705,11 +847,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 labelText = me.locale.layerList.hide;
             }
             return labelText;
-        },
-        _toggleMetadataCoverage: function() {
-            var me = this;
-            me._model;
-
         },
         isLayerSelected: function(layer) {
             var me = this,

@@ -97,7 +97,7 @@ function() {
                 'Oskari.statistics.bundle.statsgrid.StatisticsService',
                 me.__instance
             );
-            if(statsLayer){
+            if(statsLayer) {
                 request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
@@ -117,11 +117,13 @@ function() {
             if (me.__started === true) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
-            jQuery('.publishedgrid').remove();
+            if(me.statsContainer) {
+                me.statsContainer.remove();
+            }
         }
 
-        if (enabled && me.__handlers['MapSizeChanged']) {
-                me.__handlers.MapSizeChanged();
+        if (me.__handlers['MapSizeChanged']) {
+            me.__handlers.MapSizeChanged();
         }
     },
     /**
@@ -158,7 +160,12 @@ function() {
     getValues: function() {
         var me = this,
             statsGridState = me._getState();
-        if(me.state.enabled && statsGridState) {
+        // just to make sure if user removes the statslayer while in publisher
+        // if there is no statslayer on map -> don't setup publishedgrid
+        // otherwise always return the state even if grid is not selected so
+        //  publishedgrid gets the information it needs to render map correctly
+        var statslayerOnMap = this._getStatsLayer();
+        if(statslayerOnMap && statsGridState) {
             return {
                 configuration: {
                     publishedgrid: {

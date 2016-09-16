@@ -86,8 +86,7 @@ Oskari.clazz.define(
                 form = this.template.clone(),
                 formClazzes = this._getFormClazz(),
                 btnContainer,
-                formName,
-                formClazz;
+                formName;
 
             for (formName in formClazzes) {
                 if (formClazzes.hasOwnProperty(formName)) {

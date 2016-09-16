@@ -20,10 +20,6 @@ Oskari.clazz.define(
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
             viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
-        this.state = {
-            indicators: [],
-            layerId: null
-        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -36,6 +32,16 @@ Oskari.clazz.define(
             statsService.addDatasource(conf.sources);
 
             this.getTile().setEnabled(this.hasData());
+            if(this.state) {
+                this.setState(this.state);
+            }
+
+            var tile = this.getTile();
+            var cel = tile.container;
+
+            if (!cel.hasClass('statsgrid2016')) {
+                cel.addClass('statsgrid2016');
+            }
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
@@ -43,6 +49,17 @@ Oskari.clazz.define(
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.RegionSelectedEvent' : function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'UIChangeEvent' : function() {
+                // close/tear down tge ui when receiving the event
+                var sandbox = this.getSandbox();
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
@@ -55,8 +72,7 @@ Oskari.clazz.define(
                 }
 
                 var isShown = event.getViewState() !== 'close';
-
-                this.getView().prepareMode(isShown);
+                this.getView().prepareMode(isShown, this.getConfiguration());
             },
             /**
              * @method MapLayerEvent
@@ -81,13 +97,67 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
+            state = state || {};
+            var service = this.statsService.getStateService();
+            service.reset();
+            if(state.regionset) {
+                service.setRegionset(state.regionset);
+            }
+            if(state.indicators) {
+                state.indicators.forEach(function(ind) {
+                    service.addIndicator(ind.ds, ind.id, ind.selections);
+                });
+            }
+            if(state.active) {
+                service.setActiveIndicator(state.active);
+            }
+            // if state says view was visible fire up the UI, otherwise close it
+            var sandbox = this.getSandbox();
+            var uimode = state.view ? 'attach' : 'close';
+            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
 
+            /*
+ {
+     "indicators": [{
+         "ds": 1,
+         "id": 5,
+         "selections": {
+             "sex": "male",
+             "year": "1991"
+         }
+     }, {
+         "ds": 1,
+         "id": 6,
+         "selections": {
+             "sex": "male",
+             "year": "1994"
+         }
+     }],
+     "regionset": 7,
+     "active": "1_6_{\"sex\":\"male\",\"year\":\"1994\"}",
+     "view" : true
+ }
+            */
         getState: function () {
-            return {
+            var service = this.statsService.getStateService();
+            var state = {
                 indicators : [],
-                regionset : null
+                regionset : service.getRegionset(),
+                view : this.getView().isVisible
             };
+            service.getIndicators().forEach(function(ind) {
+                state.indicators.push({
+                    ds : ind.datasource,
+                    id : ind.indicator,
+                    selections : ind.selections
+                });
+            });
+            var active = service.getActiveIndicator();
+            if(active) {
+                state.active = active.hash
+            }
+            return state;
         }
 
     }, {

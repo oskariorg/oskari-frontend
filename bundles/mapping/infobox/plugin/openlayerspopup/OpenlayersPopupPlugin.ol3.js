@@ -103,8 +103,8 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-            var me = this,
-                currPopup = me._popups[id],
+
+            var currPopup = me._popups[id],
                 lon = null,
                 lat = null,
                 marker = null;
@@ -190,15 +190,18 @@ Oskari.clazz.define(
                 } else {
                     popupDOM = jQuery('#' + id);
                     popupType = "desktop";
-                    jQuery('.olPopup').empty();
-                    jQuery('.olPopup').html(popupContentHtml);
+                    jQuery(popup.getElement()).empty();
+                    jQuery(popup.getElement()).html(popupContentHtml);
                     popup.setPosition(lonlatArray);
-                    if (colourScheme) {
-                        me._changeColourScheme(colourScheme, popupDOM, id);
-                    }
                     if (positioning) {
+                        popupDOM.removeClass(positioning);
+                        popupDOM.find('.popupHeaderArrow').removeClass(positioning);
+
                         popupDOM.addClass(positioning);
                         popupDOM.find('.popupHeaderArrow').addClass(positioning);
+                    }
+                    if (colourScheme) {
+                        me._changeColourScheme(colourScheme, popupDOM, id);
                     }
                 }
             } else if (isInMobileMode) {
@@ -229,13 +232,15 @@ Oskari.clazz.define(
                 popup = new ol.Overlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    positioning: positioning,
+                    //start with ol default positioning
+                    positioning: null,
                     offset: [offsetX, offsetY],
                     autoPan: true
                 });
 
                 mapModule.getMap().addOverlay(popup);
                 jQuery(popup.getElement()).html(popupContentHtml);
+
                 me._panMapToShowPopup(lonlatArray);
 
                 jQuery(popup.div).css('overflow', 'visible');
@@ -245,7 +250,7 @@ Oskari.clazz.define(
                 if (positioning) {
                     popupDOM.addClass(positioning);
                     popupDOM.find('.popupHeaderArrow').addClass(positioning);
-                };
+                }
 
                 // Set the colour scheme if one provided
                 if (colourScheme) {
@@ -276,14 +281,43 @@ Oskari.clazz.define(
                 type: popupType
             };
 
+
+            // Fix popup header height to match title content height if using desktop popup
+            if(title && !isInMobileMode) {
+                var popupEl = jQuery(popup.getElement());
+                var popupHeaderEl = popupEl.find('.popupHeader');
+
+                var fixSize = {
+                    top: 0,
+                    left: 0,
+                    height: 0
+                };
+
+                var popupHeaderChildrens = popupHeaderEl.children();
+                popupHeaderChildrens.each(function(){
+                    var popupHeaderChildren = jQuery(this);
+                    fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
+                    fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
+                    fixSize.height += popupHeaderChildren.height();
+                });
+
+                var fixedHeight = fixSize.height;
+                popupHeaderEl.height(fixedHeight);
+            }
+
             if (me.adaptable && !isInMobileMode) {
                 if (positioning && positioning !== 'no-position-info') {
                     me._adaptPopupSizeWithPositioning(id, refresh);
+                    //if refresh, we need to reset the positioning
+                    if (refresh) {
+                        popup.setPositioning(null);
+                    }
+                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
+                    popup.setPositioning(positioning);
                 } else {
                     me._adaptPopupSize(id, refresh);
                 }
             }
-
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
@@ -306,7 +340,6 @@ Oskari.clazz.define(
         },
         _showInMobileMode: function (popup) {
             popup.makeModal();
-            popup.overlay._overlays[0].overlay.css({opacity: 0});
             popup.overlay.followResizing(true);
             popup.overlay.bindClickToClose();
             popup.overlay.onClose(function () {
@@ -573,23 +606,15 @@ Oskari.clazz.define(
                 'z-index': '16000'
             });
 
-            if (jQuery.browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                var isOverThanMax = height > maxHeight ? true : false;
-                content.css({
-                    'height': height
-                });
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            var isOverThanMax = height > maxHeight ? true : false;
+            content.css({
+                'height': height
+            });
 
-                if(!isOverThanMax) {
-                    popup.css('min-height', 'inherit');
-                }
+            if(!isOverThanMax) {
+                popup.css('min-height', 'inherit');
             }
         },
         _adaptPopupSizeWithPositioning: function (olPopupId, isOld) {
@@ -609,8 +634,18 @@ Oskari.clazz.define(
                 'width': '100%',
                 'height': '100%'
             });
-        },
 
+            var wrapper = content.find('.contentWrapper');
+            popup.css({
+                'height': 'auto',
+                //just have some initial width, other than auto, so that we don't get ridiculous widths with wide content
+                'width': '1px',
+                'min-width': '300px',
+                'max-width': maxWidth + 'px',
+                'overflow' : 'visible',
+                'z-index': '16000'
+            });
+        },
         /**
          * @method _panMapToShowPopup
          * @private

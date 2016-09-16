@@ -1,18 +1,169 @@
 # Release Notes
 
-## 1.38.0
+## 1.39.0
+
+### IE 9 not supported
+
+``IE9`` will not be a supported browser anymore.
+
+### metadatacatalogue 
+
+Updated the functionality of the "Limit the search area on the map" button. 
+
+### RPC - new request available
+
+``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
+
+Note! When OpenLayers3 is used, GET requests longer than 2048 bytes will be automatically transformed to async ajax POST-requests and proxied. Thus the service itself also has to support http POST-method.
+
+OpenLayers2 will always use GET-requests and will fail, if the GET-request's length exceeds the allowed maximum.
+
+```javascript
+sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true, {
+    SLD_BODY:
+        '<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">'+
+        '    <NamedLayer>'+
+        '    <Name>oskari:kunnat2013</Name>'+
+        '    <UserStyle>'+
+        '    <Title>SLD Cook Book: Simple polygon</Title>'+
+        '    <FeatureTypeStyle>'+
+        '    <Rule>'+
+        '    <PolygonSymbolizer>'+
+        '    <Fill>'+
+        '    <CssParameter name="fill">#000080</CssParameter>'+
+        '    </Fill>'+
+        '    </PolygonSymbolizer>'+
+        '    </Rule>'+
+        '    </FeatureTypeStyle>'+
+        '    </UserStyle>'+
+        '    </NamedLayer>'+
+        '    </StyledLayerDescriptor>'
+}]);
+```
+
+### jQuery.browser checks removed
+
+All jQuery.browser check are removed in preparation for jQuery update.
+
+## 1.38.2
+
+### infobox
+
+In mobilemode the overlay under popup is now semi-transparent instead of transparent to better indicate that the popup is modal.
+
+### mapfull
+
+Fixed statsgrid width checking when calculate map size.
+
+### divmanazer/Popup
+
+Draggable handle in popup has been changed to header (as in flyout) instead of the whole popup.
+
+### findbycoordinates
+
+Findbycoordinates now supports to show all search results.
+- If only one result found then show it in infobox.
+- If more than one results found, then open their to Oskari popup and add markers of all results.
+
+### mapmodule
+
+Fixed AddMarkerRequestHandler error when using shape 0 then default marker is used.
 
 ### core
 
-Fixed Oskari.util.isNumber to return false if checked value is null.
+- Fixed reference to markers variable
+- Fixed default marker reference
+- bundle.mediator now include instanceId in addition to bundleId
 
-*New function* ``Oskari.getDefaultMarker`` function return default Oskari marker.
+### sandbox
 
-### divmanazer/visualization-form
+- Removed outside javascript file call
 
-DotForm now use defaultmarker for visuliazation if wanted marker not found.
+### Flyout tile modifications
 
-### abstractmapmodule
+All tiles has now own bundle id and intance id named class. Removed also tile id's.
+
+## 1.38.1
+
+### DrawPlugin.ol3
+
+fixed area / line measurement, when the projection units are degrees
+
+## 1.38.0
+
+### DrawPlugin.ol3
+
+Now measurement result cleared also when stopping drawing to sending ``DrawTools.StopDrawingRequest``.
+
+### infobox ol2 and ol3
+
+Fixed infobox title height if title contains long text. Now the title will increase the height to match text size.
+
+### publisher2
+
+URL for a terms of use page can now be configured in publisher2 conf (conf.termOfUseUrl).
+If the value starts with 'http' the page is opened to a new window.
+Otherwise GetArticlesByTag action route is used to fetch contents as before.
+
+Fixed CoordinateTool config saving when using publisher2 template configs.
+
+### core
+
+- Fixed Oskari.util.isNumber to return false if checked value is null.
+- Oskari.$('sandbox') has been removed - use Oskari.getSandbox() instead.
+- Major internal restructuring of Oskari/src files.
+
+### Deprecations and removals
+
+- sandbox.printDebug/printWarn/printError() has been deprecated - use Oskari.log('MyComp').debug()/warn()/error() instead.
+- core.printDebug/printWarn/printError() has been REMOVED - use Oskari.log('MyComp').debug()/warn()/error() instead.
+
+### New functions
+
+- ``Oskari.getDefaultMarker()`` function return default Oskari marker.
+- ``Oskari.seq.nextVal()`` returns a rolling sequence number for each call. Optional parameter can be used to use/init another sequence ``Oskari.seq.nextVal('myseq')``.
+- ``Oskari.util.coordinateMetricToDegrees()`` function convert metric coordinate to degrees (degree, minute and seconds).
+- ``Oskari.util.coordinateDegreesToMetric()`` function convert degree coordinate to metric.
+- ``Oskari.util.coordinateIsDegrees()`` function check is coordinate is degrees.
+
+### Modifications
+
+- ``Oskari.util.sanitize()`` Allows now target attribute.
+
+### divmanazer
+
+DotForm now use default marker for visualization if requested marker is not found.
+
+Grid is now observable. It has on, off, trigger functions. Current events are triggered from clicking a column header.
+Events sent are:
+- ``column.selected`` with clicked columns/fields name as string payload.
+- ``sort`` with a payload like { column : 'clicked columns/fields name', ascending : true }
+
+Grid now allows to set tools for columns. These are given like:
+
+```javascript
+grid.setColumnTools('field name' [{
+	name : 'Say hi',
+	callback : function(value) {
+		alert('Hello from ' + value);
+	}
+}]);
+```
+
+Grid has a new function for highlighting columns (no default style for selection):
+
+```javascript
+grid.selectColumn('column name');
+```
+
+Grid previously used field name as class for table headers. Now the name is processed to remove problematic characters before using as css class.
+
+Grid can now be configured to scroll the content area *experimental feature* (true as param will follow element container size changes and recalculate the scrollable area height with interval)
+```javascript
+grid.contentScroll(true);
+```
+
+### mapmodule
 
 ``getWellknownStyle`` function now returns default Oskari marker(s) if wanted marker not found.
 
@@ -20,9 +171,32 @@ DotForm now use defaultmarker for visuliazation if wanted marker not found.
 - named style allready exists: merge styles and override exiting style if exist
 - sanitized adding, remove unwanted tags, scripts, so on.
 
-### MarkersPlugin
+#### AbstractMapLayerPlugin
+
+getOLMapLayers() now accepts Oskari layer id as parameter as well as the layer object.
+
+#### MarkersPlugin
 
 Sanitize request added markers.
+
+#### VectorLayerPlugin ol3
+
+Feature's style can be updated using ``MapModulePlugin.AddFeaturesToMapRequest``. Useful for highlighting the feature.
+
+## 1.37.1
+
+### mapwmts/WmtsLayerService ol2
+
+Now support to reserve coordinate order if layer has configured ``reverseMatrixIdsCoordinates`` attribute JSON and this contains used matrixid property with true value.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseMatrixIdsCoordinates': {
+      'matrixIdName':true
+    }
+  }
+```
 
 ## 1.37.0
 
@@ -33,25 +207,24 @@ Fixed jQuery selectors more specific for following bundles:
 - framework/publisher2
 - framework/divmanazer
 
-### ScalebarPlugin ol3
+### Infobox
 
-Fixed scaleline width to match map units / measuring line results.
+Infobox content and title are now sanitized before adding them to DOM.
+
+Streamlined InfoBox.ShowInfoBoxRequest handling. Id refers always to a specific popup.
+If request is sent with the same id that already exists in UI, the existing one is updated:
+- If location is the same, content is added to the existing popup
+- If location is different, the existing popup is deleted and new popup is added with given parameters
+
+### drawtools ol3
+
+Some fixes made for displaying measure result on the map.
+
+DrawingEvent now includes the sketch in geojson-parameter and isFinished-parameter is true when user finishes a geometry, not only when drawing is finished (relevant when drawing multi geometries). DrawingEvent shows area and length always in meters and unit is not shown anymore.
 
 ### routingService
 
 Changed default routing markers offset properties from x and y to offsetX and offsetY.
-
-### MarkersPlugin
-
-``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
-
-ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
-- offsetX, calculated pixels from left to right. This is number.
-- offsetY, calculated pixels from bottom to up. This is number.
-
-### Oskari application loading
-
-Oskari.app.setApplicationSetup() now setup markers for setMarkers() function.
 
 ### core
 
@@ -62,6 +235,15 @@ Added convenience method Oskari.getLocalized({ "en" : "name", "fi" : "nimi", sv 
 - As last resort anything that has a value
 
 Added Oskari.makeObservable(optionalTarget) function. Creates an eventbus with on, off, trigger functions and if parameter is given attaches the functions to parameter object. Always returns an observable object.
+
+Oskari.app.setApplicationSetup() now setup markers for setMarkers() function. Markers have been moved from mapfull config to env-part of GetAppSetup response.
+
+Oskari.util.sanitize() functionality has changed! Custom implementation has been replaced with DOMPurify (https://github.com/cure53/DOMPurify).
+Now takes just one parameter as string and returns a string.
+
+### mapfull
+
+Fixed layers visibility in state handling.
 
 ### mapmodule
 
@@ -75,33 +257,47 @@ Added new ``isSvg`` function to check at if data has svg.
 
 Changed ``getSvg`` funtion to support new offsetX and offsetY params.
 
-### mapfull
+#### ol2  map scales
 
-Fixed layers visibility in state handling.
+Map scales computation improved for earth CRS  e.g. EPSG:4326
 
-Removed defaults markers adding (now application loading do it).
+Map scales computation in ol3 is/was correct for earth CRS
+
+#### ScalebarPlugin ol3
+
+Fixed scaleline width to match map units / measuring line results.
+
+#### MarkersPlugin
+
+``MapModulePlugin.AddMarkerRequest`` data changed. Also supported some time the old way add markers. See request documentation to see new/changed  params for request.
+
+ol2 and ol3: Adding marker for external graphic now support offsetX and offsetY, what tell where 'center' point should be. Center point is calculated following ways:
+- offsetX, calculated pixels from left to right. This is number.
+- offsetY, calculated pixels from bottom to up. This is number.
 
 ### popupservice
 
-New service under divmanazer, for creating popups in mobile mode as well as bookkeeping.
+New service under divmanazer, for creating popups in mobile mode as well as bookkeeping. Usable when all popups need to be closed when a feature is activated.
 
-### divmanazer
+### Fixed z-index for functionalities
 
-Fixed flyout z-index.
+Fixed divmanazer flyout z-index.
 
-### layerselection2, logoplugin and publishertoolbar
-
-Removed unneccassary z-index style.
+Removed unneccessary z-index style: layerselection2, logoplugin and publishertoolbar
 
 ### publisher2
 
-(x) icon exit callback behaviour improved. Map controls were in the unstabile state, if publishing was canceled via (x) icon.
+(x) icon exit behaviour improved. Exiting publisher with X-icon or cancel-button now do the same things.
+Previously map controls were in the unstable state if publishing was canceled via (x) icon.
 
-Embedded map name validator is changed: If the sanitation of name value is not valid, error is reported.
+Embedded map name validator now allows more freedom in naming.
+
+Publisher config can now include default configuration for tools selectable to embedded maps. Coordinatetool is the first one to utilize this to
+ allow coordinate transformations to be included in embedded maps.
 
 ### mapwfs2
 
-Mapwfs2 plugin now support different thems (used in publisher2).
+Mapwfs2 plugins now support different themes (used in publisher2).
 
 ### featuredata2
 
@@ -114,6 +310,10 @@ Changed toolstyles to use mobile icons and all different styles are now created 
 ### coordinatetool
 
 Coordinatetool now support different styles.
+
+Coordinate transformation from one coordinate system to another can be added to the coordinatetool. Supported projections must be listed in bundle configuration.
+
+Coordinate decimal separation is now done based on UI locale. For example finnish language uses comma and english uses dot.
 
 ### toolbar
 
@@ -129,10 +329,6 @@ SLD Style setup and management is added for wfs layers (versions 1.1.0 and 2.0.0
 
 CRS check is made agaist service, when new layer will be inserted into Oskari.  (*) is added to the layer title for to
 show, that current map Crs is unsupported in the requested service.
-
-### Oskari.util.sanitize()
-
-Replaced custom implementation with DOMPurify (https://github.com/cure53/DOMPurify). Now takes just one parameter as string and returns a string.
 
 ## 1.36.4
 

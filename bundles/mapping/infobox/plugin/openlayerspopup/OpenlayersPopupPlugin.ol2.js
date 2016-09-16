@@ -111,7 +111,7 @@ Oskari.clazz.define(
                 lat = position.lat;
             } else {
                 // Send a status report of the popup (it is not open)
-                var evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                var evtB = me.getSandbox().getEventBuilder('InfoBox.InfoBoxEvent');
                 var evt = evtB(id, false);
                 me.getSandbox().notifyAll(evt);
                 return;
@@ -128,7 +128,7 @@ Oskari.clazz.define(
                 } else {
                     me.close(id);
                 }
-                
+
                 delete me._popups[id];
             }
 
@@ -258,6 +258,29 @@ Oskari.clazz.define(
                 isInMobileMode: isInMobileMode,
                 type: popupType
             };
+
+            // Fix popup header height to match title content height if using desktop popup
+            if(title && !isInMobileMode) {
+                var popupEl = jQuery(popup.div);
+                var popupHeaderEl = popupEl.find('.popupHeader');
+
+                var fixSize = {
+                    top: 0,
+                    left: 0,
+                    height: 0
+                };
+
+                var popupHeaderChildrens = popupHeaderEl.children();
+                popupHeaderChildrens.each(function(){
+                    var popupHeaderChildren = jQuery(this);
+                    fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
+                    fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
+                    fixSize.height += popupHeaderChildren.height();
+                });
+
+                var fixedHeight = fixSize.height;
+                popupHeaderEl.height(fixedHeight);
+            }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
@@ -410,7 +433,7 @@ Oskari.clazz.define(
             if (isMobilePopup) {
                 popup.dialog[0].onclick = function (evt) {
                     me._handleInfoboxClick(evt, id, contentData, additionalTools);
-                }
+                };
             } else {
                  // override
                 popup.events.un({
@@ -565,23 +588,16 @@ Oskari.clazz.define(
                 'z-index': '16000'
             });
 
-            if (jQuery.browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                var isOverThanMax = height > maxHeight ? true : false;
-                content.css({
-                    'height': height
-                });
-                if(!isOverThanMax) {
-                    popup.css('min-height', 'inherit');
-                }
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            var isOverThanMax = height > maxHeight ? true : false;
+            content.css({
+                'height': height
+            });
+            if(!isOverThanMax) {
+                popup.css('min-height', 'inherit');
             }
+
         },
 
         /**

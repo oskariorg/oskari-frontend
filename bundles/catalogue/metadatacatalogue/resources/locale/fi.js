@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Aluerajaus",
         "delimitArea": "Rajaa hakualue kartalta",
         "deleteArea": "Poista aluerajaus",
+        "startDraw": "Rajaa hakualue",
         "dataset": "Aineisto",
         "series": "Aineistosarja",
         "service": "Palvelu",

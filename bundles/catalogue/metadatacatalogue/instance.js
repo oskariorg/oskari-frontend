@@ -234,7 +234,7 @@ Oskari.clazz.define(
             }
 
             var optionServName =
-                'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
+              'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
             me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
 
             var searchServName =
@@ -312,6 +312,9 @@ Oskari.clazz.define(
 
                 this.coverageButton.val(me.getLocalization('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
+                this.coverageButton.prop('disabled', false).css({
+                  'border-color': ''
+                });
                 this.drawCoverage = false;
 
                 document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
@@ -653,17 +656,18 @@ Oskari.clazz.define(
             newRow = me.templates.buttonRow.clone();
             newLabel = me.getLocalization('searchArea');
             newRow.find('div.rowLabel').append(newLabel);
-
             var newButton = me.templates.metadataButton.clone();
-            this.coverageButton = newButton.find('.metadataCoverageDef');
-            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-            this.coverageButton.attr('name', 'coverage');
+            this.coverageButton = this._initCoverageButton(me, newButton);
             this.drawCoverage = true;
 
-            this.coverageButton.on('click', function () {
-                if (me.drawCoverage === true) {
-                    me._getCoverage();
-                } else {
+            this.coverageButton.on('click', function (){
+              if (me.drawCoverage === true) {
+                  me.coverageButton.prop('disabled', true).css({
+                  'border-color': '#0099CB'
+                  });
+                  me.coverageButton.val(me.getLocalization('startDraw'));
+                  me._getCoverage();
+                }else {
                     me.selectionPlugin.stopDrawing();
                     me.coverageButton.val(me.getLocalization('delimitArea'));
                     me.drawCoverage = true;
@@ -679,6 +683,12 @@ Oskari.clazz.define(
             advancedContainer.append(newRow);
 
             me._updateOptions(advancedContainer);
+        },
+        _initCoverageButton: function(me, newButton){
+          this.coverageButton = newButton.find('.metadataCoverageDef');
+          this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+          this.coverageButton.attr('name', 'coverage');
+          return this.coverageButton;
         },
 
         /**

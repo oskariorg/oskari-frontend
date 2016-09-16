@@ -49,6 +49,8 @@ Oskari.clazz.define(
                 }
             }
         };
+
+        this.wgs84Sphere = new ol.Sphere(6378137);
     },
     {
         /**
@@ -177,10 +179,12 @@ Oskari.clazz.define(
                 me.removeInteractions(me._modify, id);
                 me.setVariablesToNull();
                 me._map.un('pointermove', me.pointerMoveHandler, me);
-               //enable gfi
+                //enable gfi
                 if (me._gfiReqBuilder) {
                     me._sandbox.request(me, me._gfiReqBuilder(true));
                 }
+
+
             }
         },
         /**
@@ -215,7 +219,7 @@ Oskari.clazz.define(
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
             var data = {
-                lenght : me._length,
+                length : me._length,
                 area : me._area,
                 buffer: me._buffer,
                 bufferedGeoJson: bufferedGeoJson,
@@ -453,35 +457,57 @@ Oskari.clazz.define(
             evt = evt || {};
             var tooltipCoord = evt.coordinate;
             if (me._sketch) {
-                var output;
+                var output,
+                    area,
+                    length;
                 var geom = (me._sketch.getGeometry());
                 if (geom instanceof ol.geom.Polygon) {
-                  output = me.getPolygonArea(geom);
-                  tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                  // for Polygon-drawing checking itself-intersection
-                  if(me._featuresValidity[me._sketch.getId()]===false) {
-                    output = "";
-                    if(me._showIntersectionWarning) {
-                        output = me._loc.intersectionNotAllowed;
-                        me._area = output;
+                    area = me.getPolygonArea(geom);
+                    if(area < 10000) {
+                        area = area.toFixed(0) + " m<sup>2</sup>";
+                    } else if(area > 1000000) {
+                        area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
+                    } else {
+                        area = (area/10000).toFixed(2) + " ha";
                     }
-                  }
+                    if (area) {
+                        area = area.replace(".", ",");
+                    }
+                    output = area;
+                    tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                    // for Polygon-drawing checking itself-intersection
+                    if(me._featuresValidity[me._sketch.getId()]===false) {
+                        output = "";
+                        if(me._showIntersectionWarning) {
+                            output = me._loc.intersectionNotAllowed;
+                            me._area = output;
+                        }
+                    }
                 } else if (geom instanceof ol.geom.LineString) {
-                  output = me.getLineLength(geom);
-                  tooltipCoord = geom.getLastCoordinate();
+                    length = me.getLineLength(geom);
+                    if(length < 1000) {
+                        length = length.toFixed(0) + " m";
+                    } else {
+                        length = (length/1000).toFixed(3) + " km";
+                    }
+                    if (length) {
+                        length = length.replace(".", ",");
+                    }
+                    output = length;
+                    tooltipCoord = geom.getLastCoordinate();
                 }
                 if(me._options.showMeasureOnMap && tooltipCoord) {
                     me._map.getOverlays().forEach(function (o) {
-                      if(o.id === me._sketch.getId()) {
-                          var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
-                          ii.html(output);
-                          if(output==="") {
-                            ii.addClass('withoutText')
-                          } else {
-                            ii.removeClass('withoutText');
-                          }
-                          o.setPosition(tooltipCoord);
-                      }
+                        if(o.id === me._sketch.getId()) {
+                            var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
+                            ii.html(output);
+                            if(output==="") {
+                                ii.addClass('withoutText')
+                            } else {
+                                ii.removeClass('withoutText');
+                            }
+                            o.setPosition(tooltipCoord);
+                        }
                     });
                 }
              }
@@ -667,6 +693,10 @@ Oskari.clazz.define(
             this._shape = null;
             this._buffer= null;
             this._id = null;
+            // Remove measure result from map
+            if(this._sketch) {
+               jQuery('div.' + this._tooltipClassForMeasure + "." + this._sketch.getId()).remove();
+            }
             this._sketch = null;
             this._layerId = null;
         },
@@ -710,23 +740,23 @@ Oskari.clazz.define(
          *
          * @param {ol.geom.Geometry} geometry
          * @return {String} area: measure result icluding 'km2'/'ha' text
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getPolygonArea: function(geometry) {
             var area = 0;
-            if(geometry && geometry.getType()==='Polygon') {
-                area = geometry.getArea();
-                if(area < 10000) {
-                    area = area.toFixed(0) + " m<sup>2</sup>";
-                } else if(area > 1000000) {
-                    area = (area/1000000).toFixed(2) + " km<sup>2</sup>";
+            if (geometry && geometry.getType()==='Polygon') {
+                var sourceProj = this._map.getView().getProjection();
+                if (sourceProj.getUnits() === "degrees") {
+                    var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
+                    var coordinates = geom.getLinearRing(0).getCoordinates();
+                    area = Math.abs(this.wgs84Sphere.geodesicArea(coordinates));
                 } else {
-                    area = (area/10000).toFixed(2) + " ha";
+                    area = geometry.getArea();
                 }
             }
-            if(area) {
-                area = area.replace(".", ",");
-                this._area = area;
-            }
+            this._area = area;
             return area;
         },
         /**
@@ -735,21 +765,26 @@ Oskari.clazz.define(
          *
          * @param {ol.geom.Geometry} geometry
          * @return {String} length: measure result icluding 'm'/'km' text
+         *
+         * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
+         * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
          */
         getLineLength: function(geometry) {
             var length = 0;
             if(geometry && geometry.getType()==='LineString') {
-                length = geometry.getLength();
-                if(length < 1000) {
-                    length = length.toFixed(0) + " m";
+                var sourceProj = this._map.getView().getProjection();
+                if (sourceProj.getUnits() === "degrees") {
+                    var coordinates = geometry.getCoordinates();
+                    for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                        var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                        var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                        length += this.wgs84Sphere.haversineDistance(c1, c2);
+                    }
                 } else {
-                    length = (length/1000).toFixed(3) + " km";
-                }
+                    length = geometry.getLength();
+                }   
             }
-            if(length) {
-                length = length.replace(".", ",");
-                this._length = length;
-            }
+            this._length = length;
             return length;
         },
         /**
