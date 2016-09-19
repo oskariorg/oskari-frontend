@@ -44,6 +44,9 @@ Oskari.clazz.define(
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this._handleDataChangeEvent();
+            },
+            'StatsGrid.RegionSelectedEvent' : function(evt) {
+                this.getFlyout().regionSelected(evt.getRegion(), evt.getRegionset());
             }
         },
 

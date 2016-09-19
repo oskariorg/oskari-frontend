@@ -123,8 +123,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Flyout',
         },
         chartDataChanged : function(data) {
             this.tabsData.chart1.showChart(data);
+        },
+        regionSelected : function(region, regionset) {
+            //this.tabsData.chart1.showChart(data);
         }
-
 
     }, {
         /**
