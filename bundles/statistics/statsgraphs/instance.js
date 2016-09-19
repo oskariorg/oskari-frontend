@@ -82,7 +82,6 @@ Oskari.clazz.define(
         _handleDataChangeEvent: function () {
 
             var me = this;
-
             this.service.getCurrentDataset(function(err, data) {
                 if(err) {
                     console.warn(err);
