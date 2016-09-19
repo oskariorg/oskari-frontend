@@ -174,6 +174,9 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     return;
                 }
                 var classify = service.getClassificationService().getClassification(data);
+                if(!classify) {
+                    return;
+                }
 
                 // TODO: check that we got colors
                 var regions = [];
