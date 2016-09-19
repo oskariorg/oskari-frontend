@@ -17,7 +17,8 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
-        "tabTitle": "Geo Product Finder"
+        "tabTitle": "Geo Product Finder",
+        "metadataCatalogueDescription": "Search spatial resources, such as spatial datasets, dataset series or services."
     }
 }, true);
 
@@ -161,14 +162,5 @@ Oskari.registerLocalization(
         "tool": {
             "tooltip": "Click on the map and locate the nearest address or placename and its coordinates."
         }
-    }
-}, true);
-
-Oskari.registerLocalization(
-{
-    "lang": "en",
-    "key": "catalogue.bundle.metadatacatalogue",
-    "value": {
-        "metadataCatalogueDescription": "Search spatial resources, such as spatial datasets, dataset series or services.",
     }
 }, true);
