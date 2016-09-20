@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "Kartes slānis šobrīd nav pieejams",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kartes slānis šobrīd nav pieejams",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kartes slānis var nebūt periodiski pieejams dažu tuvāko dienu laikā",
                 "iconClass": "backendstatus-maintenance"

@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "В момента картният слой е недостъпен",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "В момента картният слой е недостъпен",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Картният слой периодично може да е недостъпен през следващите няколко дни",
                 "iconClass": "backendstatus-maintenance"
