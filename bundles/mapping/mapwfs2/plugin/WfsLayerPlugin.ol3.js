@@ -583,7 +583,7 @@ Oskari.clazz.define(
                 var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids);
+                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids, false, true);
                 }
             });
         },
@@ -724,7 +724,6 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-
             me.getIO().highlightMapLayerFeatures(
                 layerId,
                 wfsFeatureIds,
@@ -1453,6 +1452,8 @@ Oskari.clazz.define(
             if (!imageUrl || !boundsObj) {
                 return;
             }
+
+
 
             if (layerType === me.__typeHighlight) {
                   ols = [imageSize.width,imageSize.height];  //ol.Size

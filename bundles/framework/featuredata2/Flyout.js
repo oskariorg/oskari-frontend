@@ -475,7 +475,10 @@ Oskari.clazz.define(
             var me = this,
                 panel = this.layers['' + layer.getId()],
                 isOk = this.tabsContainer.isSelected(panel),
-                conf = me.instance.conf;
+                conf = me.instance.conf,
+                isManualRefresh = layer.isManualRefresh(),
+                allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
+                
 
             if (isOk) {
                 panel.getContainer().empty();
@@ -499,7 +502,14 @@ Oskari.clazz.define(
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
-                fields.unshift('locate_on_map');
+                
+
+
+                //ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
+                if (allowLocateOnMap) {
+                    fields.unshift('locate_on_map');
+                }
+
                 hiddenFields.push('__fid');
                 hiddenFields.push('__centerX');
                 hiddenFields.push('__centerY');
@@ -593,73 +603,78 @@ Oskari.clazz.define(
                 });
 
                 //custom renderer for locating feature on map
-                panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
-                    var div = me.templateLocateOnMap.clone();
-                    var fid = data.__fid;
-                    div.attr('data-fid', fid);
+                if (allowLocateOnMap) {
+                    panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
+                        var div = me.templateLocateOnMap.clone();
+                        var fid = data.__fid;
+                        div.attr('data-fid', fid);
 
-                    var markers = Oskari.getMarkers();
-                    var normalIcon = markers[me.locateOnMapIcon];
-                    var normalIconObj = jQuery(normalIcon.data);
-                    normalIconObj.find('path').attr({
-                        fill: me.colors.locateOnMap.normal,
-                        stroke: '#000000'
-                    });
-                    normalIconObj.attr({
-                        x: 0,
-                        y: 0
-                    });
-                    var activeIcon = markers[me.locateOnMapIcon];
-                    var activeIconObj = jQuery(activeIcon.data);
-                    activeIconObj.find('path').attr({
-                        fill: me.colors.locateOnMap.active,
-                        stroke: '#000000'
-                    });
-                    activeIconObj.attr({
-                        x: 0,
-                        y: 0
-                    });
+                        var markers = Oskari.getMarkers();
+                        var normalIcon = markers[me.locateOnMapIcon];
+                        var normalIconObj = jQuery(normalIcon.data);
+                        normalIconObj.find('path').attr({
+                            fill: me.colors.locateOnMap.normal,
+                            stroke: '#000000'
+                        });
+                        normalIconObj.attr({
+                            x: 0,
+                            y: 0
+                        });
+                        var activeIcon = markers[me.locateOnMapIcon];
+                        var activeIconObj = jQuery(activeIcon.data);
+                        activeIconObj.find('path').attr({
+                            fill: me.colors.locateOnMap.active,
+                            stroke: '#000000'
+                        });
+                        activeIconObj.attr({
+                            x: 0,
+                            y: 0
+                        });
 
-                    div.html(normalIconObj.outerHTML());
+                        div.html(normalIconObj.outerHTML());
 
-                    if(me.locateOnMapFID !== null && me.locateOnMapFID !== undefined && fid === me.locateOnMapFID) {
-                        div.html(activeIconObj.outerHTML());
-                    }
+                        if(me.locateOnMapFID !== null && me.locateOnMapFID !== undefined && fid === me.locateOnMapFID) {
+                            div.html(activeIconObj.outerHTML());
+                        }
 
-                    div.on('click', function(event) {
-                        // Save clicked feature fid to check centered status
-                        me.locateOnMapFID  = fid;
-                        jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
-                        jQuery(this).html(activeIconObj.outerHTML());
+                        div.on('click', function(event) {
+                            // Save clicked feature fid to check centered status
+                            me.locateOnMapFID  = fid;
+                            jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
+                            jQuery(this).html(activeIconObj.outerHTML());
 
-                        var feature = null;
-                        //create the eventhandler for this particular fid
-                        me.instance.eventHandlers.WFSFeatureGeometriesEvent = function(event) {
-                            var wkts = event.getGeometries(),
-                                wkt;
-                            for (var i = 0; i < wkts.length; i++) {
-                                if (wkts[i][0] === fid) {
-                                    wkt = wkts[i][1];
-                                    break;
+                            var feature = null;
+                            //create the eventhandler for this particular fid
+                            me.instance.eventHandlers.WFSFeatureGeometriesEvent = function(event) {
+                                var wkts = event.getGeometries(),
+                                    wkt;
+                                for (var i = 0; i < wkts.length; i++) {
+                                    if (wkts[i][0] === fid) {
+                                        wkt = wkts[i][1];
+                                        break;
+                                    }
                                 }
-                            }
-                            var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
-                            if (viewportInfo) {
-                                if (viewportInfo.mapBoundsArea > viewportInfo.boundsArea) {
-                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
-                                } else {
-                                    me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
+                                var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
+                                if (viewportInfo) {
+                                    if (viewportInfo.mapBoundsArea > viewportInfo.boundsArea) {
+                                        setTimeout(function() {
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
+                                        }, 1000);
+                                    } else {
+                                        setTimeout(function() {
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
+                                        }, 1000);
+                                    }
                                 }
-                            }
-                            me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
-                            me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
-                        };
-                        me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                                me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                                me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
+                            };
+                            me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
 
+                        });
+                        return div;
                     });
-                    return div;
-                });
-
+                }
 
 
                 panel.grid.renderTo(panel.getContainer());
@@ -811,7 +826,6 @@ Oskari.clazz.define(
          * Notifies components that a selection was made
          */
         _handleGridSelect: function (layer, dataId, keepCollection) {
-            console.log("_handleGridSelect");
             var sandbox = this.instance.sandbox,
                 featureIds = [dataId],
                 builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
@@ -834,7 +848,6 @@ Oskari.clazz.define(
          *
          */
         featureSelected: function (event) {
-            console.log("featureSelectedEvent");
             if (!this.active) {
                 return;
             }
