@@ -685,7 +685,58 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.text = textStyleJSON.labelText;
             }
             return new ol.style.Text(text);
-        }
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                mapboundsArea,
+                boundsArea;
+
+            if (!feature) {
+                return;
+            }
+            if (feature && feature.getGeometry() && feature.getGeometry().getExtent()) {
+                var map = me.getMap();
+                bounds = feature.getGeometry().getExtent();
+                centroid = ol.extent.getCenter(bounds);
+                mapBounds = map.getView().calculateExtent(map.getSize());
+                mapBoundsArea = ol.geom.Polygon.fromExtent(mapBounds).getArea();
+                boundsArea = ol.geom.Polygon.fromExtent(bounds).getArea();
+
+                //x,y -> 0,1 : true for 3067, might not be true for some other projection...fffffff
+                var ret = {
+                    'x': centroid[0],
+                    'y': centroid[1],
+                    'bounds': bounds, 
+                    'mapBounds': mapBounds, 
+                    'mapBoundsArea': mapBoundsArea, 
+                    'boundsArea': boundsArea
+                };
+
+                return ret;
+            }
+
+            return null;         
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new ol.format.WKT(),
+                feature = wktFormat.readFeature(wkt);
+
+            return feature;
+        }       
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**
