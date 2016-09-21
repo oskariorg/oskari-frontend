@@ -479,7 +479,6 @@ Oskari.clazz.define(
                 isManualRefresh = layer.isManualRefresh(),
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
                 
-
             if (isOk) {
                 panel.getContainer().empty();
 
@@ -604,6 +603,7 @@ Oskari.clazz.define(
 
                 //custom renderer for locating feature on map
                 if (allowLocateOnMap) {
+                    panel.grid.setColumnUIName('locate_on_map', ' ');
                     panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
                         var div = me.templateLocateOnMap.clone();
                         var fid = data.__fid;
