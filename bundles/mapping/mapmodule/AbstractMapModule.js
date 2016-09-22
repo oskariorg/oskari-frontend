@@ -473,8 +473,8 @@ Oskari.clazz.define(
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
-                // accept an hour long cached position
-                opts.maximumAge = 3600000;
+                // don't accept cached position
+                opts.maximumAge = 0;
             }
             if(!opts.hasOwnProperty('timeout')) {
                 // timeout after 6 seconds

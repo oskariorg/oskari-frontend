@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 }, {
 	__templates : {
 		main : _.template('<div class="stats-ind-params"></div>'),
-		select : _.template('<div><label>${name}<select name="${name}" class="${clazz}"></select></label></div>'),
+		select : _.template('<div><label>${name}<select name="${id}" class="${clazz}"></select></label></div>'),
 		option : _.template('<option value="${id}">${name}</option>'),
 		data : _.template('<div><label style="font-weight:bold;">${name}</label><span style="display: inline-block; float: right; clear:both;">${data}</span></div>')
 	},
@@ -89,15 +89,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			var selections = [];
 			indicator.selectors.forEach(function(selector) {
 				var select = me.__templates.select({
-					name : selector.id,
+					id : selector.id,
+					name : selector.name || selector.id,
 					clazz : 'stats-select-param-' + selector.id
 				});
 				cont.append(select);
 				var jqSelect = cont.find('.stats-select-param-' + selector.id);
 				selector.allowedValues.forEach(function(val) {
+					// val can be an object with id and name or plain value
 					var opt = me.__templates.option({
-						id : val,
-						name : val
+						id : val.id || val,
+						name : val.name || val.id || val
 					});
 					jqSelect.append(opt);
 				});

@@ -6,6 +6,10 @@
 
 ``IE9`` will not be a supported browser anymore.
 
+### metadatacatalogue
+
+Updated the functionality of the "Limit the search area on the map" button.
+
 ### RPC - new request available
 
 ``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
@@ -36,6 +40,14 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
         '    </StyledLayerDescriptor>'
 }]);
 ```
+### Mapmodule/UserLocation
+
+Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.
+
+### Action route calls caching workaround
+
+IE is notorious for using cached XHR responses. To workaround the jQuery global setting has been included to attach a timestamp for each XHR.
+This fixes an issue where for example admin bundles were not loaded correctly in IE after logging in.
 
 ### jQuery.browser checks removed
 
