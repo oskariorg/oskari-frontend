@@ -656,13 +656,16 @@ Oskari.clazz.define(
                                 }
                                 var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
                                 if (viewportInfo) {
-                                    if (viewportInfo.mapBoundsArea > viewportInfo.boundsArea) {
-                                        setTimeout(function() {
-                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
-                                        }, 1000);
-                                    } else {
+
+                                    //feature didn't fit -> zoom to bounds
+                                    if (viewportInfo.bounds) {
                                         setTimeout(function() {
                                             me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
+                                        }, 1000);
+                                    } else {
+                                        //else just set center.
+                                        setTimeout(function() {
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
                                         }, 1000);
                                     }
                                 }

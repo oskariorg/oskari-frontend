@@ -531,8 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 centroid,
                 bounds,
                 mapBounds,
-                mapboundsArea,
-                boundsArea;
+                zoomToBounds = null;
 
             if (!feature) {
                 return;
@@ -542,16 +541,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 bounds = feature.geometry.getBounds();
                 centroid = bounds.toGeometry().getCentroid();
                 mapBounds = me.getMap().getExtent();
-                mapBoundsArea = mapBounds.toGeometry().getArea();
-                boundsArea = bounds.toGeometry().getArea();
-
+                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                if (bounds.getHeight() < mapBounds.getHeight() && bounds.getWidth() < mapBounds.getWidth()) {
+                    zoomToBounds = null;
+                } else {
+                    zoomToBounds = bounds;
+                }
                 return {
                     'x': centroid.x,
                     'y': centroid.y,
-                    'bounds': bounds, 
-                    'mapBounds': mapBounds, 
-                    'mapBoundsArea': mapBoundsArea, 
-                    'boundsArea': boundsArea
+                    'bounds': zoomToBounds
                 }
             }
 
