@@ -5,7 +5,7 @@
 Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     function () {
     }, {
-        __name : 'WmsLayerPlugin',
+        __name : 'WmtsLayerPlugin',
         _clazz : 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         layertype : 'wmtslayer',
 

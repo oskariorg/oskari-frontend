@@ -1233,6 +1233,11 @@ Oskari.clazz.define(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
+            if(this._pluginInstances[pluginName]) {
+                this.log.warn(
+                    '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
+                );
+            }
             this._pluginInstances[pluginName] = plugin;
         },
         /**
