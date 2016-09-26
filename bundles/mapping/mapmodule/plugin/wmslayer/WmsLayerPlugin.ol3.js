@@ -111,7 +111,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
+                this.getSandbox().printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
