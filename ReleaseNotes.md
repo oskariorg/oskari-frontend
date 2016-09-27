@@ -2,6 +2,14 @@
 
 ## 1.39.0
 
+### Migration for embedded maps
+
+The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.
+See oskari-server/MigrationGuide.md for details.
+
+*Note!* You will need to update the minifierAppSetup.json to reflect the new template. This can be used with the default setup:
+https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_published_ol3/minifierAppSetup.json
+
 ### IE 9 not supported
 
 ``IE9`` will not be a supported browser anymore.
@@ -40,9 +48,13 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
         '    </StyledLayerDescriptor>'
 }]);
 ```
-### Mapmodule/UserLocation
+### Mapmodule
 
 Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.
+
+Registering a plugin with same name as an existing one triggers a warning to be printed out to dev console.
+
+WmtsLayerPugin OL3 timing issues with layer ordering fixed.
 
 ### Action route calls caching workaround
 
