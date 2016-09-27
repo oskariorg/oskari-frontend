@@ -1430,7 +1430,6 @@ Oskari.clazz.define(
             me.autosizeColumns();
 
             // TODO do we still need this stuff?
-
             if (silent) {
                 // Show classification
                 me.sendStatsData(columns[columns.length - 1]);
@@ -2106,7 +2105,6 @@ Oskari.clazz.define(
                 );
                 me.addIndicatorMeta(indicator);
             });
-
             // FIXME change sotka to something general
             if (indicators.sotka && indicators.sotka.length > 0) {
                 //send ajax calls and build the grid
@@ -2842,6 +2840,7 @@ Oskari.clazz.define(
                 i;
 
             inputArray = _.map(inputArray, this._numerizeValue);
+            this.dataView.beginUpdate();
 
             for (i = 0; i < items.length; i += 1) {
                 item = items[i];
@@ -2889,6 +2888,7 @@ Oskari.clazz.define(
                 }
 
             }
+            this.dataView.endUpdate();
             this.dataView.refresh();
             data.collapseGroup('empty');
             // sendstats ...update map
@@ -3108,6 +3108,7 @@ Oskari.clazz.define(
                 i,
                 j,
                 id;
+            this.dataView.beginUpdate();
 
             for (i = 0; i < items.length; i += 1) {
                 item = items[i];
@@ -3121,6 +3122,7 @@ Oskari.clazz.define(
                 }
                 data.updateItem(item.id, item);
             }
+            this.dataView.endUpdate();
             data.collapseGroup('empty');
             data.refresh();
         },
