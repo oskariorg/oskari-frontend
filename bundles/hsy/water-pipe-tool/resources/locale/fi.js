@@ -57,9 +57,11 @@
                 "tag-min-pressure-level": "Minimipainetaso",
                 "tag-ground-height": "Maanpinnan korkeus (m)",
                 "clear-marks-from-map": "Tyhjennä kartta",
-                "show-tagpipe-onmap": "Kartalle"
+                "show-tagpipe-onmap": "Kartalle",
+                "tag-pipe-calculate-btn": "Laske korkeudet",
+                "tag-lb":"label-position"
             }
         },
         "save": "tallenna"
 	}
-}); 
+});
