@@ -17,14 +17,13 @@ Oskari.clazz.define(
      *
      * @static
      */
-    function (config, locale) {
+    function (config, locale, statslayer) {
         var me = this;
-
         me._clazz =
             'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin';
         me._name = 'ManageStatsPlugin';
         me._locale = locale || {};
-        me._layer = null;
+        me._layer = statslayer;
         me._state = null;
         me.statsService = null;
         me.userIndicatorsService = undefined;
@@ -166,6 +165,17 @@ Oskari.clazz.define(
             var me = this,
                 config = me.getConfig();
 
+            if(!me._layer) {
+                // in publisher we don't get the layer as constructor param so find one from the layer service
+                var layerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                var statsLayers  = layerService.getLayersOfType('STATS');
+                if(statsLayers.length) {
+                    // this implementation only supports one statslayer, the new one supports multiple
+                    me._layer = statsLayers[0];
+                }
+                // TODO: notify failure if layer is not available
+            }
+
             me.statsService = me.getSandbox().getService(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService'
             );
@@ -174,7 +184,6 @@ Oskari.clazz.define(
             );
             me._published = (config.published || false);
             me._state = (config.state || {});
-            me._layer = (config.layer || null);
             me.selectMunicipalitiesMode = false;
         },
 
