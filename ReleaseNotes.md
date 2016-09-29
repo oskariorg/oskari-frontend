@@ -65,6 +65,14 @@ This fixes an issue where for example admin bundles were not loaded correctly in
 
 All jQuery.browser check are removed in preparation for jQuery update.
 
+## 1.38.3
+
+### statsgrid/publishedgrid
+
+Layer is no longer saved in config as it was a bad idea in the first place, but also jQuery.extend() crashes on Chrome 53 when extended object has a circular reference.
+Performance improvement when updating table values.
+Openlayers 3 based maps now use single tile to render statistics to be consistent with Openlayers 2 ones.
+
 ## 1.38.2
 
 ### infobox
