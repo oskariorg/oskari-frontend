@@ -33,6 +33,7 @@
                 "no_pipes_in_click": "Klikkaus kohdasta ei löytynyt liittymiskohtia, klikkaa uutta kohtaa",
                 "add_mustache_to_map": "Osoita viite kartalle",
                 "cancel_mustache_to_map": "Lopeta viitteen osoittaminen",
+                "add_label_to_map": "Osoita teksti kartalle",
                 "tag-type": "Tyyppi",
                 "tag-type-vesi_putki": "VJ-liitoskohta",
                 "tag-type-maapaloposti": "Maapaloposti",

@@ -35,7 +35,7 @@ Oskari.clazz.define(
             hulevesi_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-calculate-btn','tag-low-tag-height','tag-barrage-height'],
             sekaviemari_putki: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-calculate-btn','tag-low-tag-height','tag-barrage-height'],
             sekaviemari_kaivo: ['tag-type','tag-address','tag-pipe-size','tag-ground-height','tag-bottom-height','tag-calculate-btn','tag-low-tag-height','tag-barrage-height'],
-            muu_liitynta: ['tag-type','tag-address','tag-other-issue','tag-lb'],
+            muu_liitynta: ['tag-type','tag-address','tag-other-issue'],
             doNotUseInLabel: ['tag-address','tag-pipe-size','tag-ground-height','tag-calculate-btn'],
             onlyNumberInputs: ['tag-pipe-size','tag-bottom-height','tag-low-tag-height','tag-barrage-height','tag-ground-height','tag-low-tag-height','tag-barrage-height','tag-max-water-take','tag-min-pressure-level','tag-low-pressure-level','tag-max-pressure-level']
         };
@@ -637,22 +637,38 @@ Oskari.clazz.define(
             );
 
             btn.setTitle(me._getLocalization('add_mustache_to_map'));
-            btn.addClass("add-mustache-to-map");
+            btn.addClass("add-mustache-to-map start-mode");
             jQuery(btn.getElement()).click(function (e) {
                     var el = jQuery(this);
                     e.preventDefault();
 
-                    if(el.hasClass('active')){
-                        el.removeClass("active primary");
+                    if(el.hasClass('start-mode')){
+                        if (me._formIsValid(el.parents('form'), me)) {
+                            el.removeClass('start-mode').addClass('draw-mustache primary');
+                            el.val(me._getLocalization("add_label_to_map"));
+                            me.state.mustacheActive = true;
+                        }
+                    }else if(el.hasClass('draw-mustache')){
+                            el.removeClass('draw-mustache').addClass('draw-label');
+                            el.val(me._getLocalization("cancel_mustache_to_map"));
+                            me.state.mustacheActive = true;
+                    }else if(el.hasClass('draw-label')){
+                            el.removeClass('draw-label primary').addClass("start-mode");
+                            el.val(me._getLocalization('add_mustache_to_map'));
+                            me.state.mustacheActive = false;
+                    }
+
+/*                    if(el.hasClass('draw-mustache')){
+                        el.removeClass("draw-mustache primary");
                         el.val(me._getLocalization("add_mustache_to_map"));
                         me.state.mustacheActive = false;
                     }else{
                         if (me._formIsValid(el.parents('form'), me)) {
-                            el.addClass("active primary");
+                            el.addClass("draw-mustache primary");
                             el.val(me._getLocalization("cancel_mustache_to_map"));
                             me.state.mustacheActive = true;
                         }
-                    }
+                    }*/
                 }
             );
             btn.insertTo(innerFieldset);
@@ -807,6 +823,7 @@ Oskari.clazz.define(
             me._activateNormalWFSReq(true);
             if(mustachelayer){
                 me._removeFeaturesFromMap('MUSTACHE-TAG', null, null);
+                me._removeFeaturesFromMap('MUSTACHE-TAG-LABEL', null, null);
             }else{
                 me._removeFeaturesFromMap();
                 me.state.mustachePrintJSONarray = [];
@@ -1143,7 +1160,8 @@ Oskari.clazz.define(
         mustachePointOnMap: function(lonlat, geojson){
             var me = this,
             mustacheInfo = me._populateMustacheInfo(),
-            geojson_format = new OpenLayers.Format.GeoJSON();
+            geojson_format = new OpenLayers.Format.GeoJSON(),
+            mustacheBtn = jQuery('.add-mustache-to-map');
 
             if(geojson){
                 var geojson2point = geojson_format.parseCoords.point(geojson.features[0].geometry.coordinates[1]);
@@ -1153,27 +1171,39 @@ Oskari.clazz.define(
 
             }else{
 
-                var points = [
-                    new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
-                    new OpenLayers.Geometry.Point(me.state.tagPipeClickLonLat.lon, me.state.tagPipeClickLonLat.lat)
-                ];
+                if(mustacheBtn.hasClass('draw-mustache')){
 
-                var lineFeature = new OpenLayers.Feature.Vector(
+                    var points = [
+                        new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat),
+                        new OpenLayers.Geometry.Point(me.state.tagPipeClickLonLat.lon, me.state.tagPipeClickLonLat.lat)
+                    ];
+                    var lineFeature = new OpenLayers.Feature.Vector(
                         new OpenLayers.Geometry.LineString(points)
-                );
+                    );
+                    lineFeature.attributes = {label : ""};
 
-                var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+                    var lineFeatures = geojson_format.write(lineFeature);
+                    var geojsonObjectLine = me._populateGeoJSON([JSON.parse(lineFeatures)]);
+                    mustacheBtn.attr("data-mustache-line", JSON.stringify(lineFeatures));
+                    me._addFeaturesToMap(geojsonObjectLine, 'MUSTACHE-TAG', true, 'label', false, mustacheInfo.labelposition);
 
-                lineFeature.attributes = {label : ""};
-                pointFeature.attributes = mustacheInfo;
-                var lineFeatures = geojson_format.write(lineFeature);
-                var pointFeatures = geojson_format.write(pointFeature);
-                var array = [JSON.parse(lineFeatures),JSON.parse(pointFeatures)];
-                var geojsonObject = me._populateGeoJSON(array);
+                }else if(mustacheBtn.hasClass('draw-label')){
 
-                me._addFeaturesToMap(geojsonObject, 'MUSTACHE-TAG', true, 'label', false, mustacheInfo.labelposition);
-                me.state.mustacheIsOnMap = true;
-                me.state.mustacheGeoJSON = JSON.stringify(geojsonObject);
+                    var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+                    pointFeature.attributes = mustacheInfo;
+
+                    var pointFeatures = geojson_format.write(pointFeature);
+                    var geojsonObjectPoint = me._populateGeoJSON([JSON.parse(pointFeatures)]);
+                    me._addFeaturesToMap(geojsonObjectPoint, 'MUSTACHE-TAG-LABEL', true, 'label', false, mustacheInfo.labelposition);
+
+                    var lineFeaturesFinal = JSON.parse(mustacheBtn.attr("data-mustache-line"));
+                    var array = [JSON.parse(lineFeaturesFinal),JSON.parse(pointFeatures)];
+                    var geojsonObject = me._populateGeoJSON(array);
+
+                    me.state.mustacheIsOnMap = true;
+                    me.state.mustacheGeoJSON = JSON.stringify(geojsonObject);
+                }
+
             }
 
         },
@@ -1191,7 +1221,7 @@ Oskari.clazz.define(
             output.labelposition = "";
 
             jQuery.each(me.state[me.state.mustacheType], function(index, item) {
-                output.labelposition = form.find("input[name='tag-lb']").val();
+                output.labelposition = "lb";
                 if(me.state.doNotUseInLabel.indexOf(item) == -1){
                     if(index !== 0){
                         label += me._getLocalization(item)+":";
