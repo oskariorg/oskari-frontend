@@ -44,19 +44,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"><div class="icon"></div></div>'),
             popupContent: jQuery(
                 '<div>'+
-                '   <div class="coordinatetool__popup__content"></div>' +
-                '   <div class="srs"></div>' +
-                '   <div class="margintop">'+
-                '       <div class="coordinate-label floatleft lat-label"></div>'+
-                '       <div class="floatleft"><input type="text" class="lat-input"></input></div>'+
-                '       <div class="clear"></div>'+
-                '   </div>' +
-                '   <div class="margintop">'+
-                '       <div class="coordinate-label floatleft lon-label"></div>'+
-                '       <div class="floatleft"><input type="text" class="lon-input"></input></div>'+
-                '       <div class="clear"></div>'+
-                '   </div>' +
-                '   <div class="margintop "><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   <div class="coordinatetool__popup__content"></div>'+
+                '   <div class="srs"></div>'+
+                '   <div class="lonlat-input-container">'+
+                '       <div class="margintop">'+
+                '           <div class="coordinate-label floatleft lat-label"></div>'+
+                '           <div class="floatleft"><input type="text" class="lat-input"></input></div>'+
+                '           <div class="clear"></div>'+
+                '       </div>'+
+                '       <div class="margintop">'+
+                '           <div class="coordinate-label floatleft lon-label"></div>'+
+                '           <div class="floatleft"><input type="text" class="lon-input"></input></div>'+
+                '           <div class="clear"></div>'+
+                '       </div>'+
+                '       <div class="margintop mousecoordinates-div"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
+                '   </div>'+
+                '   <div class="coordinatetool-divider"></div>'+
+                '   <div class="margintop coordinatedisplay-emergencycall" style="display:none;">'+
+                '       <span class="coordinatedisplay-emergencycall-label"></span>'+
+                '       <span class="coordinatedisplay-emergencycall degreesY"></span>&deg;'+
+                '       <span class="coordinatedisplay-emergencycall minutesY"></span>\''+
+                '       <span class="coordinatedisplay-emergencycall-label-and"></span> '+
+                '       <span class="coordinatedisplay-emergencycall degreesX"></span>&deg;'+
+                '       <span class="coordinatedisplay-emergencycall minutesX"></span>\' '+
+                '   </div>'+
                 '   <div class="margintop">'+
                 '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
                 '   </div>' +
@@ -119,10 +130,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._lonInput = popupContent.find('.lon-input');
             me._reverseGeocodeLabel = popupContent.find('.reverseGeocode-label');
 
-            popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
-            popupContent.find('.lat-label').html(loc.compass.lat);
-            popupContent.find('.lon-label').html(loc.compass.lon);
-            popupContent.find('.mousecoordinates-label').html(loc.popup.showMouseCoordinates);
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.lat-label').html(loc.compass.lat);
             popupContent.find('.lon-label').html(loc.compass.lon);
@@ -214,6 +221,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.setColourScheme({"bgColour": "#e6e6e6"});
                 me._popup.createCloseIcon();
 
+                //hide mouse coordinates
+                popupContent.find('div.mousecoordinates-div').hide();
+
                 popupService.closeAllPopups(true);
                 me._popup.onClose(function() {
                     me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-coordinatetool'].iconCls);
@@ -243,6 +253,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 } else {
                     popupLocation = "left";
                 }
+
+                //show mouse coordinates
+                popupContent.find('div.mousecoordinates-div').show();
+
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
@@ -556,11 +570,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 else {
                     me._coordinateTransformationExtension._coordinatesFromServer = false;
                 }
-
                 me._latInput.val(lat);
                 me._lonInput.val(lon);
+
+                if (me._allowDegrees()) {
+                    me._coordinateTransformationExtension.updateCoordinateDisplay(data);
+                } else {
+                    me._coordinateTransformationExtension.updateCoordinateDisplay(null);
+                }
+
+
+                if (conf.showEmergencyCallMessage) {
+                    me.updateEmergencyCallMessage(data);
+                }
             }
         },
+        /**
+         * Get the coordinates in degrees (do a backend transformation roundtrip if need be) and fill in the emergency call message
+         */
+        updateEmergencyCallMessage: function(data) {
+            var me = this;
+
+            //get the transform from current to wgs84
+            var sourceProjection = me._projectionSelect && me._projectionSelect.val() ? me._projectionSelect.val() : me.getMapModule.getProjection();
+            if (sourceProjection !== "EPSG:4326") {
+                me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, "EPSG:4326", 
+                    function(responseData) {
+                        me._updateEmergencyCallMessage(responseData);
+                    }, 
+                    function(error) {
+                        me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
+                });
+            } else {
+                me._updateEmergencyCallMessage(data);
+            }
+        },
+        _updateEmergencyCallMessage: function(data) {
+            var me = this,
+                degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min"),
+                coordinateDisplayEmergencyCall = jQuery('div.coordinatedisplay-emergencycall');
+
+            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale.coordinatesTransform.emergencyCallLabel);
+            coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale.coordinatesTransform.emergencyCallLabelAnd);
+            coordinateDisplayEmergencyCall.find('span.degreesX').html(degmin.degreesX);
+            coordinateDisplayEmergencyCall.find('span.minutesX').html(parseFloat(degmin.minutesX).toFixed(3));
+            coordinateDisplayEmergencyCall.find('span.degreesY').html(degmin.degreesY);
+            coordinateDisplayEmergencyCall.find('span.minutesY').html(parseFloat(degmin.minutesY).toFixed(3));
+            coordinateDisplayEmergencyCall.show();
+        } ,
         /**
          * Update reverse geocode value to inputs
          * @method  @private _updateReverseGeocode
