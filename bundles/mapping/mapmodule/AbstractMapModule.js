@@ -473,8 +473,8 @@ Oskari.clazz.define(
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
-                // accept an hour long cached position
-                opts.maximumAge = 3600000;
+                // don't accept cached position
+                opts.maximumAge = 0;
             }
             if(!opts.hasOwnProperty('timeout')) {
                 // timeout after 6 seconds
@@ -1233,6 +1233,11 @@ Oskari.clazz.define(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
+            if(this._pluginInstances[pluginName]) {
+                this.log.warn(
+                    '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
+                );
+            }
             this._pluginInstances[pluginName] = plugin;
         },
         /**

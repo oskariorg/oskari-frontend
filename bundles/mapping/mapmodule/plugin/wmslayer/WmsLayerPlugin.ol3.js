@@ -111,7 +111,7 @@ Oskari.clazz.define(
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
+                this.getSandbox().printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
@@ -161,19 +161,19 @@ Oskari.clazz.define(
 								layerSource.setTileLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
-										me._imagePostFunction(image, src, proxyUrl);	
+										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalTileLoadFunction.apply(this, arguments);
 									}
 								});
-                    		} 
+                    		}
                     		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
                     		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
                     			var originalImageLoadFunction = new ol.source.ImageWMS().getImageLoadFunction();
 								layerSource.setImageLoadFunction(function(image, src) {
 									if (src.length >= 2048) {
 										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
-										me._imagePostFunction(image, src, proxyUrl);	
+										me._imagePostFunction(image, src, proxyUrl);
 									} else {
 										originalImageLoadFunction.apply(this, arguments);
 									}
@@ -182,7 +182,7 @@ Oskari.clazz.define(
                         olLayerList[i].getSource().updateParams(params);
                     }
                 }
-            } 
+            }
         },
         /**
          * @method @private _imagePostFunction

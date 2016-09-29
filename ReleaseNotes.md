@@ -2,13 +2,21 @@
 
 ## 1.39.0
 
+### Migration for embedded maps
+
+The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.
+See oskari-server/MigrationGuide.md for details.
+
+*Note!* You will need to update the minifierAppSetup.json to reflect the new template. This can be used with the default setup:
+https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_published_ol3/minifierAppSetup.json
+
 ### IE 9 not supported
 
 ``IE9`` will not be a supported browser anymore.
 
-### metadatacatalogue 
+### metadatacatalogue
 
-Updated the functionality of the "Limit the search area on the map" button. 
+Updated the functionality of the "Limit the search area on the map" button.
 
 ### RPC - new request available
 
@@ -40,10 +48,30 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
         '    </StyledLayerDescriptor>'
 }]);
 ```
+### Mapmodule
+
+Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.
+
+Registering a plugin with same name as an existing one triggers a warning to be printed out to dev console.
+
+WmtsLayerPugin OL3 timing issues with layer ordering fixed.
+
+### Action route calls caching workaround
+
+IE is notorious for using cached XHR responses. To workaround the jQuery global setting has been included to attach a timestamp for each XHR.
+This fixes an issue where for example admin bundles were not loaded correctly in IE after logging in.
 
 ### jQuery.browser checks removed
 
 All jQuery.browser check are removed in preparation for jQuery update.
+
+## 1.38.3
+
+### statsgrid/publishedgrid
+
+Layer is no longer saved in config as it was a bad idea in the first place, but also jQuery.extend() crashes on Chrome 53 when extended object has a circular reference.
+Performance improvement when updating table values.
+Openlayers 3 based maps now use single tile to render statistics to be consistent with Openlayers 2 ones.
 
 ## 1.38.2
 
