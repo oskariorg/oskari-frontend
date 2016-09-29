@@ -323,7 +323,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
             if (this._config) {
                 // return a clone so people won't muck about with the config...
-                return jQuery.extend(true, ret, this._config);
+                try {
+                    return jQuery.extend(true, ret, this._config);
+                } catch(err) {
+                    var log = Oskari.log('AbstractMapModulePlugin');
+                    log.warn('Unable to setup config properly for ' + this.getName() + '. Trying shallow copy.', err);
+                    try {
+                        return jQuery.extend(ret, this._config);
+                    } catch(err) {
+                        log.error('Unable to setup config for ' + this.getName() + '. Returning empty config.', err);
+                    }
+                }
             }
             return ret;
         },
