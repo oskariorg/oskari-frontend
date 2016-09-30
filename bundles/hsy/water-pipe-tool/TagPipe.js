@@ -424,7 +424,10 @@ Oskari.clazz.define(
                     },
                     stroke : {
                         color: '#ff0000',
-                        width: 3
+                        width: 1
+                    },
+                    image: {
+                        radius: 0.01
                     },
                     text : {
                         scale : 1.3,
@@ -436,7 +439,9 @@ Oskari.clazz.define(
                             width : 6
                         },
                         labelProperty: labelProperty,
-                        labelAlign: labelPosition
+                        labelAlign: labelPosition,
+                        offsetX: 0,
+                        offsetY: -30
                     },
                     labelAlign: labelPosition
                 };
