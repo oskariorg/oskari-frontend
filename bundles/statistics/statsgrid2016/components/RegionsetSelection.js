@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 }, {
 	__templates : {
 		main : _.template('<div></div>'),
-		select : _.template('<div><label>${name}<select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
+		select : _.template('<div><label><span>${name}</span><select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
 	render : function(el) {
@@ -19,7 +19,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 		this.service.getRegionsets().forEach(function(regionset) {
 			rsSelector.append(me.__templates.option(regionset));
 		});
-		rsSelector.chosen({ disable_search_threshold: 10 });
+		rsSelector.chosen({ disable_search_threshold: 10,
+					width: '250px' });
 
 		rsSelector.on('change', function() {
 			var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');

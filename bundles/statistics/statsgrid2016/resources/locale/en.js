@@ -8,10 +8,15 @@ Oskari.registerLocalization(
         "tile": {
             "title": "Thematic maps"
         },
+        "flyout": {
+            "title": "Thematic maps"
+        },
+        /*
         "view": {
             "title": "Patio",
             "message": "patiopoc"
         },
+        */
         "tab": {
             "title": "Indicators",
             "description": "Own indicators",
