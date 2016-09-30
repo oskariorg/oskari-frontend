@@ -581,18 +581,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
 
                 if (conf.showEmergencyCallMessage) {
-                    me.updateEmergencyCallMessage(data);
+                    //already in degrees, don't fetch again
+                    if (me._allowDegrees()) {
+                        me._updateEmergencyCallMessage({
+                            "lonlat": {
+                                "lon": data.lonlat.lon,
+                                "lat": data.lonlat.lat
+                            }
+                        });
+                    } else {
+                        me.getEmergencyCallCoordinatesFromServer(data);
+                    }
                 }
             }
         },
         /**
          * Get the coordinates in degrees (do a backend transformation roundtrip if need be) and fill in the emergency call message
          */
-        updateEmergencyCallMessage: function(data) {
+        getEmergencyCallCoordinatesFromServer: function(data) {
             var me = this;
 
-            //get the transform from current to wgs84
-            var sourceProjection = me._projectionSelect && me._projectionSelect.val() ? me._projectionSelect.val() : me.getMapModule.getProjection();
+            //get the transform from current data
+            var sourceProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
+            console.log(sourceProjection)
             if (sourceProjection !== "EPSG:4326") {
                 me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, "EPSG:4326", 
                     function(responseData) {
