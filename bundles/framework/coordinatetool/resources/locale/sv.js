@@ -78,7 +78,11 @@ Oskari.registerLocalization(
                     "EPSG:2391": "KKJ zon 1",
                     "EPSG:2392": "KKJ zon 2",
                     "EPSG:2394": "KKJ zon 4"
-                }
+                },
+                "emergencyCallLabel": "Koordinaterna som rekommenderas att användas i nödsamtal är",
+                "emergencyCallLabelAnd": "och",
+                "showCoordinateFormatDisplay":"Show coordinates &raquo;",
+                "showInputValues":"&laquo;Input values"
             },
             "cannotTransformCoordinates" : {
                 "title": "Fel",

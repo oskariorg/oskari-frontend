@@ -78,7 +78,12 @@ Oskari.registerLocalization(
                    "EPSG:2391": "KKJ zone 1",
                    "EPSG:2392": "KKJ zone 2",
                    "EPSG:2394": "KKJ zone 4"
-                }
+                },
+                "emergencyCallLabel": "The coordinates recommended to be used in emergency calls are",
+                "emergencyCallLabelAnd": "and",
+                "showCoordinateFormatDisplay":"Show coordinates &raquo;",
+                "showInputValues":"&laquo; Input values"
+
             },
             "cannotTransformCoordinates" : {
                 "title": "Error",
