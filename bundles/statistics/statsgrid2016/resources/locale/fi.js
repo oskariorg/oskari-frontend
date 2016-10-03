@@ -8,10 +8,14 @@ Oskari.registerLocalization(
         "tile": {
             "title": "Teemakartat"
         },
+        "flyout": {
+            "title": "Teemakartat"
+        },
+        /*
         "view": {
             "title": "Patio",
             "message": "patiopoc"
-        },
+        },*/
         "tab": {
             "title": "Indikaattorit",
             "description": "Omat indikaattorit",

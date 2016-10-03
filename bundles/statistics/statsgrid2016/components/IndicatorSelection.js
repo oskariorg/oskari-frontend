@@ -3,9 +3,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(s
 	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
 	__templates : {
-		main : _.template('<div></div>'),
+		main : _.template('<div class="statsgrid-ds-selections"></div>'),
 		selections : _.template('<div class="statsgrid-indicator-selections"></div>'),
-		select : _.template('<div><label>${name}<select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
+		select : _.template('<div><label><span>${name}</span><select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
 	render : function(el) {
@@ -20,7 +20,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(s
 		this.service.getDatasource().forEach(function(ds) {
 			dsSelector.append(me.__templates.option(ds));
 		});
-		dsSelector.chosen({ disable_search_threshold: 10 });
+		dsSelector.chosen({ disable_search_threshold: 10,
+					width: '250px' });
 
 		// Indicator list
 		main.append(jQuery(this.__templates.select({name : 'Indicators', clazz : 'stats-ind-selector', placeholder : 'Select an indicator'})));
@@ -29,7 +30,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(s
 		indicatorSelector.chosen({
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
-			no_results_text: "Oops, nothing found!"
+			no_results_text: "Oops, nothing found!",
+					width: '250px'
 		});
 		this.populateIndicators(indicatorSelector, dsSelector.val());
 		var selectionsContainer = jQuery(this.__templates.selections());

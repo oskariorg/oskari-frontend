@@ -1,4 +1,8 @@
-#contentMap.statsgrid-contentMap {
+/* ********************************************
+ * These are for the sidepanel "mode"/StatsView
+ * ******************************************* */
+/*
+ #contentMap.statsgrid-contentMap {
   position: relative; }
 
 .oskariui-mode-content {
@@ -12,19 +16,45 @@
     position: absolute;
     top: 0;
     bottom: 0; }
-
 .statsgrid_100 {
   height: 100%; }
 
 .statsgrid {
-  min-width: 100%;
+  // min-width: 100%;
   min-height: 100%;
   height: 100%; }
 
+div.oskari-view.statsgrid table.oskari-grid th.selected {
+  background-color: #FDF8D9;
+}
+ */
+
+/* ********************************************
+ * These are for common code in statsgrid
+ * ******************************************* */
   .statsgrid .statsgrid-table {
     min-height: 80%;
     height: 80%; }
 
-div.oskari-view.statsgrid table.oskari-grid th.selected {
+/* ********************************************
+ * These are for flyout version of statsgrid
+ * ******************************************* */
+div.oskari-flyoutcontent.statsgrid {
+  /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
+    max-width: 700px;
+}
+
+div.oskari-flyoutcontent.statsgrid label span {
+  /* Indicator selection form */
+    width: 200px;
+    display: inline-block;
+}
+
+div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections {
+  /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
+  max-width : 450px;
+}
+
+div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
   background-color: #FDF8D9;
 }

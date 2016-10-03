@@ -18,7 +18,8 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            viewClazz: 'Oskari.statistics.statsgrid.StatsView'
+            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
+            //,viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
     }, {
         afterStart: function (sandbox) {
@@ -39,8 +40,8 @@ Oskari.clazz.define(
             var tile = this.getTile();
             var cel = tile.container;
 
-            if (!cel.hasClass('statsgrid2016')) {
-                cel.addClass('statsgrid2016');
+            if (!cel.hasClass('statsgrid')) {
+                cel.addClass('statsgrid');
             }
         },
         eventHandlers: {
@@ -72,7 +73,10 @@ Oskari.clazz.define(
                 }
 
                 var isShown = event.getViewState() !== 'close';
-                this.getView().prepareMode(isShown, this.getConfiguration());
+                //this.getView().prepareMode(isShown, this.getConfiguration());
+                if(isShown) {
+                    this.getFlyout().lazyRender(this.getConfiguration());
+                }
             },
             /**
              * @method MapLayerEvent
