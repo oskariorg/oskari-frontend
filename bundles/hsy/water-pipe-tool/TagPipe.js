@@ -149,7 +149,10 @@ Oskari.clazz.define(
             me.templates.item = jQuery(
                 '<li class="accordion">' +
                 '<div class="header accordion-header clearfix">' +
-                '   <h3></h3>' +
+                ' <div class="accordion-header-text">' +
+                '   <span></span>' +
+                '   <h4></h4>' +
+                ' </div>' +
                 '</div>' +
                 '</li>'
             );
@@ -1086,11 +1089,12 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, tagpipe) {
-            var me = this,
-            topic = tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type);
+            var me = this;
+            //topic = tagpipe.tag_address+ ", "+me._getLocalization("tag-type-"+tagpipe.tag_type);
 
             item.attr('data-id', tagpipe.tag_id);
-            item.find('h3').html(topic);
+            item.find('span').text(me._getLocalization("tag-type-"+tagpipe.tag_type));
+            item.find('h4').text(tagpipe.tag_address);
             return item;
         },
 

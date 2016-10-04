@@ -104,10 +104,22 @@
 	clear: both;
 }
 
-.tag-pipe-wrapper .accordion .accordion-header h3 {
-	font-size: 16px;
-	line-height: 40px;
+.tag-pipe-wrapper .accordion .accordion-header .accordion-header-text{
+	width: 280px;
 	float: left;
+}
+
+.tag-pipe-wrapper .accordion .accordion-header .accordion-header-text span {
+    float: left;
+    width: 100%;
+    padding: 4px 0 0 10px;
+}
+
+.tag-pipe-wrapper .accordion .accordion-header .accordion-header-text h4 {
+	font-size: 16px;
+	line-height: 18px;
+	float: left;
+	width: 100%;
 	padding: 0 0 0 10px;
 }
 
