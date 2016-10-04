@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "Lokaliseer dichtstbijzijnde plaats",
             "geolocDesc": "Klik op kaart voor de dichtsbijzijnde plaats",
             "noResults": "Geen zoek resultaten",
+            "showMore": "Zoekopties weergeven",
+            "showLess": "Verbergen zoekopties",
+            "emptyOption": "* Geen selectie *",
             "errors": {
                 "searchTermMissing": "Zoek term is verplicht",
                 "searchFailed": "Zoeken is mislukt. Probeer het later opnieuw."
