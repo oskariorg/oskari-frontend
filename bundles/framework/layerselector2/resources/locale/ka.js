@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "ფენა ამჟამად მიუწვდომელია",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "ფენა ამჟამად მიუწვდომელია",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "ფენა შეიძლება პერიოდულად მიუწვდომელი იყოს რამდენიმე დღის განმავლობაში",
                 "iconClass": "backendstatus-maintenance"
