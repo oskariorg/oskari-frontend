@@ -67,7 +67,7 @@ div.geolocator-results {
         }
 
     }
-    
+
     div.search-results {
         margin-top: 15px;
 
@@ -93,6 +93,65 @@ div.geolocator-results {
 
     }
 
+}
+
+$display: table-cell;
+$align: middle;
+$margin-left: 0;
+$min-width:130px;
+$width:130px;
+$whitespace:nowrap;
+
+div.geoLocatorRow {
+
+  div.rowLabel{
+    display: $display;
+    vertical-align: $align;
+    margin-left: $margin-left;
+    min-width: $min-width;
+    width: $width;
+    white-space: $whitespace;}
+
+    div.geoLocatorDropdown{
+      display: $display;
+      vertical-align: $align;
+      margin-left: $margin-left;
+      min-width: $min-width;
+      width: $width;
+      white-space: $whitespace;}
+
+        div.ui-country-autocomplete-widget{
+          display: $display;
+          vertical-align: $align;
+          margin-left: $margin-left;
+          min-width: $min-width;
+          width: $width;
+          white-space: $whitespace;}
+
+            div.locationTypeDropdown{
+              display: $display;
+              vertical-align: $align;
+              margin-left: $margin-left;
+              min-width: $min-width;
+              width: $width;
+              white-space: $whitespace;}
+
+              div.nameLanguageDropdown{
+                display: $display;
+                vertical-align: $align;
+                margin-left: $margin-left;
+                min-width: $min-width;
+                width: $width;
+                white-space: $whitespace;}
+  }
+
+div.moreLess{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+div.geoLocatorRow{
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .elf-fake-link {

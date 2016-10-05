@@ -48,79 +48,56 @@ div.geolocator-results div.search-results {
     text-decoration: none !important;
     margin-left: 40px; }
 
+div.geoLocatorRow div.rowLabel {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.geoLocatorDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.ui-country-autocomplete-widget {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.locationTypeDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.nameLanguageDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.moreLess {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
+div.geoLocatorRow {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
 .elf-fake-link {
   /* This should apparently look like a normal link */
   text-decoration: underline;
   cursor: pointer;
   color: #0091FF; }
-
-  div.geoLocatorRow div.checkboxRow {
-    display: table-cell;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    vertical-align: middle;
- }
-  div.search table.search_result {
-    margin-bottom: 0; }
-  div.search table.search_result th {
-    text-align: left; }
-
-  div.geoLocatorRow div.rowLabel{
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    white-space: nowrap; }
-
-  div.geoLocatorRow div.geoLocatorDropdown{
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    padding-bottom: 3px;
-    white-space: nowrap; }
-  div.geoLocatorRow div.buttonRow{
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    padding-bottom: 3px;
-    white-space: nowrap; }
-  div.moreLess{
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  div.geoLocatorRow div.ui-country-autocomplete-widget {
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    padding-bottom: 3px;
-    white-space: nowrap; }
-
-  div.geoLocatorRow div.locationTypeDropdown {
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    padding-bottom: 3px;
-    white-space: nowrap;
-  }
-  div.geoLocatorRow div.nameLanguageDropdown {
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 0;
-    min-width: 130px;
-    width: 130px;
-    padding-bottom: 3px;
-    white-space: nowrap;
-  }
-  div.geoLocatorRow {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
