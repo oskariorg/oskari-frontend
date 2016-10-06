@@ -116,7 +116,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
           },
           getAdvancedSearchParams: function( val ) {
             var searchValues = [];
-            var chkArr = [];
             var obj = {};
             var queryValue;
               for( var i = 0; i< val.length; i++ ) {
@@ -187,6 +186,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
               // Populate autocomplete countries
               this.__getCountries();
 
+              //generate dropdown rows from data
               var count = _.keys( this.results ).length;
               var tmp = [];
               var resultArray = {locationtypes:{id:[], name:[]}, namelanguages:[] };
@@ -400,9 +400,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 values.errors = termErrors;
             }
 
-            //selections is defined in the _createAdvancedPanel method
             this._getDropdownValue(container);
-            //this._getCheckboxValue(container);
+            //selections is defined in the _createAdvancedPanel method
             var params = this.getAdvancedSearchParams(this.selections);
             /* params[0].LocationType
                params[0].NameLanguage */
@@ -416,8 +415,12 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
               values.lat = lat;
             }
             else {
-              values.locationtype = params[0].LocationType;
-              values.namelanguage = params[0].NameLanguage;
+              if(params[0].LocationType){
+                values.locationtype = params[0].LocationType;
+              }
+              if(params[0].NameLanguage){
+                values.namelanguage = params[0].NameLanguage;
+              }
               values.region = this.regionInput.getValue();
               values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
               values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
