@@ -20,7 +20,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         this.templates = {};
         //Selections for advanced search
         this.selections = [];
-        this.results = {locationtypes:[], namelanguages:[]};
+        this.results = {locationtypes:{id:[],name:[]}, namelanguages:[]};
+
         for (var t in this.__templates) {
             if(this.__templates.hasOwnProperty(t)) {
                 this.templates[t] = jQuery(this.__templates[t]);
@@ -114,27 +115,25 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             )
           },
           getAdvancedSearchParams: function( val ) {
-            var searchResult = [];
+            var searchValues = [];
             var chkArr = [];
             var obj = {};
+            var queryValue;
               for( var i = 0; i< val.length; i++ ) {
-               var queryValue =val[i].find(':selected').text();
+               var selected = val[i].find(':selected').text();
+               var n = parseInt(selected);
+               n ? queryValue = n : queryValue = selected;
+
                var queryKey = val[i].find(':selected').val();
 
-               if(!queryValue && !queryKey){
-                 var qv = val[i].attr('name');
-                 chkArr.push(qv);
-                 queryValue = chkArr;
-                 queryKey = val[i].attr('value');
-               }
                if( queryKey !== "empty" ){
                   obj[queryKey] = queryValue;
                }
           }
-          searchResult.push(obj);
-          return searchResult;
+          searchValues.push(obj);
+          return searchValues;
           },
-          _getDropdownValue: function( advancedContainer ){
+          _getDropdownValue: function( advancedContainer ) {
             var dropdownRows = advancedContainer.find('.dropdownRow');
             for (i = 0; i < dropdownRows.length; i += 1) {
                 dropdownDefs = jQuery(dropdownRows[i]).find('.geolocatorDef');
@@ -189,21 +188,23 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
               this.__getCountries();
 
               var count = _.keys( this.results ).length;
-              var resultArray = [];
+              var tmp = [];
+              var resultArray = {locationtypes:{id:[], name:[]}, namelanguages:[] };
               for( i = 0; i < count; i++ ){
                 if( i == 0 ){
-                  for( var k = 0; k < this.results.locationtypes.length; k++ ){
-                    resultArray.push( this.results.locationtypes[k] );
+                  for( var k = 0; k < _.keys( this.results.locationtypes.id ).length; k++ ){
+                    resultArray.locationtypes.id.push( this.results.locationtypes.id[k] );
+                    resultArray.locationtypes.name.push( this.results.locationtypes.id[k]  + ": " + this.results.locationtypes.name[k]  );
                     }
                     newLabel = this.loc.locationFilter;
                   }
                   else{
-                    resultArray = [];
                     for( var k = 0; k < this.results.namelanguages.length; k++ ){
-                      resultArray.push( this.results.namelanguages[k] );
+                      resultArray.namelanguages.push( this.results.namelanguages[k] );
                     }
                     newLabel = this.loc.namelangFilter;
                    }
+                   i == 0 ? tmp = resultArray.locationtypes.name : tmp = resultArray.namelanguages;
                     newRow = null;
                     newRow = me.__templates.dropdownRow.clone();
                       newRow.find('div.rowLabel').text(newLabel);
@@ -213,10 +214,10 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                       emptyOption.attr('value', 'empty');
                       emptyOption.text(me.loc.emptyOption);
                       dropdownDef.append(emptyOption);
-                       for (j = 0; j < resultArray.length; j++) {
+                       for (j = 0; j < tmp.length; j++) {
                            newOption = me.__templates.dropdownOption.clone();
                            newOption.attr('value', names.dropdown[i]);
-                           newOption.text(resultArray[j]);
+                           newOption.text(tmp[j]);
                            dropdownDef.append(newOption);
                        }
                       newRow.append(newDropdown);
@@ -403,6 +404,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             this._getDropdownValue(container);
             //this._getCheckboxValue(container);
             var params = this.getAdvancedSearchParams(this.selections);
+            debugger;
             /* params[0].LocationType
                params[0].NameLanguage */
             this.selections = [];
@@ -547,16 +549,14 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         __handleLocationTypeResults: function (results){
           var container = this.getContent().find('div.searchadvanced');
-          var reslocation = [];
-          var resnamelang = [];
+
           for(var i = 0; i<results[0].SI_LocationTypes.length; i++){
-          reslocation.push(results[0].SI_LocationTypes[i].id + ": " + results[0].SI_LocationTypes[i].name);
+            this.results.locationtypes.id[i] = results[0].SI_LocationTypes[i].id;
+            this.results.locationtypes.name[i] = results[0].SI_LocationTypes[i].name;
           }
           for(var i = 0; i<results[1].NameLanguages.length; i++){
-          resnamelang.push(results[1].NameLanguages[i]);
+            this.results.namelanguages.push(results[1].NameLanguages[i]);
           }
-          this.results.locationtypes = reslocation;
-          this.results.namelanguages= resnamelang;
         },
         /**
          * Renders the search results to a div.
