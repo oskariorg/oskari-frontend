@@ -404,7 +404,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             this._getDropdownValue(container);
             //this._getCheckboxValue(container);
             var params = this.getAdvancedSearchParams(this.selections);
-            debugger;
             /* params[0].LocationType
                params[0].NameLanguage */
             this.selections = [];
