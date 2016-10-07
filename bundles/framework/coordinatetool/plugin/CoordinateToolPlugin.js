@@ -603,7 +603,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             //get the transform from current data
             var sourceProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
-            console.log(sourceProjection)
             if (sourceProjection !== "EPSG:4326") {
                 me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, "EPSG:4326", 
                     function(responseData) {
