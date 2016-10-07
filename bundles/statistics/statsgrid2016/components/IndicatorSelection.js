@@ -1,65 +1,107 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(instance, sandbox) {
+	this.instance = instance;
 	this.sb = sandbox;
 	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+	this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
 }, {
 	__templates : {
 		main : _.template('<div class="statsgrid-ds-selections"></div>'),
 		selections : _.template('<div class="statsgrid-indicator-selections"></div>'),
-		select : _.template('<div><label><span>${name}</span><select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
+		select : _.template('<div class="selection">'+
+			'<div class="title">${name}</div>'+
+			'<div>'+
+			'	<select data-placeholder="${placeholder}" class="${clazz}"></select>'+
+			'</div>'+
+			'</div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
-	render : function(el) {
+	getPanelContent: function(config) {
 		var me = this;
 		var main = jQuery(this.__templates.main());
-		el.append(main);
+		var locale = me.instance.getLocalization();
+		me.spinner.insertTo(main);
 
-		// Datasources
-		main.append(jQuery(this.__templates.select({name : 'Datasources', clazz : 'stats-ds-selector', placeholder : ''})));
-		// chosen works better when it has context for the element, get a new reference for chosen
-		var dsSelector = main.find('.stats-ds-selector');
-		this.service.getDatasource().forEach(function(ds) {
-			dsSelector.append(me.__templates.option(ds));
-		});
-		dsSelector.chosen({ disable_search_threshold: 10,
-					width: '250px' });
+		if(config.indicatorSelector !== false){
 
-		// Indicator list
-		main.append(jQuery(this.__templates.select({name : 'Indicators', clazz : 'stats-ind-selector', placeholder : 'Select an indicator'})));
-		// chosen works better when it has context for the element, get a new reference for chosen
-		var indicatorSelector = main.find('.stats-ind-selector');
-		indicatorSelector.chosen({
-			allow_single_deselect : true,
-			disable_search_threshold: 10,
-			no_results_text: "Oops, nothing found!",
-					width: '250px'
-		});
-		this.populateIndicators(indicatorSelector, dsSelector.val());
-		var selectionsContainer = jQuery(this.__templates.selections());
-		main.append(selectionsContainer);
+			// Datasources
+			main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.datasourceTitle, clazz : 'stats-ds-selector', placeholder : locale.panels.newSearch.selectDatasourcePlaceholder})));
+			// chosen works better when it has context for the element, get a new reference for chosen
+			var dsSelector = main.find('.stats-ds-selector');
+			// Add empty option to show placeholder
+			dsSelector.append('<option></option>');
+			this.service.getDatasource().forEach(function(ds) {
+				dsSelector.append(me.__templates.option(ds));
+			});
+			dsSelector.chosen({
+				allow_single_deselect : true,
+				disable_search_threshold: 10,
+				no_results_text: locale.panels.newSearch.noResults,
+				width: '100%'
+			});
 
-		var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.sb);
-		dsSelector.on('change', function() {
-			params.clean();
-			me.populateIndicators(indicatorSelector, jQuery(this).val());
-		});
+			me.instance.addChosenHacks(dsSelector);
+			// Indicator list
+			main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector', placeholder : locale.panels.newSearch.selectIndicatorPlaceholder})));
+			// chosen works better when it has context for the element, get a new reference for chosen
+			var indicatorSelector = main.find('.stats-ind-selector');
+			// add empty selection to show placeholder
+			indicatorSelector.append('<option></option>');
+			this.populateIndicators(indicatorSelector, dsSelector.val());
+			indicatorSelector.chosen({
+				allow_single_deselect : true,
+				disable_search_threshold: 10,
+				no_results_text: locale.panels.newSearch.noResults,
+				width: '100%'
+			});
+			me.instance.addChosenHacks(indicatorSelector);
 
-		indicatorSelector.on('change', function() {
-			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val());
-		});
+			var selectionsContainer = jQuery(this.__templates.selections());
+			main.append(selectionsContainer);
+
+			var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.sb);
+			dsSelector.on('change', function() {
+				params.clean();
+				me.populateIndicators(indicatorSelector, jQuery(this).val());
+
+			});
+
+			indicatorSelector.on('change', function() {
+				params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config);
+			});
+		}
+
+
+		return main;
 	},
+
 	populateIndicators : function(select, datasrc) {
 		var me = this;
+
 		select.trigger('chosen:close');
-		var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-		// selects parent is the label tag, labels parent is the div containing label + dropdown
-        spinner.insertTo(select.parent().parent());
-        spinner.start();
+
+
+		if(!datasrc || datasrc === '') {
+			return;
+		}
+
+
+
 		this.service.getIndicatorList(datasrc, function(err, indicators) {
 			if(err) {
 				// notify error!!
 				return;
 			}
-			select.empty();
+			me.spinner.start();
+			select.find('option').each(function(){
+				var el = jQuery(this);
+				var elValue = el.attr('value');
+				if(elValue !== null && elValue !== '') {
+					el.remove();
+				}
+			});
+			//select.empty();
+
+
 			indicators.forEach(function(ind) {
 				select.append(me.__templates.option({
 					id : ind.id,
@@ -67,9 +109,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(s
 				}));
 			});
 			// let chosen know options has been updated (liszt:updated is only needed for old chosen version)
-			//select.trigger("liszt:updated");
-			select.trigger("chosen:updated");
-            spinner.stop();
+			select.trigger('chosen:updated');
+            me.spinner.stop();
 		});
 	}
 
