@@ -222,7 +222,8 @@ Oskari.registerLocalization(
                     "regionset": {
                         "placeholder": "Valitse aluejako"
                     }
-                }
+                },
+                "noRegionset": "Ei aluevalintaa"
             }
         }
     }

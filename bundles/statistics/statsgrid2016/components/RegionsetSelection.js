@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(i
 		var me = this;
 		var main = jQuery(this.__templates.main());
 
-
 		// Datasources
 		main.append(jQuery(this.__templates.select({name : 'Regionset', clazz : 'stats-regionset-selector', placeholder : ''})));
 		// chosen works better when it has context for the element, get a new reference for chosen

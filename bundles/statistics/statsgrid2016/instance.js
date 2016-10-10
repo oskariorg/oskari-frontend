@@ -75,7 +75,7 @@ Oskari.clazz.define(
                 var isShown = event.getViewState() !== 'close';
                 //this.getView().prepareMode(isShown, this.getConfiguration());
                 if(isShown) {
-                    this.getFlyout().lazyRender(this.getConfiguration());
+                   // this.getFlyout().lazyRender(this.getConfiguration());
                 }
             },
             /**

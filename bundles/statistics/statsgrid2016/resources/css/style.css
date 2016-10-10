@@ -27,6 +27,8 @@ div.oskari-flyoutcontent.statsgrid {
         margin-top: 12px; }
       div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection .margintopLarge, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections .margintopLarge {
         margin-top: 24px; }
+      div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection .noresults, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections .noresults {
+        font-style: italic; }
   div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
     background-color: #FDF8D9; }
   div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
