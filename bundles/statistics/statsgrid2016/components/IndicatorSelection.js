@@ -13,62 +13,83 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			'	<select data-placeholder="${placeholder}" class="${clazz}"></select>'+
 			'</div>'+
 			'</div>'),
+		headerWithTooltip:  _.template('<div class="selection tooltip">'+
+			'<div class="title">${title}</div>'+
+			'<div class="tooltip">${tooltip1}</div>'+
+			'<div class="tooltip">${tooltip2}</div>'+
+			'</div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
 	getPanelContent: function(config) {
 		var me = this;
 		var main = jQuery(this.__templates.main());
 		var locale = me.instance.getLocalization();
+		var panelLoc = locale.panels.newSearch;
 		me.spinner.insertTo(main);
 
-		if(config.indicatorSelector !== false){
+		// Datasources
+		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.datasourceTitle, clazz : 'stats-ds-selector', placeholder : locale.panels.newSearch.selectDatasourcePlaceholder})));
+		// chosen works better when it has context for the element, get a new reference for chosen
+		var dsSelector = main.find('.stats-ds-selector');
+		// Add empty option to show placeholder
+		dsSelector.append('<option></option>');
+		this.service.getDatasource().forEach(function(ds) {
+			dsSelector.append(me.__templates.option(ds));
+		});
+		dsSelector.chosen({
+			allow_single_deselect : true,
+			disable_search_threshold: 10,
+			no_results_text: locale.panels.newSearch.noResults,
+			width: '100%'
+		});
 
-			// Datasources
-			main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.datasourceTitle, clazz : 'stats-ds-selector', placeholder : locale.panels.newSearch.selectDatasourcePlaceholder})));
-			// chosen works better when it has context for the element, get a new reference for chosen
-			var dsSelector = main.find('.stats-ds-selector');
-			// Add empty option to show placeholder
-			dsSelector.append('<option></option>');
-			this.service.getDatasource().forEach(function(ds) {
-				dsSelector.append(me.__templates.option(ds));
-			});
-			dsSelector.chosen({
-				allow_single_deselect : true,
-				disable_search_threshold: 10,
-				no_results_text: locale.panels.newSearch.noResults,
-				width: '100%'
-			});
+		me.instance.addChosenHacks(dsSelector);
+		// Indicator list
+		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector', placeholder : locale.panels.newSearch.selectIndicatorPlaceholder})));
+		// chosen works better when it has context for the element, get a new reference for chosen
+		var indicatorSelector = main.find('.stats-ind-selector');
+		// add empty selection to show placeholder
+		indicatorSelector.append('<option></option>');
+		this.populateIndicators(indicatorSelector, dsSelector.val());
+		indicatorSelector.chosen({
+			allow_single_deselect : true,
+			disable_search_threshold: 10,
+			no_results_text: locale.panels.newSearch.noResults,
+			width: '100%'
+		});
+		me.instance.addChosenHacks(indicatorSelector);
 
-			me.instance.addChosenHacks(dsSelector);
-			// Indicator list
-			main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector', placeholder : locale.panels.newSearch.selectIndicatorPlaceholder})));
-			// chosen works better when it has context for the element, get a new reference for chosen
-			var indicatorSelector = main.find('.stats-ind-selector');
-			// add empty selection to show placeholder
-			indicatorSelector.append('<option></option>');
-			this.populateIndicators(indicatorSelector, dsSelector.val());
-			indicatorSelector.chosen({
-				allow_single_deselect : true,
-				disable_search_threshold: 10,
-				no_results_text: locale.panels.newSearch.noResults,
-				width: '100%'
-			});
-			me.instance.addChosenHacks(indicatorSelector);
+		// Refine data label and tooltips
+		var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1:panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
+		main.append(dataLabelWithTooltips);
 
-			var selectionsContainer = jQuery(this.__templates.selections());
-			main.append(selectionsContainer);
+		// Refine data selections
+		var selectionsContainer = jQuery(this.__templates.selections());
+		main.append(selectionsContainer);
 
-			var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.sb);
-			dsSelector.on('change', function() {
-				params.clean();
-				me.populateIndicators(indicatorSelector, jQuery(this).val());
+		var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.sb);
+		dsSelector.on('change', function() {
+			params.clean();
+			me.populateIndicators(indicatorSelector, jQuery(this).val());
 
-			});
+			// If removed selection then need to be also update indicator selection
+			if(jQuery(this).val() === '') {
+				indicatorSelector.val(indicatorSelector.find('option:first').val());
+				indicatorSelector.trigger('change');
+				indicatorSelector.trigger("chosen:updated");
+			}
+		});
 
-			indicatorSelector.on('change', function() {
-				params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config);
-			});
-		}
+		indicatorSelector.on('change', function() {
+			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config);
+			if(jQuery(this).val() !== '') {
+				dataLabelWithTooltips.find('.tooltip').hide();
+			} else {
+				dataLabelWithTooltips.find('.tooltip').show();
+			}
+		});
+
+
 
 
 		return main;

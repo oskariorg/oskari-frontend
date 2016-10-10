@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             config = config || {};
             var panels = [];
 
-            // Generate first pnel
+            // Generate first panel
             panels.push(this.getNewSearchPanel(config));
 
             if(config.grid !== false) {

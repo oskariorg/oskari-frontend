@@ -29,11 +29,30 @@ div.oskari-flyoutcontent{
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
 
-            div.selection, div.statsgrid-indicator-selections {
+            div.selection {
                 padding: 10px;
+
+                &.tooltip {
+                  padding-bottom: 0 !important;
+                }
+            }
+
+
+            div.statsgrid-indicator-selections {
+                padding-left: 10px;
+                padding-bottom: 10px;
+                padding-right: 10px;
+            }
+
+            div.selection, div.statsgrid-indicator-selections {
 
                 div.title {
                     font-weight: bold;
+                }
+
+                div.tooltip {
+                    font-style: italic;
+                    font-size: 14px;
                 }
 
                 .margintop {
@@ -49,6 +68,7 @@ div.oskari-flyoutcontent{
                 }
             }
         }
+
 
 
 

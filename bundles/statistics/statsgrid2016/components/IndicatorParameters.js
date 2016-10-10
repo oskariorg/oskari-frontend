@@ -6,7 +6,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 }, {
 	__templates : {
 		main : _.template('<div class="stats-ind-params">'+
-			'	<div class="title"></div>'+
 			'</div>'),
 		select : _.template('<div><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
@@ -49,9 +48,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 
 		this.service.getIndicatorMetadata(datasrc, indId, function(err, indicator) {
             me.spinner.stop();
-
-			cont.find('.title').html(panelLoc.refineSearchLabel);
-
 
 			if(err) {
 				// notify error!!
@@ -97,50 +93,48 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			});
 
 			// FIXME change this for use indicator regions
-			if(config.regionSelector !== false) {
-				var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
-				var select = me.__templates.select({
-					id : 'regionset',
-					name : 'Regionset',
-					clazz : 'stats-regionset-selector',
-					placeholder: placeholderText
-				});
-				if(indicator.regionsets.length === 0) {
-					select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
-					select.addClass('margintop');
-				}
-				cont.append(select);
-				var jqSelect = cont.find('.stats-regionset-selector');
-
-				// Add margin if there is selections
-				if(selections.length>0) {
-					jqSelect.parent().addClass('margintop');
-				}
-
-				// If there is indicators then do selections
-				if(indicator.regionsets.length > 0) {
-					// add empty selection to show placeholder
-					jqSelect.append('<option></option>');
-
-					me.service.getRegionsets().forEach(function(regionset) {
-						jqSelect.append(me.__templates.option(regionset));
-					});
-					jqSelect.chosen({
-						allow_single_deselect : true,
-						disable_search_threshold: 10,
-						width: '100%'
-					});
-					me.instance.addChosenHacks(jqSelect);
-					jqSelect.on('change', function() {
-						var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
-						var value = jQuery(this).val();
-						log.info('Selected region ' + value);
-						me.service.getStateService().setRegionset(value);
-					});
-					me.service.getStateService().setRegionset(jqSelect.val());
-				}
-				selections.push(jqSelect);
+			var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
+			var select = me.__templates.select({
+				id : 'regionset',
+				name : 'Regionset',
+				clazz : 'stats-regionset-selector',
+				placeholder: placeholderText
+			});
+			if(indicator.regionsets.length === 0) {
+				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
+				select.addClass('margintop');
 			}
+			cont.append(select);
+			var jqSelect = cont.find('.stats-regionset-selector');
+
+			// Add margin if there is selections
+			if(selections.length>0) {
+				jqSelect.parent().addClass('margintop');
+			}
+
+			// If there is indicators then do selections
+			if(indicator.regionsets.length > 0) {
+				// add empty selection to show placeholder
+				jqSelect.append('<option></option>');
+
+				me.service.getRegionsets().forEach(function(regionset) {
+					jqSelect.append(me.__templates.option(regionset));
+				});
+				jqSelect.chosen({
+					allow_single_deselect : true,
+					disable_search_threshold: 10,
+					width: '100%'
+				});
+				me.instance.addChosenHacks(jqSelect);
+				jqSelect.on('change', function() {
+					var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
+					var value = jQuery(this).val();
+					log.info('Selected region ' + value);
+					me.service.getStateService().setRegionset(value);
+				});
+				me.service.getStateService().setRegionset(jqSelect.val());
+			}
+			selections.push(jqSelect);
 
 
 			var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
