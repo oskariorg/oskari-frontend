@@ -27,15 +27,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			data : value
 		}));
 	},
-	indicatorSelected : function(el, datasrc, indId, config) {
+	indicatorSelected : function(el, datasrc, indId, config, elements) {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
 		config = config || {};
+		elements = elements || {};
 
 		this.clean();
 
 		if(!indId && indId ==='')  {
+			if(elements.dataLabelWithTooltips) {
+				elements.dataLabelWithTooltips.find('.tooltip').show();
+			}
 			return;
 		}
 
@@ -48,7 +52,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 
 		this.service.getIndicatorMetadata(datasrc, indId, function(err, indicator) {
             me.spinner.stop();
-
+            if(elements.dataLabelWithTooltips) {
+				elements.dataLabelWithTooltips.find('.tooltip').hide();
+			}
 			if(err) {
 				// notify error!!
 				return;
@@ -136,23 +142,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			}
 			selections.push(jqSelect);
 
-
-			var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-			btn.addClass('margintopLarge');
-			btn.setTitle(panelLoc.addButtonTitle);
-			btn.setHandler(function() {
-				var values = {
-					datasource : datasrc,
-					indicator : indId,
-					selections : {}
-				};
-				selections.forEach(function(select) {
-					values.selections[select.attr('name')] = select.val();
+			if(elements.btn) {
+				elements.btn.setHandler(function() {
+					var values = {
+						datasource : datasrc,
+						indicator : indId,
+						selections : {}
+					};
+					selections.forEach(function(select) {
+						values.selections[select.attr('name')] = select.val();
+					});
+					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
 				});
-				me.service.getStateService().addIndicator(datasrc, indId, values.selections);
-			});
-			btn.setEnabled(indicator.regionsets.length>0);
-			btn.insertTo(cont);
+				elements.btn.setEnabled(indicator.regionsets.length>0);
+			}
 		});
 	}
 });

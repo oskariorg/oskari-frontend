@@ -80,16 +80,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			}
 		});
 
+		var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+		btn.addClass('margintopLarge');
+		btn.setTitle(panelLoc.addButtonTitle);
+		btn.setEnabled(false);
+		btn.insertTo(main);
+
 		indicatorSelector.on('change', function() {
-			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config);
-			if(jQuery(this).val() !== '') {
-				dataLabelWithTooltips.find('.tooltip').hide();
-			} else {
-				dataLabelWithTooltips.find('.tooltip').show();
-			}
+			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config, {dataLabelWithTooltips:dataLabelWithTooltips, btn: btn});
 		});
-
-
 
 
 		return main;
