@@ -54,7 +54,6 @@ Oskari.clazz.define(
             }
 
             layers.forEach(function (oskariLayer) {
-
                 // default params and options
                 var defaultParams = {
                         layers: oskariLayer.getLayerName(),
@@ -72,7 +71,13 @@ Oskari.clazz.define(
                         buffer: 0
                     },
                     layerParams = oskariLayer.getParams(),
-                    layerOptions = oskariLayer.getOptions();
+                    layerOptions = oskariLayer.getOptions(),
+                    layerAttributes = oskariLayer.getAttributes();
+
+                if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
+                    defaultOptions.yx = _.clone(layerAttributes.reverseXY);
+                }
+
                 // Sub layers could be different types
                 if (oskariLayer.getLayerType() !== 'wms') {
                     return;
