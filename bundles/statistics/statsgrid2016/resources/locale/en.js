@@ -194,7 +194,40 @@ Oskari.registerLocalization(
         "connectionProblem": "The indicator could not be saved.",
         "parsedDataInfo": "The imported regions totally:",
         "parsedDataUnrecognized": "Unknown regions",
-        "loginToSaveIndicator": "If you want to save the indicator, please log in."
+        "loginToSaveIndicator": "If you want to save the indicator, please log in.",
+
+        // FIXME: check upper keys!!!
+        // statsgrid 2016 locales
+        "panels": {
+            "newSearch": {
+                "title": "UUSI AINEISTOHAKU",
+                "datasourceTitle": "Aineiston tarjoaja",
+                "indicatorTitle": "Aineisto",
+                "selectDatasourcePlaceholder": "Valitse tietolähde",
+                "selectIndicatorPlaceholder": "Valitse aineisto",
+                "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
+                "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
+                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut",
+                "refineSearchTooltip2": "Aineiston tarjoajan ja aineiston.",
+                "addButtonTitle": "Hae aineiston tiedot",
+                "defaultPlaceholder": "Valitse arvo",
+                "selectionValues": {
+                    "sex": {
+                        "placeholder": "Valitse sukupuoli",
+                        "male": "Miehet",
+                        "female": "Naiset",
+                        "total": "Yhteensä"
+                    },
+                    "year": {
+                        "placeholder": "Valitse vuosi"
+                    },
+                    "regionset": {
+                        "placeholder": "Valitse aluejako"
+                    }
+                },
+                "noRegionset": "Ei aluevalintaa"
+            }
+        }
     }
 }
 );

@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      *      reference to component that created the flyout
      */
     function () {
-        this.__components = null;
+        this.__panels = null;
     }, {
         /**
          * @method getName
@@ -36,41 +36,53 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          * Creates the UI for a fresh start.
          */
         lazyRender: function (config) {
-            if(this.__components) {
+            if(this.__panels) {
                 // already rendered
                 return;
             }
             this.addContent(this.getEl(), config);
         },
         addContent : function (el, config) {
-            var comps = this.getComponents(config);
-            comps.forEach(function(component, index) {
-                component.render(el);
-                var notLastComponent = index < comps.length - 1;
-                if(notLastComponent) {
-                    el.append('<hr style="border: 1px dashed #c3c3c3;" />');
-                }
+            var accordion = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Accordion'
+                );
+            var panels = this.getPanels(config);
+            _.each(panels, function(panel) {
+                accordion.addPanel(panel);
             });
+
+            accordion.insertTo(el);
         },
-        getComponents : function(config) {
-            if(this.__components) {
-                return this.__components;
+        getPanels : function(config) {
+            var locale = this.instance.getLocalization();
+            if(this.__panels) {
+                return this.__panels;
             }
-            this.__components = true;
+            this.__panels = true;
             var sb = this.instance.getSandbox();
             config = config || {};
-            var comps = [];
-            if(config.indicatorSelector !== false) {
-                comps.push(Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', sb));
-            }
-            if(config.regionSelector !== false) {
-                comps.push(Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelection', sb));
-            }
+            var panels = [];
+
+            // Generate first panel
+            panels.push(this.getNewSearchPanel(config));
+
             if(config.grid !== false) {
-                comps.push(Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb));
+                //panels.push(Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb));
             }
-            this.__components = comps;
-            return comps;
+            this.__panels = panels;
+            return panels;
+        },
+        getNewSearchPanel: function(config){
+            var sb = this.instance.getSandbox();
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            var container = panel.getContainer();
+            var locale = this.instance.getLocalization();
+
+            panel.setTitle(locale.panels.newSearch.title);
+
+            container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb).getPanelContent(config));
+
+            return panel;
         }
     }, {
         /**

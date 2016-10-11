@@ -1,4 +1,5 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(instance, sandbox) {
+	this.instance = instance;
 	this.sb = sandbox;
 	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
@@ -7,10 +8,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 		select : _.template('<div><label><span>${name}</span><select data-placeholder="${placeholder}" class="${clazz}"></select></label></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
-	render : function(el) {
+	getPanelContent : function() {
 		var me = this;
 		var main = jQuery(this.__templates.main());
-		el.append(main);
 
 		// Datasources
 		main.append(jQuery(this.__templates.select({name : 'Regionset', clazz : 'stats-regionset-selector', placeholder : ''})));
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 		});
 		rsSelector.chosen({ disable_search_threshold: 10,
 					width: '250px' });
-
+		me.instance.addChosenHacks(rsSelector);
 		rsSelector.on('change', function() {
 			var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
 			var value = jQuery(this).val();
@@ -29,5 +29,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelection', function(s
 			me.service.getStateService().setRegionset(value);
 		});
 		this.service.getStateService().setRegionset(rsSelector.val());
+
+		return main;
 	}
 });
