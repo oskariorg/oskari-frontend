@@ -81,9 +81,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             return me.container;
         },
         refresh: function () {
-            this.container.empty();
-            this.grid.setDataModel(this._getGridModel());
-            this.grid.renderTo(this.container);
+            if (this.container) {
+                this.container.empty();
+                this.grid.setDataModel(this._getGridModel());
+                this.grid.renderTo(this.container);
+                
+            }
         },
         /**
          * Confirms delete for given layer and deletes it if confirmed. Also shows
