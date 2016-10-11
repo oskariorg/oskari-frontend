@@ -135,10 +135,9 @@ Oskari.clazz.define(
          *
          */
         _createReverseProjection: function(projectionCode) {
-            var originalProjection = ol.proj.get(projectionCode),
-                originalAxisorder = proj4 && proj4.defs && proj4.defs(projectionCode) && proj4.defs(projectionCode).axis ? proj4.defs(projectionCode).axis : null;
+            var originalProjection = ol.proj.get(projectionCode);
 
-            if (!originalProjection || !originalAxisorder) {
+            if (!originalProjection) {
                 return null;
             }
 
