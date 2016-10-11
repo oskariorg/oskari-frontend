@@ -5237,8 +5237,9 @@
     c3_chart_internal_fn.initSubchart = function () {
         var $$ = this, config = $$.config,
             context = $$.context = $$.svg.append("g").attr("transform", $$.getTranslate('context'));
+       //burasi subchart icin
 
-        context.style('visibility', config.subchart_show ? 'visible' : 'hidden');
+        context.style("visibility", (config.subchart_show && config.subchart_axis_x_show) ? 'visible' : 'hidden');
 
         // Define g for chart area
         context.append('g')

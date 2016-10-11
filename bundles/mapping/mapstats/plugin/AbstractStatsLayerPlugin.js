@@ -170,10 +170,13 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             // TODO: get all statslayers on map?
             service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
                 if(err) {
-                    log.warn('Error getting indicator data', datasrc, indId, selections, me.getCurrentRegionset());
+                    Oskari.log('AbstractStatsLayerPlugin').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
                     return;
                 }
                 var classify = service.getClassificationService().getClassification(data);
+                if(!classify) {
+                    return;
+                }
 
                 // TODO: check that we got colors
                 var regions = [];

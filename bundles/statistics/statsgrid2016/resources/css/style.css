@@ -1,30 +1,62 @@
-#contentMap.statsgrid-contentMap {
-  position: relative; }
+/* ********************************************
+ * These are for common code in statsgrid
+ * ******************************************* */
+.statsgrid .statsgrid-table {
+  min-height: 80%;
+  height: 80%; }
 
-.oskariui-mode-content {
-  height: 100%;
-  background-color: white; }
+/* ********************************************
+ * These are for flyout version of statsgrid
+ * ******************************************* */
+div.oskari-flyoutcontent.statsgrid {
+  /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
+  max-width: 700px;
+  /* Chosen fixes */ }
+  div.oskari-flyoutcontent.statsgrid label span {
+    /* Indicator selection form */
+    width: 200px;
+    display: inline-block; }
+  div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections {
+    /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
+    max-width: 450px; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection {
+      padding: 10px; }
+      div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection.tooltip {
+        padding-bottom: 0 !important; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections {
+      padding-left: 10px;
+      padding-bottom: 10px;
+      padding-right: 10px; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.title, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.title {
+      font-weight: bold; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.tooltip, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.tooltip {
+      font-style: italic;
+      font-size: 14px; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection .margintop, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections .margintop {
+      margin-top: 12px; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection .margintopLarge, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections .margintopLarge {
+      margin-top: 24px; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection .noresults, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections .noresults {
+      font-style: italic; }
+    div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections input.oskari-button {
+      margin-left: 10px; }
+  div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
+    background-color: #FDF8D9; }
+  div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
+    border-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    border-top: 1px solid #aaa;
+    bottom: 100%;
+    box-shadow: none;
+    top: auto; }
+  div.oskari-flyoutcontent.statsgrid .chosen-container-active.chosen-with-drop.chosen-drop-up .chosen-single {
+    background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(40%, #eee), color-stop(90%, #fff));
+    background-image: -webkit-linear-gradient(#fff 40%, #eee 90%);
+    background-image: -moz-linear-gradient(#fff 40%, #eee 90%);
+    background-image: -o-linear-gradient(#fff 40%, #eee 90%);
+    background-image: linear-gradient(#fff 40%, #eee 90%);
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+    box-shadow: 0 1px 0 #fff inset; }
 
-.oskariui-mode-content.statsgrid-mode {
-    overflow: hidden;
-    height: auto;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0; }
-
-.statsgrid_100 {
-  height: 100%; }
-
-.statsgrid {
-  min-width: 100%;
-  min-height: 100%;
-  height: 100%; }
-
-  .statsgrid .statsgrid-table {
-    min-height: 80%;
-    height: 80%; }
-
-div.oskari-view.statsgrid table.oskari-grid th.selected {
-  background-color: #FDF8D9;
-}
+/*# sourceMappingURL=style.css.map */

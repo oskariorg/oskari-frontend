@@ -18,7 +18,8 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            viewClazz: 'Oskari.statistics.statsgrid.StatsView'
+            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
+            //,viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
     }, {
         afterStart: function (sandbox) {
@@ -39,8 +40,8 @@ Oskari.clazz.define(
             var tile = this.getTile();
             var cel = tile.container;
 
-            if (!cel.hasClass('statsgrid2016')) {
-                cel.addClass('statsgrid2016');
+            if (!cel.hasClass('statsgrid')) {
+                cel.addClass('statsgrid');
             }
         },
         eventHandlers: {
@@ -72,7 +73,10 @@ Oskari.clazz.define(
                 }
 
                 var isShown = event.getViewState() !== 'close';
-                this.getView().prepareMode(isShown, this.getConfiguration());
+                //this.getView().prepareMode(isShown, this.getConfiguration());
+                if(isShown) {
+                   // this.getFlyout().lazyRender(this.getConfiguration());
+                }
             },
             /**
              * @method MapLayerEvent
@@ -85,8 +89,7 @@ Oskari.clazz.define(
             }
         },
         hasData: function () {
-            return this.statsService.getDatasource().length
-                && this.statsService.getRegionsets().length;
+            return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
         },
 
         /**
@@ -115,6 +118,34 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
+        },
+        /**
+         * addChosenHacks Add chosen hacks to element
+         * FIXME: remove this when oskari components have own working selection
+         * @param {Jquery.element} element
+         */
+        addChosenHacks: function(element){
+
+            // Fixes chosen selection to visible when rendering chosen small height elements
+            element.on('chosen:showing_dropdown', function () {
+                jQuery(this).parents('div').css('overflow', 'visible');
+            });
+
+            // Fixes chosen selection go upper when chosen element is near by window bottom
+            element.on('chosen:showing_dropdown', function(event, params) {
+                var chosen_container = jQuery(event.target).next('.chosen-container');
+                var dropdown = chosen_container.find('.chosen-drop');
+                var dropdown_top = dropdown.offset().top - $(window).scrollTop();
+                var dropdown_height = dropdown.height();
+                var viewport_height = jQuery(window).height();
+
+                if ( dropdown_top + dropdown_height > viewport_height ) {
+                    chosen_container.addClass('chosen-drop-up');
+                }
+            });
+            element.on('chosen:hiding_dropdown', function(event, params) {
+                jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
+            });
         },
 
             /*
@@ -155,7 +186,7 @@ Oskari.clazz.define(
             });
             var active = service.getActiveIndicator();
             if(active) {
-                state.active = active.hash
+                state.active = active.hash;
             }
             return state;
         }

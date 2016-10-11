@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         addIndicator : function(datasrc, indicator, selections) {
             var ind = {
                 datasource : Number(datasrc),
-                indicator : Number(indicator),
+                indicator : indicator,
                 selections : selections,
                 hash : this.getHash(datasrc, indicator, selections)
             };
