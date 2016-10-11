@@ -25,12 +25,27 @@ div.oskari-flyoutcontent{
             display: inline-block;
         }
 
+        label.oskari-formcomponent {
+          width: 100%;
+          padding-left: 10px;
+        }
+
+        div.accordion {
+            div.accordion_panel {
+                div.content {
+                    padding: 10px;
+                }
+            }
+        }
+
         .statsgrid-ds-selections {
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
 
             div.selection {
-                padding: 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 10px;
 
                 &.tooltip {
                   padding-bottom: 0 !important;
@@ -41,7 +56,6 @@ div.oskari-flyoutcontent{
             div.statsgrid-indicator-selections {
                 padding-left: 10px;
                 padding-bottom: 10px;
-                padding-right: 10px;
             }
 
             div.selection, div.statsgrid-indicator-selections {

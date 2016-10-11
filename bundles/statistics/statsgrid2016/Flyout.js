@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         lazyRender: function (config) {
             if(this.__panels) {
                 // already rendered
+                // open first panel
+                this.__panels[0].open();
                 return;
             }
             this.addContent(this.getEl(), config);
@@ -66,6 +68,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             // Generate first panel
             panels.push(this.getNewSearchPanel(config));
 
+            // Generate extra features panel
+            panels.push(this.getExtraFeaturesPanel(config));
+
             if(config.grid !== false) {
                 //panels.push(Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb));
             }
@@ -75,12 +80,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getNewSearchPanel: function(config){
             var sb = this.instance.getSandbox();
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            panel.open();
             var container = panel.getContainer();
             var locale = this.instance.getLocalization();
 
             panel.setTitle(locale.panels.newSearch.title);
 
             container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb).getPanelContent(config));
+
+            return panel;
+        },
+        getExtraFeaturesPanel: function(config){
+            var sb = this.instance.getSandbox();
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            var container = panel.getContainer();
+            var locale = this.instance.getLocalization();
+
+            panel.setTitle(locale.panels.extraFeatures.title);
+
+            container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', this.instance, sb).getPanelContent(config));
 
             return panel;
         }

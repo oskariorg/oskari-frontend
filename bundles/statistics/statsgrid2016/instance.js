@@ -75,7 +75,7 @@ Oskari.clazz.define(
                 var isShown = event.getViewState() !== 'close';
                 //this.getView().prepareMode(isShown, this.getConfiguration());
                 if(isShown) {
-                   // this.getFlyout().lazyRender(this.getConfiguration());
+                    this.getFlyout().lazyRender(this.getConfiguration());
                 }
             },
             /**
@@ -175,7 +175,7 @@ Oskari.clazz.define(
             var state = {
                 indicators : [],
                 regionset : service.getRegionset(),
-                view : this.getView().isVisible
+                view : this.getView().isVisible || false
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

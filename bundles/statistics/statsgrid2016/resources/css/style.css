@@ -16,17 +16,23 @@ div.oskari-flyoutcontent.statsgrid {
     /* Indicator selection form */
     width: 200px;
     display: inline-block; }
+  div.oskari-flyoutcontent.statsgrid label.oskari-formcomponent {
+    width: 100%;
+    padding-left: 10px; }
+  div.oskari-flyoutcontent.statsgrid div.accordion div.accordion_panel div.content {
+    padding: 10px; }
   div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections {
     /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 450px; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection {
-      padding: 10px; }
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 10px; }
       div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection.tooltip {
         padding-bottom: 0 !important; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections {
       padding-left: 10px;
-      padding-bottom: 10px;
-      padding-right: 10px; }
+      padding-bottom: 10px; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.title, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.title {
       font-weight: bold; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.tooltip, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.tooltip {
