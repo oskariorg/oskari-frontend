@@ -64,7 +64,8 @@ Oskari.clazz.define(
                         'VERSION' : _layer.getVersion() || '1.3.0'
                     },
                     layerParams = _layer.getParams() || {},
-                    layerOptions = _layer.getOptions() || {};
+                    layerOptions = _layer.getOptions() || {},
+                    layerAttributes = _layer.getAttributes() || undefined;
 
                 if (_layer.isRealtime()) {
                     var date = new Date();
@@ -77,23 +78,35 @@ Oskari.clazz.define(
                     }
                 }
                 var layerImpl = null;
-                if(layerOptions.singleTile === true) {
 
-                      layerImpl = new ol.layer.Image({
+
+                var projection = this.getMapModule().getProjection(),
+                    reverseProjection;
+                if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
+                    var projectionCode = this.getMapModule().getProjection();
+                    //use reverse coordinate order for this layer!
+                    if (layerAttributes.reverseXY[projectionCode]) {
+                        reverseProjection = this._createReverseProjection(projectionCode);
+                    }
+                }
+                if(layerOptions.singleTile === true) {
+                    layerImpl = new ol.layer.Image({
                         source: new ol.source.ImageWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
-                            crossOrigin : _layer.getAttributes('crossOrigin')
+                            crossOrigin : _layer.getAttributes('crossOrigin'),
+                            projection: reverseProjection ? reverseProjection : undefined
                         }),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                 } else {
                     layerImpl = new ol.layer.Tile({
-                        source : new ol.source.TileWMS({
+                        source : new ol.source.OskariTileWMS({
                             url : _layer.getLayerUrl(),
                             params : defaultParams,
-                            crossOrigin : _layer.getAttributes('crossOrigin')
+                            crossOrigin : _layer.getAttributes('crossOrigin'),
+                            projection: reverseProjection ? reverseProjection : undefined
                         }),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
@@ -115,6 +128,32 @@ Oskari.clazz.define(
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
+        },
+        /**
+         *
+         * @method @private _createReverseProjection Create a clone of the projection object with reversed axis order
+         *
+         */
+        _createReverseProjection: function(projectionCode) {
+            var originalProjection = ol.proj.get(projectionCode),
+                originalAxisorder = proj4 && proj4.defs && proj4.defs(projectionCode) && proj4.defs(projectionCode).axis ? proj4.defs(projectionCode).axis : null;
+
+            if (!originalProjection || !originalAxisorder) {
+                return null;
+            }
+
+            var reverseAxisOrder = (originalAxisorder === "enu") ? "neu" : "enu";
+            reverseProjection = new ol.proj.Projection({
+                "code": projectionCode,
+                "units": originalProjection.getUnits(),
+                "extent": originalProjection.getExtent(), 
+                "axisOrientation": reverseAxisOrder,
+                "global": originalProjection.isGlobal(),
+                "metersPerUnit": originalProjection.getMetersPerUnit(),
+                "worldExtent": originalProjection.getWorldExtent(),
+                "getPointResolution": originalProjection.getPointResolution
+            });
+            return reverseProjection;
         },
 
         /**
