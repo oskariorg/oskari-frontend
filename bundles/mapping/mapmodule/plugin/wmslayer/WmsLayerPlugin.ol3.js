@@ -131,7 +131,7 @@ Oskari.clazz.define(
         },
         /**
          *
-         * @method @private _createReverseProjection Create a clone of the projection object with reversed axis order
+         * @method @private _createReverseProjection Create a clone of the projection object with axis order neu
          *
          */
         _createReverseProjection: function(projectionCode) {
@@ -142,12 +142,11 @@ Oskari.clazz.define(
                 return null;
             }
 
-            var reverseAxisOrder = (originalAxisorder === "enu") ? "neu" : "enu";
             reverseProjection = new ol.proj.Projection({
                 "code": projectionCode,
                 "units": originalProjection.getUnits(),
                 "extent": originalProjection.getExtent(), 
-                "axisOrientation": reverseAxisOrder,
+                "axisOrientation": "neu",
                 "global": originalProjection.isGlobal(),
                 "metersPerUnit": originalProjection.getMetersPerUnit(),
                 "worldExtent": originalProjection.getWorldExtent(),
