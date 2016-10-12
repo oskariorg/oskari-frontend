@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Kartlagret är inte tillgängligt just nu.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kartlagret är inte tillgängligt just nu.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
                 "iconClass": "backendstatus-maintenance"

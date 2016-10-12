@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "Sloj nije dostupan",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Sloj nije dostupan",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Sloj može biti povrenemo nedostupan nekoliko sledećih dana",
                 "iconClass": "backendstatus-maintenance"

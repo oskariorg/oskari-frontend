@@ -516,7 +516,55 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
              olStyle.label = "${"+style.text.labelProperty+"}";
           }
             return olStyle;
-        }
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                zoomToBounds = null;
+
+            if (!feature) {
+                return;
+            }
+
+            if (feature && feature.geometry && feature.geometry.getBounds()) {
+                bounds = feature.geometry.getBounds();
+                centroid = bounds.toGeometry().getCentroid();
+                mapBounds = me.getMap().getExtent();
+                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                if (bounds.getHeight() < mapBounds.getHeight() && bounds.getWidth() < mapBounds.getWidth()) {
+                    zoomToBounds = null;
+                } else {
+                    zoomToBounds = bounds;
+                }
+                return {
+                    'x': centroid.x,
+                    'y': centroid.y,
+                    'bounds': zoomToBounds
+                }
+            }
+
+            return null;         
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new OpenLayers.Format.WKT(),
+                feature = wktFormat.read(wkt);
+
+            return feature;
+        }       
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
     }, {

@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "A camada não está disponível",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "A camada não está disponível",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "A camada pode não estar disponível por alguns momentos nos próximos dias",
                 "iconClass": "backendstatus-maintenance"
