@@ -16,17 +16,25 @@ div.oskari-flyoutcontent.statsgrid {
     /* Indicator selection form */
     width: 200px;
     display: inline-block; }
+  div.oskari-flyoutcontent.statsgrid label.oskari-formcomponent {
+    width: 100%;
+    padding-left: 10px; }
+  div.oskari-flyoutcontent.statsgrid div.accordion div.accordion_panel div.content {
+    padding: 10px; }
+  div.oskari-flyoutcontent.statsgrid .chosen-container .chosen-results {
+    max-height: 140px; }
   div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections {
     /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 450px; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection {
-      padding: 10px; }
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 10px; }
       div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection.tooltip {
         padding-bottom: 0 !important; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections {
       padding-left: 10px;
-      padding-bottom: 10px;
-      padding-right: 10px; }
+      padding-bottom: 10px; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.title, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.title {
       font-weight: bold; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection div.tooltip, div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections div.tooltip {
@@ -58,5 +66,14 @@ div.oskari-flyoutcontent.statsgrid {
     border-radius: 0 0 4px 4px;
     border-top: 0;
     box-shadow: 0 1px 0 #fff inset; }
+  div.oskari-flyoutcontent.statsgrid .stats-table {
+    margin-top: 14px; }
+    div.oskari-flyoutcontent.statsgrid .stats-table .noresults .title {
+      background-color: #000;
+      color: #fff;
+      padding: 8px 10px 8px 12px;
+      font-weight: bold; }
+    div.oskari-flyoutcontent.statsgrid .stats-table .noresults .content {
+      padding: 10px; }
 
 /*# sourceMappingURL=style.css.map */

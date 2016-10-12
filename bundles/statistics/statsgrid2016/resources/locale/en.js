@@ -226,7 +226,16 @@ Oskari.registerLocalization(
                     }
                 },
                 "noRegionset": "Ei aluevalintaa"
+            },
+            "extraFeatures": {
+                "title": "LISÄEHDOT JA -OMINAISUUDET",
+                "showMapLayers": "Näytä karttatasot"
+
             }
+        },
+        "statsgrid": {
+            "title": "HAETUT AINEISTOT",
+            "noResults": "Ei valittuja aineistoja"
         }
     }
 }

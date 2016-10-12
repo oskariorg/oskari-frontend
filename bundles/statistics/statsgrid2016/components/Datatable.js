@@ -1,15 +1,31 @@
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, sandbox) {
+    this.instance = instance;
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.__bindToEvents();
 }, {
     __templates : {
-        main : _.template('<div class="stats-table"></div>')
+        main : _.template('<div class="stats-table">'+
+            '<div class="noresults">'+
+            '   <div class="title"></div>'+
+            '   <div class="content"></div>'+
+            '</div>'+
+            '<div class="grid"></div>'+
+            '</div>')
     },
     render : function(el) {
         var me = this;
+        var locale = me.instance.getLocalization();
+        var gridLoc = locale.statsgrid;
+
         var main = jQuery(this.__templates.main());
+        me.spinner.insertTo(main);
+        var noresults = main.find('.noresults');
+        noresults.find('.title').html(gridLoc.title);
+        noresults.find('.content').html(gridLoc.noResults);
+
         this.mainEl = main;
         this.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         this.grid.on('column.selected', function(indicatorHash) {
@@ -46,20 +62,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
         }
         var me = this;
         var regionset = this.service.getRegionsets(setId);
-        var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
-        overlay.overlay(this.mainEl, true);
+        //var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
+        //overlay.overlay(this.mainEl, true);
+        if(this.getIndicators().length>0){
+            me.spinner.start();
+        }
         this.service.getRegions(setId, function(err, regions) {
             me.createModel(regions, function(model) {
                 me.updateModel(model, regions);
-                overlay.close();
-            })
+                me.spinner.stop();
+            });
         });
     },
     updateModel : function(model, regions) {
-        this.grid.setColumnUIName('region', this.service.getRegionsets(this.getCurrentRegionset()).name);
         var me = this;
-        var indicators = this.getIndicators();
+        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+
+        var indicators = this.getIndicators();
+        // Show no results text
+        if(indicators.length === 0) {
+            statsTableEl.find('.oskari-grid').hide();
+            statsTableEl.find('.noresults').show();
+            return;
+        }
+        // Show datatable
+        else {
+            statsTableEl.find('.oskari-grid').show();
+            statsTableEl.find('.noresults').hide();
+        }
+
+        this.grid.setColumnUIName('region', this.service.getRegionsets(this.getCurrentRegionset()).name);
+
 
         var regionIdMap = {};
         regions.forEach(function(reg) {
@@ -71,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
         // done is called when we have indicator names for columns
         var done = function() {
             me.grid.setDataModel(model);
-            me.grid.renderTo(me.mainEl);
+            me.grid.renderTo(me.mainEl.find('.grid'));
             //me.grid.contentScroll(true);
         };
         if(!indicators.length) {
@@ -108,7 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
     handleIndicatorRemoved: function(datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
-        log.info('Indicator removed', src, indId, selections)
+        log.info('Indicator removed', src, indId, selections);
         this.handleRegionsetChanged(this.getCurrentRegionset());
     },
     createModel : function(regions, callback) {

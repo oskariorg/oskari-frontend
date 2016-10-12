@@ -70,7 +70,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance, this.sb);
 		dsSelector.on('change', function() {
 			params.clean();
-			me.populateIndicators(indicatorSelector, jQuery(this).val());
 
 			// If removed selection then need to be also update indicator selection
 			if(jQuery(this).val() === '') {
@@ -78,6 +77,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 				indicatorSelector.trigger('change');
 				indicatorSelector.trigger("chosen:updated");
 			}
+			// else show spinner
+			else {
+				me.spinner.start();
+			}
+
+			me.populateIndicators(indicatorSelector, jQuery(this).val());
 		});
 
 		var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -104,14 +109,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			return;
 		}
 
-
-
 		this.service.getIndicatorList(datasrc, function(err, indicators) {
 			if(err) {
 				// notify error!!
 				return;
 			}
-			me.spinner.start();
+
 			select.find('option').each(function(){
 				var el = jQuery(this);
 				var elValue = el.attr('value');
@@ -119,8 +122,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 					el.remove();
 				}
 			});
-			//select.empty();
 
+			select.empty();
+
+			// add empty selection to show placeholder
+			select.append('<option></option>');
 
 			indicators.forEach(function(ind) {
 				select.append(me.__templates.option({
