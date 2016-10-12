@@ -232,6 +232,10 @@ Oskari.registerLocalization(
                 "showMapLayers": "Näytä karttatasot"
 
             }
+        },
+        "statsgrid": {
+            "title": "HAETUT AINEISTOT",
+            "noResults": "Ei valittuja aineistoja"
         }
     }
 }
