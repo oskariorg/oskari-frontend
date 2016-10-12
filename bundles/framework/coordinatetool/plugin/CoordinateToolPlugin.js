@@ -647,6 +647,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 // update with map coordinates if coordinates not given
                 data = me._getMapXY();
             }
+
             service.getReverseGeocode(
                 // Success callback
                 function (response) {
@@ -758,10 +759,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         var dataServer = _.clone(data);
                         if(me._projectionSelect) {
                             if(me._mapmodule.getProjection() === me._projectionSelect.val()) {
-                               me.refresh(data);
+                               me.refresh(_.clone(data));
                             }
                         } else {
-                            me.refresh(data);
+                            me.refresh(_.clone(data));
                         }
 
 
@@ -770,7 +771,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
 
                         if (event.isPaused() && me._showReverseGeocode){
-                            me._updateReverseGeocode(data);
+                            me._updateReverseGeocode(_.clone(data));
                         }
                     }
                 },
@@ -808,13 +809,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         },
                         dataServer = _.clone(data);
                     if(!me._showMouseCoordinates) {
-                        me.refresh(data);
+                        //don't manipulate the original data- object, we need the coordinates in map projection for the reverse geocoding to work
+                        me.refresh(_.clone(data));
                         if(me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
                         }
                     }
                     if (me._showReverseGeocode){
-                        me._updateReverseGeocode(data);
+                        me._updateReverseGeocode(_.clone(data));
                     }
                 },
                 /**
