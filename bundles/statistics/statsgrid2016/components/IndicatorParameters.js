@@ -168,6 +168,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 						values.selections[select.attr('name')] = select.val();
 					});
 					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+
+					me.instance.getFlyout().closePanels();
 				});
 				elements.btn.setEnabled(indicator.regionsets.length>0);
 			}

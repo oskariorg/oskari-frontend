@@ -128,7 +128,16 @@ Oskari.clazz.define(
 
             // Fixes chosen selection to visible when rendering chosen small height elements
             element.on('chosen:showing_dropdown', function () {
-                jQuery(this).parents('div').css('overflow', 'visible');
+
+                jQuery(this).parents('div').each(function() {
+                    var el = jQuery(this);
+                    if(!el.hasClass('oskari-flyoutcontentcontainer')) {
+                        el.css('overflow', 'visible');
+                    }
+
+                });
+
+
             });
 
             // Fixes chosen selection go upper when chosen element is near by window bottom

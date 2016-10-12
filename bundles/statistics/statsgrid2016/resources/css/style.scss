@@ -38,6 +38,10 @@ div.oskari-flyoutcontent{
             }
         }
 
+        .chosen-container .chosen-results {
+            max-height: 140px;
+        }
+
         .statsgrid-ds-selections {
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
@@ -114,6 +118,23 @@ div.oskari-flyoutcontent{
          border-radius: 0 0 4px 4px;
          border-top: 0;
          box-shadow: 0 1px 0 #fff inset;
+        }
+
+        .stats-table{
+            margin-top: 14px;
+
+            .noresults {
+                .title {
+                    background-color:#000;
+                    color:#fff;
+                    padding:8px 10px 8px 12px;
+                    font-weight:bold;
+                }
+
+                .content{
+                    padding:10px;
+                }
+            }
         }
     }
 }
