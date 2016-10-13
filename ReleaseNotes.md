@@ -48,6 +48,7 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
         '    </StyledLayerDescriptor>'
 }]);
 ```
+
 ### Mapmodule
 
 Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.
@@ -64,6 +65,10 @@ This fixes an issue where for example admin bundles were not loaded correctly in
 ### jQuery.browser checks removed
 
 All jQuery.browser check are removed in preparation for jQuery update.
+
+### divmanazer
+
+Grid setColumnUIName function now allows also function from uiName parameter. If uiName type is string then it's used by default, if type is function then function is runned and function param include uiname object.
 
 ## 1.38.3
 
