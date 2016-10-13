@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "Shtresa e hartës aktualisht nuk është në dispozicion",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Shtresa e hartës aktualisht nuk është në dispozicion",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Shtresa e hartës gjatë disa ditëve të ardhshme herë pas here mund të mos jetë në dispozicion",
                 "iconClass": "backendstatus-maintenance"

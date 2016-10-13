@@ -2,6 +2,19 @@
 
 ## 1.39.0
 
+### admin-layerselector / wms ol2 and ol3
+
+Implemented functionality to force YX axis order (=neu) for wms-layers for certain projections with ``reverseXY`` attribute JSON.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseXY': {
+      'EPSG:3035':true
+    }
+  }
+```
+
 ### Migration for embedded maps
 
 The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.

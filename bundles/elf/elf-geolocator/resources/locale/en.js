@@ -28,10 +28,15 @@ Oskari.registerLocalization(
             "fuzzyResultsTitle": "Fuzzy search results",
             "filterResultsTitle": "Region filter results",
             "countryFilter": "Select country",
+            "locationFilter": "Location type",
+            "namelangFilter": "Name language",
             "backButton": "Back",
             "geolocButton": "Locate nearest place",
             "geolocDesc": "Click the map and locate the placename nearest the place.",
             "noResults": "No search results",
+            "showMore": "Show search options",
+            "showLess": "Hide search options",
+            "emptyOption": "* No selection *",
             "errors": {
                 "searchTermMissing": "An error occurred. The search term is required. Please type it and try again.",
                 "searchFailed": "An error occurred. The search could not be completed."

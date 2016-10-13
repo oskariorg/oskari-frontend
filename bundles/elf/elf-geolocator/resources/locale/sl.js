@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "Poišči najbližjo lokacijo",
             "geolocDesc": "Klikni na karto, da poiščeš najbližjo lokacijo",
             "noResults": "Ni iskanih rezultatov",
+            "showMore": "Pokaži iskalne možnosti",
+            "showLess": "Skrij iskalne možnosti",
+            "emptyOption": "*Ni izbora*",
             "errors": {
                 "searchTermMissing": "Zahtevan je iskalni pogoj",
                 "searchFailed": "Iskanje je bilo neuspešno. Prosim poskusi kasneje."

@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "The map layer is not currently available.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "The map layer is not currently available.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "The map layer may be periodically not available during the next few days.",
                 "iconClass": "backendstatus-maintenance"

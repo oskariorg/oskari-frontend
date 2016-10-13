@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "La capa no está actualmente disponible",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "La capa no está actualmente disponible",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "La capa puede no estar disponible de manera periódica durante los próximos días",
                 "iconClass": "backendstatus-maintenance"

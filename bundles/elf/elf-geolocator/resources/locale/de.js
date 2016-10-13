@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "NOT TRANSLATED",
             "geolocDesc": "NOT TRANSLATED",
             "noResults": "Keine Suchergebnisse",
+            "showMore": "Ergebnisse anzeigen",
+            "showLess": "Ergebnisse ausblenden",
+            "emptyOption": "* Keine Auswahl *",
             "errors": {
                 "searchTermMissing": "Suchbegriff eingeben",
                 "searchFailed": "Die Suche ist fehlgeschlagen. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."

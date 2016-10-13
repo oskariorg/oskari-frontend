@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Mapová vrstva je momentálne nedostupná",
                 "iconClass": "backendstatus-dolu"
             },
+            "ERROR": {
+                "tooltip": "Mapová vrstva je momentálne nedostupná",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "V nasledujúcich dňoch môže byť mapová vrstva pravidelne nedostupná",
                 "iconClass": "backendstatus-údržba"

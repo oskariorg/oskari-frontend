@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "Kortlaget er ikke tilgængeligt",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kortlaget er ikke tilgængeligt",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kortlaget vil være lejlighedsvis utilgængeligt i de kommende dage",
                 "iconClass": "backendstatus-maintenance"

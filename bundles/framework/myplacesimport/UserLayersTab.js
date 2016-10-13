@@ -85,7 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 this.container.empty();
                 this.grid.setDataModel(this._getGridModel());
                 this.grid.renderTo(this.container);
-                
             }
         },
         /**

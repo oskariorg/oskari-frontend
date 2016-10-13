@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "Localizza luogo più vicino",
             "geolocDesc": "Clicca sulla mappa per localizzare il luogo più vicino",
             "noResults": "Nessun risultato",
+            "showMore": "Mostra le opzioni di ricerca",
+            "showLess": "Nascondi le opzioni di ricerca",
+            "emptyOption": "Nessuna selezione",
             "errors": {
                 "searchTermMissing": "E' obbligatorio inserire il nome del luogo da ricercare",
                 "searchFailed": "La ricerca è fallita. Per favore, riprova più tardi."
