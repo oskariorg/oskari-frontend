@@ -221,7 +221,7 @@ Oskari.clazz.define(
                     popup.setColourScheme(colourScheme);
                 }
                 popup.onClose(function () {
-                    me.close(id);
+                    me.close(id, null, true);
                 });
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
@@ -838,7 +838,7 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id, position) {
+        close: function (id, position, alreadyClosed) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
@@ -857,7 +857,7 @@ Oskari.clazz.define(
                             }
                             if (popup.popup && popup.type === "desktop") {
                                 this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
-                            } else if (popup.popup && popup.type === "mobile") {
+                            } else if (popup.popup && popup.type === "mobile" && !alreadyClosed) {
                                 popup.popup.close();
                             }
                             delete this._popups[pid];
@@ -872,7 +872,7 @@ Oskari.clazz.define(
             if (this._popups[id]) {
                 if (this._popups[id].popup && this._popups[id].type === "desktop") {
                     this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
-                } else if (this._popups[id].popup && this._popups[id].type === "mobile") {
+                } else if (this._popups[id].popup && this._popups[id].type === "mobile" && !alreadyClosed) {
                     this._popups[id].popup.close();
                 }
                 delete this._popups[id];
