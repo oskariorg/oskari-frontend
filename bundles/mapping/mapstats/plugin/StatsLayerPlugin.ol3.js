@@ -196,39 +196,28 @@ Oskari.clazz.define(
             var me = this,
                 eventBuilder = me.getSandbox().getEventBuilder(
                     'MapStats.FeatureHighlightedEvent'
-                ),
-                highlightEvent,
-                layerScales = me.getMapModule().calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                ),
-
-
-                wms = {
-                    'URL': me.ajaxUrl + '&LAYERID=' + layer.getId(),
-                    'LAYERS': layer.getLayerName(),
-                    'FORMAT': 'image/png'
-                },
-
-                openlayer = new ol.layer.Tile({
-                    source: new ol.source.TileWMS({
-                        url: wms.URL,
-                        //crossOrigin : 'anonymous',
+                );
+            var openlayer = new ol.layer.Image({
+                    source: new ol.source.ImageWMS({
+                        url: me.ajaxUrl + '&LAYERID=' + layer.getId(),
                         params: {
-                            'LAYERS': wms.LAYERS,
-                            'FORMAT': wms.FORMAT
+                            'LAYERS': layer.getLayerName(),
+                            'FORMAT': 'image/png'
                         },
                         crossOrigin : layer.getAttributes('crossOrigin')
                     }),
-                    id: layer.getId(),
-                    transparent: true,
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
                     visible: layer.isInScale(me.getSandbox().getMap().getScale()) && layer.isVisible(),
-                    singleTile: true,
                     buffer: 0
                 });
+            openlayer.setOpacity(layer.getOpacity() / 100);
+            // Set min max Resolutions
+            if (layer.getMaxScale() && layer.getMaxScale() !== -1 ) {
+                openlayer.setMinResolution(this.getMapModule().getResolutionForScale(layer.getMaxScale()));
+            }
+            // No definition, if scale is greater than max resolution scale
+            if (layer.getMinScale()  && layer.getMinScale() !== -1 && (layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
+                openlayer.setMaxResolution(this.getMapModule().getResolutionForScale(layer.getMinScale()));
+            }
 
 
             //Select control styles
@@ -262,10 +251,9 @@ Oskari.clazz.define(
             );
 
 
-            openlayer.setOpacity(layer.getOpacity() / 100);
 
             me.getMap().addLayer(openlayer);
-            me._layers[openlayer.get('id')] = openlayer;
+            me._layers[layer.getId()] = openlayer;
 
             //Select control
             map.on('singleclick', me._handleSingleClick, this);
@@ -595,7 +583,6 @@ Oskari.clazz.define(
             this._manageFeatureVisibility(params);
 
             this.featureAttribute = params.VIS_ATTR;
-
             if (mapLayer !== null && mapLayer !== undefined) {
                 mapLayer.getSource().updateParams({
                     VIS_ID: params.VIS_ID,

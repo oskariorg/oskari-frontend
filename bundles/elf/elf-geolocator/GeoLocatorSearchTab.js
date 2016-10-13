@@ -557,6 +557,9 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 });
         },
         __handleLocationTypeResults: function (results){
+          if (!results) {
+            return;
+          }
           var container = this.getContent().find('div.searchadvanced');
 
           for(var i = 0; i<results[0].SI_LocationTypes.length; i++){

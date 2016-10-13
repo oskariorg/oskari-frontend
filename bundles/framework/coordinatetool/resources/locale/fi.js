@@ -78,7 +78,11 @@ Oskari.registerLocalization(
                     "EPSG:2391": "KKJ kaista 1",
                     "EPSG:2392": "KKJ kaista 2",
                     "EPSG:2394": "KKJ kaista 4"
-                }
+                },
+                "emergencyCallLabel": "Hätäpuheluissa käytettäväksi suositellut koordinaatit ovat",
+                "emergencyCallLabelAnd": "ja",
+                "showCoordinateFormatDisplay":"Näytä koordinaatit &raquo;",
+                "showInputValues":"&laquo; Syötä arvot"
             },
             "cannotTransformCoordinates" : {
                 "title": "Virhe",

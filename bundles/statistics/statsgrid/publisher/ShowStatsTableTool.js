@@ -36,19 +36,16 @@ function() {
     getTool: function(pdata){
         var me = this,
             statsGrid = me.__sandbox.getStatefulComponents().statsgrid,
-            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state,
-            layer = me._getStatsLayer();
+            statsGridState = Oskari.util.keyExists(pdata, 'configuration.publishedgrid.state') ? pdata.configuration.publishedgrid.state : statsGrid.state;
 
         if(!me.__tool) {
             statsGridState = me._filterIndicators(_.clone(statsGridState, true));
-
             me.__tool = {
 
                 id: 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
                 title: 'grid',
                 config: {
                     'published': true,
-                    'layer': layer,
                     'state': statsGridState
                 }
             };

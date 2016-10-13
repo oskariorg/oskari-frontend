@@ -88,6 +88,12 @@ div.coordinatetool__popup {
     margin-bottom: 5px;
     height: 1px;
     border-top: 1px solid #DDDDDD; }
+  div.coordinatetool__popup .coordinatedisplay-emergencycall {
+    font-style: italic; }
+  div.coordinatetool__popup .coordinatedisplay-toggler {
+    cursor: pointer; }
+  div.coordinatetool__popup .coordinatedisplay-toggler:hover {
+    color: #b3b3b3; }
   div.coordinatetool__popup .coordinatetool-projection-change-header {
     font-style: italic; }
   div.coordinatetool__popup div.projectionchange {
@@ -101,5 +107,3 @@ div.coordinatetool__popup {
 .coordinate-label {
   width: 70px;
   padding-top: 7px; }
-
-/*# sourceMappingURL=coordinatetool.css.map */

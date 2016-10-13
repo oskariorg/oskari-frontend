@@ -39,13 +39,11 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "expose" : "ol",
-                    "src": "../../../../libraries/ol3/ol-v3.15.1-oskari.js"
+                    "src": "../../../../libraries/ol3/ol-v3.18.2-oskari.js"
                 },
                 /*
                  * Abstract base
                  */
-
-
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/AbstractMapModule.js"

@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
         var done = function() {
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl);
-            me.grid.contentScroll(true);
+            //me.grid.contentScroll(true);
         };
         if(!indicators.length) {
             done();
@@ -146,7 +146,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox) {
             me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, me.getCurrentRegionset(), function(err, indicatorData) {
                 count--;
                 for(var key in indicatorData) {
-                    data[key][ind.hash] = indicatorData[key];
+                    var region =  data[key];
+                    if(!region) {
+                        continue;
+                    }
+                    region[ind.hash] = indicatorData[key];
                 }
                 if(count===0) {
                     done(data);

@@ -12,7 +12,6 @@ Oskari.clazz.define(
     function () {
         this.mapModule = null;
         this.pluginName = null;
-        this._sandbox = null;
         this._supportedFormats = {};
 
         this.tileSize = [256, 256];
@@ -30,7 +29,7 @@ Oskari.clazz.define(
         },
 
         getSandbox : function() {
-            return this._sandbox;
+            return this.getMapModule().getSandbox();
         },
         /**
          * @method getMapModule
