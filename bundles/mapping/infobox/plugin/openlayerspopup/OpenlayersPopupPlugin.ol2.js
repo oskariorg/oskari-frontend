@@ -190,9 +190,7 @@ Oskari.clazz.define(
                     popup.setColourScheme(colourScheme);
                 }
                 popup.onClose(function () {
-                    if (me._popups[id] && me._popups[id].type === "mobile") {
-                        delete me._popups[id];
-                    }
+                    me.close(id);
                 });
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');

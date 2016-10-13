@@ -2,6 +2,22 @@
 
 ## 1.39.0
 
+### Migration for embedded maps
+
+The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.
+See oskari-server/MigrationGuide.md for details.
+
+*Note!* You will need to update the minifierAppSetup.json to reflect the new template. This can be used with the default setup:
+https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_published_ol3/minifierAppSetup.json
+
+### IE 9 not supported
+
+``IE9`` will not be a supported browser anymore.
+
+### infobox
+
+Fixed an issue where InfoBox.InfoBoxEvent was not sent on close when the map is in mobile mode.
+
 ### admin-layerselector / wms ol2 and ol3
 
 Implemented functionality to force YX axis order (=neu) for wms-layers for certain projections with ``reverseXY`` attribute JSON.
@@ -14,18 +30,6 @@ Example layer attribute configuration:
     }
   }
 ```
-
-### Migration for embedded maps
-
-The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.
-See oskari-server/MigrationGuide.md for details.
-
-*Note!* You will need to update the minifierAppSetup.json to reflect the new template. This can be used with the default setup:
-https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_published_ol3/minifierAppSetup.json
-
-### IE 9 not supported
-
-``IE9`` will not be a supported browser anymore.
 
 ### metadatacatalogue
 
