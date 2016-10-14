@@ -18,6 +18,10 @@ https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_pub
 
 Fixed an issue where InfoBox.InfoBoxEvent was not sent on close when the map is in mobile mode.
 
+### divmanazer/popup
+
+Added code to prevent an infinite loop where popup.onClose() callback triggers another call to popup.close().
+
 ### admin-layerselector / wms ol2 and ol3
 
 Implemented functionality to force YX axis order (=neu) for wms-layers for certain projections with ``reverseXY`` attribute JSON.
