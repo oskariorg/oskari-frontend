@@ -190,9 +190,7 @@ Oskari.clazz.define(
                     popup.setColourScheme(colourScheme);
                 }
                 popup.onClose(function () {
-                    if (me._popups[id] && me._popups[id].type === "mobile") {
-                        delete me._popups[id];
-                    }
+                    me.close(id, null, true);
                 });
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
@@ -788,7 +786,7 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id) {
+        close: function (id, position, alreadyClosed) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
@@ -798,7 +796,9 @@ Oskari.clazz.define(
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
                         if(popup.type && popup.type === 'mobile') {
-                            popup.popup.close();
+                            if(!alreadyClosed) {
+                                popup.popup.close();
+                            }
                         } else {
                             popup.popup.destroy();
                         }
@@ -813,7 +813,9 @@ Oskari.clazz.define(
                 if (this._popups[id].popup) {
                     popup = this._popups[id].popup;
                     if(popup.type && popup.type === 'mobile') {
-                        popup.close();
+                        if(!alreadyClosed) {
+                            popup.close();
+                        }
                     } else {
                         popup.destroy();
                     }
