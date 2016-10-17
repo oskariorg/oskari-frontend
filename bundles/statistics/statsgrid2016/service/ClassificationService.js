@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     groups[index].push(region);
                 }
                 return groups;
-            }
+            };
             response.getGroups = function(index) {
                 var groups = getGroups();
                 if(index || index === 0) {

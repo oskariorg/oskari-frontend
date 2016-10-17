@@ -8,6 +8,41 @@
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
+.statsgrid-grid-table-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 94%;
+  height: 94%;
+  text-align: left;
+  margin: 10px;
+  font-weight: normal; }
+  .statsgrid-grid-table-header .title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 6px; }
+  .statsgrid-grid-table-header .selection {
+    margin-bottom: 6px;
+    width: 94%; }
+
+.statsgrid-grid-table-header-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 94%;
+  height: 94%;
+  text-align: left;
+  margin: 10px;
+  font-weight: normal; }
+  .statsgrid-grid-table-header-content .header {
+    width: 90%; }
+    .statsgrid-grid-table-header-content .header .title {
+      font-weight: bold; }
+  .statsgrid-grid-table-header-content .icon {
+    position: absolute;
+    top: 0;
+    right: 10px; }
+
 div.oskari-flyoutcontent.statsgrid {
   /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
   max-width: 700px;

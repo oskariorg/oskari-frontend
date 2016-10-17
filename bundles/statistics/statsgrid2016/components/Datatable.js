@@ -13,7 +13,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             '   <div class="content"></div>'+
             '</div>'+
             '<div class="grid"></div>'+
-            '</div>')
+            '</div>'),
+        tableHeader: _.template('<div class="statsgrid-grid-table-header">'+
+                '<div class="title"></div>'+
+                '<div class="selection"></div>'+
+                '<div class="info"></div>'+
+                '</div>'),
+        tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">'+
+                '<div class="header"><span class="title"></span> </div>'+
+                '<div class="icon icon-close-dark"></div>' +
+                '</div>')
     },
     render : function(el) {
         var me = this;
@@ -28,21 +37,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
 
         this.mainEl = main;
         this.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-        this.grid.on('column.selected', function(indicatorHash) {
-            // only notify if clicked column was not region
-            if(indicatorHash !== 'region') {
-                me.service.getStateService().setActiveIndicator(indicatorHash);
-            }
-        });
+
         this.grid.addSelectionListener(function(grid, region) {
             me.service.getStateService().selectRegion(region);
         });
-        /*
-        this.grid.on('sort', function(value) {
-            // maybe trigger an event to sort graphs?
-            console.log('sort:', value);
-        });
-        */
 
         el.append(main);
         this.handleRegionsetChanged();
@@ -62,8 +60,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         }
         var me = this;
         var regionset = this.service.getRegionsets(setId);
-        //var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
-        //overlay.overlay(this.mainEl, true);
+
         if(this.getIndicators().length>0){
             me.spinner.start();
         }
@@ -78,8 +75,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+        var locale = me.instance.getLocalization();
+        var gridLoc = locale.statsgrid;
 
         var indicators = this.getIndicators();
+
         // Show no results text
         if(indicators.length === 0) {
             statsTableEl.find('.oskari-grid').hide();
@@ -92,7 +92,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             statsTableEl.find('.noresults').hide();
         }
 
-        this.grid.setColumnUIName('region', this.service.getRegionsets(this.getCurrentRegionset()).name);
+        // Area selection
+        this.grid.setColumnUIName('region', function(content) {
+            var tableHeader = jQuery(me.__templates.tableHeader());
+            tableHeader.find('.title').html(gridLoc.areaSelection.title);
+            tableHeader.find('.info').html(gridLoc.areaSelection.info);
+
+            var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
+            content.append(tableHeader);
+            params.getRegionSelection(tableHeader.find('.selection'));
+
+            content.css('height', '160px');
+            content.css('width', '180px');
+        });
 
 
         var regionIdMap = {};
@@ -106,7 +118,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         var done = function() {
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
-            //me.grid.contentScroll(true);
         };
         if(!indicators.length) {
             done();
@@ -114,19 +125,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         }
         // figure out ui names for indicators
         var count = 0;
-        indicators.forEach(function(ind) {
+
+        indicators.forEach(function(ind, id) {
             count++;
             me.service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
                 count--;
                 var ds = me.service.getDatasource(ind.datasource).name;
-                me.grid.setColumnUIName(ind.hash, ds + ' - ' + Oskari.getLocalized(indicator.name));
-                me.grid.setColumnTools(ind.hash, [{
-                    name : '<div class="icon-close-dark"></div>',
-                    callback : function(value) {
-                        log.info('Removing indicator ' + value);
+                me.grid.setColumnUIName(ind.hash, function(content) {
+
+                    var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
+                    tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
+                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name)).attr('title', Oskari.getLocalized(indicator.name));
+                    tableHeader.find('.icon').bind('click', function(){
+                        log.info('Removing indicator ' + ind.hash);
                         me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
-                    }
-                }]);
+                    });
+
+                    tableHeader.find('.selection').remove();
+
+                    content.bind('click', function(){
+                        me.service.getStateService().setActiveIndicator(ind.hash);
+                    });
+
+                    content.append(tableHeader);
+                });
+
                 if(count === 0) {
                     done();
                 }
@@ -153,8 +176,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             data[reg.id] = {};
         });
         var done = function(data) {
-            //var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-            //log.info(data);
             var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             model.setIdField('region');
             for(var region in data) {

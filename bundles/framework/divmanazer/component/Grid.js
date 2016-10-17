@@ -151,15 +151,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * The grid shows the UI name instead of the datas field name
          *
          * @param {String} fieldName field name we want to replace in UI
-         * @param {Function/String} uiName field name we want to use instead in UI
+         * @param {String} uiName field name we want to use instead in UI
          */
         setColumnUIName: function (fieldName, uiName) {
-            var me = this;
-            if(typeof uiName === 'function'){
-                uiName(me.uiNames[fieldName]);
-            } else {
-                me.uiNames[fieldName] = uiName;
-            }
+            this.uiNames[fieldName] = uiName;
         },
         /**
          * @method setColumnTools
@@ -537,46 +532,53 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
-                var tools = this.columnTools[baseKey] || [];
-                if (!uiName) {
-                    uiName = fieldName;
-                } else if (fieldName !== fullFieldNames[i][key]) {
-                    uiName = fieldName.replace(baseKey, uiName);
-                }
-                link.append(uiName);
-                header.attr('title',uiName);
-                if (me.lastSort && fieldName === me.lastSort.attr) {
-                    if (me.lastSort.descending) {
-                        header.addClass('desc');
-                    } else {
-                        header.addClass('asc');
+
+                if(typeof uiName === 'function') {
+                    uiName(header);
+                } else {
+
+                    var tools = this.columnTools[baseKey] || [];
+                    if (!uiName) {
+                        uiName = fieldName;
+                    } else if (fieldName !== fullFieldNames[i][key]) {
+                        uiName = fieldName.replace(baseKey, uiName);
                     }
-                }
-                if (fullFieldNames[i].type === 'default') {
-                    link.bind('click', headerClosureMagic(fullFieldNames[i].key));
-                    me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
-                } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > 2) {
-                        header.addClass('closedSubTable');
-                        header.addClass('base');
-                    } else {
-                        header.addClass('openSubTable');
-                        header.addClass('base');
+                    link.append(uiName);
+                    header.attr('title',uiName);
+                    if (me.lastSort && fieldName === me.lastSort.attr) {
+                        if (me.lastSort.descending) {
+                            header.addClass('desc');
+                        } else {
+                            header.addClass('asc');
+                        }
                     }
-                    // Expand or close subtable
-                    link.bind('click', headerLinkClosureMagic);
+                    if (fullFieldNames[i].type === 'default') {
+                        link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                        me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
+                    } else if (fullFieldNames[i].type === 'object') {
+                        if (dataArray.length > 2) {
+                            header.addClass('closedSubTable');
+                            header.addClass('base');
+                        } else {
+                            header.addClass('openSubTable');
+                            header.addClass('base');
+                        }
+                        // Expand or close subtable
+                        link.bind('click', headerLinkClosureMagic);
+                    }
+
+                    if (fullFieldNames[i].visibility === 'hidden') {
+                        header.addClass('hidden');
+                    }
                 }
 
-                if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
-                }
+                header.data('key', fullFieldNames[i].baseKey);
+                header.data('value', fullFieldNames[i].subKey);
 
                 header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
                 if(me.__selectedColumn === fullFieldNames[i].baseKey) {
                     header.addClass('selected');
                 }
-                header.data('key', fullFieldNames[i].baseKey);
-                header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
