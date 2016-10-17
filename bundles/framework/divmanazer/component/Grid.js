@@ -151,15 +151,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * The grid shows the UI name instead of the datas field name
          *
          * @param {String} fieldName field name we want to replace in UI
-         * @param {Function/String} uiName field name we want to use instead in UI
+         * @param {String} uiName field name we want to use instead in UI
          */
         setColumnUIName: function (fieldName, uiName) {
             var me = this;
-            if(typeof uiName === 'function'){
-                uiName(me.uiNames[fieldName]);
-            } else {
-                me.uiNames[fieldName] = uiName;
-            }
+            me.uiNames[fieldName] = uiName;
         },
         /**
          * @method setColumnTools
