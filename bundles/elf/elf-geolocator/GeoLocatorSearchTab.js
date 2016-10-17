@@ -407,6 +407,15 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                params[0].NameLanguage */
             this.selections = [];
             values.term = this.searchInput.getValue();
+            
+            if(jQuery(container).find('input[name=addresses]')[0] == undefined && jQuery(container).find('input[name=geographical_names]')[0] == undefined){
+              values.addresses = true;
+              values.geographical_names = true;
+            }
+            else {
+              values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
+              values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
+            }
 
             if( advVisiblity ){
             values.nearest = jQuery(container).find('input[name=nearest]')[0].checked;
@@ -422,8 +431,6 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 values.namelanguage = params[0].NameLanguage;
               }
               values.region = this.regionInput.getValue();
-              values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
-              values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
               if (container.find('#countries').val()) {
               values.country = container
                   .find('#countries').attr('country');
