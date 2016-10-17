@@ -790,33 +790,39 @@ Oskari.clazz.define(
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
-                popup;
+                popup,
+                event,
+                sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        if(popup.type && popup.type === 'mobile') {
+                        delete this._popups[pid];
+                        if(popup.type === 'mobile') {
                             popup.popup.close();
                         } else {
                             popup.popup.destroy();
                         }
-
-                        delete this._popups[pid];
+                        event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                        sandbox.notifyAll(event);
                     }
                 }
                 return;
             }
             // id specified, delete only single popup
-            if (this._popups[id]) {
-                if (this._popups[id].popup) {
-                    popup = this._popups[id].popup;
-                    if(popup.type && popup.type === 'mobile') {
-                        popup.close();
-                    } else {
-                        popup.destroy();
-                    }
-                }
+            popup = this._popups[id];
+            if (popup) {
                 delete this._popups[id];
+                if (!popup.popup) {
+                    return;
+                }
+                if(popup.type === 'mobile') {
+                    popup.popup.close();
+                } else {
+                    popup.popup.destroy();
+                }
+                event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+                sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },
