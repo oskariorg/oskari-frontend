@@ -943,7 +943,6 @@ Oskari.clazz.define(
 
         _handleMapSizeChanges: function (newSize, pluginName) {
             var me = this;
-            return;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
             if (Oskari.util.isMobile()) {
