@@ -45,7 +45,7 @@
     cursor: pointer; }
   .statsgrid-grid-table-header-content .sortby {
     cursor: pointer;
-    /*position:absolute;*/
+    position: absolute;
     bottom: 6px;
     right: 6px; }
     .statsgrid-grid-table-header-content .sortby .orderTitle {

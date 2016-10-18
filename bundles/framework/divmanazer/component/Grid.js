@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
+        this.autoHeightHeader = false;
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
@@ -144,6 +145,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setResizableColumns: function (newResizableColumns) {
             this.resizableColumns = newResizableColumns;
+        },
+        /**
+         * @method  setAutoHeightHeader
+         * Sets the header table autosizeble
+         * @param {Integer} margin is setted some margin then autosize header
+         */
+        setAutoHeightHeader: function(margin) {
+            if(typeof margin === 'number') {
+                this.autoHeightHeader = margin;
+            }
         },
         /**
          * @method setColumnUIName
@@ -938,6 +949,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             container.append(table);
+
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number') {
+                var maxHeight = 0;
+                var thead = table.find('thead');
+                var theadRow = table.find('thead tr');
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
+            }
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();

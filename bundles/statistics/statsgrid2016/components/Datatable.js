@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             content.append(tableHeader);
             params.getRegionSelection(tableHeader.find('.selection'));
 
-            content.css('height', '160px');
+            //content.css('height', '160px');
             content.css('width', '180px');
         });
 
@@ -119,6 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         });
         // done is called when we have indicator names for columns
         var done = function() {
+            me.grid.setAutoHeightHeader(20);
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
         };
@@ -156,7 +157,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                         jQuery('.statsgrid-grid-table-header-content .sortby .orderTitle').removeClass('selected');
                         sortBy.find('.orderTitle').addClass('selected');
 
-
                         var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
 
                         me.grid.sortBy(ind.hash, descending);
@@ -188,22 +188,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
 
                 if(count === 0) {
                     done();
-                    /*
-                    setTimeout(function(){
-                        var maxHeight = 0;
-                        jQuery('.statsgrid-grid-table-header-content').each(function(){
-                            var el = jQuery(this);
-                            if(el.height()>maxHeight) {
-                                maxHeight = el.height();
-                            }
-                        });
-
-                        jQuery('.statsgrid-grid-table-header-content').each(function(){
-                            var el = jQuery(this);
-                            el.parent().css('height', (maxHeight + 15) + 'px');
-                        });
-                    },1000);
-                    */
                 }
             });
         });
