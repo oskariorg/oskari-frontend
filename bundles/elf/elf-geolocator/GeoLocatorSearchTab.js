@@ -569,6 +569,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
           for(var i = 0; i<results[1].NameLanguages.length; i++){
             this.results.namelanguages.push(results[1].NameLanguages[i]);
           }
+          // sort the languages to make it easier to find one
+          this.results.namelanguages.sort();
         },
         /**
          * Renders the search results to a div.
