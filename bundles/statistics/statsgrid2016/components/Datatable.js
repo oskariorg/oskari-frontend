@@ -22,8 +22,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">'+
                 '<div class="header"><span class="title"></span> </div>'+
                 '<div class="icon icon-close-dark"></div>' +
+                '<div style="clear:both;"></div>' +
+                '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>')
     },
+
     render : function(el) {
         var me = this;
         var locale = me.instance.getLocalization();
@@ -136,12 +139,45 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
                     tableHeader.find('.header').append(Oskari.getLocalized(indicator.name)).attr('title', Oskari.getLocalized(indicator.name));
+                    tableHeader.find('.icon').attr('title', gridLoc.removeSource);
                     tableHeader.find('.icon').bind('click', function(){
                         log.info('Removing indicator ' + ind.hash);
                         me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
                     });
 
-                    tableHeader.find('.selection').remove();
+
+                    var sortBy = tableHeader.find('.sortby');
+                    sortBy.find('.orderTitle').html(gridLoc.orderBy);
+                    var order = sortBy.find('.order');
+
+                    sortBy.bind('click', function(evt){
+                        evt.stopPropagation();
+
+                        jQuery('.statsgrid-grid-table-header-content .sortby .orderTitle').removeClass('selected');
+                        sortBy.find('.orderTitle').addClass('selected');
+
+
+                        var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
+
+                        me.grid.sortBy(ind.hash, descending);
+                        sortBy.attr('data-descending', !descending);
+
+                        order.removeClass('asc');
+                        order.removeClass('desc');
+
+                        if(descending) {
+                            sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+                            order.addClass('desc');
+                        } else {
+                            sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
+                            order.addClass('asc');
+                        }
+                    });
+
+                    sortBy.attr('data-descending', false);
+                    sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+                    order.addClass('desc');
+
 
                     content.bind('click', function(){
                         me.service.getStateService().setActiveIndicator(ind.hash);
@@ -152,6 +188,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
 
                 if(count === 0) {
                     done();
+                    /*
+                    setTimeout(function(){
+                        var maxHeight = 0;
+                        jQuery('.statsgrid-grid-table-header-content').each(function(){
+                            var el = jQuery(this);
+                            if(el.height()>maxHeight) {
+                                maxHeight = el.height();
+                            }
+                        });
+
+                        jQuery('.statsgrid-grid-table-header-content').each(function(){
+                            var el = jQuery(this);
+                            el.parent().css('height', (maxHeight + 15) + 'px');
+                        });
+                    },1000);
+                    */
                 }
             });
         });
