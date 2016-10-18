@@ -96,10 +96,10 @@ Oskari.clazz.define(
 
         me._wellknownStyles = {};
 
-        me._isInMobileMode;
-        me._mobileToolbar;
+        me._isInMobileMode = null;
+        me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
-        me._toolbarContent;
+        me._toolbarContent = null;
 
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -112,7 +112,7 @@ Oskari.clazz.define(
                     '<div class="oskari-crosshair-vertical-bar"></div>'+
                     '<div class="oskari-crosshair-horizontal-bar"></div>'+
                 '</div>')
-        }
+        };
     }, {
         /**
          * @method init
@@ -473,8 +473,8 @@ Oskari.clazz.define(
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
-                // accept an hour long cached position
-                opts.maximumAge = 3600000;
+                // don't accept cached position
+                opts.maximumAge = 0;
             }
             if(!opts.hasOwnProperty('timeout')) {
                 // timeout after 6 seconds
@@ -1233,6 +1233,11 @@ Oskari.clazz.define(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
+            if(this._pluginInstances[pluginName]) {
+                this.log.warn(
+                    '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
+                );
+            }
             this._pluginInstances[pluginName] = plugin;
         },
         /**
@@ -1455,11 +1460,11 @@ Oskari.clazz.define(
                 if(styleKey && sanitizedStyles[styleKey]) {
                     if(me._wellknownStyles[styleKey]){
                         me.log.warn('Founded allready added wellknown style for key=' + key + ', merging styles');
-                        for(var name in sanitizedStyles[styleKey]) {
-                            if(me._wellknownStyles[styleKey][name]) {
-                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+name+', replacing style');
+                        for(var sanitizedStyleName in sanitizedStyles[styleKey]) {
+                            if(me._wellknownStyles[styleKey][sanitizedStyleName]) {
+                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+sanitizedStyleName+', replacing style');
                             }
-                            me._wellknownStyles[styleKey][name] = sanitizedStyles[styleKey][name];
+                            me._wellknownStyles[styleKey][sanitizedStyleName] = sanitizedStyles[styleKey][sanitizedStyleName];
                         }
                     }
                     else {
@@ -1488,7 +1493,7 @@ Oskari.clazz.define(
 
             if(key && style){
                 if(me._wellknownStyles[key] && me._wellknownStyles[key][style]) {
-                    return me._wellknownStyles[key][style]
+                    return me._wellknownStyles[key][style];
                 } else {
                     this.log.warn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
                     return Oskari.getDefaultMarker();
@@ -1663,7 +1668,7 @@ Oskari.clazz.define(
                     data: marker.data.shape.data,
                     offsetX: marker.data.shape.x || marker.data.offsetX,
                     offsetY: marker.data.shape.x || marker.data.offsetY
-                }
+                };
             }
 
             var dx = !isNaN(markerDetails.offsetX) ? markerDetails.offsetX : 16;
@@ -1777,9 +1782,7 @@ Oskari.clazz.define(
                 j,
                 el;
 
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
+            var removeClasses = function(el) {
                 el.removeClass(function (index, classes) {
                     var removeThese = '',
                         classNames = classes.split(' ');
@@ -1794,6 +1797,11 @@ Oskari.clazz.define(
                     // Return the class names to be removed.
                     return removeThese;
                 });
+            };
+
+            for (i = 0; i < elements.length; i += 1) {
+                el = elements[i];
+                removeClasses(el);
 
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
@@ -2156,6 +2164,27 @@ Oskari.clazz.define(
             }
             //checkig other things, will be added later...
             return false;
+        },
+        /**
+         * @method handleMapLayerUpdateRequest
+         * Update layer params and force update (wms) or force redraw for other layer types
+         * @param layerId
+         * @param {boolean} forced
+         * @param {Object} params
+         */
+        handleMapLayerUpdateRequest: function(layerId, forced, params) {
+            var me = this,
+            	sandbox = me.getSandbox(),
+            	layerPlugins = me.getLayerPlugins(),
+            	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+
+            _.each(layerPlugins, function (plugin) {
+                // true if either plugin doesn't have the function or says the layer is supported.
+                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
+                if (_.isFunction(plugin.updateLayerParams) && isSupported) {
+                    plugin.updateLayerParams(layer, forced, params);
+                }
+            });
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

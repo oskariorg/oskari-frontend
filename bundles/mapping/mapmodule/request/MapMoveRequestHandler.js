@@ -39,15 +39,17 @@ Oskari.clazz.define(
             // transform coordinates to given projection
             lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
 
-            this.mapModule.moveMapToLonLat(lonlat, zoom, false);
-            // if zoom=0 -> if(zoom) is determined as false...
-            if (zoom || zoom === 0) {
+            var zoomChange = (zoom || zoom === 0);
+
+            //if zoom is about to change -> Suppress the event
+            this.mapModule.centerMap(lonlat, null, zoomChange);
+            if (zoomChange) {
                 if (zoom.left && zoom.top && zoom.bottom && zoom.right) {
-                    this.mapModule.zoomToExtent(zoom);
+                    this.mapModule.zoomToExtent(zoom, false, false);
                 } else if (zoom.scale) {
-                    this.mapModule.zoomToScale(zoom.scale);
+                    this.mapModule.zoomToScale(zoom.scale, false, false);
                 } else {
-                    this.mapModule.setZoomLevel(zoom);
+                    this.mapModule.setZoomLevel(zoom, false);
                 }
             }
 

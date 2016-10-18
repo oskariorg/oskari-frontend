@@ -1,41 +1,14 @@
-// parses and shows indicator metadata/selectors
-/* {
-	"id": "5",
-	"regionsets": [6, 7],
-	"source": {
-		"fi": "Terveyden ja hyvinvoinnin laitos (THL)",
-		"sv": "Institutet för hälsa och välfärd (THL)",
-		"en": "Institute for Health and Welfare (THL)"
-	},
-	"selectors": [{
-		"id": "sex",
-		"allowedValues": ["male", "female", "total"]
-	}, {
-		"id": "year",
-		"allowedValues": ["1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"]
-	}],
-	"description": {
-		"fi": "Indikaattori ilmaisee kalenterivuoden aikana toimeentulotukea saaneiden 25-64-vuotiaiden osuuden prosentteina vastaavanikäisestä väestöstä. Väestötietona käytetään vuoden viimeisen päivän tietoa.<br /><br />Vuodesta 1991 lähtien tiedonkeruussa on kysytty viitehenkilön lisäksi myös puolison henkilötunnusta eli sukupuolittaiset tiedot saadaan vuodesta 1991alkaen. Viitehenkilöllä tarkoitetaan henkilöä, joka pääasiallisesti vastaa kotitalouden toimeentulosta.<p id=suhteutus>Väestösuhteutus on tehty THL:ssä käyttäen Tilastokeskuksen Väestötilaston tietoja.<\/p>",
-		"sv": "Indikatorn visar den procentuella andelen 25-64-åriga mottagare av utkomststöd under kalenderåret av befolkningen i samma ålder (31.12).<p id=suhteutus>THL har relaterat uppgifterna till hela befolkningen på basis av uppgifterna i statistikcentralens befolkningsstatistik.<\/p>",
-		"en": "The indicator gives the percentage of those who have received social assistance during the calendar year in the 25-64 age group. Population figures refer to the last day of the year. Since 1991, data have been collected on the spouse's personal identity code in addition to that of the reference person. In other words, data broken down by sex are available from 1991 onwards. Reference person is the person primarily responsible for the economic support of the household.<p id=suhteutus>Population proportions are calculated at THL based on the Population Statistics of Statistics Finland.<\/p>"
-	},
-	"name": {
-		"fi": "Toimeentulotukea saaneet 25 - 64-vuotiaat, % vastaavanikäisestä väestöstä",
-		"sv": "25-64-åriga mottagare av utkomststöd, % av befolkningen i samma ålder",
-		"en": "Social assistance recipients aged 25-64, as % of total population of same age"
-	},
-	"public": true
-}
- */
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(instance, sandbox) {
+	this.instance = instance;
 	this.sb = sandbox;
 	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+	this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
 }, {
 	__templates : {
-		main : _.template('<div class="stats-ind-params"></div>'),
-		select : _.template('<div><label>${name}<select name="${name}" class="${clazz}"></select></label></div>'),
-		option : _.template('<option value="${id}">${name}</option>'),
-		data : _.template('<div><label style="font-weight:bold;">${name}</label><span style="display: inline-block; float: right; clear:both;">${data}</span></div>')
+		main : _.template('<div class="stats-ind-params">'+
+			'</div>'),
+		select : _.template('<div><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div>'),
+		option : _.template('<option value="${id}">${name}</option>')
 	},
 	clean : function() {
 		if(!this.container) {
@@ -54,73 +27,152 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			data : value
 		}));
 	},
-	indicatorSelected : function(el, datasrc, indId) {
+	indicatorSelected : function(el, datasrc, indId, config, elements) {
 		var me = this;
+		var locale = me.instance.getLocalization();
+		var panelLoc = locale.panels.newSearch;
+		config = config || {};
+		elements = elements || {};
+
 		this.clean();
+
+		if(!indId && indId ==='')  {
+			if(elements.dataLabelWithTooltips) {
+				elements.dataLabelWithTooltips.find('.tooltip').show();
+			}
+			return;
+		}
+
 		var cont = jQuery(this.__templates.main());
-		this.container = cont;
 		el.append(cont);
-		var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-        spinner.insertTo(cont);
-        spinner.start();
+		this.container = cont;
+
+        me.spinner.insertTo(cont.parent().parent());
+        me.spinner.start();
 
 		this.service.getIndicatorMetadata(datasrc, indId, function(err, indicator) {
+            me.spinner.stop();
+            if(elements.dataLabelWithTooltips) {
+				elements.dataLabelWithTooltips.find('.tooltip').hide();
+			}
 			if(err) {
 				// notify error!!
 				return;
 			}
-			// show description for indicator
-			me.addMetadata(cont, 'Name', Oskari.getLocalized(indicator.name));
-			me.addMetadata(cont, 'Source', Oskari.getLocalized(indicator.source));
-			me.addMetadata(cont, 'Description', Oskari.getLocalized(indicator.description));
-			// usable regions sets
-			var availableSets = me.service.getRegionsets(indicator.regionsets);
-			var regionsValue = _.map(availableSets, function(item) {
-									return item.name;
-								}).join(', ');
-			if(!regionsValue) {
-				regionsValue = 'No regions available for dataset';
-			}
-			cont.append(me.__templates.data({
-				name : 'Regionsets',
-				data : regionsValue
-			}));
+
 			// selections
 			var selections = [];
-			indicator.selectors.forEach(function(selector) {
+			indicator.selectors.forEach(function(selector, index) {
+				var placeholderText = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id].placeholder) ? panelLoc.selectionValues[selector.id].placeholder :panelLoc.defaultPlaceholder;
 				var select = me.__templates.select({
-					name : selector.id,
-					clazz : 'stats-select-param-' + selector.id
+					id : selector.id,
+					name : selector.name || selector.id,
+					clazz : 'stats-select-param-' + selector.id,
+					placeholder: placeholderText
 				});
 				cont.append(select);
 				var jqSelect = cont.find('.stats-select-param-' + selector.id);
+
+				// add empty selection to show placeholder
+				jqSelect.append('<option></option>');
+
 				selector.allowedValues.forEach(function(val) {
+					var name = val.name || val.id || val;
+					var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
+
+					// val can be an object with id and name or plain value
 					var opt = me.__templates.option({
-						id : val,
-						name : val
+						id : val.id || val,
+						name : optName
 					});
 					jqSelect.append(opt);
 				});
 				jqSelect.chosen({
-					disable_search_threshold: 10
+					allow_single_deselect : true,
+					disable_search_threshold: 10,
+					width: '100%'
 				});
+				if(index>0) {
+					jqSelect.parent().addClass('margintop');
+				}
 				selections.push(jqSelect);
 			});
 
-			var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-			btn.setHandler(function() {
-				var values = {
-					datasource : datasrc,
-					indicator : indId,
-					selections : {}
-				};
-				selections.forEach(function(select) {
-					values.selections[select.attr('name')] = select.val()
-				});
-				me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+			var allRegionsets = me.service.getRegionsets();
+			var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
+			var select = me.__templates.select({
+				id : 'regionset',
+				clazz : 'stats-regionset-selector',
+				placeholder: placeholderText
 			});
-			btn.insertTo(cont);
-            spinner.stop();
+
+			var allowedRegionsets = [];
+			var addAllowedRegionSets = function(indicatorRegionset){
+				var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset,id) {
+					return regionset.id === indicatorRegionset;
+				});
+
+				grepAllRegionsets.forEach(function(regionset){
+					allowedRegionsets.push(regionset);
+				});
+			};
+			indicator.regionsets.forEach(function(indicatorRegionset) {
+				addAllowedRegionSets(indicatorRegionset);
+			});
+
+			if(allowedRegionsets.length === 0) {
+				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
+				select.addClass('margintop');
+			}
+			cont.append(select);
+			var jqSelect = cont.find('.stats-regionset-selector');
+
+			// Add margin if there is selections
+			if(selections.length>0) {
+				jqSelect.parent().addClass('margintop');
+			}
+
+			// If there is indicators then do selections
+			if(allowedRegionsets.length > 0) {
+				// add empty selection to show placeholder
+				jqSelect.append('<option></option>');
+
+				me.service.getRegionsets().forEach(function(regionset) {
+					if(indicator.regionsets)
+					jqSelect.append(me.__templates.option(regionset));
+				});
+				jqSelect.chosen({
+					allow_single_deselect : true,
+					disable_search_threshold: 10,
+					width: '100%'
+				});
+				me.instance.addChosenHacks(jqSelect);
+				jqSelect.on('change', function() {
+					var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
+					var value = jQuery(this).val();
+					log.info('Selected region ' + value);
+					me.service.getStateService().setRegionset(value);
+				});
+				me.service.getStateService().setRegionset(jqSelect.val());
+			}
+			selections.push(jqSelect);
+
+			if(elements.btn) {
+				elements.btn.setHandler(function() {
+					var values = {
+						datasource : datasrc,
+						indicator : indId,
+						selections : {}
+					};
+					selections.forEach(function(select) {
+						values.selections[select.attr('name')] = select.val();
+					});
+					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+
+					me.instance.getFlyout().closePanels();
+				});
+				elements.btn.setEnabled(indicator.regionsets.length>0);
+			}
 		});
 	}
 });

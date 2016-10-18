@@ -1,5 +1,92 @@
 # Release Notes
 
+## 1.39.0
+
+### Migration for embedded maps
+
+The oskari-server will migrate the publish template and all published maps from Openlayers 2 based maps to Openlayers 3 based maps.
+See oskari-server/MigrationGuide.md for details.
+
+*Note!* You will need to update the minifierAppSetup.json to reflect the new template. This can be used with the default setup:
+https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_published_ol3/minifierAppSetup.json
+
+### IE 9 not supported
+
+``IE9`` will not be a supported browser anymore.
+
+### infobox
+
+Fixed an issue where InfoBox.InfoBoxEvent was not sent on close when the map is in mobile mode.
+
+### divmanazer/popup
+
+Added code to prevent an infinite loop where popup.onClose() callback triggers another call to popup.close().
+
+### admin-layerselector / wms ol2 and ol3
+
+Implemented functionality to force YX axis order (=neu) for wms-layers for certain projections with ``reverseXY`` attribute JSON.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseXY': {
+      'EPSG:3035':true
+    }
+  }
+```
+
+### metadatacatalogue
+
+Updated the functionality of the "Limit the search area on the map" button.
+
+### RPC - new request available
+
+``MapModulePlugin.MapLayerUpdateRequest`` made available via RPC. With the request you can force redraw of layers or update any arbitrary layer parameters, such as a WMS layer's SLD_BODY.
+
+Note! When OpenLayers3 is used, GET requests longer than 2048 bytes will be automatically transformed to async ajax POST-requests and proxied. Thus the service itself also has to support http POST-method.
+
+OpenLayers2 will always use GET-requests and will fail, if the GET-request's length exceeds the allowed maximum.
+
+```javascript
+sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true, {
+    SLD_BODY:
+        '<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">'+
+        '    <NamedLayer>'+
+        '    <Name>oskari:kunnat2013</Name>'+
+        '    <UserStyle>'+
+        '    <Title>SLD Cook Book: Simple polygon</Title>'+
+        '    <FeatureTypeStyle>'+
+        '    <Rule>'+
+        '    <PolygonSymbolizer>'+
+        '    <Fill>'+
+        '    <CssParameter name="fill">#000080</CssParameter>'+
+        '    </Fill>'+
+        '    </PolygonSymbolizer>'+
+        '    </Rule>'+
+        '    </FeatureTypeStyle>'+
+        '    </UserStyle>'+
+        '    </NamedLayer>'+
+        '    </StyledLayerDescriptor>'
+}]);
+```
+
+### Mapmodule
+
+Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.
+
+Registering a plugin with same name as an existing one triggers a warning to be printed out to dev console.
+
+WmtsLayerPugin OL3 timing issues with layer ordering fixed.
+
+### Action route calls caching workaround
+
+IE is notorious for using cached XHR responses. To workaround the jQuery global setting has been included to attach a timestamp for each XHR.
+This fixes an issue where for example admin bundles were not loaded correctly in IE after logging in.
+
+### jQuery.browser checks removed
+
+All jQuery.browser check are removed in preparation for jQuery update.
+
 ## 1.38.3
 
 ### statsgrid/publishedgrid
@@ -20,7 +107,7 @@ Fixed statsgrid width checking when calculate map size.
 
 ### divmanazer/Popup
 
-Now if setted draggable then dragging work to drag popup header.
+Draggable handle in popup has been changed to header (as in flyout) instead of the whole popup.
 
 ### findbycoordinates
 

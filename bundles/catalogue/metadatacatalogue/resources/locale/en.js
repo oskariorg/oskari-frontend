@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Search area",
         "delimitArea": "Limit the search area on the map",
         "deleteArea": "Delete search area",
+        "startDraw": "Select area from map",
         "dataset": "Dataset",
         "series": "Series",
         "service": "Service",

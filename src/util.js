@@ -23,7 +23,7 @@ Oskari.util = (function () {
             }
         }
         return false;
-    };
+    }
 
     /**
     * Checks at if value is number.

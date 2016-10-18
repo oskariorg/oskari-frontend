@@ -17,7 +17,8 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
-        "tabTitle": "Geo Product Finder"
+        "tabTitle": "Geo Product Finder",
+        "metadataCatalogueDescription": "Search spatial resources, such as spatial datasets, dataset series or services."
     }
 }, true);
 
@@ -79,7 +80,7 @@ Oskari.registerLocalization(
             "text": "This tool allows you to create embedded maps from available services. Use of these are subject to licensing and requires that you log in."
         },
         "StartView": {
-            "text": "Welcome to create an embedded map on your website.",
+            "text": "Welcome to create an embedded map.",
             "layerlist_title": "Embeddable map layers open in map window:",
             "layerlist_empty": "No embeddable map layers are open in the map window.",
             "layerlist_denied": "Non-embeddable map layers open in map window:",
@@ -119,7 +120,7 @@ Oskari.registerLocalization({
     "value": {
         "flyout": {
             "heading": {
-                "datasetInformation": "Information about the dataset",
+                "datasetInformation": "Information about the resource",
                 "contactInformation": "Contact information",
                 "metadataContact": "Metadata contact",
                 "technicalInformation": "Technical information",
@@ -149,6 +150,17 @@ Oskari.registerLocalization({
                     "conformance":"Conformance"
                 }
             }
+        }
+    }
+}, true);
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "findbycoordinates",
+    "value": {
+        "tool": {
+            "tooltip": "Click on the map and locate the nearest address or placename and its coordinates."
         }
     }
 }, true);

@@ -685,7 +685,64 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.text = textStyleJSON.labelText;
             }
             return new ol.style.Text(text);
-        }
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                zoomToBounds = null;
+
+            if (!feature) {
+                return;
+            }
+
+            if (feature && feature.getGeometry() && feature.getGeometry().getExtent()) {
+                var map = me.getMap();
+                bounds = feature.getGeometry().getExtent();
+                centroid = ol.extent.getCenter(bounds);
+                mapBounds = map.getView().calculateExtent(map.getSize());
+
+                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                if (ol.extent.getHeight(bounds) < ol.extent.getHeight(mapBounds) && ol.extent.getWidth(bounds) < ol.extent.getWidth(mapBounds)) {
+                    zoomToBounds = null;
+                } else {
+                    zoomToBounds = {
+                        'top': ol.extent.getTopLeft(bounds)[1],
+                        'left': ol.extent.getTopLeft(bounds)[0],
+                        'bottom': ol.extent.getBottomRight(bounds)[1],
+                        'right': ol.extent.getBottomRight(bounds)[0]
+                    };
+                }
+
+                var ret = {
+                    'x': centroid[0],
+                    'y': centroid[1],
+                    'bounds': zoomToBounds
+                };
+
+                return ret;
+            }
+
+            return null;         
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new ol.format.WKT(),
+                feature = wktFormat.readFeature(wkt);
+
+            return feature;
+        }       
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

@@ -18,6 +18,10 @@ Oskari.registerLocalization(
             "jhs": "ISO 19115 metadata",
             "quality": "Data kvalität",
             "xml": "ISO 19139 XML fil",
+            "coverage": {
+                "removeBBOX": "Göm geografisk datatäckning",
+                "showBBOX": "Visa geografisk datatäckning"
+            },
             "map": "Geografisk omfattning",
             "pdf": "Utskrift",
             "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna.",

@@ -467,22 +467,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 'z-index': '16000'
             });
 
-            if (jQuery.browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                content.css({
-                    'height': height
-                });
-            }
-
-            //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
-
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            content.css({
+                'height': height
+            });
         },
 
         /**
@@ -496,13 +485,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 size = this._map.getCurrentSize(),
                 width = size.w,
                 height = size.h;
-            // if infobox would be out of screen 
+            // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0,
                 pany = 0,
                 popup = jQuery('.olPopup'),
                 infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128; //300; 
+                infoboxHeight = popup.height() + 128; //300;
             if (pixels.x + infoboxWidth > width) {
                 panx = width - (pixels.x + infoboxWidth);
             }

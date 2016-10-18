@@ -24,7 +24,34 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         /* @property container the DIV element */
         this.container = null;
 
+        this._sidetool = null;
+
+
     }, {
+      __temp:{
+        sideTool:_.template(
+          '<div class="sidetool">'  +
+          '<label class="verticalsidelabel"></label>'  +
+          '</div>'
+        )
+      },
+      //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
+      getSideLabel : function( text ) {
+        if(this._sidetool){
+          $(this._sidetool).css({ top: '33%' });
+        }
+          var sidelabel = this.__temp.sideTool();
+          this._sidetool = jQuery( sidelabel );
+          this._sidetool.find('label').text(text)
+        return this._sidetool;
+      },
+        addSideTool: function(label, callback){
+          var sidelabel = this.getSideLabel(label);
+          this.container.append(sidelabel);
+          sidelabel.on("click", function() {
+            callback( sidelabel );
+          })
+        },
         /**
          * @method getName
          * @return {String} implementation name
@@ -85,7 +112,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         setState: function (state) {
             this.state = state;
         },
-
         /**
          * @method getState
          * @return {JSON} returns state

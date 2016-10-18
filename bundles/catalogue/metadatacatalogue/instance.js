@@ -234,7 +234,7 @@ Oskari.clazz.define(
             }
 
             var optionServName =
-                'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
+              'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
             me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
 
             var searchServName =
@@ -312,6 +312,9 @@ Oskari.clazz.define(
 
                 this.coverageButton.val(me.getLocalization('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
+                this.coverageButton.prop('disabled', false).css({
+                  'border-color': ''
+                });
                 this.drawCoverage = false;
 
                 document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
@@ -488,7 +491,9 @@ Oskari.clazz.define(
                         search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
                     }
                     // Coverage geometry
-                    search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
+                    if (me.coverageButton && me.coverageButton[0] && me.coverageButton[0].data) {
+                        search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
+                    }
                 }
                 me.lastSearch = field.getValue();
 
@@ -585,10 +590,10 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
+                renderCoverageButton = (_.filter(dataFields, {'field':'coverage'}).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
-
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
                 if (dataField.values.length === 0) {
@@ -650,35 +655,45 @@ Oskari.clazz.define(
                 advancedContainer.append(newRow);
             }
 
-            newRow = me.templates.buttonRow.clone();
-            newLabel = me.getLocalization('searchArea');
-            newRow.find('div.rowLabel').append(newLabel);
+            if (renderCoverageButton) {
+                newRow = me.templates.buttonRow.clone();
+                newLabel = me.getLocalization('searchArea');
+                newRow.find('div.rowLabel').append(newLabel);
 
-            var newButton = me.templates.metadataButton.clone();
-            this.coverageButton = newButton.find('.metadataCoverageDef');
-            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-            this.coverageButton.attr('name', 'coverage');
-            this.drawCoverage = true;
+                var newButton = me.templates.metadataButton.clone();
+                this.coverageButton = this._initCoverageButton(me, newButton);
+                this.drawCoverage = true;
 
-            this.coverageButton.on('click', function () {
-                if (me.drawCoverage === true) {
-                    me._getCoverage();
-                } else {
-                    me.selectionPlugin.stopDrawing();
-                    me.coverageButton.val(me.getLocalization('delimitArea'));
-                    me.drawCoverage = true;
-                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                    var emptyData = {};
-                    me.coverageButton[0].data = '';
-                    me._removeFeaturesFromMap();
-                }
-            });
+                this.coverageButton.on('click', function (){
+                  if (me.drawCoverage === true) {
+                      me.coverageButton.prop('disabled', true).css({
+                      'border-color': '#0099CB'
+                      });
+                      me.coverageButton.val(me.getLocalization('startDraw'));
+                      me._getCoverage();
+                    }else {
+                        me.selectionPlugin.stopDrawing();
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.drawCoverage = true;
+                        document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
+                        var emptyData = {};
+                        me.coverageButton[0].data = '';
+                        me._removeFeaturesFromMap();
+                    }
+                });
 
-            newRow.append(newButton);
+                newRow.append(newButton);
 
-            advancedContainer.append(newRow);
+                advancedContainer.append(newRow);
+            }
 
             me._updateOptions(advancedContainer);
+        },
+        _initCoverageButton: function(me, newButton){
+          this.coverageButton = newButton.find('.metadataCoverageDef');
+          this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+          this.coverageButton.attr('name', 'coverage');
+          return this.coverageButton;
         },
 
         /**

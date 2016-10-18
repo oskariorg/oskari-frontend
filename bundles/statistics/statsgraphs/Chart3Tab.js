@@ -31,13 +31,11 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart3Tab',
                 bindto: "#chart3",
                 data: {
                     columns: [],
-                    type:'scatter',
+                    type:'scatter'
                 },
                 padding: {
-                    right: 20,
-
-                },
-
+                    right: 20
+                }
             });
         },
 
@@ -49,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart3Tab',
 
             this.chart.load({
                 columns: [
-                    [name].concat(data),
+                    [name].concat(data)
                 ],
                 keys: {
                     // this doesn't seem to work really

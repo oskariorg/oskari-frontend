@@ -113,7 +113,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                     }
                 }
             }
-            //var tabs = this.ui.find('> div.tab-content');
             var tabs = this.ui.children().children('div.tab-content');
             tabs.hide();
 
@@ -149,7 +148,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
         _getPanelIndex: function (panel) {
             var i;
             for (i = 0; i < this.panels.length; i++) {
-                // FIXME use === if possible, id or smthn if not
                 if (this.panels[i].getId() === panel.getId()) {
                     return i;
                 }

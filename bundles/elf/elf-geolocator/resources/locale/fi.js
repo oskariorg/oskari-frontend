@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "Etsi lähin paikka",
             "geolocDesc": "Etsi pistettä lähimmän paikan nimi klikkaamalla kyseistä pistettä.",
             "noResults": "Ei hakutuloksia.",
+            "showMore": "Lisää hakuehtoja",
+            "showLess": "Piilota tarkennettu haku",
+            "emptyOption": "* Ei valintaa *",
             "errors": {
                 "searchTermMissing": "Hakusana on pakollinen tieto. Anna hakusana ja yritä uudelleen.",
                 "searchFailed": "Haku epäonnistui."

@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Karttataso ei tällä hetkellä käytettävissä.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.",
                 "iconClass": "backendstatus-maintenance"

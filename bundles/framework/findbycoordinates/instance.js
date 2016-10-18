@@ -353,7 +353,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
 
                     if(channelResults.length === 0) {
                         channelResults = me.__templates.popupChannelResult.clone();
-                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId) + langText );
+                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId || '') + langText );
                         if(loc.channelDescriptions[channelId]) {
                             channelResults.find('.channel_description').attr('title', loc.channelDescriptions[channelId]);
                         } else {
@@ -419,7 +419,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 lang = (result.lang && typeof result.lang ==='string') ? ' (' + result.lang.toUpperCase() + ')' : '';
 
             var item = this.__templates.item.clone();
-            item.find('.channel_id').html((loc.channels[result.channelId] || result.channelId) + lang);
+            item.find('.channel_id').html((loc.channels[result.channelId] || result.channelId || '') + lang);
             if(loc.channelDescriptions[result.channelId]) {
                 item.find('.channel_description').attr('title', loc.channelDescriptions[result.channelId]);
             } else {

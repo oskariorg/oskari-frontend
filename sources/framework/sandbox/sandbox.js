@@ -532,10 +532,6 @@
              * @return {Object} object with properties width and height as the window size in pixels
              */
             getBrowserWindowSize: function () {
-                // FIXME get rid of jQuery.browser and make this code sane... height isn't used for anything?
-                if (jQuery.browser.opera && window.innerHeight !== null && window.innerHeight !== undefined) {
-                    var height = window.innerHeight;
-                }
                 var width = jQuery(window).width(),
                     size = {};
                 size.height = jQuery(window).height();
@@ -1042,7 +1038,7 @@
                 return serverUrl + window.location.pathname + '/' + baseUrl;
             },
             /**
-             * Ensures that the given parameter has ? character and appends & to the end if 
+             * Ensures that the given parameter has ? character and appends & to the end if
              * url-parameter doesn't end to '?' or '&' characters
              * @method __prepareQueryString
              * @private

@@ -44,6 +44,9 @@ Oskari.clazz.define(
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this._handleDataChangeEvent();
+            },
+            'StatsGrid.RegionSelectedEvent' : function(evt) {
+                this.getFlyout().regionSelected(evt.getRegion(), evt.getRegionset());
             }
         },
 
@@ -82,7 +85,6 @@ Oskari.clazz.define(
         _handleDataChangeEvent: function () {
 
             var me = this;
-
             this.service.getCurrentDataset(function(err, data) {
                 if(err) {
                     console.warn(err);

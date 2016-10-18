@@ -113,7 +113,6 @@ Oskari.clazz.define(
          * @param {bool} closeFlyouts Optional. If provided, closes all open flyouts as well.
          */
         closeAllPopups: function(closeFlyouts) {
-            var me = this;
             _.each(this.popups, function(popup) {
                 //publisher toolbar seems to need this for the tools to stay intact...
                 popup.getJqueryContent().detach();

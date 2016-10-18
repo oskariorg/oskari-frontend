@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Sökområde",
         "delimitArea": "Avgränsa sökområdet på kartan",
         "deleteArea": "Ta bort sökområdet",
+        "startDraw": "Avgränsa sökområdet",
         "dataset": "Dataset",
         "series": "Serie",
         "service": "Tjänst",

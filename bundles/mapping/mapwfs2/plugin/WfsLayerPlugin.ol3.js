@@ -583,7 +583,7 @@ Oskari.clazz.define(
                 var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids);
+                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids, false, true);
                 }
             });
         },
@@ -724,7 +724,6 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-
             me.getIO().highlightMapLayerFeatures(
                 layerId,
                 wfsFeatureIds,
@@ -1454,6 +1453,8 @@ Oskari.clazz.define(
                 return;
             }
 
+
+
             if (layerType === me.__typeHighlight) {
                   ols = [imageSize.width,imageSize.height];  //ol.Size
                 layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
@@ -1471,7 +1472,7 @@ Oskari.clazz.define(
                 wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
                 me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
-                wfsMapImageLayer.setVisibility(true);
+                wfsMapImageLayer.setVisible(true);
                 // also for draw
                 wfsMapImageLayer.redraw(true);
 

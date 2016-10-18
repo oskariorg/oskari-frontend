@@ -64,6 +64,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             var opts = this._validateOptions(options);
             var list = this._getDataAsList(indicatorData);
+            if(list.length < 2) {
+                return;
+            }
+            if(opts.count > list.length) {
+                opts.count = list.length;
+            }
 
             if (this._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)

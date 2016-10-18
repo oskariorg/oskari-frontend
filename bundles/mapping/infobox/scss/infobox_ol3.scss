@@ -64,7 +64,7 @@ div.popupHeaderArrow {
       position: absolute;
       left: 50%;
       top: 0;
-      margin-top: 15px;
+      margin-top: 20px;
       margin-left: -10px;
     }
 }
@@ -72,7 +72,7 @@ div.popupHeaderArrow {
 div.olPopup {
     margin: 0;
     padding: 0;
-    overflow: auto/*\0/ !important*/;   
+    overflow: auto/*\0/ !important*/;
     /*height: 400px*//*\0/ !important*/;
     z-index: 16000;
 
@@ -89,8 +89,13 @@ div.olPopup {
       margin-bottom: -10px;
     }
     &.top-center {
-      margin-top: 25px;
+      margin-top: 30px;
     }
+
+    table td {
+      text-align: left;
+      vertical-align: top;
+  }
 }
 
 div.infoboxPopupNoMargin {
@@ -122,12 +127,12 @@ div.popupHeader {
     margin: 0px;
     @include border-radius(6px 6px 0px 0px);
     display: inline-block;
-    width: 390px;   
+    width: 390px;
     float: left;
     height: 40px;
 
     div {
-        vertical-align: top;    
+        vertical-align: top;
         margin-left: 20px;
         margin-right: 20px;
         padding-left: 0;
@@ -136,7 +141,7 @@ div.popupHeader {
         position: absolute;
         top: 12px;
     }
-    
+
 }
 
 div.popupContent {
@@ -164,7 +169,7 @@ div.popupContent {
 
     span.infoboxActionLinks {
         padding-right: 15px;
-    } 
+    }
 
 }
 
@@ -173,7 +178,7 @@ div.olPopupContent {
     padding: 0px;
     margin: 0px;
     left: 0px;
-    top: 0px;    
+    top: 0px;
 }
 
 .olPopupCloseBox {
@@ -205,6 +210,6 @@ div.divmanazerpopup.mobile-infobox {
     left: 3% !important;
     margin-top: -6px !important;
     margin-left: -4px !important;
-    overflow: auto; 
+    overflow: auto;
 }
 

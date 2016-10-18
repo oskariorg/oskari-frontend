@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Il layer non è disponibile.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Il layer non è disponibile.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Il layer potrebbe non essere disponibile nei prossimi giorni.",
                 "iconClass": "backendstatus-down"

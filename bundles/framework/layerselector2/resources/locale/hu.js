@@ -42,6 +42,10 @@ Oskari.registerLocalization(
                 "tooltip": "A térképréteg jelenleg nem érhető el.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "A térképréteg jelenleg nem érhető el.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Előfordulhat, hogy a térképréteg ideiglenesen nem lesz elérhető következő néhány napban.",
                 "iconClass": "backendstatus-maintenance"

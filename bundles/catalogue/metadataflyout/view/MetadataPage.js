@@ -26,6 +26,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         locale.languages =
             Oskari.getLocalization('DivManazer').LanguageSelect.languages;
 
+        this.asyncTabs = {};
+
     }, {
         init: function () {},
 
@@ -61,13 +63,28 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     me.locale,
                     model
                 );
-
-                if (me.additionalTabs && !jQuery.isEmptyObject(me.additionalTabs)) {
-                    panel.addTabs(me.additionalTabs);
+                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                    panel.addTabs(me.asyncTabs);
                 }
 
                 me.addPanel(panel);
                 panel.init(i === 0);
+            }
+        },
+
+        addTabsAsync: function(data) {
+            var me = this;
+
+            if (me.panels && me.panels.length) {
+                _.each(me.panels, function(panel) {
+                      panel.addTabsAsync(data);
+                });
+            } else {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        me.asyncTabs[key] = data[key];
+                    }
+                }
             }
         },
 
@@ -83,32 +100,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 me = this,
                 data,
                 dataTemplate,
-                extentEnvelope,
                 i,
                 identification,
                 imgObj,
                 identificationTemplate,
                 url;
-
-            // We can prolly only show one extent at a time...
-            for (i = 0; i < metadataJson.identifications.length; i += 1) {
-                identification = metadataJson.identifications[i];
-                if (identification.envelopes) {
-                    extentEnvelope = identification.envelopes[0];
-                }
-            }
-
-            /*
-             * Let's post Envelope to some layer
-             */
-            if (extentEnvelope) {
-                me.instance.showExtentOnMap(
-                    uuid,
-                    extentEnvelope,
-                    metadataJson
-                );
-            }
-
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
                 dataQualities: [],

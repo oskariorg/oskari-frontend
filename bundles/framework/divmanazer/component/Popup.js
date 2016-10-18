@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.__listeners = {
         };
         this._isVisible = false;
+        // for preventing things going infinity with onClose() handlers. show() and close() use this.
+        this._closingInProgress = false;
     }, {
         /**
          * @method show
@@ -26,6 +28,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
          */
         show: function (title, message, buttons) {
+            this._closingInProgress = false;
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
                 actionDiv = this.dialog.find('div.actions'),
@@ -202,6 +205,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Boolean} noAnimation true to close immediately (optional, defaults to fade out animation)
          */
         close: function (noAnimation) {
+            if(this._closingInProgress) {
+                return;
+            }
+            this._closingInProgress = true;
             var me = this;
             if (this.overlay) {
                 this.overlay.close();
@@ -253,8 +260,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 return;
             }
 
-            var windowWidth = jQuery(window).height(),
-                windowHeight = jQuery(window).height(),
+            var windowHeight = jQuery(window).height(),
                 targetWidth = tar.outerWidth(),
                 targetHeight = tar.outerHeight(),
                 dialogWidth = me.dialog.outerWidth(),

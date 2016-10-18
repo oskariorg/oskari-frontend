@@ -15,6 +15,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
      *
      */
     function (instance, locale) {
+
+        //move to be a part of the bundle's configuration perhaps...?
+        this.availableOskariRoles = ["sM_Administrator", "sM_GroupAdministrator", "User", "BetaTester", "AlphaTester", "GeoLocatorUser", "NewUser", "Guest"];
         this.instance = instance;
         this.locale = locale;
         this.container = null;
@@ -43,21 +46,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 '<fieldset>'+
                   '<legend><small>'+this.locale.userInformation.userDetails+'</small></legend>'+
                   '<label>'+this.locale.userInformation.contactRole+'</label>'+
-                  '<select  id="userRole">'+
-                    '<option value="ciRoleUser">'+this.locale.userInformation.ciRoleUser+'</option>'+
-                    '<option value="ciRoleResourceProvider">'+this.locale.userInformation.ciRoleResourceProvider+'</option>'+
-                    '<option value="ciRoleCustodian">'+this.locale.userInformation.ciRoleCustodian+'</option>'+
-                    '<option value="ciRoleOwner">'+this.locale.userInformation.ciRoleOwner+'</option>'+
-                    '<option value="ciRoleSponsor">'+this.locale.userInformation.ciRoleSponsor+'</option>'+
-                    '<option value="ciRoleDistributor">'+this.locale.userInformation.ciRoleDistributor+'</option>'+
-                    '<option value="ciRoleOriginator">'+this.locale.userInformation.ciRoleOriginator+'</option>'+
-                    '<option value="ciRolePointOfContact">'+this.locale.userInformation.ciRolePointOfContact+'</option>'+
-                    '<option value="ciRolePrincipalInvestigator">'+this.locale.userInformation.ciRolePrincipalInvestigator+'</option>'+
-                    '<option value="ciRoleProcessor">'+this.locale.userInformation.ciRoleProcessor+'</option>'+
-                    '<option value="ciRolePublisher">'+this.locale.userInformation.ciRolePublisher+'</option>'+
-                    '<option value="ciRoleAuthor">'+this.locale.userInformation.ciRoleAuthor+'</option>'+
-                    '<option value="ciRoleCollaborator">'+this.locale.userInformation.ciRoleCollaborator+'</option>'+
-                  '</select>'+
+                  '<input type="hidden" id="userRole" readonly="true"/>'+
+                  '<input type="text" id="userRolePlaceholder" disabled/>'+
                 '</fieldset>'+
               '</div>'+
               '<div>'+
@@ -74,6 +64,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         this._metadata = null;
 
     }, {
+        getUserRole: function() {
+          var me = this;
+          if (me.availableOskariRoles) {
+            var user = me.getSandbox().getUser();
+            var userRoles = _.pluck(user.getRoles(), 'name');
+            for (var i = 0; i < me.availableOskariRoles.length; i++) {
+              if (me.userHasRole(me.availableOskariRoles[i])) {
+                return me.availableOskariRoles[i];
+              }
+            } 
+          }
+          return "";
+        },
+        userHasRole: function(roleToCheck) {
+          var user = this.getSandbox().getUser();
+          var userRoles = _.pluck(user.getRoles(), 'name');
+          return _.contains(userRoles, roleToCheck);
+        },
         getName: function () {
             return 'Oskari.catalogue.bundle.metadatafeedback.Flyout';
         },
@@ -89,9 +97,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 cancelBtn = contents.find("button.cancel"),
                 ratings = contents.find("div#raty-star"),
                 el = me.getEl();
-
             me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', this.locale['title']);
-
             ratings.raty({
                 starOn: starOnImg,
                 starOff: starOffImg,
@@ -108,8 +114,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                       function(e) {
                         me._showMessage(me.locale.successPopup.title, me.locale.successPopup.savingTheFeedbackSuccesful);
                         me._resetForm();
-                        //update the ratinginfo in the search result list.
-                        me.instance.updateMetadataRating(e);
+                        //update the "admin latest" rating, in case the user has that role.
+                        if (me.userHasRole("sM_Administrator")) {
+                          e.latestAdminRating = params.score;
+                          me.instance.updateMetadataRating(e);
+                        }
 
                         me.instance.sandbox.postRequestByName(
                             'userinterface.UpdateExtensionRequest',
@@ -222,14 +231,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
             el.find('div#raty-star').raty('score',me._metadata.rating);
 
             // Set metadata id
-//            el.find('input#primaryTargetCode').val(me._metadata.id);
             el.find('input#categoryItem').val(me._metadata.id);
 
-            // Set user name
-            el.find('input#username').val(user.getNickName());
-
-            // Set nature of target
-//            el.find('input#natureOfTarget').val(metadata.natureofthetarget);
+            // Set user role
+            el.find('input#userRole').val(this.getUserRole());
+            el.find('input#userRolePlaceholder').attr('placeholder', this.getUserRole());
         },
 
         /**
