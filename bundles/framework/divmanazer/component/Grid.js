@@ -1274,6 +1274,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 attr: pAttribute,
                 descending: pDescending
             };
+
             dataArray.sort(function (a, b) {
                 if (typeof a[pAttribute] === 'object' ||
                     typeof b[pAttribute] === 'object') {
@@ -1284,6 +1285,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var nameB = me._getAttributeValue(b, pAttribute);
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
+        },
+
+        sortBy: function(scopedValue, descending) {
+            var me = this;
+            // sort the results
+            me._sortBy(scopedValue, descending);
+            // populate table content
+            var fieldNames = me.fieldNames;
+            // if visible fields not given, show all
+            if (fieldNames.length === 0) {
+                fieldNames = me.model.getFields();
+            }
+            this.table.find('tbody').empty();
+            me._renderBody(this.table, fieldNames);
+            me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
         },
 
         /**

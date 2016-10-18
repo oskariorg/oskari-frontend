@@ -239,7 +239,11 @@ Oskari.registerLocalization(
                 "title": "ALUEJAKO",
                 "info": "Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta"
             },
-            "source": "Aineisto"
+            "source": "Aineisto",
+            "orderBy": "Lajittele",
+            "orderByAscending": "Lajittele nousevasti",
+            "orderByDescending": "Lajittele laskevasti",
+            "removeSource": "Poista aineisto"
         }
 
     }
