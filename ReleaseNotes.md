@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.40.0
+
+### divmanazer / grid
+
+New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
+
 ## 1.39.0
 
 ### Migration for embedded maps
