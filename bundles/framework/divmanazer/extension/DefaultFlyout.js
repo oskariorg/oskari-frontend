@@ -28,29 +28,32 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
 
 
     }, {
-      __temp:{
-        sideTool:_.template(
-          '<div class="sidetool">'  +
-          '<label class="verticalsidelabel"></label>'  +
-          '</div>'
-        )
-      },
-      //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
-      getSideLabel : function( text ) {
-        if(this._sidetool){
-          $(this._sidetool).css({ top: '33%' });
-        }
-          var sidelabel = this.__temp.sideTool();
-          this._sidetool = jQuery( sidelabel );
-          this._sidetool.find('label').text(text)
-        return this._sidetool;
-      },
+        __temp:{
+            sideTool:_.template(
+                '<div class="sidetool">'  +
+                '<div class="icon icon-arrow-white-right"></div>' +
+                '<label class="verticalsidelabel"></label>'  +
+                '</div>')
+        },
+        //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
+        getSideLabel : function( text ) {
+            if(this._sidetool){
+                this._sidetool.css({ top: '33%' });
+            }
+
+            var sidelabel = this.__temp.sideTool();
+            this._sidetool = jQuery(sidelabel);
+            this._sidetool.find('label').text(text);
+            return this._sidetool;
+        },
         addSideTool: function(label, callback){
-          var sidelabel = this.getSideLabel(label);
-          this.container.append(sidelabel);
-          sidelabel.on("click", function() {
-            callback( sidelabel );
-          })
+            var sidelabel = this.getSideLabel(label);
+            this.container.append(sidelabel);
+            if(typeof callback === 'function') {
+                sidelabel.on('click', function() {
+                    callback( sidelabel );
+                });
+            }
         },
         /**
          * @method getName

@@ -245,6 +245,9 @@ Oskari.registerLocalization(
             "orderByAscending": "Lajittele nousevasti",
             "orderByDescending": "Lajittele laskevasti",
             "removeSource": "Poista aineisto"
+        },
+        "legend": {
+            "title": "Luokittelu"
         }
     }
 }
