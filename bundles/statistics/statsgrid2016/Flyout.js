@@ -35,12 +35,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          * Creates the UI for a fresh start.
          */
         lazyRender: function (config) {
+            var me = this;
+            var locale = this.instance.getLocalization();
             if(this.__panels) {
                 // already rendered
                 // open first panel
                 this.__panels[0].panel.open();
                 return;
             }
+            this.addSideTool(locale.legend.title, function(el){
+                if(!me.__legend) {
+                    me.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance, me.instance.getSandbox());
+                }
+                me.__legend.render(el, locale.legend.title);
+            });
             this.addContent(this.getEl(), config);
         },
         addContent : function (el, config) {
