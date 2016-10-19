@@ -17,6 +17,10 @@ Fixes for getClosestZoomLevel(min, max) function:
 
 Fixed isInScale() when minScale was missing.
 
+### admin-layerselector
+
+Now always sends a value for min/maxscale (-1 if missing) so server will update a removed value to the database.
+
 ## 1.39.0
 
 ### Migration for embedded maps
