@@ -6,6 +6,13 @@
 
 New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
 
+### mapmodule
+
+Fixes for getClosestZoomLevel(min, max) function:
+- If either parameter was missing the current zoomlevel was returned.
+- Now uses the max/min scales of the map as default value for the missing parameter.
+- Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
+
 ## 1.39.0
 
 ### Migration for embedded maps

@@ -567,33 +567,31 @@ Oskari.clazz.define(
          * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
          * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds
          * If the boundaries are within current zoomlevel or undefined, returns the current zoomLevel
-         * @param {Number} maxScale maximum scale boundary (optional)
          * @param {Number} minScale minimum scale boundary (optional)
+         * @param {Number} maxScale maximum scale boundary (optional)
          * @return {Number} zoomLevel (0-12)
          */
-        getClosestZoomLevel: function (maxScale, minScale) {
+        getClosestZoomLevel: function (minScale, maxScale) {
             var zoomLevel = this.getMapZoom();
-            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
-            if (!minScale || !maxScale) {
-                return zoomLevel;
-            }
-
             var scale = this.getMapScale(),
                 scaleList = this.getScaleArray(),
                 i;
+            // default to values from scaleList if missing
+            minScale = minScale || scaleList[0];
+            maxScale = maxScale || scaleList[scaleList.length -1];
 
-            if (scale < minScale) {
+            if (scale < maxScale) {
                 // zoom out
                 //for(i = this._mapScales.length; i > zoomLevel; i--) {
                 for (i = zoomLevel; i > 0; i -= 1) {
-                    if (scaleList[i] >= minScale) {
+                    if (scaleList[i] >= maxScale) {
                         return i;
                     }
                 }
-            } else if (scale > maxScale) {
+            } else if (scale > minScale) {
                 // zoom in
                 for (i = zoomLevel; i < scaleList.length; i += 1) {
-                    if (scaleList[i] <= maxScale) {
+                    if (scaleList[i] <= minScale) {
                         return i;
                     }
                 }
