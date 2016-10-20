@@ -12,6 +12,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
+        this.__sideTools = {
+            legend: {
+                opened: false,
+                flyout: null
+            }
+        };
     }, {
         /**
          * @method getName
@@ -43,13 +49,49 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 this.__panels[0].panel.open();
                 return;
             }
+
             this.addSideTool(locale.legend.title, function(el){
-                if(!me.__legend) {
-                    me.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance, me.instance.getSandbox());
+                if(!me.__sideTools.flyout) {
+                    me.__sideTools.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, locale.legend, {
+                        width: '200px',
+                        height: '300px',
+                        addEventHandlersFunc: null,
+                        closeCallback: function(popup) {
+                             me.__sideTools.opened = false;
+                        },
+                        showCallback: function(popup) {
+                            me.setSideToolPopupPosition(el, popup);
+                        }
+                    });
                 }
-                me.__legend.render(el, locale.legend.title);
+                if(me.__sideTools.opened) {
+                    me.__sideTools.flyout.hide();
+                    me.__sideTools.opened = false;
+                } else {
+                    me.__sideTools.flyout.show();
+                    me.__sideTools.opened = true;
+                }
             });
             this.addContent(this.getEl(), config);
+        },
+        setSideToolPopupPosition: function(tool, popup) {
+            var me = this;
+            var position = tool.position();
+            var parent = tool.parents('.oskari-flyout');
+            var left = parent.position().left + parent.outerWidth();
+            if(left + popup.width() > jQuery(window).width()) {
+                left = left - popup.width() - tool.width();
+            }
+            var top = parent.position().top + position.top;
+            if(top + popup.height() > jQuery(window).height()) {
+                top = top - (popup.height() - tool.height());
+            }
+            popup.css({
+                left: left,
+                top: top
+            });
+
+            popup.css('z-index', 20000);
         },
         addContent : function (el, config) {
             var sb = this.instance.getSandbox();
