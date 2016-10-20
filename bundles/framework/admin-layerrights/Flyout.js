@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             cellTh: jQuery('<th></th>'),
             cellTd: jQuery('<td></td>'),
             row: jQuery('<tr></tr>'),
+            checkboxCtrl: jQuery('<td><input class="checkboxCtrl" type="checkbox" /></td>'),
             checkBox: jQuery('<input type="checkbox" />'),
             name: jQuery('<span class="layer-name"></span>')
         };
@@ -74,7 +75,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     '   <form method="post" id="admin-layerrights-form">' +
                     '       <label><span></span>' +
                     '          <select class="admin-layerrights-role"></select>\n' +
-                    '       </label>' + /*
+                    '       </label>' +/*
                     '       <label for="admin-layerrights-theme">Theme</label>' +
                     '       <select id="admin-layerrights-theme"></select>\n' +
                     '       <label for="admin-layerrights-dataprovidere">Data provider</label>' +
@@ -152,13 +153,30 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                selections = me.extractSelections(),
-                saveData = {"resource" : JSON.stringify(selections)},
-                rightsLoc = this.instance._localization.rights,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                selections = me.extractSelections();
 
-            me.progressSpinner.start();
-            jQuery.ajax({
+          me.progressSpinner.start();
+          me.chunkAjaxCall( 0, selections.length, selections );
+
+        },
+        chunkAjaxCall: function( i, j, selections ) {
+          "use strict";
+           var me = this,
+              chunk = 100,
+              changedArray = [],
+              changes = jQuery.each( selections, function( index ) {
+                  if( !_.contains( changedArray, selections[index].name ) ) {
+                    changedArray.push( selections[index].name );
+                  }
+                return;
+              }),
+              rightsLoc = this.instance._localization.rights,
+              dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+            if( i < j ) {
+              var subChunk = selections.slice( i, i + chunk );
+              var saveData = { "resource" : JSON.stringify( subChunk ) };
+              var call = jQuery.ajax({
                 type: 'POST',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
@@ -167,7 +185,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 success: function () {
                     me.updatePermissionsTable(me.activeRole, "ROLE");
                     me.progressSpinner.stop();
-                    dialog.show(rightsLoc.success.title, rightsLoc.success.message);
+                    dialog.show(rightsLoc.success.title, rightsLoc.success.message + '</br>' + changedArray);
                     dialog.fadeout(3000);
                 },
                 error: function() {
@@ -176,6 +194,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     dialog.fadeout(3000);
                 }
             });
+            this.chunkAjaxCall( i+=chunk, j, selections );
+            }
         },
 
         /**
@@ -253,6 +273,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 tbody = table.find('tbody'),
                 service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
                 headerRow = me._templates.row.clone(),
+                controlRow = me._templates.row.clone(),
+                controlCell,
+                checkboxes,
                 columnsLoc = this.instance.getLocalization('rights');
 
             // Create headers
@@ -267,6 +290,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     headerName = columnsLoc[header.name];
                 }
                 thCell.html(headerName);
+
                 headerRow.append(thCell);
             });
             thead.append(headerRow);
@@ -277,6 +301,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     dataRow = me._templates.row.clone(),
                 	cell = null,
                 	tooltip = null,
+                  checkboxCtrlRow = me._templates.checkboxCtrl.clone(),
                 	dataCell = me._templates.cellTd.clone();
 
                 if(layer) {
@@ -288,6 +313,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 cell.attr('data-namespace', layerRight.namespace);
                 cell.html(layerRight.name);
                 dataCell.append(cell);
+                checkboxCtrlRow.addClass(layerRight.name);
+                dataRow.append(checkboxCtrlRow);
                 dataRow.append(dataCell);
 
                 // lets loop through permissions
@@ -298,16 +325,28 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
+                    cell.addClass(layerRight.name);
                     if(allow === true){
                         cell.attr('checked', 'checked');
                     }
 
                     cell.attr('title', tooltip);
+
                     dataCell.append(cell);
                     dataRow.append(dataCell);
-                });
-                tbody.append(dataRow);
-            });
+
+                    });
+                    tbody.append(dataRow);
+                    tbody.find(dataRow).each( function(index, val) {
+                      var controlCell = dataRow.find( 'input.checkboxCtrl' ),
+                      checkboxes = dataRow.find( 'input.'+controlCell.parent().attr('class').split(' ') );
+                      controlCell.change( function () {
+                      checkboxes.prop( 'checked', !checkboxes.prop( 'checked' ) );
+                      });
+                    });
+
+
+                    });
 
             return table;
         },
@@ -341,7 +380,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 dataObj = {};
                 tr = jQuery(trs[i]);
                 tdName = tr.find('td span');
-                tds = tr.find('td input');
+                tds = tr.find('td input').not('input.checkboxCtrl');
                 dataObj.name            = tdName.text();
                 dataObj.resourceName    = tdName.attr('data-resource');
                 dataObj.namespace       = tdName.attr('data-namespace');
@@ -356,8 +395,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     if (cleanDataObj[right] !== value) {
                         dirty = true;
                     }
-                    dataObj.permissions.push({key: right, value: value});
-
+                      dataObj.permissions.push({key: right, value: value});
                 }
 
                 if (cleanDataObj.resourceName !== dataObj.resourceName) {
@@ -374,9 +412,23 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     data.push(dataObj);
                 }
             }
-            return data;
-        },
+            var changedData = this.getChangedValues(me.cleanData, data);
 
+            return changedData;
+        },
+        getChangedValues: function( arrayClean, arrayDirty ) {
+          var changedvalues = [];
+          for( var i = 0; i < arrayClean.length; i++ ) {
+            for ( var j = 0; j < arrayClean[0].permissions.length; j++ ) {
+              if ( arrayClean[i].permissions[j].allow !== arrayDirty[i].permissions[j].value ) {
+                if ( !_.contains( changedvalues, arrayDirty[i] ) ) {
+                  changedvalues.push( arrayDirty[i] );
+              }
+             }
+            }
+          }
+          return changedvalues;
+        },
         /**
          * @method updatePermissionsTable
          * Refreshes the permissions table with the given role and type
