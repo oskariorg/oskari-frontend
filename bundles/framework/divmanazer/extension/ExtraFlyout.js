@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	}
 
 	    	if(me.options.cls) {
-	    		me.addClass(options.cls);
+	    		me.addClass(me.options.cls);
 	    	}
 
 	    	if(me.options.width) {

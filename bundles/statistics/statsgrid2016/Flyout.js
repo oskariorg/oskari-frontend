@@ -61,7 +61,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                         },
                         showCallback: function(popup) {
                             me.setSideToolPopupPosition(el, popup);
-                        }
+                        },
+                        cls: 'statsgrid-legend-flyout'
                     });
                 }
                 if(me.__sideTools.opened) {
