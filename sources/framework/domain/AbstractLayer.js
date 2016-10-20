@@ -932,7 +932,7 @@ Oskari.clazz.define(
             } else {
                 // Otherwise just check if the scale falls between min/max scales
                 if ((scale > this.getMaxScale() || !this.getMaxScale()) &&
-                    (scale < this.getMinScale()) || !this.getMinScale()) {
+                    (scale < this.getMinScale() || !this.getMinScale())) {
                     _inScale = true;
                 }
             }
