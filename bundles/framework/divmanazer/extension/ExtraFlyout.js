@@ -105,6 +105,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	me.__popup.find('.oskari-flyout-title p').html(title);
 	    },
 	    addClass: function(cls) {
+	    	var me = this;
 	    	if(me.__popup) {
 	    		me.__popup.addClass(cls);
 	    	}
