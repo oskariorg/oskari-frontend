@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
                 "iconClass": "backendstatus-nede"
             },
+            "ERROR": {
+                "tooltip": "Kartlaget er for tiden utilgjengelig",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
                 "iconClass": "backendstatus-vedlikehold"

@@ -491,7 +491,9 @@ Oskari.clazz.define(
                         search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
                     }
                     // Coverage geometry
-                    search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
+                    if (me.coverageButton && me.coverageButton[0] && me.coverageButton[0].data) {
+                        search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
+                    }
                 }
                 me.lastSearch = field.getValue();
 
@@ -588,10 +590,10 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
+                renderCoverageButton = (_.filter(dataFields, {'field':'coverage'}).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
-
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
                 if (dataField.values.length === 0) {
@@ -653,34 +655,37 @@ Oskari.clazz.define(
                 advancedContainer.append(newRow);
             }
 
-            newRow = me.templates.buttonRow.clone();
-            newLabel = me.getLocalization('searchArea');
-            newRow.find('div.rowLabel').append(newLabel);
-            var newButton = me.templates.metadataButton.clone();
-            this.coverageButton = this._initCoverageButton(me, newButton);
-            this.drawCoverage = true;
+            if (renderCoverageButton) {
+                newRow = me.templates.buttonRow.clone();
+                newLabel = me.getLocalization('searchArea');
+                newRow.find('div.rowLabel').append(newLabel);
 
-            this.coverageButton.on('click', function (){
-              if (me.drawCoverage === true) {
-                  me.coverageButton.prop('disabled', true).css({
-                  'border-color': '#0099CB'
-                  });
-                  me.coverageButton.val(me.getLocalization('startDraw'));
-                  me._getCoverage();
-                }else {
-                    me.selectionPlugin.stopDrawing();
-                    me.coverageButton.val(me.getLocalization('delimitArea'));
-                    me.drawCoverage = true;
-                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                    var emptyData = {};
-                    me.coverageButton[0].data = '';
-                    me._removeFeaturesFromMap();
-                }
-            });
+                var newButton = me.templates.metadataButton.clone();
+                this.coverageButton = this._initCoverageButton(me, newButton);
+                this.drawCoverage = true;
 
-            newRow.append(newButton);
+                this.coverageButton.on('click', function (){
+                  if (me.drawCoverage === true) {
+                      me.coverageButton.prop('disabled', true).css({
+                      'border-color': '#0099CB'
+                      });
+                      me.coverageButton.val(me.getLocalization('startDraw'));
+                      me._getCoverage();
+                    }else {
+                        me.selectionPlugin.stopDrawing();
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.drawCoverage = true;
+                        document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
+                        var emptyData = {};
+                        me.coverageButton[0].data = '';
+                        me._removeFeaturesFromMap();
+                    }
+                });
 
-            advancedContainer.append(newRow);
+                newRow.append(newButton);
+
+                advancedContainer.append(newRow);
+            }
 
             me._updateOptions(advancedContainer);
         },

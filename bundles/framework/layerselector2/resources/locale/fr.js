@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "La couche cartographique n’est pas disponible actuellement.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "La couche cartographique n’est pas disponible actuellement.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.",
                 "iconClass": "backendstatus-maintenance"

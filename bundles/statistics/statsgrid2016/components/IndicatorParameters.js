@@ -98,47 +98,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				selections.push(jqSelect);
 			});
 
-			// FIXME change this for use indicator regions
-			var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
-			var select = me.__templates.select({
-				id : 'regionset',
-				name : 'Regionset',
-				clazz : 'stats-regionset-selector',
-				placeholder: placeholderText
-			});
-			if(indicator.regionsets.length === 0) {
-				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
-				select.addClass('margintop');
-			}
-			cont.append(select);
-			var jqSelect = cont.find('.stats-regionset-selector');
-
+			var jqSelect = me.getRegionSelection(cont,indicator);
 			// Add margin if there is selections
 			if(selections.length>0) {
 				jqSelect.parent().addClass('margintop');
-			}
-
-			// If there is indicators then do selections
-			if(indicator.regionsets.length > 0) {
-				// add empty selection to show placeholder
-				jqSelect.append('<option></option>');
-
-				me.service.getRegionsets().forEach(function(regionset) {
-					jqSelect.append(me.__templates.option(regionset));
-				});
-				jqSelect.chosen({
-					allow_single_deselect : true,
-					disable_search_threshold: 10,
-					width: '100%'
-				});
-				me.instance.addChosenHacks(jqSelect);
-				jqSelect.on('change', function() {
-					var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
-					var value = jQuery(this).val();
-					log.info('Selected region ' + value);
-					me.service.getStateService().setRegionset(value);
-				});
-				me.service.getStateService().setRegionset(jqSelect.val());
 			}
 			selections.push(jqSelect);
 
@@ -153,9 +116,82 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 						values.selections[select.attr('name')] = select.val();
 					});
 					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+
+					me.instance.getFlyout().closePanels();
 				});
 				elements.btn.setEnabled(indicator.regionsets.length>0);
 			}
 		});
+	},
+	/**
+	 * Get region selection.
+	 * @method  @public getRegionSelection
+	 *
+	 * @param  {Object} cont      jQuery element
+	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
+	 * @return {Object}           jQuery element
+	 */
+	getRegionSelection: function(cont, indicator) {
+		var me = this;
+		var locale = me.instance.getLocalization();
+		var panelLoc = locale.panels.newSearch;
+		var allRegionsets = me.service.getRegionsets();
+		var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
+		var select = me.__templates.select({
+			id : 'regionset',
+			clazz : 'stats-regionset-selector',
+			placeholder: placeholderText
+		});
+
+		var allowedRegionsets = [];
+		if(indicator) {
+			var addAllowedRegionSets = function(indicatorRegionset){
+				var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset,id) {
+					return regionset.id === indicatorRegionset;
+				});
+
+				grepAllRegionsets.forEach(function(regionset){
+					allowedRegionsets.push(regionset);
+				});
+			};
+			indicator.regionsets.forEach(function(indicatorRegionset) {
+				addAllowedRegionSets(indicatorRegionset);
+			});
+
+			if(allowedRegionsets.length === 0) {
+				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
+				select.addClass('margintop');
+			}
+		} else {
+			allowedRegionsets = allRegionsets;
+		}
+		cont.append(select);
+		var jqSelect = cont.find('.stats-regionset-selector');
+
+		// If there is indicators then do selections
+		if(allowedRegionsets.length > 0) {
+			if(indicator) {
+				// add empty selection to show placeholder
+				jqSelect.append('<option></option>');
+			}
+
+			me.service.getRegionsets().forEach(function(regionset) {
+				jqSelect.append(me.__templates.option(regionset));
+			});
+			jqSelect.chosen({
+				allow_single_deselect : true,
+				disable_search_threshold: 10,
+				width: '100%'
+			});
+			me.instance.addChosenHacks(jqSelect);
+			jqSelect.on('change', function() {
+				var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
+				var value = jQuery(this).val();
+				log.info('Selected region ' + value);
+				me.service.getStateService().setRegionset(value);
+			});
+		}
+
+		return jqSelect;
 	}
 });

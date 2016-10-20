@@ -221,9 +221,7 @@ Oskari.clazz.define(
                     popup.setColourScheme(colourScheme);
                 }
                 popup.onClose(function () {
-                    if (me._popups[id] && me._popups[id].type === "mobile") {
-                        delete me._popups[id];
-                    }
+                    me.close(id);
                 });
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
@@ -854,6 +852,7 @@ Oskari.clazz.define(
                         if (!position ||
                             position.lon !== popup.lonlat.lon ||
                             position.lat !== popup.lonlat.lat) {
+                            delete this._popups[pid];
                             if(typeof popup.popup.setPosition === 'function') {
                                 popup.popup.setPosition(undefined);
                             }
@@ -862,7 +861,6 @@ Oskari.clazz.define(
                             } else if (popup.popup && popup.type === "mobile") {
                                 popup.popup.close();
                             }
-                            delete this._popups[pid];
                             event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
                         	sandbox.notifyAll(event);
                         }
@@ -871,13 +869,14 @@ Oskari.clazz.define(
                 return;
             }
             // id specified, delete only single popup
-            if (this._popups[id]) {
-                if (this._popups[id].popup && this._popups[id].type === "desktop") {
-                    this.getMapModule().getMap().removeOverlay(this._popups[id].popup);
-                } else if (this._popups[id].popup && this._popups[id].type === "mobile") {
-                    this._popups[id].popup.close();
-                }
+            popup = this._popups[id];
+            if (popup) {
                 delete this._popups[id];
+                if (popup.popup && popup.type === "desktop") {
+                    this.getMapModule().getMap().removeOverlay(popup.popup);
+                } else if (popup.popup && popup.type === "mobile") {
+                    popup.popup.close();
+                }
                 event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
             	sandbox.notifyAll(event);
             }

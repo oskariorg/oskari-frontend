@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
+        this.autoHeightHeader = false;
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
@@ -144,6 +145,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setResizableColumns: function (newResizableColumns) {
             this.resizableColumns = newResizableColumns;
+        },
+        /**
+         * @method  setAutoHeightHeader
+         * Sets the header table autosizeble
+         * @param {Integer} margin is setted some margin then autosize header
+         */
+        setAutoHeightHeader: function(margin) {
+            if(typeof margin === 'number') {
+                this.autoHeightHeader = margin;
+            }
         },
         /**
          * @method setColumnUIName
@@ -509,68 +520,76 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
             }
 
+            var headerLinkClosureMagic = function () {
+                var parentItem = jQuery(this).parent(),
+                    thisKey = parentItem.data('key');
+
+                if (parentItem.hasClass('closedSubTable')) {
+                    table.find('th.hidden.' + thisKey).removeClass('hidden');
+                    table.find('td.hidden.' + thisKey).removeClass('hidden');
+                    parentItem.removeClass('closedSubTable');
+                    parentItem.addClass('openSubTable');
+                } else {
+                    table.find('th.' + thisKey).not('.base').addClass('hidden');
+                    table.find('td.' + thisKey).not('.base').addClass('hidden');
+                    parentItem.removeClass('openSubTable');
+                    parentItem.addClass('closedSubTable');
+                }
+            };
+
             for (i = 0; i < fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
-                var tools = this.columnTools[baseKey] || [];
-                if (!uiName) {
-                    uiName = fieldName;
-                } else if (fieldName !== fullFieldNames[i][key]) {
-                    uiName = fieldName.replace(baseKey, uiName);
-                }
-                link.append(uiName);
-                header.attr('title',uiName);
-                if (me.lastSort && fieldName === me.lastSort.attr) {
-                    if (me.lastSort.descending) {
-                        header.addClass('desc');
-                    } else {
-                        header.addClass('asc');
-                    }
-                }
-                if (fullFieldNames[i].type === 'default') {
-                    link.bind('click', headerClosureMagic(fullFieldNames[i].key));
-                    me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
-                } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > 2) {
-                        header.addClass('closedSubTable');
-                        header.addClass('base');
-                    } else {
-                        header.addClass('openSubTable');
-                        header.addClass('base');
-                    }
-                    // Expand or close subtable
-                    // FIXME create function outside the loop
-                    link.bind('click', function () {
-                        var parentItem = jQuery(this).parent(),
-                            thisKey = parentItem.data('key');
 
-                        if (parentItem.hasClass('closedSubTable')) {
-                            table.find('th.hidden.' + thisKey).removeClass('hidden');
-                            table.find('td.hidden.' + thisKey).removeClass('hidden');
-                            parentItem.removeClass('closedSubTable');
-                            parentItem.addClass('openSubTable');
+                if(typeof uiName === 'function') {
+                    uiName(header);
+                } else {
+
+                    var tools = this.columnTools[baseKey] || [];
+                    if (!uiName) {
+                        uiName = fieldName;
+                    } else if (fieldName !== fullFieldNames[i][key]) {
+                        uiName = fieldName.replace(baseKey, uiName);
+                    }
+                    link.append(uiName);
+                    header.attr('title',uiName);
+                    if (me.lastSort && fieldName === me.lastSort.attr) {
+                        if (me.lastSort.descending) {
+                            header.addClass('desc');
                         } else {
-                            table.find('th.' + thisKey).not('.base').addClass('hidden');
-                            table.find('td.' + thisKey).not('.base').addClass('hidden');
-                            parentItem.removeClass('openSubTable');
-                            parentItem.addClass('closedSubTable');
+                            header.addClass('asc');
                         }
-                    });
+                    }
+                    if (fullFieldNames[i].type === 'default') {
+                        link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                        me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
+                    } else if (fullFieldNames[i].type === 'object') {
+                        if (dataArray.length > 2) {
+                            header.addClass('closedSubTable');
+                            header.addClass('base');
+                        } else {
+                            header.addClass('openSubTable');
+                            header.addClass('base');
+                        }
+                        // Expand or close subtable
+                        link.bind('click', headerLinkClosureMagic);
+                    }
+
+                    if (fullFieldNames[i].visibility === 'hidden') {
+                        header.addClass('hidden');
+                    }
                 }
 
-                if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
-                }
+                header.data('key', fullFieldNames[i].baseKey);
+                header.data('value', fullFieldNames[i].subKey);
 
                 header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
                 if(me.__selectedColumn === fullFieldNames[i].baseKey) {
                     header.addClass('selected');
                 }
-                header.data('key', fullFieldNames[i].baseKey);
-                header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
@@ -724,6 +743,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
             fields = me.model.getFields();
 
+            var checkbocInputChange = function () {
+                    var fieldSelectors = jQuery(
+                            'input.column-selector-list-item'
+                        ),
+                        oldFields = me.model.getFields(),
+                        newFields = [],
+                        k,
+                        l;
+
+                    for (k = 0; k < oldFields.length; k += 1) {
+                        for (l = 0; l < fieldSelectors.length; l += 1) {
+                            if (oldFields[k] === fieldSelectors[l].id) {
+                                if (fieldSelectors[l].checked) {
+                                    newFields.push(oldFields[k]);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (newFields.length > 0) {
+                        me.setVisibleFields(newFields);
+                    }
+                    me.renderTo(table.parent(), {
+                        columnSelector: 'open'
+                    });
+                };
+
             // Add field names to the list
             for (i = 0; i < fields.length; i += 1) {
                 visibleField = false;
@@ -751,33 +797,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 // Update visible fields after checkbox change
-                // FIXME create function outside the loop
-                checkboxInput.change(function () {
-                    var fieldSelectors = jQuery(
-                            'input.column-selector-list-item'
-                        ),
-                        oldFields = me.model.getFields(),
-                        newFields = [],
-                        k,
-                        l;
-
-                    for (k = 0; k < oldFields.length; k += 1) {
-                        for (l = 0; l < fieldSelectors.length; l += 1) {
-                            if (oldFields[k] === fieldSelectors[l].id) {
-                                if (fieldSelectors[l].checked) {
-                                    newFields.push(oldFields[k]);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    if (newFields.length > 0) {
-                        me.setVisibleFields(newFields);
-                    }
-                    me.renderTo(table.parent(), {
-                        columnSelector: 'open'
-                    });
-                });
+                checkboxInput.change(checkbocInputChange);
                 columnSelectorList.append(newColumn);
             }
             columnSelectorList.attr('class', 'column-selector-list');
@@ -929,6 +949,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             container.append(table);
+
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number') {
+                var maxHeight = 0;
+                var thead = table.find('thead');
+                var theadRow = table.find('thead tr');
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
+            }
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();
@@ -1265,6 +1300,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 attr: pAttribute,
                 descending: pDescending
             };
+
             dataArray.sort(function (a, b) {
                 if (typeof a[pAttribute] === 'object' ||
                     typeof b[pAttribute] === 'object') {
@@ -1275,6 +1311,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var nameB = me._getAttributeValue(b, pAttribute);
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
+        },
+
+        sortBy: function(scopedValue, descending) {
+            var me = this;
+            // sort the results
+            me._sortBy(scopedValue, descending);
+            // populate table content
+            var fieldNames = me.fieldNames;
+            // if visible fields not given, show all
+            if (fieldNames.length === 0) {
+                fieldNames = me.model.getFields();
+            }
+            this.table.find('tbody').empty();
+            me._renderBody(this.table, fieldNames);
+            me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
         },
 
         /**
@@ -1385,7 +1439,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 pixelsFromTop = newTop;
                 var parentHeight = me.table.parent().parent().height();
                 me.table.find('tbody').height((parentHeight-headerHeight-pixelsFromTop) + 'px');
-            }
+            };
             setHeight(true);
             if(follow === true) {
                 clearInterval(this.sizeInterval);

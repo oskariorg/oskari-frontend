@@ -14,6 +14,88 @@
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
+
+
+.statsgrid-grid-table-header {
+    position:absolute;
+    top:0;
+    left:0;
+    width:94%;
+    height:94%;
+    text-align:left;
+    margin:10px;
+    font-weight: normal;
+
+    .title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .selection {
+        margin-bottom: 6px;
+        width: 94%;
+    }
+}
+
+.statsgrid-grid-table-header-content {
+    position:absolute;
+    top:0;
+    left:0;
+    width:94%;
+    height:94%;
+    text-align:left;
+    margin:10px;
+    font-weight: normal;
+
+    .header {
+        width: 90%;
+        .title {
+            font-weight: bold;
+        }
+    }
+
+    .icon {
+        position: absolute;
+        top:0;
+        right:10px;
+        cursor: pointer;
+    }
+
+    .sortby {
+        cursor: pointer;
+        position:absolute;
+        bottom: 6px;
+        right: 6px;
+
+        .orderTitle {
+            float: left;
+
+            &.selected {
+              text-decoration: underline;
+            }
+        }
+        .order {
+            height: 10px;
+            width: 10px;
+            float: left;
+            margin-top: 4px;
+
+            &.asc {
+                background-image: url('../images/asc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+
+            &.desc {
+                background-image: url('../images/desc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+        }
+    }
+}
+
 div.oskari-flyoutcontent{
     &.statsgrid {
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
@@ -25,12 +107,31 @@ div.oskari-flyoutcontent{
             display: inline-block;
         }
 
+        label.oskari-formcomponent {
+          width: 100%;
+          padding-left: 10px;
+        }
+
+        div.accordion {
+            div.accordion_panel {
+                div.content {
+                    padding: 10px;
+                }
+            }
+        }
+
+        .chosen-container .chosen-results {
+            max-height: 140px;
+        }
+
         .statsgrid-ds-selections {
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
 
             div.selection {
-                padding: 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 10px;
 
                 &.tooltip {
                   padding-bottom: 0 !important;
@@ -41,7 +142,6 @@ div.oskari-flyoutcontent{
             div.statsgrid-indicator-selections {
                 padding-left: 10px;
                 padding-bottom: 10px;
-                padding-right: 10px;
             }
 
             div.selection, div.statsgrid-indicator-selections {
@@ -100,6 +200,23 @@ div.oskari-flyoutcontent{
          border-radius: 0 0 4px 4px;
          border-top: 0;
          box-shadow: 0 1px 0 #fff inset;
+        }
+
+        .stats-table{
+            margin-top: 14px;
+
+            .noresults {
+                .title {
+                    background-color:#000;
+                    color:#fff;
+                    padding:8px 10px 8px 12px;
+                    font-weight:bold;
+                }
+
+                .content{
+                    padding:10px;
+                }
+            }
         }
     }
 }

@@ -226,7 +226,28 @@ Oskari.registerLocalization(
                     }
                 },
                 "noRegionset": "Ei aluevalintaa"
+            },
+            "extraFeatures": {
+                "title": "LISÄEHDOT JA -OMINAISUUDET",
+                "showMapLayers": "Näytä karttatasot"
+
             }
+        },
+        "statsgrid": {
+            "title": "HAETUT AINEISTOT",
+            "noResults": "Ei valittuja aineistoja",
+            "areaSelection": {
+                "title": "ALUEJAKO",
+                "info": "Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta"
+            },
+            "source": "Aineisto",
+            "orderBy": "Lajittele",
+            "orderByAscending": "Lajittele nousevasti",
+            "orderByDescending": "Lajittele laskevasti",
+            "removeSource": "Poista aineisto"
+        },
+        "legend": {
+            "title": "Luokittelu"
         }
     }
 }

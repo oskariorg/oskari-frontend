@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "Die Kartenebene ist derzeit nicht verfügbar.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Die Kartenebene ist derzeit nicht verfügbar.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Die Kartenebene könnte in den nächsten Tagen teilweise nicht verfügbar sein.",
                 "iconClass": "backendstatus-maintenance"

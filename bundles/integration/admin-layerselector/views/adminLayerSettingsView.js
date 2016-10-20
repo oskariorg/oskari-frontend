@@ -765,8 +765,8 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                data.minScale = form.find('#add-layer-minscale').val();
-                data.maxScale = form.find('#add-layer-maxscale').val();
+                data.minScale = form.find('#add-layer-minscale').val() || -1;
+                data.maxScale = form.find('#add-layer-maxscale').val() || -1;
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();

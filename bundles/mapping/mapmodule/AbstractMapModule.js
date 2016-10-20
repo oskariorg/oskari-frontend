@@ -96,10 +96,10 @@ Oskari.clazz.define(
 
         me._wellknownStyles = {};
 
-        me._isInMobileMode;
-        me._mobileToolbar;
+        me._isInMobileMode = null;
+        me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
-        me._toolbarContent;
+        me._toolbarContent = null;
 
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -112,7 +112,7 @@ Oskari.clazz.define(
                     '<div class="oskari-crosshair-vertical-bar"></div>'+
                     '<div class="oskari-crosshair-horizontal-bar"></div>'+
                 '</div>')
-        }
+        };
     }, {
         /**
          * @method init
@@ -567,33 +567,31 @@ Oskari.clazz.define(
          * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
          * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds
          * If the boundaries are within current zoomlevel or undefined, returns the current zoomLevel
-         * @param {Number} maxScale maximum scale boundary (optional)
          * @param {Number} minScale minimum scale boundary (optional)
+         * @param {Number} maxScale maximum scale boundary (optional)
          * @return {Number} zoomLevel (0-12)
          */
-        getClosestZoomLevel: function (maxScale, minScale) {
+        getClosestZoomLevel: function (minScale, maxScale) {
             var zoomLevel = this.getMapZoom();
-            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
-            if (!minScale || !maxScale) {
-                return zoomLevel;
-            }
-
             var scale = this.getMapScale(),
                 scaleList = this.getScaleArray(),
                 i;
+            // default to values from scaleList if missing
+            minScale = minScale || scaleList[0];
+            maxScale = maxScale || scaleList[scaleList.length -1];
 
-            if (scale < minScale) {
+            if (scale < maxScale) {
                 // zoom out
                 //for(i = this._mapScales.length; i > zoomLevel; i--) {
                 for (i = zoomLevel; i > 0; i -= 1) {
-                    if (scaleList[i] >= minScale) {
+                    if (scaleList[i] >= maxScale) {
                         return i;
                     }
                 }
-            } else if (scale > maxScale) {
+            } else if (scale > minScale) {
                 // zoom in
                 for (i = zoomLevel; i < scaleList.length; i += 1) {
-                    if (scaleList[i] <= maxScale) {
+                    if (scaleList[i] <= minScale) {
                         return i;
                     }
                 }
@@ -1460,11 +1458,11 @@ Oskari.clazz.define(
                 if(styleKey && sanitizedStyles[styleKey]) {
                     if(me._wellknownStyles[styleKey]){
                         me.log.warn('Founded allready added wellknown style for key=' + key + ', merging styles');
-                        for(var name in sanitizedStyles[styleKey]) {
-                            if(me._wellknownStyles[styleKey][name]) {
-                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+name+', replacing style');
+                        for(var sanitizedStyleName in sanitizedStyles[styleKey]) {
+                            if(me._wellknownStyles[styleKey][sanitizedStyleName]) {
+                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+sanitizedStyleName+', replacing style');
                             }
-                            me._wellknownStyles[styleKey][name] = sanitizedStyles[styleKey][name];
+                            me._wellknownStyles[styleKey][sanitizedStyleName] = sanitizedStyles[styleKey][sanitizedStyleName];
                         }
                     }
                     else {
@@ -1493,7 +1491,7 @@ Oskari.clazz.define(
 
             if(key && style){
                 if(me._wellknownStyles[key] && me._wellknownStyles[key][style]) {
-                    return me._wellknownStyles[key][style]
+                    return me._wellknownStyles[key][style];
                 } else {
                     this.log.warn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
                     return Oskari.getDefaultMarker();
@@ -1668,7 +1666,7 @@ Oskari.clazz.define(
                     data: marker.data.shape.data,
                     offsetX: marker.data.shape.x || marker.data.offsetX,
                     offsetY: marker.data.shape.x || marker.data.offsetY
-                }
+                };
             }
 
             var dx = !isNaN(markerDetails.offsetX) ? markerDetails.offsetX : 16;
@@ -1782,9 +1780,7 @@ Oskari.clazz.define(
                 j,
                 el;
 
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
+            var removeClasses = function(el) {
                 el.removeClass(function (index, classes) {
                     var removeThese = '',
                         classNames = classes.split(' ');
@@ -1799,6 +1795,11 @@ Oskari.clazz.define(
                     // Return the class names to be removed.
                     return removeThese;
                 });
+            };
+
+            for (i = 0; i < elements.length; i += 1) {
+                el = elements[i];
+                removeClasses(el);
 
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);

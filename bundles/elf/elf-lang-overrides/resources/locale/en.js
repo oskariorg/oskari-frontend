@@ -17,7 +17,8 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
-        "tabTitle": "Geo Product Finder"
+        "tabTitle": "Geo Product Finder",
+        "metadataCatalogueDescription": "Search spatial resources, such as spatial datasets, dataset series or services."
     }
 }, true);
 
@@ -119,7 +120,7 @@ Oskari.registerLocalization({
     "value": {
         "flyout": {
             "heading": {
-                "datasetInformation": "Information about the dataset",
+                "datasetInformation": "Information about the resource",
                 "contactInformation": "Contact information",
                 "metadataContact": "Metadata contact",
                 "technicalInformation": "Technical information",
@@ -149,6 +150,17 @@ Oskari.registerLocalization({
                     "conformance":"Conformance"
                 }
             }
+        }
+    }
+}, true);
+
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "findbycoordinates",
+    "value": {
+        "tool": {
+            "tooltip": "Click on the map and locate the nearest address or placename and its coordinates."
         }
     }
 }, true);

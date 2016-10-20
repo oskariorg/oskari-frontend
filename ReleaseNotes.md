@@ -1,5 +1,26 @@
 # Release Notes
 
+## 1.40.0
+
+### divmanazer / grid
+
+New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
+
+### mapmodule
+
+Fixes for getClosestZoomLevel(min, max) function:
+- If either parameter was missing the current zoomlevel was returned.
+- Now uses the max/min scales of the map as default value for the missing parameter.
+- Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
+
+### core/AbstractLayer
+
+Fixed isInScale() when minScale was missing.
+
+### admin-layerselector
+
+Now always sends a value for min/maxscale (-1 if missing) so server will update a removed value to the database.
+
 ## 1.39.0
 
 ### Migration for embedded maps
@@ -13,6 +34,27 @@ https://github.com/nls-oskari/oskari/blob/master/applications/sample/servlet_pub
 ### IE 9 not supported
 
 ``IE9`` will not be a supported browser anymore.
+
+### infobox
+
+Fixed an issue where InfoBox.InfoBoxEvent was not sent on close when the map is in mobile mode.
+
+### divmanazer/popup
+
+Added code to prevent an infinite loop where popup.onClose() callback triggers another call to popup.close().
+
+### admin-layerselector / wms ol2 and ol3
+
+Implemented functionality to force YX axis order (=neu) for wms-layers for certain projections with ``reverseXY`` attribute JSON.
+
+Example layer attribute configuration:
+```javascript
+  {
+    'reverseXY': {
+      'EPSG:3035':true
+    }
+  }
+```
 
 ### metadatacatalogue
 
@@ -48,6 +90,7 @@ sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, tru
         '    </StyledLayerDescriptor>'
 }]);
 ```
+
 ### Mapmodule
 
 Mapmodule accepted a cached version of user location from the browser. Now it always tries to get a fresh location by default.

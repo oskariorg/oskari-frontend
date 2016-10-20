@@ -43,6 +43,10 @@ Oskari.registerLocalization(
                 "tooltip": "De kaartlaag is momenteel niet beschikbaar.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "De kaartlaag is momenteel niet beschikbaar.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "De kaartlaag kan tijdens de komende dagen periodiek niet beschikbaar zijn.",
                 "iconClass": "backendstatus-maintenance"
