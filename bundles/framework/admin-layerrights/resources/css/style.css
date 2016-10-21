@@ -11,8 +11,9 @@ table.layer-rights-table thead tr {
   table.layer-rights-table thead tr th:first-child {
     width: 40%;
     padding: 2px 5px;
-    text-align: center;
-    min-width: 380px; }
+    padding-left: 30px;
+    text-align: left;
+    min-width: 360px; }
   table.layer-rights-table thead tr th {
     width: 15%; }
 
@@ -31,9 +32,12 @@ table.layer-rights-table tbody {
     table.layer-rights-table tbody {
       max-height: 480px; } }
   table.layer-rights-table tbody tr td:first-child {
-    width: 40%;
-    text-align: center;
-    min-width: 380px; }
+    width: 10%;
+    min-width: 50px; }
+  table.layer-rights-table tbody tr td:nth-child(2) {
+    width: 30%;
+    text-align: left;
+    min-width: 320px; }
   table.layer-rights-table tbody tr td {
     width: 15%; }
 
