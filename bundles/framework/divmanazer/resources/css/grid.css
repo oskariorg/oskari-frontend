@@ -71,7 +71,7 @@ input.excelExportButton {
 table.oskari-grid [class*="span"] {
   float: none; }
 table.oskari-grid td {
-  padding: 1px; }
+  padding: 1px 5px 0 5px; }
 table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;

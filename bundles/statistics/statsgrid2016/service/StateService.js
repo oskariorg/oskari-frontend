@@ -69,6 +69,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             return this.indicators;
         },
         /**
+         * @method  @public getIndicatorIndex Gets indicator index startin number 1
+         * @param  {String} indicatorHash indicator hash
+         * @return {Integer} indicator index
+         */
+        getIndicatorIndex : function(indicatorHash) {
+            for(var i = 0;i<this.indicators.length; i++) {
+                var ind = this.indicators[i];
+                if(ind.hash === indicatorHash) {
+                    return i+1;
+                }
+            }
+            return null;
+        },
+        /**
          * Sets the active indicator and sends an event about the change
          * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
          */

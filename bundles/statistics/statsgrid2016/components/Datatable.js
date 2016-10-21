@@ -18,6 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 '<div class="title"></div>'+
                 '<div class="selection"></div>'+
                 '<div class="info"></div>'+
+                '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">'+
                 '<div class="header"><span class="title"></span> </div>'+
@@ -105,6 +106,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             content.append(tableHeader);
             params.getRegionSelection(tableHeader.find('.selection'));
 
+            var sortBy = tableHeader.find('.sortby');
+            sortBy.find('.orderTitle').html(gridLoc.orderBy);
+            var order = sortBy.find('.order');
+
+            sortBy.bind('click', function(evt){
+                evt.stopPropagation();
+
+                me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
+                sortBy.find('.orderTitle').addClass('selected');
+
+                var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
+
+                me.grid.sortBy('region', descending);
+                sortBy.attr('data-descending', !descending);
+
+                order.removeClass('asc');
+                order.removeClass('desc');
+
+                if(descending) {
+                    sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+                    order.addClass('desc');
+                } else {
+                    sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
+                    order.addClass('asc');
+                }
+            });
+
+
+            sortBy.attr('data-descending', false);
+            sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+
+            // region selected by default sort order
+            sortBy.find('.orderTitle').addClass('selected');
+            order.addClass('asc');
+
             //content.css('height', '160px');
             content.css('width', '180px');
         });
@@ -154,7 +190,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     sortBy.bind('click', function(evt){
                         evt.stopPropagation();
 
-                        jQuery('.statsgrid-grid-table-header-content .sortby .orderTitle').removeClass('selected');
+                        me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
                         sortBy.find('.orderTitle').addClass('selected');
 
                         var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
@@ -191,6 +227,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 }
             });
         });
+
     },
     handleIndicatorAdded: function(datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');

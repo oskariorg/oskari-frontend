@@ -212,11 +212,11 @@ body {
 
 .sidetool {
   position: absolute;
-  bottom: 10%;
-  left: 97%;
-  float: right;
+  left: 100%;
   width: 16px;
   height: 100px;
+  bottom: 0;
+  float: right;
   background-color: #333438; }
   .sidetool .icon {
     position: absolute;

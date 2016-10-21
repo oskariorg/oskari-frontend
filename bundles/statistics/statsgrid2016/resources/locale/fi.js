@@ -199,7 +199,7 @@ Oskari.registerLocalization(
         // statsgrid 2016 locales
         "panels": {
             "newSearch": {
-                "title": "UUSI AINEISTOHAKU",
+                "title": "AINEISTOHAKU",
                 "datasourceTitle": "Aineiston tarjoaja",
                 "indicatorTitle": "Aineisto",
                 "selectDatasourcePlaceholder": "Valitse tietolähde",
@@ -246,7 +246,8 @@ Oskari.registerLocalization(
             "removeSource": "Poista aineisto"
         },
         "legend": {
-            "title": "Luokittelu"
+            "title": "Luokittelu",
+            "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun."
         }
 
     }

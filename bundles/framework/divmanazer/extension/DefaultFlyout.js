@@ -37,16 +37,26 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         },
         //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
         getSideLabel : function( text ) {
-            if(this._sidetool){
-                this._sidetool.css({ top: '33%' });
-            }
-
-            var sidelabel = this.__temp.sideTool();
-            this._sidetool = jQuery(sidelabel);
-            this._sidetool.find('label').text(text);
-            return this._sidetool;
+            var sidelabel = jQuery(this.__temp.sideTool());
+            sidelabel.find('label').text(text);
+            var sidelabels = this.container.parent().find('.sidetool');
+            //sidelabel.css('bottom', sidelabels.length * (sidelabel.height() + 10 ) + 'px');
+            return sidelabel;
+        },
+        _calcSideLabelPositions: function(){
+            var me = this;
+            var sidelabels = me.container.find('.sidetool');
+            sidelabels.each(function(index, sidelabel) {
+                if(index + 1 === sidelabels.length) {
+                    jQuery(this).css('bottom', 0);
+                }
+                else {
+                    jQuery(this).css('bottom', (index + 1) * (jQuery(this).height() + 10 ) + 'px');
+                }
+            });
         },
         addSideTool: function(label, callback){
+            var me = this;
             var sidelabel = this.getSideLabel(label);
             this.container.append(sidelabel);
             if(typeof callback === 'function') {
@@ -54,7 +64,19 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                     callback( sidelabel );
                 });
             }
+
+            me._calcSideLabelPositions();
+/*
+            if(!me._addedResizeListener){
+                this.container.parent().bind('change', function(){
+                    me._calcSideLabelPositions();
+                    console.log('resize handling');
+                });
+                me._addedResizeListener = true;
+            }
+            */
         },
+
         /**
          * @method getName
          * @return {String} implementation name
