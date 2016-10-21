@@ -159,23 +159,29 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             this._savePermissions(chunks, function(errors) {
                 me.progressSpinner.stop();
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var rightsLoc = me.instance._localization.rights;
+
+                var changedLayers = me._collectResponseMessages( changedPermissions );
+
                 if (errors.length) {
+                    var errorLayers = me._collectResponseMessages( errors );
                     // TODO: append layers that couldn't be updated to dialog message
-                    //dialog.show(rightsLoc.error.title, rightsLoc.error.message);
+                    dialog.show(rightsLoc.error.title, rightsLoc.error.message + " " + errorLayers);
                 }
 
-                var changedArray = [];
-                jQuery.each(changedPermissions, function(index) {
-                    if (!_.contains(changedArray, changedPermissions[index].name)) {
-                        changedArray.push(changedPermissions[index].name);
-                    }
-                    return;
-                });
-                var rightsLoc = me.instance._localization.rights;
-                dialog.show(rightsLoc.success.title, rightsLoc.success.message + '</br>' + changedArray);
+                dialog.show(rightsLoc.success.title, rightsLoc.success.message + '</br>' + changedLayers);
                 dialog.fadeout(3000);
                 me.updatePermissionsTable(me.activeRole, "ROLE");
             }, []);
+        },
+        _collectResponseMessages: function( responseItems ) {
+          var responseArray = [];
+          jQuery.each( responseItems, function( index ) {
+              if ( !_.contains( responseArray, responseItems[index].name ) ) {
+                  responseArray.push( responseItems );
+                }
+            });
+          return responseArray;
         },
         /**
          * Split list into chunks of given size
