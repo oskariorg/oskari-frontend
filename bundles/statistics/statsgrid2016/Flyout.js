@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var parent = tool.parents('.oskari-flyout');
             var left = parent.position().left + parent.outerWidth() + tool.width();
             if(left + popup.width() > jQuery(window).width()) {
-                left = left - popup.width();
+                left = left - popup.width() + tool.width();
             }
             var top = parent.position().top + position.top;
             if(top + popup.height() > jQuery(window).height()) {
