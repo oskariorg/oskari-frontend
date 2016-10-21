@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
           var responseArray = [];
           jQuery.each( responseItems, function( index ) {
               if ( !_.contains( responseArray, responseItems[index].name ) ) {
-                  responseArray.push( responseItems );
+                  responseArray.push( responseItems[index].name );
                 }
             });
           return responseArray;
