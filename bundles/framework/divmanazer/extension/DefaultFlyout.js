@@ -70,7 +70,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
             if(!me._addedResizeListener){
                 this.container.parent().bind('DOMSubtreeModified', function(){
                     me._calcSideLabelPositions();
-                    console.log('DOMSubtreeModified handling');
                 });
                 me._addedResizeListener = true;
             }
