@@ -96,9 +96,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	if(me.options.height) {
 	    		me.__popup.css('height', me.options.height);
 	    	}
-	    	if(typeof me.options.addEventHandlersFunc === 'function') {
-	    		me.options.addEventHandlersFunc();
-	    	}
 	    },
 	    setTitle: function(title) {
 	    	var me = this;

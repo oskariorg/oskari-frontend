@@ -66,15 +66,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
             }
 
             me._calcSideLabelPositions();
-/*
+
             if(!me._addedResizeListener){
-                this.container.parent().bind('change', function(){
+                this.container.parent().bind('DOMSubtreeModified', function(){
                     me._calcSideLabelPositions();
-                    console.log('resize handling');
+                    console.log('DOMSubtreeModified handling');
                 });
                 me._addedResizeListener = true;
             }
-            */
         },
 
         /**

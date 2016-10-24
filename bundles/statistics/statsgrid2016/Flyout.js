@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     me.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, locale.legend, {
                         width: '200px',
                         height: '300px',
-                        addEventHandlersFunc: null,
                         closeCallback: function(popup) {
                              me.__sideTools.legend.opened = false;
                         },
@@ -88,7 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var parent = tool.parents('.oskari-flyout');
             var left = parent.position().left + parent.outerWidth() + tool.width();
             if(left + popup.width() > jQuery(window).width()) {
-                left = left - popup.width() + tool.width();
+                left = left - popup.width() - tool.width();
             }
             var top = parent.position().top + position.top;
             if(top + popup.height() > jQuery(window).height()) {
