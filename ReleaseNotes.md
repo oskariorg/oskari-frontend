@@ -2,7 +2,13 @@
 
 ## 1.40.0
 
-### divmanazer / grid
+### divmanazer
+
+#### ExtraFlyout
+
+``New component`` to show Defaultflyout style flyout, what you can define for example own renderer, position calculatation and so on.
+
+#### grid
 
 New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
 
