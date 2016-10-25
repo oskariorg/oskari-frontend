@@ -393,8 +393,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             var values = {},
                 container = this.getContent(),
                 termErrors = this.searchInput.validate(),
-                lon = this.sandbox.getMap().getX() / 2,
-                lat = this.sandbox.getMap().getY() / 2;
+                lon = this.sandbox.getMap().getX(),
+                lat = this.sandbox.getMap().getY();
 
             if (termErrors && termErrors.length) {
                 values.errors = termErrors;
@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                params[0].NameLanguage */
             this.selections = [];
             values.term = this.searchInput.getValue();
-            
+
             if(jQuery(container).find('input[name=addresses]')[0] == undefined && jQuery(container).find('input[name=geographical_names]')[0] == undefined){
               values.addresses = true;
               values.geographical_names = true;
