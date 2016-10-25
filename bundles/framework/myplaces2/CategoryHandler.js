@@ -284,7 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
 
         editCategory: function (category) {
             var me = this;
-            
+
             this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance),
                 values = {

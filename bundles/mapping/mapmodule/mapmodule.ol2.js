@@ -554,7 +554,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
 
-            return null;         
+            return null;
         },
         /**
          * @method getFeatureFromWKT
@@ -564,7 +564,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 feature = wktFormat.read(wkt);
 
             return feature;
-        }       
+        }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 
     }, {
