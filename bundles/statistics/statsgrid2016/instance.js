@@ -19,8 +19,8 @@ Oskari.clazz.define(
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
             flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
-            //,viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
+        this.visible = false;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -69,13 +69,33 @@ Oskari.clazz.define(
 
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
+                    this.visible = false;
                     return;
                 }
-
+                var me = this;
+                var sandbox = this.getSandbox();
                 var isShown = event.getViewState() !== 'close';
-                //this.getView().prepareMode(isShown, this.getConfiguration());
+                this.visible = isShown;
                 if(isShown) {
+                    var conf = this.getConfiguration();
+                    var defaultConf = {
+                        search: true,
+                        extraFeatures: true,
+                        areaSelection: true,
+                        mouseEarLegend: true
+                    };
+                    if(sandbox.mapMode === 'mapPublishMode') {
+                        conf.search = false;
+                        conf.extraFeatures = false;
+                        conf.areaSelection = false;
+                        conf.mouseEarLegend = false;
+                    }
+
+                    conf = jQuery.extend({}, defaultConf, this.getConfiguration());
                     this.getFlyout().lazyRender(this.getConfiguration());
+                }
+                else if(event.getViewState() === 'close'){
+                    this.getFlyout().handleClose();
                 }
             },
             /**
@@ -125,7 +145,6 @@ Oskari.clazz.define(
          * @param {Jquery.element} element
          */
         addChosenHacks: function(element){
-
             // Fixes chosen selection to visible when rendering chosen small height elements
             element.on('chosen:showing_dropdown', function () {
 
@@ -134,10 +153,7 @@ Oskari.clazz.define(
                     if(!el.hasClass('oskari-flyoutcontentcontainer')) {
                         el.css('overflow', 'visible');
                     }
-
                 });
-
-
             });
 
             // Fixes chosen selection go upper when chosen element is near by window bottom
@@ -157,34 +173,15 @@ Oskari.clazz.define(
             });
         },
 
-            /*
- {
-     "indicators": [{
-         "ds": 1,
-         "id": 5,
-         "selections": {
-             "sex": "male",
-             "year": "1991"
-         }
-     }, {
-         "ds": 1,
-         "id": 6,
-         "selections": {
-             "sex": "male",
-             "year": "1994"
-         }
-     }],
-     "regionset": 7,
-     "active": "1_6_{\"sex\":\"male\",\"year\":\"1994\"}",
-     "view" : true
- }
-            */
         getState: function () {
+            var me = this;
+            var view = me.getView();
+
             var service = this.statsService.getStateService();
             var state = {
                 indicators : [],
                 regionset : service.getRegionset(),
-                view : this.getView().isVisible || false
+                view :me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

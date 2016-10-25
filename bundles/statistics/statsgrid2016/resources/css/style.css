@@ -156,13 +156,48 @@ div.oskari-flyoutcontent.statsgrid {
     div.oskari-flyoutcontent.statsgrid .stats-table .noresults .content {
       padding: 10px; }
 
-.statsgrid-legend-flyout .statsgrid-legend-container {
+.statsgrid-legend-flyout .statsgrid-legend-container, .statsgrid-legend-flyout-published .statsgrid-legend-container {
   font-size: 12px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .legend-noactive {
+  .statsgrid-legend-flyout .statsgrid-legend-container .legend-noactive, .statsgrid-legend-flyout-published .statsgrid-legend-container .legend-noactive {
     margin: 3px 10px 5px 10px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend {
+  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend {
     font-size: 12px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend-title {
+  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend-title, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend-title {
     font-weight: normal; }
+
+.statsgrid-legend-flyout-published {
+  top: 0;
+  right: 0; }
+  .statsgrid-legend-flyout-published div.oskari-flyoutheading {
+    display: none; }
+  .statsgrid-legend-flyout-published div.oskari-flyouttoolbar {
+    height: auto; }
+  .statsgrid-legend-flyout-published div.oskari-flyouttools {
+    display: none; }
+  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend-title {
+    display: none; }
+  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend {
+    padding-top: 12px;
+    padding-bottom: 12px; }
+  .statsgrid-legend-flyout-published div.oskari-flyout-title {
+    background-color: #fdf8d9;
+    margin: 0;
+    height: auto;
+    padding: 6px;
+    width: 100%; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.header {
+      font-size: 14px;
+      font-weight: bold; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.link {
+      cursor: pointer;
+      color: #4292c5;
+      position: absolute;
+      top: 6px;
+      right: 0;
+      text-decoration: underline; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.sourcename {
+      font-weight: bold; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title p {
+      font-size: 12px; }
 
 /*# sourceMappingURL=style.css.map */

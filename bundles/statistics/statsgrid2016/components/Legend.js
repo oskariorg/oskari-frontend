@@ -100,27 +100,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             this.handleRegionsetChanged(event.getRegionset());
         });
-
-
-/*
-         this.service.on('StatsGrid.IndicatorEvent', function(event) {
-            if(event.isRemoved()) {
-                me.handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
-            } else {
-                me.handleIndicatorAdded(event.getDatasource(), event.getIndicator(), event.getSelections());
-            }
-        });*/
-    }/*,
-    handleIndicatorAdded: function(datasrc, indId, selections) {
-        var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var src = this.service.getDatasource(datasrc);
-        log.info('Indicator added ', src, indId, selections);
-        this.handleRegionsetChanged(this.getCurrentRegionset());
-    },
-    handleIndicatorRemoved: function(datasrc, indId, selections) {
-        var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var src = this.service.getDatasource(datasrc);
-        log.info('Indicator removed', src, indId, selections);
-        this.handleRegionsetChanged(this.getCurrentRegionset());
-    }*/
+    }
 });

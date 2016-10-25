@@ -23,12 +23,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /* @property container the DIV element */
         this.container = null;
         this.options = options ||  {};
-        if(!this.options.width) {
-        	this.options.width = '200px';
-        }
-        if(!this.options.height) {
-        	this.options.height = '300px';
-        }
+
         this.__render();
     },
     {
@@ -100,6 +95,10 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    setTitle: function(title) {
 	    	var me = this;
 	    	me.__popup.find('.oskari-flyout-title p').html(title);
+	    },
+	    getTitle: function() {
+	    	var me = this;
+	    	return me.__popup.find('.oskari-flyout-title p');
 	    },
 	    /**
 	     * @method  @public setContent Set content

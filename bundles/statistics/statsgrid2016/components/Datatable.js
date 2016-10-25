@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
     render : function(el) {
         var me = this;
         var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid;
+        var gridLoc = locale.statsgrid || {};
 
         var main = jQuery(this.__templates.main());
         me.spinner.insertTo(main);
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid;
+        var gridLoc = locale.statsgrid || {};
 
         var indicators = this.getIndicators();
 
@@ -104,7 +104,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
 
             var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
             content.append(tableHeader);
-            params.getRegionSelection(tableHeader.find('.selection'));
+
+            // If not published, then show area selection
+            if(me.instance.getConfiguration().areaSelection !== false) {
+                params.getRegionSelection(tableHeader.find('.selection'));
+            }
+            // Else remove area selection
+            else {
+                tableHeader.find('.selection').remove();
+                tableHeader.find('.info').remove();
+            }
 
             var sortBy = tableHeader.find('.sortby');
             sortBy.find('.orderTitle').html(gridLoc.orderBy);
@@ -177,10 +186,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
                     tableHeader.find('.header').append(Oskari.getLocalized(indicator.name)).attr('title', Oskari.getLocalized(indicator.name));
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
-                    tableHeader.find('.icon').bind('click', function(){
-                        log.info('Removing indicator ' + ind.hash);
-                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
-                    });
+
+                    // If not published then show close icon
+                    if(me.instance.getConfiguration().areaSelection !== false) {
+                        tableHeader.find('.icon').bind('click', function(){
+                            log.info('Removing indicator ' + ind.hash);
+                            me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
+                        });
+                    }
+                    // Else remove close icon
+                    else {
+                        tableHeader.find('.icon').remove();
+                    }
 
 
                     var sortBy = tableHeader.find('.sortby');
@@ -215,7 +232,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     order.addClass('desc');
 
 
-                    content.bind('click', function(){
+                    tableHeader.bind('click', function(){
                         me.service.getStateService().setActiveIndicator(ind.hash);
                     });
 

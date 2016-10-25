@@ -36,6 +36,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
         },
+        getLegendFlyout: function(options){
+            var me = this;
+            if(!me.__sideTools.legend.comp) {
+                me.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            }
+            if(!me.__sideTools.legend.flyout) {
+                options = options || {};
+                options.locale = options.locale || { title: ''};
+                me.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
+                    width: '200px',
+                    closeCallback: function(popup) {
+                         if(options.callbacks && typeof options.callbacks.close === 'function'){
+                            options.callbacks.close(popup);
+                         }
+                    },
+                    showCallback: function(popup) {
+                        if(options.callbacks && typeof options.callbacks.show === 'function'){
+                            options.callbacks.show(popup);
+                         }
+                    },
+                    cls: options.cls
+                });
+            }
+
+            if(options.callbacks && typeof options.callbacks.after === 'function') {
+                options.callbacks.after();
+            }
+        },
         /**
          * @method lazyRender
          * Called when flyout is opened (by divmanazer)
@@ -44,48 +72,187 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         lazyRender: function (config) {
             var me = this;
             var locale = this.instance.getLocalization();
+            /*
             if(this.__panels) {
                 // already rendered
                 // open first panel
-                this.__panels[0].panel.open();
+                //this.__panels[0].panel.open();
+                return;
+            }
+            */
+
+            // empties all
+            this.getEl().empty();
+            this.removeSideTools();
+
+            config = config || {};
+
+
+            if(config.mouseEarLegend !== false) {
+                this.addSideTool(locale.legend.title, function(el){
+                    me.__sideTools.legend.sideTool = el;
+                    me.getLegendFlyout(
+                    {
+                        callbacks: {
+                            close: function(popup) {
+                                me.__sideTools.legend.opened = false;
+                            },
+                            show: function(popup) {
+                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
+                                me.setSideToolPopupPosition(popup);
+                            },
+                            after: function(){
+                                if(me.__sideTools.legend.opened) {
+                                    me.__sideTools.legend.flyout.hide();
+                                    me.__sideTools.legend.opened = false;
+                                } else {
+                                    me.__sideTools.legend.flyout.show();
+                                    me.__sideTools.legend.opened = true;
+                                }
+                            }
+                        },
+                        locale: locale.legend,
+                        cls: 'statsgrid-legend-flyout'
+                    });
+                });
+            } else {
+                me.renderPublishedLegend();
+            }
+            this.addContent(this.getEl(), config);
+        },
+        renderPublishedLegend: function(){
+            var me = this;
+            var sb = me.instance.getSandbox();
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(!service) {
+                // not available yet
                 return;
             }
 
-            //this.addSideTool('testi', function(el){});
+            var state = service.getStateService();
+            var ind = state.getActiveIndicator();
+            if(!ind) {
+                return;
+            }
 
-            this.addSideTool(locale.legend.title, function(el){
-                if(!me.__sideTools.legend.comp) {
-                    me.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+                if(err) {
+                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                    return;
                 }
-                if(!me.__sideTools.legend.flyout) {
-                    me.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, locale.legend, {
-                        width: '200px',
-                        height: '300px',
-                        closeCallback: function(popup) {
-                             me.__sideTools.legend.opened = false;
+                var classify = service.getClassificationService().getClassification(data);
+                if(!classify) {
+                    me.log.warn('Error getting indicator classification', data);
+                    return;
+                }
+
+                // TODO: check that we got colors
+                var regions = [];
+                var vis = [];
+
+                // format regions to groups for url
+                var regiongroups = classify.getGroups();
+                var classes = [];
+                regiongroups.forEach(function(group) {
+                    // make each group a string separated with comma
+                    classes.push(group.join());
+                });
+
+                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+                var colors = [];
+                colorsWithoutHash.forEach(function(color) {
+                    colors.push('#' + color);
+                });
+
+                var state = service.getStateService();
+
+                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                    if(err) {
+                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
+                        return;
+                    }
+                    //var legend = classify.createLegend(colors, me.instance.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name));
+
+                    me.getLegendFlyout(
+                    {
+                        callbacks: {
+                            show: function(popup) {
+                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
+                                //me.__sideTools.legend.flyout.setTitle('<div>asfasdf</div>' + me.instance.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name));
+                            },
+                            after: function(){
+                                me.__sideTools.legend.flyout.show();
+                            }
                         },
-                        showCallback: function(popup) {
-                            me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
-                            me.setSideToolPopupPosition(el, popup);
+                        locale: {
+                            title: ''
                         },
-                        cls: 'statsgrid-legend-flyout'
+                        cls: 'statsgrid-legend-flyout-published'
                     });
-                }
-                if(me.__sideTools.legend.opened) {
-                    me.__sideTools.legend.flyout.hide();
-                    me.__sideTools.legend.opened = false;
-                } else {
-                    me.__sideTools.legend.flyout.show();
-                    me.__sideTools.legend.opened = true;
-                }
+
+                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+                        var ind = event.getCurrent();
+                        if(ind) {
+                            me.updatePublishedFlyoutTitle(ind);
+                        }
+                    });
+
+                    me.updatePublishedFlyoutTitle(state.getActiveIndicator());
+                });
             });
-            this.addContent(this.getEl(), config);
         },
-        setSideToolPopupPosition: function(tool, popup) {
+        updatePublishedFlyoutTitle: function (ind){
             var me = this;
+            var sb = me.instance.getSandbox();
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(!service) {
+                // not available yet
+                return;
+            }
+            var state = service.getStateService();
+
+            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+
+                var getSourceLink = function(currentHash){
+                    var indicators = state.getIndicators();
+                    var currentIndex = state.getIndicatorIndex(currentHash);
+                    var nextIndicatorIndex = 1;
+                    if(currentIndex === indicators.length) {
+                        nextIndicatorIndex = 1;
+                    } else {
+                        nextIndicatorIndex=currentIndex + 1;
+                    }
+
+                    return {
+                        index: nextIndicatorIndex,
+                        handler: function(){
+                            var curIndex = nextIndicatorIndex-1;
+                            var i = indicators[curIndex];
+                            state.setActiveIndicator(i.hash);
+                        }
+                    };
+                };
+
+                var link = getSourceLink(ind.hash);
+
+                me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.instance.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                    '<div class="link">' + me.instance.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
+                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + '</div>');
+                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
+                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
+                    link.handler();
+                });
+
+            });
+
+        },
+        setSideToolPopupPosition: function(popup) {
+            var me = this;
+            var tool = me.__sideTools.legend.sideTool;
             var position = tool.position();
             var parent = tool.parents('.oskari-flyout');
             var left = parent.position().left + parent.outerWidth() + tool.width();
+
             if(left + popup.width() > jQuery(window).width()) {
                 left = left - popup.width() - tool.width();
             }
@@ -124,28 +291,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             }
 
         },
+        handleClose: function(){
+            var me = this;
+            for(var tool in me.__sideTools) {
+                if(me.__sideTools[tool] && me.__sideTools[tool].flyout) {
+                    me.__sideTools[tool].flyout.hide();
+                }
+            }
+        },
         closePanels: function(){
             var panels = this.__panels || [];
             _.each(panels, function(p) {
-                    p.panel.close();
+                p.panel.close();
             });
         },
         getPanels : function(config) {
             var locale = this.instance.getLocalization();
-            if(this.__panels) {
+            /*if(this.__panels) {
                 return this.__panels;
-            }
-            this.__panels = true;
+            }*/
+            //this.__panels = true;
             var sb = this.instance.getSandbox();
             var panels = [];
 
             // Generate first panel
-            panels.push(this.getNewSearchPanel(config));
+            if(config.search !== false) {
+                panels.push(this.getNewSearchPanel(config));
+            }
 
             // Generate extra features panel
-            panels.push(this.getExtraFeaturesPanel(config));
+            if(config.extraFeatures !== false) {
+                panels.push(this.getExtraFeaturesPanel(config));
+            }
 
-            this.__panels = panels;
+            //this.__panels = panels;
             return panels;
         },
         getNewSearchPanel: function(config){

@@ -89,10 +89,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         setActiveIndicator : function(indicatorHash) {
             var me = this;
             var previous = this.activeIndicator;
-            if(previous && previous.hash === indicatorHash) {
-                // trying to set the same, do nothing
-                return;
-            }
+
             // reset previous
             me.activeIndicator = null;
             this.indicators.forEach(function(ind) {

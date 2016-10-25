@@ -251,7 +251,7 @@ div.oskari-flyoutcontent{
 }
 
 
-.statsgrid-legend-flyout {
+.statsgrid-legend-flyout, .statsgrid-legend-flyout-published {
     .statsgrid-legend-container {
         font-size: 12px;
         .legend-noactive {
@@ -262,6 +262,62 @@ div.oskari-flyoutcontent{
         }
         .geostats-legend-title {
             font-weight: normal;
+        }
+    }
+}
+
+.statsgrid-legend-flyout-published {
+    top: 0;
+    right:0;
+
+    div.oskari-flyoutheading {
+        display:none;
+    }
+
+    div.oskari-flyouttoolbar {
+        height:auto;
+    }
+    div.oskari-flyouttools {
+        display: none;
+    }
+
+    div.statsgrid-legend-container {
+        div.geostats-legend-title {
+            display: none;
+        }
+
+        div.geostats-legend {
+            padding-top: 12px;
+            padding-bottom:12px;
+        }
+    }
+
+    div.oskari-flyout-title {
+        background-color: #fdf8d9;
+        margin: 0;
+        height:auto;
+        padding: 6px;
+        width: 100%;
+
+        div.header {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        div.link {
+            cursor:pointer;
+            color:#4292c5;
+            position:absolute;
+            top:6px;
+            right:0;
+            text-decoration: underline;
+        }
+
+        div.sourcename {
+            font-weight: bold;
+        }
+        p {
+            font-size: 12px;
         }
     }
 }

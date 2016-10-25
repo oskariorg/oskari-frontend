@@ -39,13 +39,12 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         getSideLabel : function( text ) {
             var sidelabel = jQuery(this.__temp.sideTool());
             sidelabel.find('label').text(text);
-            var sidelabels = this.container.parent().find('.sidetool');
-            //sidelabel.css('bottom', sidelabels.length * (sidelabel.height() + 10 ) + 'px');
             return sidelabel;
         },
         _calcSideLabelPositions: function(){
             var me = this;
-            var sidelabels = me.container.find('.sidetool');
+            console.warn('calculate sidetools positions');
+            var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
             sidelabels.each(function(index, sidelabel) {
                 if(index + 1 === sidelabels.length) {
                     jQuery(this).css('bottom', 0);
@@ -55,24 +54,42 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                 }
             });
         },
+        /**
+         * @method  @public addSideTool Add side tool for flyout
+         * @param {String}   label    sidetool label
+         * @param {Function} callback sidetool callback
+         */
         addSideTool: function(label, callback){
             var me = this;
             var sidelabel = this.getSideLabel(label);
-            this.container.append(sidelabel);
+            this.container.parents('.oskari-flyout').append(sidelabel);
             if(typeof callback === 'function') {
                 sidelabel.on('click', function() {
-                    callback( sidelabel );
+                    callback(jQuery(sidelabel));
                 });
             }
 
             me._calcSideLabelPositions();
 
             if(!me._addedResizeListener){
-                this.container.parent().bind('DOMSubtreeModified', function(){
-                    me._calcSideLabelPositions();
+                me.container.parents('.oskari-flyout').bind('DOMSubtreeModified', function(){
+                    clearTimeout(me._sidetoolTimer);
+                    me._sidetoolTimer = setTimeout(function(){
+                        me._calcSideLabelPositions();
+                    }, 10);
                 });
                 me._addedResizeListener = true;
             }
+        },
+        /**
+         * @method  @public removeSideTools Remove sidetools
+         */
+        removeSideTools: function(){
+            var me = this;
+            var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
+            sidelabels.each(function(index, sidelabel) {
+                sidelabel.remove();
+            });
         },
 
         /**
