@@ -71,6 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          */
         lazyRender: function (config) {
             var me = this;
+            var sb = me.instance.getSandbox();
             var locale = this.instance.getLocalization();
             /*
             if(this.__panels) {
@@ -88,7 +89,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             config = config || {};
 
 
-            if(config.mouseEarLegend !== false) {
+            if(config.mouseEarLegend !== false && sb.mapMode !== 'mapPublishMode') {
                 this.addSideTool(locale.legend.title, function(el){
                     me.__sideTools.legend.sideTool = el;
                     me.getLegendFlyout(
@@ -251,6 +252,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var tool = me.__sideTools.legend.sideTool;
             var position = tool.position();
             var parent = tool.parents('.oskari-flyout');
+            if(parent.length === 0) {
+                return;
+            }
             var left = parent.position().left + parent.outerWidth() + tool.width();
 
             if(left + popup.width() > jQuery(window).width()) {
