@@ -124,6 +124,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         renderPublishedLegend: function(){
             var me = this;
             var sb = me.instance.getSandbox();
+            var locale = this.instance.getLocalization();
+
             var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
             if(!service) {
                 // not available yet
@@ -177,10 +179,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                         callbacks: {
                             show: function(popup) {
                                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                var container = jQuery('<div class="accordion"></div>');
+                                var container = jQuery('<div class="accordion-published"></div>');
 
                                 var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panel.setTitle('Luokittelu');
+                                panel.setTitle(locale.legend.title);
                                 panel.setContent(me.__sideTools.legend.comp.getClassification());
                                 panel.setVisible(true);
                                 panel.open();
