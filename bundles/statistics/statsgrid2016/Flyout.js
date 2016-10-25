@@ -188,11 +188,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                                 accordion.addPanel(panel);
                                 accordion.insertTo(container);
 
-                                me.__sideTools.legend.flyout.setContent(container); /*
-                                me.__sideTools.legend.flyout.setContent(
-
-                                    me.__sideTools.legend.comp.getClassification());
-                                    */
+                                me.__sideTools.legend.flyout.setContent(container);
                             },
                             after: function(){
                                 me.__sideTools.legend.flyout.show();

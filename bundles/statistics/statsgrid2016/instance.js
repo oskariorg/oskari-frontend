@@ -84,11 +84,17 @@ Oskari.clazz.define(
                         areaSelection: true,
                         mouseEarLegend: true
                     };
-                    if(sandbox.mapMode === 'mapPublishMode') {
+                    var map = jQuery('#contentMap');
+                    if(map.hasClass('mapPublishMode')) {
                         conf.search = false;
                         conf.extraFeatures = false;
                         conf.areaSelection = false;
                         conf.mouseEarLegend = false;
+                    } else if(!map.hasClass('published')) {
+                        conf.search = true;
+                        conf.extraFeatures = true;
+                        conf.areaSelection = true;
+                        conf.mouseEarLegend = true;
                     }
 
                     conf = jQuery.extend({}, defaultConf, this.getConfiguration());
