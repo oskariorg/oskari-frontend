@@ -287,8 +287,8 @@ div.oskari-flyoutcontent{
         }
 
         div.geostats-legend {
-            padding-top: 12px;
-            padding-bottom:12px;
+            padding-top: 0;
+            padding-bottom:0;
         }
     }
 
@@ -297,7 +297,7 @@ div.oskari-flyoutcontent{
         margin: 0;
         height:auto;
         padding: 6px;
-        width: 100%;
+        width: 94%;
 
         div.header {
             font-size: 14px;
@@ -309,7 +309,7 @@ div.oskari-flyoutcontent{
             color:#4292c5;
             position:absolute;
             top:6px;
-            right:0;
+            right:8px;
             text-decoration: underline;
         }
 
@@ -320,4 +320,30 @@ div.oskari-flyoutcontent{
             font-size: 12px;
         }
     }
+
+    div.accordion {
+        div.accordion_panel {
+            border: none;
+            div.header {
+                background-color: #F3F3F3;
+
+                div.headerText {
+                    font-size: 12px;
+                    line-height: 12px;
+                    padding: 4px 8px 4px 4px;
+                }
+
+                div.headerIcon {
+                    margin-left: 4px;
+                }
+            }
+
+            &.open {
+                div.header {
+                    background-color: #F3F3F3;
+                }
+            }
+        }
+    }
+
 }

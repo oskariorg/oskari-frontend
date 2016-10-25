@@ -172,14 +172,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                         me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
                         return;
                     }
-                    //var legend = classify.createLegend(colors, me.instance.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name));
-
                     me.getLegendFlyout(
                     {
                         callbacks: {
                             show: function(popup) {
-                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
-                                //me.__sideTools.legend.flyout.setTitle('<div>asfasdf</div>' + me.instance.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name));
+                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                                var container = jQuery('<div class="accordion"></div>');
+
+                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                panel.setTitle('Luokittelu');
+                                panel.setContent(me.__sideTools.legend.comp.getClassification());
+                                panel.setVisible(true);
+                                panel.open();
+
+                                accordion.addPanel(panel);
+                                accordion.insertTo(container);
+
+                                me.__sideTools.legend.flyout.setContent(container); /*
+                                me.__sideTools.legend.flyout.setContent(
+
+                                    me.__sideTools.legend.comp.getClassification());
+                                    */
                             },
                             after: function(){
                                 me.__sideTools.legend.flyout.show();
