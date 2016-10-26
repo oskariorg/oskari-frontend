@@ -70,13 +70,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 					clazz : 'stats-select-param-' + selector.id,
 					placeholder: placeholderText
 				});
+
 				cont.append(select);
 				var jqSelect = cont.find('.stats-select-param-' + selector.id);
 
 				// add empty selection to show placeholder
 				jqSelect.append('<option></option>');
 
-				selector.allowedValues.forEach(function(val) {
+				selector.allowedValues.forEach(function(val, i) {
 					var name = val.name || val.id || val;
 					var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
 
@@ -87,6 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 					});
 					jqSelect.append(opt);
 				});
+				jqSelect.find('option:nth-child(2)').prop('selected', true);
 				jqSelect.chosen({
 					allow_single_deselect : true,
 					disable_search_threshold: 10,
@@ -98,7 +100,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				selections.push(jqSelect);
 			});
 
-			var jqSelect = me.getRegionSelection(cont,indicator);
+			var jqSelect = me.getRegionSelection(cont,indicator, true);
 			// Add margin if there is selections
 			if(selections.length>0) {
 				jqSelect.parent().addClass('margintop');
@@ -129,9 +131,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	 *
 	 * @param  {Object} cont      jQuery element
 	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
+	 * @param {Boolean} firstSelected if setetd true then first option is selected
 	 * @return {Object}           jQuery element
 	 */
-	getRegionSelection: function(cont, indicator) {
+	getRegionSelection: function(cont, indicator, firstSelected) {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
@@ -178,6 +181,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			me.service.getRegionsets().forEach(function(regionset) {
 				jqSelect.append(me.__templates.option(regionset));
 			});
+			jqSelect.find('option:nth-child(2)').prop('selected', true);
 			jqSelect.chosen({
 				allow_single_deselect : true,
 				disable_search_threshold: 10,
