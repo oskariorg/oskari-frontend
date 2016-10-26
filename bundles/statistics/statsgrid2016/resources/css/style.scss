@@ -26,6 +26,23 @@
     padding: 5px 5px 0px 5px;
     font-weight: normal;
 
+    .selection {
+        .parameter {
+            .label {
+                display: none !important;
+                float:none !important;
+            }
+            .select {
+                width: auto !important;
+                float:none !important;
+            }
+            .clear: {
+                display: none !important;
+            }
+
+        }
+    }
+
     .title {
         font-weight: bold;
         font-size: 16px;
@@ -162,9 +179,9 @@ div.oskari-flyoutcontent{
             max-width : 450px;
 
             div.selection {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-left: 10px;
+                padding-top: 0;
+                padding-bottom: 6px;
+                padding-left: 0;
 
                 &.tooltip {
                   padding-bottom: 0 !important;
@@ -245,6 +262,23 @@ div.oskari-flyoutcontent{
                 .content{
                     padding:10px;
                 }
+            }
+        }
+
+        div.parameter {
+            div.label, div.select {
+                float:left;
+            }
+            div.label {
+                width: 100px;
+                margin-right: 4px;
+                text-align: left;
+            }
+            div.select {
+                width: 336px;
+            }
+            div.clear {
+                clear: both;
             }
         }
     }

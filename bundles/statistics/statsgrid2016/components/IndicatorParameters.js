@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	__templates : {
 		main : _.template('<div class="stats-ind-params">'+
 			'</div>'),
-		select : _.template('<div><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div>'),
+		select : _.template('<div class="parameter"><div class="label">${label}</div><div class="select"><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div><div class="clear"></div></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
 	clean : function() {
@@ -64,11 +64,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			var selections = [];
 			indicator.selectors.forEach(function(selector, index) {
 				var placeholderText = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id].placeholder) ? panelLoc.selectionValues[selector.id].placeholder :panelLoc.defaultPlaceholder;
+				var label = (locale.parameters[selector.id]) ? locale.parameters[selector.id] : selector.id;
 				var select = me.__templates.select({
 					id : selector.id,
 					name : selector.name || selector.id,
 					clazz : 'stats-select-param-' + selector.id,
-					placeholder: placeholderText
+					placeholder: placeholderText,
+					label: label
 				});
 
 				cont.append(select);
@@ -95,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 					width: '100%'
 				});
 				if(index>0) {
-					jqSelect.parent().addClass('margintop');
+					jqSelect.parent().parent().addClass('margintop');
 				}
 				selections.push(jqSelect);
 			});
@@ -103,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			var jqSelect = me.getRegionSelection(cont,indicator, true);
 			// Add margin if there is selections
 			if(selections.length>0) {
-				jqSelect.parent().addClass('margintop');
+				jqSelect.parent().parent().addClass('margintop');
 			}
 			selections.push(jqSelect);
 
@@ -140,10 +142,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		var panelLoc = locale.panels.newSearch;
 		var allRegionsets = me.service.getRegionsets();
 		var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
+		var label = (locale.parameters.regionset) ? locale.parameters.regionset : 'Regionset';
 		var select = me.__templates.select({
 			id : 'regionset',
 			clazz : 'stats-regionset-selector',
-			placeholder: placeholderText
+			placeholder: placeholderText,
+			label: label
 		});
 
 		var allowedRegionsets = [];

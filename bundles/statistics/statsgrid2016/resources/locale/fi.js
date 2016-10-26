@@ -248,6 +248,11 @@ Oskari.registerLocalization(
         "legend": {
             "title": "Luokittelu",
             "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun."
+        },
+        parameters: {
+            "sex": "Sukupuoli",
+            "year": "Vuosi",
+            "regionset": "Aluevalinta"
         }
 
     }
