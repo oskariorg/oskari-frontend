@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         },
         _calcSideLabelPositions: function(){
             var me = this;
-            console.warn('calculate sidetools positions');
             var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
             sidelabels.each(function(index, sidelabel) {
                 if(index + 1 === sidelabels.length) {
