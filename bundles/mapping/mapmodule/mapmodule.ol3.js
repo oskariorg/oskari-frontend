@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __boundsToArray : function(bounds) {
             var extent = bounds || [];
-            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
+            if(!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
               extent = [
                     bounds.left,
                     bounds.bottom,
