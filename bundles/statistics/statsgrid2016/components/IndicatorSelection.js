@@ -36,7 +36,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		this.service.getDatasource().forEach(function(ds) {
 			dsSelector.append(me.__templates.option(ds));
 		});
-		dsSelector.find('option:nth-child(2)').prop('selected', true);
 		dsSelector.chosen({
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
@@ -136,10 +135,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 					name : Oskari.getLocalized(ind.name)
 				}));
 			});
-			select.find('option:nth-child(2)').prop('selected', true);
 			// let chosen know options has been updated (liszt:updated is only needed for old chosen version)
 			select.trigger('chosen:updated');
-			select.trigger('change');
             me.spinner.stop();
 		});
 	}
