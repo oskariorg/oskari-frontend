@@ -201,6 +201,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
+
+                var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+                if(stats) {
+                    stats.renderPublishedLegend({showLegend:false});
+                }
             }
         },
         /**

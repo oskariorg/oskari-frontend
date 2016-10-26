@@ -13,11 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
     function () {
         this.__panels = null;
         this.__sideTools = {
-            legend: {
-                opened: false,
-                flyout: null,
-                comp: null
-            }
+            legend: {}
         };
     }, {
         /**
@@ -36,15 +32,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
         },
-        getLegendFlyout: function(options){
+        getLegendFlyout: function(options, comp){
             var me = this;
-            if(!me.__sideTools.legend.comp) {
-                me.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            if(!comp.__sideTools) {
+                comp.__sideTools = {
+                    legend: {}
+                };
             }
-            if(!me.__sideTools.legend.flyout) {
+            if(!comp.__sideTools.legend.comp) {
+                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            }
+            if(!comp.__sideTools.legend.flyout) {
                 options = options || {};
                 options.locale = options.locale || { title: ''};
-                me.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
+                comp.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
                     width: '200px',
                     closeCallback: function(popup) {
                          if(options.callbacks && typeof options.callbacks.close === 'function'){
@@ -80,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
             config = config || {};
 
-            if(config.mouseEarLegend !== false && sb.mapMode !== 'mapPublishMode') {
+            if(config.mouseEarLegend === true) {
                 this.addSideTool(locale.legend.title, function(el){
                     me.__sideTools.legend.sideTool = el;
                     me.getLegendFlyout(
@@ -105,163 +106,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                         },
                         locale: locale.legend,
                         cls: 'statsgrid-legend-flyout'
-                    });
+                    }, me);
                 });
-            } else if(config.showLegend !== false) {
-                me.renderPublishedLegend(config);
             }
             this.addContent(this.getEl(), config);
         },
-        /**
-         * @method  @public renderPublishedLegend Render published  legend
-         */
-        renderPublishedLegend: function(config){
-            var me = this;
-            var sb = me.instance.getSandbox();
-            var locale = this.instance.getLocalization();
 
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-
-            var state = service.getStateService();
-            var ind = state.getActiveIndicator();
-            if(!ind) {
-                return;
-            }
-
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-                if(err) {
-                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                    return;
-                }
-                var classify = service.getClassificationService().getClassification(data);
-                if(!classify) {
-                    me.log.warn('Error getting indicator classification', data);
-                    return;
-                }
-
-                // TODO: check that we got colors
-                var regions = [];
-                var vis = [];
-
-                // format regions to groups for url
-                var regiongroups = classify.getGroups();
-                var classes = [];
-                regiongroups.forEach(function(group) {
-                    // make each group a string separated with comma
-                    classes.push(group.join());
-                });
-
-                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
-                var colors = [];
-                colorsWithoutHash.forEach(function(color) {
-                    colors.push('#' + color);
-                });
-
-                var state = service.getStateService();
-
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-                    if(err) {
-                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                        return;
-                    }
-                    me.getLegendFlyout(
-                    {
-                        callbacks: {
-                            show: function(popup) {
-                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                var container = jQuery('<div class="accordion-published"></div>');
-
-                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panel.setTitle(locale.legend.title);
-                                panel.setContent(me.__sideTools.legend.comp.getClassification());
-                                panel.setVisible(true);
-                                panel.open();
-
-                                accordion.addPanel(panel);
-                                accordion.insertTo(container);
-
-                                me.__sideTools.legend.flyout.setContent(container);
-                            },
-                            after: function(){
-                                me.__sideTools.legend.flyout.show();
-                            }
-                        },
-                        locale: {
-                            title: ''
-                        },
-                        cls: 'statsgrid-legend-flyout-published'
-                    });
-
-                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-                        var ind = event.getCurrent();
-                        if(ind) {
-                            me.updatePublishedFlyoutTitle(ind, config);
-                        }
-                    });
-
-                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
-                });
-            });
-        },
-        /**
-         * @method  @public updatePublishedFlyoutTitle update published map legend
-         * @param  {Object} ind indicator
-         * @param {Object} config config
-         */
-        updatePublishedFlyoutTitle: function (ind, config){
-            var me = this;
-            var sb = me.instance.getSandbox();
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-            var state = service.getStateService();
-
-            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-
-                var getSourceLink = function(currentHash){
-                    var indicators = state.getIndicators();
-                    var currentIndex = state.getIndicatorIndex(currentHash);
-                    var nextIndicatorIndex = 1;
-                    if(currentIndex === indicators.length) {
-                        nextIndicatorIndex = 1;
-                    } else {
-                        nextIndicatorIndex=currentIndex + 1;
-                    }
-
-                    return {
-                        index: nextIndicatorIndex,
-                        handler: function(){
-                            var curIndex = nextIndicatorIndex-1;
-                            var i = indicators[curIndex];
-                            state.setActiveIndicator(i.hash);
-                        }
-                    };
-                };
-
-                var link = getSourceLink(ind.hash);
-                var selectionsText = '';
-
-                if(config.grid !== true || config.showLegend !== false) {
-                    selectionsText = service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch);
-                }
-
-                me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.instance.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                    '<div class="link">' + me.instance.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
-                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + selectionsText + '</div>');
-                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
-                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
-                    link.handler();
-                });
-
-            });
-
-        },
         setSideToolPopupPosition: function(popup) {
             var me = this;
             var tool = me.__sideTools.legend.sideTool;
@@ -294,8 +144,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     'Oskari.userinterface.component.Accordion'
                 );
             var panels = this.getPanels(config);
+            var openFirstPanel = true;
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(service) {
+                var state =  service.getStateService();
+                openFirstPanel = (state && state.getIndicators().length > 0) ? false : true;
+            }
+
             _.each(panels, function(p) {
-                if(p.id === 'newSearchPanel') {
+                if(p.id === 'newSearchPanel' && openFirstPanel) {
                     p.panel.open();
                 }
                 accordion.addPanel(p.panel);
@@ -334,12 +191,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var panels = [];
 
             // Generate first panel
-            if(config.search !== false) {
+            if(config.search === true) {
                 panels.push(this.getNewSearchPanel(config));
             }
 
             // Generate extra features panel
-            if(config.extraFeatures !== false) {
+            if(config.extraFeatures === true) {
                 panels.push(this.getExtraFeaturesPanel(config));
             }
 

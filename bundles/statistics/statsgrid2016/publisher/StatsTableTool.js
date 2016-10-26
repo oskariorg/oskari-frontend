@@ -44,7 +44,8 @@ function() {
                     areaSelection: false,
                     search: false,
                     extraFeatures: false,
-                    mouseEarLegend: false
+                    mouseEarLegend: false,
+                    showLegend: true
                 }
             };
          }
@@ -92,6 +93,8 @@ function() {
         } else {
             me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'close', 'StatsGrid']);
         }
+
+        Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid').renderPublishedLegend({showLegend:true});
 
         if (typeof me.__handlers.MapSizeChanged === 'function') {
             me.__handlers.MapSizeChanged();
