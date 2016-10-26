@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         });
         // done is called when we have indicator names for columns
         var done = function() {
-            me.grid.setAutoHeightHeader(20);
+            me.grid.setAutoHeightHeader(30);
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
         };
@@ -181,10 +181,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 count--;
                 var ds = me.service.getDatasource(ind.datasource).name;
                 me.grid.setColumnUIName(ind.hash, function(content) {
-
                     var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
-                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name)).attr('title', Oskari.getLocalized(indicator.name));
+
+                    var selectionsText = me.service.getSelectionsText(ind, locale.panels.newSearch);
+
+                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + selectionsText).attr('title', Oskari.getLocalized(indicator.name) + selectionsText);
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                     // If not published then show close icon

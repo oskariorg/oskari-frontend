@@ -129,7 +129,8 @@ function() {
                             areaSelection: false,
                             search: false,
                             extraFeatures: false,
-                            mouseEarLegend: false
+                            mouseEarLegend: false,
+                            showLegend: true
                         }
                     }
                 }

@@ -78,7 +78,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
             		me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
             		return;
             	}
-            	var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name));
+                var selectionText = service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch);
+            	var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + selectionText);
             	me.__legendElement.html(legend);
             });
         });

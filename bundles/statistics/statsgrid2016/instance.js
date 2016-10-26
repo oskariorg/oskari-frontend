@@ -82,7 +82,8 @@ Oskari.clazz.define(
                         search: true,
                         extraFeatures: true,
                         areaSelection: true,
-                        mouseEarLegend: true
+                        mouseEarLegend: true,
+                        showLegend: true
                     };
                     var map = jQuery('#contentMap');
                     if(map.hasClass('mapPublishMode')) {

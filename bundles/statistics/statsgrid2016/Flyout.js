@@ -73,21 +73,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var me = this;
             var sb = me.instance.getSandbox();
             var locale = this.instance.getLocalization();
-            /*
-            if(this.__panels) {
-                // already rendered
-                // open first panel
-                //this.__panels[0].panel.open();
-                return;
-            }
-            */
 
             // empties all
             this.getEl().empty();
             this.removeSideTools();
 
             config = config || {};
-
 
             if(config.mouseEarLegend !== false && sb.mapMode !== 'mapPublishMode') {
                 this.addSideTool(locale.legend.title, function(el){
@@ -116,12 +107,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                         cls: 'statsgrid-legend-flyout'
                     });
                 });
-            } else {
-                me.renderPublishedLegend();
+            } else if(config.showLegend !== false) {
+                me.renderPublishedLegend(config);
             }
             this.addContent(this.getEl(), config);
         },
-        renderPublishedLegend: function(){
+        /**
+         * @method  @public renderPublishedLegend Render published  legend
+         */
+        renderPublishedLegend: function(config){
             var me = this;
             var sb = me.instance.getSandbox();
             var locale = this.instance.getLocalization();
@@ -205,15 +199,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
                         var ind = event.getCurrent();
                         if(ind) {
-                            me.updatePublishedFlyoutTitle(ind);
+                            me.updatePublishedFlyoutTitle(ind, config);
                         }
                     });
 
-                    me.updatePublishedFlyoutTitle(state.getActiveIndicator());
+                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
                 });
             });
         },
-        updatePublishedFlyoutTitle: function (ind){
+        /**
+         * @method  @public updatePublishedFlyoutTitle update published map legend
+         * @param  {Object} ind indicator
+         * @param {Object} config config
+         */
+        updatePublishedFlyoutTitle: function (ind, config){
             var me = this;
             var sb = me.instance.getSandbox();
             var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
@@ -246,10 +245,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 };
 
                 var link = getSourceLink(ind.hash);
+                var selectionsText = '';
+
+                if(config.grid !== true || config.showLegend !== false) {
+                    selectionsText = service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch);
+                }
 
                 me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.instance.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
                     '<div class="link">' + me.instance.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
-                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + '</div>');
+                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + selectionsText + '</div>');
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
                 me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
                     link.handler();

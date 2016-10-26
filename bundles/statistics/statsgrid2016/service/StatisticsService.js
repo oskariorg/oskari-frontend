@@ -62,6 +62,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             this.datasources.push(ds);
         },
 
+        getSelectionsText: function(indicator, locale) {
+            var me = this;
+            var selectionsTexts = [];
+            for(var sel in indicator.selections){
+                var val = indicator.selections[sel];
+                if(sel==='regionset') {
+                    selectionsTexts.push(me.getRegionsets(parseFloat(val)).name);
+                } else {
+                    var name = (locale.selectionValues[sel] && locale.selectionValues[sel][val]) ? locale.selectionValues[sel][val] : val;
+                    selectionsTexts.push(name);
+                }
+            }
+            var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
+            return selectionsText;
+        },
         /**
          * Returns datasource {id, name, type} as object.
          * If id omitted returns all datasources as array.
@@ -275,40 +290,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 }
             });
         },
-        /*
-    Convenience method to get the complete dataset for current selections. Hides the callback hell.
-{
-    regionset : {
-        id : 1234,
-        name : "Municipalities"
-    },
-    indicators : [
-        {
-            datasource : {
-                id : 12,
-                name : "SotkaNet"
-            },
-            id : 346,
-            name : "indicator name",
-            selections : {
-                sex : 'male',
-                year : '1993'
-            },
-            hash : 'unique id for ds, id and selections'
-        }
-    ],
-    data : [
-        {
-            id : 2353,
-            name : "municipality name",
-            values : {
-                hash1 : value of indicator with hash1,
-                hash2 : value of indicator with hash2
-            }
-        }
-    ]
-}
-         */
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {
