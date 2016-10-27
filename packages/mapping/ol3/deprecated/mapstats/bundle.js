@@ -26,42 +26,42 @@ Oskari.clazz.define(
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/plugin/StatsLayerPlugin.ol3.js"
+                "src": "../../../../../bundles/mapping/mapstats/plugin/StatsLayerPlugin.ol3.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/domain/StatsLayer.js"
+                "src": "../../../../../bundles/mapping/mapstats/domain/StatsLayer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/domain/StatsLayerModelBuilder.js"
+                "src": "../../../../../bundles/mapping/mapstats/domain/StatsLayerModelBuilder.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/StatsVisualizationChangeEvent.js"
+                "src": "../../../../../bundles/mapping/mapstats/event/StatsVisualizationChangeEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/FeatureHighlightedEvent.js"
+                "src": "../../../../../bundles/mapping/mapstats/event/FeatureHighlightedEvent.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/event/HoverTooltipContentEvent.js"
+                "src": "../../../../../bundles/mapping/mapstats/event/HoverTooltipContentEvent.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/mapstats/resources/css/mapstats.css"
+                "src": "../../../../../bundles/mapping/mapstats/resources/css/mapstats.css"
             }],
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/fi.js"
+                "src": "../../../../../bundles/mapping/mapstats/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/sv.js"
+                "src": "../../../../../bundles/mapping/mapstats/resources/locale/sv.js"
             }, {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/en.js"
+                "src": "../../../../../bundles/mapping/mapstats/resources/locale/en.js"
             }, {
                 "lang": "es",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapstats/resources/locale/es.js"
+                "src": "../../../../../bundles/mapping/mapstats/resources/locale/es.js"
             }]
         },
         "bundle": {
