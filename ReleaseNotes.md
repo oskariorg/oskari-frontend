@@ -21,6 +21,7 @@ grid.setGroupingHeader([
     {
         cls: 'firstClass',
         text: 'First text'
+        colspan: 3
     },
     {
         cls:'secondClass',
