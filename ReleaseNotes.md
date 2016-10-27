@@ -10,7 +10,25 @@
 
 #### grid
 
-New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
+New ``setAutoHeightHeader`` function. If some margin is given for function param then autoresize header column when rendering it.
+
+New ``setGroupingHeader`` function. Function can be used when wanting added grouping headers. Function takes a param array of objects. If array not contains enought cells or colspans then header lates cell is merged.
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+        colspan: 3
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text'
+    }
+]);
+```
 
 ### mapmodule
 

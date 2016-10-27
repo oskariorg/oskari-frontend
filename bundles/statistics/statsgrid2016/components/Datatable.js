@@ -96,10 +96,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             statsTableEl.find('.noresults').hide();
         }
 
+        // Set grouping headers
+        this.grid.setGroupingHeader([
+            {
+                cls: 'statsgrid-grouping-header region',
+                text: gridLoc.areaSelection.title
+            },
+            {
+                cls:'statsgrid-grouping-header sources',
+                text: gridLoc.title + ' <span>('+indicators.length+')</span>'
+            }
+        ]);
+
         // Area selection
         this.grid.setColumnUIName('region', function(content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
-            tableHeader.find('.title').html(gridLoc.areaSelection.title);
+            tableHeader.find('.title').remove();
             tableHeader.find('.info').html(gridLoc.areaSelection.info);
 
             var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
