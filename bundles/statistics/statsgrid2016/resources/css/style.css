@@ -173,6 +173,21 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
+div.oskari-flyoutcontent thead th {
+  border: none;
+  border-bottom: 1px solid #E6E6E6;
+  border-left: 1px solid #E6E6E6;
+  border-right: 1px solid #E6E6E6; }
+div.oskari-flyoutcontent .statsgrid-grouping-header {
+  text-align: left;
+  padding: 6px;
+  border-bottom: none !important;
+  border-top: 1px solid #E6E6E6; }
+  div.oskari-flyoutcontent .statsgrid-grouping-header.sources {
+    color: #ffffff;
+    background-color: #000000; }
+    div.oskari-flyoutcontent .statsgrid-grouping-header.sources span {
+      font-weight: normal; }
 
 .statsgrid-legend-flyout .statsgrid-legend-container, .statsgrid-legend-flyout-published .statsgrid-legend-container {
   font-size: 12px; }
