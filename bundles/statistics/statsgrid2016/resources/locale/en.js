@@ -250,7 +250,7 @@ Oskari.registerLocalization(
             "title": "Luokittelu",
             "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun."
         },
-        parameters: {
+        "parameters": {
             "sex": "Sukupuoli",
             "year": "Vuosi",
             "regionset": "Aluevalinta"
