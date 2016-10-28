@@ -18,6 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 '<div class="title"></div>'+
                 '<div class="selection"></div>'+
                 '<div class="info"></div>'+
+                '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">'+
                 '<div class="header"><span class="title"></span> </div>'+
@@ -30,7 +31,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
     render : function(el) {
         var me = this;
         var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid;
+        var gridLoc = locale.statsgrid || {};
 
         var main = jQuery(this.__templates.main());
         me.spinner.insertTo(main);
@@ -79,7 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid;
+        var gridLoc = locale.statsgrid || {};
 
         var indicators = this.getIndicators();
 
@@ -95,15 +96,71 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             statsTableEl.find('.noresults').hide();
         }
 
+        // Set grouping headers
+        this.grid.setGroupingHeader([
+            {
+                cls: 'statsgrid-grouping-header region',
+                text: gridLoc.areaSelection.title
+            },
+            {
+                cls:'statsgrid-grouping-header sources',
+                text: gridLoc.title + ' <span>('+indicators.length+')</span>'
+            }
+        ]);
+
         // Area selection
         this.grid.setColumnUIName('region', function(content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
-            tableHeader.find('.title').html(gridLoc.areaSelection.title);
+            tableHeader.find('.title').remove();
             tableHeader.find('.info').html(gridLoc.areaSelection.info);
 
             var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
             content.append(tableHeader);
-            params.getRegionSelection(tableHeader.find('.selection'));
+
+            // If not published, then show area selection
+            if(me.instance.getConfiguration().areaSelection !== false) {
+                params.getRegionSelection(tableHeader.find('.selection'));
+            }
+            // Else remove area selection
+            else {
+                tableHeader.find('.selection').remove();
+                tableHeader.find('.info').remove();
+            }
+
+            var sortBy = tableHeader.find('.sortby');
+            sortBy.find('.orderTitle').html(gridLoc.orderBy);
+            var order = sortBy.find('.order');
+
+            sortBy.bind('click', function(evt){
+                evt.stopPropagation();
+
+                me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
+                sortBy.find('.orderTitle').addClass('selected');
+
+                var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
+
+                me.grid.sortBy('region', descending);
+                sortBy.attr('data-descending', !descending);
+
+                order.removeClass('asc');
+                order.removeClass('desc');
+
+                if(descending) {
+                    sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+                    order.addClass('desc');
+                } else {
+                    sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
+                    order.addClass('asc');
+                }
+            });
+
+
+            sortBy.attr('data-descending', false);
+            sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+
+            // region selected by default sort order
+            sortBy.find('.orderTitle').addClass('selected');
+            order.addClass('asc');
 
             //content.css('height', '160px');
             content.css('width', '180px');
@@ -119,7 +176,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         });
         // done is called when we have indicator names for columns
         var done = function() {
-            me.grid.setAutoHeightHeader(20);
+            me.grid.setAutoHeightHeader(30);
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
         };
@@ -136,15 +193,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 count--;
                 var ds = me.service.getDatasource(ind.datasource).name;
                 me.grid.setColumnUIName(ind.hash, function(content) {
-
                     var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
-                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name)).attr('title', Oskari.getLocalized(indicator.name));
+
+                    var selectionsText = me.service.getSelectionsText(ind, locale.panels.newSearch);
+
+                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + selectionsText).attr('title', Oskari.getLocalized(indicator.name) + selectionsText);
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
-                    tableHeader.find('.icon').bind('click', function(){
-                        log.info('Removing indicator ' + ind.hash);
-                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
-                    });
+
+                    // If not published then show close icon
+                    if(me.instance.getConfiguration().areaSelection !== false) {
+                        tableHeader.find('.icon').bind('click', function(){
+                            log.info('Removing indicator ' + ind.hash);
+                            me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
+                        });
+                    }
+                    // Else remove close icon
+                    else {
+                        tableHeader.find('.icon').remove();
+                    }
 
 
                     var sortBy = tableHeader.find('.sortby');
@@ -154,7 +221,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     sortBy.bind('click', function(evt){
                         evt.stopPropagation();
 
-                        jQuery('.statsgrid-grid-table-header-content .sortby .orderTitle').removeClass('selected');
+                        me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
                         sortBy.find('.orderTitle').addClass('selected');
 
                         var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
@@ -179,7 +246,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     order.addClass('desc');
 
 
-                    content.bind('click', function(){
+                    tableHeader.bind('click', function(){
                         me.service.getStateService().setActiveIndicator(ind.hash);
                     });
 
@@ -191,6 +258,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 }
             });
         });
+
     },
     handleIndicatorAdded: function(datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');

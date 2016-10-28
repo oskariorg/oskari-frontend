@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 });
             }
-            
+
             var coordinateDisplayToggler = me._popupContent.find('div.coordinatedisplay-toggler');
             coordinateDisplayToggler.html(this._locale.coordinatesTransform.showCoordinateFormatDisplay);
             coordinateDisplayToggler.on('click', function() {
@@ -240,10 +240,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (data) {
                 var degmin = me._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
                 var degminsec = me._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
-                var coordinateDisplayDeg = jQuery('div.coordinatedisplay-deg'); 
-                var coordinateDisplayDegmin = jQuery('div.coordinatedisplay-degmin'); 
-                var coordinateDisplayDegminsec = jQuery('div.coordinatedisplay-degminsec'); 
-                var coordinateDisplayEmergencyCall = jQuery('div.coordinatedisplay-emergencycall'); 
+                var coordinateDisplayDeg = jQuery('div.coordinatedisplay-deg');
+                var coordinateDisplayDegmin = jQuery('div.coordinatedisplay-degmin');
+                var coordinateDisplayDegminsec = jQuery('div.coordinatedisplay-degminsec');
+                var coordinateDisplayEmergencyCall = jQuery('div.coordinatedisplay-emergencycall');
                 var toggler = jQuery('div.coordinatedisplay-toggler');
 
                 coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lon).toFixed(9));
@@ -264,12 +264,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 toggler.show();
             } else {
                 jQuery('div.coordinatedisplay-toggler').hide();
-                jQuery('div.coordinatedisplay-container').hide();            
+                jQuery('div.coordinatedisplay-container').hide();
             }
         },
         /**
          * toggle between input fields / representation of wgs84 coordinates in different formats
-         * @param {bool} reset Force reset to initial state -> inputs visible 
+         * @param {bool} reset Force reset to initial state -> inputs visible
          */
         _toggleCoordinateDisplay: function(reset) {
             var me = this;

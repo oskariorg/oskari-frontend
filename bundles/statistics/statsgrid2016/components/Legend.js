@@ -1,88 +1,105 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance, sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this.instance = instance;
-    this.sb = sandbox;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.sb = this.instance.getSandbox();
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
+    this.colorService = this.sb.getService('Oskari.statistics.statsgrid.ColorService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.locale = this.instance.getLocalization();
     this.__bindToEvents();
+    this.__templates = {
+    	legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
+    	noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>')
+    };
+    this.__legendElement = this.__templates.legendContainer.clone();
+    this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
 }, {
-	__visible: false,
-	__popup: null,
-    __templates : {
-    	// style="width:200px;height:300px;background-color:#ff0000;position:absolute;z-index:100000;"
-    	popup: jQuery('<div class="statsgrid-legend oskari-flyout" style="width:200px;height:300px;">' +
-    		'<div class="oskari-flyouttoolbar">' +
-    		'	<div class="oskari-flyoutheading"></div>' +
-    		'	<div class="oskari-flyout-title"><p></p></div>' +
-    		'	<div class="oskari-flyouttools">' +
-    		'		<div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
-    		'	</div>' +
-    		'</div>' +
-    		'<div class="oskari-flyoutcontentcontainer"></div>' +
-    		'</div>')
-    },
-    __log: Oskari.log('Oskari.statistics.statsgrid.Legend'),
-    __setTitle: function(title) {
-    	var me = this;
-    	me.__popup.find('.oskari-flyout-title p').html(title);
-    },
-    render : function(el, title) {
-    	var me = this;
-        var popup = me.__popup || me.__templates.popup.clone();
-
-        if(!me.__popup) {
-        	jQuery('body').append(popup);
-        	popup.find('.icon-close').bind('click', function(){
-        		me.__visible = false;
-        		popup.hide();
-        	});
-        	me.__popup = popup;
-        	me.__updateLocation(el, popup);
-    		me.__popup.show();
-    		me.__visible = true;
-    	} else if(me.__visible === false) {
-    		me.__updateLocation(el, popup);
-    		me.__popup.show();
-    		me.__visible = true;
-    	} else if(me.__visible === true) {
-    		me.__popup.hide();
-    		me.__visible = false;
-    	}
-
-    	if(title) {
-    		me.__setTitle(title);
-    	}
-
-    	me.__update();
-    },
-    __updateLocation: function(el, popup){
-    	var position = el.position();
-        var parent = el.parents('.oskari-flyout');
-        var left = parent.position().left + parent.outerWidth();
-        if(left + popup.width() > jQuery(window).width()) {
-            left = left - popup.width() - el.width();
+	getClassification: function(){
+		var me = this;
+		me.__legendElement.html(me.__templates.noActiveSelection.clone());
+		me.renderActiveIndicator();
+		return me.__legendElement;
+	},
+	__update: function(){},
+	handleIndicatorRemoved: function(){
+		var me = this;
+		me.__legendElement.html(me.__templates.noActiveSelection.clone());
+	},
+	handleIndicatorChanged: function(datasrc, indicatorId, selections) {
+		this.renderActiveIndicator();
+	},
+	renderActiveIndicator: function(){
+		var me = this;
+        var service = me.service;
+        if(!service) {
+            // not available yet
+            return;
         }
-        popup.css({
-            left: left,
-            top:  parent.position().top + position.top
+
+        var state = service.getStateService();
+        var ind = state.getActiveIndicator();
+        if(!ind) {
+            return;
+        }
+
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+            if(err) {
+                me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                return;
+            }
+            var classify = service.getClassificationService().getClassification(data);
+            if(!classify) {
+            	me.log.warn('Error getting indicator classification', data);
+                return;
+            }
+
+            // TODO: check that we got colors
+            var regions = [];
+            var vis = [];
+
+            // format regions to groups for url
+            var regiongroups = classify.getGroups();
+            var classes = [];
+            regiongroups.forEach(function(group) {
+                // make each group a string separated with comma
+                classes.push(group.join());
+            });
+
+            var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+            var colors = [];
+            colorsWithoutHash.forEach(function(color) {
+            	colors.push('#' + color);
+            });
+
+            var state = service.getStateService();
+
+            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+            	if(err) {
+            		me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
+            		return;
+            	}
+                var selectionText = service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch);
+            	var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + selectionText);
+            	me.__legendElement.html(legend);
+            });
         });
-
-        popup.css('z-index', 20000);
-    },
-    __update: function(indicator) {
-    	var me = this;
-    	if(me.__visible === true) {
-
-    	}
-    },
+	},
     __bindToEvents : function() {
         var me = this;
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-            var current = event.getCurrent();
-            me.__log.info('Active indicator changed! ', current);
-            if(current) {
-                me.__update();
+            var ind = event.getCurrent();
+            if(!ind) {
+                // last indicator was removed -> no active indicators
+                me.handleIndicatorRemoved();
+            } else {
+                // active indicator changed -> update map
+                me.handleIndicatorChanged(ind.datasource, ind.indicator, ind.selections);
             }
+        });
+
+        this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
+            this.handleRegionsetChanged(event.getRegionset());
         });
     }
 });

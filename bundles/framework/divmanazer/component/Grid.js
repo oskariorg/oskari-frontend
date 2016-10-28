@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTableHeader = jQuery(
             '<th><a href="JavaScript:void(0);"></a></th>'
         );
+        this.templateTableGroupingHeader = jQuery('<th class="grouping"></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
@@ -64,6 +65,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * same column is sorted again
          */
         this.lastSort = null;
+
+        /** Grouping headers */
+        this._groupingHeaders = null;
+
         Oskari.makeObservable(this);
     }, {
         /**
@@ -392,6 +397,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         /**
+         * Set grouping headers for Grid
+         * @method  @public addGroupingHeader
+         * @param {Array} headers array of groupung header objects [{cls:'styleClass', text:'Grouping text'}]
+         */
+        setGroupingHeader: function(headers) {
+            this._groupingHeaders = headers;
+        },
+        /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
          * table.
@@ -405,6 +418,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             var me = this,
                 // print header
                 headerContainer = table.find('thead tr'),
+                tableHeader = table.find('thead'),
                 bodyContainer = table.find('tbody'),
                 i,
                 header,
@@ -536,6 +550,37 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     parentItem.addClass('closedSubTable');
                 }
             };
+
+            if(me._groupingHeaders) {
+                var cols = 0;
+                var row = jQuery('<tr class="grouping"></tr>');
+                for(i =0; i < me._groupingHeaders.length; i+= 1) {
+                    var h = me._groupingHeaders[i];
+                    var groupHeader = me.templateTableGroupingHeader.clone();
+                    if(typeof h.cls === 'string') {
+                        groupHeader.addClass(h.cls);
+                    }
+                    if(typeof h.text === 'string'){
+                        groupHeader.html(h.text);
+                    }
+
+                    if(typeof h.colspan === 'number') {
+                        groupHeader.attr('colspan', h.colspan);
+                        cols += h.colspan;
+                    } else {
+                        cols++;
+                    }
+
+                    // Check last grouping header cell
+                    if(i === me._groupingHeaders.length-1 && cols < fullFieldNames.length && !h.colspan) {
+                        var lastColspan = (fullFieldNames.length - cols) + 1;
+                        groupHeader.attr('colspan', lastColspan);
+                    }
+                    row.append(groupHeader);
+                }
+                tableHeader.prepend(row);
+            }
+
 
             for (i = 0; i < fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
@@ -954,7 +999,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if(typeof me.autoHeightHeader === 'number') {
                 var maxHeight = 0;
                 var thead = table.find('thead');
-                var theadRow = table.find('thead tr');
+                var theadRow = table.find('thead tr:not(.grouping)');
+
                 theadRow.find('th').each(function(){
                     var el = jQuery(this);
                     if(el.prop('scrollHeight')>maxHeight) {

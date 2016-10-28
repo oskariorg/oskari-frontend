@@ -15,8 +15,16 @@
   width: 94%;
   height: 94%;
   text-align: left;
-  margin: 10px;
+  padding: 5px 5px 0px 5px;
   font-weight: normal; }
+  .statsgrid-grid-table-header .selection .parameter {
+    .clear-display: none !important; }
+    .statsgrid-grid-table-header .selection .parameter .label {
+      display: none !important;
+      float: none !important; }
+    .statsgrid-grid-table-header .selection .parameter .select {
+      width: auto !important;
+      float: none !important; }
   .statsgrid-grid-table-header .title {
     font-weight: bold;
     font-size: 16px;
@@ -24,6 +32,28 @@
   .statsgrid-grid-table-header .selection {
     margin-bottom: 6px;
     width: 94%; }
+  .statsgrid-grid-table-header .sortby {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    right: 0; }
+    .statsgrid-grid-table-header .sortby .orderTitle {
+      float: left; }
+      .statsgrid-grid-table-header .sortby .orderTitle.selected {
+        text-decoration: underline; }
+    .statsgrid-grid-table-header .sortby .order {
+      height: 10px;
+      width: 10px;
+      float: left;
+      margin-top: 4px; }
+      .statsgrid-grid-table-header .sortby .order.asc {
+        background-image: url("../images/asc_arrow.png");
+        background-repeat: no-repeat;
+        background-position: right center; }
+      .statsgrid-grid-table-header .sortby .order.desc {
+        background-image: url("../images/desc_arrow.png");
+        background-repeat: no-repeat;
+        background-position: right center; }
 
 .statsgrid-grid-table-header-content {
   position: absolute;
@@ -32,7 +62,7 @@
   width: 94%;
   height: 94%;
   text-align: left;
-  margin: 10px;
+  padding: 5px 5px 0px 5px;
   font-weight: normal; }
   .statsgrid-grid-table-header-content .header {
     width: 90%; }
@@ -40,14 +70,14 @@
       font-weight: bold; }
   .statsgrid-grid-table-header-content .icon {
     position: absolute;
-    top: 0;
-    right: 10px;
+    top: 5px;
+    right: 5px;
     cursor: pointer; }
   .statsgrid-grid-table-header-content .sortby {
     cursor: pointer;
     position: absolute;
-    bottom: 6px;
-    right: 6px; }
+    bottom: 0;
+    right: 0; }
     .statsgrid-grid-table-header-content .sortby .orderTitle {
       float: left; }
       .statsgrid-grid-table-header-content .sortby .orderTitle.selected {
@@ -85,9 +115,9 @@ div.oskari-flyoutcontent.statsgrid {
     /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
     max-width: 450px; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: 10px; }
+      padding-top: 0;
+      padding-bottom: 6px;
+      padding-left: 0; }
       div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.selection.tooltip {
         padding-bottom: 0 !important; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections div.statsgrid-indicator-selections {
@@ -133,5 +163,86 @@ div.oskari-flyoutcontent.statsgrid {
       font-weight: bold; }
     div.oskari-flyoutcontent.statsgrid .stats-table .noresults .content {
       padding: 10px; }
+  div.oskari-flyoutcontent.statsgrid div.parameter div.label, div.oskari-flyoutcontent.statsgrid div.parameter div.select {
+    float: left; }
+  div.oskari-flyoutcontent.statsgrid div.parameter div.label {
+    width: 100px;
+    margin-right: 4px;
+    text-align: left; }
+  div.oskari-flyoutcontent.statsgrid div.parameter div.select {
+    width: 336px; }
+  div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
+    clear: both; }
+div.oskari-flyoutcontent thead th {
+  border: none;
+  border-bottom: 1px solid #E6E6E6;
+  border-left: 1px solid #E6E6E6;
+  border-right: 1px solid #E6E6E6; }
+div.oskari-flyoutcontent .statsgrid-grouping-header {
+  text-align: left;
+  padding: 6px;
+  border-bottom: none !important;
+  border-top: 1px solid #E6E6E6; }
+  div.oskari-flyoutcontent .statsgrid-grouping-header.sources {
+    color: #ffffff;
+    background-color: #000000; }
+    div.oskari-flyoutcontent .statsgrid-grouping-header.sources span {
+      font-weight: normal; }
+
+.statsgrid-legend-flyout .statsgrid-legend-container, .statsgrid-legend-flyout-published .statsgrid-legend-container {
+  font-size: 12px; }
+  .statsgrid-legend-flyout .statsgrid-legend-container .legend-noactive, .statsgrid-legend-flyout-published .statsgrid-legend-container .legend-noactive {
+    margin: 3px 10px 5px 10px; }
+  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend {
+    font-size: 12px; }
+  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend-title, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend-title {
+    font-weight: normal; }
+
+.statsgrid-legend-flyout-published {
+  top: 0;
+  right: 0; }
+  .statsgrid-legend-flyout-published div.oskari-flyoutheading {
+    display: none; }
+  .statsgrid-legend-flyout-published div.oskari-flyouttoolbar {
+    height: auto; }
+  .statsgrid-legend-flyout-published div.oskari-flyouttools {
+    display: none; }
+  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend-title {
+    display: none; }
+  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend {
+    padding-top: 0;
+    padding-bottom: 0; }
+  .statsgrid-legend-flyout-published div.oskari-flyout-title {
+    background-color: #fdf8d9;
+    margin: 0;
+    height: auto;
+    padding: 6px;
+    width: 94%; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.header {
+      font-size: 14px;
+      font-weight: bold; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.link {
+      cursor: pointer;
+      color: #4292c5;
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      text-decoration: underline; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title div.sourcename {
+      font-weight: bold; }
+    .statsgrid-legend-flyout-published div.oskari-flyout-title p {
+      font-size: 12px; }
+  .statsgrid-legend-flyout-published div.accordion div.accordion_panel {
+    border: none; }
+    .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header {
+      background-color: #F3F3F3; }
+      .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header div.headerText {
+        font-size: 12px;
+        line-height: 12px;
+        padding: 4px 8px 4px 4px; }
+      .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header div.headerIcon {
+        margin-left: 4px; }
+    .statsgrid-legend-flyout-published div.accordion div.accordion_panel.open div.header {
+      background-color: #F3F3F3; }
 
 /*# sourceMappingURL=style.css.map */

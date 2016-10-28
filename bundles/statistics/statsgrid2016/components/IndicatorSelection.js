@@ -51,6 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		// add empty selection to show placeholder
 		indicatorSelector.append('<option></option>');
 		this.populateIndicators(indicatorSelector, dsSelector.val());
+
 		indicatorSelector.chosen({
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
@@ -75,7 +76,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			if(jQuery(this).val() === '') {
 				indicatorSelector.val(indicatorSelector.find('option:first').val());
 				indicatorSelector.trigger('change');
-				indicatorSelector.trigger("chosen:updated");
+				indicatorSelector.trigger('chosen:updated');
 			}
 			// else show spinner
 			else {

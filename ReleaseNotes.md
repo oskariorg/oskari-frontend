@@ -2,9 +2,33 @@
 
 ## 1.40.0
 
-### divmanazer / grid
+### divmanazer
 
-New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
+#### ExtraFlyout
+
+``New component`` to show Defaultflyout style flyout, what you can define for example own renderer, position calculatation and so on.
+
+#### grid
+
+New ``setAutoHeightHeader`` function. If some margin is given for function param then autoresize header column when rendering it.
+
+New ``setGroupingHeader`` function. Function can be used when wanting added grouping headers. Function takes a param array of objects. If array not contains enought cells or colspans then header lates cell is merged.
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+        colspan: 3
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text'
+    }
+]);
+```
 
 ### mapmodule
 

@@ -604,10 +604,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             //get the transform from current data
             var sourceProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             if (sourceProjection !== "EPSG:4326") {
-                me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, "EPSG:4326", 
+                me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, "EPSG:4326",
                     function(responseData) {
                         me._updateEmergencyCallMessage(responseData);
-                    }, 
+                    },
                     function(error) {
                         me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
                 });

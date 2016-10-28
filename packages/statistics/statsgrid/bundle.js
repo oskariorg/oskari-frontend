@@ -99,6 +99,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/locale/en.js"
+            }, {
+                "lang": "sv",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/sv.js"
             }]
         },
         "bundle": {

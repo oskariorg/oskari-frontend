@@ -19,8 +19,8 @@ Oskari.clazz.define(
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
             flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
-            //,viewClazz: 'Oskari.statistics.statsgrid.StatsView'
         };
+        this.visible = false;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -66,16 +66,53 @@ Oskari.clazz.define(
              * @method userinterface.ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
+                    this.visible = false;
+
                     return;
                 }
-
+                var me = this;
+                var sandbox = this.getSandbox();
                 var isShown = event.getViewState() !== 'close';
-                //this.getView().prepareMode(isShown, this.getConfiguration());
+                this.visible = isShown;
+                var conf = this.getConfiguration();
                 if(isShown) {
-                    this.getFlyout().lazyRender(this.getConfiguration());
+                    var defaultConf = {
+                        search: true,
+                        extraFeatures: true,
+                        areaSelection: true,
+                        mouseEarLegend: true,
+                        showLegend: true
+                    };
+                    var map = jQuery('#contentMap');
+                    if(map.hasClass('mapPublishMode')) {
+                        conf.search = false;
+                        conf.extraFeatures = false;
+                        conf.areaSelection = false;
+                        conf.mouseEarLegend = false;
+                        conf.showLegend = true;
+                    } else if(!map.hasClass('published')) {
+                        conf.search = true;
+                        conf.extraFeatures = true;
+                        conf.areaSelection = true;
+                        conf.mouseEarLegend = true;
+                        conf.showLegend = false;
+                    }
+
+                    conf = jQuery.extend({}, defaultConf, this.getConfiguration());
+
+                    if(conf.grid !== false) {
+                        this.getFlyout().lazyRender(conf);
+                    }
+
+                }
+                else if(event.getViewState() === 'close'){
+                    this.getFlyout().handleClose();
+                }
+
+                if(conf.showLegend === true) {
+                    me.renderPublishedLegend(conf);
                 }
             },
             /**
@@ -90,6 +127,166 @@ Oskari.clazz.define(
         },
         hasData: function () {
             return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
+        },
+
+        /**
+         * @method  @public renderPublishedLegend Render published  legend
+         */
+        renderPublishedLegend: function(config){
+            var me = this;
+            var sb = me.getSandbox();
+            var locale = this.getLocalization();
+
+            jQuery('.statsgrid-legend-flyout-published').show();
+
+            if(config.showLegend === false) {
+                jQuery('.statsgrid-legend-flyout-published').hide();
+                return;
+            }
+
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(!service) {
+                // not available yet
+                return;
+            }
+
+            var state = service.getStateService();
+            var ind = state.getActiveIndicator();
+            if(!ind) {
+                return;
+            }
+
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+                if(err) {
+                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                    return;
+                }
+                var classify = service.getClassificationService().getClassification(data);
+                if(!classify) {
+                    me.log.warn('Error getting indicator classification', data);
+                    return;
+                }
+
+                // TODO: check that we got colors
+                var regions = [];
+                var vis = [];
+
+                var flyout = me.getFlyout();
+
+                // format regions to groups for url
+                var regiongroups = classify.getGroups();
+                var classes = [];
+                regiongroups.forEach(function(group) {
+                    // make each group a string separated with comma
+                    classes.push(group.join());
+                });
+
+                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+                var colors = [];
+                colorsWithoutHash.forEach(function(color) {
+                    colors.push('#' + color);
+                });
+
+                var state = service.getStateService();
+
+                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                    if(err) {
+                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
+                        return;
+                    }
+                    flyout.getLegendFlyout(
+                    {
+                        callbacks: {
+                            show: function(popup) {
+                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                                var container = jQuery('<div class="accordion-published"></div>');
+
+                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                panel.setTitle(locale.legend.title);
+                                panel.setContent(me.__sideTools.legend.comp.getClassification());
+                                panel.setVisible(true);
+                                panel.open();
+
+                                accordion.addPanel(panel);
+                                accordion.insertTo(container);
+
+                                me.__sideTools.legend.flyout.setContent(container);
+                            },
+                            after: function(){
+                                me.__sideTools.legend.flyout.show();
+                            }
+                        },
+                        locale: {
+                            title: ''
+                        },
+                        cls: 'statsgrid-legend-flyout-published'
+                    }, me);
+
+                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+                        var ind = event.getCurrent();
+                        if(ind) {
+                            me.updatePublishedFlyoutTitle(ind, config);
+                        }
+                    });
+
+                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
+                });
+            });
+        },
+        /**
+         * @method  @public updatePublishedFlyoutTitle update published map legend
+         * @param  {Object} ind indicator
+         * @param {Object} config config
+         */
+        updatePublishedFlyoutTitle: function (ind, config){
+            var me = this;
+            var sb = me.getSandbox();
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(!service) {
+                // not available yet
+                return;
+            }
+            var state = service.getStateService();
+
+            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+
+                var getSourceLink = function(currentHash){
+                    var indicators = state.getIndicators();
+                    var currentIndex = state.getIndicatorIndex(currentHash);
+                    var nextIndicatorIndex = 1;
+                    if(currentIndex === indicators.length) {
+                        nextIndicatorIndex = 1;
+                    } else {
+                        nextIndicatorIndex=currentIndex + 1;
+                    }
+
+                    return {
+                        index: nextIndicatorIndex,
+                        handler: function(){
+                            var curIndex = nextIndicatorIndex-1;
+                            var i = indicators[curIndex];
+                            state.setActiveIndicator(i.hash);
+                        }
+                    };
+                };
+
+                var link = getSourceLink(ind.hash);
+                var selectionsText = '';
+
+                if(config.grid !== true || config.showLegend !== false) {
+                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch);
+                }
+
+                me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                    '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
+                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + selectionsText + '</div>');
+                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
+                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
+                    link.handler();
+                });
+
+            });
+
         },
 
         /**
@@ -125,7 +322,6 @@ Oskari.clazz.define(
          * @param {Jquery.element} element
          */
         addChosenHacks: function(element){
-
             // Fixes chosen selection to visible when rendering chosen small height elements
             element.on('chosen:showing_dropdown', function () {
 
@@ -134,10 +330,7 @@ Oskari.clazz.define(
                     if(!el.hasClass('oskari-flyoutcontentcontainer')) {
                         el.css('overflow', 'visible');
                     }
-
                 });
-
-
             });
 
             // Fixes chosen selection go upper when chosen element is near by window bottom
@@ -157,34 +350,15 @@ Oskari.clazz.define(
             });
         },
 
-            /*
- {
-     "indicators": [{
-         "ds": 1,
-         "id": 5,
-         "selections": {
-             "sex": "male",
-             "year": "1991"
-         }
-     }, {
-         "ds": 1,
-         "id": 6,
-         "selections": {
-             "sex": "male",
-             "year": "1994"
-         }
-     }],
-     "regionset": 7,
-     "active": "1_6_{\"sex\":\"male\",\"year\":\"1994\"}",
-     "view" : true
- }
-            */
         getState: function () {
+            var me = this;
+            var view = me.getView();
+
             var service = this.statsService.getStateService();
             var state = {
                 indicators : [],
                 regionset : service.getRegionset(),
-                view : this.getView().isVisible || false
+                view :me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

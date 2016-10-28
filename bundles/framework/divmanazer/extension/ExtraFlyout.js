@@ -23,12 +23,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /* @property container the DIV element */
         this.container = null;
         this.options = options ||  {};
-        if(!this.options.width) {
-        	this.options.width = '200px';
-        }
-        if(!this.options.height) {
-        	this.options.height = '300px';
-        }
+
         this.__render();
     },
     {
@@ -59,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	var me = this;
 	    	me.__popup.hide();
     		me.__visible = false;
-    		suppressEvent = suppressEvent || false;
+    		suppressEvent = suppressEvent ? suppressEvent: false;
 
     		if(typeof me.options.closeCallback === 'function' && !suppressEvent) {
     			me.options.closeCallback(me.__popup);
@@ -83,7 +78,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	}
 
 	    	if(me.locale.title) {
-	    		me.__setTitle(me.locale.title);
+	    		me.setTitle(me.locale.title);
 	    	}
 
 	    	if(me.options.cls) {
@@ -96,13 +91,22 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	if(me.options.height) {
 	    		me.__popup.css('height', me.options.height);
 	    	}
-	    	if(typeof me.options.addEventHandlersFunc === 'function') {
-	    		me.options.addEventHandlersFunc();
-	    	}
 	    },
-	    __setTitle: function(title) {
+	    setTitle: function(title) {
 	    	var me = this;
 	    	me.__popup.find('.oskari-flyout-title p').html(title);
+	    },
+	    getTitle: function() {
+	    	var me = this;
+	    	return me.__popup.find('.oskari-flyout-title p');
+	    },
+	    /**
+	     * @method  @public setContent Set content
+	     * @param {Object} content jQuery object
+	     */
+	    setContent: function(content) {
+	    	var me = this;
+	    	me.__popup.find('.oskari-flyoutcontentcontainer').html(content);
 	    },
 	    addClass: function(cls) {
 	    	var me = this;

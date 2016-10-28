@@ -782,7 +782,7 @@ Oskari.clazz.define(
                     }
                 } else {
                     length = geometry.getLength();
-                }   
+                }
             }
             this._length = length;
             return length;

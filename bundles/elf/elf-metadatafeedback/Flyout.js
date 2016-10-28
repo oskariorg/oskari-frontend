@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
               if (me.userHasRole(me.availableOskariRoles[i])) {
                 return me.availableOskariRoles[i];
               }
-            } 
+            }
           }
           return "";
         },

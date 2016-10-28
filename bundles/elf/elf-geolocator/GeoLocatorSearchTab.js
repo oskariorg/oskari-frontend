@@ -407,7 +407,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                params[0].NameLanguage */
             this.selections = [];
             values.term = this.searchInput.getValue();
-            
+
             if(jQuery(container).find('input[name=addresses]')[0] == undefined && jQuery(container).find('input[name=geographical_names]')[0] == undefined){
               values.addresses = true;
               values.geographical_names = true;

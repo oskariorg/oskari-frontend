@@ -13,10 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
     function () {
         this.__panels = null;
         this.__sideTools = {
-            legend: {
-                opened: false,
-                flyout: null
-            }
+            legend: {}
         };
     }, {
         /**
@@ -35,6 +32,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
         },
+        getLegendFlyout: function(options, comp){
+            var me = this;
+            if(!comp.__sideTools) {
+                comp.__sideTools = {
+                    legend: {}
+                };
+            }
+            if(!comp.__sideTools.legend.comp) {
+                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            }
+            if(!comp.__sideTools.legend.flyout) {
+                options = options || {};
+                options.locale = options.locale || { title: ''};
+                comp.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
+                    width: '200px',
+                    closeCallback: function(popup) {
+                         if(options.callbacks && typeof options.callbacks.close === 'function'){
+                            options.callbacks.close(popup);
+                         }
+                    },
+                    showCallback: function(popup) {
+                        if(options.callbacks && typeof options.callbacks.show === 'function'){
+                            options.callbacks.show(popup);
+                         }
+                    },
+                    cls: options.cls
+                });
+            }
+
+            if(options.callbacks && typeof options.callbacks.after === 'function') {
+                options.callbacks.after();
+            }
+        },
         /**
          * @method lazyRender
          * Called when flyout is opened (by divmanazer)
@@ -42,44 +72,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          */
         lazyRender: function (config) {
             var me = this;
+            var sb = me.instance.getSandbox();
             var locale = this.instance.getLocalization();
-            if(this.__panels) {
-                // already rendered
-                // open first panel
-                this.__panels[0].panel.open();
-                return;
-            }
 
-            this.addSideTool(locale.legend.title, function(el){
-                if(!me.__sideTools.flyout) {
-                    me.__sideTools.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, locale.legend, {
-                        width: '200px',
-                        height: '300px',
-                        addEventHandlersFunc: null,
-                        closeCallback: function(popup) {
-                             me.__sideTools.opened = false;
+            // empties all
+            this.getEl().empty();
+            this.removeSideTools();
+
+            config = config || {};
+
+            if(config.mouseEarLegend === true) {
+                this.addSideTool(locale.legend.title, function(el){
+                    me.__sideTools.legend.sideTool = el;
+                    me.getLegendFlyout(
+                    {
+                        callbacks: {
+                            close: function(popup) {
+                                me.__sideTools.legend.opened = false;
+                            },
+                            show: function(popup) {
+                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
+                                me.setSideToolPopupPosition(popup);
+                            },
+                            after: function(){
+                                if(me.__sideTools.legend.opened) {
+                                    me.__sideTools.legend.flyout.hide();
+                                    me.__sideTools.legend.opened = false;
+                                } else {
+                                    me.__sideTools.legend.flyout.show();
+                                    me.__sideTools.legend.opened = true;
+                                }
+                            }
                         },
-                        showCallback: function(popup) {
-                            me.setSideToolPopupPosition(el, popup);
-                        },
+                        locale: locale.legend,
                         cls: 'statsgrid-legend-flyout'
-                    });
-                }
-                if(me.__sideTools.opened) {
-                    me.__sideTools.flyout.hide();
-                    me.__sideTools.opened = false;
-                } else {
-                    me.__sideTools.flyout.show();
-                    me.__sideTools.opened = true;
-                }
-            });
+                    }, me);
+                });
+            }
             this.addContent(this.getEl(), config);
         },
-        setSideToolPopupPosition: function(tool, popup) {
+
+        setSideToolPopupPosition: function(popup) {
             var me = this;
+            var tool = me.__sideTools.legend.sideTool;
             var position = tool.position();
             var parent = tool.parents('.oskari-flyout');
-            var left = parent.position().left + parent.outerWidth();
+            if(parent.length === 0) {
+                return;
+            }
+            var left = parent.position().left + parent.outerWidth() + tool.width();
+
             if(left + popup.width() > jQuery(window).width()) {
                 left = left - popup.width() - tool.width();
             }
@@ -102,8 +144,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     'Oskari.userinterface.component.Accordion'
                 );
             var panels = this.getPanels(config);
+            var openFirstPanel = true;
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(service) {
+                var state =  service.getStateService();
+                openFirstPanel = (state && state.getIndicators().length > 0) ? false : true;
+            }
+
             _.each(panels, function(p) {
-                if(p.id === 'newSearchPanel') {
+                if(p.id === 'newSearchPanel' && openFirstPanel) {
                     p.panel.open();
                 }
                 accordion.addPanel(p.panel);
@@ -118,28 +167,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             }
 
         },
+        handleClose: function(){
+            var me = this;
+            for(var tool in me.__sideTools) {
+                if(me.__sideTools[tool] && me.__sideTools[tool].flyout) {
+                    me.__sideTools[tool].flyout.hide();
+                }
+            }
+        },
         closePanels: function(){
             var panels = this.__panels || [];
             _.each(panels, function(p) {
-                    p.panel.close();
+                p.panel.close();
             });
         },
         getPanels : function(config) {
             var locale = this.instance.getLocalization();
-            if(this.__panels) {
+            /*if(this.__panels) {
                 return this.__panels;
-            }
-            this.__panels = true;
+            }*/
+            //this.__panels = true;
             var sb = this.instance.getSandbox();
             var panels = [];
 
             // Generate first panel
-            panels.push(this.getNewSearchPanel(config));
+            if(config.search === true) {
+                panels.push(this.getNewSearchPanel(config));
+            }
 
             // Generate extra features panel
-            panels.push(this.getExtraFeaturesPanel(config));
+            if(config.extraFeatures === true) {
+                panels.push(this.getExtraFeaturesPanel(config));
+            }
 
-            this.__panels = panels;
+            //this.__panels = panels;
             return panels;
         },
         getNewSearchPanel: function(config){

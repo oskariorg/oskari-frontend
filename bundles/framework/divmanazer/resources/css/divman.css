@@ -212,11 +212,11 @@ body {
 
 .sidetool {
   position: absolute;
-  bottom: 10%;
-  left: 97%;
-  float: right;
+  left: 100%;
   width: 16px;
   height: 100px;
+  bottom: 0;
+  float: right;
   background-color: #333438; }
   .sidetool .icon {
     position: absolute;
@@ -225,13 +225,13 @@ body {
 
 .verticalsidelabel {
   width: 100%;
-  height: 20%;
   position: absolute;
-  bottom: 12%;
-  left: 51%;
+  bottom: 0;
+  left: 0;
   color: white;
   transform: rotate(270deg);
-  transform-origin: center bottom; }
+  transform-origin: center;
+  white-space: nowrap; }
 
 /** media queries */
 @media screen {

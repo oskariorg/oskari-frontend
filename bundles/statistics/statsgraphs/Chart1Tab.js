@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
 
                     }
                 },
-                
+
             });
         },
         /*
@@ -213,7 +213,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
     ]
 }
          */
-        
+
         showChart : function(data) {
             var list = data.indicators;
             if(!list.length) {
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
             for(var hash in sortedValues) {
                 values.push(me.sanitize(sortedValues[hash]));
             }
-            
+
 
             this.initChart(sortedRegions, values);
 
