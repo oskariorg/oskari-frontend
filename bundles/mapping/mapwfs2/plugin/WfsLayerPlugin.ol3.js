@@ -779,7 +779,7 @@ Oskari.clazz.define(
                 var OLLayer = this.getOLMapLayer(
                     event.getMapLayer()
                 );
-                OLLayer.redraw();
+                //OLLayer.redraw();
 
                 this.getIO().setMapLayerStyle(
                     event.getMapLayer().getId(),
@@ -1119,7 +1119,8 @@ Oskari.clazz.define(
                     rows: null,
                     columns: null
                 },
-                rowidx = 0;
+                rowidx = 0,
+                colidx = 0;
             var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndResolutionWrapper(mapExtent, resolution);
             var tileRangeExtent = {
                 minX: tileRangeExtentArray[0],
@@ -1129,7 +1130,6 @@ Oskari.clazz.define(
             };
 
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                var colidx = 0;
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
                     var zxy = [z,ix,iy];
                     var tileBounds = tileGrid.getTileCoordExtent(zxy);
@@ -1473,8 +1473,9 @@ Oskari.clazz.define(
                 me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisible(true);
+
                 // also for draw
-                wfsMapImageLayer.redraw(true);
+   //             wfsMapImageLayer.redraw(true);
 
                 // if removed set to same index [but if wfsMapImageLayer created
                 // in add (sets just in draw - not needed then here)]
