@@ -66,10 +66,10 @@ Oskari.clazz.define(
              * @method userinterface.ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
                     this.visible = false;
+
                     return;
                 }
                 var me = this;
@@ -78,7 +78,6 @@ Oskari.clazz.define(
                 this.visible = isShown;
                 var conf = this.getConfiguration();
                 if(isShown) {
-
                     var defaultConf = {
                         search: true,
                         extraFeatures: true,

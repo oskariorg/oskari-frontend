@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			if(jQuery(this).val() === '') {
 				indicatorSelector.val(indicatorSelector.find('option:first').val());
 				indicatorSelector.trigger('change');
-				indicatorSelector.trigger("chosen:updated");
+				indicatorSelector.trigger('chosen:updated');
 			}
 			// else show spinner
 			else {

@@ -185,19 +185,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			me.service.getRegionsets().forEach(function(regionset) {
 				jqSelect.append(me.__templates.option(regionset));
 			});
-			jqSelect.find('option:nth-child(2)').prop('selected', true);
+
 			jqSelect.chosen({
 				allow_single_deselect : true,
 				disable_search_threshold: 10,
 				width: '100%'
 			});
 			me.instance.addChosenHacks(jqSelect);
+
 			jqSelect.on('change', function() {
 				var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
 				var value = jQuery(this).val();
 				log.info('Selected region ' + value);
 				me.service.getStateService().setRegionset(value);
 			});
+
+			// Select second if firs selected is true, first option is empty because of placeholder text
+			if(firstSelected === true) {
+				jqSelect.find('option:nth-child(2)').prop('selected', true);
+				jqSelect.trigger('change');
+				jqSelect.trigger('chosen:updated');
+			}
 		}
 
 		return jqSelect;

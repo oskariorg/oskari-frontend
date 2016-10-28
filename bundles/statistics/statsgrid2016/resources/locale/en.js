@@ -4,68 +4,66 @@ Oskari.registerLocalization(
     "key": "StatsGrid",
     "value": {
         "tile": {
-            "title": "Teemakartat"
+            "title": "Thematic maps"
         },
         "flyout": {
-            "title": "Teemakartat"
+            "title": "Thematic maps"
         },
         "panels": {
             "newSearch": {
-                "title": "AINEISTOHAKU",
-                "datasourceTitle": "Aineiston tarjoaja",
-                "indicatorTitle": "Aineisto",
-                "selectDatasourcePlaceholder": "Valitse tietolähde",
-                "selectIndicatorPlaceholder": "Valitse aineisto",
-                "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
-                "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
-                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut",
-                "refineSearchTooltip2": "Aineiston tarjoajan ja aineiston.",
-                "addButtonTitle": "Hae aineiston tiedot",
-                "defaultPlaceholder": "Valitse arvo",
+                "title": "DATA SEARCH",
+                "datasourceTitle": "Data source",
+                "indicatorTitle": "Indicator",
+                "selectDatasourcePlaceholder": "Select data source",
+                "selectIndicatorPlaceholder": "Select an indicator",
+                "noResults": "No search results found",
+                "refineSearchLabel": "Refine selected content",
+                "refineSearchTooltip1": "To view the options you must first select",
+                "refineSearchTooltip2": "The data provider and data.",
+                "addButtonTitle": "Get data",
+                "defaultPlaceholder": "Select value",
                 "selectionValues": {
                     "sex": {
-                        "placeholder": "Valitse sukupuoli",
-                        "male": "Miehet",
-                        "female": "Naiset",
-                        "total": "Yhteensä"
+                        "placeholder": "Select gender",
+                        "male": "Men",
+                        "female": "Women",
+                        "total": "Total"
                     },
                     "year": {
-                        "placeholder": "Valitse vuosi"
+                        "placeholder": "Select year"
                     },
                     "regionset": {
-                        "placeholder": "Valitse aluejako"
+                        "placeholder": "Select region"
                     }
                 },
-                "noRegionset": "Ei aluevalintaa"
+                "noRegionset": "No region selected"
             },
             "extraFeatures": {
-                "title": "LISÄEHDOT JA -OMINAISUUDET",
-                "showMapLayers": "Näytä karttatasot"
-
+                "title": "Additional terms and features",
+                "showMapLayers": "Show map layers"
             }
         },
         "statsgrid": {
-            "title": "HAETUT AINEISTOT",
-            "noResults": "Ei valittuja aineistoja",
+            "title": "SEARCHED DATA",
+            "noResults": "No selected data",
             "areaSelection": {
-                "title": "ALUEJAKO",
-                "info": "Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta"
+                "title": "REGION",
+                "info": "Redefine the areas in which you want to view the data, click the drop-down menu"
             },
-            "source": "Aineisto",
-            "orderBy": "Lajittele",
-            "orderByAscending": "Lajittele nousevasti",
-            "orderByDescending": "Lajittele laskevasti",
-            "removeSource": "Poista aineisto"
+            "source": "Source",
+            "orderBy": "Order by",
+            "orderByAscending": "Order by ascending",
+            "orderByDescending": "Order by descending",
+            "removeSource": "Remove source"
         },
         "legend": {
-            "title": "Luokittelu",
-            "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun."
+            "title": "Classification",
+            "noActive": "No data selected, select data to view classification."
         },
         "parameters": {
-            "sex": "Sukupuoli",
-            "year": "Vuosi",
-            "regionset": "Aluevalinta"
+            "sex": "Gender",
+            "year": "Year",
+            "regionset": "Region"
         }
-
     }
 });
