@@ -90,90 +90,6 @@ module.exports = function (grunt) {
         buildOskariOL3: {
             main: {
             }
-        },
-        copy: {
-            nonminified: {
-                files: [{
-                    expand: true,
-                    src: [
-                             '../bundles/statistics/statsgrid.polymer/**/*.html',
-                             '../bundles/statistics/statsgrid.polymer/polymerjs/*.js'
-                         ],
-                    dest: 'Oskari/bundles'
-                },
-                {
-                    expand: true,
-                    src: '../bundles/statistics/statsgrid.polymer/**/*.css',
-                    dest: 'Oskari/bundles'
-                }]
-            },
-            vulcanjs: {
-                files: [{
-                    expand: true,
-                    src: [
-                             '../bundles/statistics/statsgrid.polymer/polymerjs/*.js'
-                         ],
-                    dest: 'Oskari/bundles'
-                }]
-            },
-            stats: {
-                files: [{
-                    src: '../bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise-Statics.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise-Statics.js'
-                },
-                {
-                    src: '../bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/promise-polyfill/Promise.js'
-                },
-                {
-                    src: '../bundles/statistics/statsgrid.polymer/libs/web-animations-js/web-animations-next-lite.min.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/web-animations-js/web-animations-next-lite.min.js'
-                },
-                {
-                    src: '../bundles/statistics/statsgrid.polymer/libs/spinner/spin.min.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/spinner/spin.min.js'
-                },
-                {
-                    src: '../bundles/statistics/statsgrid.polymer/libs/webcomponents-lite/webcomponents-lite.js',
-                    dest: 'Oskari/bundles/statistics/statsgrid.polymer/libs/webcomponents-lite/webcomponents-lite.js'
-                }
-                ]
-            }
-        },
-        minifyPolymer: {
-            default: {
-                files: [{
-                    expand: true,
-                    cwd: '../',
-                    src: ['bundles/statistics/statsgrid.polymer/**/*.html'],
-                    dest: 'Oskari/'
-                }]
-            }
-        },
-        minifyPolymerCSS: {
-            default: {
-                files: [{
-                    expand: true,
-                    cwd: '../',
-                    src: ['bundles/statistics/statsgrid.polymer/**/*.css'],
-                    dest: 'Oskari/'
-                }]
-            }
-        },
-        vulcanize: {
-            default: {
-                options: {
-                    abspath: '.',
-                    inlineScripts: true,
-                    inlineCss: true,
-                    stripComments: true
-                },
-                files: {
-                    '../bundles/statistics/statsgrid.polymer/vulcanized.html': [
-                        'Oskari/bundles/statistics/statsgrid.polymer/oskari-vulcanization-base.html'
-                    ]
-                }
-            }
         }
     });
 
@@ -187,30 +103,21 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-trimtrailingspaces');
 
-    grunt.loadNpmTasks('grunt-minify-polymer');
-    grunt.loadNpmTasks('grunt-vulcanize');
-
     // Default task(s).
     grunt.registerTask('default', ['build']);
-    grunt.registerTask('minifyStats', ['clean:build', 'minifyPolymer', 'minifyPolymerCSS', 'copy:vulcanjs', 'copy:stats', 'vulcanize']);
 
-    grunt.registerTask('nonminifiedStats', ['clean:build', 'copy:nonminified', 'copy:stats', 'vulcanize']);
     grunt.registerTask('devRelease', 'Release build without minification',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
-            var nonMinifiedTaskStr = 'nonminifiedStats:' + (version || '') + ':' + (configs || '') + ':' +
-                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
-                releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+            var releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
-            grunt.task.run(nonMinifiedTaskStr, releaseManualTaskStr);
+            grunt.task.run(releaseManualTaskStr);
     });
 
     grunt.registerTask('release', 'Release build',
         function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
-            var minifyStatsTaskStr = 'minifyStats:' + (version || '') + ':' + (configs || '') + ':' +
-                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || ''),
-                releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+            var releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
                     (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
-            grunt.task.run(minifyStatsTaskStr, releaseManualTaskStr);
+            grunt.task.run(releaseManualTaskStr);
     });
 
     grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
