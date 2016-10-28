@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.getFlyout().close();
 
                 var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-                if(stats) {
+                if(stats && typeof stats.renderPublishedLegend === 'function') {
                     stats.renderPublishedLegend({showLegend:false});
                 }
             }
