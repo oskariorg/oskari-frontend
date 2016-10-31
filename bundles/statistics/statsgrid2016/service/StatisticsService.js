@@ -283,7 +283,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 data : data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp);
+                    me.getRegions(regionset, function(err, regions) {
+                        if(err) {
+                            me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
+                            return;
+                        }
+                        // filter out data for regions that are not part of the regionset since some adapters return additional data!
+                        // any additional data will result in broken classification
+                        var filteredResponse = {};
+                        regions.forEach(function(reg) {
+                            filteredResponse[reg.id] = pResp[reg.id];
+                        });
+                        me.cache.respondToQueue(cacheKey, null, filteredResponse);
+
+                    });
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
