@@ -107,7 +107,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			if(selections.length>0) {
 				jqSelect.parent().parent().addClass('margintop');
 			}
-			selections.push(jqSelect);
+			// regionSelection cannot be part of selections. It should just change the region set on the map.
+			// dynamically created queries will break if it's part of the selections sent to server when fetching data.
 
 			if(elements.btn) {
 				elements.btn.setHandler(function() {
