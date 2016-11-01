@@ -153,16 +153,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		});
 
 		var allowedRegionsets = [];
-		if(indicator) {
-			var addAllowedRegionSets = function(indicatorRegionset){
-				var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset,id) {
-					return regionset.id === indicatorRegionset;
-				});
 
-				grepAllRegionsets.forEach(function(regionset){
-					allowedRegionsets.push(regionset);
-				});
-			};
+		var addAllowedRegionSets = function(indicatorRegionset){
+			var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset,id) {
+				return regionset.id === indicatorRegionset;
+			});
+
+			grepAllRegionsets.forEach(function(regionset){
+				allowedRegionsets.push(regionset);
+			});
+		};
+
+		if(indicator) {
 			indicator.regionsets.forEach(function(indicatorRegionset) {
 				addAllowedRegionSets(indicatorRegionset);
 			});
@@ -171,8 +173,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
 				select.addClass('margintop');
 			}
-		} else {
-			allowedRegionsets = allRegionsets;
+		}
+		// No indicators, so this selection is showed by Datatable. DAtatable needs to show all regionsets of selected indicators.
+		else {
+
+			var indicatorRegions = me.service.getSelectedIndicatorsRegions();
+
+			indicatorRegions.forEach(function(indicatorRegionset) {
+				addAllowedRegionSets(indicatorRegionset);
+			});
 		}
 		cont.append(select);
 		var jqSelect = cont.find('.stats-regionset-selector');

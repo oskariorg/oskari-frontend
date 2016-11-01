@@ -303,6 +303,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 }
             });
         },
+        getSelectedIndicatorsRegions: function() {
+            var me = this;
+            var indicators = me.getStateService().getIndicators();
+            var regionsets = [];
+            var addRegions = function(regions){
+                for(var i=0;i<regions.length;i++) {
+                    if(jQuery.inArray(regions[i], regionsets) === -1){
+                        regionsets.push(regions[i]);
+                    }
+                }
+            };
+            for(var i = 0;i<indicators.length; i++) {
+                var ind = indicators[i];
+                me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err,indicator){
+                    if(!err){
+                        addRegions(indicator.regionsets);
+                    }
+                });
+            }
+            return regionsets;
+        },
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {
