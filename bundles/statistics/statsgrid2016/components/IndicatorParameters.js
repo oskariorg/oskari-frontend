@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	 *
 	 * @param  {Object} cont      jQuery element
 	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
-	 * @param {Boolean} firstSelected if setetd true then first option is selected
+	 * @param {Boolean} firstSelected if setted true then first option is selected
 	 * @return {Object}           jQuery element
 	 */
 	getRegionSelection: function(cont, indicator, firstSelected) {
@@ -142,6 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
 		var allRegionsets = me.service.getRegionsets();
+
 		var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
 		var label = (locale.parameters.regionset) ? locale.parameters.regionset : 'Regionset';
 		var select = me.__templates.select({
@@ -183,7 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				jqSelect.append('<option></option>');
 			}
 
-			me.service.getRegionsets().forEach(function(regionset) {
+			allowedRegionsets.forEach(function(regionset) {
 				jqSelect.append(me.__templates.option(regionset));
 			});
 
