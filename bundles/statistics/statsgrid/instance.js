@@ -124,8 +124,8 @@ Oskari.clazz.define(
                 },
                 locale
             );
-            mapModule.registerPlugin(classifyPlugin);
-            mapModule.startPlugin(classifyPlugin);
+            me.mapModule.registerPlugin(classifyPlugin);
+            me.mapModule.startPlugin(classifyPlugin);
             me.classifyPlugin = classifyPlugin;
 
             var dataSourceRequestHandler = Oskari.clazz.create(
