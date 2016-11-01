@@ -54,8 +54,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         d3.selectAll(".c3-shape").style("opacity", 0.5);
                         var k = ".c3-shape-" + d.index;
                         //make the clicked bar opacity 1
-                        d3.selectAll(k).style("opacity", 1)
-                        event.stopPropagation()
+                        d3.selectAll(k).style("opacity", 1);
+                        event.stopPropagation();
 
                         },
                     onmouseout: function (d) {
@@ -95,10 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         },
 
                     }
-                },
-                subchart: {
-                    show: true,
-
                 }
             });
 
@@ -138,10 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         },
 
                     }
-                },
-                subchart: {
-                    show: true,
-
                 }
             });
             this.chart = c3.generate({
