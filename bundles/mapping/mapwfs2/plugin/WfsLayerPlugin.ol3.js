@@ -1437,6 +1437,7 @@ Oskari.clazz.define(
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),
+                mapmodule = me.getMapModule(),
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
@@ -1487,8 +1488,8 @@ Oskari.clazz.define(
                 highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
 
                 if (normalLayer && highlightLayer) {
-                    normalLayerIndex = map.getLayerIndex(normalLayer);
-                    map.setLayerIndex(highlightLayer,normalLayerIndex + 10);
+                    normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
+                    map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
 
             } else { // "normal"
