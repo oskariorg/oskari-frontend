@@ -1475,9 +1475,6 @@ Oskari.clazz.define(
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisible(true);
 
-                // also for draw
-   //             wfsMapImageLayer.redraw(true);
-
                 // if removed set to same index [but if wfsMapImageLayer created
                 // in add (sets just in draw - not needed then here)]
                 if (layerIndex !== null && wfsMapImageLayer !== null) {
