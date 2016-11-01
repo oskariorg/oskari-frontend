@@ -76,11 +76,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
 
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
-
+                    right: 20
                 },
                 axis : {
                     x : {
@@ -112,13 +111,12 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 },
                 subchart: {
                     show: true
-
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
+                    right: 20
 
                 },
                 axis : {
@@ -148,10 +146,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     }
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
+                    right: 20
 
                 },
                 axis : {
