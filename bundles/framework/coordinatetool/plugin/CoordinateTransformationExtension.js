@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 });
             } else {
-                successCb(lonlat);
+
             }
         },
         updateCoordinateDisplay: function(data) {
@@ -260,7 +260,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 coordinateDisplayDegminsec.find('span.degreesY').html(degminsec.degreesY);
                 coordinateDisplayDegminsec.find('span.minutesY').html(degminsec.minutesY);
                 coordinateDisplayDegminsec.find('span.secondsY').html(degminsec.secondsY);
-
                 toggler.show();
             } else {
                 jQuery('div.coordinatedisplay-toggler').hide();
