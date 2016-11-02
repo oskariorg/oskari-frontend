@@ -103,7 +103,10 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
+            if(me.markerPopups.MARKER_WITH_POPUP !== id && me.markerPopups.MARKER_WITH_POPUP !== undefined ){
+              event = me._sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(me.markerPopups.MARKER_WITH_POPUP, false);
+              me._sandbox.notifyAll(event);
+            }
             var currPopup = me._popups[id],
                 lon = null,
                 lat = null,
@@ -124,7 +127,6 @@ Oskari.clazz.define(
                 me.getSandbox().notifyAll(evt);
                 return;
             }
-
             var refresh = (currPopup &&
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
@@ -857,17 +859,16 @@ Oskari.clazz.define(
                                 popup.popup.setPosition(undefined);
                             }
                             if (popup.popup && popup.type === "desktop") {
-                                this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
+                                this.getMapModule().getMap().removeOverlay(popup.popup);
                             } else if (popup.popup && popup.type === "mobile") {
                                 popup.popup.close();
                             }
-                            event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
-                        	sandbox.notifyAll(event);
                         }
                     }
                 }
                 return;
             }
+
             // id specified, delete only single popup
             popup = this._popups[id];
             if (popup) {
