@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
-                url: '../config.json',
+                url: 'config.json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
