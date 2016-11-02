@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsToolbar',
             } else {
                 this.removeToolButton();
             }
-            //sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, showHide]);
         },
         destroy: function () {
             var sandbox = this.instance.getSandbox();
@@ -96,7 +95,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsToolbar',
         addToolButton: function () {
             var me = this,
                 instance = me.instance,
-                view = instance.plugins['Oskari.userinterface.View'],
                 sandbox = instance.getSandbox(),
                 buttonGroup = 'statsgrid-tools',
                 buttons = {

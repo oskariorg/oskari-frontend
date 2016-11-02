@@ -1437,6 +1437,7 @@ Oskari.clazz.define(
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),
+                mapmodule = me.getMapModule(),
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
@@ -1474,9 +1475,6 @@ Oskari.clazz.define(
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
                 wfsMapImageLayer.setVisible(true);
 
-                // also for draw
-   //             wfsMapImageLayer.redraw(true);
-
                 // if removed set to same index [but if wfsMapImageLayer created
                 // in add (sets just in draw - not needed then here)]
                 if (layerIndex !== null && wfsMapImageLayer !== null) {
@@ -1487,8 +1485,8 @@ Oskari.clazz.define(
                 highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
 
                 if (normalLayer && highlightLayer) {
-                    normalLayerIndex = map.getLayerIndex(normalLayer);
-                    map.setLayerIndex(highlightLayer,normalLayerIndex + 10);
+                    normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
+                    map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
 
             } else { // "normal"

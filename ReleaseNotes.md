@@ -2,6 +2,14 @@
 
 ## 1.40.0
 
+### postprocessor
+
+Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol3
+
+Fixed wfs layer index calculation.
+
 ### divmanazer
 
 #### ExtraFlyout

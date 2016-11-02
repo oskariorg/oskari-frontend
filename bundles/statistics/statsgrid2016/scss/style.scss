@@ -17,7 +17,6 @@
 
 
 .statsgrid-grid-table-header {
-    position:absolute;
     top:0;
     left:0;
     width:94%;
@@ -25,6 +24,12 @@
     text-align:left;
     padding: 5px 5px 0px 5px;
     font-weight: normal;
+
+    .header {
+        position: absolute;
+        width: 94%;
+        top:0;
+    }
 
     .selection {
         .parameter {
@@ -89,7 +94,6 @@
 }
 
 .statsgrid-grid-table-header-content {
-    position:absolute;
     top:0;
     left:0;
     width:94%;
@@ -100,6 +104,8 @@
 
     .header {
         width: 90%;
+        position: absolute;
+        top: 5px;
         .title {
             font-weight: bold;
         }

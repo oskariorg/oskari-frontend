@@ -283,12 +283,46 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 data : data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp);
+                    me.getRegions(regionset, function(err, regions) {
+                        if(err) {
+                            me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
+                            return;
+                        }
+                        // filter out data for regions that are not part of the regionset since some adapters return additional data!
+                        // any additional data will result in broken classification
+                        var filteredResponse = {};
+                        regions.forEach(function(reg) {
+                            filteredResponse[reg.id] = pResp[reg.id];
+                        });
+                        me.cache.respondToQueue(cacheKey, null, filteredResponse);
+
+                    });
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
+        },
+        getSelectedIndicatorsRegions: function() {
+            var me = this;
+            var indicators = me.getStateService().getIndicators();
+            var regionsets = [];
+            var addRegions = function(regions){
+                for(var i=0;i<regions.length;i++) {
+                    if(jQuery.inArray(regions[i], regionsets) === -1){
+                        regionsets.push(regions[i]);
+                    }
+                }
+            };
+            for(var i = 0;i<indicators.length; i++) {
+                var ind = indicators[i];
+                me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err,indicator){
+                    if(!err){
+                        addRegions(indicator.regionsets);
+                    }
+                });
+            }
+            return regionsets;
         },
         getCurrentDataset : function(callback) {
             var me = this;

@@ -16,8 +16,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             '</div>'),
         tableHeader: _.template('<div class="statsgrid-grid-table-header">'+
                 '<div class="title"></div>'+
-                '<div class="selection"></div>'+
-                '<div class="info"></div>'+
+                '<div class="header">'+
+                '   <div class="selection"></div>'+
+                '   <div class="info"></div>'+
+                '</div>'+
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">'+
