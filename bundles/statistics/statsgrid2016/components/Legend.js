@@ -9,7 +9,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this._bindToEvents();
     this.__templates = {
     	legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
-    	noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>')
+    	noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
+        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
     };
     this.__legendElement = this.__templates.legendContainer.clone();
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
@@ -74,11 +75,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
             if(err) {
                 me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                me.__legendElement.html(me.__templates.noEnoughData.clone());
                 return;
             }
             var classify = service.getClassificationService().getClassification(data);
             if(!classify) {
                 me.log.warn('Error getting indicator classification', data);
+                me.__legendElement.html(me.__templates.noEnoughData.clone());
                 return;
             }
 

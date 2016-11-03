@@ -58,7 +58,8 @@ Oskari.registerLocalization(
         },
         "legend": {
             "title": "Classification",
-            "noActive": "No data selected, select data to view classification."
+            "noActive": "No data selected, select data to view classification.",
+            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
         },
         "parameters": {
             "sex": "Gender",

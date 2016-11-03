@@ -59,7 +59,8 @@ Oskari.registerLocalization(
         },
         "legend": {
             "title": "Luokittelu",
-            "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun."
+            "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.",
+            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
         },
         "parameters": {
             "sex": "Sukupuoli",

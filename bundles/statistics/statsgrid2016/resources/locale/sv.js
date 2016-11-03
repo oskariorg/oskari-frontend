@@ -59,7 +59,8 @@ Oskari.registerLocalization(
         },
         "legend": {
             "title": "Klassificering",
-            "noActive": "Ingen vald datamängd, välj en datamängd för att visa kartans klassificering."
+            "noActive": "Ingen vald datamängd, välj en datamängd för att visa kartans klassificering.",
+            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
         },
         "parameters": {
             "sex": "Kön",
