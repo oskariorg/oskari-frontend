@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         this.colorsets.forEach(function(item) {
             me.limits.name.push(item.name);
         });
-        this.limits.defaultType = this.colorsets[0].type;
-        this.limits.defaultName = this.colorsets[0].name;
+        this.limits.defaultType = this.colorsets[9].type;
+        this.limits.defaultName = this.colorsets[9].name;
     }, {
         __name: "StatsGrid.ColorService",
         __qname: "Oskari.statistics.statsgrid.ColorService",
