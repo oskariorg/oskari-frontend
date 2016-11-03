@@ -93,18 +93,22 @@
             }
         }
     },{
-        "bundlename": "publishedgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
+            "title": "Teemakartat",
+            "fi": "Teemakartat",
+            "sv": "Tematiska Kartor",
+            "en": "Thematic Maps",
+            "bundleinstancename": "statsgrid",
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
+                    }
                 },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
-                }
-            }
-        }
-    },{
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        },{
         "bundlename": "divmanazer",
         "metadata": {
             "Import-Bundle": {
