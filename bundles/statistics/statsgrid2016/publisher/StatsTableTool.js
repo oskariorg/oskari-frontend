@@ -83,8 +83,7 @@ function() {
         var me = this,
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
-            request,
-            elLeft;
+            request;
 
         me.state.enabled = enabled;
 
