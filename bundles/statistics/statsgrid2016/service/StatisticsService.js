@@ -68,7 +68,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             for(var sel in indicator.selections){
                 var val = indicator.selections[sel];
                 if(sel==='regionset') {
-                    selectionsTexts.push(me.getRegionsets(parseFloat(val)).name);
+                    var regionset = me.getRegionsets(parseFloat(val));
+                    var text = (regionset && regionset.name) ? regionset.name : '';
+                    selectionsTexts.push(text);
                 } else {
                     var name = (locale.selectionValues[sel] && locale.selectionValues[sel][val]) ? locale.selectionValues[sel][val] : val;
                     selectionsTexts.push(name);
