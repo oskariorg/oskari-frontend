@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          */
         lazyRender: function (config) {
             var me = this;
-            var sb = me.instance.getSandbox();
             var locale = this.instance.getLocalization();
 
             // empties all
@@ -87,7 +86,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     me.getLegendFlyout(
                     {
                         callbacks: {
-                            close: function(popup) {
+                            close: function() {
                                 me.__sideTools.legend.opened = false;
                             },
                             show: function(popup) {
@@ -182,12 +181,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             });
         },
         getPanels : function(config) {
-            var locale = this.instance.getLocalization();
-            /*if(this.__panels) {
-                return this.__panels;
-            }*/
-            //this.__panels = true;
-            var sb = this.instance.getSandbox();
             var panels = [];
 
             // Generate first panel
@@ -199,8 +192,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             if(config.extraFeatures === true) {
                 panels.push(this.getExtraFeaturesPanel(config));
             }
-
-            //this.__panels = panels;
             return panels;
         },
         getNewSearchPanel: function(config){

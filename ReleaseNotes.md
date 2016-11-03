@@ -2,6 +2,14 @@
 
 ## 1.40.0
 
+### postprocessor
+
+Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol3
+
+Fixed wfs layer index calculation.
+
 ### divmanazer
 
 #### ExtraFlyout
@@ -10,7 +18,25 @@
 
 #### grid
 
-New setAutoHeightHeader function. If some margin is given for function param then autoresize header column when rendering it.
+New ``setAutoHeightHeader`` function. If some margin is given for function param then autoresize header column when rendering it.
+
+New ``setGroupingHeader`` function. Function can be used when wanting added grouping headers. Function takes a param array of objects. If array not contains enought cells or colspans then header lates cell is merged.
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+        colspan: 3
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text'
+    }
+]);
+```
 
 ### mapmodule
 
@@ -18,6 +44,10 @@ Fixes for getClosestZoomLevel(min, max) function:
 - If either parameter was missing the current zoomlevel was returned.
 - Now uses the max/min scales of the map as default value for the missing parameter.
 - Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
+
+Added ol3 map following parameters and values for better user experience (map tiles are loaded faster):
+- loadTilesWhileInteracting: true
+- loadTilesWhileAnimating: true
 
 ### core/AbstractLayer
 

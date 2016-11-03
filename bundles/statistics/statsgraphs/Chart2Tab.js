@@ -33,14 +33,14 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart2Tab',
             this.chart = c3.generate({
                 bindto: "#chart2",
                 data: {
-                    columns: data,
+                    columns: data
 
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
+                    right: 20
 
                 },
                 axis : {

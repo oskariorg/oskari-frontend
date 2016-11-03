@@ -16,7 +16,7 @@
                     "bundlePath": "../../../packages/mapping/ol3/"
                 },
                 "mapstats": {
-                    "bundlePath": "../../../packages/mapping/ol3/deprecated/"
+                    "bundlePath": "../../../packages/mapping/ol3/"
                 },
                 "mapanalysis" : {
                     "bundlePath" : "../../../packages/mapping/ol3/"
@@ -93,18 +93,22 @@
             }
         }
     },{
-        "bundlename": "publishedgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
+            "title": "Teemakartat",
+            "fi": "Teemakartat",
+            "sv": "Tematiska Kartor",
+            "en": "Thematic Maps",
+            "bundleinstancename": "statsgrid",
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
+                    }
                 },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
-                }
-            }
-        }
-    },{
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        },{
         "bundlename": "divmanazer",
         "metadata": {
             "Import-Bundle": {
@@ -183,23 +187,5 @@
                 }
             }
         }
-    },
-    {
-            "title": "PostProcessor",
-            "fi": "PostProcessor",
-            "sv": "PostProcessor",
-            "en": "PostProcessor",
-            "bundlename": "postprocessor",
-            "bundleinstancename": "postprocessor",
-            "metadata": {
-                "Import-Bundle": {
-                    "postprocessor": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
-        }
-]
+    }]
 }

@@ -31,7 +31,6 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 return;
             }
 
-
             this.chart = c3.generate({
                 bindto: "#chart1",
                 data: {
@@ -54,8 +53,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         d3.selectAll(".c3-shape").style("opacity", 0.5);
                         var k = ".c3-shape-" + d.index;
                         //make the clicked bar opacity 1
-                        d3.selectAll(k).style("opacity", 1)
-                        event.stopPropagation()
+                        d3.selectAll(k).style("opacity", 1);
+                        event.stopPropagation();
 
                         },
                     onmouseout: function (d) {
@@ -64,7 +63,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                         //var k = ".c3-shape-" + d.index;
                         //make the clicked bar opacity
                         //d3.selectAll(k).style("fill",'#1f77b4');
-                        console.log("onmouseout latest data", d); },
+                        console.log("onmouseout latest data", d);
+                    }
                 },
                 grid: {
                     x: {
@@ -76,11 +76,10 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
 
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
-
+                    right: 20
                 },
                 axis : {
                     x : {
@@ -92,13 +91,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                             culling: {
                                 max: 5 // the number of tick texts will be adjusted to less than this value
                             }
-                        },
-
+                        }
                     }
-                },
-                subchart: {
-                    show: true,
-
                 }
             });
 
@@ -116,13 +110,12 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                 },
                 subchart: {
                     show: true
-
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
+                    right: 20
 
                 },
                 axis : {
@@ -135,13 +128,8 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                             culling: {
                                 max: 5 // the number of tick texts will be adjusted to less than this value
                             }
-                        },
-
+                        }
                     }
-                },
-                subchart: {
-                    show: true,
-
                 }
             });
             this.chart = c3.generate({
@@ -156,63 +144,25 @@ Oskari.clazz.define('Oskari.mapframework.statsgraphs.Chart1Tab',
                     }
                 },
                 size: {
-                    height: 400,
+                    height: 400
                 },
                 padding: {
-                    right: 20,
-
+                    right: 20
                 },
                 axis : {
                     x : {
                         type : 'category',
                         categories : regions,
                         tick: {
-
                             multiline: false,
                             culling: {
                                 max: 5 // the number of tick texts will be adjusted to less than this value
                             }
-                        },
-
+                        }
                     }
-                },
-
+                }
             });
         },
-        /*
-        Data is in this format:
-{
-    regionset : {
-        id : 1234,
-        name : "Municipalities"
-    },
-    indicators : [
-        {
-            datasource : {
-                id : 12,
-                name : "SotkaNet"
-            },
-            id : 346,
-            name : "indicator name",
-            selections : {
-                sex : 'male',
-                year : '1993'
-            },
-            hash : 'unique id for ds, id and selections'
-        }
-    ],
-    data : [
-        {
-            id : 2353,
-            name : "municipality name",
-            values : {
-                hash1 : value of indicator with hash1,
-                hash2 : value of indicator with hash2
-            }
-        }
-    ]
-}
-         */
 
         showChart : function(data) {
             var list = data.indicators;

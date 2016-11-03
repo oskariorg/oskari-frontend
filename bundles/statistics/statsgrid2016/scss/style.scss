@@ -17,7 +17,6 @@
 
 
 .statsgrid-grid-table-header {
-    position:absolute;
     top:0;
     left:0;
     width:94%;
@@ -25,6 +24,12 @@
     text-align:left;
     padding: 5px 5px 0px 5px;
     font-weight: normal;
+
+    .header {
+        position: absolute;
+        width: 94%;
+        top:0;
+    }
 
     .selection {
         .parameter {
@@ -36,7 +41,7 @@
                 width: auto !important;
                 float:none !important;
             }
-            .clear: {
+            .clear {
                 display: none !important;
             }
 
@@ -89,7 +94,6 @@
 }
 
 .statsgrid-grid-table-header-content {
-    position:absolute;
     top:0;
     left:0;
     width:94%;
@@ -100,6 +104,8 @@
 
     .header {
         width: 90%;
+        position: absolute;
+        top: 5px;
         .title {
             font-weight: bold;
         }
@@ -282,6 +288,36 @@ div.oskari-flyoutcontent{
             }
         }
     }
+
+    thead {
+        th {
+            border: none;
+            border-bottom: 1px solid #E6E6E6;
+            border-left: 1px solid #E6E6E6;
+            border-right: 1px solid #E6E6E6;
+        }
+    }
+
+    .statsgrid-grouping-header {
+        text-align: left;
+        padding: 6px;
+        border-bottom: none !important;
+        border-top: 1px solid #E6E6E6;
+
+        &.region {
+
+        }
+
+        &.sources {
+            color: #ffffff;
+            background-color: #000000;
+
+            span {
+                font-weight: normal;
+            }
+        }
+    }
+
 }
 
 

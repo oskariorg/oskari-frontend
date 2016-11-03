@@ -24,6 +24,7 @@ Oskari.clazz.define(
     }, {
         afterStart: function (sandbox) {
             var me = this;
+
             // create the StatisticsService for handling ajax calls and common functionality.
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox);
             sandbox.registerService(statsService);
@@ -42,6 +43,10 @@ Oskari.clazz.define(
 
             if (!cel.hasClass('statsgrid')) {
                 cel.addClass('statsgrid');
+            }
+
+            if(conf.showLegend === true) {
+                me.renderPublishedLegend(conf);
             }
         },
         eventHandlers: {
@@ -66,19 +71,16 @@ Oskari.clazz.define(
              * @method userinterface.ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
                     this.visible = false;
                     return;
                 }
                 var me = this;
-                var sandbox = this.getSandbox();
                 var isShown = event.getViewState() !== 'close';
                 this.visible = isShown;
                 var conf = this.getConfiguration();
                 if(isShown) {
-
                     var defaultConf = {
                         search: true,
                         extraFeatures: true,
@@ -168,10 +170,6 @@ Oskari.clazz.define(
                     return;
                 }
 
-                // TODO: check that we got colors
-                var regions = [];
-                var vis = [];
-
                 var flyout = me.getFlyout();
 
                 // format regions to groups for url
@@ -190,7 +188,7 @@ Oskari.clazz.define(
 
                 var state = service.getStateService();
 
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
                     if(err) {
                         me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
                         return;
@@ -198,7 +196,7 @@ Oskari.clazz.define(
                     flyout.getLegendFlyout(
                     {
                         callbacks: {
-                            show: function(popup) {
+                            show: function() {
                                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
                                 var container = jQuery('<div class="accordion-published"></div>');
 
@@ -335,7 +333,7 @@ Oskari.clazz.define(
             });
 
             // Fixes chosen selection go upper when chosen element is near by window bottom
-            element.on('chosen:showing_dropdown', function(event, params) {
+            element.on('chosen:showing_dropdown', function(event) {
                 var chosen_container = jQuery(event.target).next('.chosen-container');
                 var dropdown = chosen_container.find('.chosen-drop');
                 var dropdown_top = dropdown.offset().top - $(window).scrollTop();
@@ -346,14 +344,13 @@ Oskari.clazz.define(
                     chosen_container.addClass('chosen-drop-up');
                 }
             });
-            element.on('chosen:hiding_dropdown', function(event, params) {
+            element.on('chosen:hiding_dropdown', function(event) {
                 jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
             });
         },
 
         getState: function () {
             var me = this;
-            var view = me.getView();
 
             var service = this.statsService.getStateService();
             var state = {

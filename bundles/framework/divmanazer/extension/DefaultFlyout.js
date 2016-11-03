@@ -44,12 +44,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         _calcSideLabelPositions: function(){
             var me = this;
             var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
-            sidelabels.each(function(index, sidelabel) {
-                if(index + 1 === sidelabels.length) {
-                    jQuery(this).css('bottom', 0);
+            var heights = 0;
+            jQuery.each(sidelabels.get().reverse(), function(index, sidelabel) {
+                if(index === 0) {
+                    jQuery(this).css('bottom', heights);
+                    heights += jQuery(this).height() + 10;
                 }
                 else {
-                    jQuery(this).css('bottom', (index + 1) * (jQuery(this).height() + 10 ) + 'px');
+                    jQuery(this).css('bottom', heights + 'px');
+                    heights += jQuery(this).height() + 10;
                 }
             });
         },
@@ -61,7 +64,23 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         addSideTool: function(label, callback){
             var me = this;
             var sidelabel = this.getSideLabel(label);
+
+            var textWidth = function (el)
+            {
+                // Only create the dummy element once
+                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
+                var width = calc.html(el.html()).width();
+                // Empty out the content until next time - not needed, but cleaner
+                calc.remove();
+                return width;
+            };
+
+            var textSize = textWidth(sidelabel.find('label'));
+
             this.container.parents('.oskari-flyout').append(sidelabel);
+
+            sidelabel.css('height', (textSize + sidelabel.find('.icon').height() + 10) + 'px');
+
             if(typeof callback === 'function') {
                 sidelabel.on('click', function() {
                     callback(jQuery(sidelabel));

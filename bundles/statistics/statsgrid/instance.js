@@ -25,16 +25,8 @@ Oskari.clazz.define(
             layerId: null
         };
     }, {
-        afterStart: function (sandbox) {
+        _addRequestHandlers: function(sandbox){
             var me = this;
-
-            var tile = this.plugins['Oskari.userinterface.Tile']
-            var cel = tile.container;
-
-            if (!cel.hasClass('statsgrid')) {
-                cel.addClass('statsgrid');
-            }
-
             var tooltipRequestHandler = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler',
                 me
@@ -52,12 +44,21 @@ Oskari.clazz.define(
                 'StatsGrid.IndicatorsRequest',
                 indicatorRequestHandler
             );
+        },
+        afterStart: function (sandbox) {
+            var me = this;
 
-            var locale = me.getLocalization(),
-                mapModule = sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                );
-            me.mapModule = mapModule;
+            var tile = this.plugins['Oskari.userinterface.Tile'];
+            var cel = tile.container;
+
+            if (!cel.hasClass('statsgrid')) {
+                cel.addClass('statsgrid');
+            }
+
+            me._addRequestHandlers(sandbox);
+
+            var locale = me.getLocalization();
+            me.mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             // create the StatisticsService for handling ajax calls
             // and common functionality.
@@ -111,8 +112,8 @@ Oskari.clazz.define(
                 gridConf,
                 locale
             );
-            mapModule.registerPlugin(gridPlugin);
-            mapModule.startPlugin(gridPlugin);
+            me.mapModule.registerPlugin(gridPlugin);
+            me.mapModule.startPlugin(gridPlugin);
             me.gridPlugin = gridPlugin;
 
             // Register classification plugin for map.
@@ -123,8 +124,8 @@ Oskari.clazz.define(
                 },
                 locale
             );
-            mapModule.registerPlugin(classifyPlugin);
-            mapModule.startPlugin(classifyPlugin);
+            me.mapModule.registerPlugin(classifyPlugin);
+            me.mapModule.startPlugin(classifyPlugin);
             me.classifyPlugin = classifyPlugin;
 
             var dataSourceRequestHandler = Oskari.clazz.create(
@@ -189,7 +190,7 @@ Oskari.clazz.define(
             /**
              * @method AfterMapMoveEvent
              */
-            AfterMapMoveEvent: function (event) {
+            AfterMapMoveEvent: function () {
                 var view = this.getView();
                 if (view.isVisible && view._layer) {
                     this._createPrintParams(view._layer);
@@ -203,7 +204,7 @@ Oskari.clazz.define(
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              *
              */
-            MapLayerEvent: function (event) {
+            MapLayerEvent: function () {
                 // Enable tile when stats layer is available
                 this._enableTile();
             }
@@ -299,9 +300,8 @@ Oskari.clazz.define(
          *
          * @method setState
          * @param {Object} state bundle state as JSON
-         * @param {Boolean} ignoreLocation true to NOT set map location based on state
          */
-        setState: function (state, ignoreLocation) {
+        setState: function (state) {
             this.state = jQuery.extend({}, {
                 indicators: [],
                 layerId: null
@@ -346,11 +346,8 @@ Oskari.clazz.define(
                 state = me.state;
 
             // If there's no view or it's not visible, nothing to do here!
-            if (!view || !view.isVisible) {
-                return null;
-            }
-            // If the state is null or an empty object, nothing to do here!
-            if (!state || jQuery.isEmptyObject(state)) {
+            // Or if the state is null or an empty object, nothing to do here!
+            if (!view || !view.isVisible || !state || jQuery.isEmptyObject(state)) {
                 return null;
             }
 

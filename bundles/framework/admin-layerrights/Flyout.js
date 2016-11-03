@@ -368,8 +368,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 });
                 tbody.append(dataRow);
                 tbody.find(dataRow).each(function(index, val) {
-                    var controlCell = dataRow.find('input.checkboxCtrl'),
-                        checkboxes = dataRow.find('input.' + controlCell.parent().attr('class').split(' '));
+                    var controlCell = dataRow.find('input.checkboxCtrl');
+                    var checkboxes = dataRow.find('input:not(.checkboxCtrl)');
                     controlCell.change(function() {
                         checkboxes.prop('checked', !checkboxes.prop('checked'));
                     });
