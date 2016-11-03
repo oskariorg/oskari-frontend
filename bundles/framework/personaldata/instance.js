@@ -87,7 +87,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
 
             me.started = true;
 
-            var conf = this.conf;
+            var conf = this.conf || {};
+            this.conf = conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName),
                 p;

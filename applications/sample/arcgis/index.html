@@ -7,7 +7,9 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
 </script>
 
-<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<link rel="stylesheet" type="text/css" href="../../../resources/css/portal.css">
+<link rel="stylesheet" type="text/css" href="../../../resources/css/forms.css">
+<link rel="stylesheet" type="text/css" href="../../../resources/icons.css" />
 <style type="text/css">
 @media screen {
   body {
@@ -58,17 +60,14 @@
 	src="../../../bundles/bundle.js">
 </script>
 
-<!--  OPENLAYERS -->
-<script type="text/javascript"
-	src="../../../packages/openlayers/startup.js">
+<script type="text/javascript">
+jQuery(document).ready(function () {
+    Oskari.app.loadAppSetup('appsetupconfig.json', function() {
+        jQuery('#mapdiv').append('Unable to start');
+    });
+});
 </script>
 
-	<!--
-<script type="text/javascript" src="full.js">
-</script>
--->
-<script type="text/javascript" src="index.js">
-</script>
 
 <!-- ############# /Javascript ################# -->
 </body>
