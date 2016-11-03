@@ -59,12 +59,13 @@ Oskari.registerLocalization(
         "legend": {
             "title": "Classification",
             "noActive": "No data selected, select data to view classification.",
-            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
+            "noEnough": "Dataset is too small for classification. Try another dataset or edit search options."
         },
         "parameters": {
             "sex": "Gender",
             "year": "Year",
             "regionset": "Region"
-        }
+        },
+        "datatable": "Table"
     }
 });

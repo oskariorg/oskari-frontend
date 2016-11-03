@@ -135,7 +135,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             sortBy.find('.orderTitle').addClass('selected');
             order.addClass('asc');
 
-            //content.css('height', '160px');
             content.css('width', '180px');
         });
 

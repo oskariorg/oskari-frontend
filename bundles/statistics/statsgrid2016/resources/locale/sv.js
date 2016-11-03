@@ -66,7 +66,8 @@ Oskari.registerLocalization(
             "sex": "Kön",
             "year": "År",
             "regionset": "Regionindelning"
-        }
+        },
+        "datatable": "Bord"
 
     }
 });

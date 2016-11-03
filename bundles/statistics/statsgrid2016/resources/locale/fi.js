@@ -66,7 +66,8 @@ Oskari.registerLocalization(
             "sex": "Sukupuoli",
             "year": "Vuosi",
             "regionset": "Aluevalinta"
-        }
+        },
+        "datatable": "Taulukko"
 
     }
 });
