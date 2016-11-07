@@ -306,6 +306,7 @@ Oskari.clazz.define(
                 return;
             }
             var state = service.getStateService();
+            console.log(state);
 
             service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
 
@@ -333,9 +334,13 @@ Oskari.clazz.define(
                 var selectionsText = '';
 
                 if(config.grid !== true || config.showLegend !== false) {
+                    var linkButton = '';
+                    if(state.indicators.length>1) {
+                        linkButton = '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>';
+                    }
                     selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch, function(text){
                         me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                            '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
+                            linkButton +
                             '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
                     });
                 }
