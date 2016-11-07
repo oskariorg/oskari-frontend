@@ -385,7 +385,7 @@ Oskari.clazz.define(
          * FIXME: remove this when oskari components have own working selection
          * @param {Jquery.element} element
          */
-        addChosenHacks: function(element){
+        addChosenHacks: function(element, makeOverEl){
             // Fixes chosen selection to visible when rendering chosen small height elements
             element.on('chosen:showing_dropdown', function () {
 
@@ -412,6 +412,30 @@ Oskari.clazz.define(
             element.on('chosen:hiding_dropdown', function(event) {
                 jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
             });
+
+
+            if(makeOverEl) {
+                element.on('chosen:showing_dropdown', function(event) {
+                    var chosen_container = jQuery(event.target).next('.chosen-container');
+                    var offset = chosen_container.offset();
+                    var dropdown = chosen_container.find('.chosen-drop');
+                    dropdown.css('position', 'fixed');
+                    dropdown.css('width', '300px');
+                    dropdown.css('top', (offset.top + chosen_container.height()) + 'px');
+                    dropdown.css('left', offset.left + 'px');
+                });
+
+                element.on('chosen:hiding_dropdown', function(event) {
+                    var chosen_container = jQuery(event.target).next('.chosen-container');
+                    var offset = chosen_container.offset();
+                    var dropdown = chosen_container.find('.chosen-drop');
+                    dropdown.css('position', '');
+                    dropdown.css('width', '');
+                    dropdown.css('top', '');
+                    dropdown.css('left', '');
+                });
+            }
+
         },
 
         getState: function () {

@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				disable_search_threshold: 10,
 				width: '100%'
 			});
-			me.instance.addChosenHacks(jqSelect);
+			me.instance.addChosenHacks(jqSelect, true);
 
 			jqSelect.on('change', function() {
 				var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
