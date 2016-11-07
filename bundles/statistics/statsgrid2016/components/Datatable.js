@@ -181,9 +181,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
 
-                    var selectionsText = me.service.getSelectionsText(ind, locale.panels.newSearch);
+                    me.service.getSelectionsText(ind, locale.panels.newSearch, function(text){
+                        tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + text).attr('title', Oskari.getLocalized(indicator.name) + text);
+                    });
 
-                    tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + selectionsText).attr('title', Oskari.getLocalized(indicator.name) + selectionsText);
+
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                     // If not published then show close icon

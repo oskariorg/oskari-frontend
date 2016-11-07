@@ -333,12 +333,13 @@ Oskari.clazz.define(
                 var selectionsText = '';
 
                 if(config.grid !== true || config.showLegend !== false) {
-                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch);
+                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch, function(text){
+                        me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                            '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
+                            '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                    });
                 }
 
-                me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                    '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
-                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + selectionsText + '</div>');
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
                 me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
                     link.handler();
