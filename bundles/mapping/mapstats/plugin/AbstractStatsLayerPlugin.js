@@ -171,10 +171,22 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
                 if(err) {
                     Oskari.log('AbstractStatsLayerPlugin').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                    me.__updateLayerParams(mapLayer, {
+                        VIS_NAME: layer.getLayerName(),
+                        VIS_ATTR: '',
+                        VIS_CLASSES: '',
+                        VIS_COLORS: ''
+                    });
                     return;
                 }
                 var classify = service.getClassificationService().getClassification(data);
                 if(!classify) {
+                    me.__updateLayerParams(mapLayer, {
+                        VIS_NAME: layer.getLayerName(),
+                        VIS_ATTR: '',
+                        VIS_CLASSES: '',
+                        VIS_COLORS: ''
+                    });
                     return;
                 }
 
