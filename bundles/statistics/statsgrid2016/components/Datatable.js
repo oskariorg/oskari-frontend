@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
 
             // If not published, then show area selection
             if(me.instance.getConfiguration().areaSelection !== false) {
-                params.getRegionSelection(tableHeader.find('.selection'), null, true);
+                params.getRegionSelection(tableHeader.find('.selection'), null, true, true);
             }
             // Else remove area selection
             else {
