@@ -62,20 +62,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             this.datasources.push(ds);
         },
 
-        getSelectionsText: function(indicator, locale) {
+        getSelectionsText: function(indicator, locale, callback) {
             var me = this;
             var selectionsTexts = [];
-            for(var sel in indicator.selections){
-                var val = indicator.selections[sel];
-                if(sel==='regionset') {
-                    selectionsTexts.push(me.getRegionsets(parseFloat(val)).name);
-                } else {
-                    var name = (locale.selectionValues[sel] && locale.selectionValues[sel][val]) ? locale.selectionValues[sel][val] : val;
-                    selectionsTexts.push(name);
+
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind){
+                for(var sel in indicator.selections){
+                    var val = indicator.selections[sel];
+
+                    ind.selectors.forEach(function(selector, index) {
+                        selector.allowedValues.forEach(function(value) {
+                            if(val === (value.id || value)) {
+                                var name = value.name || value.id || value;
+                                var optName = (locale.selectionValues[selector.id] && locale.selectionValues[selector.id][name]) ? locale.selectionValues[selector.id][name] : name;
+
+                                selectionsTexts.push(optName);
+                            }
+
+                        });
+                    });
+
                 }
-            }
-            var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
-            return selectionsText;
+
+                var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
+                if(typeof callback === 'function') {
+                    callback(selectionsText);
+                }
+            });
         },
         /**
          * Returns datasource {id, name, type} as object.

@@ -430,9 +430,6 @@
 				"Import-Bundle": {
 					"statsgrid": {
 						"bundlePath": "../../../packages/statistics/"
-					},
-					"geostats": {
-						"bundlePath": "../../../packages/libraries/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []

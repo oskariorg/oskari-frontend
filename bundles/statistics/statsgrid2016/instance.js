@@ -21,9 +21,14 @@ Oskari.clazz.define(
             flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
         };
         this.visible = false;
+
+        this._templates= {
+            publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
+        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
+
             // create the StatisticsService for handling ajax calls and common functionality.
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox);
             sandbox.registerService(statsService);
@@ -43,6 +48,66 @@ Oskari.clazz.define(
             if (!cel.hasClass('statsgrid')) {
                 cel.addClass('statsgrid');
             }
+
+            if(conf.showLegend === true) {
+                me.renderPublishedLegend(conf);
+            }
+            if(me.hasPublished() && conf.grid) {
+                me.renderToggleButtons();
+                me.changePosition({top:0,left:0});
+            }
+        },
+        changePosition: function(position){
+            var me = this;
+            position = position || {};
+
+            var flyout =  me.getFlyout().getEl().parent().parent();
+
+            if(typeof position.top === 'number' || typeof position.top === 'string'){
+                flyout.css('top', position.top);
+            }
+            if(typeof position.left === 'number' || typeof position.left === 'string'){
+                flyout.css('left', position.left);
+            }
+        },
+        renderToggleButtons: function(remove){
+            var me = this;
+            if(remove){
+                jQuery('.statsgrid-published-toggle-buttons').remove();
+                return;
+            }
+            var toggleButtons = me._templates.publishedToggleButtons.clone();
+            var map = toggleButtons.find('.map');
+            var table = toggleButtons.find('.table');
+            table.addClass('active');
+
+            map.attr('title', me.getLocalization().published.showMap);
+            table.attr('title', me.getLocalization().published.showTable);
+
+            map.bind('click', function(){
+                if(!map.hasClass('active')) {
+                    table.removeClass('active');
+                    map.addClass('active');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'close', 'StatsGrid']);
+                }
+            });
+
+            table.bind('click', function(){
+                if(!table.hasClass('active')) {
+                    map.removeClass('active');
+                    table.addClass('active');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'detach', 'StatsGrid']);
+                }
+            });
+
+            jQuery('body').append(toggleButtons);
+        },
+        hasPublished: function(){
+            var map = jQuery('#contentMap');
+            if(map.hasClass('mapPublishMode') ||  map.hasClass('published')) {
+                return true;
+            }
+            return false;
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
@@ -69,11 +134,9 @@ Oskari.clazz.define(
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
                     this.visible = false;
-
                     return;
                 }
                 var me = this;
-                var sandbox = this.getSandbox();
                 var isShown = event.getViewState() !== 'close';
                 this.visible = isShown;
                 var conf = this.getConfiguration();
@@ -167,10 +230,6 @@ Oskari.clazz.define(
                     return;
                 }
 
-                // TODO: check that we got colors
-                var regions = [];
-                var vis = [];
-
                 var flyout = me.getFlyout();
 
                 // format regions to groups for url
@@ -189,7 +248,7 @@ Oskari.clazz.define(
 
                 var state = service.getStateService();
 
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
+                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
                     if(err) {
                         me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
                         return;
@@ -197,7 +256,7 @@ Oskari.clazz.define(
                     flyout.getLegendFlyout(
                     {
                         callbacks: {
-                            show: function(popup) {
+                            show: function() {
                                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
                                 var container = jQuery('<div class="accordion-published"></div>');
 
@@ -274,12 +333,13 @@ Oskari.clazz.define(
                 var selectionsText = '';
 
                 if(config.grid !== true || config.showLegend !== false) {
-                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch);
+                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch, function(text){
+                        me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                            '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
+                            '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                    });
                 }
 
-                me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                    '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>'+
-                    '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + selectionsText + '</div>');
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
                 me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
                     link.handler();
@@ -334,7 +394,7 @@ Oskari.clazz.define(
             });
 
             // Fixes chosen selection go upper when chosen element is near by window bottom
-            element.on('chosen:showing_dropdown', function(event, params) {
+            element.on('chosen:showing_dropdown', function(event) {
                 var chosen_container = jQuery(event.target).next('.chosen-container');
                 var dropdown = chosen_container.find('.chosen-drop');
                 var dropdown_top = dropdown.offset().top - $(window).scrollTop();
@@ -345,14 +405,13 @@ Oskari.clazz.define(
                     chosen_container.addClass('chosen-drop-up');
                 }
             });
-            element.on('chosen:hiding_dropdown', function(event, params) {
+            element.on('chosen:hiding_dropdown', function(event) {
                 jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
             });
         },
 
         getState: function () {
             var me = this;
-            var view = me.getView();
 
             var service = this.statsService.getStateService();
             var state = {

@@ -40,14 +40,12 @@ function(instance, config) {
      * @return {String}
      */
     _getReverseGeocodeUrl: function(lon, lat) {
-        var me = this;
-        if(me._reverseGeocodingIds){
-            return this.urls.reverseGeocode+'&epsg=' +
-                this._sandbox.getMap().getSrsName()+'&lon='+lon+'&lat='+lat+'&channel_ids='+me._reverseGeocodingIds;
-        } else {
-            return this.urls.reverseGeocode+'&epsg='+this._sandbox.getMap().getSrsName()+'&lon='+lon+'&lat='+lat;
+        var url = this.urls.reverseGeocode + '&epsg=' + this._sandbox.getMap().getSrsName() + '&lon=' + lon + '&lat=' + lat;
+        if(this._reverseGeocodingIds) {
+            // '&scale=' + this._sandbox.getMap().getScale();
+            url += '&channel_ids=' + this._reverseGeocodingIds + '&scale=5000';
         }
-
+        return url;
     },
     /**
      * Retrieves retreaves reverse geocoding result to input lon, lat
@@ -95,6 +93,7 @@ function(instance, config) {
                 var loca = {};
                 loca.channelId = location.channelId;
                 loca.name = location.name;
+                loca.type = location.type;
                 result.push(loca);
             });
         }

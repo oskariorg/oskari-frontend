@@ -206,6 +206,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 if(stats && typeof stats.renderPublishedLegend === 'function') {
                     stats.renderPublishedLegend({showLegend:false});
                 }
+                if(stats && typeof stats.renderToggleButtons === 'function') {
+                    stats.renderToggleButtons(true);
+                }
             }
         },
         /**

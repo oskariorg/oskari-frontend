@@ -45,6 +45,10 @@ Fixes for getClosestZoomLevel(min, max) function:
 - Now uses the max/min scales of the map as default value for the missing parameter.
 - Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
 
+Added ol3 map following parameters and values for better user experience (map tiles are loaded faster):
+- loadTilesWhileInteracting: true
+- loadTilesWhileAnimating: true
+
 ### core/AbstractLayer
 
 Fixed isInScale() when minScale was missing.

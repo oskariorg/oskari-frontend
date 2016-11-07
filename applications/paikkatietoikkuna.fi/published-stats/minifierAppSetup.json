@@ -93,14 +93,11 @@
             }
         }
     },{
-        "bundlename": "publishedgrid",
+        "bundlename": "statsgrid",
         "metadata": {
             "Import-Bundle": {
-                "publishedgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
+                "statsgrid": {
+                    "bundlePath": "../../../packages/statistics/"
                 }
             }
         }

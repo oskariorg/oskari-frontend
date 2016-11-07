@@ -651,10 +651,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             service.getReverseGeocode(
                 // Success callback
                 function (response) {
-                    var hasResponse = (response && response.length > 0 && response[0].name && response[0].channelId) ? true : false;
+                    var hasResponse = (response && response.length > 0) ? true : false;
+
+                    // typestä title jos ei ole localea
 
                     if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]){
-                        me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
+                        me._reverseGeocodeLabel.html('');
+//                        me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
+                        for (var i = 0; i < response.length; i++) {
+                            var r = response[i];
+                            var title = locale[r.channelId].label;
+                            if (title == undefined) {
+                                title = r.type;
+                            }
+                            me._reverseGeocodeLabel.append("<div>" + title + "<u>" + r.name + "</u></div>")
+                        }
                     }
                 },
                 // Error callback

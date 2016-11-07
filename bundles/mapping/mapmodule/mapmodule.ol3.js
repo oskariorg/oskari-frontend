@@ -65,7 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keyboardEventTarget: document,
                 target: this.getMapElementId(),
                 controls: controls,
-                interactions: interactions
+                interactions: interactions,
+                loadTilesWhileInteracting: true,
+                loadTilesWhileAnimating: true
             });
 
             var projection = ol.proj.get(me.getProjection());
@@ -495,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             /* insert at */
 
             if (index === layerIndex) {
-                return
+                return;
             } else if (index === layerColl.getLength()) {
                 /* to top */
                 layerColl.removeAt(layerIndex);

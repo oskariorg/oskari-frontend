@@ -249,4 +249,33 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
     .statsgrid-legend-flyout-published div.accordion div.accordion_panel.open div.header {
       background-color: #F3F3F3; }
 
+/** Toggle buttons */
+.statsgrid-published-toggle-buttons {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 10px;
+  bottom: 10px; }
+  .statsgrid-published-toggle-buttons .map {
+    background-color: #3c3c3c;
+    float: left;
+    height: 36px;
+    width: 36px;
+    background-image: url("../images/map_dark.png");
+    cursor: pointer; }
+    .statsgrid-published-toggle-buttons .map.active {
+      background-color: #ffffff;
+      background-image: url("../images/map_light.png"); }
+  .statsgrid-published-toggle-buttons .table {
+    background-color: #3c3c3c;
+    float: left;
+    height: 36px;
+    width: 36px;
+    background-image: url("../images/table_dark.png");
+    cursor: pointer; }
+    .statsgrid-published-toggle-buttons .table.active {
+      background-color: #ffffff;
+      background-image: url("../images/table_light.png"); }
+  .statsgrid-published-toggle-buttons .clear {
+    clear: both; }
+
 /*# sourceMappingURL=style.css.map */

@@ -30,6 +30,9 @@ Oskari.registerLocalization(
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL" : {
                     "label": "Osoite: "
+                },
+                "TM35LEHTIJAKO_CHANNEL": {
+                    "label": "Karttalehti: "
                 }
             },
             "tooltip": {

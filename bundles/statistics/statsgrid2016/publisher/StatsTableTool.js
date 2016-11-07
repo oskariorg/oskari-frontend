@@ -83,18 +83,30 @@ function() {
         var me = this,
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
-            request,
-            elLeft;
+            request;
 
         me.state.enabled = enabled;
 
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            stats.renderPublishedLegend({showLegend:true});
+        }
+
         if(enabled === true) {
             me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'detach', 'StatsGrid']);
+            stats.changePosition({
+                top: 0,
+                left: jQuery('.basic_publisher').width() + jQuery('#sidebar').width() + jQuery('#sidebar').position().left + jQuery('.basic_publisher').position().left
+            });
         } else {
             me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'close', 'StatsGrid']);
         }
 
-        Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid').renderPublishedLegend({showLegend:true});
+        if(stats) {
+            stats.renderToggleButtons(!enabled);
+        }
+
+
 
         if (typeof me.__handlers.MapSizeChanged === 'function') {
             me.__handlers.MapSizeChanged();

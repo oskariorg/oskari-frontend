@@ -10,6 +10,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		select : _.template('<div class="parameter"><div class="label">${label}</div><div class="select"><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div><div class="clear"></div></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
+
+	/****** PUBLIC METHODS ******/
+
+	/**
+	 * @method  @public  clean clean params
+	 */
 	clean : function() {
 		if(!this.container) {
 			return;
@@ -17,16 +23,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		this.container.remove();
 		this.container = null;
 	},
-	addMetadata : function(el, label, value) {
-		if(!value) {
-			// Nothing to show
-			return;
-		}
-		el.append(this.__templates.data({
-			name : label,
-			data : value
-		}));
-	},
+
+	/**
+	 * @method  @public indicatorSelected  handle indicator selected
+	 * @param  {Object} el       jQuery element
+	 * @param  {Integer} datasrc indicator datasource
+	 * @param  {String} indId    indicator id
+	 * @param  {Object} config   config
+	 * @param  {Object} elements elements
+	 */
 	indicatorSelected : function(el, datasrc, indId, config, elements) {
 		var me = this;
 		var locale = me.instance.getLocalization();
@@ -79,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				// add empty selection to show placeholder
 				jqSelect.append('<option></option>');
 
-				selector.allowedValues.forEach(function(val, i) {
+				selector.allowedValues.forEach(function(val) {
 					var name = val.name || val.id || val;
 					var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
 
@@ -107,8 +112,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			if(selections.length>0) {
 				jqSelect.parent().parent().addClass('margintop');
 			}
-			// regionSelection cannot be part of selections. It should just change the region set on the map.
-			// dynamically created queries will break if it's part of the selections sent to server when fetching data.
 
 			if(elements.btn) {
 				elements.btn.setHandler(function() {
@@ -128,6 +131,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			}
 		});
 	},
+
 	/**
 	 * Get region selection.
 	 * @method  @public getRegionSelection
@@ -155,7 +159,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		var allowedRegionsets = [];
 
 		var addAllowedRegionSets = function(indicatorRegionset){
-			var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset,id) {
+			var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset) {
 				return regionset.id === indicatorRegionset;
 			});
 
@@ -205,7 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			me.instance.addChosenHacks(jqSelect);
 
 			jqSelect.on('change', function() {
-				var log = Oskari.log('Oskari.statistics.statsgrid.RegionsetSelection');
+				var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
 				var value = jQuery(this).val();
 				log.info('Selected region ' + value);
 				me.service.getStateService().setRegionset(value);
