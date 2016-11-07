@@ -164,6 +164,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             me.grid.setAutoHeightHeader(30);
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
+
+            var state = me.service.getStateService();
+            var activeIndicator = state.getActiveIndicator();
+            if(activeIndicator) {
+                me.grid.selectColumn(activeIndicator.hash);
+            }
         };
         if(!indicators.length) {
             done();
@@ -185,7 +191,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                         tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + text).attr('title', Oskari.getLocalized(indicator.name) + text);
                     });
 
-
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                     // If not published then show close icon
@@ -199,7 +204,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     else {
                         tableHeader.find('.icon').remove();
                     }
-
 
                     var sortBy = tableHeader.find('.sortby');
                     sortBy.find('.orderTitle').html(gridLoc.orderBy);
@@ -231,7 +235,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     sortBy.attr('data-descending', false);
                     sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
                     order.addClass('desc');
-
 
                     tableHeader.bind('click', function(){
                         me.service.getStateService().setActiveIndicator(ind.hash);
