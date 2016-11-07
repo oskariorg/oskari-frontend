@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				selections.push(jqSelect);
 			});
 
-			var jqSelect = me.getRegionSelection(cont,indicator, true);
+			var jqSelect = me.getRegionSelection(cont,indicator);
 			// Add margin if there is selections
 			if(selections.length>0) {
 				jqSelect.parent().parent().addClass('margintop');
@@ -138,10 +138,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	 *
 	 * @param  {Object} cont      jQuery element
 	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
-	 * @param {Boolean} firstSelected if setted true then first option is selected
 	 * @return {Object}           jQuery element
 	 */
-	getRegionSelection: function(cont, indicator, firstSelected) {
+	getRegionSelection: function(cont, indicator) {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
@@ -180,9 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		}
 		// No indicators, so this selection is showed by Datatable. DAtatable needs to show all regionsets of selected indicators.
 		else {
-
 			var indicatorRegions = me.service.getSelectedIndicatorsRegions();
-
 			indicatorRegions.forEach(function(indicatorRegionset) {
 				addAllowedRegionSets(indicatorRegionset);
 			});
@@ -220,13 +217,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				log.info('Selected region ' + value);
 				me.service.getStateService().setRegionset(value);
 			});
-
-			// Select second if firs selected is true, first option is empty because of placeholder text
-			if(firstSelected === true) {
-				jqSelect.find('option:nth-child(2)').prop('selected', true);
-				jqSelect.trigger('change');
-				jqSelect.trigger('chosen:updated');
-			}
 		}
 
 		return jqSelect;
