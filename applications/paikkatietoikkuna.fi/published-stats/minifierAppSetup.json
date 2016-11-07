@@ -96,7 +96,7 @@
         "bundlename": "statsgrid",
         "metadata": {
             "Import-Bundle": {
-                "publishedgrid": {
+                "statsgrid": {
                     "bundlePath": "../../../packages/statistics/"
                 }
             }
