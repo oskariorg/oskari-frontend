@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
 	 * @return {Object}           jQuery element
 	 */
-	getRegionSelection: function(cont, indicator) {
+	getRegionSelection: function(cont, indicator, addWidthHack) {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				disable_search_threshold: 10,
 				width: '100%'
 			});
-			me.instance.addChosenHacks(jqSelect, true);
+			me.instance.addChosenHacks(jqSelect, addWidthHack);
 
 			jqSelect.on('change', function() {
 				var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
