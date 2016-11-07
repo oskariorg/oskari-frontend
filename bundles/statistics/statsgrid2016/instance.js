@@ -306,7 +306,6 @@ Oskari.clazz.define(
                 return;
             }
             var state = service.getStateService();
-            console.log(state);
 
             service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
 
