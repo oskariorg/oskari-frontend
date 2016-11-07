@@ -54,10 +54,28 @@ Oskari.clazz.define(
             }
             if(me.hasPublished() && conf.grid) {
                 me.renderToggleButtons();
+                me.changePosition({top:0,left:0});
             }
         },
-        renderToggleButtons: function(){
+        changePosition: function(position){
             var me = this;
+            position = position || {};
+
+            var flyout =  me.getFlyout().getEl().parent().parent();
+
+            if(typeof position.top === 'number' || typeof position.top === 'string'){
+                flyout.css('top', position.top);
+            }
+            if(typeof position.left === 'number' || typeof position.left === 'string'){
+                flyout.css('left', position.left);
+            }
+        },
+        renderToggleButtons: function(remove){
+            var me = this;
+            if(remove){
+                jQuery('.statsgrid-published-toggle-buttons').remove();
+                return;
+            }
             var toggleButtons = me._templates.publishedToggleButtons.clone();
             var map = toggleButtons.find('.map');
             var table = toggleButtons.find('.table');
