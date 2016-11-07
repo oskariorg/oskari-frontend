@@ -197,8 +197,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				jqSelect.append('<option></option>');
 			}
 
+			var currentRegion = me.service.getStateService().getRegionset();
+
 			allowedRegionsets.forEach(function(regionset) {
-				jqSelect.append(me.__templates.option(regionset));
+				var optionEl = jQuery(me.__templates.option(regionset));
+				if(regionset.id == currentRegion) {
+					optionEl.attr('selected', 'selected');
+				}
+				jqSelect.append(optionEl);
 			});
 
 			jqSelect.chosen({

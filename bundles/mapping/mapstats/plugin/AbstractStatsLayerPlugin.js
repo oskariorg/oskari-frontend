@@ -158,6 +158,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             }
             var state = service.getStateService();
             var ind = state.getActiveIndicator();
+
             if(!ind) {
                 return;
             }
