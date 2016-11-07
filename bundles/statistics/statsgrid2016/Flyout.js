@@ -80,9 +80,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
             config = config || {};
 
-             var map = jQuery('#contentMap');
-            if(map.hasClass('mapPublishMode') ||  map.hasClass('published')) {
-                this.getEl().parent().parent().find('.oskari-flyout-title p').html(locale.datatable);
+            if(this.instance.hasPublished()) {
+                var parent = this.getEl().parent().parent();
+                parent.find('.oskari-flyout-title p').html(locale.datatable);
+                // Remove close button from published
+                parent.find('.oskari-flyouttools').remove();
             }
 
             if(config.mouseEarLegend === true) {

@@ -67,7 +67,11 @@ Oskari.registerLocalization(
             "year": "Vuosi",
             "regionset": "Aluevalinta"
         },
-        "datatable": "Taulukko"
+        "datatable": "Taulukko",
+        "published": {
+            "showMap": "Näytä kartta",
+            "showTable": "Näytä taulukko"
+        }
 
     }
 });

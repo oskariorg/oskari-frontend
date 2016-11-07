@@ -21,6 +21,10 @@ Oskari.clazz.define(
             flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
         };
         this.visible = false;
+
+        this._templates= {
+            publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
+        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -48,6 +52,44 @@ Oskari.clazz.define(
             if(conf.showLegend === true) {
                 me.renderPublishedLegend(conf);
             }
+            if(me.hasPublished() && conf.grid) {
+                me.renderToggleButtons();
+            }
+        },
+        renderToggleButtons: function(){
+            var me = this;
+            var toggleButtons = me._templates.publishedToggleButtons.clone();
+            var map = toggleButtons.find('.map');
+            var table = toggleButtons.find('.table');
+            table.addClass('active');
+
+            map.attr('title', me.getLocalization().published.showMap);
+            table.attr('title', me.getLocalization().published.showTable);
+
+            map.bind('click', function(){
+                if(!map.hasClass('active')) {
+                    table.removeClass('active');
+                    map.addClass('active');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'close', 'StatsGrid']);
+                }
+            });
+
+            table.bind('click', function(){
+                if(!table.hasClass('active')) {
+                    map.removeClass('active');
+                    table.addClass('active');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'detach', 'StatsGrid']);
+                }
+            });
+
+            jQuery('body').append(toggleButtons);
+        },
+        hasPublished: function(){
+            var map = jQuery('#contentMap');
+            if(map.hasClass('mapPublishMode') ||  map.hasClass('published')) {
+                return true;
+            }
+            return false;
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {

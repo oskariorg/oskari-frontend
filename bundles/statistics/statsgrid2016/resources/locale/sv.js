@@ -67,7 +67,11 @@ Oskari.registerLocalization(
             "year": "År",
             "regionset": "Regionindelning"
         },
-        "datatable": "Bord"
+        "datatable": "Tabell",
+        "published": {
+            "showMap": "Visa karta",
+            "showTable": "Show tabell"
+        }
 
     }
 });

@@ -66,6 +66,10 @@ Oskari.registerLocalization(
             "year": "Year",
             "regionset": "Region"
         },
-        "datatable": "Table"
+        "datatable": "Table",
+        "published": {
+            "showMap": "Show map",
+            "showTable": "Show table"
+        }
     }
 });
