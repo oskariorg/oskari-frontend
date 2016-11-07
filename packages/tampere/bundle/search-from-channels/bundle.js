@@ -31,17 +31,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.searchfromchannels.SearchFromChannels
 			{
 	            "type": "text/javascript",
 	            "src": "../../../../bundles/tampere/search-from-channels/service/ChannelOptionService.js"
-	        }, 
-	        /* plugin */
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
-	        }, 
-	        /* event */
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/tampere/search-from-channels/event/FinishedDrawingEvent.js"
-	        }, 
+	        },
 	        /* instance */
 	        {
 				"type" : "text/javascript",
