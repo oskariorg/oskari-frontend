@@ -2,6 +2,11 @@
 
 ## 1.40.0
 
+### coordinatetool
+
+Added support for multiple search channel results.
+TM35 channel support and localization.
+
 ### postprocessor
 
 Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
