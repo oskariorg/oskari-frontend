@@ -188,7 +188,7 @@ Oskari.clazz.define(
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetWfsSearchResult';
+                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
             }
 
             // Default tab priority
