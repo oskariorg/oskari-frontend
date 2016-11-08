@@ -54,6 +54,10 @@ jQuery(document).ready(function() {
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function (appSetup) {
+            var mapfull = appSetup.startupSequence[0].metadata['Import-Bundle'];
+              mapfull.mapstats.bundlePath = "/Oskari/packages/mapping/ol3/";
+              var statsgrid = appSetup.startupSequence[8].metadata['Import-Bundle'];
+              statsgrid.statsgrid.bundlePath = "/Oskari/packages/statistics/";
             var app = Oskari.app;
             if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');

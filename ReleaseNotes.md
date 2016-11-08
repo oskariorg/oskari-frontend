@@ -16,6 +16,11 @@ Published map:
 - new legend component, user can change active indicator for link (link is visible if there are more than one indicators)
 - thematic map table is visible (if publisher wanted)
 
+### coordinatetool
+
+Added support for multiple search channel results.
+TM35 channel support and localization.
+
 ### postprocessor
 
 Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
