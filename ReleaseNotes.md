@@ -2,6 +2,20 @@
 
 ## 1.40.0
 
+### statistic/statsgrid2016
+
+``New bundle`` to show thematic maps and their datas. This is the first version. Later this developed more functions.
+
+Normal map mode:
+- thematic map selections are now showed by Flyout
+- user can select wanted parameters and regionset
+- legend shows active indicator by ExtraFlyout
+- can publish thematic map
+
+Published map:
+- new legend component, user can change active indicator for link (link is visible if there are more than one indicators)
+- thematic map table is visible (if publisher wanted)
+
 ### postprocessor
 
 Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
