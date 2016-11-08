@@ -204,13 +204,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				jqSelect.append(optionEl);
 			});
 
-			jqSelect.chosen({
-				allow_single_deselect : true,
-				disable_search_threshold: 10,
-				width: '100%'
-			});
-			me.instance.addChosenHacks(jqSelect, addWidthHack);
-
 			if(changeEvent) {
 				jqSelect.on('change', function() {
 					var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
@@ -219,6 +212,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 					me.service.getStateService().setRegionset(value);
 				});
 			}
+			// trigger change only then when active region is null
+			else {
+				jqSelect.on('change', function() {
+					var currentRegion = me.service.getStateService().getRegionset();
+					if(!currentRegion) {
+						var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
+						var value = jQuery(this).val();
+						log.info('Selected region ' + value);
+						me.service.getStateService().setRegionset(value);
+					}
+				});
+			}
+
+			// If current regionset is null then auto select first option
+			if(!currentRegion) {
+				jqSelect.find('option:nth-child(2)').prop('selected', true);
+				jqSelect.trigger('change');
+			}
+
+			jqSelect.chosen({
+				allow_single_deselect : true,
+				disable_search_threshold: 10,
+				width: '100%'
+			});
+
+			me.instance.addChosenHacks(jqSelect, addWidthHack);
 		}
 
 		return jqSelect;
