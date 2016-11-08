@@ -2,6 +2,15 @@
 
 ## 1.40.0
 
+### framework/postprocessor for ol2/ol3
+
+Fixed nationalCadastralReferenceHighlight param handling for o2/ol3.
+Now map zoomed right to cadastral reference and highlight also working.
+
+For example usage:
+- add postprocessor bundle to view
+- open map with param nationalCadastralReferenceHighlight=<CODE>
+
 ### statistic/statsgrid2016
 
 ``New bundle`` to show thematic maps and their datas. This is the first version. Later this developed more functions.
