@@ -40,6 +40,10 @@ Fixed wfs layer index calculation.
 
 ### divmanazer
 
+### Popup
+
+Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
+
 #### ExtraFlyout
 
 ``New component`` to show a movable "window" similar to Defaultflyout. The rendering and position can be injected for the component.
@@ -81,6 +85,11 @@ Added ol3 map following parameters and values for better user experience (map ti
 ### core/AbstractLayer
 
 Fixed isInScale() when minScale was missing.
+
+### admin-layerrights
+
+Sends changed layerrights in chunks of 100 to the server if number of changed permissions is greater than 100.
+Added checkboxes to toggle all permissions in one column.
 
 ### admin-layerselector
 
