@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             cellTh: jQuery('<th></th>'),
             cellTd: jQuery('<td></td>'),
             row: jQuery('<tr></tr>'),
-            checkboxCtrl: jQuery('<td><input class="checkboxCtrl" type="checkbox" /></td>'),
+            checkboxCtrl: jQuery('<input id="checkboxCtrl" type="checkbox" />'),
             checkBox: jQuery('<input type="checkbox" />'),
             name: jQuery('<span class="layer-name"></span>')
         };
@@ -308,6 +308,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 checkboxes,
                 columnsLoc = this.instance.getLocalization('rights');
 
+                controlRow.addClass("control");
+
+
             // Create headers
             var thCell = me._templates.cellTh.clone();
             thCell.html(columnsLoc.name);
@@ -315,15 +318,21 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             jQuery.each(layerRightsJSON[0].permissions, function(index, header) {
                 var thCell = me._templates.cellTh.clone();
+                var tdCell = me._templates.cellTd.clone();
+                var checkboxCtrl = me._templates.checkboxCtrl.clone();
                 var headerName = header.name;
                 if (typeof columnsLoc[header.name] !== 'undefined') {
                     headerName = columnsLoc[header.name];
                 }
+                checkboxCtrl.addClass(header.name);
+                tdCell.append(checkboxCtrl);
                 thCell.html(headerName);
-
+                controlRow.append(tdCell);
                 headerRow.append(thCell);
             });
             thead.append(headerRow);
+            thead.append(controlRow);
+
 
             // Create rows
             jQuery.each(layerRightsJSON, function(index, layerRight) {
@@ -331,7 +340,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     dataRow = me._templates.row.clone(),
                     cell = null,
                     tooltip = null,
-                    checkboxCtrlRow = me._templates.checkboxCtrl.clone(),
                     dataCell = me._templates.cellTd.clone();
 
                 if (layer) {
@@ -343,8 +351,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 cell.attr('data-namespace', layerRight.namespace);
                 cell.html(layerRight.name);
                 dataCell.append(cell);
-                checkboxCtrlRow.addClass(layerRight.name);
-                dataRow.append(checkboxCtrlRow);
                 dataRow.append(dataCell);
 
                 // lets loop through permissions
@@ -355,7 +361,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     cell = me._templates.checkBox.clone();
                     cell.attr('data-right', permission.id);
-                    cell.addClass(layerRight.name);
+                    cell.addClass(permission.name);
                     if (allow === true) {
                         cell.attr('checked', 'checked');
                     }
@@ -367,18 +373,18 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                 });
                 tbody.append(dataRow);
-                tbody.find(dataRow).each(function(index, val) {
-                    var controlCell = dataRow.find('input.checkboxCtrl');
-                    var checkboxes = dataRow.find('input:not(.checkboxCtrl)');
-                    controlCell.change(function() {
-                        checkboxes.prop('checked', !checkboxes.prop('checked'));
-                    });
-                });
-
 
             });
+            me.togglePermissionsColumn(thead, tbody);
 
             return table;
+        },
+        togglePermissionsColumn: function(thead, tbody) {
+         var controlCell = thead.find('#checkboxCtrl');
+         controlCell.change(function() {
+           var checkboxes = tbody.find('input.'+ this.className);
+             checkboxes.prop('checked', !checkboxes.prop('checked'));
+         });
         },
 
         /**
