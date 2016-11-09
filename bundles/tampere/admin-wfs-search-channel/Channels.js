@@ -222,11 +222,6 @@ Oskari.clazz.define(
                     timestamp : timeStamp,
                     epsg : epsg
                 },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/json;charset=UTF-8");
-                    }
-                },
                 url: ajaxUrl + 'action_route=GetMapLayers&lang=' + Oskari.getLang(),
                 success: function (data) {
                     var allLayers = data.layers;
@@ -268,11 +263,6 @@ Oskari.clazz.define(
                     type: 'GET',
                     dataType: 'json',
                     url: url,
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType('application/j-son;charset=UTF-8');
-                        }
-                    },
                     success: function (data) {
                         jQuery(el).find('select[name=choose-param-for-search]').empty();
 
@@ -347,7 +337,7 @@ Oskari.clazz.define(
             if(channels) {
                 for (i = 0; i < channels.length; i += 1) {
                     channel = channels[i];
-                    matches = !hasFilter || channel.topic[Oskari.getLang()].toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                    matches = !hasFilter || channel.locale[Oskari.getLang()].name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
                     if (matches) {
                         list.append(
                             me._populateItem(
@@ -407,7 +397,7 @@ Oskari.clazz.define(
                 uid = parseInt(item.attr('data-id')),
                 channel = me._getChannel(uid);
 
-            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel.topic[Oskari.getLang()]))) {
+            if (!window.confirm(me._getLocalization('confirm_delete').replace('{channel}', channel.locale[Oskari.getLang()].name))) {
                 return;
             }
 
@@ -439,7 +429,7 @@ Oskari.clazz.define(
 
             item.attr('data-id', channel.id);
             item.find('h3').html(
-                channel.topic[Oskari.getLang()]
+                channel.locale[Oskari.getLang()].name
             );
             return item;
         },
@@ -547,35 +537,38 @@ Oskari.clazz.define(
 
                 var dataObject = {
                     'id': frm.find("[name=id]").val(),
-                    'choose-wfs-layer': frm.find("[name=choose-wfs-layer]").val(),
-                    'topic' : {},
-                    'desc': {},
-                    'params' : [],
-                    'is-default' : frm.find("[name=details-default]").is(":checked"),
-                    'is-address' : frm.find("[name=details-isaddress]").is(":checked")
+                    'wfsLayerId': frm.find("[name=choose-wfs-layer]").val(),
+                    'locale' : {},
+                    'paramsForSearch' : [],
+                    'isDefault' : frm.find("[name=details-default]").is(":checked"),
+                    'config' : {}
                 };
 
+                // TODO: setup config properly instead of isAddress
+                if(frm.find("[name=details-isaddress]").is(":checked")) {
+                    dataObject.config.handler = 'SimpleAddress';
+                }
+
                 jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
-                    dataObject.topic[item] = frm.find("[name=details-topic-"+item+"]").val();
-                    dataObject.desc[item] = frm.find("[name=details-desc-"+item+"]").val();
+                    dataObject.locale[item] = {
+                        name : frm.find("[name=details-topic-"+item+"]").val(),
+                        desc : frm.find("[name=details-desc-"+item+"]").val()
+                    }
                 });
 
                 jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
-                    dataObject.params.push(jQuery(this).val());
+                    dataObject.paramsForSearch.push(jQuery(this).val());
                 });
 
-                url += "id="+dataObject["id"];
-                url += "&wfsLayerId="+dataObject["choose-wfs-layer"];
-                url += "&desc="+JSON.stringify(dataObject.desc);
-                url += "&topic="+JSON.stringify(dataObject.topic);
-                url += "&paramsForSearch="+JSON.stringify(dataObject.params);
-                url += "&isDefault="+dataObject["is-default"];
-                url += "&isAddress="+dataObject["is-address"];
+               // stringified JSON for request
+               dataObject.locale = JSON.stringify(dataObject.locale);
+               dataObject.paramsForSearch = JSON.stringify(dataObject.paramsForSearch);
+               dataObject.config = JSON.stringify(dataObject.config);
 
                 jQuery.ajax({
                     type: frm.attr('method'),
                     url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
-                    data: url,
+                    data: dataObject,
                     success: function (data) {
                         me._closeForm(frm);
                         me.fetchChannels(me.container);
@@ -610,12 +603,11 @@ Oskari.clazz.define(
                 fragment.find("[name=id]").val(channel.id);
                 fragment.find("[name=choose-wfs-layer]").val(channel.wfsId).trigger("change");
                 fragment.find("[name=details-default]").attr('checked', channel.is_default);
-                fragment.find("[name=details-isaddress]").attr('checked', channel.is_address);
-                $.each(channel.topic, function(lang, text) {
-                    fragment.find("[name=details-topic-"+lang+"]").val(text);
-                });
-                $.each(channel.desc, function(lang, text) {
-                    fragment.find("[name=details-desc-"+lang+"]").val(text);
+                // TODO: setup config properly
+                fragment.find("[name=details-isaddress]").attr('checked', !!channel.config.handler);
+                $.each(channel.locale, function(lang, text) {
+                    fragment.find("[name=details-topic-"+lang+"]").val(text.name);
+                    fragment.find("[name=details-desc-"+lang+"]").val(text.desc);
                 });
                 var paramsSelect =  fragment.find("[name=choose-param-for-search]");
                 $.each(channel.params_for_search, function(index, text) {

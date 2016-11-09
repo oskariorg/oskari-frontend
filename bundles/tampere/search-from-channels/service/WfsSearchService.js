@@ -53,17 +53,12 @@ function (searchUrl) {
         jQuery.ajax({
             dataType : "json",
             type : "POST",
-            beforeSend: function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json");
-                }
-            },
             url : this._searchUrl,
             data : {
                 "searchKey" : searchString,
                 "Language" : lang,
                 "epsg" : epsg,
-                "channelIds" : JSON.stringify(channelIds)
+                "channels" : channelIds.join()
             },
             error : onError,
             success : onSuccess

@@ -181,14 +181,14 @@ Oskari.clazz.define(
             if (me.conf && me.conf.optionUrl) {
                 optionAjaxUrl = me.conf.optionUrl;
             } else {
-                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel';
+                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=SearchOptions';
             }
 
             var searchAjaxUrl = null;
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetWfsSearchResult';
+                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
             }
 
             // Default tab priority
@@ -339,7 +339,7 @@ Oskari.clazz.define(
             field.setIds('oskari_searchfromchannels_forminput', 'oskari_searchfromchannels_forminput_searchassistance');
 
             field.bindChange(function (event) {
-                if (me.state === null) {
+                if (!me.state) {
                     me.state = {};
                 }
                 var value = field.getValue();
@@ -381,7 +381,7 @@ Oskari.clazz.define(
 
                 me.optionPanel.find("input[name='channelChkBox']").each( function () {
                     if(jQuery(this).is(":checked")){
-                        channelIds.push(parseInt(jQuery(this).val()));
+                        channelIds.push(jQuery(this).val());
                     }
                 });
 
@@ -1021,8 +1021,8 @@ Oskari.clazz.define(
         * @private
         */
         _sortAdvanced: function(a, b){
-            var topicA = a.topic[Oskari.getLang()];
-            var topicB = b.topic[Oskari.getLang()];
+            var topicA = a.locale.name;
+            var topicB = b.locale.name;
             if(topicA === null){
                 topicA = '';
             }
@@ -1075,15 +1075,13 @@ Oskari.clazz.define(
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
 
-                value = dataField["wfsId"];
-                text = dataField.topic[Oskari.getLang()];
+                value = dataField.id;
+                text = dataField.locale.name;
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');
                 newCheckboxDef.attr('name', "channelChkBox");
-                newCheckboxDef.attr('value', dataField["id"]);
-                if(dataField["is_default"]){
-                    newCheckboxDef.attr('checked', true);
-                }
+                newCheckboxDef.attr('value', dataField.id);
+                newCheckboxDef.attr('checked', !!dataField.isDefault);
                 newCheckbox.find('label.searchFromChannelsTypeText').append(text);
                 newRow.find('.checkboxes').append(newCheckbox);
 
