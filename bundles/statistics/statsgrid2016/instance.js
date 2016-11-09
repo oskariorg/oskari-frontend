@@ -25,6 +25,8 @@ Oskari.clazz.define(
         this._templates= {
             publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
         };
+
+        this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
     }, {
         afterStart: function (sandbox) {
             var me = this;
