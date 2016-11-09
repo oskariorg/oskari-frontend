@@ -541,9 +541,13 @@ Oskari.clazz.define(
                     'locale' : {},
                     'paramsForSearch' : [],
                     'isDefault' : frm.find("[name=details-default]").is(":checked"),
-                    // TODO: setup config properly instead of isAddress
-                    'isAddress' : frm.find("[name=details-isaddress]").is(":checked")
+                    'config' : {}
                 };
+
+                // TODO: setup config properly instead of isAddress
+                if(frm.find("[name=details-isaddress]").is(":checked")) {
+                    dataObject.config.handler = 'SimpleAddress';
+                }
 
                 jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
                     dataObject.locale[item] = {
@@ -559,6 +563,7 @@ Oskari.clazz.define(
                // stringified JSON for request
                dataObject.locale = JSON.stringify(dataObject.locale);
                dataObject.paramsForSearch = JSON.stringify(dataObject.paramsForSearch);
+               dataObject.config = JSON.stringify(dataObject.config);
 
                 jQuery.ajax({
                     type: frm.attr('method'),
