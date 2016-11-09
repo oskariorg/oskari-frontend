@@ -188,7 +188,7 @@ Oskari.clazz.define(
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetWfsSearchResult';
+                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
             }
 
             // Default tab priority
@@ -381,7 +381,7 @@ Oskari.clazz.define(
 
                 me.optionPanel.find("input[name='channelChkBox']").each( function () {
                     if(jQuery(this).is(":checked")){
-                        channelIds.push(parseInt(jQuery(this).val()));
+                        channelIds.push(jQuery(this).val());
                     }
                 });
 
@@ -1075,7 +1075,7 @@ Oskari.clazz.define(
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
 
-                value = dataField["wfsId"];
+                value = dataField.id;
                 text = dataField.locale.name;
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');

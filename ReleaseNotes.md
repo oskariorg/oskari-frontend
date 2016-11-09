@@ -5,15 +5,19 @@
 ### framework/postprocessor for ol2/ol3
 
 Fixed nationalCadastralReferenceHighlight param handling for o2/ol3.
-Now map zoomed right to cadastral reference and highlight also working.
+Now map is zoomed correctly to cadastral reference and highlight also working.
 
-For example usage:
-- add postprocessor bundle to view
+Example usage:
+- make sure postprocessor bundle is part of the minified app (if using minified code)
+- requires KTJ_KII_CHANNEL search channel
 - open map with param nationalCadastralReferenceHighlight=<CODE>
 
-### statistic/statsgrid2016
+### statistics/statsgrid2016
 
-``New bundle`` to show thematic maps and their datas. This is the first version. Later this developed more functions.
+``New bundle`` to show thematic maps and their datas. This will replace the previous version of thematic maps.
+The API has changed as well as the server interface. The implementation doesn't include all the features from
+the previous UI, but it will be developed further in the near future to have most if not all the features of the
+ old one and more. The previous version under statistics/statsgrid has been deprecated
 
 Normal map mode:
 - thematic map selections are now showed by Flyout
@@ -27,12 +31,8 @@ Published map:
 
 ### coordinatetool
 
-Added support for multiple search channel results.
+Added support for multiple search channel results for reverse geocoding.
 TM35 channel support and localization.
-
-### postprocessor
-
-Fixed nationalCadastralReferenceHighlight parameter map zooming and highlighting.
 
 ### mapping/mapwfs2 - WfsLayerPlugin for ol3
 
@@ -40,15 +40,19 @@ Fixed wfs layer index calculation.
 
 ### divmanazer
 
+### Popup
+
+Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
+
 #### ExtraFlyout
 
-``New component`` to show Defaultflyout style flyout, what you can define for example own renderer, position calculatation and so on.
+``New component`` to show a movable "window" similar to Defaultflyout. The rendering and position can be injected for the component.
 
 #### grid
 
-New ``setAutoHeightHeader`` function. If some margin is given for function param then autoresize header column when rendering it.
+New ``setAutoHeightHeader`` function. If margin is given as function parameter the header column is resized automatically on render.
 
-New ``setGroupingHeader`` function. Function can be used when wanting added grouping headers. Function takes a param array of objects. If array not contains enought cells or colspans then header lates cell is merged.
+New ``setGroupingHeader`` function. Function can be used for grouping table columns under a shared header. Function takes a param array of objects. If array does not contains enought items to match the table columns the last header is spanned for the rest of the table columns.
 For example:
 ```javascript
 var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
@@ -72,6 +76,7 @@ Fixes for getClosestZoomLevel(min, max) function:
 - If either parameter was missing the current zoomlevel was returned.
 - Now uses the max/min scales of the map as default value for the missing parameter.
 - Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
+For the user this means that layers that only have one or the other restriction for min/max scale now works. Previously they didn't.
 
 Added ol3 map following parameters and values for better user experience (map tiles are loaded faster):
 - loadTilesWhileInteracting: true
@@ -80,6 +85,11 @@ Added ol3 map following parameters and values for better user experience (map ti
 ### core/AbstractLayer
 
 Fixed isInScale() when minScale was missing.
+
+### admin-layerrights
+
+Sends changed layerrights in chunks of 100 to the server if number of changed permissions is greater than 100.
+Added checkboxes to toggle all permissions in one column.
 
 ### admin-layerselector
 
