@@ -720,7 +720,7 @@ Oskari.clazz.define(
                     if (popup.isInMobileMode) {
                         //are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
-                            popup.popup.close();
+                            popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
@@ -799,7 +799,7 @@ Oskari.clazz.define(
                         popup = this._popups[pid];
                         delete this._popups[pid];
                         if(popup.type === 'mobile') {
-                            popup.popup.close();
+                            popup.popup.close(true);
                         } else {
                             popup.popup.destroy();
                         }

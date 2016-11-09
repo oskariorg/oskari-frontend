@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.40
+
+## [mod] [rpc] InfoBox.ShowInfoBoxRequest
+
+Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+
 ## 1.39
 
 #### [add] [rpc] New MapModulePlugin.MapLayerUpdateRequest Request
