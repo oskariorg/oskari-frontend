@@ -703,7 +703,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           var coordinateDisplayDegminsecY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
 
             //X
-            coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lon).toFixed(9));
+            coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lat).toFixed(9));
 
             coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesY);
             coordinateDisplayDegmin.find('span.minutesX').html(degmin.minutesY);
@@ -712,7 +712,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinateDisplayDegminsec.find('span.minutesX').html(degminsec.minutesY);
             coordinateDisplayDegminsec.find('span.secondsX').html(degminsec.secondsY);
             //Y
-            coordinateDisplayDegY.find('span.degreesY').html(parseFloat(data.lonlat.lat).toFixed(9));
+            coordinateDisplayDegY.find('span.degreesY').html(parseFloat(data.lonlat.lon).toFixed(9));
 
             coordinateDisplayDegminY.find('span.degreesY').html(degmin.degreesX);
             coordinateDisplayDegminY.find('span.minutesY').html(degmin.minutesX);
