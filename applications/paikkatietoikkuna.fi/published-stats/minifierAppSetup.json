@@ -169,8 +169,7 @@
                 }
             }
         }
-    },
-        {
+    }, {
         "bundlename" : "rpc",
         "bundleinstancename" : "rpc",
         "metadata" : {

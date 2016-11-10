@@ -593,36 +593,45 @@
                     }
                 }
             }
-        },
-	  {
-		"bundlename": "content-editor",
-		"metadata": {
-		  "Import-Bundle": {
-			"content-editor": {
-			  "bundlePath": "../../../packages/tampere/bundle/"
+    	}, {
+	        "bundlename" : "feedbackService",
+	        "bundleinstancename" : "feedbackService",
+	        "metadata" : {
+	            "Import-Bundle" : {
+	                "feedbackService" : {
+	                    "bundlePath" : "../../../packages/framework/bundle/"
+	                }
+	            }
+	        }
+        }, {
+			"bundlename": "content-editor",
+			"metadata": {
+			  "Import-Bundle": {
+				"content-editor": {
+				  "bundlePath": "../../../packages/tampere/bundle/"
+				}
+			  }
 			}
-		  }
-		}
 	  },
 	  {
-		"bundlename": "search-from-channels",
-		"metadata": {
-		  "Import-Bundle": {
-			"search-from-channels": {
-			  "bundlePath": "../../../packages/tampere/bundle/"
+			"bundlename": "search-from-channels",
+			"metadata": {
+			  "Import-Bundle": {
+				"search-from-channels": {
+				  "bundlePath": "../../../packages/tampere/bundle/"
+				}
+			  }
 			}
-		  }
-		}
 	  },
 	  {
-		"bundlename": "admin-wfs-search-channel",
-		"metadata": {
-		  "Import-Bundle": {
-			"admin-wfs-search-channel": {
-			  "bundlePath": "../../../packages/tampere/bundle/"
+			"bundlename": "admin-wfs-search-channel",
+			"metadata": {
+			  "Import-Bundle": {
+				"admin-wfs-search-channel": {
+				  "bundlePath": "../../../packages/tampere/bundle/"
+				}
+			  }
 			}
-		  }
-		}
 	  }
 	]
 }
