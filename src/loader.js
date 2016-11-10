@@ -107,13 +107,6 @@
         var appConfig = config || {};
 
         var globalExpose = {};
-
-        if(o.getLoaderMode() === 'dev') {
-            // config for dev mode
-            require.config({
-                urlArgs: "ts=" + (new Date()).getTime()
-            });
-        }
         // Listen to started bundles
         var result = {
             bundles : [],
