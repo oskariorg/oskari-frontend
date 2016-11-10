@@ -34,8 +34,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._popup = null;
         me._latInput = null;
         me._lonInput = null;
+        me._latLabel = null;
+        me._lonLabel = null;
         me._centerToCoordsBtn = null;
         me._reverseGeocodeLabel = null;
+        me._showReverseGeocodeCheckbox = false;
         me._dialog = null;
         me._projectionSelect = null;
         me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
@@ -50,16 +53,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <div class="margintop">'+
                 '           <div class="coordinate-label floatleft lat-label"></div>'+
                 '           <div class="floatleft"><input type="text" class="lat-input"></input></div>'+
+                '           <div class="coordinate-lat-container" style="margin-left:30%"></div>'+
                 '           <div class="clear"></div>'+
                 '       </div>'+
                 '       <div class="margintop">'+
                 '           <div class="coordinate-label floatleft lon-label"></div>'+
                 '           <div class="floatleft"><input type="text" class="lon-input"></input></div>'+
+                '           <div class="coordinate-lon-container" style="margin-left:30%"></div>'+
                 '           <div class="clear"></div>'+
                 '       </div>'+
                 '       <div class="margintop mousecoordinates-div"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   </div>'+
                 '   <div class="coordinatetool-divider"></div>'+
+                '   <div class="margintop reverseGeocodeContainer"> '+
+                '   </div> '+
                 '   <div class="margintop coordinatedisplay-emergencycall" style="display:none;">'+
                 '       <span class="coordinatedisplay-emergencycall-label"></span>'+
                 '       <span class="coordinatedisplay-emergencycall degreesY"></span>&deg;'+
@@ -68,10 +75,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <span class="coordinatedisplay-emergencycall degreesX"></span>&deg;'+
                 '       <span class="coordinatedisplay-emergencycall minutesX"></span>\' '+
                 '   </div>'+
-                '   <div class="margintop">'+
-                '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
-                '   </div>' +
-                '</div>')
+                '</div>'),
+                reverseGeocodeContainer: jQuery(
+                  '       <div class="geocodeControl"> '+
+                  '         <input class=reverseGeoCheckbox type="checkbox" />' +
+                  '         <label class="reverseGeocodeInfoText for="reverseGeoCheckbox"></label>' +
+                  '   <div class="margintop">'+
+                  '      <div class="reversegeocode-label floatleft reverseGeocode-label"></div>'+
+                  '   </div>' +
+                  '       </div> '
+                ),
+                coordinateFormatDisplayY: jQuery(
+                    '<div>'+
+                    '   <div class="coordinatedisplay-container">'+
+                    '       <div class="margintop coordinatedisplay-degy">'+
+                    '           <span class="coordinatedisplay-deg degreesY" style="text-align:center";></span>&deg;'+
+                    '           </br>  '+
+                    '       </div>'+
+                    '       <div class="margintop coordinatedisplay-degminy">'+
+                    '           <span class="coordinatedisplay-degmin degreesY" style="text-align:center";></span>&deg;'+
+                    '           <span class="coordinatedisplay-degmin minutesY" style="text-align:center";></span>\''+
+                    '           </br>  '+
+                    '       </div>'+
+                    '       <div class="margintop coordinatedisplay-degminsecy">'+
+                    '           <span class="coordinatedisplay-degminsec degreesY" style="text-align:center";></span>&deg;'+
+                    '           <span class="coordinatedisplay-degminsec minutesY" style="text-align:center";></span>\''+
+                    '           <span class="coordinatedisplay-degminsec secondsY" style="text-align:center";></span>\'\''+
+                    '           </br>  '+
+                    '       </div>'+
+                    '   </div>'+
+                    '</div>'
+                ),
+                coordinateFormatDisplayX: jQuery(
+                    '<div>'+
+                    '   <div class="coordinatedisplay-container" >'+
+                    '       <div class="margintop coordinatedisplay-degx">'+
+                    '           <span class="coordinatedisplay-deg degreesX" style="text-align:center";></span>&deg;' +
+                    '           </br>  '+
+                    '       </div>'+
+                    '       <div class="margintop coordinatedisplay-degminx">'+
+                    '           <span class="coordinatedisplay-degmin degreesX" style="text-align:center";></span>&deg;'+
+                    '           <span class="coordinatedisplay-degmin minutesX" style="text-align:center";></span>\''+
+                    '           </br>  '+
+                    '       </div>'+
+                    '       <div class="margintop coordinatedisplay-degminsecx">'+
+                    '           <span class="coordinatedisplay-degminsec degreesX" style="text-align:center";></span>&deg;'+
+                    '           <span class="coordinatedisplay-degminsec minutesX" style="text-align:center";></span>\''+
+                    '           <span class="coordinatedisplay-degminsec secondsX" style="text-align:center";></span>\'\''+
+                    '           </br>  '+
+                    '       </div>'+
+                    '   </div>'+
+                    '</div>'
+                )
         };
         me.spinnerStopTimer = null;
         //me.lastLonLat = null;
@@ -128,11 +183,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
-            me._reverseGeocodeLabel = popupContent.find('.reverseGeocode-label');
+            me._latLabel = popupContent.find('.lat-label');
+            me._lonLabel = popupContent.find('.lon-label');
+            var showLatLon = me._labelMetricOrDegrees();
 
-            popupContent.find('.coordinatetool__popup__conte nt').html(loc.popup.info);
-            popupContent.find('.lat-label').html(loc.compass.lat);
-            popupContent.find('.lon-label').html(loc.compass.lon);
+            popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
             popupContent.find('.mousecoordinates-label').html(loc.popup.showMouseCoordinates);
 
             var centerToCoordsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -209,6 +264,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
                 me._toolOpen = false;
                 me._showMouseCoordinates = false;
+                me._showReverseGeocodeCheckbox = false;
             });
 
             var themeColours = mapmodule.getThemeColours();
@@ -272,7 +328,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             if (this._showReverseGeocode){
                 this._updateReverseGeocode();
+                me._showReverseGeocodeContainer(popupContent);
             }
+        },
+        _showReverseGeocodeContainer: function( popupContent ) {
+          var me = this;
+          me._reverseGeocodeLabel = me._templates.reverseGeocodeContainer.find('div.reverseGeocode-label').clone();
+          var reverseArray = me._config.reverseGeocodingIds.split(',');
+          if(reverseArray.length > 2) {
+            me._showReverseGeocodeCheckbox = true;
+          }
+          if (me._showReverseGeocodeCheckbox) {
+            var geocodeController = me._templates.reverseGeocodeContainer.clone();
+            var geocodeContainer = popupContent.find('div.reverseGeocodeContainer');
+            var reverseGeoCheckbox = geocodeController.find('input.reverseGeoCheckbox');
+            geocodeController.find('label.reverseGeocodeInfoText').html(me._locale.reversegeocode.moreInfo);
+            reverseGeoCheckbox.on('change', function() {
+                if (this.checked) {
+                  geocodeController.append(me._reverseGeocodeLabel);
+                  geocodeController.find(me._reverseGeocodeLabel).show();
+                }
+                else {
+                  geocodeContainer.find(me._reverseGeocodeLabel).hide();
+                }
+            });
+            geocodeContainer.append(geocodeController);
+          } else {
+            popupContent.find('div.reverseGeocodeContainer').append(me._reverseGeocodeLabel);
+          }
         },
         /**
          * Add marker according to the coordinates given in coordinate popup.
@@ -513,7 +596,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _updateLonLat: function(data){
             var me = this,
                 conf = me._config;
-
             if (me._latInput && me._lonInput) {
                 var isSupported = (conf && _.isArray(conf.supportedProjections)) ? true : false;
                 var isDifferentProjection = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() && data.lonlat.lat!=0 && data.lonlat.lon!=0) ? true : false;
@@ -574,9 +656,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._lonInput.val(lon);
 
                 if (me._allowDegrees()) {
-                    me._coordinateTransformationExtension.updateCoordinateDisplay(data);
+                  me._updateCoordinateDisplay(data);
                 } else {
-                    me._coordinateTransformationExtension.updateCoordinateDisplay(null);
+                    me._updateCoordinateDisplay(null);
                 }
 
 
@@ -594,6 +676,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 }
             }
+        },
+        _updateCoordinateDisplay: function(data){
+          var me = this;
+          var latContainer = jQuery('div.coordinate-lat-container');
+          var lonContainer = jQuery('div.coordinate-lon-container');
+          if (!me.coordinateFormatDisplayX && !me.coordinateFormatDisplayY) {
+            me.coordinateFormatDisplayY = me._templates.coordinateFormatDisplayY.clone();
+            me.coordinateFormatDisplayX = me._templates.coordinateFormatDisplayX.clone();
+            latContainer.append(me.coordinateFormatDisplayX);
+            lonContainer.append(me.coordinateFormatDisplayY);
+          }
+
+          if (data) {
+          var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
+          var degminsec = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
+
+          var coordinateDisplayDeg = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
+          var coordinateDisplayDegmin = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
+          var coordinateDisplayDegminsec = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminsecx');
+
+          var coordinateDisplayDegY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
+          var coordinateDisplayDegminY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
+          var coordinateDisplayDegminsecY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
+
+            //X
+            coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lon).toFixed(9));
+
+            coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesY);
+            coordinateDisplayDegmin.find('span.minutesX').html(degmin.minutesY);
+
+            coordinateDisplayDegminsec.find('span.degreesX').html(degminsec.degreesY);
+            coordinateDisplayDegminsec.find('span.minutesX').html(degminsec.minutesY);
+            coordinateDisplayDegminsec.find('span.secondsX').html(degminsec.secondsY);
+            //Y
+            coordinateDisplayDegY.find('span.degreesY').html(parseFloat(data.lonlat.lat).toFixed(9));
+
+            coordinateDisplayDegminY.find('span.degreesY').html(degmin.degreesX);
+            coordinateDisplayDegminY.find('span.minutesY').html(degmin.minutesX);
+
+            coordinateDisplayDegminsecY.find('span.degreesY').html(degminsec.degreesX);
+            coordinateDisplayDegminsecY.find('span.minutesY').html(degminsec.minutesX);
+            coordinateDisplayDegminsecY.find('span.secondsY').html(degminsec.secondsX);
+
+            latContainer.show();
+            lonContainer.show();
+
+        }
+        else {
+          latContainer.hide();
+          lonContainer.hide();
+          return;
+        }
         },
         /**
          * Get the coordinates in degrees (do a backend transformation roundtrip if need be) and fill in the emergency call message
@@ -713,6 +847,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 } catch(error) {}
             }
             me._updateLonLat(data);
+            me._labelMetricOrDegrees();
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
@@ -870,6 +1005,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 }
             }
             el.addClass(styleClass);
+        },
+        _labelMetricOrDegrees: function(){
+          var me = this;
+          var loc = me._locale;
+          var conf = me._config;
+          var projection = me._previousProjection || me.getMapModule().getProjection;
+          if(!_.has(conf.projectionShowFormat, projection)){
+            console.log("not supported");
+          }else {
+            var showDegrees = (conf.projectionShowFormat[projection].format ==='degrees') ? true : false;
+          }
+          if(me._latLabel !== null && me._lonLabel !== null){
+            if(showDegrees){
+              me._latLabel.html(loc.compass.lat);
+              me._lonLabel.html(loc.compass.lon);
+            }else {
+              me._latLabel.html(loc.compass.n);
+              me._lonLabel.html(loc.compass.e);
+            }
+          }
+          return showDegrees;
         },
         /**
          * @method  @private _allowDegrees is degrees allowed to input fields
