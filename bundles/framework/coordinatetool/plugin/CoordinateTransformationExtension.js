@@ -310,10 +310,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         "minutesX": minutesX,
                         "minutesY": minutesY
                     };
-                    break;
                 case "sec":
-                    degreesX = parseInt(lon),
-                    degreesY = parseInt(lat),
+                    degreesX = parseInt(lon);
+                    degreesY = parseInt(lat);
                     minutesX = parseFloat((lon - degreesX) * 60);
                     minutesY = parseFloat((lat - degreesY) * 60);
                     secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
@@ -326,7 +325,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         "secondsX": secondsX,
                         "secondsY": secondsY
                     };
-                    break;
             }
 
         },
