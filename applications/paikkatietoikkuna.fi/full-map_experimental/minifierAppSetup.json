@@ -593,6 +593,36 @@
                     }
                 }
             }
-        }
+        },
+	  {
+		"bundlename": "content-editor",
+		"metadata": {
+		  "Import-Bundle": {
+			"content-editor": {
+			  "bundlePath": "../../../packages/tampere/bundle/"
+			}
+		  }
+		}
+	  },
+	  {
+		"bundlename": "search-from-channels",
+		"metadata": {
+		  "Import-Bundle": {
+			"content-editor": {
+			  "bundlePath": "../../../packages/tampere/bundle/"
+			}
+		  }
+		}
+	  },
+	  {
+		"bundlename": "admin-wfs-search-channel",
+		"metadata": {
+		  "Import-Bundle": {
+			"content-editor": {
+			  "bundlePath": "../../../packages/tampere/bundle/"
+			}
+		  }
+		}
+	  }
 	]
 }
