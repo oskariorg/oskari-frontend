@@ -103,10 +103,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-            if(me.markerPopups.MARKER_WITH_POPUP !== id && me.markerPopups.MARKER_WITH_POPUP !== undefined ){
-              event = me._sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(me.markerPopups.MARKER_WITH_POPUP, false);
-              me._sandbox.notifyAll(event);
-            }
             var currPopup = me._popups[id],
                 lon = null,
                 lat = null,
@@ -774,7 +770,7 @@ Oskari.clazz.define(
                     if (popup.isInMobileMode) {
                         //are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
-                            popup.popup.close();
+                            popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
@@ -861,7 +857,7 @@ Oskari.clazz.define(
                             if (popup.popup && popup.type === "desktop") {
                                 this.getMapModule().getMap().removeOverlay(popup.popup);
                             } else if (popup.popup && popup.type === "mobile") {
-                                popup.popup.close();
+                                popup.popup.close(true);
                             }
                         }
                     }

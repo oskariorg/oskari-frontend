@@ -30,7 +30,20 @@ http://wiki.open311.org/GeoReport_v2/#get-service-definition
 
 ## Parameter description
 
-http://wiki.open311.org/GeoReport_v2/
+
+### Oskari request parameter defaults
+There are also parameters, which are not in request api, but must be defined in Oskari publisher when creating the embedded map.
+
+Use Oskari map publishing method for to define these properties for the embedded map
+
+<u>Oskari embedded map configs for feedbackService</u>
+
+    1. **base url**, Open311 service base url
+    2. **api_key** value in Open311 post request - posting is not allowed without api key in general
+    3. **service extensions**,
+    Url, key and extensions are not visible to the user
+
+ --> http://wiki.open311.org/GeoReport_v2/#get-service-definition
 
 
 

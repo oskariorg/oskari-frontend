@@ -2,6 +2,10 @@
 
 ## 1.40.0
 
+## infobox
+
+Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+
 ### framework/postprocessor for ol2/ol3
 
 Fixed nationalCadastralReferenceHighlight param handling for o2/ol3.
@@ -10,7 +14,7 @@ Now map is zoomed correctly to cadastral reference and highlight also working.
 Example usage:
 - make sure postprocessor bundle is part of the minified app (if using minified code)
 - requires KTJ_KII_CHANNEL search channel
-- open map with param nationalCadastralReferenceHighlight=<CODE>
+- open map with param nationalCadastralReferenceHighlight=[CODE]
 
 ### statistics/statsgrid2016
 

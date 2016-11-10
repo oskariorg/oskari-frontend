@@ -87,6 +87,20 @@ No configuration is required, but there is few possible configurations:
 }
 ````
 
+- Option to configure XY-icon not visible (for example coordinatetools is used in published map and it's opened/closed by RPC request):
+````
+{
+    "noUI": true
+}
+````
+
+- Option to configure to show emergency call message:
+````
+{
+    "showEmergencyCallMessage" : true
+}
+````
+
 ## Requests the bundle sends out
 
 <table class="table">

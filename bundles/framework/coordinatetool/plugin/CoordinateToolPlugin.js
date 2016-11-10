@@ -268,6 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             });
 
             var themeColours = mapmodule.getThemeColours();
+            var popupCloseIcon = null;
 
             if (isMobile) {
                 var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
@@ -293,7 +294,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
                 }
 
-                var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
                     'bgColour': themeColours.activeColour,
                     'titleColour': themeColours.activeTextColour,
@@ -316,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
-                var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
                     'bgColour': themeColours.backgroundColour,
                     'titleColour': themeColours.textColour,
@@ -598,7 +599,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 conf = me._config;
             if (me._latInput && me._lonInput) {
                 var isSupported = (conf && _.isArray(conf.supportedProjections)) ? true : false;
-                var isDifferentProjection = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() && data.lonlat.lat!=0 && data.lonlat.lon!=0) ? true : false;
+                var isDifferentProjection = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() &&
+                    data.lonlat.lat !== 0 && data.lonlat.lon !==0) ? true : false;
                 var lat = parseFloat(data.lonlat.lat);
                 var lon = parseFloat(data.lonlat.lon);
 
@@ -787,18 +789,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 function (response) {
                     var hasResponse = (response && response.length > 0) ? true : false;
 
-                    // typestä title jos ei ole localea
-
+                    // type title is not found in locales
                     if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]){
                         me._reverseGeocodeLabel.html('');
-//                        me._reverseGeocodeLabel.html(locale[response[0].channelId].label + '<u>' + response[0].name + '</u>');
                         for (var i = 0; i < response.length; i++) {
                             var r = response[i];
                             var title = locale[r.channelId].label;
-                            if (title == undefined) {
+                            if (!title) {
                                 title = r.type;
                             }
-                            me._reverseGeocodeLabel.append("<div>" + title + "<u>" + r.name + "</u></div>")
+                            me._reverseGeocodeLabel.append("<div>" + title + "<u>" + r.name + "</u></div>");
                         }
                     }
                 },
@@ -1079,15 +1079,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
             var lon = me._lonInput.val(),
-                lat = me._latInput.val();
+                lat = me._latInput.val(),
+                dec = null;
 
             if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
-                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
+                dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
                 lon = dec[0];
                 lat = dec[1];
             }
             else if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
-                var dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
+                dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
                 lon = dec[0];
                 lat = dec[1];
             }

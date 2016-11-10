@@ -41,7 +41,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
             "src": "../../../../bundles/framework/feedbackService/request/PostFeedbackRequest.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/feedbackService/publisher/FeedbackServiceTool.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/feedbackService/request/PostFeedbackRequestHandler.js"
+        }],
+        "locales": [{
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/feedbackService/resources/locale/en.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/feedbackService/resources/locale/fi.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/feedbackService/resources/locale/sv.js"
         }]
     },
     "bundle": {

@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.40
+
+## [mod] [rpc] InfoBox.ShowInfoBoxRequest
+
+Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+
 ## 1.39
 
 #### [add] [rpc] New MapModulePlugin.MapLayerUpdateRequest Request
@@ -211,8 +217,6 @@ Posts user's feedback data to the Open311 service.
 
 For more detailed information, see documentation http://oskari.org/api/requests.
 
-feedback.open331.key=     setup is required in oskari server properties
-(api_key  of Open311 service)
 
 #### [add] [rpc] GetFeedbackServiceRequest
 

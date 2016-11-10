@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
                 me._popup.dialog.find('.projection-change-button-cancel').html(me._locale.projectionChange.buttons.cancel);
                 me._popup.dialog.find('.projection-change-button-ok').html(me._locale.projectionChange.buttons.ok);
 
-                me._projectionSelect =  me._popup.dialog.find('.projection-select')
+                me._projectionSelect =  me._popup.dialog.find('.projection-select');
                 me._populateProjectionSelect(me._projectionSelect);
                 me._projectionSelect.on('change', function(event) {
                     me._toggleProjectionSelectionConfirmation(true);
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
                 cssDisplay = display ? "block" : "none";
             me._popup.dialog.find('.coordinate-tool-projection-change-confirmation').css('display', cssDisplay);
             if (!display) {
-                me._resetProjectionSelect()
+                me._resetProjectionSelect();
             }
         },
         /**
