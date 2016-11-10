@@ -4,7 +4,14 @@
 
 Provides a service which listen ``GetFeedbackRequest`` , ``PostFeedbackRequest`` , ``GetFeedbackServiceRequest`` or ``GetFeedbackServiceDefinitionRequest`` requests. 
 
-When request has made the service send ajax call to Oskari backend and waiting to response. When response come then service sends ``FeedbackResultEvent``.
+When request has made the service send ajax call to Oskari backend and waits the response. Service sends ``FeedbackResultEvent`` , when response is received.
+
+
+## Bundle configuration
+
+No configuration is required, but service parameters must be defined when creating the embedded view in Oskari map publishing module.
+
+![screenshot](feedbackService.png)
 
 ## Dependencies
 

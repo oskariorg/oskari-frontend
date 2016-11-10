@@ -86,6 +86,9 @@ function () {
         var me = this,
             getFeedbackUrl = this.sandbox.getAjaxUrl() + 'action_route=Feedback';
 
+        // Add view uuid for the request for to access view metadata
+        //FIXME: Store current view uuid to Oskari globals and use it via Oskari.
+        params['uuid'] = window.controlParams['uuid'];
         jQuery.ajax({
             data: params,
             dataType : "json",

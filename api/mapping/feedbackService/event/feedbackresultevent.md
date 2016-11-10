@@ -46,7 +46,7 @@ Event occurs after above mentioned feedback request has been completed.
                   "data": {
                     "serviceList": [
                       {
-                        "keywords": "ilkivalta, penkit, istuimet,pöydät, katokset, grillit, lipputangot, roska-astiat",
+                        "keywords": "ilkivalta, penkit, istuimet,pï¿½ydï¿½t, katokset, grillit, lipputangot, roska-astiat",
                         "description": "Onko puistonpenkki heitetty ojaan tai infotaulu rikottu? Anna palautetta ilkivaltaan liittyen.",
                         "service_name": "Ilkivalta",
                         "group": "Puhtaanapito",
@@ -55,8 +55,8 @@ Event occurs after above mentioned feedback request has been completed.
                         "metadata": false
                       },
                       {
-                        "keywords": "roska,jäte",
-                        "description": "Ilmoita, jos havaitset suuria määriä roskia yleisillä alueilla, puistoissa tai metsissä.",
+                        "keywords": "roska,jï¿½te",
+                        "description": "Ilmoita, jos havaitset suuria mï¿½ï¿½riï¿½ roskia yleisillï¿½ alueilla, puistoissa tai metsissï¿½.",
                         "service_name": "Roskaaminen",
                         "group": "Puhtaanapito",
                         "type": "realtime",
@@ -117,18 +117,50 @@ Event occurs after above mentioned feedback request has been completed.
 <pre class="event-code-block">
 <code>
                          
-                var filterdata = {
-                  "start_date": "2016-04-01T00:00:00Z",
-                  "status": "open,closed"
-                };
-                var data = {                
-                "srs":"EPSG:3067",
-                "getServiceRequests": JSON.stringify(filterdata)
-                };
-                channel.postRequest('GetFeedbackRequest', [data]);
-            
-                               
-                               // response 
+           {
+             "success": true,
+             "data": {
+               "getFeedback": {
+                 "features": [
+                   {
+                     "geometry": {
+                       "coordinates": [
+                         [
+                           392999.4195,
+                           6673187.7602
+                         ],
+                         [
+                           393215.648,
+                           6673560.3227
+                         ],
+                         [
+                           393712.9862,
+                           6673869.0068
+                         ],
+                         [
+                           393738.1743,
+                           6673589.6925
+                         ]
+                       ],
+                       "type": "LineString"
+                     },
+                     "type": "Feature",
+                     "properties": {
+                       "address": "",
+                       "expected_datetime": "2016-10-27T14:27:07.289496Z",
+                       "service_name": "Other issue to be fixed",
+                       "service_request_id": "opowug4q",
+                       "description": "Vartiosaari kaipaa suojelua",
+                       "media_url": "",
+                       "status_notes": "",
+                       "agency_responsible": "",
+                       "requested_datetime": "2016-10-25T07:54:33.278138Z",
+                       "updated_datetime": "2016-10-25T07:54:33.278173Z",
+                       "service_code": "180",
+                       "service_notice": "",
+                       "status": "open"
+                     }
+                   },
                              
 
 </code>
@@ -138,22 +170,40 @@ Event occurs after above mentioned feedback request has been completed.
 
 <pre class="event-code-block">
 <code>
-                             var postdata = {
-                             "service_code": "180",
-                             "description": "Kampin bussipysäkillä on roskis täynnä",
-                             "first_name" : "Oskari",
-                             "last_name" : "Olematon",
-                             "lat": "6674188.748000",
-                             "long": "384717.640000"
-                             };
-                             var data = {                     
-                             "srs":"EPSG:3067",
-                             "postServiceRequest": JSON.stringify(postdata)
-                             };
-                             channel.postRequest('PostFeedbackRequest', [data]);
-            
-                               
-                               // response 
+                   {
+                     "success": true,
+                     "data": {
+                       "postFeedback": [
+                         {
+                           "address": "",
+                           "expected_datetime": "2016-10-27T17:01:04.681370Z",
+                           "service_name": "Other issue to be fixed",
+                           "service_request_id": "x1pevj2d",
+                           "description": "Kampin bussipysÃ¤killÃ¤ on roskakori tÃ¤ynnÃ¤",
+                           "media_url": "",
+                           "status_notes": "",
+                           "long": 25.0357,
+                           "agency_responsible": "",
+                           "extended_attributes": {
+                             "geometry": {
+                               "coordinates": [
+                                 25.0357,
+                                 60.2379
+                               ],
+                               "type": "Point",
+                               "srid": 4326
+                             },
+                             "media_urls": []
+                           },
+                           "requested_datetime": "2016-10-25T10:28:30.665129Z",
+                           "updated_datetime": "2016-10-25T10:28:30.665178Z",
+                           "service_code": "180",
+                           "lat": 60.2379,
+                           "service_notice": "",
+                           "status": "open"
+                         }
+                       ]
+                     },
                              
 
 </code>
