@@ -428,7 +428,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                     field: 'name',
                     error: loc.categoryName
                 });
-            } else if (this.hasIllegalChars(values.name)) {
+            } else if (Oskari.util.sanitize(values.name) !== values.name) {
                 errors.push({
                     field: 'name',
                     error: loc.categoryNameIllegal
@@ -487,7 +487,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         },
         getCategoryFromFormValues: function (values) {
             var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
-            category.setName(values.name);
+            category.setName(Oskari.util.sanitize(values.name));
             category.setId(values.id);
 
             category.setDotSize(values.dot.size);
