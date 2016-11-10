@@ -217,8 +217,6 @@ Posts user's feedback data to the Open311 service.
 
 For more detailed information, see documentation http://oskari.org/api/requests.
 
-feedback.open331.key=     setup is required in oskari server properties
-(api_key  of Open311 service)
 
 #### [add] [rpc] GetFeedbackServiceRequest
 
