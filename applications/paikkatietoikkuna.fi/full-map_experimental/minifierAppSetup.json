@@ -608,7 +608,7 @@
 		"bundlename": "search-from-channels",
 		"metadata": {
 		  "Import-Bundle": {
-			"content-editor": {
+			"search-from-channels": {
 			  "bundlePath": "../../../packages/tampere/bundle/"
 			}
 		  }
@@ -618,7 +618,7 @@
 		"bundlename": "admin-wfs-search-channel",
 		"metadata": {
 		  "Import-Bundle": {
-			"content-editor": {
+			"admin-wfs-search-channel": {
 			  "bundlePath": "../../../packages/tampere/bundle/"
 			}
 		  }
