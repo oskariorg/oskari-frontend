@@ -215,6 +215,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 var lon = me._lonInput.val(),
                     lat = me._latInput.val();
+
                 var msg = null;
                 if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
                     msg = {
@@ -368,6 +369,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 inputData = me._getInputsData(),
                 lat = parseFloat(inputData.lonlat.lat),
                 lon = parseFloat(inputData.lonlat.lon);
+
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
                 lat = lat.toFixed(0);
@@ -380,6 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 if(me._config.supportedProjections) {
                     msg += ' (' + jQuery("#projection option:selected" ).text() + ')';
                 }
+
                 var marker = {
                     x: data.lonlat.lon,
                     y: data.lonlat.lat,
@@ -1011,10 +1014,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           var loc = me._locale;
           var conf = me._config;
           var projection = me._previousProjection || me.getMapModule().getProjection;
+          var showDegrees = null;
           if(!_.has(conf.projectionShowFormat, projection)){
             Oskari.log("coordinatetool").info("projection not supported");
-          }else {
-            var showDegrees = (conf.projectionShowFormat[projection].format ==='degrees') ? true : false;
+          } else {
+            showDegrees = (conf.projectionShowFormat[projection].format ==='degrees') ? true : false;
           }
           if(me._latLabel !== null && me._lonLabel !== null){
             if(showDegrees){
@@ -1088,7 +1092,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lat = dec[1];
             }
             else if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
-                dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
+                dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
                 lon = dec[0];
                 lat = dec[1];
             }
