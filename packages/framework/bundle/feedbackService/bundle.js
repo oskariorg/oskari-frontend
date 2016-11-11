@@ -23,28 +23,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
             "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackServiceRequest.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackServiceRequestHandler.js"
-        },{
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackServiceDefinitionRequest.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackServiceDefinitionRequestHandler.js"
-        },{
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackRequest.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/request/GetFeedbackRequestHandler.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/feedbackService/request/PostFeedbackRequest.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/feedbackService/publisher/FeedbackServiceTool.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/request/PostFeedbackRequestHandler.js"
         }],
         "locales": [{
             "lang": "en",

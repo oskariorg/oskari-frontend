@@ -15,6 +15,21 @@ Some extra tags:
 
 Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
 
+### [mod] [rpc] [breaking] feedbackService (Open311)
+
+NOTE! Still under construction, this is a POC solution for testing Open311 servers.
+For more detailed information, see documentation http://oskari.org/api/requests.
+
+#### GetFeedbackRequest & PostFeedbackRequest
+
+The parameters "getServiceRequests" and "postServiceRequest" are no longer available, but the same content can now be sent with parameter named "payload".
+The payload no longer needs to be JSON.stringified.
+
+#### GetFeedbackServiceRequest & GetFeedbackServiceDefinitionRequest
+
+The two requests have been merged to GetFeedbackServiceRequest. The request without a parameter results in a FeedbackResultEvent with a listing of services and
+ when the request is sent with a parameter with the value of a service code the event will include metadata (service definition) for that single service.
+
 ## 1.39
 
 #### [add] [rpc] New MapModulePlugin.MapLayerUpdateRequest Request

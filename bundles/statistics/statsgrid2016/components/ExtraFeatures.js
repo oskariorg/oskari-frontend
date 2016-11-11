@@ -1,8 +1,8 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(instance, sandbox) {
-	this.instance = instance;
-	this.sb = sandbox;
-	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-	this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.instance = instance;
+    this.sb = sandbox;
+    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
 }, {
 	__templates : {
 		main : _.template('<div class="statsgrid-ds-selections"></div>'),
