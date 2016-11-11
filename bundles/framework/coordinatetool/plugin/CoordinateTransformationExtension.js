@@ -51,6 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._projectionSelect.on('change', function(event) {
                     var nowSelected = jQuery("#projection option:selected").val();
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
+                    var data = coordinateToolPlugin._getInputsData();
                     var usersInputs = _.clone(data);
                     coordinateToolPlugin._projectionChanged = true;
                     coordinateToolPlugin.refresh(data);
