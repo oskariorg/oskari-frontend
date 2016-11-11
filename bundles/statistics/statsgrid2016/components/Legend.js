@@ -8,8 +8,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this.locale = this.instance.getLocalization();
     this._bindToEvents();
     this.__templates = {
-    	legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
-    	noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
+        legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
+        noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
         noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
     };
     this.__legendElement = this.__templates.legendContainer.clone();
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 colors.push('#' + color);
             });
 
-            var state = service.getStateService();
+            var stateService = service.getStateService();
 
             service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
                 if(err) {
@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 }
 
                 service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
-                    var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
+                    var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
                     me.__legendElement.html(legend);
                 });
 

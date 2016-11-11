@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             content.append(tableHeader);
 
             // If not published, then show area selection
-            if(me.instance.getConfiguration().areaSelection !== false) {
+            if(me.instance.getConfiguration().areaSelection) {
                 params.getRegionSelection(tableHeader.find('.selection'), null, true, true);
             }
             // Else remove area selection
@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                     // If not published then show close icon
-                    if(me.instance.getConfiguration().areaSelection !== false) {
+                    if(me.instance.getConfiguration().areaSelection) {
                         tableHeader.find('.icon').bind('click', function(){
                             log.info('Removing indicator ', + ind.hash);
                             me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
@@ -380,7 +380,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
     updateModel : function(model, regions) {
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
-        var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var locale = me.instance.getLocalization();
         var gridLoc = locale.statsgrid || {};
 

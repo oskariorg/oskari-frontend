@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 
 			allowedRegionsets.forEach(function(regionset) {
 				var optionEl = jQuery(me.__templates.option(regionset));
-				if(regionset.id == currentRegion) {
+				if(regionset.id === currentRegion) {
 					optionEl.attr('selected', 'selected');
 				}
 				jqSelect.append(optionEl);
