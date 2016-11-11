@@ -2,7 +2,7 @@
 
 ## Description
 
-Provides a service which listen ``GetFeedbackRequest`` , ``PostFeedbackRequest`` , ``GetFeedbackServiceRequest`` or ``GetFeedbackServiceDefinitionRequest`` requests. 
+Provides a Oskari request/event API for listing and posting feedback to Open311-based service. Requires server-side functionality from oskari-server and configuration for the view/app on the server. Configuration fields are provided in the publisher tool.
 
 When request has made the service send ajax call to Oskari backend and waits the response. Service sends ``FeedbackResultEvent`` , when response is received.
 

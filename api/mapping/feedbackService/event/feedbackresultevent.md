@@ -4,11 +4,9 @@ Notifies that feedback request response has been got from the service. Includes 
 
 ## Description
 
-Used to notify if getFeedbackRequest, postFeedbackRequest, getFeedbackServiceRequest or getFeedbackServiceDefinitionRequest was successfull 
-and the response data has been got from the service. 
+Used to notify if getFeedbackRequest, postFeedbackRequest or getFeedbackServiceRequest was successful and the response data that was received from the service.
 
 ## Response data
-
 
 <table class="table">
 <tr>
@@ -33,82 +31,77 @@ Event occurs after above mentioned feedback request has been completed.
 
 <pre class="event-code-block">
 <code>
-               var data = {          
-                };
-                channel.postRequest('GetFeedbackServiceRequest', [data]);
-                
-                 // response 
-                [{
-                  "success": true,
-                  "requestParameters": {
-                      "method": "serviceList"
-                    },
-                  "data": {
-                    "serviceList": [
-                      {
-                        "keywords": "ilkivalta, penkit, istuimet,p�yd�t, katokset, grillit, lipputangot, roska-astiat",
-                        "description": "Onko puistonpenkki heitetty ojaan tai infotaulu rikottu? Anna palautetta ilkivaltaan liittyen.",
-                        "service_name": "Ilkivalta",
-                        "group": "Puhtaanapito",
-                        "type": "realtime",
-                        "service_code": "172",
-                        "metadata": false
-                      },
-                      {
-                        "keywords": "roska,j�te",
-                        "description": "Ilmoita, jos havaitset suuria m��ri� roskia yleisill� alueilla, puistoissa tai metsiss�.",
-                        "service_name": "Roskaaminen",
-                        "group": "Puhtaanapito",
-                        "type": "realtime",
-                        "service_code": "246",
-                        "metadata": false
-                      }]
+    channel.postRequest('GetFeedbackServiceRequest', []);
+
+     // response
+    [{
+      "success": true,
+      "requestParameters": {
+          "method": "serviceList"
+        },
+      "data": {
+        "serviceList": [
+          {
+            "keywords": "ilkivalta, penkit, istuimet,pöydät, katokset, grillit, lipputangot, roska-astiat",
+            "description": "Onko puistonpenkki heitetty ojaan tai infotaulu rikottu? Anna palautetta ilkivaltaan liittyen.",
+            "service_name": "Ilkivalta",
+            "group": "Puhtaanapito",
+            "type": "realtime",
+            "service_code": "172",
+            "metadata": false
+          },
+          {
+            "keywords": "roska,jäte",
+            "description": "Ilmoita, jos havaitset suuria määriä roskia yleisillä alueilla, puistoissa tai metsissä.",
+            "service_name": "Roskaaminen",
+            "group": "Puhtaanapito",
+            "type": "realtime",
+            "service_code": "246",
+            "metadata": false
+          }]
 
 </code>
 </pre>
 
-### GetFeedbackServiceDefinitionRequest response data
+### GetFeedbackServiceRequest with id response data
 
 <pre class="event-code-block">
 <code>
-                           var data = {                             
-                               "serviceId":"4ffa4c69601827691b000018"
-                               };
-                               channel.postRequest('GetFeedbackServiceDefinitionRequest', [data]);
-                               
-                               // response 
-                               
-                               {
-                                 "success": true,
-                                 "requestParameters": {
-                                                       "method": "serviceDefinition"
-                                                     },
-                                 "data":  {
-                                 "service_code": "4ffa4c69601827691b000018",
-                                 "attributes": [{
-                                   "variable": true,
-                                   "code": "FQSKA1",
-                                   "datatype": "string",
-                                   "required": true,
-                                   "order": 1,
-                                   "description": "Vehicle License Plate Number"
-                                 }, {
-                                   "variable": true,
-                                   "code": "FQSKA11",
-                                   "datatype": "number",
-                                   "required": true,
-                                   "order": 2,
-                                   "description": "How many days has the vehicle been parked?"
-                                 }, {
-                                   "variable": true,
-                                   "code": "A511OPTN",
-                                   "datatype": "string",
-                                   "required": false,
-                                   "datatype_description": "Enter number as 999-999-9999",
-                                   "order": 3,
-                                   "description": "Input mobile # to opt-in for text updates. If already opted-in, add mobile # to contact info."
-                                 }]
-                               }
+   channel.postRequest('GetFeedbackServiceRequest', ["4ffa4c69601827691b000018"]);
+
+   // response
+
+   {
+     "success": true,
+     "requestParameters": {
+                           "method": "serviceDefinition"
+                         },
+     "data":  {
+     "service_code": "4ffa4c69601827691b000018",
+     "attributes": [{
+       "variable": true,
+       "code": "FQSKA1",
+       "datatype": "string",
+       "required": true,
+       "order": 1,
+       "description": "Vehicle License Plate Number"
+     }, {
+       "variable": true,
+       "code": "FQSKA11",
+       "datatype": "number",
+       "required": true,
+       "order": 2,
+       "description": "How many days has the vehicle been parked?"
+     }, {
+       "variable": true,
+       "code": "A511OPTN",
+       "datatype": "string",
+       "required": false,
+       "datatype_description": "Enter number as 999-999-9999",
+       "order": 3,
+       "description": "Input mobile # to opt-in for text updates. If already opted-in, add mobile # to contact info."
+     }]
+   }
 
 </code>
 </pre>
@@ -116,7 +109,7 @@ Event occurs after above mentioned feedback request has been completed.
 
 <pre class="event-code-block">
 <code>
-                         
+
            {
              "success": true,
              "data": {
@@ -161,7 +154,7 @@ Event occurs after above mentioned feedback request has been completed.
                        "status": "open"
                      }
                    },
-                             
+
 
 </code>
 </pre>
@@ -204,13 +197,7 @@ Event occurs after above mentioned feedback request has been completed.
                          }
                        ]
                      },
-                             
+
 
 </code>
 </pre>
-
-
-## Examples
-
-Used in feedbackService bundle in method getFeedback:
-
