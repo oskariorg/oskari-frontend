@@ -4,11 +4,11 @@
 
 ## myplaces2
 
-Fixed allowed characters check for myyplace feature field. Now (name, description and layer group) fields allows special characters (field are sanitatized by Oskari.util.sanitize()).
+Relaxed restrictions for allowed characters in myplaces features. Now (name, description and layer group) fields allows more non-ascii characters (field are sanitatized by Oskari.util.sanitize()).
 
 ## infobox
 
-Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+Updating existing infobox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
 
 ### framework/postprocessor for ol2/ol3
 
