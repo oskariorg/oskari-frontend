@@ -436,8 +436,8 @@ Oskari.util = (function () {
             var dms1 = NaN;
             if(!coordinateDMSDecode(point[0])) {
                 var p1 = parseFloat(point[0]);
-                var d1 =  parseInt(p1);
-                var m1 = parseInt((p1 - d1) * 60);
+                var d1 = p1|0;
+                var m1 = ((p1 - d1) * 60)|0;
                 var s1 = (p1 - d1 - m1/60) * 3600;
                 s1 = parseFloat(s1).toFixed(roundToDecimals);
                 s1 = '' + s1;
@@ -451,8 +451,8 @@ Oskari.util = (function () {
             var dms2 = NaN;
             if(!coordinateDMSDecode(point[1])) {
                 var p2 = parseFloat(point[1]);
-                var d2 =  parseInt(p2);
-                var m2 = parseInt((p2 - d2) * 60);
+                var d2 = p2|0;
+                var m2 = ((p2 - d2) * 60)|0;
                 var s2 = (p2 - d2 - m2/60) * 3600;
                 s2 = parseFloat(s2).toFixed(roundToDecimals);
                 s2 = '' + s2;
