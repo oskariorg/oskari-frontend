@@ -368,7 +368,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
                 inputData = me._getInputsData(),
                 lat = parseFloat(inputData.lonlat.lat),
-                lon = parseFloat(inputData.lonlat.lon);
+                lon = parseFloat(inputData.lonlat.lon),
+                data = {
+                    'lonlat': {
+                        'lat':lat,
+                        'lon':lon
+                    }
+                },
+
+                //change data to map projection and use it to place marker
+                data = me._coordinateTransformationExtension.transformCoordinates(data, me._previousProjection, me.getMapModule().getProjection());
 
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
