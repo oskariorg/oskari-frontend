@@ -7,6 +7,8 @@
   width: 90px;
   position: absolute;
   display: block; }
+  .panbuttonDiv map area {
+    outline: none; }
 
 .panbuttonDivImg {
   background-image: url("../images/sprite.png"); }
@@ -26,3 +28,5 @@
 
 .panbutton_right {
   float: right; }
+
+/*# sourceMappingURL=panbuttons.css.map */
