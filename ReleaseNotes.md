@@ -103,6 +103,11 @@ Added checkboxes to toggle all permissions in one column.
 
 Now always sends a value for min/maxscale (-1 if missing) so server will update a removed value to the database.
 
+### feedbackService
+
+Bundle API changed with breaking changes. API still in POC-stage, but cleaned up a bit (see api/CHANGELOG for details). Also provides publisher tool for configuring
+Open311-service for an embedded map.
+
 ## 1.39.0
 
 ### Migration for embedded maps
