@@ -13,8 +13,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.request.GetFeedb
      * @params {Object} lang, serviceId
      *
      */
-    function(params) {
-        this._feedbackparams = params;
+    function(serviceId) {
+        this.serviceId = serviceId;
     }, {
         /** @static @property __name request name */
         __name : "GetFeedbackServiceRequest",
@@ -30,7 +30,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.request.GetFeedb
          * @return {Object} parameters of current feedback request
          */
         getFeedbackParams : function() {
-            return this._feedbackparams;
+            if(!this.serviceId) {
+                return {
+                    "method" : "serviceList"
+                };
+            }
+            return {
+                "method" : "serviceDefinition",
+                "serviceId": this.serviceId
+            };
         }
     }, {
         /**

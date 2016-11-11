@@ -20,7 +20,7 @@ http://wiki.open311.org/GeoReport_v2/#get-service-requests
   <td>/* srs </td><td> String </td><td> Coordinate system of front end map</td><td>EPSG:3067 </td><td> </td>
 </tr>
 <tr>
-  <td>/* getServiceRequests </td><td> JSON </td><td> filter params for selecting feedbacks </td><td>{"start_date": "2016-04-01T00:00:00Z","status": "open,closed"} </td><td>http://wiki.open311.org/GeoReport_v2/#get-service-requests </td>
+  <td>/* payload </td><td> JSON </td><td> filter params for selecting feedbacks </td><td>{"start_date": "2016-04-01T00:00:00Z","status": "open,closed"} </td><td>http://wiki.open311.org/GeoReport_v2/#get-service-requests </td>
 </tr>
 
 
@@ -36,7 +36,7 @@ http://wiki.open311.org/GeoReport_v2/
 
 <pre class="event-code-block">
 <code>
-  getServiceRequests content                                                              required item
+  payload content                                                              required item
     service_request_id 	To call multiple Service Requests at once,
                         multiple service_request_id can be declared; comma delimited. 	No
                         This overrides all other arguments.
@@ -115,33 +115,33 @@ Use Oskari map publishing method for to define these properties for the embedded
 <pre class="event-code-block">
 <code>
   var filterdata = {
-                  "start_date": "2016-04-01T00:00:00Z",
-                  "status": "open,closed"
-                };
-                var data = {
-                "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
-                "srs":"EPSG:3067",
-                "getServiceRequests": JSON.stringify(filterdata)
-                };
-                channel.postRequest('GetFeedbackRequest', [data]);
-            
+    "start_date": "2016-04-01T00:00:00Z",
+    "status": "open,closed"
+  };
+  var data = {
+  "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+  "srs":"EPSG:3067",
+  "payload": filterdata
+  };
+  channel.postRequest('GetFeedbackRequest', [data]);
+
 </code>
 </pre>
 
 <pre class="event-code-block">
 <code>
   channel.getMapBbox(function (data) {
-              var filterdata = {
-                  "start_date": "2016-09-01T00:00:00Z",
-                  "bbox": data.left + ',' + data.bottom + ',' + data.right + ',' + data.top,
-                  "status": "open,closed"
-              };
-              var data = {
-                  "srs": "EPSG:3067",
-                  "getServiceRequests": JSON.stringify(filterdata)
-              };
-              channel.postRequest('GetFeedbackRequest', [data]);
-          });;
+        var filterdata = {
+            "start_date": "2016-09-01T00:00:00Z",
+            "bbox": data.left + ',' + data.bottom + ',' + data.right + ',' + data.top,
+            "status": "open,closed"
+        };
+        var data = {
+            "srs": "EPSG:3067",
+            "payload": filterdata
+        };
+        channel.postRequest('GetFeedbackRequest', [data]);
+    });
 
 </code>
 </pre>
