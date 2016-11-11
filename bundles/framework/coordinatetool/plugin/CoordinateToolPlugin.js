@@ -1088,7 +1088,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lat = dec[1];
             }
             else if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection &&  me._allowDegrees(me._previousProjection) ) {
-                dec = Oskari.util.coordinateDegreesToMetric([lon,lat],me._getProjectionDecimals(me._previousProjection));
+                dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
                 lon = dec[0];
                 lat = dec[1];
             }
