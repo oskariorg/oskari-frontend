@@ -816,7 +816,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         message = me._instance.getName() + ': ' + messageJSON.error;
                     }
 
-                    Oskari.log(message);
+                    Oskari.log("coordinatetool").warn(message);
                 },data.lonlat.lon, data.lonlat.lat);
 
         },
@@ -1012,7 +1012,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           var conf = me._config;
           var projection = me._previousProjection || me.getMapModule().getProjection;
           if(!_.has(conf.projectionShowFormat, projection)){
-            console.log("not supported");
+            Oskari.log("coordinatetool").info("projection not supported");
           }else {
             var showDegrees = (conf.projectionShowFormat[projection].format ==='degrees') ? true : false;
           }
