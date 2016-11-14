@@ -786,12 +786,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min"),
                 coordinateDisplayEmergencyCall = jQuery('div.coordinatedisplay-emergencycall');
 
+            var minutesX = ''  + parseFloat(degmin.minutesX.replace(Oskari.getDecimalSeparator(),'.')).toFixed(3);
+            minutesX = minutesX.replace('.', Oskari.getDecimalSeparator());
+
+            var minutesY = ''  + parseFloat(degmin.minutesY.replace(Oskari.getDecimalSeparator(),'.')).toFixed(3);
+            minutesY = minutesY.replace('.', Oskari.getDecimalSeparator());
+
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale.coordinatesTransform.emergencyCallLabel);
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale.coordinatesTransform.emergencyCallLabelAnd);
-            coordinateDisplayEmergencyCall.find('span.degreesX').html(degmin.degreesX);
-            coordinateDisplayEmergencyCall.find('span.minutesX').html(parseFloat(degmin.minutesX).toFixed(3));
-            coordinateDisplayEmergencyCall.find('span.degreesY').html(degmin.degreesY);
-            coordinateDisplayEmergencyCall.find('span.minutesY').html(parseFloat(degmin.minutesY).toFixed(3));
+            coordinateDisplayEmergencyCall.find('span.degreesX').html(me._locale.compass.i +' ' + degmin.degreesX);
+            coordinateDisplayEmergencyCall.find('span.minutesX').html(minutesX);
+            coordinateDisplayEmergencyCall.find('span.degreesY').html(me._locale.compass.p + ' ' + degmin.degreesY);
+            coordinateDisplayEmergencyCall.find('span.minutesY').html(minutesY);
             coordinateDisplayEmergencyCall.show();
         } ,
         /**
@@ -1048,11 +1054,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           }
           if(me._latLabel !== null && me._lonLabel !== null){
             if(showDegrees){
-              me._latLabel.html(loc.compass.lat);
-              me._lonLabel.html(loc.compass.lon);
+              me._latLabel.html(loc.compass.lat + ':');
+              me._lonLabel.html(loc.compass.lon + ':');
             } else {
-              me._latLabel.html(loc.compass.n);
-              me._lonLabel.html(loc.compass.e);
+              me._latLabel.html(loc.compass.n + ':');
+              me._lonLabel.html(loc.compass.e + ':');
             }
           }
           return showDegrees;

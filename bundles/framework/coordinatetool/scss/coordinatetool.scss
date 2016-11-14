@@ -101,6 +101,10 @@ div.mapplugin.coordinatetool {
 }
 
 div.coordinatetool__popup {
+    .reversegeocode-label {
+      margin-left: 24px;
+    }
+
     width: 280px;
     z-index:15000;
     background-color: #ffffff;
