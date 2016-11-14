@@ -112,8 +112,6 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
