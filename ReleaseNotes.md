@@ -42,6 +42,8 @@ Published map:
 Added support for multiple search channel results for reverse geocoding.
 TM35 channel support and localization.
 
+Updated UI to show all degree values below to inputs (if projection chooser if configured to show and projection show format is degree).
+
 ### mapping/mapwfs2 - WfsLayerPlugin for ol3
 
 Fixed wfs layer index calculation.
