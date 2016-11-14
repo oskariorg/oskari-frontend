@@ -402,9 +402,11 @@ Oskari.clazz.define(
             }
 
             item.hide();
-            jQuery.ajax({
-                type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel&id='+ uid,
+            this.__tryRestMethods('DELETE', {
+                url: me.sandbox.getAjaxUrl('SearchWFSChannel'),
+                data : {
+                    id : uid
+                }
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -530,65 +532,95 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
 
-            if (me._formIsValid(frm, me)) {
+            if (!me._formIsValid(frm, me)) {
+                return false;
+            }
 
-                //FIXME
-                var url = "";
+            var dataObject = {
+                'id': frm.find("[name=id]").val(),
+                'wfsLayerId': frm.find("[name=choose-wfs-layer]").val(),
+                'locale' : {},
+                'paramsForSearch' : [],
+                'isDefault' : frm.find("[name=details-default]").is(":checked"),
+                'config' : {}
+            };
 
-                var dataObject = {
-                    'id': frm.find("[name=id]").val(),
-                    'wfsLayerId': frm.find("[name=choose-wfs-layer]").val(),
-                    'locale' : {},
-                    'paramsForSearch' : [],
-                    'isDefault' : frm.find("[name=details-default]").is(":checked"),
-                    'config' : {}
-                };
+            // TODO: setup config properly instead of isAddress
+            if(frm.find("[name=details-isaddress]").is(":checked")) {
+                dataObject.config.handler = 'SimpleAddress';
+            }
 
-                // TODO: setup config properly instead of isAddress
-                if(frm.find("[name=details-isaddress]").is(":checked")) {
-                    dataObject.config.handler = 'SimpleAddress';
+            jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
+                dataObject.locale[item] = {
+                    name : frm.find("[name=details-topic-"+item+"]").val(),
+                    desc : frm.find("[name=details-desc-"+item+"]").val()
                 }
+            });
 
-                jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
-                    dataObject.locale[item] = {
-                        name : frm.find("[name=details-topic-"+item+"]").val(),
-                        desc : frm.find("[name=details-desc-"+item+"]").val()
-                    }
-                });
+            jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
+                dataObject.paramsForSearch.push(jQuery(this).val());
+            });
 
-                jQuery.each(frm.find("[name=choose-param-for-search]"), function(index, item) {
-                    dataObject.paramsForSearch.push(jQuery(this).val());
-                });
-
-               // stringified JSON for request
-               dataObject.locale = JSON.stringify(dataObject.locale);
-               dataObject.paramsForSearch = JSON.stringify(dataObject.paramsForSearch);
-               dataObject.config = JSON.stringify(dataObject.config);
-
-                jQuery.ajax({
-                    type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + 'action_route=SearchWFSChannel',
-                    data: dataObject,
-                    success: function (data) {
-                        me._closeForm(frm);
-                        me.fetchChannels(me.container);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        var error = me._getErrorText(
-                            jqXHR,
-                            textStatus,
-                            errorThrown
-                        );
-                        me._openPopup(
-                            me._getLocalization('save_failed'),
-                            error
-                        );
-                    }
-                });
-           }
-            return false;
+            // stringified JSON for request
+            dataObject.locale = JSON.stringify(dataObject.locale);
+            dataObject.paramsForSearch = JSON.stringify(dataObject.paramsForSearch);
+            dataObject.config = JSON.stringify(dataObject.config);
+            this.__tryRestMethods(frm.attr('method'), {
+                url: me.sandbox.getAjaxUrl('SearchWFSChannel'),
+                data: dataObject,
+                success: function (data) {
+                    me._closeForm(frm);
+                    me.fetchChannels(me.container);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(
+                        jqXHR,
+                        textStatus,
+                        errorThrown
+                    );
+                    me._openPopup(
+                        me._getLocalization('save_failed'),
+                        error
+                    );
+                }
+            });
         },
 
+        /**
+         * Tries to call backend with given method, if server responds with
+         * '405 Method Not Allowed' tries the request again with POST method
+         * and additional header 'X-HTTP-Method-Override' with the original method as value.
+         * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE'
+         * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
+         */
+        __tryRestMethods : function(method, config) {
+            var me = this;
+            config.type = method;
+            var errorHandler = function(jqXHR, textStatus, errorThrown) {
+                var origType = config.type;
+                if(errorThrown === 'Method Not Allowed' &&
+                    (origType === 'PUT' || origType === 'DELETE')) {
+                    // PUT/DELETE not allowed -> try POST instead
+                    var origBefore = config.beforeSend;
+                    config.beforeSend = function(req) {
+                        req.setRequestHeader('X-HTTP-Method-Override', origType);
+                        if(origBefore) {
+                            origBefore(req);
+                        }
+                    };
+                    me.__tryRestMethods('POST', config);
+                }
+                else if(config.__oskariError) {
+                    config.__oskariError(jqXHR, textStatus, errorThrown);
+                }
+            };
+
+            if(!config.__oskariError) {
+                config.__oskariError = config.error;
+                config.error = errorHandler;
+            }
+            jQuery.ajax(config);
+        },
         /**
          * @method _populateForm
          * Populates given form with given channel's data.
