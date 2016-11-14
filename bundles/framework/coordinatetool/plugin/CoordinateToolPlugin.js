@@ -746,6 +746,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             //get the transform from current data
             var sourceProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
 
+            // If source projection is same than map projection, then we translate coordiantes to right 'EPSG:4326'
             if (sourceProjection === me.getMapModule().getProjection()) {
                 me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, 'EPSG:4326',
                     function(responseData) {
@@ -754,11 +755,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     function(error) {
                         me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
                 });
-            } else if (sourceProjection !== 'EPSG:4326'){
+            }
+            // Else coordinates are not map projection or EPSG:4326 then
+            // need first get coordinates from map projection and then use response coordinates
+            // to get 'EPSG:4326' coordinates again from service
+            else if (sourceProjection !== 'EPSG:4326'){
                 me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, me.getMapModule().getProjection(),
                     function(responseData) {
-                        //me._updateEmergencyCallMessage(responseData);
-                        //
+
                         me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(responseData, me.getMapModule().getProjection(), 'EPSG:4326',
                             function(responseDataTo4326) {
                                 me._updateEmergencyCallMessage(responseDataTo4326);
@@ -770,7 +774,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     function(error) {
                         me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
                 });
-            } else {
+            }
+            // Else if coordinates are from 'EPSG:4326' then use these
+            else {
                 me._updateEmergencyCallMessage(data);
             }
         },
