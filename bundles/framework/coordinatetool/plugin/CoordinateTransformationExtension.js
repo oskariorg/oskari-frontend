@@ -66,8 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                     //getting precise transformed coordinates from server
                     me.getTransformedCoordinatesFromServer(usersInputs, coordinateToolPlugin._previousProjection, me._projectionSelect.val(), successCb, errorCb);
-                    // coordinateToolPlugin._previousProjection = nowSelected;
-
+                    coordinateToolPlugin._previousProjection = nowSelected;
                 });
             }
 
