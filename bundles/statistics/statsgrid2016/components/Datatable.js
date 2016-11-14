@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
     this._bindToEvents();
 }, {
     __templates : {
@@ -50,6 +51,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             me.spinner.start();
         }
         this.service.getRegions(setId, function(err, regions) {
+            if(err) {
+                me.log.warn('Cannot get regions for wanted regionset='+setId);
+                // notify error!!
+                return;
+            }
             me.createModel(regions, function(model) {
                 me.updateModel(model, regions);
                 me.spinner.stop();
