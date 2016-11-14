@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
         *
         */
         startPlugin: function () {
-            this.createUI();
         },
         /* App specific methods */
         createUI: function () {
