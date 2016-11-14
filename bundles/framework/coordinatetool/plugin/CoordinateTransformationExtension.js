@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     var usersInputs = _.clone(data);
                     coordinateToolPlugin._projectionChanged = true;
                     coordinateToolPlugin.refresh(data);
+                    coordinateToolPlugin._labelMetricOrDegrees(nowSelected);
 
                     var successCb = function(newLonLat) {
                          coordinateToolPlugin._updateLonLat(newLonLat);
@@ -195,8 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }
                 });
-            } else {
-              // successCb(lonlat);
             }
         },
         /**
@@ -220,8 +219,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     return {
                         "degreesX": degreesX,
                         "degreesY": degreesY,
-                        "minutesX": minutesX,
-                        "minutesY": minutesY
+                        "minutesX": minutesX.replace('.', Oskari.getDecimalSeparator()),
+                        "minutesY": minutesY.replace('.', Oskari.getDecimalSeparator())
                     };
                 case "sec":
                     degreesX = parseInt(lon);
@@ -235,8 +234,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         "degreesY": degreesY,
                         "minutesX": parseInt(minutesX),
                         "minutesY": parseInt(minutesY),
-                        "secondsX": secondsX,
-                        "secondsY": secondsY
+                        "secondsX": secondsX.replace('.', Oskari.getDecimalSeparator()),
+                        "secondsY": secondsY.replace('.', Oskari.getDecimalSeparator())
                     };
             }
 

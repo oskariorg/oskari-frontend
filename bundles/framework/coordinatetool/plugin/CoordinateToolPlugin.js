@@ -697,19 +697,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           }
 
           if (data) {
-          var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
-          var degminsec = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
+            var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
+            var degminsec = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
 
-          var coordinateDisplayDeg = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
-          var coordinateDisplayDegmin = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
-          var coordinateDisplayDegminsec = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminsecx');
+            var coordinateDisplayDeg = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
+            var coordinateDisplayDegmin = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
+            var coordinateDisplayDegminsec = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminsecx');
 
-          var coordinateDisplayDegY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
-          var coordinateDisplayDegminY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
-          var coordinateDisplayDegminsecY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
+            var coordinateDisplayDegY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
+            var coordinateDisplayDegminY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
+            var coordinateDisplayDegminsecY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
 
             //X
-            coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lat).toFixed(9));
+            coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lat).toFixed(9).replace('.', Oskari.getDecimalSeparator()));
 
             coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesY);
             coordinateDisplayDegmin.find('span.minutesX').html(degmin.minutesY);
@@ -717,8 +717,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinateDisplayDegminsec.find('span.degreesX').html(degminsec.degreesY);
             coordinateDisplayDegminsec.find('span.minutesX').html(degminsec.minutesY);
             coordinateDisplayDegminsec.find('span.secondsX').html(degminsec.secondsY);
+
             //Y
-            coordinateDisplayDegY.find('span.degreesY').html(parseFloat(data.lonlat.lon).toFixed(9));
+            coordinateDisplayDegY.find('span.degreesY').html(parseFloat(data.lonlat.lon).toFixed(9).replace('.', Oskari.getDecimalSeparator()));
 
             coordinateDisplayDegminY.find('span.degreesY').html(degmin.degreesX);
             coordinateDisplayDegminY.find('span.minutesY').html(degmin.minutesX);
@@ -1034,11 +1035,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             el.addClass(styleClass);
         },
-        _labelMetricOrDegrees: function(){
+        _labelMetricOrDegrees: function(projection){
           var me = this;
           var loc = me._locale;
           var conf = me._config;
-          var projection = me._previousProjection || me.getMapModule().getProjection;
+          projection = projection || me._previousProjection || me.getMapModule().getProjection;
           var showDegrees = null;
           if(!_.has(conf.projectionShowFormat, projection)){
             me._log.debug('Not specified projection format. Used defaults (metrics).');
