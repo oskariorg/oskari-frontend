@@ -415,7 +415,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     el.addClass('active');
                 }
                 me._toolOpen = true;
+                me._previousProjection = null;
                 me._showPopup();
+
+                me._labelMetricOrDegrees(jQuery("#projection option:selected").val());
             }
         },
 
