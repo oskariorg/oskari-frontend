@@ -69,7 +69,7 @@
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
 					"mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
+	                    "bundlePath": "../../../packages/mapping/ol2/"
 	                },
 					"domain": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
@@ -588,6 +588,15 @@
                     }
                 }
             }
+		}, {
+			"bundlename": "statsgrid",
+			"metadata": {
+				"Import-Bundle": {
+					"statsgrid": {
+						"bundlePath": "../../../packages/statistics/"
+					}
+				}
+			}
 		}, {
 			"title": "SelectedFeaturedata",
 			"fi": "selected-featuredata",
