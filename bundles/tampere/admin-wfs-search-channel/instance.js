@@ -135,19 +135,12 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
                 var me = this,
                     doOpen = event.getViewState() !== 'close',
                     p;
-                if (event.getExtension().getName() !== me.getName()) {
+                if (event.getExtension().getName() !== me.getName() || !this.plugins['Oskari.userinterface.Flyout']) {
                     // not me -> do nothing
                     return;
                 }
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
-                    // flyouts eventHandlers are registered
-                    for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
-                        if (!this.eventHandlers[p]) {
-                            this.sandbox.registerForEventByName(this, p);
-                        }
-                    }
-
                 }
             }
         },
