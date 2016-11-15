@@ -53,6 +53,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         this.service.getRegions(setId, function(err, regions) {
             if(err) {
                 me.log.warn('Cannot get regions for wanted regionset='+setId);
+                me.spinner.stop();
                 // notify error!!
                 return;
             }
