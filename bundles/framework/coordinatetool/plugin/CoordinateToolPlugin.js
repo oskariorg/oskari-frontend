@@ -730,7 +730,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
           if (data) {
             var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
-            var degminsec = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
 
             var coordinateDisplayDeg = coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
             var coordinateDisplayDegmin = coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
