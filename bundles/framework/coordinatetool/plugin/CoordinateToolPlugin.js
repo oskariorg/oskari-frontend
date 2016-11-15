@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._projectionSelect = null;
         me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         me._reverseGeocodeNotImplementedError = false;
+        me._popupContent = null;
         me._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"><div class="icon"></div></div>'),
             popupContent: jQuery(
@@ -84,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                   '       </div> '
                 ),
                 coordinateFormatDisplayY: jQuery(
-                    '<div>'+
+                    '<div class="coordinate-format-display-y">'+
                     '   <div class="coordinatedisplay-container">'+
                     '       <div class="margintop coordinatedisplay-degy">'+
                     '           <span class="coordinatedisplay-deg degreesY" style="text-align:center";></span>&deg;'+
@@ -105,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     '</div>'
                 ),
                 coordinateFormatDisplayX: jQuery(
-                    '<div>'+
+                    '<div class="coordinate-format-display-x">'+
                     '   <div class="coordinatedisplay-container" >'+
                     '       <div class="margintop coordinatedisplay-degx">'+
                     '           <span class="coordinatedisplay-deg degreesX" style="text-align:center";></span>&deg;' +
@@ -180,6 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._progressSpinner.stop();
                 });
             }
+            me._popupContent = popupContent;
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
             me._latLabel = popupContent.find('.lat-label');
@@ -690,26 +692,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
         _updateCoordinateDisplay: function(data){
           var me = this;
-          var latContainer = jQuery('div.coordinate-lat-container');
-          var lonContainer = jQuery('div.coordinate-lon-container');
-          if (!me.coordinateFormatDisplayX && !me.coordinateFormatDisplayY) {
-            me.coordinateFormatDisplayY = me._templates.coordinateFormatDisplayY.clone();
-            me.coordinateFormatDisplayX = me._templates.coordinateFormatDisplayX.clone();
-            latContainer.append(me.coordinateFormatDisplayX);
-            lonContainer.append(me.coordinateFormatDisplayY);
+          var latContainer = me._popupContent.find('div.coordinate-lat-container');
+          var lonContainer = me._popupContent.find('div.coordinate-lon-container');
+          var coordinateFormatDisplayX = me._popupContent.find('.coordinate-format-display-x');
+          var coordinateFormatDisplayY = me._popupContent.find('.coordinate-format-display-y');
+
+          if (coordinateFormatDisplayX.length === 0 && coordinateFormatDisplayY.length === 0) {
+            coordinateFormatDisplayY = me._templates.coordinateFormatDisplayY.clone();
+            coordinateFormatDisplayX = me._templates.coordinateFormatDisplayX.clone();
+            latContainer.append(coordinateFormatDisplayX);
+            lonContainer.append(coordinateFormatDisplayY);
           }
 
           if (data) {
             var degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
             var degminsec = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
 
-            var coordinateDisplayDeg = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
-            var coordinateDisplayDegmin = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
-            var coordinateDisplayDegminsec = me.coordinateFormatDisplayX.find('div.coordinatedisplay-degminsecx');
+            var coordinateDisplayDeg = coordinateFormatDisplayX.find('div.coordinatedisplay-degx');
+            var coordinateDisplayDegmin = coordinateFormatDisplayX.find('div.coordinatedisplay-degminx');
+            var coordinateDisplayDegminsec = coordinateFormatDisplayX.find('div.coordinatedisplay-degminsecx');
 
-            var coordinateDisplayDegY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
-            var coordinateDisplayDegminY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
-            var coordinateDisplayDegminsecY = me.coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
+            var coordinateDisplayDegY = coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
+            var coordinateDisplayDegminY = coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
+            var coordinateDisplayDegminsecY = coordinateFormatDisplayY.find('div.coordinatedisplay-degminsecy');
 
             //X
             coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lat).toFixed(9).replace('.', Oskari.getDecimalSeparator()));
