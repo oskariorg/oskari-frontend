@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         this.colorsets.forEach(function(item) {
             me.limits.name.push(item.name);
         });
-        this.limits.defaultType = this.colorsets[0].type;
-        this.limits.defaultName = this.colorsets[0].name;
+        this.limits.defaultType = this.colorsets[9].type;
+        this.limits.defaultName = this.colorsets[9].name;
     }, {
         __name: "StatsGrid.ColorService",
         __qname: "Oskari.statistics.statsgrid.ColorService",
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                     return null;
                 }
                 return item.colors[index].split(',');
-            }
+            };
             var value;
             var typeMatch;
             var nameMatch;
@@ -78,8 +78,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                     nameMatch = item;
                 }
             });
+            var result;
             if(value) {
-                var result = getArray(value);
+                result = getArray(value);
                 log.debug('Requested set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
                 return result;
@@ -87,14 +88,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             // TODO: get first to match type?
             log.warn('Requested set not found, using type matching');
             if(typeMatch) {
-                var result = getArray(typeMatch);
+                result = getArray(typeMatch);
                 log.debug('Type matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
                 return result;
             }
             log.warn('Requested set not found, using name matching');
             if(nameMatch) {
-                var result = getArray(nameMatch);
+                result = getArray(nameMatch);
                 log.debug('Name matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
                 return result;

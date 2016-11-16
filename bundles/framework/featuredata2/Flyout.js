@@ -478,7 +478,7 @@ Oskari.clazz.define(
                 conf = me.instance.conf,
                 isManualRefresh = layer.isManualRefresh(),
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
-                
+
             if (isOk) {
                 panel.getContainer().empty();
 
@@ -501,7 +501,7 @@ Oskari.clazz.define(
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
-                
+
 
 
                 //ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!

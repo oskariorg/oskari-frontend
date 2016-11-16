@@ -37,10 +37,15 @@ function() {
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-
-                id: 'Oskari.mapframework.publisher.tool.StatsTableTool',
+                id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
                 title: 'grid',
                 config: {
+                    grid: true,
+                    areaSelection: false,
+                    search: false,
+                    extraFeatures: false,
+                    mouseEarLegend: false,
+                    showLegend: true
                 }
             };
          }
@@ -78,27 +83,32 @@ function() {
         var me = this,
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
-            request,
-            elLeft;
+            request;
 
         me.state.enabled = enabled;
 
-        if(!me.grid && enabled) {
-            me.grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', me.__sandbox);
-            me.statsContainer = jQuery(me.templates.publishedGridTemplate);
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            stats.renderPublishedLegend({showLegend:true});
         }
 
         if(enabled === true) {
-            elLeft = jQuery('.oskariui-left');
-            elLeft.html(me.statsContainer);
-            me.grid.render(me.statsContainer);
+            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'detach', 'StatsGrid']);
+            stats.changePosition({
+                top: 0,
+                left: jQuery('.basic_publisher').width() + jQuery('#sidebar').width() + jQuery('#sidebar').position().left + jQuery('.basic_publisher').position().left
+            });
         } else {
-            if(me.statsContainer) {
-                me.statsContainer.remove();
-            }
+            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'close', 'StatsGrid']);
         }
 
-        if (me.__handlers['MapSizeChanged']) {
+        if(stats) {
+            stats.renderToggleButtons(!enabled);
+        }
+
+
+
+        if (typeof me.__handlers.MapSizeChanged === 'function') {
             me.__handlers.MapSizeChanged();
         }
     },
@@ -130,9 +140,12 @@ function() {
                     statsgrid: {
                         state: statsGridState,
                         conf : {
-                            indicatorSelector : false,
-                            regionSelector : false,
-                            grid : me.state.enabled
+                            grid: me.state.enabled,
+                            areaSelection: false,
+                            search: false,
+                            extraFeatures: false,
+                            mouseEarLegend: false,
+                            showLegend: true
                         }
                     }
                 }

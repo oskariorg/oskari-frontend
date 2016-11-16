@@ -71,8 +71,17 @@ div.coordinatetool__popup {
   width: 280px;
   z-index: 15000;
   background-color: #ffffff; }
+  div.coordinatetool__popup .reversegeocode-label {
+    margin-left: 24px; }
+  div.coordinatetool__popup .coordinate-container {
+    margin-left: 70px; }
+  div.coordinatetool__popup .lonlat-input-container input.lat-input {
+    width: 170px; }
+  div.coordinatetool__popup .lonlat-input-container input.lon-input {
+    width: 170px; }
   div.coordinatetool__popup div.actions {
-    float: right; }
+    float: right;
+    margin: 0; }
   div.coordinatetool__popup div.clear {
     clear: both; }
   div.coordinatetool__popup div.coordinatetool__popup__content {
@@ -82,8 +91,8 @@ div.coordinatetool__popup {
     div.coordinatetool__popup div.coordinatetool__popup__content .clear {
       clear: both; }
   div.coordinatetool__popup .margintop {
-    margin-top: 10px;
-    display: inline-block; }
+    margin-top: 6px;
+    display: block; }
   div.coordinatetool__popup .coordinatetool-divider {
     margin-bottom: 5px;
     height: 1px;
@@ -107,3 +116,5 @@ div.coordinatetool__popup {
 .coordinate-label {
   width: 70px;
   padding-top: 7px; }
+
+/*# sourceMappingURL=coordinatetool.css.map */

@@ -144,7 +144,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName),
                 request;
 
-            // FIXME we should figure out a better way to toggle modes & map plugins
             if (isShown) {
                 /** ENTER The Mode */
                 // Hide base layers, store hidden layers to state so we can show them on exit
@@ -165,7 +164,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
                 jQuery('#contentMap').addClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
-                // TODO we are going to create a handle for grid vs. map separator
                 var leftWidth = 40;
 
                 /** show our mode view - view hacks */
@@ -183,7 +181,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 elLeft.resizable({
                     minWidth: 450,
                     handles: "e",
-                    resize: function (event, ui) {
+                    resize: function () {
                         elCenter.width(jQuery('.row-fluid').width() - elLeft.width());
                         me.instance.gridPlugin.grid.resizeCanvas();
                     },
@@ -214,7 +212,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 }
                 // remove stats layer if we added it and there's no active indicators
                 // this breaks published stats...
-                //me.instance.gridPlugin.resetLayer();
                 me.hiddenLayers = [];
                 me.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
@@ -227,12 +224,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 elLeft.resizable().resizable('destroy');
                 elLeft.addClass('oskari-closed');
                 // remove width from left-div
-                elLeft.width(''); //removeClass('span7');
+                elLeft.width('');
                 elLeft.empty();
 
                 if (!blnFromExtensionEvent) {
                     // reset tile state if not triggered by tile click
-                    // postRequestbyName is banned! sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
                     request = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me.instance, 'close', me.instance.getName());
                     sandbox.request(me.instance.getName(), request);
                 }

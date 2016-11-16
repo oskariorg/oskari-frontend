@@ -19,8 +19,12 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit."
             },
             "compass": {
-                "lon": "E / lon:",
-                "lat": "N / lat:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "P",
+                "i": "I"
             },
             "reversegeocode": {
                 "errorTitle": "Reverse geokoodaus virhe",
@@ -30,7 +34,12 @@ Oskari.registerLocalization(
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL" : {
                     "label": "Osoite: "
-                }
+                },
+                "TM35LEHTIJAKO_CHANNEL": {
+                    "label": "Karttalehti: "
+                },
+                "moreInfo" : "Näytä sijainnin lisätiedot."
+
             },
             "tooltip": {
                 "tool": "Näytä koordinaatit tai kohdista kartta antamiisi koordinaatteihin.",

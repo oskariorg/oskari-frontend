@@ -19,8 +19,12 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
-                "lon": "E / lon:",
-                "lat": "N / lat:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "N",
+                "i": "E"
             },
             "reversegeocode": {
                 "errorTitle": "Reverse geocoding error",
@@ -30,7 +34,11 @@ Oskari.registerLocalization(
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL": {
                     "label": "Address: "
-                }
+                },
+                "TM35LEHTIJAKO_CHANNEL": {
+                    "label": "Map sheet: "
+                },
+                "moreInfo" : "Show more info on current position."
             },
             "tooltip": {
                 "tool": "Show coordinates or type coordinates and focus map on them.",

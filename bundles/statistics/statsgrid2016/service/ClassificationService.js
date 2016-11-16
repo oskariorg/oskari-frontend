@@ -114,11 +114,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     groups.push([]);
                 }
                 for(var region in indicatorData) {
-                    var index = stats.getRangeNum(indicatorData[region]);
+                    var value = indicatorData[region];
+                    if(typeof value ===  'undefined') {
+                        // no value for region -> skip
+                        continue;
+                    }
+                    var index = stats.getRangeNum(value);
                     groups[index].push(region);
                 }
                 return groups;
-            }
+            };
             response.getGroups = function(index) {
                 var groups = getGroups();
                 if(index || index === 0) {

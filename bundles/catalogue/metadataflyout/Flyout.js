@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
         addTabs: function (data) {
-            
+
             //add to bookkeeping
             var me = this;
             for (var key in data) {

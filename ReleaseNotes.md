@@ -1,5 +1,115 @@
 # Release Notes
 
+## 1.40.0
+
+## myplaces2
+
+Relaxed restrictions for allowed characters in myplaces features. Now (name, description and layer group) fields allows more non-ascii characters (field are sanitatized by Oskari.util.sanitize()).
+
+## infobox
+
+Updating existing infobox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+
+### framework/postprocessor for ol2/ol3
+
+Fixed nationalCadastralReferenceHighlight param handling for o2/ol3.
+Now map is zoomed correctly to cadastral reference and highlight also working.
+
+Example usage:
+- make sure postprocessor bundle is part of the minified app (if using minified code)
+- requires KTJ_KII_CHANNEL search channel
+- open map with param nationalCadastralReferenceHighlight=[CODE]
+
+### statistics/statsgrid2016
+
+``New bundle`` to show thematic maps and their datas. This will replace the previous version of thematic maps.
+The API has changed as well as the server interface. The implementation doesn't include all the features from
+the previous UI, but it will be developed further in the near future to have most if not all the features of the
+ old one and more. The previous version under statistics/statsgrid has been deprecated
+
+Normal map mode:
+- thematic map selections are now showed by Flyout
+- user can select wanted parameters and regionset
+- legend shows active indicator by ExtraFlyout
+- can publish thematic map
+
+Published map:
+- new legend component, user can change active indicator for link (link is visible if there are more than one indicators)
+- thematic map table is visible (if publisher wanted)
+
+### coordinatetool
+
+Added support for multiple search channel results for reverse geocoding.
+TM35 channel support and localization.
+
+Updated UI to show all degree values below to inputs (if projection chooser if configured to show and projection show format is degree).
+
+### mapping/mapwfs2 - WfsLayerPlugin for ol3
+
+Fixed wfs layer index calculation.
+
+### divmanazer
+
+### Popup
+
+Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
+
+#### ExtraFlyout
+
+``New component`` to show a movable "window" similar to Defaultflyout. The rendering and position can be injected for the component.
+
+#### grid
+
+New ``setAutoHeightHeader`` function. If margin is given as function parameter the header column is resized automatically on render.
+
+New ``setGroupingHeader`` function. Function can be used for grouping table columns under a shared header. Function takes a param array of objects. If array does not contains enought items to match the table columns the last header is spanned for the rest of the table columns.
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+        colspan: 3
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text'
+    }
+]);
+```
+
+### mapmodule
+
+Fixes for getClosestZoomLevel(min, max) function:
+- If either parameter was missing the current zoomlevel was returned.
+- Now uses the max/min scales of the map as default value for the missing parameter.
+- Switched the parameter names since internally the first parameter (named maxScale) was treated as minScale and vice versa.
+For the user this means that layers that only have one or the other restriction for min/max scale now works. Previously they didn't.
+
+Added ol3 map following parameters and values for better user experience (map tiles are loaded faster):
+- loadTilesWhileInteracting: true
+- loadTilesWhileAnimating: true
+
+### core/AbstractLayer
+
+Fixed isInScale() when minScale was missing.
+
+### admin-layerrights
+
+Sends changed layerrights in chunks of 100 to the server if number of changed permissions is greater than 100.
+Added checkboxes to toggle all permissions in one column.
+
+### admin-layerselector
+
+Now always sends a value for min/maxscale (-1 if missing) so server will update a removed value to the database.
+
+### feedbackService
+
+Bundle API changed with breaking changes. API still in POC-stage, but cleaned up a bit (see api/CHANGELOG for details). Also provides publisher tool for configuring
+Open311-service for an embedded map.
+
 ## 1.39.0
 
 ### Migration for embedded maps

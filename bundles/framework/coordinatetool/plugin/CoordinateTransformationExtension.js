@@ -27,31 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '</div>'+
                 '<div class="clear"/>'
             ),
-            coordinateFormatDisplay: jQuery(
-                '<div>'+
-                '   <div class="coordinatedisplay-toggler" style="display:none;"></div>'+
-                '   <div class="coordinatedisplay-container" style="display:none;">'+
-                '       <div class="margintop coordinatedisplay-deg">'+
-                '           <span class="coordinatedisplay-deg degreesY"></span>&deg;,'+
-                '           <span class="coordinatedisplay-deg degreesX"></span>&deg;'+
-                '       </div>'+
-                '       <div class="margintop coordinatedisplay-degmin">'+
-                '           <span class="coordinatedisplay-degmin degreesY"></span>&deg;'+
-                '           <span class="coordinatedisplay-degmin minutesY"></span>\','+
-                '           <span class="coordinatedisplay-degmin degreesX"></span>&deg;'+
-                '           <span class="coordinatedisplay-degmin minutesX"></span>\' '+
-                '       </div>'+
-                '       <div class="margintop coordinatedisplay-degminsec">'+
-                '           <span class="coordinatedisplay-degminsec degreesY"></span>&deg;'+
-                '           <span class="coordinatedisplay-degminsec minutesY"></span>\''+
-                '           <span class="coordinatedisplay-degminsec secondsY"></span>\'\''+
-                '           <span class="coordinatedisplay-degminsec degreesX"></span>&deg;,'+
-                '           <span class="coordinatedisplay-degminsec minutesX"></span>\''+
-                '           <span class="coordinatedisplay-degminsec secondsX"></span>\'\''+
-                '       </div>'+
-                '   </div>'+
-                '</div>'
-            ),
             projectionSelectOption: jQuery('<option></option>')
         };
         this._ajaxXhr = null;
@@ -69,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             if (keys && keys.length > 1) {
                 me._popupContent.find('.srs').append(me._templates.projectionTransformSelect.clone());
-                me._popupContent.find('.srs').after(me._templates.coordinateFormatDisplay.clone());
 
                 me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale.coordinatesTransform.header);
                 me._projectionSelect =  me._popupContent.find('.projection-select');
@@ -77,9 +51,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._projectionSelect.on('change', function(event) {
                     var nowSelected = jQuery("#projection option:selected").val();
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
+                    var data = coordinateToolPlugin._getInputsData();
                     var usersInputs = _.clone(data);
                     coordinateToolPlugin._projectionChanged = true;
                     coordinateToolPlugin.refresh(data);
+                    coordinateToolPlugin._labelMetricOrDegrees(nowSelected);
 
                     var successCb = function(newLonLat) {
                          coordinateToolPlugin._updateLonLat(newLonLat);
@@ -92,19 +68,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     //getting precise transformed coordinates from server
                     me.getTransformedCoordinatesFromServer(usersInputs, coordinateToolPlugin._previousProjection, me._projectionSelect.val(), successCb, errorCb);
                     coordinateToolPlugin._previousProjection = nowSelected;
-
-                    //reset the coordinate display panel
-                    me._toggleCoordinateDisplay(true);
-
                 });
             }
-            
-            var coordinateDisplayToggler = me._popupContent.find('div.coordinatedisplay-toggler');
-            coordinateDisplayToggler.html(this._locale.coordinatesTransform.showCoordinateFormatDisplay);
-            coordinateDisplayToggler.on('click', function() {
-                me._toggleCoordinateDisplay();
-            });
-
 
             return me._projectionSelect;
         },
@@ -231,60 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }
                 });
-            } else {
-                successCb(lonlat);
-            }
-        },
-        updateCoordinateDisplay: function(data) {
-            var me = this;
-            if (data) {
-                var degmin = me._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min");
-                var degminsec = me._formatDegrees(data.lonlat.lon, data.lonlat.lat, "sec");
-                var coordinateDisplayDeg = jQuery('div.coordinatedisplay-deg'); 
-                var coordinateDisplayDegmin = jQuery('div.coordinatedisplay-degmin'); 
-                var coordinateDisplayDegminsec = jQuery('div.coordinatedisplay-degminsec'); 
-                var coordinateDisplayEmergencyCall = jQuery('div.coordinatedisplay-emergencycall'); 
-                var toggler = jQuery('div.coordinatedisplay-toggler');
-
-                coordinateDisplayDeg.find('span.degreesX').html(parseFloat(data.lonlat.lon).toFixed(9));
-                coordinateDisplayDeg.find('span.degreesY').html(parseFloat(data.lonlat.lat).toFixed(9));
-
-                coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesX);
-                coordinateDisplayDegmin.find('span.minutesX').html(degmin.minutesX);
-                coordinateDisplayDegmin.find('span.degreesY').html(degmin.degreesY);
-                coordinateDisplayDegmin.find('span.minutesY').html(degmin.minutesY);
-
-                coordinateDisplayDegminsec.find('span.degreesX').html(degminsec.degreesX);
-                coordinateDisplayDegminsec.find('span.minutesX').html(degminsec.minutesX);
-                coordinateDisplayDegminsec.find('span.secondsX').html(degminsec.secondsX);
-                coordinateDisplayDegminsec.find('span.degreesY').html(degminsec.degreesY);
-                coordinateDisplayDegminsec.find('span.minutesY').html(degminsec.minutesY);
-                coordinateDisplayDegminsec.find('span.secondsY').html(degminsec.secondsY);
-
-                toggler.show();
-            } else {
-                jQuery('div.coordinatedisplay-toggler').hide();
-                jQuery('div.coordinatedisplay-container').hide();            
-            }
-        },
-        /**
-         * toggle between input fields / representation of wgs84 coordinates in different formats
-         * @param {bool} reset Force reset to initial state -> inputs visible 
-         */
-        _toggleCoordinateDisplay: function(reset) {
-            var me = this;
-
-            if (reset) {
-                jQuery('div.lonlat-input-container').toggle(true);
-                jQuery('div.coordinatedisplay-toggler').html(this._locale.coordinatesTransform.showCoordinateFormatDisplay);
-                jQuery('div.coordinatedisplay-container').toggle(false);
-            } else {
-                var containerVisible = jQuery('div.coordinatedisplay-container').is(':visible'),
-                    toggleLabel = containerVisible ? this._locale.coordinatesTransform.showCoordinateFormatDisplay : this._locale.coordinatesTransform.showInputValues;
-                jQuery('div.coordinatedisplay-toggler').html(toggleLabel);
-                jQuery('div.coordinatedisplay-container').toggle(!containerVisible);
-                jQuery('div.lonlat-input-container').toggle(containerVisible);
-
             }
         },
         /**
@@ -308,13 +219,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     return {
                         "degreesX": degreesX,
                         "degreesY": degreesY,
-                        "minutesX": minutesX,
-                        "minutesY": minutesY
+                        "minutesX": minutesX.replace('.', Oskari.getDecimalSeparator()),
+                        "minutesY": minutesY.replace('.', Oskari.getDecimalSeparator())
                     };
-                    break;
                 case "sec":
-                    degreesX = parseInt(lon),
-                    degreesY = parseInt(lat),
+                    degreesX = parseInt(lon);
+                    degreesY = parseInt(lat);
                     minutesX = parseFloat((lon - degreesX) * 60);
                     minutesY = parseFloat((lat - degreesY) * 60);
                     secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
@@ -324,10 +234,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         "degreesY": degreesY,
                         "minutesX": parseInt(minutesX),
                         "minutesY": parseInt(minutesY),
-                        "secondsX": secondsX,
-                        "secondsY": secondsY
+                        "secondsX": secondsX.replace('.', Oskari.getDecimalSeparator()),
+                        "secondsY": secondsY.replace('.', Oskari.getDecimalSeparator())
                     };
-                    break;
             }
 
         },

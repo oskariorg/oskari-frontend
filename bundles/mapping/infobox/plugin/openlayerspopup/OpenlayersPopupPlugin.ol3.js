@@ -103,7 +103,6 @@ Oskari.clazz.define(
             if (_.isEmpty(contentData)) {
                 return;
             }
-
             var currPopup = me._popups[id],
                 lon = null,
                 lat = null,
@@ -124,7 +123,6 @@ Oskari.clazz.define(
                 me.getSandbox().notifyAll(evt);
                 return;
             }
-
             var refresh = (currPopup &&
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
@@ -772,7 +770,7 @@ Oskari.clazz.define(
                     if (popup.isInMobileMode) {
                         //are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
-                            popup.popup.close();
+                            popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
@@ -857,17 +855,16 @@ Oskari.clazz.define(
                                 popup.popup.setPosition(undefined);
                             }
                             if (popup.popup && popup.type === "desktop") {
-                                this.getMapModule().getMap().removeOverlay(this._popups[pid].popup);
+                                this.getMapModule().getMap().removeOverlay(popup.popup);
                             } else if (popup.popup && popup.type === "mobile") {
-                                popup.popup.close();
+                                popup.popup.close(true);
                             }
-                            event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
-                        	sandbox.notifyAll(event);
                         }
                     }
                 }
                 return;
             }
+
             // id specified, delete only single popup
             popup = this._popups[id];
             if (popup) {

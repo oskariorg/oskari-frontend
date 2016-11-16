@@ -12,6 +12,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
+        this.__sideTools = {
+            legend: {}
+        };
     }, {
         /**
          * @method getName
@@ -29,19 +32,115 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
         },
+        getLegendFlyout: function(options, comp){
+            var me = this;
+            if(!comp.__sideTools) {
+                comp.__sideTools = {
+                    legend: {}
+                };
+            }
+            if(!comp.__sideTools.legend.comp) {
+                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+            }
+            if(!comp.__sideTools.legend.flyout) {
+                options = options || {};
+                options.locale = options.locale || { title: ''};
+                comp.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
+                    width: '200px',
+                    closeCallback: function(popup) {
+                         if(options.callbacks && typeof options.callbacks.close === 'function'){
+                            options.callbacks.close(popup);
+                         }
+                    },
+                    showCallback: function(popup) {
+                        if(options.callbacks && typeof options.callbacks.show === 'function'){
+                            options.callbacks.show(popup);
+                         }
+                    },
+                    cls: options.cls
+                });
+            }
+
+            if(options.callbacks && typeof options.callbacks.after === 'function') {
+                options.callbacks.after();
+            }
+        },
         /**
          * @method lazyRender
          * Called when flyout is opened (by divmanazer)
          * Creates the UI for a fresh start.
          */
         lazyRender: function (config) {
-            if(this.__panels) {
-                // already rendered
-                // open first panel
-                this.__panels[0].panel.open();
-                return;
+            var me = this;
+            var locale = this.instance.getLocalization();
+
+            // empties all
+            this.getEl().empty();
+            this.removeSideTools();
+
+            config = config || {};
+
+            if(this.instance.hasPublished()) {
+                var parent = this.getEl().parent().parent();
+                parent.find('.oskari-flyout-title p').html(locale.datatable);
+                // Remove close button from published
+                parent.find('.oskari-flyouttools').remove();
+            }
+
+            if(config.mouseEarLegend === true) {
+                this.addSideTool(locale.legend.title, function(el){
+                    me.__sideTools.legend.sideTool = el;
+                    me.getLegendFlyout(
+                    {
+                        callbacks: {
+                            close: function() {
+                                me.__sideTools.legend.opened = false;
+                            },
+                            show: function(popup) {
+                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
+                                me.setSideToolPopupPosition(popup);
+                            },
+                            after: function(){
+                                if(me.__sideTools.legend.opened) {
+                                    me.__sideTools.legend.flyout.hide();
+                                    me.__sideTools.legend.opened = false;
+                                } else {
+                                    me.__sideTools.legend.flyout.show();
+                                    me.__sideTools.legend.opened = true;
+                                }
+                            }
+                        },
+                        locale: locale.legend,
+                        cls: 'statsgrid-legend-flyout'
+                    }, me);
+                });
             }
             this.addContent(this.getEl(), config);
+        },
+
+        setSideToolPopupPosition: function(popup) {
+            var me = this;
+            var tool = me.__sideTools.legend.sideTool;
+            var position = tool.position();
+            var parent = tool.parents('.oskari-flyout');
+            if(parent.length === 0) {
+                return;
+            }
+            var left = parent.position().left + parent.outerWidth() + tool.width();
+
+            if(left + popup.width() > jQuery(window).width()) {
+                left = left - popup.width() - tool.width();
+            }
+            var top = parent.position().top + position.top;
+            if(top + popup.height() > jQuery(window).height()) {
+                top = top - (popup.height() - tool.height());
+            }
+            popup.css({
+                left: left,
+                top: top
+            });
+
+            popup.css('z-index', 20000);
         },
         addContent : function (el, config) {
             var sb = this.instance.getSandbox();
@@ -51,8 +150,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     'Oskari.userinterface.component.Accordion'
                 );
             var panels = this.getPanels(config);
+            var openFirstPanel = true;
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(service) {
+                var state =  service.getStateService();
+                openFirstPanel = (state && state.getIndicators().length > 0) ? false : true;
+            }
+
             _.each(panels, function(p) {
-                if(p.id === 'newSearchPanel') {
+                if(p.id === 'newSearchPanel' && openFirstPanel) {
                     p.panel.open();
                 }
                 accordion.addPanel(p.panel);
@@ -67,28 +173,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             }
 
         },
+        handleClose: function(){
+            var me = this;
+            for(var tool in me.__sideTools) {
+                if(me.__sideTools[tool] && me.__sideTools[tool].flyout) {
+                    me.__sideTools[tool].flyout.hide();
+                }
+            }
+        },
         closePanels: function(){
             var panels = this.__panels || [];
             _.each(panels, function(p) {
-                    p.panel.close();
+                p.panel.close();
             });
         },
         getPanels : function(config) {
-            var locale = this.instance.getLocalization();
-            if(this.__panels) {
-                return this.__panels;
-            }
-            this.__panels = true;
-            var sb = this.instance.getSandbox();
             var panels = [];
 
             // Generate first panel
-            panels.push(this.getNewSearchPanel(config));
+            if(config.search === true) {
+                panels.push(this.getNewSearchPanel(config));
+            }
 
             // Generate extra features panel
-            panels.push(this.getExtraFeaturesPanel(config));
-
-            this.__panels = panels;
+            if(config.extraFeatures === true) {
+                panels.push(this.getExtraFeaturesPanel(config));
+            }
             return panels;
         },
         getNewSearchPanel: function(config){

@@ -148,7 +148,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
          */
         _renderIndicators: function (indicators) {
             var me = this,
-                lang = Oskari.getLang(),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
 
             gridModel.setIdField('id');
@@ -276,12 +275,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
          * @return {undefined}
          */
         _removeIndicatorFromGrid: function (indicatorId) {
-            // TODO: remove the verbose code after the beef with
-            // lodash/underscore has been settled.
-            //
-            //_.remove(gridData, function (data) {
-            //    return data.id === indicatorId;
-            //});
             var gridModel = this.grid.getDataModel(),
                 gridData = gridModel.getData() || [],
                 i, gLen, index = null;

@@ -19,8 +19,12 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Visa koordinaterna för musmarkörens position"
             },
             "compass": {
-                "lon": "E / lon:",
-                "lat": "N / lat:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "N",
+                "i": "E"
             },
             "reversegeocode": {
                 "errorTitle": "Geokodningsfel",
@@ -30,7 +34,12 @@ Oskari.registerLocalization(
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL" : {
                     "label": "Adress: "
-                }
+                },
+                "TM35LEHTIJAKO_CHANNEL": {
+                    "label": "Kartblad: "
+                },
+                "moreInfo" : "Visa mer information om positionen."
+
             },
             "tooltip" : {
                 "tool": "Visa koordinaterna eller fokusera kartan till de valda koordinaterna",

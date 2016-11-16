@@ -252,6 +252,7 @@ Oskari.clazz.define(
                 okButton = dialog.createCloseButton('OK');
 
             dialog.setId('oskari_search_error_popup');
+            dialog.makeModal();
 
             dialog.show(
                     this.instance.getLocalization('searchservice_search_alert_title'),

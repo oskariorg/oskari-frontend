@@ -62,6 +62,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             this.datasources.push(ds);
         },
 
+        getSelectionsText: function(indicator, locale, callback) {
+            var me = this;
+            var selectionsTexts = [];
+
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind){
+                for(var sel in indicator.selections){
+                    var val = indicator.selections[sel];
+
+                    ind.selectors.forEach(function(selector, index) {
+                        selector.allowedValues.forEach(function(value) {
+                            if(val === (value.id || value)) {
+                                var name = value.name || value.id || value;
+                                var optName = (locale.selectionValues[selector.id] && locale.selectionValues[selector.id][name]) ? locale.selectionValues[selector.id][name] : name;
+
+                                selectionsTexts.push(optName);
+                            }
+
+                        });
+                    });
+
+                }
+
+                var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
+                if(typeof callback === 'function') {
+                    callback(selectionsText);
+                }
+            });
+        },
         /**
          * Returns datasource {id, name, type} as object.
          * If id omitted returns all datasources as array.
@@ -268,47 +296,47 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 data : data,
                 url: this.sandbox.getAjaxUrl('GetIndicatorData'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp);
+                    me.getRegions(regionset, function(err, regions) {
+                        if(err) {
+                            me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
+                            return;
+                        }
+                        // filter out data for regions that are not part of the regionset since some adapters return additional data!
+                        // any additional data will result in broken classification
+                        var filteredResponse = {};
+                        regions.forEach(function(reg) {
+                            filteredResponse[reg.id] = pResp[reg.id];
+                        });
+                        me.cache.respondToQueue(cacheKey, null, filteredResponse);
+
+                    });
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 }
             });
         },
-        /*
-    Convenience method to get the complete dataset for current selections. Hides the callback hell.
-{
-    regionset : {
-        id : 1234,
-        name : "Municipalities"
-    },
-    indicators : [
-        {
-            datasource : {
-                id : 12,
-                name : "SotkaNet"
-            },
-            id : 346,
-            name : "indicator name",
-            selections : {
-                sex : 'male',
-                year : '1993'
-            },
-            hash : 'unique id for ds, id and selections'
-        }
-    ],
-    data : [
-        {
-            id : 2353,
-            name : "municipality name",
-            values : {
-                hash1 : value of indicator with hash1,
-                hash2 : value of indicator with hash2
+        getSelectedIndicatorsRegions: function() {
+            var me = this;
+            var indicators = me.getStateService().getIndicators();
+            var regionsets = [];
+            var addRegions = function(regions){
+                for(var i=0;i<regions.length;i++) {
+                    if(jQuery.inArray(regions[i], regionsets) === -1){
+                        regionsets.push(regions[i]);
+                    }
+                }
+            };
+            for(var i = 0;i<indicators.length; i++) {
+                var ind = indicators[i];
+                me.getIndicatorMetadata(ind.datasource, ind.indicator, function(err,indicator){
+                    if(!err){
+                        addRegions(indicator.regionsets);
+                    }
+                });
             }
-        }
-    ]
-}
-         */
+            return regionsets;
+        },
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {

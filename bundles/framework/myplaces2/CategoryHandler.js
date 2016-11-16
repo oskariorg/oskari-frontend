@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
              * Checks if categories have been changed and updates corresponding maplayers accordingly
              * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
              */
-            'MyPlaces.MyPlacesChangedEvent': function (event) {
+            'MyPlaces.MyPlacesChangedEvent': function () {
                 this._handlePlacesChanged();
             }
         },
@@ -113,10 +113,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                     sandbox.requestByName(this.getName(), 'RemoveMapLayerRequest', [layer.getId()]);
                     // remove maplayer from all layers
                     mapLayerService.removeLayer(layer.getId());
-
-                    // remove grid tab for category
-                    //var catID = layer.getId().substring(this.instance.idPrefix.length + 1);
-                    //this.uiItems.gridPanel.removeCategory(catID);
                 }
             }
 
@@ -144,7 +140,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         myplacesLayer = mapLayerService.createMapLayer(json);
                     mapLayerService.addLayer(myplacesLayer, this.initialLoad);
                 }
-                //this.uiItems.gridPanel.addOrUpdateCategory(cat);
             }
 
             if (this.initialLoad) {
@@ -155,9 +150,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 this._processStartupLinkLayers(sandbox);
                 // done here because layers aren't added to the service before this
                 this.initialLoad = false;
-
-                // preselect the first category
-                //this.uiItems.gridPanel.showCategory();
             }
         },
         /**
@@ -169,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 var request = this.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
-                // FIXME: not a registered module so this should fail?
                 this.sandbox.request(this.getName(), request);
             }
         },
@@ -206,10 +197,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         _getMapLayerJson: function (categoryModel) {
             var baseJson = this._getMapLayerJsonBase();
             baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + '&';
-            //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
-         //  Permission is always ok for user's own data
+            //  Permission is always ok for user's own data
                 baseJson.permissions = {
                     'publish': 'publication_permission_ok'
                 };
@@ -268,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 splitted = layerStrings[i].split('+');
                 layerId = splitted[0];
                 opacity = splitted[1];
-                //var style = splitted[2];
+
                 if (layerId !== null && layerId.indexOf(this.instance.idPrefix) !== -1) {
                     rb = null;
                     r = null;
@@ -368,6 +358,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 content.append(row);
             }
             dialog.show(loc.validation.title, content, [okBtn]);
+
         },
         /**
          * @method _showMessage
@@ -382,11 +373,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(loc.buttons.ok);
             okBtn.addClass('primary');
+
             okBtn.setHandler(function () {
                 dialog.close(true);
             });
             dialog.show(title, message, [okBtn]);
         },
+
         /**
          * @method hasIllegalChars
          * Checks value for problematic characters
@@ -396,6 +389,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             this.validateTool.setValue(value);
             return !this.validateTool.checkValue();
         },
+
         /**
          * @method _validateNumber
          * Checks value for number and number range
@@ -426,7 +420,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                     field: 'name',
                     error: loc.categoryName
                 });
-            } else if (this.hasIllegalChars(values.name)) {
+            } else if (Oskari.util.sanitize(values.name) !== values.name) {
                 errors.push({
                     field: 'name',
                     error: loc.categoryNameIllegal
@@ -485,7 +479,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         },
         getCategoryFromFormValues: function (values) {
             var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
-            category.setName(values.name);
+            category.setName(Oskari.util.sanitize(values.name));
             category.setId(values.id);
 
             category.setDotSize(values.dot.size);
@@ -525,7 +519,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         if (blnNew) {
                             me.instance.showMessage(loc.error.title, loc.error.addCategory);
                         } else {
-                            me.instance.showMessage(loc.error.title, loc.error.editCategory);
+                            me.instance.showMessage(loc.error.title, loc.error.editCategory, blnNew);
                         }
                     }
                 };
@@ -546,6 +540,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 loc,
                 deleteBtn;
+
+            dialog.makeModal();
+
             if (defaultCategory.getId() === category.getId()) {
                 // cannot delete default category
                 loc = me.instance.getLocalization();
@@ -597,7 +594,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             }
 
             dialog.show(loc.categoryDelete.title, content, buttons);
-            dialog.makeModal();
         },
         /**
          *@method _formatMessage
@@ -636,7 +632,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          * Internal method to handle server response for category delete
          * @private
          */
-        _deleteCategoryCallback: function (success, movePlaces, categoryId) {
+        _deleteCategoryCallback: function (success, movePlaces) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 service = this.instance.getService(),
                 me = this,

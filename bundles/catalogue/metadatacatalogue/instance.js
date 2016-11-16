@@ -566,6 +566,7 @@ Oskari.clazz.define(
                 okButton = dialog.createCloseButton('OK');
 
             dialog.setId('oskari_search_error_popup');
+            dialog.makeModal();
 
             dialog.show(
                 this.getLocalization('metadataoptionservice_alert_title'),

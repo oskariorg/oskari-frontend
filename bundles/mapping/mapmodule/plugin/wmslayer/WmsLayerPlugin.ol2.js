@@ -200,7 +200,7 @@ Oskari.clazz.define(
                     }
                 }
                 sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layer.getId() + ", found " + count);
-            } 
+            }
         }
     },
     {

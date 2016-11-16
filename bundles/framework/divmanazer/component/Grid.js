@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTableHeader = jQuery(
             '<th><a href="JavaScript:void(0);"></a></th>'
         );
+        this.templateTableGroupingHeader = jQuery('<th class="grouping"></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
@@ -55,6 +56,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
+        this.autoHeightHeader = false;
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
@@ -63,6 +65,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * same column is sorted again
          */
         this.lastSort = null;
+
+        /** Grouping headers */
+        this._groupingHeaders = null;
+
         Oskari.makeObservable(this);
     }, {
         /**
@@ -146,6 +152,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.resizableColumns = newResizableColumns;
         },
         /**
+         * @method  setAutoHeightHeader
+         * Sets the header table autosizeble
+         * @param {Integer} margin is setted some margin then autosize header
+         */
+        setAutoHeightHeader: function(margin) {
+            if(typeof margin === 'number') {
+                this.autoHeightHeader = margin;
+            }
+        },
+        /**
          * @method setColumnUIName
          * Sets an UI text for a given field.
          * The grid shows the UI name instead of the datas field name
@@ -154,8 +170,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} uiName field name we want to use instead in UI
          */
         setColumnUIName: function (fieldName, uiName) {
-            var me = this;
-            me.uiNames[fieldName] = uiName;
+            this.uiNames[fieldName] = uiName;
         },
         /**
          * @method setColumnTools
@@ -382,6 +397,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         /**
+         * Set grouping headers for Grid
+         * @method  @public addGroupingHeader
+         * @param {Array} headers array of groupung header objects [{cls:'styleClass', text:'Grouping text'}]
+         */
+        setGroupingHeader: function(headers) {
+            this._groupingHeaders = headers;
+        },
+        /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
          * table.
@@ -395,6 +418,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             var me = this,
                 // print header
                 headerContainer = table.find('thead tr'),
+                tableHeader = table.find('thead'),
                 bodyContainer = table.find('tbody'),
                 i,
                 header,
@@ -527,52 +551,90 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
             };
 
+            if(me._groupingHeaders) {
+                var cols = 0;
+                var row = jQuery('<tr class="grouping"></tr>');
+                for(i =0; i < me._groupingHeaders.length; i+= 1) {
+                    var h = me._groupingHeaders[i];
+                    var groupHeader = me.templateTableGroupingHeader.clone();
+                    if(typeof h.cls === 'string') {
+                        groupHeader.addClass(h.cls);
+                    }
+                    if(typeof h.text === 'string'){
+                        groupHeader.html(h.text);
+                    }
+
+                    if(typeof h.colspan === 'number') {
+                        groupHeader.attr('colspan', h.colspan);
+                        cols += h.colspan;
+                    } else {
+                        cols++;
+                    }
+
+                    // Check last grouping header cell
+                    if(i === me._groupingHeaders.length-1 && cols < fullFieldNames.length && !h.colspan) {
+                        var lastColspan = (fullFieldNames.length - cols) + 1;
+                        groupHeader.attr('colspan', lastColspan);
+                    }
+                    row.append(groupHeader);
+                }
+                tableHeader.prepend(row);
+            }
+
+
             for (i = 0; i < fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
-                var tools = this.columnTools[baseKey] || [];
-                if (!uiName) {
-                    uiName = fieldName;
-                } else if (fieldName !== fullFieldNames[i][key]) {
-                    uiName = fieldName.replace(baseKey, uiName);
-                }
-                link.append(uiName);
-                header.attr('title',uiName);
-                if (me.lastSort && fieldName === me.lastSort.attr) {
-                    if (me.lastSort.descending) {
-                        header.addClass('desc');
-                    } else {
-                        header.addClass('asc');
+
+                if(typeof uiName === 'function') {
+                    uiName(header);
+                } else {
+
+                    var tools = this.columnTools[baseKey] || [];
+                    if (!uiName) {
+                        uiName = fieldName;
+                    } else if (fieldName !== fullFieldNames[i][key]) {
+                        uiName = fieldName.replace(baseKey, uiName);
                     }
-                }
-                if (fullFieldNames[i].type === 'default') {
-                    link.bind('click', headerClosureMagic(fullFieldNames[i].key));
-                    me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
-                } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > 2) {
-                        header.addClass('closedSubTable');
-                        header.addClass('base');
-                    } else {
-                        header.addClass('openSubTable');
-                        header.addClass('base');
+                    link.append(uiName);
+                    header.attr('title',uiName);
+                    if (me.lastSort && fieldName === me.lastSort.attr) {
+                        if (me.lastSort.descending) {
+                            header.addClass('desc');
+                        } else {
+                            header.addClass('asc');
+                        }
                     }
-                    // Expand or close subtable
-                    link.bind('click', headerLinkClosureMagic);
+                    if (fullFieldNames[i].type === 'default') {
+                        link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                        me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
+                    } else if (fullFieldNames[i].type === 'object') {
+                        if (dataArray.length > 2) {
+                            header.addClass('closedSubTable');
+                            header.addClass('base');
+                        } else {
+                            header.addClass('openSubTable');
+                            header.addClass('base');
+                        }
+                        // Expand or close subtable
+                        link.bind('click', headerLinkClosureMagic);
+                    }
+
+                    if (fullFieldNames[i].visibility === 'hidden') {
+                        header.addClass('hidden');
+                    }
                 }
 
-                if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
-                }
+                header.data('key', fullFieldNames[i].baseKey);
+                header.data('value', fullFieldNames[i].subKey);
 
                 header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
                 if(me.__selectedColumn === fullFieldNames[i].baseKey) {
                     header.addClass('selected');
                 }
-                header.data('key', fullFieldNames[i].baseKey);
-                header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
@@ -933,6 +995,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             container.append(table);
 
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number') {
+                var maxHeight = 0;
+                var thead = table.find('thead');
+                var theadRow = table.find('thead tr:not(.grouping)');
+
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
+            }
+
             if (me.resizableColumns) {
                 me._enableColumnResizer();
             }
@@ -1268,6 +1346,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 attr: pAttribute,
                 descending: pDescending
             };
+
             dataArray.sort(function (a, b) {
                 if (typeof a[pAttribute] === 'object' ||
                     typeof b[pAttribute] === 'object') {
@@ -1278,6 +1357,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var nameB = me._getAttributeValue(b, pAttribute);
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
+        },
+
+        sortBy: function(scopedValue, descending) {
+            var me = this;
+            // sort the results
+            me._sortBy(scopedValue, descending);
+            // populate table content
+            var fieldNames = me.fieldNames;
+            // if visible fields not given, show all
+            if (fieldNames.length === 0) {
+                fieldNames = me.model.getFields();
+            }
+            this.table.find('tbody').empty();
+            me._renderBody(this.table, fieldNames);
+            me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
         },
 
         /**

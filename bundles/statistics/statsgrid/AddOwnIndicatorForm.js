@@ -64,8 +64,7 @@ Oskari.clazz.define(
          */
         createUI: function (container, callback) {
             var me = this,
-                form = jQuery(me.templates.main),
-                layer = me.sandbox.findMapLayerFromAllAvailable(me.layerId);
+                form = jQuery(me.templates.main);
 
             me.container = container;
 
@@ -111,14 +110,12 @@ Oskari.clazz.define(
             field.prev().append(me.localization.addDataMetaReferenceLayer);
 
             // Add region categories
-            // FIXME: copypasted from ManageStatsPlugin
             var regionCategories = [
                 'KUNTA',
                 'ALUEHALLINTOVIRASTO',
                 'MAAKUNTA',
                 'NUTS1',
                 'SAIRAANHOITOPIIRI',
-                //'SUURALUE',
                 'SEUTUKUNTA',
                 'ERVA',
                 'ELY-KESKUS'
@@ -265,9 +262,7 @@ Oskari.clazz.define(
                             indicatorData.indicatorId = 'user_' + indicator.id;
                             callback(indicatorData);
                         }
-                    }, function (jqXHR, textStatus) {
-                        //TODO some better way of showing errors? Popup?
-                        alert(me.localization.connectionProblem);
+                    }, function () {
                     });
                 } else {
                     me._handleCancel(e, me);
@@ -386,7 +381,6 @@ Oskari.clazz.define(
          * @return {Object} Dialog data
          */
         _gatherData: function () {
-            // FIXME all jQuery selectors...
             var me = this,
                 json = {},
                 emptyFields = [],
@@ -439,7 +433,6 @@ Oskari.clazz.define(
             json.published = me.container.find('#indicator_publicity').prop('checked');
 
             json.category = me.regionCategory;
-            //json.category = me.container.find('.form-meta .reference-layer select').val();
 
             json.data = [];
 
@@ -504,29 +497,24 @@ Oskari.clazz.define(
          * @return {Boolean} Year validity
          */
         validateYear: function (year, e) {
-            // FIXME just parseInt(value, 10); !isNaN(numVal) && numVal >= minVal && numVal <= maxVal
-            var text = /^[0-9]+$/;
 
-            if (e.type === 'blur' ||
-                year.length === 4 && e.keyCode !== 8 && e.keyCode !== 46 && e.keyCode !== 37 && e.keyCode !== 39) {
-                if (year !== 0 && year !== '0') {
+            var text = /^[0-9]+$/;
+            var isYear = (year.length === 4 && year !== 0 && year !== '0') ? true : false;
+            if (e.type === 'blur' ||  isYear & e.keyCode !== 8 && e.keyCode !== 46 && e.keyCode !== 37 && e.keyCode !== 39) {
                     var current = jQuery(e.target);
 
                     if ((year !== '') && (!text.test(year))) {
-                        //alert("Please Enter Numeric Values Only");
                         current.css({
                             'color': '#ff0000'
                         });
                         return false;
                     }
                     if (year.length !== 4) {
-                        //alert("Year is not proper. Please check");
                         current.css({
                             'color': '#ff0000'
                         });
                         return false;
                     }
-                    // FIXME I think it's completely feasible to have data that
                     // is from the 1800s or extends to the future
                     var currentYear = new Date().getFullYear();
 
@@ -541,7 +529,6 @@ Oskari.clazz.define(
                         'color': '#878787'
                     });
                     return true;
-                }
             }
         }
     }

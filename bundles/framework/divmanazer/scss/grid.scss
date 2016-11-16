@@ -90,7 +90,7 @@ table.oskari-grid {
     }
 
     td {
-        padding: 5px;
+        padding: 1px 5px 0 5px;
     }
 
     td, th {
@@ -108,6 +108,7 @@ table.oskari-grid {
     th {
         padding: 0px;
         background-color: #F3F3F3;
+        position:relative;
 
         a {
             color: inherit;

@@ -101,12 +101,29 @@ div.mapplugin.coordinatetool {
 }
 
 div.coordinatetool__popup {
+    .reversegeocode-label {
+      margin-left: 24px;
+    }
+    .coordinate-container {
+      margin-left: 70px;
+    }
+
+    .lonlat-input-container {
+      input.lat-input {
+          width: 170px;
+      }
+      input.lon-input {
+          width: 170px;
+      }
+    }
+
     width: 280px;
     z-index:15000;
     background-color: #ffffff;
 
     div.actions {
       float: right;
+      margin:0;
     }
 
     div.clear {
@@ -126,8 +143,8 @@ div.coordinatetool__popup {
     }
 
     .margintop {
-        margin-top: 10px;
-        display: inline-block;
+        margin-top: 6px;
+        display: block;
     }
 
     .coordinatetool-divider {

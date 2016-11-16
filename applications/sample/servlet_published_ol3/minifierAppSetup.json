@@ -93,6 +93,15 @@
                 }
             }
         }, {
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
+                    }
+                }
+            }
+        },{
             "bundlename": "toolbar",
             "metadata": {
                 "Import-Bundle": {

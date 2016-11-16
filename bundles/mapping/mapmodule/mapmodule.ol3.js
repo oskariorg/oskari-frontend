@@ -65,7 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keyboardEventTarget: document,
                 target: this.getMapElementId(),
                 controls: controls,
-                interactions: interactions
+                interactions: interactions,
+                loadTilesWhileInteracting: true,
+                loadTilesWhileAnimating: true
             });
 
             var projection = ol.proj.get(me.getProjection());
@@ -152,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __boundsToArray : function(bounds) {
             var extent = bounds || [];
-            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
+            if(!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
               extent = [
                     bounds.left,
                     bounds.bottom,
@@ -495,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             /* insert at */
 
             if (index === layerIndex) {
-                return
+                return;
             } else if (index === layerColl.getLength()) {
                 /* to top */
                 layerColl.removeAt(layerIndex);
@@ -732,7 +734,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 return ret;
             }
 
-            return null;         
+            return null;
         },
         /**
          * @method getFeatureFromWKT
@@ -742,7 +744,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 feature = wktFormat.readFeature(wkt);
 
             return feature;
-        }       
+        }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {
         /**

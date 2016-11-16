@@ -144,7 +144,7 @@ Oskari.clazz.define(
             reverseProjection = new ol.proj.Projection({
                 "code": projectionCode,
                 "units": originalProjection.getUnits(),
-                "extent": originalProjection.getExtent(), 
+                "extent": originalProjection.getExtent(),
                 "axisOrientation": "neu",
                 "global": originalProjection.isGlobal(),
                 "metersPerUnit": originalProjection.getMetersPerUnit(),

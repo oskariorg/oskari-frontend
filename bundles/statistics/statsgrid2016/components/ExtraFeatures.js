@@ -1,8 +1,8 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(instance, sandbox) {
-	this.instance = instance;
-	this.sb = sandbox;
-	this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-	this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.instance = instance;
+    this.sb = sandbox;
+    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
 }, {
 	__templates : {
 		main : _.template('<div class="statsgrid-ds-selections"></div>'),
@@ -20,18 +20,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(instan
 			'</div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
-	getPanelContent: function(config) {
+
+	/****** PUBLIC METHODS ******/
+
+	/**
+	 * @method  @public getPanelContent get content panel
+	 */
+	getPanelContent: function() {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.extraFeatures;
 		var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
 		checkbox.setTitle(panelLoc.showMapLayers);
 		checkbox.setChecked(true);
-		checkbox.setHandler(function(checked) {
+		checkbox.setHandler(function() {
 			me.toggleSelectedLayersVisibility(checkbox.isChecked());
 		});
 		return checkbox.getElement();
 	},
+
+	/**
+	 * @method  @public toggleSelectedLayersVisibility toggle selected layers visibility
+	 * @param  {Boolean} checked is checked
+	 */
 	toggleSelectedLayersVisibility: function(checked) {
 		var me  = this;
 		var selectedLayers = me.sb.findAllSelectedMapLayers();
