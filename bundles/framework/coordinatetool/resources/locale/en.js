@@ -19,10 +19,12 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
-                "lon": "Lon:",
-                "lat": "Lat:",
-                "n": "N:",
-                "e": "E:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "N",
+                "i": "E"
             },
             "reversegeocode": {
                 "errorTitle": "Reverse geocoding error",

@@ -19,10 +19,12 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Visa koordinaterna för musmarkörens position"
             },
             "compass": {
-                "lon": "Lon:",
-                "lat": "Lat:",
-                "n": "N:",
-                "e": "E:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "N",
+                "i": "E"
             },
             "reversegeocode": {
                 "errorTitle": "Geokodningsfel",

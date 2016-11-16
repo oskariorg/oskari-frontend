@@ -4,11 +4,11 @@
 
 ## myplaces2
 
-Fixed allowed characters check for myyplace feature field. Now (name, description and layer group) fields allows special characters (field are sanitatized by Oskari.util.sanitize()).
+Relaxed restrictions for allowed characters in myplaces features. Now (name, description and layer group) fields allows more non-ascii characters (field are sanitatized by Oskari.util.sanitize()).
 
 ## infobox
 
-Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
+Updating existing infobox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
 
 ### framework/postprocessor for ol2/ol3
 
@@ -41,6 +41,8 @@ Published map:
 
 Added support for multiple search channel results for reverse geocoding.
 TM35 channel support and localization.
+
+Updated UI to show all degree values below to inputs (if projection chooser if configured to show and projection show format is degree).
 
 ### mapping/mapwfs2 - WfsLayerPlugin for ol3
 

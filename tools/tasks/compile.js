@@ -333,7 +333,11 @@ module.exports = function(grunt) {
             if (!concat) {
                 try {
                     result = UglifyJS.minify(okFiles, {
-                        //outSourceMap : "out.js.map",
+                        outSourceMap : "oskari.min.js.map",
+                        sourceMapUrl : "oskari.min.js.map",
+                        //p  : "relative",
+                        //sourceRoot : "/Oskari",
+                        sourceMapIncludeSources : true,
                         warnings : true,
                         compress : true
                     });
@@ -386,6 +390,18 @@ module.exports = function(grunt) {
 
             // write result to disk
             fs.writeFileSync(outputFile, cleanedCode, 'utf8');
+            try {
+                // source map
+                // replace "C:\\Omat\\alusta\\oskari -> oskari
+                var srcMap = JSON.parse(result.map);
+                var srcMapPath = srcMap.sources[0].toLowerCase();
+                var prefixToRemove = srcMap.sources[0].substring(0, srcMapPath.indexOf("oskari")).split('\\').join('\\\\');
+
+                var cleanedMap = result.map.split(prefixToRemove);
+                cleanedMap = cleanedMap.join('');
+                fs.writeFileSync(outputFile + ".map", cleanedMap, 'utf8');
+            } catch (ignored) {}
+
         }
 
         // validate parsed appsetup
