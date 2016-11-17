@@ -56,6 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     coordinateToolPlugin._projectionChanged = true;
                     coordinateToolPlugin.refresh(data);
                     coordinateToolPlugin._labelMetricOrDegrees(nowSelected);
+                    coordinateToolPlugin._changeCoordinateContainerVisibility(coordinateToolPlugin._allowDegrees(nowSelected));
 
                     var successCb = function(newLonLat) {
                          coordinateToolPlugin._updateLonLat(newLonLat);
