@@ -145,6 +145,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return this._popup;
         },
         /**
+         * @method  @private _validLonLatInputs validate inputs
+         * @return {Boolean} is inputs valid true/false
+         */
+        _validLonLatInputs: function(){
+            var me = this;
+            if(me._lonInput && me._latInput) {
+                var lon = me._lonInput.val(),
+                    lat = me._latInput.val();
+
+                if(lon !== '' && lat !== '') {
+                    return true;
+                }
+            }
+            return false;
+        },
+        /**
+         * @method  @private _showCoordinatesNotValidMessage show coordinates are not vlaid message
+         */
+        _showCoordinatesNotValidMessage: function(){
+            var me = this;
+            var loc = me._locale;
+
+            if(!me._dialog) {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                me._dialog = dialog;
+            }
+            var btn = me._dialog.createCloseButton(loc.checkValuesDialog.button);
+            btn.addClass('primary');
+            me._dialog.show(loc.checkValuesDialog.title, loc.checkValuesDialog.message, [btn]);
+        },
+        /**
          * Show popup.
          * @method @private _showPopup
          */
@@ -183,15 +214,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var centerToCoordsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             centerToCoordsBtn.setTitle(loc.popup.searchButton);
             centerToCoordsBtn.setHandler(function () {
-                data = me._getInputsData();
-                if(!me._getPreciseTransform) {
-                    me._centerMapToSelectedCoordinates(data);
-                } else {
-                    if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                // Check valid
+                if(me._validLonLatInputs()) {
+                    var data = me._getInputsData();
+                    if(!me._getPreciseTransform) {
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._getTransformedCoordinatesFromServer(data, false,  false, true);
+                        if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                            me._centerMapToSelectedCoordinates(data);
+                        } else {
+                            me._getTransformedCoordinatesFromServer(data, false,  false, true);
+                        }
                     }
+                } else {
+                    me._showCoordinatesNotValidMessage();
                 }
             });
             me._centerToCoordsBtn = centerToCoordsBtn;
@@ -200,30 +236,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             addMarkerBtn.setTitle(loc.popup.addMarkerButton);
 
             addMarkerBtn.setHandler(function() {
-                var data = me._getInputsData();
-                var markerData = me._getInputsData();
+                // Check valid
+                if(me._validLonLatInputs()) {
+                    var data = me._getInputsData();
 
-                var lon = me._lonInput.val(),
-                    lat = me._latInput.val();
+                    var lon = me._lonInput.val(),
+                        lat = me._latInput.val();
 
-                var msg = null;
-                if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
-                    msg = {
-                        lat: lat,
-                        lon: lon
-                    };
-                }
+                    var msg = null;
+                    if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                        msg = {
+                            lat: lat,
+                            lon: lon
+                        };
+                    }
 
-                if(!me._getPreciseTransform) {
-                    me._addMarker(data, msg);
-                    me._centerMapToSelectedCoordinates(data);
-                } else {
-                    if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                    if(!me._getPreciseTransform) {
                         me._addMarker(data, msg);
                         me._centerMapToSelectedCoordinates(data);
                     } else {
-                        me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                        if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                            me._addMarker(data, msg);
+                            me._centerMapToSelectedCoordinates(data);
+                        } else {
+                            me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                        }
                     }
+                } else {
+                     me._showCoordinatesNotValidMessage();
                 }
 
             });
@@ -535,21 +575,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {[type]} [description]
          */
         _centerMapToSelectedCoordinates: function(data){
-            var me = this,
-                loc = me._locale;
+            var me = this;
 
             if(this.getMapModule().isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(data.lonlat.lon, data.lonlat.lat);
                 me._sandbox.request(this, moveReq);
             } else {
-                if(!me._dialog) {
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    me._dialog = dialog;
-                }
-                var btn = me._dialog.createCloseButton(loc.checkValuesDialog.button);
-                btn.addClass('primary');
-                me._dialog.show(loc.checkValuesDialog.title, loc.checkValuesDialog.message, [btn]);
+                me._showCoordinatesNotValidMessage();
             }
         },
         /**
