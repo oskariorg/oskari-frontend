@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.41.0
+
+### coordinatetool
+
+Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
+
+### mapmodule ol2/ol3
+
+Now transformCoordinates funtion checks srs and targer srs. If these projection definations missings throwing error.
+
 ## 1.40.0
 
 ## myplaces2

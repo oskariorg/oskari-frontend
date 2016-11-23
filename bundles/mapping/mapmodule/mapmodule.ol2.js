@@ -293,17 +293,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(!srs || targetSRS === srs) {
                 return pLonlat;
             }
-            var isProjectionDefined = Proj4js.defs[srs];
-            if (!isProjectionDefined) {
-                throw 'SrsName not supported! Provide Proj4js.def for ' + srs;
-            }
-            var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
-            var transformed = tmp.transform(new OpenLayers.Projection(srs), new OpenLayers.Projection(targetSRS));
 
-            return {
-                lon : transformed.lon,
-                lat : transformed.lat
-            };
+            var isSRSDefined = Proj4js.defs[srs];
+            var isTargetSRSDefined = Proj4js.defs[targetSRS];
+
+            if (isSRSDefined && isTargetSRSDefined) {
+                var tmp = new OpenLayers.LonLat(pLonlat.lon, pLonlat.lat);
+                var transformed = tmp.transform(new OpenLayers.Projection(srs), new OpenLayers.Projection(targetSRS));
+
+                return {
+                    lon : transformed.lon,
+                    lat : transformed.lat
+                };
+            }
+
+            var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+            log.warn('SrsName not supported!');
+            throw new Error('SrsName not supported!');
         },
 
         /**
@@ -470,12 +476,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     olStyle.graphicName = "circle";
                 }
             }
-            /*
-                TODO: figure out ol2 equivalent to this... "normal" font size * scale?
-                if(style.text.scale) {
-                    olStyle.scale = style.text.scale;
-                }
-          */
           if(style.text.font) {
             var split = style.text.font.split(" ");
             if(split[1]) {
@@ -551,7 +551,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     'x': centroid.x,
                     'y': centroid.y,
                     'bounds': zoomToBounds
-                }
+                };
             }
 
             return null;
