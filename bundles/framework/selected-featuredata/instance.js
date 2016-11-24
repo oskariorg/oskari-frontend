@@ -145,9 +145,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     },
                     callback : function(params) {
                         flyout.createUI(params.content, params.data);
-
-                        var bundleInstance = Oskari.getSandbox().findRegisteredModuleInstance('SelectedFeatureDataBundle');
-                        Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
+                        Oskari.getSandbox().requestByName(me, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
                     }
                 };
 
