@@ -2,6 +2,10 @@
 
 ## 1.41.0
 
+### selected-featuredata
+
+Fixed deprecated Oskari.app.getBundleInstanceByName() function usages.
+
 ### coordinatetool
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.

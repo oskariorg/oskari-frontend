@@ -92,7 +92,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
 		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
-            var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(me.resultHandler);
+            var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(function(content, data, formatters, params) {
+                me.resultHandler(content, data, formatters, params);
+            });
             sandbox.request(me, reqGetInfoResultHandler);
 
         },
@@ -105,9 +107,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          */
         resultHandler: function(content, data, formatters, params){
             // show infobox
+            var me = this;
 
-            var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
-            var flyout = bundleInstance.plugins['Oskari.userinterface.Flyout'];
+            var flyout = me.plugins['Oskari.userinterface.Flyout'];
 
             var options = {
                 hidePrevious: true,
@@ -116,22 +118,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             };
 
             if(flyout.isFlyoutVisible() && content.length > 0){
-                    flyout.createUI(content, data);
-            }else{
+                flyout.createUI(content, data);
+            } else {
+                var reqBuilder = this.getSandbox().getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                    request;
 
-                var reqBuilder = this.getSandbox().getRequestBuilder(
-                'InfoBox.ShowInfoBoxRequest'
-                ),
-                request;
-
-                    if (reqBuilder) {
-                        request = reqBuilder(
-                        params.infoboxId,
-                        params.title,
-                        content,
-                        data.lonlat,
-                        options
-                    );
+                if (reqBuilder) {
+                    request = reqBuilder(
+                    params.infoboxId,
+                    params.title,
+                    content,
+                    data.lonlat,
+                    options
+                );
 
                 var def = {
                     name : 'selected-featuredata-btn',
@@ -145,10 +144,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                         params:params
                     },
                     callback : function(params) {
-
                         flyout.createUI(params.content, params.data);
 
-                        var bundleInstance = Oskari.app.getBundleInstanceByName('selected-featuredata');
+                        var bundleInstance = Oskari.getSandbox().findRegisteredModuleInstance('SelectedFeatureDataBundle');
                         Oskari.getSandbox().requestByName(bundleInstance, 'userinterface.UpdateExtensionRequest', [bundleInstance, 'detach']);
                     }
                 };
