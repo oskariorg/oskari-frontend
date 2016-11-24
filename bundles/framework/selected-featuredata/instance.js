@@ -112,7 +112,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
             var flyout = me.plugins['Oskari.userinterface.Flyout'];
 
             var options = {
-                hidePrevious: true,
+                hidePrevious: false,
                 colourScheme: params.colourScheme,
                 font: params.font
             };

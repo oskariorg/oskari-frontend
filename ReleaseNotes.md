@@ -6,6 +6,8 @@
 
 Fixed deprecated Oskari.app.getBundleInstanceByName() function usages.
 
+Fixed popup keepPrevious handling.
+
 ### coordinatetool
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
