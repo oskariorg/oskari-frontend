@@ -422,13 +422,13 @@ Oskari.clazz.define(
                 if (actions) {
                     _.forEach(actions, function (action) {
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
-                        if (action.type === "link") {
+                        if (action.type === 'link') {
                             actionTemplate = me._actionLink.clone();
                             link = actionTemplate.find('a');
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
                             link.append(sanitizedActionName);
-                        } else {
+                        } else if(action.name){
                             actionTemplate = me._actionButton.clone();
                             btn = actionTemplate.find('input');
                             btn.attr({
