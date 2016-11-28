@@ -403,10 +403,7 @@ Oskari.clazz.define(
 
             item.hide();
             this.__tryRestMethods('DELETE', {
-                url: me.sandbox.getAjaxUrl('SearchWFSChannel'),
-                data : {
-                    id : uid
-                },
+                url: me.sandbox.getAjaxUrl('SearchWFSChannel') + '&id=' + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(

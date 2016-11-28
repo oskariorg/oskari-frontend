@@ -932,7 +932,7 @@ Oskari.clazz.define(
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
-                var zoom = {scale : result.zoomScale};
+                 zoom = {scale : result.zoomScale};
             }
 
            sandbox.request(
@@ -945,29 +945,23 @@ Oskari.clazz.define(
                 sandbox.postRequestByName(rn, [result.GEOMETRY, 'WKT', {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), false]);
             }
 
-            var loc = me.getLocalization('resultBox'),
-                resultActions = {},
-                action;
-            for (var name in this.resultActions) {
-                if (this.resultActions.hasOwnProperty(name)) {
-                    action = this.resultActions[name];
-                    resultActions[name] = action(result);
+            var loc = me.getLocalization('resultBox');
+
+            var content = [
+                {
+                    html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
+                    actions: [{
+                        name: loc.close,
+                        type: 'link',
+                        action: function(){
+                            var rN = 'InfoBox.HideInfoBoxRequest',
+                                rB = sandbox.getRequestBuilder(rN),
+                                request = rB(popupId);
+                            sandbox.request(me.getName(), request);
+                        }
+                    }]
                 }
-            }
-
-            var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
-                actions: resultActions
-            };
-            var content = [contentItem];
-
-            /* impl smashes action key to UI - we'll have to localize that here */
-            contentItem.actions[loc.close] = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = sandbox.getRequestBuilder(rN),
-                    request = rB(popupId);
-                sandbox.request(me.getName(), request);
-            };
+            ];
 
             var options = {
                 hidePrevious: true
