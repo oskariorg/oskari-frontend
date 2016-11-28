@@ -308,6 +308,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if(parent.width() < (me.dialog.width() + left)) {
                 left = parent.width() - me.dialog.width();
             }
+            // Check at if popup is outside screen from bottom
+            if(windowHeight < (me.dialog.outerHeight() + top)) {
+              //set the popup top-position to be the original top position - amount which is outside of screen
+                top = top - ((me.dialog.outerHeight() + top) - windowHeight);
+            }
 
             //move dialog to correct location
             me.dialog.css({
