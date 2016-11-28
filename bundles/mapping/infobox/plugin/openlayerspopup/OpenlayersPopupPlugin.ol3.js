@@ -33,6 +33,8 @@ Oskari.clazz.define(
             'top':'bottom-center',
             'bottom':'top-center'
         };
+
+        me.log = Oskari.log('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
     }, {
 
         /**
@@ -379,7 +381,6 @@ Oskari.clazz.define(
                 headerWrapper.append(additionalButton);
             });
 
-
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
                 contentDiv.outerHTML();
@@ -419,7 +420,7 @@ Oskari.clazz.define(
 
 	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
-                if (actions) {
+                if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === 'link') {
@@ -448,6 +449,8 @@ Oskari.clazz.define(
                         }
                         group = currentGroup;
                     });
+                } else if(typeof actions === 'object') {
+                    me.log.warn('Popup actions must be an Array. Cannot add tools.');
                 }
 
                 contentDiv.append(contentWrapper);

@@ -950,7 +950,7 @@ Oskari.clazz.define(
             var content = [
                 {
                     html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
-                    actions: {
+                    actions: [{
                         name: loc.close,
                         type: 'link',
                         action: function(){
@@ -959,7 +959,7 @@ Oskari.clazz.define(
                                 request = rB(popupId);
                             sandbox.request(me.getName(), request);
                         }
-                    }
+                    }]
                 }
             ];
 
