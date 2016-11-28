@@ -2,11 +2,17 @@
 
 ## 1.41.0
 
+### infobox
+
+Fixed action handling.
+
 ### selected-featuredata
 
 Fixed deprecated Oskari.app.getBundleInstanceByName() function usages.
 
 Fixed popup keepPrevious handling.
+
+Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
 
 ### coordinatetool
 

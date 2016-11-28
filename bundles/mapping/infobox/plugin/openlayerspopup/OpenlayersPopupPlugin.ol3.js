@@ -480,7 +480,7 @@ Oskari.clazz.define(
                     if (contentData[i] && contentData[i].actions) {
                         var actionObject = _.find(contentData[i].actions, {'name': text});
                         if (typeof actionObject.action === 'function') {
-                            contentData[i].actions[value]();
+                            actionObject.action();
                         } else {
                             var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
                             sandbox.notifyAll(event);
