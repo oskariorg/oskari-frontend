@@ -4,7 +4,9 @@
 
 ### infobox
 
-Fixed action handling.
+Fixed action handling. Now action not handled if action property is not Array.
+
+Fixed popup title height calculation when popup title is large text. Now title height calculation observe also popup additional tools.
 
 ### selected-featuredata
 
