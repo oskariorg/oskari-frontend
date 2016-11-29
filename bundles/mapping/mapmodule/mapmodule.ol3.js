@@ -280,6 +280,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         /**
+         * @method  @public getProjectionUnits Get projection units. If projection is not defined then using map projection.
+         * @param {String} srs projection srs, if not defined used map srs
+         * @return {String} projection units. 'degrees' or 'm'
+         */
+        getProjectionUnits: function(srs){
+            var me = this;
+            var units = null;
+            srs = srs || me.getProjection();
+
+            try {
+                var proj = ol.proj.get(srs);
+                units = proj.getUnits(); // return 'degrees' or 'm'
+            } catch(err){
+                var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+                log.warn('Cannot get map units for "' + srs + '"-projection!');
+            }
+            return units;
+        },
+
+        /**
          * @method panMapByPixels
          * Pans the map by given amount of pixels.
          * @param {Number} pX amount of pixels to pan on x axis

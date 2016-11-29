@@ -2,6 +2,19 @@
 
 ## 1.41.0
 
+### routingUI
+
+Now coordinates are rounded by current map projection definations. Round rules are defined by current map units.
+
+Special projection rounding conf added. Now the bundle configuration can contain projection specified rounding rules. For example:
+```javascript
+{
+    "EPSG:4326" {
+        "roundToDecimals": 4
+    }
+}
+```
+
 ### infobox
 
 Fixed action handling. Now action not handled if action property is not Array.
@@ -20,9 +33,35 @@ Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
 
+Improvements for showing coordinates:
+- if conf not include round rules, then coordinate decimals is concluded for selected projection units.
+- if conf not include format options, then degrees format is showed unit when selected projection is degrees unit.
+
+
 ### mapmodule ol2/ol3
 
-Now transformCoordinates funtion checks srs and targer srs. If these projection definations missings throwing error.
+Now transformCoordinates function checks srs and targer srs. If these projection definations missings throw error.
+
+New ``getProjectionDecimals`` -function, this function returns wanted projection decimals. If wanted projection is not defined, then using map projection. Decimals concluded from projection units. Now 'degrees' units returns 6 and 'm' units returns 0.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapProjectionDecimals = mapmodule.getProjectionDecimals();
+console.log('Map projection decimals = '+mapProjectionDecimals);
+var WGS84Decimals = mapmodule.getProjectionDecimals('EPSG:4326');
+console.log('WGS84 projection decimals = '+WGS84Decimals);
+```
+
+New ``getProjectionUnits`` -function, this function returns wanted projection units. If wanted projection is not defined, then using map projection.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapUnits = mapModule.getProjectionUnits();
+console.log('Map projection units = ' + mapUnits);
+var WGS84Units = mapModule.getProjectionUnits('EPSG:4326');
+console.log('WGS84 projection units = ' + WGS84Units);
+```
+
 
 ## 1.40.0
 

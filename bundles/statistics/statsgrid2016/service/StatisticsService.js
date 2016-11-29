@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
-                    ind.selectors.forEach(function(selector, index) {
+                    ind.selectors.forEach(function(selector) {
                         selector.allowedValues.forEach(function(value) {
                             if(val === (value.id || value)) {
                                 var name = value.name || value.id || value;
