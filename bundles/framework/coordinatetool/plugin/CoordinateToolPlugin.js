@@ -438,15 +438,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 inputData = me._getInputsData(),
                 lat = parseFloat(inputData.lonlat.lat),
                 lon = parseFloat(inputData.lonlat.lon),
-                data = {
+                inputLonLatData = {
                     'lonlat': {
                         'lat':lat,
                         'lon':lon
                     }
-                },
+                };
 
-                //change data to map projection and use it to place marker
-                data = me._coordinateTransformationExtension.transformCoordinates(data, me._previousProjection, me.getMapModule().getProjection());
+            //change data to map projection and use it to place marker
+            data = me._coordinateTransformationExtension.transformCoordinates(inputLonLatData, me._previousProjection, me.getMapModule().getProjection());
 
             //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
             if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
@@ -1179,7 +1179,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var conf = me._config;
 
             var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format) ? true : false;
-            var isDegrees = (isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') ? true : false;
+            var isDegrees = ((isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') || me._mapmodule.getMapUnits() === 'degrees') ? true : false;
 
             var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.format === 'string') ? true : false;
             if(!isProjectionShowConfig && isAllProjectionConfig) {
@@ -1198,7 +1198,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             var projection = checkedProjection || selectedProjection;
             var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number') ? true : false;
-            var decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : 0;
+
+            var decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : me._mapmodule.getProjectionDecimals(selectedProjection);
+
             var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number') ? true : false;
 
             if(!isProjectionShowConfig && isAllProjectionConfig) {

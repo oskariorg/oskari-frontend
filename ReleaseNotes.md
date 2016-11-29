@@ -20,6 +20,11 @@ Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
 
+Improvements for showing coordinates:
+- if conf not include round rules, then coordinate decimals is concluded for selected projection units.
+- if conf not include format options, then degrees format is showed unit when selected projection is degrees unit.
+
+
 ### mapmodule ol2/ol3
 
 Now transformCoordinates function checks srs and targer srs. If these projection definations missings throw error.
