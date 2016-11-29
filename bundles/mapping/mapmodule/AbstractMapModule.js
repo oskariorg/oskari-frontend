@@ -267,6 +267,8 @@ Oskari.clazz.define(
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
         getSize: Oskari.AbstractFunc('getSize'),
         getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
+        getProjectionUnits: Oskari.AbstractFunc('getProjectionUnits'),
+
         /**
          * @method centerMap
          * Moves the map to the given position and zoomlevel.
@@ -345,6 +347,24 @@ Oskari.clazz.define(
 
 
 /* ---------------- SHARED FUNCTIONS --------------- */
+
+        /**
+         * getProjectionDecimals get projection decimals
+         *
+         * @param {String} srs projection srs, if not defined used map srs
+         *
+         * @return {Integer} projetion decimals (decimal count spefied by units)
+         */
+        getProjectionDecimals: function(srs){
+            var me = this;
+            var units = me.getProjectionUnits(srs);
+            if(units === 'm') {
+                return 0;
+            } else if(units === 'degrees') {
+                return 6;
+            }
+            return 6;
+        },
         /**
          * Returns the id where map is rendered.
          * @return {String} DOMElement id like 'mapdiv'
