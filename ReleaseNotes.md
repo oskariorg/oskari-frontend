@@ -2,6 +2,19 @@
 
 ## 1.41.0
 
+### routingUI
+
+Now coordinates are rounded by current map projection definations. Round rules are defined by current map units.
+
+Special projection rounding conf added. Now the bundle configuration can contain projection specified rounding rules. For example:
+```javascript
+{
+    "EPSG:4326" {
+        "roundToDecimals": 4
+    }
+}
+```
+
 ### infobox
 
 Fixed action handling. Now action not handled if action property is not Array.
