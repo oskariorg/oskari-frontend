@@ -62,7 +62,7 @@ Oskari.clazz.define(
             '<div class="myplacescategoryform">' +
             '  <div class="field">' +
             '    <label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
-            '    <input type="text" name="categoryname" placeholder="' + loc.name.placeholder + '"/>' +
+            '    <input type="text" data-name="categoryname" placeholder="' + loc.name.placeholder + '"/>' +
             '  </div>' +
             '  <div class="field drawing">' +
             '    <label>' + loc.drawing.label + '</label><br clear="all" />' +
@@ -112,7 +112,7 @@ Oskari.clazz.define(
 
             if (onScreenForm.length > 0) {
                 // found form on screen
-                values.name = onScreenForm.find('input[name=categoryname]').val();
+                values.name = onScreenForm.find('input[data-name=categoryname]').val();
                 if (this.categoryId) {
                     values.id = this.categoryId;
                 }
