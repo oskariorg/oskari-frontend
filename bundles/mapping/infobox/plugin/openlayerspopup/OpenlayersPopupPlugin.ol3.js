@@ -288,7 +288,7 @@ Oskari.clazz.define(
                 var fixSize = {
                     top: 0,
                     left: 0,
-                    height: 16
+                    height: 24
                 };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
