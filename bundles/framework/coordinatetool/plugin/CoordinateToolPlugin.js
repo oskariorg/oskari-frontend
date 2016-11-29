@@ -66,8 +66,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '       <div class="margintop mousecoordinates-div"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
                 '   </div>'+
 
-                '   <div class="margintop reverseGeocodeContainer"> '+
-                '   </div> '+
+                '   <div class="margintop reverseGeocodeContainer">'+
+                '   </div>'+
                 '   <div class="margintop coordinatedisplay-emergencycall" style="display:none;">'+
                 '       <span class="coordinatedisplay-emergencycall-label"></span>'+
                 '       <span class="coordinatedisplay-emergencycall degreesY"></span>&deg;'+
@@ -78,11 +78,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '   </div>'+
                 '</div>'),
                 reverseGeocodeContainer: jQuery(
-                  '       <div class="geocodeControl"> '+
-                  '         <input id="reverseGeoCheckbox" class="reverseGeoCheckbox" type="checkbox" />' +
-                  '         <label class="reverseGeocodeInfoText" for="reverseGeoCheckbox"></label>' +
-                  '         <div class="reversegeocode-label reverseGeocode-label"></div>'+
-                  '       </div> '
+                  '<div class="geocodeControl"> '+
+                  '<input id="reverseGeoCheckbox" class="reverseGeoCheckbox" type="checkbox" />' +
+                  '<label class="reverseGeocodeInfoText" for="reverseGeoCheckbox"></label>' +
+                  '<div class="reversegeocode-label reverseGeocode-label"></div>'+
+                  '</div>'
                 ),
                 coordinateFormatDisplayY: jQuery(
                     '<div class="coordinate-format-display-y">'+
