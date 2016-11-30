@@ -13,7 +13,7 @@ Oskari.registerLocalization(
         "channels" : {
             "WHAT3WORDS_CHANNEL": "what3words",
             "NLS_NEAREST_FEATURE_CHANNEL": "Nearest address",
-            "ELFGEOLOCATOR_CHANNEL " : "GeoLocator"
+            "ELFGEOLOCATOR_CHANNEL" : "GeoLocator"
         },
         "channelDescriptions" : {
             "WHAT3WORDS_CHANNEL": "what3words is a unique combination of just 3 words that identifies a 3mx3m square, anywhere on the planet."
