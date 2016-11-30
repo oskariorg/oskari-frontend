@@ -230,43 +230,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._showCoordinatesNotValidMessage();
                 }
             });
+            var buttons = [centerToCoordsBtn];
             me._centerToCoordsBtn = centerToCoordsBtn;
+            if(me._markersSupported()) {
+                var addMarkerBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                addMarkerBtn.setTitle(loc.popup.addMarkerButton);
+                buttons.push(addMarkerBtn);
 
-            var addMarkerBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            addMarkerBtn.setTitle(loc.popup.addMarkerButton);
+                addMarkerBtn.setHandler(function() {
+                    // Check valid
+                    if(me._validLonLatInputs()) {
+                        var data = me._getInputsData();
 
-            addMarkerBtn.setHandler(function() {
-                // Check valid
-                if(me._validLonLatInputs()) {
-                    var data = me._getInputsData();
+                        var lon = me._lonInput.val(),
+                            lat = me._latInput.val();
 
-                    var lon = me._lonInput.val(),
-                        lat = me._latInput.val();
+                        var msg = null;
+                        if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                            msg = {
+                                lat: lat,
+                                lon: lon
+                            };
+                        }
 
-                    var msg = null;
-                    if(Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
-                        msg = {
-                            lat: lat,
-                            lon: lon
-                        };
-                    }
-
-                    if(!me._getPreciseTransform) {
-                        me._addMarker(data, msg);
-                        me._centerMapToSelectedCoordinates(data);
-                    } else {
-                        if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                        if(!me._getPreciseTransform) {
                             me._addMarker(data, msg);
                             me._centerMapToSelectedCoordinates(data);
                         } else {
-                            me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                            if(me._projectionSelect.val() === me._mapmodule.getProjection()) {
+                                me._addMarker(data, msg);
+                                me._centerMapToSelectedCoordinates(data);
+                            } else {
+                                me._getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                            }
                         }
+                    } else {
+                         me._showCoordinatesNotValidMessage();
                     }
-                } else {
-                     me._showCoordinatesNotValidMessage();
-                }
 
-            });
+                });
+            }
 
             // showmousecoordinates checkbox change
             popupContent.find('#mousecoordinates').unbind('change');
@@ -317,7 +320,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-coordinatetool'].iconCls);
                 });
 
-                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
+                me._popup.show(popupTitle, popupContent, buttons);
                 // move popup if el and topOffsetElement
                 if (el && el.length>0 && topOffsetElement && topOffsetElement.length>0) {
                     me._popup.moveTo(el, 'bottom', true, topOffsetElement);
@@ -345,7 +348,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 //show mouse coordinates
                 popupContent.find('div.mousecoordinates-div').show();
 
-                me._popup.show(popupTitle, popupContent, [centerToCoordsBtn, addMarkerBtn]);
+                me._popup.show(popupTitle, popupContent, buttons);
                 me._popup.moveTo(me.getElement(), popupLocation, true);
                 me._popup.adaptToMapSize(me._sandbox, popupName);
                 popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
@@ -427,6 +430,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           } else {
             me._reverseGeocodeLabel = popupContent.find('div.reverseGeocodeContainer');
           }
+        },
+        _markersSupported : function() {
+            var builder = this._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            return !!builder;
         },
         /**
          * Add marker according to the coordinates given in coordinate popup.
