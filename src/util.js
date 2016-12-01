@@ -390,9 +390,9 @@ Oskari.util = (function () {
         };
 
         for(var key in patterns) {
-            if(patterns.hasOwnProperty(key) && value.match(new RegExp(patterns))) {
+            if(patterns.hasOwnProperty(key) && value.match(new RegExp(patterns[key]))) {
                 log.debug('Coordinate match to pattern ' + key);
-                return value.match(new RegExp(patterns));
+                return value.match(new RegExp(patterns[key]));
             }
         }
 
