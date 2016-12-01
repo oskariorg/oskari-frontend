@@ -44,6 +44,8 @@ Improvements for showing coordinates:
 - if conf not include round rules, then coordinate decimals is concluded for selected projection units.
 - if conf not include format options, then degrees format is showed unit when selected projection is degrees unit.
 
+No longer shows "Add Marker" button if markers are not supported in the Oskari instance.
+
 ### mapmodule ol2/ol3
 
 Now transformCoordinates function checks srs and targer srs. If these projection definations missings throw error.
