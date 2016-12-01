@@ -818,7 +818,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 //X
                 coordinateDisplayDeg.find('span.degreesX').html(
-                    parseFloat(data.lonlat.lat).toFixed(9).replace('.', Oskari.getDecimalSeparator()) + '&deg;'
+                    parseFloat(data.lonlat.lat).toFixed(9).replace('.', me._decimalSeparator) + '&deg;'
                 );
 
                 coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesY + '&deg;');
@@ -826,7 +826,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 //Y
                 coordinateDisplayDegY.find('span.degreesY').html(
-                    parseFloat(data.lonlat.lon).toFixed(9).replace('.', Oskari.getDecimalSeparator()) +'&deg;'
+                    parseFloat(data.lonlat.lon).toFixed(9).replace('.', me._decimalSeparator) +'&deg;'
                 );
 
                 coordinateDisplayDegminY.find('span.degreesY').html(degmin.degreesX + '&deg;');
@@ -887,11 +887,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, "min"),
                 coordinateDisplayEmergencyCall = me._popupContent.find('div.coordinatedisplay-emergencycall');
 
-            var minutesX = ''  + parseFloat(degmin.minutesX.replace(Oskari.getDecimalSeparator(),'.')).toFixed(3);
-            minutesX = minutesX.replace('.', Oskari.getDecimalSeparator());
+            var minutesX = ''  + parseFloat(degmin.minutesX.replace(me._decimalSeparator,'.')).toFixed(3);
+            minutesX = minutesX.replace('.', me._decimalSeparator);
 
-            var minutesY = ''  + parseFloat(degmin.minutesY.replace(Oskari.getDecimalSeparator(),'.')).toFixed(3);
-            minutesY = minutesY.replace('.', Oskari.getDecimalSeparator());
+            var minutesY = ''  + parseFloat(degmin.minutesY.replace(me._decimalSeparator,'.')).toFixed(3);
+            minutesY = minutesY.replace('.', me._decimalSeparator);
 
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale.coordinatesTransform.emergencyCallLabel);
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label-and').html(me._locale.coordinatesTransform.emergencyCallLabelAnd);
