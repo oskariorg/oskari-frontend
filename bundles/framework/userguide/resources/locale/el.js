@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Η φόρτωση του οδηγού χρήστη απέτυχε. Παρακαλούμε δοκιμάστε πάλι αργότερα."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

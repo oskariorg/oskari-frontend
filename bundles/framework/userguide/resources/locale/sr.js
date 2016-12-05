@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Učitavanje uputstva za korisnike je neuspeštno. Molimo, pokušajte ponovo."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });

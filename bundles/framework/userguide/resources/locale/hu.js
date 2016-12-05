@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Használati útmutató betöltése sikertelen. Kérem próbálja később."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });

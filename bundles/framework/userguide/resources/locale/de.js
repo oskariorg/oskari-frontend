@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Fehler beim Laden des Benutzerhandbuchs. Bitte versuchen Sie es später noch einmal."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });
