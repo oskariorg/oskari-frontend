@@ -2,6 +2,10 @@
 
 ## 1.41.0
 
+### core
+
+Fixed Oskari.util.coordinateDegreesToMetric() and Oskari.util.coordinateMetricToDegrees() degree coordinates detection.
+
 ### routingUI
 
 Now coordinates are rounded by current map projection definations. Round rules are defined by current map units.
@@ -32,6 +36,9 @@ Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
 ### coordinatetool
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
+
+Improvements for inputs:
+- allow use dot or comma for lon/lat fields
 
 Improvements for showing coordinates:
 - if conf not include round rules, then coordinate decimals is concluded for selected projection units.
