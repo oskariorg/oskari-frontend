@@ -2,6 +2,59 @@
 
 ## 1.41.0
 
+### divmanazer
+
+#### ColorSelect
+
+``New component`` to show a color selection.
+```javascript
+var colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+
+colorSelect.setColorValues([
+    'ff0000',
+    '00ff00',
+    '0000ff',
+    ['ff0000', '00ff00', '0000ff'],
+    ['1b9e77','d95f02','7570b3','e7298a','66a61e','e6ab02'],
+    ['ffffb2','fed976','feb24c','fd8d3c','f03b20','bd0026']
+]);
+```
+
+Sets handler for color selection. Handler gives the selected color index.
+```javascript
+colorSelect.setHandler(function(selected){
+    console.log('Selected index: ' + selected);
+});
+```
+
+Change color select visualization.
+```javascript
+colorSelect.setUIColors({
+    hover: 'FF0000', // menu hover background color
+    selected: '00FF00', // selected background color
+    menu: '0000FF' // menu background color
+});
+```
+
+Select wanted color index.
+```javascript
+colorSelect.setValue(0);
+```
+
+Inserts the button to given element.
+
+```javascript
+var myUI = jQuery('div.mybundle.colorselect');
+colorSelect.insertTo(myUI);
+```
+
+Removes the color select.
+
+```javascript
+colorSelect.destroy();
+```
+
+
 ### core
 
 Fixed Oskari.util.coordinateDegreesToMetric() and Oskari.util.coordinateMetricToDegrees() degree coordinates detection.
@@ -124,7 +177,7 @@ Fixed wfs layer index calculation.
 
 ### divmanazer
 
-### Popup
+#### Popup
 
 Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
 
