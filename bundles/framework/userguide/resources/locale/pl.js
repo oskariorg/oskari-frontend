@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Pobranie instrukcji użytkownika nie powiodło się. Spróbuj ponownie później."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

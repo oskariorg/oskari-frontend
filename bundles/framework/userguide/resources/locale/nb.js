@@ -47,8 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "kartvindu, brukerveiledning",
-            "contentPart": "body"
+            "tags": "kartvindu, brukerveiledning"
         }
     }
 }

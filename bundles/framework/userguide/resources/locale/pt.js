@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Falha no carregamento do guia do utilizador. Por favor tente mais tarde"
         },
         "help": {
-            "tags": "vista, guia do utilizador",
-            "contentPart": "corpo"
+            "tags": "vista, guia do utilizador"
         }
     }
 });

@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Laden gebruikershandleiding is mislukt. Probeer het later opnieuw."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });
