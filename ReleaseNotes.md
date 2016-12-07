@@ -4,6 +4,10 @@
 
 ### divmanazer
 
+#### Popup
+
+Fixed popup max-width so at this cannot be bigger than map width.
+
 #### ColorSelect
 
 ``New component`` to show a color selection.
