@@ -2,9 +2,85 @@
 
 ## 1.41.0
 
+### divmanazer
+
+#### Popup
+
+Fixed popup max-width so at this cannot be bigger than map width.
+
+#### ColorSelect
+
+``New component`` to show a color selection.
+```javascript
+var colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+
+colorSelect.setColorValues([
+    'ff0000',
+    '00ff00',
+    '0000ff',
+    ['ff0000', '00ff00', '0000ff'],
+    ['1b9e77','d95f02','7570b3','e7298a','66a61e','e6ab02'],
+    ['ffffb2','fed976','feb24c','fd8d3c','f03b20','bd0026']
+]);
+```
+
+Sets handler for color selection. Handler gives the selected color index.
+```javascript
+colorSelect.setHandler(function(selected){
+    console.log('Selected index: ' + selected);
+});
+```
+
+Change color select visualization.
+```javascript
+colorSelect.setUIColors({
+    hover: 'FF0000', // menu hover background color
+    selected: '00FF00', // selected background color
+    menu: '0000FF' // menu background color
+});
+```
+
+Select wanted color index.
+```javascript
+colorSelect.setValue(0);
+```
+
+Inserts the button to given element.
+
+```javascript
+var myUI = jQuery('div.mybundle.colorselect');
+colorSelect.insertTo(myUI);
+```
+
+Removes the color select.
+
+```javascript
+colorSelect.destroy();
+```
+
+
+### core
+
+Fixed Oskari.util.coordinateDegreesToMetric() and Oskari.util.coordinateMetricToDegrees() degree coordinates detection.
+
+### routingUI
+
+Now coordinates are rounded by current map projection definations. Round rules are defined by current map units.
+
+Special projection rounding conf added. Now the bundle configuration can contain projection specified rounding rules. For example:
+```javascript
+{
+    "EPSG:4326" {
+        "roundToDecimals": 4
+    }
+}
+```
+
 ### infobox
 
-Fixed action handling.
+Fixed action handling. Now action not handled if action property is not Array.
+
+Fixed popup title height calculation when popup title is large text. Now title height calculation observe also popup additional tools.
 
 ### selected-featuredata
 
@@ -18,9 +94,42 @@ Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
 
 Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
 
+Improvements for inputs:
+- allow use dot or comma for lon/lat fields
+
+Improvements for showing coordinates:
+- if conf not include round rules, then coordinate decimals is concluded for selected projection units.
+- if conf not include format options, then degrees format is showed unit when selected projection is degrees unit.
+
+No longer shows "Add Marker" button if markers are not supported in the Oskari instance.
+
 ### mapmodule ol2/ol3
 
-Now transformCoordinates funtion checks srs and targer srs. If these projection definations missings throwing error.
+Now transformCoordinates function checks srs and targer srs. If these projection definations missings throw error.
+
+New ``getProjectionDecimals`` -function, this function returns wanted projection decimals. If wanted projection is not defined, then using map projection. Decimals concluded from projection units. Now 'degrees' units returns 6 and 'm' units returns 0.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapProjectionDecimals = mapmodule.getProjectionDecimals();
+console.log('Map projection decimals = '+mapProjectionDecimals);
+var WGS84Decimals = mapmodule.getProjectionDecimals('EPSG:4326');
+console.log('WGS84 projection decimals = '+WGS84Decimals);
+```
+
+New ``getProjectionUnits`` -function, this function returns wanted projection units. If wanted projection is not defined, then using map projection.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapUnits = mapModule.getProjectionUnits();
+console.log('Map projection units = ' + mapUnits);
+var WGS84Units = mapModule.getProjectionUnits('EPSG:4326');
+console.log('WGS84 projection units = ' + WGS84Units);
+```
+
+## myplaces2
+
+Renamed name-attributes on forms to data-name since atleast Chrome removes the name-attribute if there is another element with the same name.
 
 ## 1.40.0
 
@@ -72,7 +181,7 @@ Fixed wfs layer index calculation.
 
 ### divmanazer
 
-### Popup
+#### Popup
 
 Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
 

@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Օգտագործողի ուղեցույցի ներբեռնման ձախողում.կրկին փորձել"
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });

@@ -234,6 +234,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.notifyMoveEnd();
             }
         },
+
+        /**
+         * @method  @public getMapUnits Get map units
+         * @return {String} map units. 'degrees' or 'm'
+         */
+        getMapUnits: function(){
+            var me = this;
+            var map = me.getMap();
+            return map.getUnits(); // return 'degrees' or 'm'
+        },
+
+        /**
+         * @method  @public getProjectionUnits Get projection units. If projection is not defined then using map projection.
+         * @param {String} srs projection srs, if not defined used map srs
+         * @return {String} projection units. 'degrees' or 'm'
+         */
+        getProjectionUnits: function(srs){
+            var me = this;
+            var units = null;
+            srs = srs || me.getProjection();
+
+            try {
+                var proj = new Proj4js.Proj(srs);
+                units = proj.units || 'degrees'; // return 'degrees' or 'm'
+            } catch(err){
+                var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+                log.warn('Cannot get map units for "' + srs + '"-projection!');
+            }
+            return units;
+        },
+
         /**
          * Get maps current extent.
          * @method getCurrentExtent

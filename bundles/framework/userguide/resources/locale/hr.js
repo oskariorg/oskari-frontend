@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Greška u učitavanju vodiča za upotrebu. Pokušajte kasnije."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

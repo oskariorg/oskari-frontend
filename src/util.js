@@ -6,6 +6,7 @@
 *
 */
 Oskari.util = (function () {
+    var log = Oskari.log('Oskari.util');
     var util = {};
 
     /**
@@ -370,60 +371,33 @@ Oskari.util = (function () {
     };
 
     var coordinateDMSDecode = function(value) {
-        var pattern1 = "";
-        var pattern2 = "";
-        var pattern3 = "";
         if(typeof value === 'number') {
             value = '' + value;
         }
         value = value.replace(Oskari.getDecimalSeparator(), '.');
+        // also convert comma to dot
+        value = value.replace(',', '.');
 
-        // Allow deg min sec
-        // deg
-        pattern1 += "(-?\\d+)[";
-        pattern1 += coordChars.CHAR_DEG;
-        pattern1 += "d";
-        pattern1 += "]\\s*";
+        var patterns = {
+            'DDMMSS.s':     '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
+                            '(\\d+)' + coordChars.CHAR_MIN + '\\s*' +               // MM
+                            '(\\d+(?:\\.\\d+)?)' + coordChars.CHAR_SEC,             // SS.s
+            'DDMM.mmm 1':   '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
+                            '(\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_MIN + ']\\s*',  // MM.mmm
+            'DDMM.mmm 2':   '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
+                            '(\\d+(?:\\.\\d+)?)\\s*',                               // MM.mmm
+            'DD.ddddd':     '(\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_DEG + 'd]\\s*' // DD.ddd
+        };
 
-        // min
-        pattern1 += "(\\d+)";
-        pattern1 += coordChars.CHAR_MIN;
-        pattern1 += "\\s*";
-
-        // sec
-        pattern1 += "(\\d+(?:\\.\\d+)?)";
-        pattern1 += coordChars.CHAR_SEC;
-
-
-        // Allow deg min
-        // deg
-        pattern2 += "(-?\\d+)[";
-        pattern2 += coordChars.CHAR_DEG;
-        pattern2 += "d";
-        pattern2 += "]\\s*";
-
-        // min
-        pattern2 += "(\\d+(?:\\.\\d+)?)";
-        pattern2 += coordChars.CHAR_MIN;
-        pattern2 += "\\s*";
-
-        // Allow deg
-        // deg
-        pattern3 += "(\\d+(?:\\.\\d+)?)[";
-        pattern3 += coordChars.CHAR_DEG;
-        pattern3 += "d";
-        pattern3 += "]\\s*";
-
-
-        if(value.match(new RegExp(pattern1)))  {
-            return value.match(new RegExp(pattern1));
-        } else if (value.match(new RegExp(pattern2))) {
-            return value.match(new RegExp(pattern2));
-        } else if (value.match(new RegExp(pattern3))) {
-            return value.match(new RegExp(pattern3));
-        } else {
-            return null;
+        for(var key in patterns) {
+            if(patterns.hasOwnProperty(key) && value.match(new RegExp(patterns[key]))) {
+                log.debug('Coordinate match to pattern ' + key);
+                return value.match(new RegExp(patterns[key]));
+            }
         }
+
+        log.debug('Coordinate not match to any patterns');
+        return null;
     };
 
     util.coordinateMetricToDegrees = function(point, decimals){

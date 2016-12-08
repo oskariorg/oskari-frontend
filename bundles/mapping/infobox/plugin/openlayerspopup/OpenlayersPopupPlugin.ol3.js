@@ -288,7 +288,7 @@ Oskari.clazz.define(
                 var fixSize = {
                     top: 0,
                     left: 0,
-                    height: 0
+                    height: 24
                 };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
@@ -296,7 +296,7 @@ Oskari.clazz.define(
                     var popupHeaderChildren = jQuery(this);
                     fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
                     fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
-                    fixSize.height += popupHeaderChildren.height();
+                    fixSize.height += popupHeaderChildren.height() - popupHeaderChildren.position().top;
                 });
 
                 var fixedHeight = fixSize.height;

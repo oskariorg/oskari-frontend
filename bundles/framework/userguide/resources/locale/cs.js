@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Nahrávání uživatelské příručky selhalo. Zkuste to prosím později."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

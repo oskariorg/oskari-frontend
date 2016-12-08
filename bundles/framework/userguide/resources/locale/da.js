@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Fejl ved indlæsning af brugervejledning. Prøv venligst igen senere."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });

@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Dështoi ngarkimi i udhëzuesit të përdoruesit. Ju lutem provoni më vonë."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });

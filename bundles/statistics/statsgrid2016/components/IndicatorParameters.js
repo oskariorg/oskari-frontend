@@ -145,7 +145,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
 		var allRegionsets = me.service.getRegionsets();
-
 		var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
 		var label = (locale.parameters.regionset) ? locale.parameters.regionset : 'Regionset';
 		var select = me.__templates.select({
@@ -154,7 +153,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 			placeholder: placeholderText,
 			label: label
 		});
-
 		var allowedRegionsets = [];
 
 		var addAllowedRegionSets = function(indicatorRegionset){

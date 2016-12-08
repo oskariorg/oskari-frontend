@@ -76,6 +76,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this._isVisible = true;
 
+            var map = Oskari.getSandbox().getMap();
+            if(map) {
+                this.dialog.css('max-width', map.getWidth() + 'px');
+            }
+
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
@@ -551,12 +556,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 popup = me.dialog;
 
             // if dialog ends up offscreen, move it back to the screen
-            if (parseInt(popup[0].style['left']) > (size.width - popup.width())) {
+            if (parseInt(popup[0].style.left) > (size.width - popup.width())) {
                 popup.css({
                     'left': (size.width - popup.width() - 10) + 'px'
                 });
             }
-            if (parseInt(popup[0].style['top']) > (size.width - popup.height())) {
+            if (parseInt(popup[0].style.top) > (size.width - popup.height())) {
                 popup.css({
                     'top': (size.width - popup.height() - 10) + 'px'
                 });

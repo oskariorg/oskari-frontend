@@ -51,7 +51,7 @@ Oskari.clazz.define(
                 cel.addClass('statsgrid');
             }
 
-            if(conf.showLegend === true) {
+            if(typeof conf.showLegend === 'boolean' && conf.showLegend) {
                 me.renderPublishedLegend(conf);
             }
             if(me.hasPublished() && conf.grid) {
@@ -429,7 +429,7 @@ Oskari.clazz.define(
 
                 element.on('chosen:hiding_dropdown', function(event) {
                     var chosen_container = jQuery(event.target).next('.chosen-container');
-                    var offset = chosen_container.offset();
+
                     var dropdown = chosen_container.find('.chosen-drop');
                     dropdown.css('position', '');
                     dropdown.css('width', '');

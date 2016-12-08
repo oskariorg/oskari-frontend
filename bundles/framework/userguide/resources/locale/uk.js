@@ -16,8 +16,7 @@ Oskari.registerLocalization({
             "generic": "Сталася помилка при завантаження інструкції користувача. Будь-ласка, спробуйте пізніше"
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": "NOT TRANSLATED"
         }
     }
 });
