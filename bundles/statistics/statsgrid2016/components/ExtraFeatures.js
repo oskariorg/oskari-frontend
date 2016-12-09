@@ -36,7 +36,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ExtraFeatures', function(instan
 		checkbox.setHandler(function() {
 			me.toggleSelectedLayersVisibility(checkbox.isChecked());
 		});
-		return checkbox.getElement();
+
+		var test = jQuery('<div></div>');
+		test.append(checkbox.getElement());
+
+var colorSelection = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+
+colorSelection.setColorValues(['ff0000', '00ff00', '0000ff', ['ff0000', '00ff00', '0000ff'],
+        ['1b9e77','d95f02','7570b3','e7298a','66a61e','e6ab02'],
+        ['ffffb2','fed976','feb24c','fd8d3c','f03b20','bd0026']
+        ]);
+//colorSelection.setColorValues(['ff00ff', '0000ff', ['ff0000', '00ff00', '0000ff']]);
+colorSelection.setHandler(function(selected){
+	console.log('Selected index: ' + selected);
+});
+/*
+colorSelection.setUIColors({
+            hover: 'FF0000',
+            selected: '00FF00',
+            menu: '0000FF'
+        });*/
+colorSelection.setValue(0);
+var el = colorSelection.getElement();
+test.append(el);
+setTimeout(function(){
+	jQuery('.oskari-flyoutcontent.statsgrid .accordion_panel').css('overflow', 'visible');
+},1000);
+		return test;
+		//return checkbox.getElement();
 	},
 
 	/**

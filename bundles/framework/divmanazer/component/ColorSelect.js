@@ -15,7 +15,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         this._colorsConfig = {
             hover: '306BC8',
             selected: 'FFFFFF',
-            menu: 'FFFFFF'
+            menu: 'FFFFFF',
+            colorBorder: '555555'
         };
 
         this._templates = {
@@ -26,7 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             selection: jQuery('<div class="oskari-color-selection"></div>'),
             option: jQuery('<div class="oskari-color-option"></div>'),
             color: jQuery('<div class="oskari-color"></div>'),
-            emptyDiv: jQuery('<div></div>')
+            emptyDiv: jQuery('<div class="color"></div>')
         };
 
         this._clazz = 'Oskari.userinterface.component.ColorSelect';
@@ -129,17 +130,19 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          */
         _getColorTemplate: function(colorsDef){
             var me = this;
-            var width = 6, template, i, color;
+            var width = 6, template, i, color, opt;
 
             if(typeof colorsDef === 'string') {
+                opt = me._templates.emptyDiv.clone();
                 width = 16;
                 template = me._templates.color.clone();
                 template.css('background', '#' +colorsDef);
                 template.width(width);
-                return template;
+                opt.append(template);
+                return opt;
             }
             else if (typeof colorsDef === 'object' && colorsDef.length > 0) {
-                var opt = me._templates.emptyDiv.clone();
+                opt = me._templates.emptyDiv.clone();
                 for(i=0;i<colorsDef.length;i++){
                     color = colorsDef[i];
                     template = me._templates.color.clone();
@@ -258,6 +261,18 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                     opt.hover(hoverIn, hoverOut);
                     opt.append(colorSel);
                     opt.attr('data-index', i);
+
+
+
+                    var width = 6;
+
+                    if(typeof colorsDef === 'string') {
+                        width = 16;
+                    } else {
+                        width = 6 * colorsDef.length;
+                    }
+                    opt.find('.color').height(16).width(width).css('border', '1px solid #' + me._colorsConfig.colorBorder);
+
                     opt.append('<div style="clear:both;"></div>');
                     opt.bind('click', colorClickHandler);
                     me._selection.append(opt);

@@ -90,6 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             if(config.mouseEarLegend === true) {
                 this.addSideTool(locale.legend.title, function(el){
                     me.__sideTools.legend.sideTool = el;
+
                     me.getLegendFlyout(
                     {
                         callbacks: {
@@ -97,7 +98,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                                 me.__sideTools.legend.opened = false;
                             },
                             show: function(popup) {
-                                me.__sideTools.legend.flyout.setContent(me.__sideTools.legend.comp.getClassification());
+                                var classification = me.__sideTools.legend.comp.getClassification();
+
+                                me.__sideTools.legend.flyout.setContent(classification);
+
                                 me.setSideToolPopupPosition(popup);
                             },
                             after: function(){
@@ -108,6 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                                     me.__sideTools.legend.flyout.show();
                                     me.__sideTools.legend.opened = true;
                                 }
+
                             }
                         },
                         locale: locale.legend,
@@ -126,7 +131,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             if(parent.length === 0) {
                 return;
             }
-            var left = parent.position().left + parent.outerWidth() + tool.width();
+            var left = parent.position().left + parent.outerWidth() + tool.width() - 16;
 
             if(left + popup.width() > jQuery(window).width()) {
                 left = left - popup.width() - tool.width();

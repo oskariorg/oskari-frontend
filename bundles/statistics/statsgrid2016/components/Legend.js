@@ -3,17 +3,84 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this.sb = this.instance.getSandbox();
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
-    this.colorService = this.sb.getService('Oskari.statistics.statsgrid.ColorService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.locale = this.instance.getLocalization();
     this._bindToEvents();
     this.__templates = {
         legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
         noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
-        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
+        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>'),
+        classifications: jQuery('<div class="classifications">'+
+            '<div class="classification-options">'+
+                '<div class="classification-method">'+
+                    '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
+                    '<div class="method value">'+
+                        '<select class="method">'+
+                            '<option value="1" selected="selected">'+this.locale.classify.jenks+'</option>'+
+                            '<option value="2">'+this.locale.classify.quantile+'</option>'+
+                            '<option value="3">'+this.locale.classify.eqinterval+'</option>'+
+                            '<option value="4">'+this.locale.classify.manual+'</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
+                '<div class="classification-count">'+
+                    '<div class="label">'+ this.locale.classify.classes +'</div>'+
+                    '<div class="amount-class value">'+
+                        '<select class="amount-class">'+
+                            '<option value="2">2</option>'+
+                            '<option value="3">3</option>'+
+                            '<option value="4">4</option>'+
+                            '<option value="5" selected="selected">5</option>'+
+                            '<option value="6">6</option>'+
+                            '<option value="7">7</option>'+
+                            '<option value="8">8</option>'+
+                            '<option value="9">9</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
+                '<div class="classification-mode">'+
+                    '<div class="label">'+ this.locale.classify.mode +'</div>'+
+                    '<div class="classify-mode value">'+
+                        '<select class="classify-mode">'+
+                            '<option value="distinct" selected="selected">'+ this.locale.classify.modes.distinct +'</option>'+
+                            '<option value="discontinuous">'+ this.locale.classify.modes.discontinuous +'</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
+                '<div class="classification-colors">'+
+                    '<div class="label">'+ this.locale.colorset.button +'</div>'+
+                    '<div class="classification-colors value">'+
+
+                    '</div>'+
+                    '<button class="reverse-colors">'+this.locale.colorset.flipButton+'</button>'+
+                '</div>'+
+
+                '<div class="classification-color-set">'+
+                    '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
+                    '<div class="color-set value">'+
+                        '<select class="color-set">'+
+                            '<option value="seq" selected="selected">'+ this.locale.colorset.sequential +'</option>'+
+                            '<option value="qual">'+ this.locale.colorset.qualitative +'</option>'+
+                            '<option value="div">'+ this.locale.colorset.divergent +'</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
+            '</div>'+
+
+            '</div>')
+
     };
     this.__legendElement = this.__templates.legendContainer.clone();
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
+    this._panel = null;
+    this._accordion = null;
+    this._container = jQuery('<div class="accordion-theming"></div>');
+    this._colorSelect = null;
+    this._selectedColorIndex = 0;
 }, {
     /****** PRIVATE METHODS ******/
 
@@ -72,6 +139,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
             return;
         }
 
+        me.__legendElement.empty();
+
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
             if(err) {
                 me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
@@ -109,11 +178,77 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
                 service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
                     var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
-                    me.__legendElement.html(legend);
+                    var jQueryLegend = jQuery(legend);
+                    var isAccordion = true;
+
+                    if(!me._accordion) {
+                        me._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+
+                        me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                        me._panel.setVisible(true);
+                        me._panel.setTitle(me.locale.classify.editClassifyTitle);
+                        me._panel.setContent(me._getEditClassifyContent());
+                        me._accordion.addPanel(me._panel);
+                        me._accordion.insertTo(me._container);
+                        isAccordion = false;
+                    }
+
+                    if(!me._colorSelect) {
+                        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+                        me._changeColors();
+                        me._colorSelect.setHandler(function(selected){
+                            console.log('Selected index: ' + selected);
+                            me._selectedColorIndex = selected;
+                        });
+
+                        var el = me._colorSelect.getElement();
+                        me._container.find('.classification-colors.value').append(el);
+                    }
+                    me._container.insertAfter(jQueryLegend.find('.geostats-legend-title'));
+
+                    me.__legendElement.append(jQueryLegend);
+
+                    // FIXME some timing issue when showing classification second or more times
+                    // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
+                    if(isAccordion) {
+                        setTimeout(function(){
+                            me.addEditHandlers();
+                        }, 200);
+                    }
+
+                    setTimeout(function(){
+                        me.addSelectHandlers();
+                    }, 200);
+
                 });
 
             });
         });
+    },
+
+    _getEditClassifyContent: function(){
+        var me = this;
+        var classifyOptions = me.__templates.classifications.clone();
+        return classifyOptions;
+    },
+
+    _changeColors: function(){
+        var me = this;
+        me._selectedColorIndex = 0;
+        var selections = me._getSelections();
+        me._colorSelect.setColorValues(me.service.getColorService().getColors(selections.type, selections.amount));
+        me._colorSelect.setValue(selections.colorIndex);
+    },
+
+    _getSelections: function(){
+        var me = this;
+        return {
+            method: me._container.find('select.method').val(),
+            amount: me._container.find('select.amount-class').val(),
+            mode: me._container.find('select.classify-mode').val(),
+            type: me._container.find('select.color-set').val(),
+            colorIndex: me._selectedColorIndex
+        };
     },
 
     /****** PUBLIC METHODS ******/
@@ -127,6 +262,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         me.__legendElement.html(me.__templates.noActiveSelection.clone());
         me._renderActiveIndicator();
         return me.__legendElement;
+    },
+
+    addEditHandlers: function(){
+        var me = this;
+        if(!me.__legendElement || !me._panel) {
+            return;
+        }
+        me.__legendElement.find('.accordion_panel').click(function(){
+            var el = jQuery(this);
+
+            if(el.hasClass('open')) {
+                me._panel.close();
+            } else {
+                me._panel.open();
+            }
+        });
+
+    },
+
+    addSelectHandlers: function(){
+        var me = this;
+        if(!me.__legendElement || !me._panel) {
+            return;
+        }
+        me.__legendElement.find('select').bind('change', function(event){
+            event.stopPropagation();
+            me._changeColors();
+        });
     }
 
 });

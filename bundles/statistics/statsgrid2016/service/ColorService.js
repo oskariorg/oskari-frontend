@@ -104,6 +104,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return getArray(this.colorsets[0]);
         },
 
+        getColors: function(type, count){
+            var me = this,
+                i,
+                set;
+            var colors = [];
+
+            // if type and count setted, return wanted colors
+            if(type && count) {
+                for(i=0;i<me.colorsets.length;i++) {
+                    set = me.colorsets[i];
+                    if(set.type === type) {
+                        colors.push(me.getColorset(count, type, set.name));
+                    }
+                }
+            }
+            // else if type setted, return type colors
+            else if(type) {
+                 for(i=0;i<me.colorsets.length;i++) {
+                    set = me.colorsets[i];
+                    if(set.type === type) {
+                        colors.push(me.getColorset(set.colors.length + 2, type, set.name));
+                    }
+                }
+            }
+            // else return all
+            else {
+                for(i=0;i<me.colorsets.length;i++) {
+                    set = me.colorsets[i];
+                    colors.push(me.getColorset(set.colors.length + 1, set.type, set.name));
+                }
+            }
+
+            return colors;
+        },
+
         colorsets : [{
                 'name': 'BrBG',
                 'type': 'div',

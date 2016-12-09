@@ -10,7 +10,7 @@ The color select component is defined in divmanazer bundle and provides a generi
 
 ## How to use
 
-Creates a color select. Three first are single colors and then use many colors.
+Creates a color selection. Three first are single colors and then use many colors.
 
 ```javascript
 var colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
