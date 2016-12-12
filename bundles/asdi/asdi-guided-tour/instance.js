@@ -3,15 +3,14 @@
  *
  * Add this to startupsequence to get this bundle started
  {
- bundlename : 'asdi-guidedtour',
- bundleinstancename : 'asdi-guidedtour',
- metadata : {
- "Import-Bundle" : {
- "asdi-guidedtour" : {
- bundlePath : '/<path to>/packages/framework/bundle/'
- }
- }
- }
+   bundlename : 'asdi-guided-tour',
+   metadata : {
+   "Import-Bundle" : {
+   "asdi-guided-tour" : {
+   bundlePath : '/Oskari/packages/asdi/bundle/'
+   }
+   }
+   }
  }
  */
 Oskari.clazz.define(
@@ -81,7 +80,6 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
-          debugger;
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
