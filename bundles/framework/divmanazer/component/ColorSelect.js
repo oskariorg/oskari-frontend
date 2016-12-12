@@ -11,11 +11,11 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
      * @method create called automatically on construction
      */
     function () {
-        'use strict';
         this._colorsConfig = {
             hover: '306BC8',
             selected: 'FFFFFF',
-            menu: 'FFFFFF'
+            menu: 'FFFFFF',
+            colorBorder: '555555'
         };
 
         this._templates = {
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             selection: jQuery('<div class="oskari-color-selection"></div>'),
             option: jQuery('<div class="oskari-color-option"></div>'),
             color: jQuery('<div class="oskari-color"></div>'),
-            emptyDiv: jQuery('<div></div>')
+            emptyDiv: jQuery('<div class="color"></div>')
         };
 
         this._clazz = 'Oskari.userinterface.component.ColorSelect';
@@ -45,10 +45,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         /**
          * @method @private _destroyImpl
          * Called before component element is removed. Useful for cleanup.
-         * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
-        _destroyImpl: function (cleanup) {
-            'use strict';
+        _destroyImpl: function () {
             this.close();
             return undefined;
         },
@@ -59,7 +57,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          *     Implement if the component can actually be disabled.
          */
         _setEnabledImpl: function (enabled) {
-            'use strict';
             this._enabled = enabled;
             return undefined;
         },
@@ -70,7 +67,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @return {Boolean} enabled
          */
         isEnabled: function () {
-            'use strict';
             return this.enabled;
         },
 
@@ -79,7 +75,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @return {Integer} selected index. If not anything selected then return -1
          */
         getValue: function () {
-            'use strict';
             if(typeof this._selectedIndex === 'undefined') {
                 return -1;
             }
@@ -102,7 +97,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @param {Integer} value
          */
         setValue: function (value) {
-            'use strict';
             var me = this;
 
             me._element.find('.oskari-color-selection .oskari-color-option').css('background-color', '#' + me._colorsConfig.menu).attr('data-selected', false);
@@ -129,17 +123,23 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          */
         _getColorTemplate: function(colorsDef){
             var me = this;
-            var width = 6, template, i, color;
+            if(colorsDef === null) {
+                return;
+            }
+            var width = 6, template, i, color, opt;
+
 
             if(typeof colorsDef === 'string') {
+                opt = me._templates.emptyDiv.clone();
                 width = 16;
                 template = me._templates.color.clone();
                 template.css('background', '#' +colorsDef);
                 template.width(width);
-                return template;
+                opt.append(template);
+                return opt;
             }
             else if (typeof colorsDef === 'object' && colorsDef.length > 0) {
-                var opt = me._templates.emptyDiv.clone();
+                opt = me._templates.emptyDiv.clone();
                 for(i=0;i<colorsDef.length;i++){
                     color = colorsDef[i];
                     template = me._templates.color.clone();
@@ -193,11 +193,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._element.empty();
 
             if(typeof colors === 'object' && colors.length>0){
-
                 me._selected =  me._templates.selected.clone();
                 me._selection = me._templates.selection.clone();
 
-                // HAndler for color selection or pressing arrow down
+                // Handler for color selection or pressing arrow down
                 var selectHandler = function(event){
                     event.stopPropagation();
                     var arrow = me._element.find('.color-selection-arrow');
@@ -246,18 +245,24 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
                 for(i=0;i<colors.length;i++){
                     colorsDef = colors[i];
-
                     colorSel = me._getColorTemplate(colorsDef);
                     if(!colorSel) {
                         continue;
                     }
-
                     var opt = me._templates.option.clone();
                     opt.css('background-color', '#' + me._colorsConfig.menu);
-
                     opt.hover(hoverIn, hoverOut);
                     opt.append(colorSel);
                     opt.attr('data-index', i);
+
+                    var width = 6;
+                    if(typeof colorsDef === 'string') {
+                        width = 16;
+                    } else {
+                        width = 6 * colorsDef.length;
+                    }
+                    opt.find('.color').height(16).width(width).css('border', '1px solid #' + me._colorsConfig.colorBorder);
+
                     opt.append('<div style="clear:both;"></div>');
                     opt.bind('click', colorClickHandler);
                     me._selection.append(opt);

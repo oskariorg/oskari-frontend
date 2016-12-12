@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
+        this.theming = null;
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -33,6 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             this.selectRegion();
             this.setRegionset();
+            this.setTheming();
         },
         /**
          * Returns id of the current regionset
@@ -61,6 +63,52 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
             this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
+
+        /**
+         * Sets the current theming and sends out event notifying about the change
+         * @param {Object} theming
+         */
+        setTheming : function(indicator, theming) {
+
+            if(!indicator && !theming) {
+                this.theming = null;
+                return;
+            }
+
+            if(this.theming === null) {
+                this.theming = {};
+            }
+
+            var previousSet = this.theming[indicator];
+            this.theming[indicator] = theming;
+            // notify
+            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ThemeChangedEvent');
+            if(eventBuilder) {
+                this.sandbox.notifyAll(eventBuilder(this.theming[indicator], previousSet));
+            }
+        },
+        /**
+         * Gets theming
+         * @param  {String|null} indicator indicator theme or if no set get all themes
+         */
+        getTheming : function(indicator) {
+            if(indicator && this.theming && this.theming[indicator]) {
+                return this.theming[indicator];
+            }
+
+            if(this.theming) {
+                return this.theming;
+            }
+            // defaults
+            return {
+                amount: 5,
+                method: 1,
+                colorIndex: 0,
+                type:'seq',
+                mode: 'discontinous'
+            };
+        },
+
         /**
          * Returns an array of objects containing details (datasource, id, selections) of currently selected indicators.
          * @return {Object[]} currently selected indicators

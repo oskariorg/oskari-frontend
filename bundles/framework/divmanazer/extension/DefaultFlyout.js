@@ -44,14 +44,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         _calcSideLabelPositions: function(){
             var me = this;
             var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
-            var heights = 0;
-            jQuery.each(sidelabels.get().reverse(), function(index, sidelabel) {
+            var flyout = this.container.parents('.oskari-flyout');
+            var heights = flyout.find('.oskari-flyouttoolbar').outerHeight();
+            jQuery.each(sidelabels.get(), function(index, sidelabel) {
                 if(index === 0) {
-                    jQuery(this).css('bottom', heights);
+                    jQuery(this).css('top', heights);
                     heights += jQuery(this).height() + 10;
                 }
                 else {
-                    jQuery(this).css('bottom', heights + 'px');
+                    jQuery(this).css('top', heights + 'px');
                     heights += jQuery(this).height() + 10;
                 }
             });
@@ -77,7 +78,17 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
 
             var textSize = textWidth(sidelabel.find('label'));
 
-            this.container.parents('.oskari-flyout').append(sidelabel);
+            var flyout = this.container.parents('.oskari-flyout');
+            var parent = this.container.parent();
+            var width = parent.width();
+            if(!me._changedSizeOfContent){
+                parent.width(width - 20);
+                me._changedSizeOfContent = true;
+            } else {
+                width += 20;
+            }
+            sidelabel.css('left', (width - 16) + 'px');
+            flyout.append(sidelabel);
 
             sidelabel.css('height', (textSize + sidelabel.find('.icon').height() + 10) + 'px');
 

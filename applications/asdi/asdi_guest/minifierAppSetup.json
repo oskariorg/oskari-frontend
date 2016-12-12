@@ -372,7 +372,15 @@
                     }
                 }
             }
+        }, {
+            "bundlename": "asdi-guided-tour",
+            "metadata": {
+                "Import-Bundle": {
+                    "asdi-guided-tour": {
+                        "bundlePath": "../../../packages/asdi/bundle/"
+                    }
+                }
+            }
         }
-
     ]
 }

@@ -4,6 +4,11 @@
 
 ### divmanazer
 
+#### DefaultFlyout
+
+Improvements for sidetools buttons positions. Now sidetools are added to top and inside of flyout.
+
+
 #### Popup
 
 Fixed popup max-width so at this cannot be bigger than map width.

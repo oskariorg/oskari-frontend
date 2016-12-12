@@ -71,6 +71,37 @@ Oskari.registerLocalization(
         "published": {
             "showMap": "Visa karta",
             "showTable": "Show tabell"
+        },
+
+        "classify": {
+            "classify": "Klassificering",
+            "classifymethod": "Klassificeringsmetod",
+            "classes": "Klasser",
+            "jenks": "Jenks intervall",
+            "quantile": "Kvantiler",
+            "eqinterval": "Lika intervall",
+            "manual": "Egna klasser",
+            "manualPlaceholder": "Ange siffrorna, separerade med kommatecken.",
+            "manualRangeError": "Klass intervallen bör vara nummer mellan {min} och {max}. Ingångs siffror separerade med kommatecken. Decimal separeras med en punkt.",
+            "nanError": "Det angivna värdet är inte ett nummer. Ange ingångsklass intervall igen som siffror separerade med kommatecken. Decimal separeras med en punkt.",
+            "infoTitle": "Egna klasser",
+            "info": "Ange siffrorna igen separerade med kommatecken. Decimal separeras med en punkt. Till exempel genom att mata in \"\" 0, 10,5, 24, 30,2, 57, 73,1 \" får du fem klasser som har värden mellan\" 0-10,5 \",\" 10,5-24 \",\" 24-30,2 \", \"30,2-57\" ja \"57-73,1\". Om indikatorns värde är mindre än minimivärdet (0) eller större än det maximala värdet (73,1) visas det inte på kartan. Klass intervallen bör vara nummer mellan {min} och {max}.",
+            "mode": "Klass intervall",
+            "modes": {
+                "distinct": "Kontinuerlig",
+                "discontinuous": "Separat"
+            }
+        },
+        "colorset": {
+            "button": "Färger",
+            "flipButton": "Vänd färger",
+            "themeselection": "Färgvalstema",
+            "setselection": "Färgset urval",
+            "sequential": "Kvantitativ",
+            "qualitative": "Kvalitativ",
+            "divergent": "Delbar",
+            "info2": "Välj färgerna genom att klicka på färggruppen",
+            "cancel": "Avbryt"
         }
 
     }

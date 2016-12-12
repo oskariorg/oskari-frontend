@@ -1,5 +1,10 @@
 $lightColor: #ffffff;
 $darkColor: #3c3c3c;
+$buttonColor: #0091ff;
+$buttonTextColor: #ffffff;
+
+$inputWidth: 94%;
+$buttonWidth: 86%;
 
 
 /* ********************************************
@@ -15,7 +20,6 @@ $darkColor: #3c3c3c;
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
-
 
 .statsgrid-grid-table-header {
     top:0;
@@ -333,6 +337,101 @@ div.oskari-flyoutcontent{
         }
         .geostats-legend-title {
             font-weight: normal;
+        }
+
+        .accordion-theming {
+            margin: 0;
+            .accordion {
+                margin: 0;
+                .accordion_panel {
+                    overflow:visible;
+                    position:relative;
+                    .header {
+                        margin: 0;
+                        .headerIcon {
+                            margin: 0;
+                            margin-left: 4px;
+                        }
+                        .headerText {
+                            font-size: 12px;
+                            padding: 0;
+                            font-weight: normal;
+                        }
+                    }
+
+                    .content {
+                        div {
+                            margin: 0;
+                            margin-left: 4px;
+                            margin-top: 2px;
+
+                            &.value {
+                                margin-left:12px;
+                            }
+                        }
+
+
+                        margin: 0;
+                        padding: 0;
+                        .classifications {
+                            margin:0;
+                            margin-bottom: 10px;
+
+                            .classification-method, .classification-count, .classification-mode, .classification-colors,
+                            .classification-color-set {
+                                margin: 0;
+                            }
+
+                            div.oskari-color-selection-main {
+                                margin: 4px;
+                                margin-left: 12px;
+                                div.oskari-selected-color {
+                                    margin:0;
+                                    div {
+                                        margin:0;
+                                    }
+                                }
+                                div.color-selection-arrow {
+                                    margin:0;
+                                    div {
+                                        margin:0;
+                                    }
+                                }
+                                div.oskari-color {
+                                    margin:0;
+                                }
+
+                                div.oskari-color-selection {
+                                    margin:0;
+                                    div {
+                                        margin: 0;
+                                    }
+                                }
+                            }
+
+                            button {
+                                &.reverse-colors{
+                                    color: $buttonTextColor;
+                                    background: $buttonColor;
+                                    text-shadow: none;
+                                    margin-left: 12px;
+                                    width: $buttonWidth;
+                                    padding: 4px 5px;
+                                }
+                            }
+
+                            .label {
+                                font-weight: bold;
+                            }
+                            select {
+                                width: $inputWidth;
+                                font-size: 12px;
+                                padding: 1px 2px;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
