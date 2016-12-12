@@ -3,7 +3,8 @@ $darkColor: #3c3c3c;
 $buttonColor: #0091ff;
 $buttonTextColor: #ffffff;
 
-$inputWidth: 170px;
+$inputWidth: 94%;
+$buttonWidth: 86%;
 
 
 /* ********************************************
@@ -19,7 +20,6 @@ $inputWidth: 170px;
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
-
 
 .statsgrid-grid-table-header {
     top:0;
@@ -415,7 +415,7 @@ div.oskari-flyoutcontent{
                                     background: $buttonColor;
                                     text-shadow: none;
                                     margin-left: 12px;
-                                    width: $inputWidth;
+                                    width: $buttonWidth;
                                     padding: 4px 5px;
                                 }
                             }

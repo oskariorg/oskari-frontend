@@ -123,7 +123,11 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          */
         _getColorTemplate: function(colorsDef){
             var me = this;
+            if(colorsDef === null) {
+                return;
+            }
             var width = 6, template, i, color, opt;
+
 
             if(typeof colorsDef === 'string') {
                 opt = me._templates.emptyDiv.clone();

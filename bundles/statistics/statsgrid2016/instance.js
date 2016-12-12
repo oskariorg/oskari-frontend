@@ -377,6 +377,11 @@ Oskari.clazz.define(
             if(state.active) {
                 service.setActiveIndicator(state.active);
             }
+            if(state.themes) {
+                for(var ind in state.themes) {
+                    service.setTheming(ind, state.themes[ind]);
+                }
+            }
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
@@ -447,7 +452,8 @@ Oskari.clazz.define(
             var state = {
                 indicators : [],
                 regionset : service.getRegionset(),
-                view :me.visible
+                view :me.visible,
+                themes: service.getTheming()
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({
@@ -460,6 +466,7 @@ Oskari.clazz.define(
             if(active) {
                 state.active = active.hash;
             }
+            console.log(state);
             return state;
         }
 

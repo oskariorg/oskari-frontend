@@ -104,6 +104,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return getArray(this.colorsets[0]);
         },
 
+        getRange: function(type) {
+            var me = this;
+            var colors = me.getColors(type);
+            var getMax = function() {
+                var maxs = [], i, j;
+                // Get max number
+                for(i=0;i<colors.length;i++) {
+                    var l = colors[i].length;
+                    maxs.push(l);
+                }
+                // Get max same index
+                var index = 0;
+                for(i=0;i<maxs.lenght;i++) {
+                    var max = maxs[i];
+                    var sameOfBelow = [];
+                    for(j=0;j<maxs.length;j++) {
+                        if(max <= maxs[j]) {
+                            sameOfBelow.push(maxs[j]);
+                        }
+                    }
+                    if(sameOfBelow.length === maxs.length) {
+                        index = i;
+                    }
+                }
+                return maxs[index];
+            };
+            return {
+                min: 2,
+                max: getMax()
+            };
+        },
+
         getColors: function(type, count){
             var me = this,
                 i,
@@ -124,7 +156,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                  for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
                     if(set.type === type) {
-                        colors.push(me.getColorset(set.colors.length + 2, type, set.name));
+                        colors.push(me.getColorset(set.colors.length + 1, type, set.name));
                     }
                 }
             }
