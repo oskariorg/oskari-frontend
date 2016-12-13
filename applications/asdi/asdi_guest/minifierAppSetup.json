@@ -381,6 +381,15 @@
                     }
                 }
             }
+        }, {
+            "bundlename": "userguide",
+            "metadata": {
+                "Import-Bundle": {
+                    "userguide": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }
