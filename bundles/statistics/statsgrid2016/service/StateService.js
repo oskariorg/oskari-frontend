@@ -12,7 +12,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
-        this.theming = null;
+        this._defaults = {
+            classification: {
+                count: 5,
+                method: 'jenks',
+                colorIndex: 0,
+                type:'seq',
+                mode: 'discontinuous'
+            }
+        };
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -34,7 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             this.selectRegion();
             this.setRegionset();
-            this.setTheming();
+            this.classification = null;
         },
         /**
          * Returns id of the current regionset
@@ -65,48 +73,62 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
 
         /**
-         * Sets the current theming and sends out event notifying about the change
-         * @param {Object} theming
+         * Sets the current classification and sends out event notifying about the change
+         * @param {String} indicatorHash indicator hash
+         * @param {Object} classification classification
+         * @param {Boolean} suppressEvent suppress event
          */
-        setTheming : function(indicator, theming) {
-
-            if(!indicator && !theming) {
-                this.theming = null;
+        setClassification : function(indicatorHash, classification, suppressEvent) {
+            var me = this;
+            if(typeof indicatorHash !== 'string' && typeof classification !== 'object') {
                 return;
             }
 
-            if(this.theming === null) {
-                this.theming = {};
-            }
-
-            var previousSet = this.theming[indicator];
-            this.theming[indicator] = theming;
-            // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ThemeChangedEvent');
-            if(eventBuilder) {
-                this.sandbox.notifyAll(eventBuilder(this.theming[indicator], previousSet));
+            var indicator = this.getIndicator(indicatorHash);
+            if(indicator) {
+                var previousClassification = indicator.classification;
+                indicator.classification = classification;
+                // notify
+                var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.ClassificationChangedEvent');
+                if(!suppressEvent && eventBuilder) {
+                    this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
+                }
             }
         },
         /**
-         * Gets theming
-         * @param  {String|null} indicator indicator theme or if no set get all themes
+         * Gets classification
+         * @param  {String} indicatorHash indicator hash
          */
-        getTheming : function(indicator) {
-            if(indicator && this.theming && this.theming[indicator]) {
-                return this.theming[indicator];
+        getClassification : function(indicatorHash) {
+            if(typeof indicatorHash === 'string') {
+                var indicator = this.getIndicator(indicatorHash);
+                if(indicator) {
+                    return indicator.classification;
+                } else {
+                    return this._defaults.classification;
+                }
             }
+            else if(typeof indicatorHash === 'string') {
+                return this._defaults.classification;
+            }
+            else {
+                return null;
+            }
+        },
 
-            if(this.theming) {
-                return this.theming;
+        /**
+         * Returns an wanted indicator.
+         * @param  {String} indicatorHash indicator hash
+         * @return {Object[]} wanted indicator or null if not found
+         */
+        getIndicator : function(indicatorHash) {
+            for(var i = 0;i<this.indicators.length; i++) {
+                var ind = this.indicators[i];
+                if(ind.hash === indicatorHash) {
+                    return ind;
+                }
             }
-            // defaults
-            return {
-                amount: 5,
-                method: 1,
-                colorIndex: 0,
-                type:'seq',
-                mode: 'discontinous'
-            };
+            return null;
         },
 
         /**
@@ -177,14 +199,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} datasrc    datasource id
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
+         * @param {Object} classification indicator classification
          * @return {Object}            an object describing the added indicator (includes parameters as an object)
          */
-        addIndicator : function(datasrc, indicator, selections) {
+        addIndicator : function(datasrc, indicator, selections, classification) {
             var ind = {
                 datasource : Number(datasrc),
                 indicator : indicator,
                 selections : selections,
-                hash : this.getHash(datasrc, indicator, selections)
+                hash : this.getHash(datasrc, indicator, selections),
+                classification: classification
             };
             this.indicators.push(ind);
 
@@ -218,6 +242,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     removedIndicator = ind;
                 }
             });
+            if(me.classification!==null && me.classification[hash]) {
+                me.classification[hash] = null;
+                delete me.classification[hash];
+            }
             this.indicators = newIndicators;
 
             if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {

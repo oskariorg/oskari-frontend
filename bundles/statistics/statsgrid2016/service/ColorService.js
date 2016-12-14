@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             var colors = [];
 
             // if type and count setted, return wanted colors
-            if(type && count) {
+            if(typeof type !== 'undefined' && typeof count !== 'undefined') {
                 for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
                     if(set.type === type) {
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 }
             }
             // else if type setted, return type colors
-            else if(type) {
+            else if(typeof type !== 'undefined') {
                  for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
                     if(set.type === type) {

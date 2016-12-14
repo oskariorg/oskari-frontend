@@ -124,6 +124,9 @@ Oskari.clazz.define(
             'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.ClassificationChangedEvent': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent' : function() {
                 // close/tear down tge ui when receiving the event
                 var sandbox = this.getSandbox();
@@ -371,17 +374,14 @@ Oskari.clazz.define(
             }
             if(state.indicators) {
                 state.indicators.forEach(function(ind) {
-                    service.addIndicator(ind.ds, ind.id, ind.selections);
+                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.classification);
                 });
             }
+
             if(state.active) {
                 service.setActiveIndicator(state.active);
             }
-            if(state.themes) {
-                for(var ind in state.themes) {
-                    service.setTheming(ind, state.themes[ind]);
-                }
-            }
+
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
@@ -447,26 +447,24 @@ Oskari.clazz.define(
 
         getState: function () {
             var me = this;
-
             var service = this.statsService.getStateService();
             var state = {
                 indicators : [],
                 regionset : service.getRegionset(),
-                view :me.visible,
-                themes: service.getTheming()
+                view :me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({
-                    ds : ind.datasource,
-                    id : ind.indicator,
-                    selections : ind.selections
+                    ds: ind.datasource,
+                    id: ind.indicator,
+                    selections: ind.selections,
+                    classification: service.getClassification(ind.hash)
                 });
             });
             var active = service.getActiveIndicator();
             if(active) {
                 state.active = active.hash;
             }
-            console.log(state);
             return state;
         }
 

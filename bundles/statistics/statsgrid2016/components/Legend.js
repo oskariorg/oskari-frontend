@@ -16,9 +16,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                     '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
                     '<div class="method value">'+
                         '<select class="method">'+
-                            '<option value="1" selected="selected">'+this.locale.classify.jenks+'</option>'+
-                            '<option value="2">'+this.locale.classify.quantile+'</option>'+
-                            '<option value="3">'+this.locale.classify.eqinterval+'</option>'+
+                            '<option value="jenks" selected="selected">'+this.locale.classify.jenks+'</option>'+
+                            '<option value="quantile">'+this.locale.classify.quantile+'</option>'+
+                            '<option value="equal">'+this.locale.classify.eqinterval+'</option>'+
 //                            '<option value="4">'+this.locale.classify.manual+'</option>'+
                         '</select>'+
                     '</div>'+
@@ -73,6 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this._container = jQuery('<div class="accordion-theming"></div>');
     this._colorSelect = null;
     this._selectedColorIndex = 0;
+    this._notHandleColorSelect = false;
 }, {
     /****** PRIVATE METHODS ******/
 
@@ -96,6 +97,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             me._handleRegionsetChanged(event.getRegionset());
         });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            me._handleClassificationChangedEvent(event.getCurrent());
+        });
+    },
+    _handleClassificationChangedEvent: function(current){
+        var me = this;
+        me._initSelections(current);
     },
 
     /**
@@ -104,6 +113,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 	_handleIndicatorRemoved: function(){
 		var me = this;
 		me.__legendElement.html(me.__templates.noActiveSelection.clone());
+        this._initSelections();
 	},
 
     /**
@@ -112,6 +122,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
      */
 	_handleIndicatorChanged: function() {
 		this._renderActiveIndicator();
+        this._initSelections();
 	},
 
     /**
@@ -140,6 +151,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 return;
             }
             var classify = service.getClassificationService().getClassification(data);
+
             if(!classify) {
                 me.log.warn('Error getting indicator classification', data);
                 me.__legendElement.html(me.__templates.noEnoughData.clone());
@@ -189,8 +201,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                         me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
 
                         me._colorSelect.setHandler(function(selected){
-                            me._selectedColorIndex = selected;
-                            me.service.getStateService().setTheming(ind.hash, me._getSelections());
+                            if(!me._notHandleColorSelect) {
+                                me._selectedColorIndex = selected;
+                                me.service.getStateService().setClassification(ind.hash, me._getSelections());
+                            }
                         });
 
                         var el = me._colorSelect.getElement();
@@ -228,25 +242,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         return classifyOptions;
     },
 
-    _changeColors: function(index){
+    _changeColors: function(classification){
         var me = this;
-        me._selectedColorIndex = index || 0;
-        var selections = me._getSelections();
-        me._colorSelect.setColorValues(me.service.getColorService().getColors(selections.type, selections.amount));
-        me._colorSelect.setValue(selections.colorIndex);
+        me._selectedColorIndex = 0;
+        if(classification && typeof classification.colorIndex ==='number') {
+            me._selectedColorIndex = classification.colorIndex;
+        }
+        classification = classification || me._getSelections();
+
+        me._colorSelect.setColorValues(me.service.getColorService().getColors(classification.type, classification.count));
+        me._notHandleColorSelect = true;
+        me._colorSelect.setValue(classification.colorIndex);
+        me._notHandleColorSelect = false;
     },
 
-// Do when state changed or initialized
-    _initSelections: function(){
+    // Do when state changed or initialized
+    _initSelections: function(classification){
         var me = this;
 
         var state = me.service.getStateService();
         var ind = state.getActiveIndicator();
-        var theme = state.getTheming(ind.hash);
+        classification = classification || state.getClassification(ind.hash);
 
-        me._container.find('select.method').val(theme.method);
+        me._container.find('select.method').val(classification.method);
 
-        var amountRange = me.service.getColorService().getRange(theme.type);
+        var amountRange = me.service.getColorService().getRange(classification.type);
         var amount = me._container.find('select.amount-class');
         amount.empty();
         var option = jQuery('<option></option>');
@@ -259,17 +279,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
             op.attr('value', i);
             amount.append(op);
         }
-        me._container.find('select.amount-class').val(theme.amount);
-        me._container.find('select.classify-mode').val(theme.mode);
-        me._container.find('select.color-set').val(theme.type);
-        me._changeColors(theme.colorIndex);
+        me._container.find('select.amount-class').val(classification.count);
+        me._container.find('select.classify-mode').val(classification.mode);
+        me._container.find('select.color-set').val(classification.type);
+        me._changeColors(classification.colorIndex);
     },
 
     _getSelections: function(){
         var me = this;
         return {
-            method: parseFloat(me._container.find('select.method').val()),
-            amount: parseFloat(me._container.find('select.amount-class').val()),
+            method: me._container.find('select.method').val(),
+            count: parseFloat(me._container.find('select.amount-class').val()),
             mode: me._container.find('select.classify-mode').val(),
             type: me._container.find('select.color-set').val(),
             colorIndex: parseFloat(me._selectedColorIndex)
@@ -311,14 +331,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         if(!me.__legendElement || !me._panel) {
             return;
         }
+        me.__legendElement.find('select').unbind('click');
+        me.__legendElement.find('select').bind('click', function(event){
+            event.stopPropagation();
+        });
+        me.__legendElement.find('select').unbind('change');
         me.__legendElement.find('select').bind('change', function(event){
             event.stopPropagation();
-            //me._initSelections(event);
             me._changeColors();
 
             var state = me.service.getStateService();
             var ind = state.getActiveIndicator();
-            me.service.getStateService().setTheming(ind.hash, me._getSelections());
+            me.service.getStateService().setClassification(ind.hash, me._getSelections());
         });
     }
 

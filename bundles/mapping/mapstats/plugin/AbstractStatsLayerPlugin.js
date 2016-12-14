@@ -180,7 +180,8 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     });
                     return;
                 }
-                var classify = service.getClassificationService().getClassification(data);
+                var classification = state.getClassification(ind.hash);
+                var classify = service.getClassificationService().getClassification(data, classification);
                 if(!classify) {
                     me.__updateLayerParams(mapLayer, {
                         VIS_NAME: layer.getLayerName(),
@@ -191,7 +192,6 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     return;
                 }
 
-                // TODO: check that we got colors
                 var regions = [];
                 var vis = [];
 
@@ -208,16 +208,27 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                      // 'kuntakoodi' - This must be the name of the attribute that has the values.
                     return;
                 }
-                var colors = service.getColorService().getColorset(regiongroups.length);
+
+                var colors = me.service.getColorService().getColors(classification.type, classification.count)[classification.colorIndex];
                 me.__updateLayerParams(mapLayer, {
                     VIS_NAME: layer.getLayerName(),
                     VIS_ATTR: attrs.regionIdTag,
-                    // classes=020,091|186,086,982|111,139,740
                     VIS_CLASSES: classes.join('|'),
-                    // vis=choro:ccffcc|99cc99|669966
                     VIS_COLORS: 'choro:' + colors.join('|')
                 });
             });
+        },
+        _createEventHandlers: function () {
+            var me = this;
+
+            return {
+                'StatsGrid.ClassificationChangedEvent': function (event) {
+                    me.renderActiveIndicator(event);
+                },
+                'StatsGrid.ActiveIndicatorChangedEvent': function (event) {
+                    me.renderActiveIndicator(event);
+                }
+            };
         }
         // implement : addMapLayerToMap() and __updateLayerParams()
     }, {

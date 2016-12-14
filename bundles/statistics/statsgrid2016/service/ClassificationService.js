@@ -7,7 +7,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
      * @method create called automatically on construction
      * @static
      */
-    function () {
+    function (colorService) {
+        this._colorService = colorService;
     }, {
         __name: "StatsGrid.ClassificationService",
         __qname: "Oskari.statistics.statsgrid.ClassificationService",
@@ -87,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 response.bounds = stats.getJenks(opts.count);
             } else if (opts.method === 'quantile') {
                 // Kvantiilit
-                response.bounds = stats.getQuantile(classes);
+                response.bounds = stats.getQuantile(opts.count);
             } else if (opts.method === 'equal') {
                 // Tasavälit
                 response.bounds = stats.getEqInterval(opts.count);
@@ -154,17 +155,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         _validateOptions : function(options) {
             var opts = options || {};
             opts.count = opts.count || this.limits.count.def;
+            opts.type = opts.type || 'seq';
 
             // precision is an integer between 0-20. Will be computed automatically by geostats if no value is set
             //opts.precision = opts.precision || 1;
-
-            if(opts.count < this.limits.count.min) {
+            var range = this._colorService.getRange(opts.type);
+            if(opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups
-                throw new Error('Requires atleast ' + this.limits.count.min + ' partitions. Count was ' + opts.count);
+                throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
             }
-            if(opts.count > this.limits.count.max) {
+            if(opts.count > range.max) {
                 // we only have 11 colors in colorsets
-                throw new Error('Max count is ' + this.limits.count.max + '. Count was ' + opts.count);
+                throw new Error('Max count is ' + range.max + '. Count was ' + opts.count);
             }
             // maybe validate max count?
             opts.method = opts.method || this.limits.method[0];
