@@ -102,14 +102,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getClassification : function(indicatorHash) {
             if(typeof indicatorHash === 'string') {
                 var indicator = this.getIndicator(indicatorHash);
-                if(indicator) {
+                if(indicator && indicator.classification) {
                     return indicator.classification;
                 } else {
                     return this._defaults.classification;
                 }
-            }
-            else if(typeof indicatorHash === 'string') {
-                return this._defaults.classification;
             }
             else {
                 return null;
