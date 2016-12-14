@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this._accordion = null;
     this._container = jQuery('<div class="accordion-theming"></div>');
     this._colorSelect = null;
-    this._selectedColorIndex = 0;
     this._notHandleColorSelect = false;
 }, {
     /****** PRIVATE METHODS ******/
@@ -100,6 +99,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
             me._handleClassificationChangedEvent(event.getCurrent());
+        });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            me._renderActiveIndicator();
         });
     },
     _handleClassificationChangedEvent: function(current){
@@ -150,7 +153,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 me.__legendElement.html(me.__templates.noEnoughData.clone());
                 return;
             }
-            var classify = service.getClassificationService().getClassification(data);
+            var classification = state.getClassification(ind.hash);
+            var classify = service.getClassificationService().getClassification(data, classification);
 
             if(!classify) {
                 me.log.warn('Error getting indicator classification', data);
@@ -166,7 +170,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 classes.push(group.join());
             });
 
-            var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+            var colorsWithoutHash = me.service.getColorService().getColors(classification.type, classification.count)[classification.colorIndex];
+
             var colors = [];
             colorsWithoutHash.forEach(function(color) {
                 colors.push('#' + color);
@@ -199,17 +204,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
                     if(!me._colorSelect) {
                         me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
-
-                        me._colorSelect.setHandler(function(selected){
-                            if(!me._notHandleColorSelect) {
-                                me._selectedColorIndex = selected;
-                                me.service.getStateService().setClassification(ind.hash, me._getSelections());
-                            }
-                        });
-
                         var el = me._colorSelect.getElement();
                         me._container.find('.classification-colors.value').append(el);
                     }
+
+                    me._colorSelect.setHandler(function(selected){
+                        if(!me._notHandleColorSelect) {
+                            me.service.getStateService().setClassification(ind.hash, me._getSelections());
+                        }
+                    });
                     me._container.insertAfter(jQueryLegend.find('.geostats-legend-title'));
 
                     me.__legendElement.append(jQueryLegend);
@@ -217,6 +220,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                     // FIXME some timing issue when showing classification second or more times
                     // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
                     if(isAccordion) {
+                        me._colorSelect.setHandlers();
                         setTimeout(function(){
                             me.addEditHandlers();
                         }, 200);
@@ -244,12 +248,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
     _changeColors: function(classification){
         var me = this;
-        me._selectedColorIndex = 0;
-        if(classification && typeof classification.colorIndex ==='number') {
-            me._selectedColorIndex = classification.colorIndex;
-        }
         classification = classification || me._getSelections();
-
         me._colorSelect.setColorValues(me.service.getColorService().getColors(classification.type, classification.count));
         me._notHandleColorSelect = true;
         me._colorSelect.setValue(classification.colorIndex);
@@ -282,7 +281,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         me._container.find('select.amount-class').val(classification.count);
         me._container.find('select.classify-mode').val(classification.mode);
         me._container.find('select.color-set').val(classification.type);
-        me._changeColors(classification.colorIndex);
+        me._changeColors(classification);
     },
 
     _getSelections: function(){
@@ -292,7 +291,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
             count: parseFloat(me._container.find('select.amount-class').val()),
             mode: me._container.find('select.classify-mode').val(),
             type: me._container.find('select.color-set').val(),
-            colorIndex: parseFloat(me._selectedColorIndex)
+            colorIndex: me._colorSelect.getValue()
         };
     },
 
@@ -314,8 +313,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         if(!me.__legendElement || !me._panel) {
             return;
         }
-        me.__legendElement.find('.accordion_panel').click(function(){
-            var el = jQuery(this);
+
+        me.__legendElement.find('.accordion_panel .header').bind('click', function(event){
+            var el = jQuery(this).parent();
 
             if(el.hasClass('open')) {
                 me._panel.close();
@@ -331,10 +331,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         if(!me.__legendElement || !me._panel) {
             return;
         }
-        me.__legendElement.find('select').unbind('click');
-        me.__legendElement.find('select').bind('click', function(event){
-            event.stopPropagation();
-        });
+
         me.__legendElement.find('select').unbind('change');
         me.__legendElement.find('select').bind('change', function(event){
             event.stopPropagation();
