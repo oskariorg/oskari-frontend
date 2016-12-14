@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 classes.push(group.join());
             });
 
-            var colorsWithoutHash = me.service.getColorService().getColors(classification.type, classification.count)[classification.colorIndex];
+            var colorsWithoutHash = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors)[classification.colorIndex];
 
             var colors = [];
             colorsWithoutHash.forEach(function(color) {
@@ -207,6 +207,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                         var el = me._colorSelect.getElement();
                         me._container.find('.classification-colors.value').append(el);
                     }
+
+                    me._container.find('button.reverse-colors').unbind('click');
+                    me._container.find('button.reverse-colors').bind('click', function(){
+                        var el = jQuery(this);
+                        if(el.hasClass('primary')) {
+                            el.removeClass('primary');
+                        } else {
+                            el.addClass('primary');
+                        }
+                        me.service.getStateService().setClassification(ind.hash, me._getSelections());
+                    });
 
                     me._colorSelect.setHandler(function(selected){
                         if(!me._notHandleColorSelect) {
@@ -249,7 +260,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     _changeColors: function(classification){
         var me = this;
         classification = classification || me._getSelections();
-        me._colorSelect.setColorValues(me.service.getColorService().getColors(classification.type, classification.count));
+        var colors = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors);
+
+        me._colorSelect.setColorValues(colors);
         me._notHandleColorSelect = true;
         me._colorSelect.setValue(classification.colorIndex);
         me._notHandleColorSelect = false;
@@ -281,6 +294,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         me._container.find('select.amount-class').val(classification.count);
         me._container.find('select.classify-mode').val(classification.mode);
         me._container.find('select.color-set').val(classification.type);
+        if(classification.reverseColors) {
+            me._container.find('button.reverse-colors').addClass('primary');
+        } else {
+            me._container.find('button.reverse-colors').removeClass('primary');
+        }
+
         me._changeColors(classification);
     },
 
@@ -291,7 +310,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
             count: parseFloat(me._container.find('select.amount-class').val()),
             mode: me._container.find('select.classify-mode').val(),
             type: me._container.find('select.color-set').val(),
-            colorIndex: me._colorSelect.getValue()
+            colorIndex: me._colorSelect.getValue(),
+            reverseColors: me._container.find('button.reverse-colors').hasClass('primary')
         };
     },
 

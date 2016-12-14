@@ -251,9 +251,6 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
                 .statsgrid-legend-flyout .statsgrid-legend-container .accordion-theming .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-color-selection div, .statsgrid-legend-flyout-published .statsgrid-legend-container .accordion-theming .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-color-selection div {
                   margin: 0; }
             .statsgrid-legend-flyout .statsgrid-legend-container .accordion-theming .accordion .accordion_panel .content .classifications button.reverse-colors, .statsgrid-legend-flyout-published .statsgrid-legend-container .accordion-theming .accordion .accordion_panel .content .classifications button.reverse-colors {
-              color: #ffffff;
-              background: #0091ff;
-              text-shadow: none;
               margin-left: 12px;
               width: 86%;
               padding: 4px 5px; }

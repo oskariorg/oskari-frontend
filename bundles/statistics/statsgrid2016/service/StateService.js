@@ -18,7 +18,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 method: 'jenks',
                 colorIndex: 0,
                 type:'seq',
-                mode: 'discontinuous'
+                mode: 'discontinuous',
+                reverseColors: false
             }
         };
     }, {
