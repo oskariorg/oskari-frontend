@@ -379,7 +379,10 @@ Oskari.clazz.define(
             }
 
             if(state.active) {
-                service.setActiveIndicator(state.active);
+                // Wait some time so at service has added their datas (map not want to draw active indicator because of this)
+                setTimeout(function(){
+                    service.setActiveIndicator(state.active);
+                }, 100);
             }
 
             // if state says view was visible fire up the UI, otherwise close it
