@@ -447,8 +447,7 @@ Oskari.clazz.define(
           getPositionRef: function () {
               return jQuery('#login');
           },
-          positionAlign: 'right'
-
+          positionAlign: 'right',
         },
         //PAGE10
         {
@@ -467,7 +466,7 @@ Oskari.clazz.define(
               return content;
           },
           getPositionRef: function () {
-              return jQuery('#toolbar');
+              return jQuery('.tool-pan');
           },
           positionAlign: 'right'
         },
@@ -511,7 +510,7 @@ Oskari.clazz.define(
               return content;
           },
           getPositionRef: function () {
-              return jQuery('.icon');
+              return jQuery('.coordinatetool');
           },
           positionAlign: 'left'
         }],
@@ -522,6 +521,12 @@ Oskari.clazz.define(
             var buttons = this._getDialogButton(dialog);
             var title = step.getTitle();
             var content = step.getContent();
+
+            if(dialog.dialog.hasClass('right')){
+              dialog.dialog.removeClass('right');
+            }else{
+              dialog.dialog.removeClass('left');
+            }
             if (step.appendTourSeenCheckbox) {
                 content.append('<br><br>');
                 var checkboxTemplate =
