@@ -114,6 +114,22 @@ Oskari.clazz.define(
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
+                if(!this.statsService) {
+                    return;
+                }
+
+                var state = this.statsService.getStateService();
+                var activeIndicator = state.getActiveIndicator();
+                var hash = state.getHash(evt.getDatasource(), evt.getIndicator(), evt.getSelections());
+
+                if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && !activeIndicator) {
+                    state.setActiveIndicator(hash);
+                } else if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && activeIndicator) {
+                    state.setActiveIndicator(activeIndicator);
+                } else if(evt.isRemoved() && this.state && this.state.active === hash) {
+                    delete this.state.active;
+                }
+
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -379,10 +395,7 @@ Oskari.clazz.define(
             }
 
             if(state.active) {
-                // Wait some time so at service has added their datas (map not want to draw active indicator because of this)
-                setTimeout(function(){
-                    service.setActiveIndicator(state.active);
-                }, 100);
+                service.setActiveIndicator(state.active);
             }
 
             // if state says view was visible fire up the UI, otherwise close it

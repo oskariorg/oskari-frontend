@@ -165,8 +165,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
             }
             if(opts.count > range.max) {
-                // we only have 11 colors in colorsets
-                throw new Error('Max count is ' + range.max + '. Count was ' + opts.count);
+                opts.count = range.max;
             }
             // maybe validate max count?
             opts.method = opts.method || this.limits.method[0];

@@ -159,15 +159,25 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             var state = service.getStateService();
             var ind = state.getActiveIndicator();
 
-            if(!ind) {
-                return;
-            }
             // setup visualization
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(state.getRegionset());
             var mapLayer = this.getMapLayerForCurrentRegionset();
             if(!mapLayer) {
                 return;
             }
+
+            if(!ind) {
+                Oskari.log('AbstractStatsLayerPlugin').warn('Error getting active indicator');
+                me.__updateLayerParams(mapLayer, {
+                    VIS_NAME: layer.getLayerName(),
+                    VIS_ATTR: '',
+                    VIS_CLASSES: '',
+                    VIS_COLORS: ''
+                });
+
+                return;
+            }
+
 
             service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
                 if(err) {

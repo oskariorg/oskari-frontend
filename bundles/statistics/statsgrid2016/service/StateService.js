@@ -214,9 +214,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
 
-            // set the latest as active indicator
-            this.setActiveIndicator(ind.hash);
-
             return ind;
         },
         /**

@@ -232,7 +232,8 @@ body {
   color: white;
   transform: rotate(270deg);
   transform-origin: center;
-  white-space: nowrap; }
+  white-space: nowrap;
+  cursor: pointer; }
 
 /** media queries */
 @media screen {
