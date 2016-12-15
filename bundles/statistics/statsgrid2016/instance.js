@@ -405,7 +405,7 @@ Oskari.clazz.define(
         },
         /**
          * addChosenHacks Add chosen hacks to element
-         * FIXME: remove this when oskari components have own working selection
+         * FIXME: remove this when Oskari components have own working selection
          * @param {Jquery.element} element
          */
         addChosenHacks: function(element, makeOverEl){

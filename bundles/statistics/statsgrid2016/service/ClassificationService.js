@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          *         mean : <mean value in data>
          *     },
          *     getGroups : <function to return keys in data grouped by value ranges, takes an optional param index to get just one group>,
-         *     getIndex : <function to return a group index for data - TODO: is this needed since we have getGroups?>,
+         *     getIndex : <function to return a group index for data
          *     createLegend : <function to create html-legend for ranges, takes colorset and optional title as params>
          * }
          * Options can include:
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             response.getIndex = function(value) {
                 return stats.getRangeNum(value);
             };
-            // TODO: do we need createLegend?
+            // createLegend
             response.createLegend = function(colors, title) {
                 stats.setColors(colors);
                 return stats.getHtmlLegend(null, title || '', true, null, opts.mode);

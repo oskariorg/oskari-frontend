@@ -181,7 +181,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getActiveIndicator : function() {
             if(this.activeIndicator) {
                 // return selected indicator
-                // TODO: maybe check that it still is in the indicators array?
                 return this.activeIndicator;
             }
             if(!this.indicators.length) {

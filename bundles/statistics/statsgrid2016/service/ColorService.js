@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 }
                 return result;
             }
-            // TODO: get first to match type?
+            // get first to match type?
             log.warn('Requested set not found, using type matching');
             if(typeMatch) {
                 result = getArray(typeMatch);

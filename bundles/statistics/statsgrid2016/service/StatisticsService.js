@@ -341,7 +341,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {
-                // TODO: log error
                 return;
             }
             var setId = this.getStateService().getRegionset();
