@@ -2,12 +2,15 @@
 
 ## 1.41.0
 
+### statistics/statsgrid2016
+
+Now user can edit indicator classification on normal map side.
+
 ### divmanazer
 
 #### DefaultFlyout
 
 Improvements for sidetools buttons positions. Now sidetools are added to top and inside of flyout.
-
 
 #### Popup
 
