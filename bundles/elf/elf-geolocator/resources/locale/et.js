@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Geolokatsioon",
         "desc": "ELF Geolokatsioon",
         "tool": {
-            "tooltip": "Otsi objekte klikates kaardile"
+            "tooltip": "Otsi objekte, klikates kaardile"
         },
         "tab": {
             "title": "Kohad",
@@ -28,12 +28,17 @@ Oskari.registerLocalization(
             "fuzzyResultsTitle": "Ebamäärase otsingu tulemused",
             "filterResultsTitle": "Asukohafiltriga otisngutulemused",
             "countryFilter": "Vali riik",
+            "locationFilter": "NOT TRANSLATED",
+            "namelangFilter": "NOT TRANSLATED",
             "backButton": "Tagasi",
             "geolocButton": "Leia lähim aadress",
             "geolocDesc": "Kaardile klikkides leitakse lähim kohanimi.",
             "noResults": "Tulemusi pole.",
+            "showMore": "NOT TRANSLATED",
+            "showLess": "NOT TRANSLATED",
+            "emptyOption": "NOT TRANSLATED",
             "errors": {
-                "searchTermMissing": "Viga! Otsingusõna on nõutav.  Kirjuta see ja proovi uuesti.",
+                "searchTermMissing": "Viga! Otsingusõna on nõutav. Kirjuta see ja proovi uuesti.",
                 "searchFailed": "Viga! Otsingut ei teostatud."
             },
             "grid": {

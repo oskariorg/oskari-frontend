@@ -38,10 +38,10 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Informácie o licencii",
-            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptionsTitle": "Produkty ELF sú v súčastnosti licencované iba na ohodnocovacie alebo rozvojové účely na časovo limitovanom a obmedzenom základe:",
             "licenseModelDescriptions": {
-                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
-                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+                "evaluation": "Licencia ohodnotenia - môžete mať prístup a využiť produkty ELF na účely ohodnotenia ich vhodnosti pre vaše vlastné interné použitie.",
+                "developer": "Licencia rozvoja - môžete mať prístup a využiť produkty ELF na účely rozvoja vašich vlastných produktov."
             },
             "licenseModelsTitle": "Licenčné modely",
             "noRightToAnyLicenseModels": "Nemáte práva na zobrazenie licenčných modelov.",
@@ -64,7 +64,14 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "Služba URL licencie: {službaurl}",
             "licenceConcluded": {
                 "message": "Licencia bola uzavretá. Prosím skontrolujte si informácie o licencii uvedené nižšie."
-            }
+            },
+            "licenseDurations": {
+                "D": "dni",
+                "W": "týždne",
+                "M": "mesiace",
+                "Y": "roky"
+            },
+            "registerLinkText": "Register"
         },
         "buttons": {
             "close": "Zatvoriť",

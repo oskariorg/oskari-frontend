@@ -112,7 +112,11 @@ function() {
             "lang" : "fr",
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/fr.js"
-        }]
+          }, {
+              "lang" : "nn",
+              "type" : "text/javascript",
+              "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/locale/nn.js"
+          }]
     },
     "bundle" : {
         "manifest" : {

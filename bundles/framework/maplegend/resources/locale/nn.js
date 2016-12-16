@@ -4,7 +4,9 @@ Oskari.registerLocalization(
     "key": "maplegend",
     "value": {
         "title": "Teiknforklaringar",
-        "desc": ""
+        "desc": "",
+        "noLegendsText": "Ingen teiknforklaringar er tilgjengelege",
+        "invalidLegendUrl": "Teiknforklaring ikkje tilgjengeleg"
     }
 }
 );

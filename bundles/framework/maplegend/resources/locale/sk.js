@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Mapové legendy",
         "desc": "",
         "noLegendsText": "Mapové legendy sú nedostupné",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": "Mapová legenda je nedostupná"
     }
 }
 );

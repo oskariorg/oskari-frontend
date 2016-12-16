@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Tegnforklaringer",
         "desc": "",
         "noLegendsText": "Ingen tegnforklaringer er tilgjengelige",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": "Tegnforklaring ikke tilgjengelig"
     }
 }
 );
