@@ -46,6 +46,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
             me._renderActiveIndicator();
+            setTimeout(function(){
+                me._addEditHandlers();
+            }, 200);
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
