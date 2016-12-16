@@ -27,6 +27,10 @@ table.layer-rights-table {
     padding-left: 370px;
     border-bottom: thin solid silver;
   td {
+     @media screen and (min-width:1000px) and (max-width:1600px){
+          width: 25%;
+          min-width: 122px;
+      }
     width: 25%;
     min-width: 108px;
   }
