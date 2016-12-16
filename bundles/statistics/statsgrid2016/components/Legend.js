@@ -129,6 +129,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
                     var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
                     var jQueryLegend = jQuery(legend);
+
                     var isAccordion = true;
 
                     if(!me._accordion) {
@@ -147,17 +148,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
                     me.__legendElement.append(jQueryLegend);
 
-                    // FIXME some timing issue when showing classification second or more times
                     // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
                     if(isAccordion) {
                         setTimeout(function(){
-                            me.addEditHandlers();
-                        }, 200);
+                            me._addEditHandlers();
+                        }, 0);
                     }
 
                     setTimeout(function(){
-                        me.addSelectHandlers();
-                    }, 200);
+                        me._refreshEditClassification();
+                    }, 0);
 
                 });
 
@@ -165,25 +165,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         });
     },
 
+    /**
+     * @method  @private _changeColors Change colors
+     * @param  {Object} classification classification
+     */
     _changeColors: function(classification){
         var me = this;
         me.editClassification.changeColors(classification);
     },
 
-    /****** PUBLIC METHODS ******/
-
     /**
-     * @method  @public getClassification get classification element
-     * @return {Object} jQuery element of classification
+     * @method  @private _refreshEditClassification refresh edit classification
      */
-    getClassification: function(){
+    _refreshEditClassification: function(){
         var me = this;
-        me.__legendElement.html(me.__templates.noActiveSelection.clone());
-        me._renderActiveIndicator();
-        return me.__legendElement;
-    },
+        if(!me.__legendElement || !me._panel) {
+            return;
+        }
 
-    addEditHandlers: function(){
+        me.editClassification.refresh();
+    },
+    /**
+     * @method  @private addEditHandlers add edit handlers again
+     */
+    _addEditHandlers: function(){
         var me = this;
         if(!me.__legendElement || !me._panel) {
             return;
@@ -198,16 +203,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 me._panel.open();
             }
         });
-
     },
 
-    addSelectHandlers: function(){
-        var me = this;
-        if(!me.__legendElement || !me._panel) {
-            return;
-        }
+    /****** PUBLIC METHODS ******/
 
-        me.editClassification.addSelectHandlers();
+    /**
+     * @method  @public getClassification get classification element
+     * @return {Object} jQuery element of classification
+     */
+    getClassification: function(){
+        var me = this;
+        me.__legendElement.html(me.__templates.noActiveSelection.clone());
+        me._renderActiveIndicator();
+        return me.__legendElement;
     }
 
 });

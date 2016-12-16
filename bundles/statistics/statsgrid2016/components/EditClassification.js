@@ -114,15 +114,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
         this._initSelections();
     },
 
-    _getEditClassifyContent: function(){
-        var me = this;
-        var classifyOptions = me.__templates.classifications.clone();
-        return classifyOptions;
-    },
-
+    /**
+     * @method  @private _changeColors change colors
+     * @param  {Object} classification object
+     */
     _changeColors: function(classification){
         var me = this;
-        classification = classification || me.getSelections();
+        classification = classification || me.getSelectedValues();
         var colors = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors);
 
         me._colorSelect.setColorValues(colors);
@@ -131,7 +129,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
         me._notHandleColorSelect = false;
     },
 
-    // Do when state changed or initialized
+    /**
+     * @method  @private _initSelections init selections
+     * @param  {Object} classification
+     */
     _initSelections: function(classification){
         var me = this;
 
@@ -163,27 +164,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
             me._element.find('button.reverse-colors').removeClass('primary');
         }
 
-        me.addSelectHandlers();
+        me._addSelectHandlers();
         me._changeColors(classification);
     },
 
-
-
-    /****** PUBLIC METHODS ******/
-
-    getSelections: function(){
-        var me = this;
-        return {
-            method: me._element.find('select.method').val(),
-            count: parseFloat(me._element.find('select.amount-class').val()),
-            mode: me._element.find('select.classify-mode').val(),
-            type: me._element.find('select.color-set').val(),
-            colorIndex: me._colorSelect.getValue(),
-            reverseColors: me._element.find('button.reverse-colors').hasClass('primary')
-        };
-    },
-
-    addSelectHandlers: function(){
+    /**
+     * @method @private _addSelectHandlers add select handlers
+     */
+    _addSelectHandlers: function(){
         var me = this;
         if(!me._element) {
             return;
@@ -201,7 +189,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
 
             var state = me.service.getStateService();
             var ind = state.getActiveIndicator();
-            me.service.getStateService().setClassification(ind.hash, me.getSelections());
+            me.service.getStateService().setClassification(ind.hash, me.getSelectedValues());
             me._changeColors();
         });
 
@@ -213,9 +201,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
             } else {
                 el.addClass('primary');
             }
-            me.service.getStateService().setClassification(ind.hash, me.getSelections());
+            me.service.getStateService().setClassification(ind.hash, me.getSelectedValues());
         });
+
+        me._colorSelect.refresh();
     },
+
+
+    /****** PUBLIC METHODS ******/
+
+    /**
+     * @method  @public getSelectedValues gets selected values
+     * @return {Object} selected values object
+     */
+    getSelectedValues: function(){
+        var me = this;
+        return {
+            method: me._element.find('select.method').val(),
+            count: parseFloat(me._element.find('select.amount-class').val()),
+            mode: me._element.find('select.classify-mode').val(),
+            type: me._element.find('select.color-set').val(),
+            colorIndex: me._colorSelect.getValue(),
+            reverseColors: me._element.find('button.reverse-colors').hasClass('primary')
+        };
+    },
+
+    refresh: function(){
+        var me = this;
+        me._addSelectHandlers();
+    },
+
+
+    /**
+     * @method  @public getElement  get element
+     * @return {Object} jQuery element object
+     */
     getElement: function(){
         var me = this;
         var service = me.service;
@@ -241,27 +261,43 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(i
 
         me._colorSelect.setHandler(function(selected){
             if(!me._notHandleColorSelect) {
-                me.service.getStateService().setClassification(ind.hash, me.getSelections());
+                me.service.getStateService().setClassification(ind.hash, me.getSelectedValues());
             }
         });
 
-        setTimeout(function(){
-            me._initSelections();
-        }, 200);
+        me._initSelections();
 
         return me._element;
 
-
     },
-     changeColors: function(classification){
+
+    /**
+     * @method  @public changeColors Change colors
+     * @param  {Object} classification classification object
+     */
+    changeColors: function(classification){
         var me = this;
-        classification = classification || me.getSelections();
+        classification = classification || me.getSelectedValues();
         var colors = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors);
 
         me._colorSelect.setColorValues(colors);
         me._notHandleColorSelect = true;
         me._colorSelect.setValue(classification.colorIndex);
         me._notHandleColorSelect = false;
+    },
+
+    /**
+     * @method  @public setEnabled set enabled
+     * @param {Boolean} enabled is edit enabled or not
+     */
+    setEnabled: function(enabled){
+        var me = this;
+        if(typeof enabled !== 'boolean') {
+            return;
+        }
+        me._element.find('select').prop('disabled', !enabled).trigger('chosen:updated');
+        me._element.find('button').prop('disabled', !enabled);
+        me._colorSelect.setEnabled(enabled);
     }
 
 });

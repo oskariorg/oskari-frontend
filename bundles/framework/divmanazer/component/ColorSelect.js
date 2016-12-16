@@ -57,8 +57,16 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          *     Implement if the component can actually be disabled.
          */
         _setEnabledImpl: function (enabled) {
-            this._enabled = enabled;
-            return undefined;
+            var me = this;
+            me._enabled = enabled;
+
+            if(enabled) {
+                me._element.removeClass('disabled');
+            } else {
+                me._element.addClass('disabled');
+            }
+
+            return enabled;
         },
 
         /**
@@ -115,12 +123,22 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                 me.close();
             }
 
-            me.setHandlers();
+            me._setHandlers();
         },
 
-        setHandlers: function(){
+        refresh: function(){
             var me = this;
+            me._setHandlers();
+        },
+
+        _setHandlers: function(){
+            var me = this;
+
+            if(!me._selected){
+                return;
+            }
             var handlers = me._handlers();
+
             me._selected.unbind('click');
             me._selected.bind('click', handlers.selectHandler);
             var options = me._selection.find('.oskari-color-option');
@@ -294,7 +312,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
                 me._element.append(me._selection);
 
-                me.setHandlers();
+                me._setHandlers();
 
                 jQuery(document).bind('click', function(){
                     me.close();
@@ -302,6 +320,22 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
                 me.close();
             }
+        },
+        /**
+         * @method _setVisibleImpl
+         * @param {Boolean} visible
+         */
+        _setVisibleImpl: function (visible) {
+            var me = this;
+            me._visible = visible;
+            if(visible) {
+                me._element.show();
+            } else {
+                me._element.hide();
+            }
+
+
+            return visible;
         }
 }, {
      extend: ['Oskari.userinterface.component.FormComponent']
