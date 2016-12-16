@@ -1,9 +1,11 @@
 Oskari.registerLocalization(
 {
     "lang": "et",
-    "key": "PersonalData",
+    "key": "findbycoordinates",
     "value": {
-        "notLoggedIn": "Minu andmed sisaldavad andmeid kasutajaprofiili, salvestatud andmete, kaartide, lõimkaartide ja andmestike kohta."
+        "tool": {
+            "tooltip": "NOT TRANSLATED"
+        }
     }
 }
 );

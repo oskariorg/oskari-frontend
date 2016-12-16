@@ -28,6 +28,8 @@ Oskari.registerLocalization(
             "fuzzyResultsTitle": "Ónákvæmar niðurstöður",
             "filterResultsTitle": "Niðurstöður úr svæðissíu",
             "countryFilter": "Veldu land",
+            "locationFilter": "NOT TRANSLATED",
+            "namelangFilter": "NOT TRANSLATED",
             "backButton": "Til baka",
             "geolocButton": "Finndu næsta stað",
             "geolocDesc": "Smelltu á kortið og finndu örnefnið sem er næst staðnum.",

@@ -1,15 +1,15 @@
 Oskari.registerLocalization(
 {
-    "lang": "is",
+    "lang": "sk",
     "key": "GenericAdmin",
     "value": {
-        "title": "Ógilt lykilorð eða notandanafn!!",
-        "desc": "Notandanafn",
+        "title": "Neplatné heslo alebo prihlasovacie meno",
+        "desc": "Prihlasovacie meno",
         "tile": {
-            "title": "Lykilorð"
+            "title": "Heslo"
         },
         "flyout": {
-            "title": "Skrá inn",
+            "title": "Prihlásiť",
             "defaultviews": {
                 "title": "NOT TRANSLATED",
                 "desc": "NOT TRANSLATED",

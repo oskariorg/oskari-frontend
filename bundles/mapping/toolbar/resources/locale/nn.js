@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Lag ei lenkje til kartutsnittet"
             },
-            "print": {
-                "tooltip": "Skriv ut kartutsnittet"
-            },
             "history": {
                 "reset": "Gå til standard kartutsnitt",
                 "back": "Gå attende til det førre kartutsnittet",

@@ -21,31 +21,31 @@ Oskari.registerLocalization(
             "contactRole": "Roll",
             "ciRoleUser": "Kasutaja",
             "ciRoleResourceProvider": "Teenusepakkuja",
-            "ciRoleCustodian": "Researcher",
+            "ciRoleCustodian": "Uurija",
             "ciRoleOwner": "Omanik",
-            "ciRoleSponsor": "Teoetaja",
+            "ciRoleSponsor": "Toetaja",
             "ciRoleDistributor": "Turustaja",
             "ciRoleOriginator": "Looja",
             "ciRolePointOfContact": "Kontakt",
-            "ciRolePrincipalInvestigator": "PrincipalInvestigator",
-            "ciRoleProcessor": "Processor",
-            "ciRolePublisher": "Publisher",
-            "ciRoleAuthor": "Author",
-            "ciRoleCollaborator": "Collaborator"
+            "ciRolePrincipalInvestigator": "Juhtivuurija",
+            "ciRoleProcessor": "Läbiviija",
+            "ciRolePublisher": "Avaldaja",
+            "ciRoleAuthor": "Autor",
+            "ciRoleCollaborator": "Kaastöötaja"
         },
         "actionButtons": {
-            "save": "Save",
-            "cancel": "Cancel"
+            "save": "Salvesta",
+            "cancel": "Tühista"
         },
         "errorPopup": {
-            "title": "Error",
-            "savingTheFeedbackFailed": "Your feedback could not be saved.",
-            "formValidationFailed": "The form could not be validated. Please check your given data and try again.",
+            "title": "Viga",
+            "savingTheFeedbackFailed": "Teie tagaissidet ei saa salvestada",
+            "formValidationFailed": "Teie tagasisside vorm ei ole korrektne. Palun kontrollide sisestatud andmeid ja proovige uuesti.",
             "okButtonText": "OK"
         },
         "successPopup": {
-            "title": "Thank You",
-            "savingTheFeedbackSuccesful": "Your feedback has been saved successfully."
+            "title": "Täname",
+            "savingTheFeedbackSuccesful": "Teie tagasisside on meieni jõudnud."
         }
     }
 }

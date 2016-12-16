@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Skýringar",
         "desc": "",
         "noLegendsText": "Kortaskýringar eru ekki til.",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": "Kortaskýringar eru ekki til."
     }
 }
 );

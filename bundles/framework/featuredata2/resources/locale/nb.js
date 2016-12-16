@@ -94,10 +94,10 @@ Oskari.registerLocalization(
             }
         },
         "gridFooter": {
-            "aggregateColumnField": "Count",
-            "differenceMessage": "The difference of unauthorized feature values is presented with value",
-            "noDataMessage": "Count = Number of features without unauthorized features",
-            "noDataCommonMessage": "There are unauthorized feature values in the data"
+            "aggregateColumnField": "Antall",
+            "differenceMessage": "Forskjellen i uautoriserte verdier er vist med verdi",
+            "noDataMessage": "Antall= Antall forekomster uten uautoriserte verdier",
+            "noDataCommonMessage": "Det er uautoriserte verdier i dataene"
         }
     }
 }

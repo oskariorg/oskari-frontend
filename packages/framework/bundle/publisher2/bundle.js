@@ -161,17 +161,37 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         }],
 
         "locales": [{
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/resources/locale/en.js"
+          "lang": "en",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/en.js"
         }, {
-            "lang": "fi",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/resources/locale/fi.js"
+          "lang": "fi",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/fi.js"
         }, {
-            "lang": "sv",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/resources/locale/sv.js"
+          "lang": "sv",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/sv.js"
+        }, {
+          "lang": "et",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/et.js"
+        }, {
+          "lang": "is",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/is.js"
+        }, {
+          "lang": "nb",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/nb.js"
+        }, {
+          "lang": "nn",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/nn.js"
+        }, {
+          "lang": "sk",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/sk.js"
         }]
     },
     "bundle": {

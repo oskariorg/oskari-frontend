@@ -95,7 +95,7 @@ Oskari.registerLocalization(
         },
         "gridFooter": {
             "aggregateColumnField": "Talning",
-            "differenceMessage": "NOT TRANSLATED",
+            "differenceMessage": "Mismunurinn á óleyfðum fitjugildum er sýnt með gildi",
             "noDataMessage": "Talning = Fjöldi fitja án óheimilla aðgerða",
             "noDataCommonMessage": "Það eru óheimil gildi í gögnunum."
         }
