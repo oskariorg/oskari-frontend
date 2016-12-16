@@ -32,27 +32,26 @@ Oskari.registerLocalization(
                 "WHAT3WORDS_CHANNEL": {
                     "label": "what3words: "
                 },
-                "NLS_NEAREST_FEATURE_CHANNEL" : {
+                "NLS_NEAREST_FEATURE_CHANNEL": {
                     "label": "Adress: "
                 },
                 "TM35LEHTIJAKO_CHANNEL": {
                     "label": "Kartblad: "
                 },
-                "moreInfo" : "Visa mer information om positionen."
-
+                "moreInfo": "Visa mer information om positionen."
             },
-            "tooltip" : {
+            "tooltip": {
                 "tool": "Visa koordinaterna eller fokusera kartan till de valda koordinaterna",
                 "close": "Stäng"
             },
-             "checkValuesDialog": {
+            "checkValuesDialog": {
                 "button": "OK",
                 "title": "Fel",
                 "message": "Koordinaterna er felaktiga. Kontrollera koordinatvärdena och försök igen"
             },
             "projectionChange": {
                 "header": "Byt projektion",
-                "projection":"Projektion",
+                "projection": "Projektion",
                 "confirmationMessage": "Genom att byta projektion återgår applikationen till startläget och alla öppna kartlager stänges. Vill du fortsätta?",
                 "buttons": {
                     "ok": "OK",
@@ -90,10 +89,10 @@ Oskari.registerLocalization(
                 },
                 "emergencyCallLabel": "Koordinaterna som rekommenderas att användas i nödsamtal är",
                 "emergencyCallLabelAnd": "och",
-                "showCoordinateFormatDisplay":"Show coordinates &raquo;",
-                "showInputValues":"&laquo;Input values"
+                "showCoordinateFormatDisplay": "Show coordinates &raquo;",
+                "showInputValues": "&laquo;Input values"
             },
-            "cannotTransformCoordinates" : {
+            "cannotTransformCoordinates": {
                 "title": "Fel",
                 "message": "Koordinaterna kunde inte omvandlas"
             },
@@ -103,5 +102,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

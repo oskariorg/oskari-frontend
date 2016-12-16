@@ -21,10 +21,10 @@ Oskari.registerLocalization(
             "compass": {
                 "lon": "Y / dĺžka:",
                 "lat": "X / šírka:",
-                "n": "NOT TRANSLATED",
-                "e": "NOT TRANSLATED",
-                "p": "NOT TRANSLATED",
-                "i": "NOT TRANSLATED"
+                "n": "",
+                "e": "",
+                "p": "",
+                "i": ""
             },
             "reversegeocode": {
                 "errorTitle": "Chyba obráteného geokódovania",
@@ -36,9 +36,9 @@ Oskari.registerLocalization(
                     "label": "Adresa:"
                 },
                 "TM35LEHTIJAKO_CHANNEL": {
-                    "label": "NOT TRANSLATED"
+                    "label": ""
                 },
-                "moreInfo": "NOT TRANSLATED"
+                "moreInfo": ""
             },
             "tooltip": {
                 "tool": "Zobraziť súradnice alebo vložiť súradnice a centrovať na ne mapu",
@@ -87,10 +87,10 @@ Oskari.registerLocalization(
                     "EPSG:2392": "KKJ zóna 2",
                     "EPSG:2394": "KKJ zóna 4"
                 },
-                "emergencyCallLabel": "NOT TRANSLATED",
-                "emergencyCallLabelAnd": "NOT TRANSLATED",
-                "showCoordinateFormatDisplay": "NOT TRANSLATED",
-                "showInputValues": "NOT TRANSLATED"
+                "emergencyCallLabel": "",
+                "emergencyCallLabelAnd": "",
+                "showCoordinateFormatDisplay": "",
+                "showInputValues": ""
             },
             "cannotTransformCoordinates": {
                 "title": "Chyba",
@@ -102,5 +102,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

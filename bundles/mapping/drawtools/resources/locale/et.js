@@ -5,5 +5,4 @@ Oskari.registerLocalization(
     "value": {
         "intersectionNotAllowed": "Polügoon ei tohi iseendaga lõikuda. Mõõtmistulemuse saamiseks joonistage korrektne polügoon."
     }
-}
-);
+});

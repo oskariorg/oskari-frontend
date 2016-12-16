@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Basisinformasjon",
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
-            "quality": "NOT TRANSLATED",
+            "quality": "",
             "xml": "ISO 19139 XML fil",
             "map": "Geografisk utstrekning",
             "pdf": "Utskrift",
@@ -381,12 +381,12 @@ Oskari.registerLocalization(
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "",
+                "qualityPassFalse": ""
             },
             "heading": {
-                "abstractTextData": "NOT TRANSLATED",
-                "abstractTextService": "NOT TRANSLATED",
+                "abstractTextData": "",
+                "abstractTextService": "",
                 "accessConstraint": "Tilgangsrestriksjonar",
                 "citationDate": "Dato",
                 "classification": "Klassifikasjonar",
@@ -415,21 +415,21 @@ Oskari.registerLocalization(
                 "temporalExtent": "Temporær utstrekning",
                 "topicCategory": "Tematiske hovudkategoriar",
                 "useLimitation": "Bruksavgrensingar",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "absoluteExternalPositionalAccuracy": "",
+                "accuracyOfTimeMeasurement": "",
+                "completenessCommission": "",
+                "completenessOmission": "",
+                "conceptualConsistency": "",
+                "domainConsistency": "",
+                "formatConsistency": "",
+                "griddedDataPositionalAccuracy": "",
+                "nonQuantitativeAttributeAccuracy": "",
+                "quantitativeAttributeAccuracy": "",
+                "relativeInternalPositionalAccuracy": "",
+                "temporalConsistency": "",
+                "temporalValidity": "",
+                "thematicClassificationCorrectness": "",
+                "topologicalConsistency": ""
             }
         },
         "tile": {
@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "Bruksvilkår og kor tilgjengelege datasetta er, er gjort greie for i metadata-utgreiinga."
         }
     }
-}
-);
+});

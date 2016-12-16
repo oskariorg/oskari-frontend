@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "Ingen tegnforklaringer er tilgjengelige",
         "invalidLegendUrl": "Tegnforklaring ikke tilgjengelig"
     }
-}
-);
+});

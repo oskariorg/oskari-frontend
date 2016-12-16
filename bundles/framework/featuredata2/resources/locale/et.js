@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistilised andmed",
         "selectionTools": {
             "title": "Vali nähtused kaardil",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Kõige pealmisest kaardikihist",
             "selectAll": "Kõigist kaardikihtidest",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
-}
-);
+});

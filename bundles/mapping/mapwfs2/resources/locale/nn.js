@@ -49,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

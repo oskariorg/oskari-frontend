@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "You can zoom in and out on the map using the scale scrollbar or the plus and minus buttons next to the scrollbar. You can also zoom using the plus and minus keys on your keyboard or with the scroll wheel of your mouse. You can also zoom in by double clicking the map."
         }
     }
-}
-);
+});

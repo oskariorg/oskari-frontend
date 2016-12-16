@@ -13,8 +13,8 @@ Oskari.registerLocalization(
                 "cancel": "Close",
                 "getRoute": "Get route"
             },
-            "startingPointTooltip":"Starting point",
-            "finishingPointTooltip":"Finishing point",
+            "startingPointTooltip": "Starting point",
+            "finishingPointTooltip": "Finishing point",
             "startingPoint": "Starting point",
             "finishingPoint": "Finishing point"
         },
@@ -36,5 +36,4 @@ Oskari.registerLocalization(
             "showRoute": "Show route"
         }
     }
-}
-);
+});

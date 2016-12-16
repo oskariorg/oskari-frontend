@@ -50,5 +50,4 @@ Oskari.registerLocalization(
             "tags": "kartvindu, brukerveiledning"
         }
     }
-}
-);
+});

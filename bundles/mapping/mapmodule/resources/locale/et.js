@@ -30,7 +30,7 @@ Oskari.registerLocalization(
                 "link": "Andmeallikas",
                 "popup": {
                     "title": "Andmeallikad",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Sulge"
@@ -110,5 +110,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

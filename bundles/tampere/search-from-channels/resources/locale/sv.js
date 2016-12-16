@@ -9,8 +9,8 @@ Oskari.registerLocalization(
         "assistance": "Skriv sökordet.",
         "showMore": "Visa sökalternativ",
         "showLess": "Dölj sökalternativ",
-        "advanced_topic" : "Sökkanaler",
-        "channeloptionservice_alert_title" : "Sökkanaler fel",
+        "advanced_topic": "Sökkanaler",
+        "channeloptionservice_alert_title": "Sökkanaler fel",
         "channeloptionservice_not_found_anything_text": "Sökkanaler misslyckades med att hämta",
         "no_channels_found": "Sökkanaler inga hittades",
         "searchResults_header": "Sökresultat",
@@ -32,7 +32,7 @@ Oskari.registerLocalization(
         "no_selected_rows_alert_title": "Visa valt på kartan fel",
         "no_selected_rows_have_to_select": "Välj de objekt du vill från sökresultatet (kryssrutan)",
         "back-to-search": "Tillbaka till sökningen",
-         "grid": {
+        "grid": {
             "name": "Platsnamn",
             "village": "Kommun",
             "type": "Sökkanaler"
@@ -42,5 +42,4 @@ Oskari.registerLocalization(
             "title": "Sökresultat"
         }
     }
-}
-);
+});

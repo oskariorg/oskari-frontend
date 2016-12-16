@@ -1,11 +1,10 @@
-Oskari.registerLocalization({
-	"lang" : "sv",
-	"key" : "LakapaSaveUserMapState",
-	"value" : {
-		"title" : "",
-		"desc" : "",
-		"display" : {
-
-		}
-	}
+Oskari.registerLocalization(
+{
+    "lang": "sv",
+    "key": "LakapaSaveUserMapState",
+    "value": {
+        "title": "",
+        "desc": "",
+        "display": {}
+    }
 });

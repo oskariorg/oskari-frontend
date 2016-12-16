@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kaardikihtide menüü",
                 "CoordinateToolPlugin": "Koordinaatide tööriist",
                 "CrosshairTool": "Näita kaardi keskpunkti",
-                "FeedbackServiceTool": "NOT TRANSLATED",
+                "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Liigu eelmisesse vaatesse",
                     "history_forward": "Liigu järgmisesse vaatesse",
@@ -245,5 +245,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -9,16 +9,15 @@ Oskari.registerLocalization(
             "tooltip": "Finn nærmaste adresse ved å klikke på kartet"
         },
         "resultsTitle": "Søkjereslutat",
-        "close": "NOT TRANSLATED",
+        "close": "",
         "channels": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED",
-            "NLS_NEAREST_FEATURE_CHANNEL": "NOT TRANSLATED",
-            "ELFGEOLOCATOR_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": "",
+            "NLS_NEAREST_FEATURE_CHANNEL": "",
+            "ELFGEOLOCATOR_CHANNEL": ""
         },
         "channelDescriptions": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": ""
         },
-        "popupTitle": "NOT TRANSLATED"
+        "popupTitle": ""
     }
-}
-);
+});

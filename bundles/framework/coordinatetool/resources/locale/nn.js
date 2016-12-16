@@ -21,10 +21,10 @@ Oskari.registerLocalization(
             "compass": {
                 "lon": "A / Lengde:",
                 "lat": "N / Breidde:",
-                "n": "NOT TRANSLATED",
-                "e": "NOT TRANSLATED",
-                "p": "NOT TRANSLATED",
-                "i": "NOT TRANSLATED"
+                "n": "",
+                "e": "",
+                "p": "",
+                "i": ""
             },
             "reversegeocode": {
                 "errorTitle": "Omvend geokoding feil",
@@ -36,9 +36,9 @@ Oskari.registerLocalization(
                     "label": "Adresse:"
                 },
                 "TM35LEHTIJAKO_CHANNEL": {
-                    "label": "NOT TRANSLATED"
+                    "label": ""
                 },
-                "moreInfo": "NOT TRANSLATED"
+                "moreInfo": ""
             },
             "tooltip": {
                 "tool": "Vis koordinatar eller gi inn koordinatar og sentrer kartet på dei.",
@@ -87,10 +87,10 @@ Oskari.registerLocalization(
                     "EPSG:2392": "KKJ zone 2",
                     "EPSG:2394": "KKJ zone 4"
                 },
-                "emergencyCallLabel": "NOT TRANSLATED",
-                "emergencyCallLabelAnd": "NOT TRANSLATED",
-                "showCoordinateFormatDisplay": "NOT TRANSLATED",
-                "showInputValues": "NOT TRANSLATED"
+                "emergencyCallLabel": "",
+                "emergencyCallLabelAnd": "",
+                "showCoordinateFormatDisplay": "",
+                "showInputValues": ""
             },
             "cannotTransformCoordinates": {
                 "title": "Feil",
@@ -102,5 +102,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

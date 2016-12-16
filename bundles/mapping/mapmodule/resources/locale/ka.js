@@ -22,15 +22,15 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "გამოყენების პირობები",
-                "dataSources": "NOT TRANSLATED",
-                "layersHeader": "NOT TRANSLATED",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "dataSources": "",
+                "layersHeader": "",
+                "indicatorsHeader": ""
             },
             "DataSourcePlugin": {
                 "link": "მონაცემთა წყარო",
                 "popup": {
                     "title": "მონაცემთა წყაროები",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "დახურვა"
@@ -43,7 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "ადგილის ძებნა",
                 "search": "ძებნა",
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "close": "ძებნის შედეგების დახურვა",
                 "noresults": "შედეგები არ მოიძებნა",
                 "toomanyresults": "მოძებნილია 100–ზე მეტი ობიექტი. გთხოვთ, დააზუსტეთ ძებნა",
@@ -53,28 +53,27 @@ Oskari.registerLocalization(
             },
             "GetInfoPlugin": {
                 "title": "რუკის ფენები",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "link": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED"
+                "layer": "",
+                "places": "",
+                "description": "",
+                "link": "",
+                "name": ""
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "",
+                    "back": "",
+                    "next": ""
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "",
+                    "area": ""
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }
-}
-);
+});

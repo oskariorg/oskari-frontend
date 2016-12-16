@@ -1,19 +1,20 @@
-Oskari.registerLocalization({
-    "lang" : "cs",
-    "key" : "MapWfs2",
-    "value" : {
-        "title" : "MapWfs2",
-        "desc" : "",
+Oskari.registerLocalization(
+{
+    "lang": "cs",
+    "key": "MapWfs2",
+    "value": {
+        "title": "MapWfs2",
+        "desc": "",
         "default-style": "Default style",
         "own-style": "Own style",
-        "tile" : {
-            "title" : "MapWfs2"
+        "tile": {
+            "title": "MapWfs2"
         },
-        "flyout" : {
-            "title" : "MapWfs2",
-            "message" : "MapWfs2"
+        "flyout": {
+            "title": "MapWfs2",
+            "message": "MapWfs2"
         },
-        "error" : {
+        "error": {
             "title": "Error",
             "connection_not_available": "Connection to the WFS background service is not available.",
             "connection_broken": "Connection to the WFS background service broke down.",
@@ -26,7 +27,7 @@ Oskari.registerLocalization({
             "cancel": "Cancel",
             "show": "View places",
             "close": "Close",
-            "edit" : "Edit"
+            "edit": "Edit"
         },
         "popup": {
             "title": "Own style",

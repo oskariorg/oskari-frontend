@@ -191,5 +191,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Neznane regije",
         "loginToSaveIndicator": "Če želiš shraniti svoje indikatorje, se prijavi."
     }
-}
-);
+});

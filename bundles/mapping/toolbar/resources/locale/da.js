@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Link til kortvisning"
             },
-            "print": {
-                "tooltip": "Print"
-            },
             "history": {
                 "reset": "Tilbage til standardvisning",
                 "back": "Tilbage",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

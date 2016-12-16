@@ -9,16 +9,15 @@ Oskari.registerLocalization(
             "tooltip": "Kliknite na bod na mape. Výsledkom budú súradnice bodu a k nemu najbližšia adresa."
         },
         "resultsTitle": "Výsledky vyhľadávania",
-        "close": "NOT TRANSLATED",
+        "close": "",
         "channels": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED",
-            "NLS_NEAREST_FEATURE_CHANNEL": "NOT TRANSLATED",
-            "ELFGEOLOCATOR_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": "",
+            "NLS_NEAREST_FEATURE_CHANNEL": "",
+            "ELFGEOLOCATOR_CHANNEL": ""
         },
         "channelDescriptions": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": ""
         },
-        "popupTitle": "NOT TRANSLATED"
+        "popupTitle": ""
     }
-}
-);
+});

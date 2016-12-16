@@ -5,8 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "",
         "desc": "",
-        "display": {
-        }
+        "display": {}
     }
-}
-);
+});

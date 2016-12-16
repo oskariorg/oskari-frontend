@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Kaardikihid",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Eemalda",
         "ok": "Ok"
     }
-}
-);
+});

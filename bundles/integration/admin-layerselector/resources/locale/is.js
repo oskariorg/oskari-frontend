@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Fjarlægja",
         "ok": "Í lagi"
     }
-}
-);
+});

@@ -21,7 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Leitarsvæði",
         "delimitArea": "Takmarka leitarsvæði á korti",
         "deleteArea": "Eyða leitarsvæði",
-        "startDraw": "NOT TRANSLATED",
+        "startDraw": "",
         "dataset": "Gagnasett",
         "series": "Röð",
         "service": "Þjónusta",
@@ -64,5 +64,4 @@ Oskari.registerLocalization(
             "revision": "endurskoðun"
         }
     }
-}
-);
+});

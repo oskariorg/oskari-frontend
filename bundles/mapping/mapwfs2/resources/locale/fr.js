@@ -30,9 +30,9 @@ Oskari.registerLocalization(
             "info": "Certains de ces produits de données n'ont pas un rendu automatique. <br/><br/>.  Sélectionner une zone sur la carte et cliquer sur le bouton de rafraîchissement. . <br/><br/> . Cliquer sur données objet pour voir les données objets dans le produit de données."
         },
         "refresh_alert": {
-            "title": "NOT TRANSLATED",
-            "all_not_in_scale": "NOT TRANSLATED",
-            "all_invisible": "NOT TRANSLATED"
+            "title": "",
+            "all_not_in_scale": "",
+            "all_invisible": ""
         },
         "button": {
             "cancel": "Annuler",
@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistiske verdier",
         "selectionTools": {
             "title": "Velg forekomster på kartet",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Fra det øverste laget",
             "selectAll": "Velg fra alle lag",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Det er uautoriserte verdier i dataene"
         }
     }
-}
-);
+});

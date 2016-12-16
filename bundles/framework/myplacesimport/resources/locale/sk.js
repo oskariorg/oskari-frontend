@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Import Datasetu",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tool": {
             "tooltip": "Importujte vaše vlastné datasety."
         },
@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Vlastné datasety"
         }
     }
-}
-);
+});

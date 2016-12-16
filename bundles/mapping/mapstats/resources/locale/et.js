@@ -5,18 +5,17 @@ Oskari.registerLocalization(
     "value": {
         "tools": {
             "table_icon": {
-                "tooltip": "NOT TRANSLATED",
-                "title": "NOT TRANSLATED"
+                "tooltip": "",
+                "title": ""
             },
             "diagram_icon": {
-                "tooltip": "NOT TRANSLATED",
-                "title": "NOT TRANSLATED"
+                "tooltip": "",
+                "title": ""
             },
             "statistics": {
-                "tooltip": "NOT TRANSLATED",
-                "title": "NOT TRANSLATED"
+                "tooltip": "",
+                "title": ""
             }
         }
     }
-}
-);
+});

@@ -9,16 +9,15 @@ Oskari.registerLocalization(
             "tooltip": "Smelltu á punkt á kortinu. Þú munt sjá hnit á punktinum og næsta heimilisfangi."
         },
         "resultsTitle": "Leitarniðurstöður",
-        "close": "NOT TRANSLATED",
+        "close": "",
         "channels": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED",
-            "NLS_NEAREST_FEATURE_CHANNEL": "NOT TRANSLATED",
-            "ELFGEOLOCATOR_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": "",
+            "NLS_NEAREST_FEATURE_CHANNEL": "",
+            "ELFGEOLOCATOR_CHANNEL": ""
         },
         "channelDescriptions": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": ""
         },
-        "popupTitle": "NOT TRANSLATED"
+        "popupTitle": ""
     }
-}
-);
+});

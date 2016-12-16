@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "Kortaskýringar eru ekki til.",
         "invalidLegendUrl": "Kortaskýringar eru ekki til."
     }
-}
-);
+});

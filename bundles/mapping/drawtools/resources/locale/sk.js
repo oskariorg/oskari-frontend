@@ -5,5 +5,4 @@ Oskari.registerLocalization(
     "value": {
         "intersectionNotAllowed": "Polygón sa nesmie pretínať sám so sebou. Nakreslite platný polygón, aby ste videli výsledky merania."
     }
-}
-);
+});

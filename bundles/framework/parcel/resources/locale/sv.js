@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "Parcel",
     "value": {
@@ -123,7 +124,6 @@ Oskari.registerLocalization({
             "language": {
                 "changed": "..."
             }
-
         },
         "validation": {
             "title": "...",

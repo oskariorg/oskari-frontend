@@ -11,11 +11,11 @@ Oskari.registerLocalization(
         "refresh": "Värskenda",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
-            "title": "NOT TRANSLATED"
+            "title": ""
         },
         "flyout": {
-            "title": "NOT TRANSLATED",
-            "message": "NOT TRANSLATED"
+            "title": "",
+            "message": ""
         },
         "error": {
             "title": "Viga!",
@@ -49,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

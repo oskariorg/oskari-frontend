@@ -82,7 +82,5 @@ Oskari.registerLocalization(
             "title": "XY tool - Coordinates",
             "message": "Here you can see the current coordinates, pan to specific coordinates and add markers."
         }
-
     }
-}
-);
+});

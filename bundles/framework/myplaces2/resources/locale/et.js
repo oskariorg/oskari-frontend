@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Pinne täitevärv on probleemne. Kontrolli RGB koodi."
         }
     }
-}
-);
+});

@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Vaša spätná väzba bola úspešne uložená."
         }
     }
-}
-);
+});

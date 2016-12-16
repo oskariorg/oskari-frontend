@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             "inspire": "Inspire-metatiedot",
             "jhs": "JHS 158 -metatiedot",
             "quality": "Laatutiedot",
-            "actions":"Toiminnot",
+            "actions": "Toiminnot",
             "xml": "ISO 19139 XML -tiedosto",
             "coverage": {
                 "removeBBOX": "Piilota kattavuusalue",
@@ -438,7 +438,7 @@ Oskari.registerLocalization(
             },
             "layerList": {
                 "title": "Karttatasot",
-                "show":"Näytä karttataso",
+                "show": "Näytä karttataso",
                 "hide": "Piilota karttataso"
             }
         },
@@ -447,5 +447,4 @@ Oskari.registerLocalization(
             "tooltip": "Metatieto on tietoa tiedosta, tässä tapauksessa joko paikkatietoaineistosta, -aineistosarjasta tai -palvelusta. Metatiedoista selviää mm. kyseisen tietoresurssin käyttöehdot ja saatavuus."
         }
     }
-}
-);
+});

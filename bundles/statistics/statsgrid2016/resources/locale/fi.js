@@ -41,7 +41,6 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "LISÄEHDOT JA -OMINAISUUDET",
                 "showMapLayers": "Näytä karttatasot"
-
             }
         },
         "statsgrid": {
@@ -72,10 +71,7 @@ Oskari.registerLocalization(
             "showMap": "Näytä kartta",
             "showTable": "Näytä taulukko"
         },
-
-
         "classify": {
-            "editClassifyTitle": "Muokkaa luokittelua",
             "classify": "Luokittelu",
             "classifymethod": "Luokittelutapa",
             "classes": "Luokkajako",
@@ -105,6 +101,5 @@ Oskari.registerLocalization(
             "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
             "cancel": "Peruuta"
         }
-
     }
 });

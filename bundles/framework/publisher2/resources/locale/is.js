@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Valmynd fyrir kortalög",
                 "CoordinateToolPlugin": "Hnitatól",
                 "CrosshairTool": "Sýna aðalatriði korts",
-                "FeedbackServiceTool": "NOT TRANSLATED",
+                "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Færa í fyrri sýn",
                     "history_forward": "Færa í næstu sýn",
@@ -245,5 +245,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

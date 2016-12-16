@@ -191,5 +191,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Tuntemattomia alueita",
         "loginToSaveIndicator": "Jos haluat tallentaa indikaattorin, kirjaudu sisään."
     }
-}
-);
+});

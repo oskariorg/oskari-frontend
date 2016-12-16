@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "admin-layerrights",
     "value": {
         "title": "Tasojen oikeudet",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tile": {
             "title": "Tasojen oikeudet"
         },
@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "Tallenna",
         "selectRole": "Rooli"
     }
-}
-);
+});

@@ -21,7 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Søkeområde",
         "delimitArea": "Avgrens søkeområde på kartet",
         "deleteArea": "Slett søkeområde",
-        "startDraw": "NOT TRANSLATED",
+        "startDraw": "",
         "dataset": "Datasett",
         "series": "Serie",
         "service": "Tjeneste",
@@ -64,5 +64,4 @@ Oskari.registerLocalization(
             "revision": "revidering"
         }
     }
-}
-);
+});

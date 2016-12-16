@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "Mapové legendy sú nedostupné",
         "invalidLegendUrl": "Mapová legenda je nedostupná"
     }
-}
-);
+});

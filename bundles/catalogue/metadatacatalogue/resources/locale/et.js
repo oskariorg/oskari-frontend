@@ -21,7 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Otsiguala",
         "delimitArea": "Piira otsinguala kaardil",
         "deleteArea": "Kustuta otsinguala",
-        "startDraw": "NOT TRANSLATED",
+        "startDraw": "",
         "dataset": "Andmestik",
         "series": "Series",
         "service": "Teenuse tüüp",
@@ -64,5 +64,4 @@ Oskari.registerLocalization(
             "revision": "Revisjoni aeg"
         }
     }
-}
-);
+});

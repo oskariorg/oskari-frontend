@@ -30,9 +30,9 @@ Oskari.registerLocalization(
             "info": "Algunos de los productos de datos no se procesan automáticamente.<br><br>Por favor seleccione  un área en el mapa y haga clic en el botón actualizar.<br><br>Haga clic en datos de los objetos para ver los datos de los objetos  en el producto de datos."
         },
         "refresh_alert": {
-            "title": "NOT TRANSLATED",
-            "all_not_in_scale": "NOT TRANSLATED",
-            "all_invisible": "NOT TRANSLATED"
+            "title": "",
+            "all_not_in_scale": "",
+            "all_invisible": ""
         },
         "button": {
             "cancel": "Cancelar",
@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

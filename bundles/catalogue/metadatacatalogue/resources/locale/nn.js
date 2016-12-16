@@ -21,7 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Søkjeområde",
         "delimitArea": "Avgrens søkjeområde på kartet",
         "deleteArea": "Slett søkeområde",
-        "startDraw": "NOT TRANSLATED",
+        "startDraw": "",
         "dataset": "Datasett",
         "series": "Serie",
         "service": "Teneste",
@@ -64,5 +64,4 @@ Oskari.registerLocalization(
             "revision": "revidering"
         }
     }
-}
-);
+});

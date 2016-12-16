@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Štatistické hodnoty",
         "selectionTools": {
             "title": "Vybrať objekty",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Od najvyššej vrstvy",
             "selectAll": "Od všetkých vrstiev",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Údaje obsahujú hodnoty nepovolených objektov"
         }
     }
-}
-);
+});

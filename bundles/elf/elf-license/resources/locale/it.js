@@ -77,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Si"
         }
     }
-}
-);
+});

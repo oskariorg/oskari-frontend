@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Menu mapové vrstvy",
                 "CoordinateToolPlugin": "Nástroj súradníc",
                 "CrosshairTool": "Zobraziť ohniskový bod mapy",
-                "FeedbackServiceTool": "NOT TRANSLATED",
+                "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Presunúť na predchádzajúce zobrazenie",
                     "history_forward": "Presunúť na nasledovné zobrazenie",
@@ -245,5 +245,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

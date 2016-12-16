@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Fylltur litur er ógildur. Litagildið á að vera á bilinu 0 og 255."
         }
     }
-}
-);
+});

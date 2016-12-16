@@ -10,5 +10,4 @@ Oskari.registerLocalization(
             "sayHello": "Hello World!"
         }
     }
-}
-);
+});

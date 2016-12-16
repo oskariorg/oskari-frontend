@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "Nähtaval kaardil legend puudub",
         "invalidLegendUrl": "Kaardilegendi ei ole"
     }
-}
-);
+});

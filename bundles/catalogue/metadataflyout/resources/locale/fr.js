@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             "inspire": "Métadonnées Inspire",
             "jhs": "Métadonnées ISO 19115",
             "quality": "Qualité des données",
-            "actions": "NOT TRANSLATED",
+            "actions": "",
             "xml": "Fichier XML ISO 19139",
             "map": "Étendue géographique",
             "pdf": "Impression",
@@ -433,9 +433,9 @@ Oskari.registerLocalization(
                 "topologicalConsistency": "Cohérence topologique"
             },
             "layerList": {
-                "title": "NOT TRANSLATED",
-                "show": "NOT TRANSLATED",
-                "hide": "NOT TRANSLATED"
+                "title": "",
+                "show": "",
+                "hide": ""
             }
         },
         "tile": {
@@ -443,5 +443,4 @@ Oskari.registerLocalization(
             "tooltip": "Les conditions d’utilisation et la disponibilité du jeu de données sont explicitées dans la description des métadonnées."
         }
     }
-}
-);
+});

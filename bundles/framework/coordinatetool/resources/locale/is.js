@@ -21,10 +21,10 @@ Oskari.registerLocalization(
             "compass": {
                 "lon": "E / lon:",
                 "lat": "N / lat:",
-                "n": "NOT TRANSLATED",
-                "e": "NOT TRANSLATED",
-                "p": "NOT TRANSLATED",
-                "i": "NOT TRANSLATED"
+                "n": "",
+                "e": "",
+                "p": "",
+                "i": ""
             },
             "reversegeocode": {
                 "errorTitle": "Öfug landakóða villa",
@@ -36,9 +36,9 @@ Oskari.registerLocalization(
                     "label": "Heimilisfang:"
                 },
                 "TM35LEHTIJAKO_CHANNEL": {
-                    "label": "NOT TRANSLATED"
+                    "label": ""
                 },
-                "moreInfo": "NOT TRANSLATED"
+                "moreInfo": ""
             },
             "tooltip": {
                 "tool": "Sýna hnit eða skrifa inn hnit og  láta kortið sýna þau.",
@@ -87,10 +87,10 @@ Oskari.registerLocalization(
                     "EPSG:2392": "KKJ zone 2",
                     "EPSG:2394": "KKJ zone 4"
                 },
-                "emergencyCallLabel": "NOT TRANSLATED",
-                "emergencyCallLabelAnd": "NOT TRANSLATED",
-                "showCoordinateFormatDisplay": "NOT TRANSLATED",
-                "showInputValues": "NOT TRANSLATED"
+                "emergencyCallLabel": "",
+                "emergencyCallLabelAnd": "",
+                "showCoordinateFormatDisplay": "",
+                "showInputValues": ""
             },
             "cannotTransformCoordinates": {
                 "title": "Villa",
@@ -102,5 +102,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

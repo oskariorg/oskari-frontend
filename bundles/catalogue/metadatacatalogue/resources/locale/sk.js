@@ -21,7 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Oblasť vyhľadávania",
         "delimitArea": "Obmedziť oblasť vyhľadávania na mape",
         "deleteArea": "Vymazať oblasť vyhľadávania",
-        "startDraw": "NOT TRANSLATED",
+        "startDraw": "",
         "dataset": "Súbor údajov",
         "series": "Série",
         "service": "Služba",
@@ -64,5 +64,4 @@ Oskari.registerLocalization(
             "revision": "revízia"
         }
     }
-}
-);
+});

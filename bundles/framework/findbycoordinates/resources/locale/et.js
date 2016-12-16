@@ -9,16 +9,15 @@ Oskari.registerLocalization(
             "tooltip": "Vajuta kaardil teid huvitavasse piirkonda, et leida lähim aadress ja punkti koordinaadid."
         },
         "resultsTitle": "Otsingutulemused",
-        "close": "NOT TRANSLATED",
+        "close": "",
         "channels": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED",
-            "NLS_NEAREST_FEATURE_CHANNEL": "NOT TRANSLATED",
-            "ELFGEOLOCATOR_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": "",
+            "NLS_NEAREST_FEATURE_CHANNEL": "",
+            "ELFGEOLOCATOR_CHANNEL": ""
         },
         "channelDescriptions": {
-            "WHAT3WORDS_CHANNEL": "NOT TRANSLATED"
+            "WHAT3WORDS_CHANNEL": ""
         },
-        "popupTitle": "NOT TRANSLATED"
+        "popupTitle": ""
     }
-}
-);
+});

@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagsmeny",
                 "CoordinateToolPlugin": "Koordinatverktøy",
                 "CrosshairTool": "Vis fokuspunkt for kartet",
-                "FeedbackServiceTool": "NOT TRANSLATED",
+                "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Flytt tilbake",
                     "history_forward": "Flytt fremover",
@@ -245,5 +245,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

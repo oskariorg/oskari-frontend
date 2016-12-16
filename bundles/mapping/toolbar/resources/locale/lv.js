@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Labi",
                 "title": "Saite uz kartes skatu"
             },
-            "print": {
-                "tooltip": "Drukāt"
-            },
             "history": {
                 "reset": "Atgriezties pie noklusējuma skata",
                 "back": "Atpakaļ",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Usuarios que han entrado",
         "desc": "Si inicia la sesión, obtendrá más funcionalidades"
     }
-}
-);
+});

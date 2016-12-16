@@ -4,8 +4,7 @@ Oskari.registerLocalization(
     "key": "findbycoordinates",
     "value": {
         "tool": {
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         }
     }
-}
-);
+});

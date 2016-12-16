@@ -24,13 +24,13 @@ Oskari.registerLocalization(
                 "terms": "Termos de utilização",
                 "dataSources": "Fontes de dados",
                 "layersHeader": "Camadas",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": ""
             },
             "DataSourcePlugin": {
                 "link": "Fonte de dados",
                 "popup": {
                     "title": "Fontes de dados",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Fechar"
@@ -53,10 +53,10 @@ Oskari.registerLocalization(
             },
             "GetInfoPlugin": {
                 "title": "Camadas",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
+                "layer": "",
+                "places": "",
                 "description": "Descrição",
-                "link": "NOT TRANSLATED",
+                "link": "",
                 "name": "Nome"
             },
             "PublisherToolbarPlugin": {
@@ -72,9 +72,8 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }
-}
-);
+});

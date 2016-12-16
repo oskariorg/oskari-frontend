@@ -194,7 +194,7 @@ Oskari.registerLocalization(
                 ],
                 "attribute": "Välj en attribut",
                 "footer": "Skyddade objekt tas inte med i beräkning.",
-                "aggregateAdditionalInfo":"Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
+                "aggregateAdditionalInfo": "Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
             },
             "buffer_size": {
                 "label": "Zon storlek",
@@ -314,7 +314,7 @@ Oskari.registerLocalization(
                 "aggreLabel": "Attribut data för statistiska mått",
                 "aggreLabelTooltip": "Välj högst 10 attributer. Statistiska mått beräknas till dem.",
                 "labelTooltip": "Välj högst 10 attributer som tas med i resultaten.",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "oskari_analyse_all",
@@ -406,7 +406,7 @@ Oskari.registerLocalization(
                 "placeholder": "Skriv analyslager namn."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Punkt",
                     "color": "Färg",
@@ -450,21 +450,6 @@ Oskari.registerLocalization(
                 "title": "Fel!",
                 "generic": "Systemfel skedde. Analys kunde inte avgöras."
             }
-        },
-        "layer": {
-            "filter": {
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Välj det sammanlagda värdet",
-                    "aggregateValueSelectTitle": "Använd det sammanlagda värdet i filtret",
-                    "selectAggregateAnalyse": "Välj den sammanlagda analysen",
-                    "selectIndicator": "Välj indikatorn",
-                    "selectReadyButton": "Färdig",
-                    "getAggregateAnalysisFailed": "De aggregerade uppgifterna kunde inte hittas.",
-                    "noAggregateAnalysisPopupTitle": "Den sammanlagda analysen hittade inte.",
-                    "noAggregateAnalysisPopupContent": "Du har inte gjort en sammanlagd analys. Du kan skapa dina egna aggregerade uppgifter från analysfunktion och sedan använda värdena i filtrering."
-                }
-            }
         }
     }
-}
-);
+});

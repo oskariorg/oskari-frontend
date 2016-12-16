@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "La couleur de remplissage n’est pas valide. Les valeurs de couleur doivent se situer entre 0 et 255."
         }
     }
-}
-);
+});

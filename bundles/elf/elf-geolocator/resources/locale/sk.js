@@ -28,8 +28,8 @@ Oskari.registerLocalization(
             "fuzzyResultsTitle": "Hrubé výsledky vyhľadávania",
             "filterResultsTitle": "Výsledky filtra rozsahu",
             "countryFilter": "vybrať krajinu",
-            "locationFilter": "NOT TRANSLATED",
-            "namelangFilter": "NOT TRANSLATED",
+            "locationFilter": "",
+            "namelangFilter": "",
             "backButton": "Späť",
             "geolocButton": "Nájsť najbližšie miesto",
             "geolocDesc": "Kliknite na mapu a nájdite najbližší názov miesta k danému miestu",
@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

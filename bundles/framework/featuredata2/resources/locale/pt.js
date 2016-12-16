@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pt",
     "key": "FeatureData2",
     "value": {
@@ -19,7 +20,7 @@ Oskari.registerLocalization({
             },
             "button": {
                 "cancel": "Cancelar",
-                "empty": "NOT TRANSLATED",
+                "empty": "",
                 "show": "Ver lugares",
                 "close": "Fechar",
                 "edit": "Editar"
@@ -41,7 +42,7 @@ Oskari.registerLocalization({
                     "tooltip": "Adicionar círculo"
                 },
                 "select": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         }

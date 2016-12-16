@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Tölfræðileg gildi",
         "selectionTools": {
             "title": "Veldu fitjur á kortinu.",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Frá efsta lagi",
             "selectAll": "Frá öllum lögum",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Það eru óheimil gildi í gögnunum."
         }
     }
-}
-);
+});

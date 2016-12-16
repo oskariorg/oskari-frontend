@@ -78,5 +78,4 @@ Oskari.registerLocalization(
             "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
         }
     }
-}
-);
+});

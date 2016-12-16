@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistiske verdiar",
         "selectionTools": {
             "title": "Vel førekomstar på kartet",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Frå det øvste laget",
             "selectAll": "Frå alle lag",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Det er uautoriserte verdiar i dataa"
         }
     }
-}
-);
+});

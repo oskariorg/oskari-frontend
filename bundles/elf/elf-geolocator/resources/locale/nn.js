@@ -28,8 +28,8 @@ Oskari.registerLocalization(
             "fuzzyResultsTitle": "Resultat av fuzzy søk",
             "filterResultsTitle": "Resultat av søk filtrert på region",
             "countryFilter": "Landfilter",
-            "locationFilter": "NOT TRANSLATED",
-            "namelangFilter": "NOT TRANSLATED",
+            "locationFilter": "",
+            "namelangFilter": "",
             "backButton": "Tilbake",
             "geolocButton": "Locate nearest place",
             "geolocDesc": "Klikk i kartet for å lokalisere næraste stad",
@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

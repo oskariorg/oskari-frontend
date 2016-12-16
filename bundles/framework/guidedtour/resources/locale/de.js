@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Sie können die Karte vergrößern und verkleinern, indem Sie die Maßstabs-Scrollbalken oder die Plus- und Minustaste neben dem Scrollbalken verwenden. Tipp: Sie können die Karte ebenfalls mit Hilfe der Plus- und Minustasten auf der Tastatur vergrößern und verkleinern. Oder Sie vergrößern die Karte indem Sie doppelt darauf klicken. Zusätzlich können Sie das Mausrad verwenden, um zu zoomen."
         }
     }
-}
-);
+});

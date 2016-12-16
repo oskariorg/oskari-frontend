@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Odstrániť",
         "ok": "OK"
     }
-}
-);
+});
