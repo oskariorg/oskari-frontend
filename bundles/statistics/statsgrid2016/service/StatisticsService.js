@@ -11,8 +11,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         this.sandbox = sandbox;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
-        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
+        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+
         // pushed from instance
         this.datasources = [];
         // attach on, off, trigger functions
@@ -340,7 +341,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {
-                // TODO: log error
                 return;
             }
             var setId = this.getStateService().getRegionset();
@@ -437,6 +437,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 });
             });
         }
+
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

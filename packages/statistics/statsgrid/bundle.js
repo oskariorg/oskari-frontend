@@ -55,6 +55,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
             },
             {
                 "type": "text/javascript",
@@ -68,6 +71,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/event/RegionSelectedEvent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/ClassificationChangedEvent.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/StatsTableTool.js"

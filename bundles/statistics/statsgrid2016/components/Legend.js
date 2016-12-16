@@ -9,70 +9,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this.__templates = {
         legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
         noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
-        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>'),
-        classifications: jQuery('<div class="classifications">'+
-            '<div class="classification-options">'+
-                '<div class="classification-method">'+
-                    '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
-                    '<div class="method value">'+
-                        '<select class="method">'+
-                            '<option value="1" selected="selected">'+this.locale.classify.jenks+'</option>'+
-                            '<option value="2">'+this.locale.classify.quantile+'</option>'+
-                            '<option value="3">'+this.locale.classify.eqinterval+'</option>'+
-//                            '<option value="4">'+this.locale.classify.manual+'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
-
-                '<div class="classification-count">'+
-                    '<div class="label">'+ this.locale.classify.classes +'</div>'+
-                    '<div class="amount-class value">'+
-                        '<select class="amount-class">'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
-
-                '<div class="classification-mode">'+
-                    '<div class="label">'+ this.locale.classify.mode +'</div>'+
-                    '<div class="classify-mode value">'+
-                        '<select class="classify-mode">'+
-                            '<option value="distinct" selected="selected">'+ this.locale.classify.modes.distinct +'</option>'+
-                            '<option value="discontinuous">'+ this.locale.classify.modes.discontinuous +'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
-
-                '<div class="classification-colors">'+
-                    '<div class="label">'+ this.locale.colorset.button +'</div>'+
-                    '<div class="classification-colors value">'+
-
-                    '</div>'+
-                    '<button class="reverse-colors">'+this.locale.colorset.flipButton+'</button>'+
-                '</div>'+
-
-                '<div class="classification-color-set">'+
-                    '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
-                    '<div class="color-set value">'+
-                        '<select class="color-set">'+
-                            '<option value="seq" selected="selected">'+ this.locale.colorset.sequential +'</option>'+
-                            '<option value="qual">'+ this.locale.colorset.qualitative +'</option>'+
-                            '<option value="div">'+ this.locale.colorset.divergent +'</option>'+
-                        '</select>'+
-                    '</div>'+
-                '</div>'+
-
-            '</div>'+
-
-            '</div>')
-
+        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
     };
     this.__legendElement = this.__templates.legendContainer.clone();
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
     this._panel = null;
     this._accordion = null;
     this._container = jQuery('<div class="accordion-theming"></div>');
-    this._colorSelect = null;
-    this._selectedColorIndex = 0;
+    this._notHandleColorSelect = false;
+
+    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.instance);
+    this.editClassificationElement = this.editClassification.getElement();
 }, {
     /****** PRIVATE METHODS ******/
 
@@ -95,6 +42,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             me._handleRegionsetChanged(event.getRegionset());
+        });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            me._renderActiveIndicator();
+            setTimeout(function(){
+                me._addEditHandlers();
+            }, 200);
+        });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            me._renderActiveIndicator();
         });
     },
 
@@ -139,7 +97,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 me.__legendElement.html(me.__templates.noEnoughData.clone());
                 return;
             }
-            var classify = service.getClassificationService().getClassification(data);
+            var classification = state.getClassification(ind.hash);
+            var classify = service.getClassificationService().getClassification(data, classification);
+
             if(!classify) {
                 me.log.warn('Error getting indicator classification', data);
                 me.__legendElement.html(me.__templates.noEnoughData.clone());
@@ -154,7 +114,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 classes.push(group.join());
             });
 
-            var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+            var colorsWithoutHash = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors)[classification.colorIndex];
+
             var colors = [];
             colorsWithoutHash.forEach(function(color) {
                 colors.push('#' + color);
@@ -171,6 +132,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                 service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
                     var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
                     var jQueryLegend = jQuery(legend);
+
                     var isAccordion = true;
 
                     if(!me._accordion) {
@@ -179,42 +141,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                         me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                         me._panel.setVisible(true);
                         me._panel.setTitle(me.locale.classify.editClassifyTitle);
-                        me._panel.setContent(me._getEditClassifyContent());
+                        me._panel.setContent(me.editClassificationElement);
                         me._accordion.addPanel(me._panel);
                         me._accordion.insertTo(me._container);
                         isAccordion = false;
                     }
 
-                    if(!me._colorSelect) {
-                        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
-
-                        me._colorSelect.setHandler(function(selected){
-                            me._selectedColorIndex = selected;
-                            me.service.getStateService().setTheming(ind.hash, me._getSelections());
-                        });
-
-                        var el = me._colorSelect.getElement();
-                        me._container.find('.classification-colors.value').append(el);
-                    }
                     me._container.insertAfter(jQueryLegend.find('.geostats-legend-title'));
 
                     me.__legendElement.append(jQueryLegend);
 
-                    // FIXME some timing issue when showing classification second or more times
                     // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
                     if(isAccordion) {
                         setTimeout(function(){
-                            me.addEditHandlers();
-                        }, 200);
-                    } else {
-                         setTimeout(function(){
-                            me._initSelections();
-                        }, 200);
+                            me._addEditHandlers();
+                        }, 0);
                     }
 
                     setTimeout(function(){
-                        me.addSelectHandlers();
-                    }, 200);
+                        me._refreshEditClassification();
+                    }, 0);
 
                 });
 
@@ -222,58 +168,44 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         });
     },
 
-    _getEditClassifyContent: function(){
+    /**
+     * @method  @private _changeColors Change colors
+     * @param  {Object} classification classification
+     */
+    _changeColors: function(classification){
         var me = this;
-        var classifyOptions = me.__templates.classifications.clone();
-        return classifyOptions;
+        me.editClassification.changeColors(classification);
     },
 
-    _changeColors: function(index){
+    /**
+     * @method  @private _refreshEditClassification refresh edit classification
+     */
+    _refreshEditClassification: function(){
         var me = this;
-        me._selectedColorIndex = index || 0;
-        var selections = me._getSelections();
-        me._colorSelect.setColorValues(me.service.getColorService().getColors(selections.type, selections.amount));
-        me._colorSelect.setValue(selections.colorIndex);
-    },
-
-// Do when state changed or initialized
-    _initSelections: function(){
-        var me = this;
-
-        var state = me.service.getStateService();
-        var ind = state.getActiveIndicator();
-        var theme = state.getTheming(ind.hash);
-
-        me._container.find('select.method').val(theme.method);
-
-        var amountRange = me.service.getColorService().getRange(theme.type);
-        var amount = me._container.find('select.amount-class');
-        amount.empty();
-        var option = jQuery('<option></option>');
-        for(var i=amountRange.min;i<amountRange.max+1;i++) {
-            var op = option.clone();
-            if(i===5) {
-                op.attr('selected', 'selected');
-            }
-            op.html(i);
-            op.attr('value', i);
-            amount.append(op);
+        if(!me.__legendElement || !me._panel) {
+            return;
         }
-        me._container.find('select.amount-class').val(theme.amount);
-        me._container.find('select.classify-mode').val(theme.mode);
-        me._container.find('select.color-set').val(theme.type);
-        me._changeColors(theme.colorIndex);
-    },
 
-    _getSelections: function(){
+        me.editClassification.refresh();
+    },
+    /**
+     * @method  @private addEditHandlers add edit handlers again
+     */
+    _addEditHandlers: function(){
         var me = this;
-        return {
-            method: parseFloat(me._container.find('select.method').val()),
-            amount: parseFloat(me._container.find('select.amount-class').val()),
-            mode: me._container.find('select.classify-mode').val(),
-            type: me._container.find('select.color-set').val(),
-            colorIndex: parseFloat(me._selectedColorIndex)
-        };
+        if(!me.__legendElement || !me._panel) {
+            return;
+        }
+
+        me.__legendElement.find('.accordion_panel .header').bind('click', function(event){
+            var el = jQuery(this).parent();
+
+            if(el.hasClass('open')) {
+                me._panel.close();
+            } else {
+                me._panel.open();
+            }
+        });
     },
 
     /****** PUBLIC METHODS ******/
@@ -287,39 +219,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         me.__legendElement.html(me.__templates.noActiveSelection.clone());
         me._renderActiveIndicator();
         return me.__legendElement;
-    },
-
-    addEditHandlers: function(){
-        var me = this;
-        if(!me.__legendElement || !me._panel) {
-            return;
-        }
-        me.__legendElement.find('.accordion_panel').click(function(){
-            var el = jQuery(this);
-
-            if(el.hasClass('open')) {
-                me._panel.close();
-            } else {
-                me._panel.open();
-            }
-        });
-
-    },
-
-    addSelectHandlers: function(){
-        var me = this;
-        if(!me.__legendElement || !me._panel) {
-            return;
-        }
-        me.__legendElement.find('select').bind('change', function(event){
-            event.stopPropagation();
-            //me._initSelections(event);
-            me._changeColors();
-
-            var state = me.service.getStateService();
-            var ind = state.getActiveIndicator();
-            me.service.getStateService().setTheming(ind.hash, me._getSelections());
-        });
     }
 
 });

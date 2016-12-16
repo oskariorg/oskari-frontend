@@ -334,6 +334,17 @@ div.oskari-flyoutcontent{
         }
         .geostats-legend {
             font-size: 12px;
+
+            div.accordion {
+                div.accordion_panel {
+                    border: 0;
+                    border-top: 1px solid #C0D0D0;
+                    border-bottom: 1px solid #C0D0D0;
+                    div.content {
+                        padding: 10px;
+                    }
+                }
+            }
         }
         .geostats-legend-title {
             font-weight: normal;
@@ -411,9 +422,6 @@ div.oskari-flyoutcontent{
 
                             button {
                                 &.reverse-colors{
-                                    color: $buttonTextColor;
-                                    background: $buttonColor;
-                                    text-shadow: none;
                                     margin-left: 12px;
                                     width: $buttonWidth;
                                     padding: 4px 5px;

@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @param  {String} name  optional name, defaults to 'BrBG'
          * @return {String[]}     array of hex-strings as colors like ["d8b365","5ab4ac"]
          */
-        getColorset : function(count, type, name) {
+        getColorset : function(count, type, name, reverse) {
             type = type || this.limits.defaultType;
             name = name || this.limits.defaultName;
             var log = Oskari.log('StatsGrid.ColorService');
@@ -83,14 +83,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 result = getArray(value);
                 log.debug('Requested set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
+                if(reverse) {
+                    result.reverse();
+                }
                 return result;
             }
-            // TODO: get first to match type?
+            // get first to match type?
             log.warn('Requested set not found, using type matching');
             if(typeMatch) {
                 result = getArray(typeMatch);
                 log.debug('Type matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
+                if(reverse) {
+                    result.reverse();
+                }
                 return result;
             }
             log.warn('Requested set not found, using name matching');
@@ -98,10 +104,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 result = getArray(nameMatch);
                 log.debug('Name matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
+                if(reverse) {
+                    result.reverse();
+                }
                 return result;
             }
             // no matches, just use the first one
-            return getArray(this.colorsets[0]);
+            result = getArray(this.colorsets[0]);
+            if(reverse) {
+                result.reverse();
+            }
+            return result;
         },
 
         getRange: function(type) {
@@ -136,27 +149,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             };
         },
 
-        getColors: function(type, count){
+        getColors: function(type, count, reverse){
             var me = this,
                 i,
                 set;
             var colors = [];
+            reverse = reverse || false;
 
             // if type and count setted, return wanted colors
-            if(type && count) {
+            if(typeof type !== 'undefined' && typeof count !== 'undefined') {
                 for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
                     if(set.type === type) {
-                        colors.push(me.getColorset(count, type, set.name));
+                        colors.push(me.getColorset(count, type, set.name, reverse));
                     }
                 }
             }
             // else if type setted, return type colors
-            else if(type) {
+            else if(typeof type !== 'undefined') {
                  for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
                     if(set.type === type) {
-                        colors.push(me.getColorset(set.colors.length + 1, type, set.name));
+                        colors.push(me.getColorset(set.colors.length + 1, type, set.name, reverse));
                     }
                 }
             }
@@ -164,7 +178,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             else {
                 for(i=0;i<me.colorsets.length;i++) {
                     set = me.colorsets[i];
-                    colors.push(me.getColorset(set.colors.length + 1, set.type, set.name));
+                    colors.push(me.getColorset(set.colors.length + 1, set.type, set.name, reverse));
                 }
             }
 
