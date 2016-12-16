@@ -199,6 +199,12 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
     margin: 3px 10px 5px 10px; }
   .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend {
     font-size: 12px; }
+    .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend div.accordion div.accordion_panel, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend div.accordion div.accordion_panel {
+      border: 0;
+      border-top: 1px solid #C0D0D0;
+      border-bottom: 1px solid #C0D0D0; }
+      .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend div.accordion div.accordion_panel div.content, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend div.accordion div.accordion_panel div.content {
+        padding: 10px; }
   .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend-title, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend-title {
     font-weight: normal; }
   .statsgrid-legend-flyout .statsgrid-legend-container .accordion-theming, .statsgrid-legend-flyout-published .statsgrid-legend-container .accordion-theming {
