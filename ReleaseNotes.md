@@ -5,6 +5,9 @@
 ### statistics/statsgrid2016
 
 Now user can edit indicator classification on normal map side.
+Publisher can also define if classification is enabled to show on published map.
+Published map not open now defaults grid component.
+
 
 ### divmanazer
 

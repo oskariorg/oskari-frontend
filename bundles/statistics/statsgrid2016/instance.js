@@ -58,6 +58,9 @@ Oskari.clazz.define(
             if(typeof conf.showLegend === 'boolean' && conf.showLegend) {
                 me.renderPublishedLegend(conf);
             }
+
+
+
             if(me.hasPublished() && conf.grid) {
                 me.renderToggleButtons();
                 me.changePosition({top:0,left:0});
@@ -105,6 +108,8 @@ Oskari.clazz.define(
                     me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'detach', 'StatsGrid']);
                 }
             });
+
+            map.trigger('click');
 
             jQuery('body').append(toggleButtons);
         },
