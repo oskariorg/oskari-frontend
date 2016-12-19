@@ -50,5 +50,4 @@ Oskari.registerLocalization(
             "tags": "Finestra della mappa, guida utente"
         }
     }
-}
-);
+});

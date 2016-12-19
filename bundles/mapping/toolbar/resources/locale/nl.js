@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Link naar de kaartweergave"
             },
-            "print": {
-                "tooltip": "Print"
-            },
             "history": {
                 "reset": "Terug naar standaardweergave",
                 "back": "Terug",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

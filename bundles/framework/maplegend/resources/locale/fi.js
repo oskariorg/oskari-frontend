@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "Karttaselitteitä ei ole saatavilla avoinna oleville karttatasoille.",
         "invalidLegendUrl": "Karttaselitettä ei voi näyttää"
     }
-}
-);
+});

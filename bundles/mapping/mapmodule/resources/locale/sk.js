@@ -22,15 +22,15 @@ Oskari.registerLocalization(
         "plugin": {
             "LogoPlugin": {
                 "terms": "Podmienky používania",
-                "dataSources": "Data Sources",
-                "layersHeader": "Map Layers",
-                "indicatorsHeader": "Indicators"
+                "dataSources": "Zdroje údajov",
+                "layersHeader": "Mapové vrstvy",
+                "indicatorsHeader": "Indikátory"
             },
             "DataSourcePlugin": {
                 "link": "Zdroj údajov",
                 "popup": {
                     "title": "Zdroje údajov",
-                    "content": "NOT TRANSLATED"
+                    "content": "Nepreložené"
                 },
                 "button": {
                     "close": "Zatvoriť"
@@ -38,75 +38,76 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Údaje o objekte",
-                "chooseDefaultBaseLayer": "Zvoliť mapovú vrstvu podkladovej mapy"
+                "chooseDefaultBaseLayer": "Zvoliť podkladovú mapu",
+                "chooseOtherLayers": "Vybrať iné mapové vrstvy"
             },
             "SearchPlugin": {
                 "placeholder": "Nájsť umiestnenia",
                 "search": "Nájsť",
                 "title": "Vyhľadať Výsledky",
                 "close": "Zavrieť výsledky vyhľadávania",
-                "noresults": "Nenašli sa žiadne výsledky",
-                "toomanyresults": "Našlo sa vyše 100 výsledkov. Spresnite vyhľadávanie, prosím",
+                "noresults": "Nenašli sa žiadne výsledky. Prosím skontrolujte hľadaný názov a skúste znova.",
+                "toomanyresults": "Našlo sa vyše 100 výsledkov. Spresnite vyhľadávanie, prosím a skúste znova.",
                 "column_name": "Názov",
                 "column_village": "Obec",
                 "column_type": "Typ"
             },
             "GetInfoPlugin": {
-                "title": "Mapové vrstvy",
-                "layer": "Map layer",
-                "places": "Features",
-                "description": "Description",
-                "link": "Web address",
-                "name": "Name"
+                "title": "Objektové údaje",
+                "layer": "Mapová vrstva",
+                "places": "Objekty",
+                "description": "Popis",
+                "link": "Webová adresa",
+                "name": "Názov",
+                "noAttributeData": "Nezobrazujú sa vlastnosti. Otvorte prosím objektové údaje, aby ste videli skryté vlastnosti."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Return to the default view",
-                    "back": "Return to the previous view",
-                    "next": "Move to the next view"
+                    "reset": "Choď do predvoleného zobrazenia",
+                    "back": "Choď do predchádzajúceho zobrazenia",
+                    "next": "Chioď do nasledujúceho zobrazenia"
                 },
                 "measure": {
-                    "line": "Measure a distance",
-                    "area": "Measure an area"
+                    "line": "Merať vzdialenosť",
+                    "area": "Merať plochu"
                 }
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "Map marker",
-                    "clear": "Delete all markers"
+                    "add": "Mapový terčík",
+                    "clear": "Zmazať všetky terčíky"
                 },
                 "form": {
-                    "title": "Point feature style",
-                    "tooltip": "",
+                    "title": "Štýl mapového terčíka",
+                    "tooltip": "Definuj štýl pre mapové terčíky",
                     "symbol": {
-                        "label": "Icon"
+                        "label": "Ikona"
                     },
                     "size": {
-                        "label": "Size"
+                        "label": "Veľkosť"
                     },
                     "color": {
-                        "label": "Colour",
-                        "labelOr": "or",
-                        "labelCustom": "Custom colour (RGB 0-255)"
+                        "label": "Farba",
+                        "labelOr": "alebo",
+                        "labelCustom": "Vlastné farby (RGB 0-255)"
                     },
                     "preview": {
-                        "label": "Preview"
+                        "label": "Náhľad"
                     },
                     "message": {
-                        "label": "The text on the map",
-                        "hint": "Write a message"
+                        "label": "Text na mape",
+                        "hint": "Názov alebo popis"
                     }
                 },
                 "dialog": {
-                    "title": "Map marker",
-                    "message": "Select a new location for the marker by clicking the map."
+                    "title": "Mapový terčík",
+                    "message": "Zvoľte novú polohu pre váš mapový terčík kliknutím do mapy."
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Center map to your location"
+                "tooltip": "Vycentrujte mapu na vašu pozíciu"
             }
         }
     }
-}
-);
+});

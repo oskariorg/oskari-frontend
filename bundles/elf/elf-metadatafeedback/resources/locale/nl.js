@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Opslaan van de feedback is gelukt"
         }
     }
-}
-);
+});

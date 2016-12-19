@@ -6,11 +6,11 @@ Oskari.registerLocalization(
         "title": "Tetris",
         "desc": "",
         "flyout": {
-        	"playText": "Pelataan vähän Tetristä :)",
+            "playText": "Pelataan vähän Tetristä :)",
             "playButtonText": "Pelaa",
             "gameOverText": "Pelin loppu :(",
             "restartButtonText": "Pelaa uudelleen",
-			"scoreText": "Pisteet"
+            "scoreText": "Pisteet"
         }
     }
 });

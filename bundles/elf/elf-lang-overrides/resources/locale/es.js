@@ -5,37 +5,36 @@ Oskari.registerLocalization(
     "value": {
         "flyout": {
             "heading": {
-                "datasetInformation": "NOT TRANSLATED",
-                "contactInformation": "NOT TRANSLATED",
-                "metadataContact": "NOT TRANSLATED",
-                "technicalInformation": "NOT TRANSLATED",
-                "dataQuality": "NOT TRANSLATED"
+                "datasetInformation": "",
+                "contactInformation": "",
+                "metadataContact": "",
+                "technicalInformation": "",
+                "dataQuality": ""
             },
             "tableHeaders": {
                 "datasetInformation": {
-                    "referenceDate": "NOT TRANSLATED",
-                    "temporalInformation": "NOT TRANSLATED",
-                    "resourceLanguage": "NOT TRANSLATED",
-                    "bbox": "NOT TRANSLATED",
-                    "crs": "NOT TRANSLATED"
+                    "referenceDate": "",
+                    "temporalInformation": "",
+                    "resourceLanguage": "",
+                    "bbox": "",
+                    "crs": ""
                 },
                 "contactInformation": {
-                    "pointOfContact": "NOT TRANSLATED"
+                    "pointOfContact": ""
                 },
                 "metadataContact": {
-                    "pointOfContact": "NOT TRANSLATED"
+                    "pointOfContact": ""
                 },
                 "technicalInformation": {
-                    "accessConstraintInformation": "NOT TRANSLATED",
-                    "lineage": "NOT TRANSLATED",
-                    "metadataChangeDate": "NOT TRANSLATED",
-                    "uniqueIdentifier": "NOT TRANSLATED"
+                    "accessConstraintInformation": "",
+                    "lineage": "",
+                    "metadataChangeDate": "",
+                    "uniqueIdentifier": ""
                 },
                 "dataQuality": {
-                    "conformance": "NOT TRANSLATED"
+                    "conformance": ""
                 }
             }
         }
     }
-}
-);
+});

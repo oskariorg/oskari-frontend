@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Utenti registrati",
         "desc": "Se ti registri avrai accesso a più funzionalità."
     }
-}
-);
+});

@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Oblasť vyhľadávania",
         "delimitArea": "Obmedziť oblasť vyhľadávania na mape",
         "deleteArea": "Vymazať oblasť vyhľadávania",
+        "startDraw": "",
         "dataset": "Súbor údajov",
         "series": "Série",
         "service": "Služba",
@@ -33,6 +34,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Jazyk zdroja",
         "modifySearch": "Editovať možnosti vyhľadávania",
         "showSearch": "Zobraziť všetky výsledky vyhľadávania",
+        "showDatasets": "Zobraziť iba datasety",
+        "showServices": "Zobraziť iba služby",
         "metadataCatalogueResults": "Výsledky vyhľadávania",
         "show": "Zobraziť mapovú vrstvu.",
         "hide": "Skryť mapovú vrstvu.",
@@ -45,6 +48,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Hľadaný výraz je prázdny. Musí tam byť aspoň jeden znak.",
         "too_many_stars": "Hľadaný výraz obsahuje priveľa hviezdičiek (*). Môžete použiť maximálne jednu hviezdičku na konci hľadaného výrazu.",
         "searching": "Vyhľadávam...",
+        "updated": "aktualizovať frekvenciu",
         "grid": {
             "name": "Názov",
             "removeBBOX": "Skryť oblasť pokrytia",
@@ -55,10 +59,9 @@ Oskari.registerLocalization(
         },
         "licenseText": "Získať licenciu",
         "identificationCode": {
-            "creation": "creation",
-            "publication": "publication",
-            "revision": "revision"
+            "creation": "vytvorenie",
+            "publication": "publikácia",
+            "revision": "revízia"
         }
     }
-}
-);
+});

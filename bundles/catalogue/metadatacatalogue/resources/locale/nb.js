@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Søkeområde",
         "delimitArea": "Avgrens søkeområde på kartet",
         "deleteArea": "Slett søkeområde",
+        "startDraw": "",
         "dataset": "Datasett",
         "series": "Serie",
         "service": "Tjeneste",
@@ -33,6 +34,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Ressursspråk",
         "modifySearch": "Tilpass søkekriterier",
         "showSearch": "Vis alle søkeresultat",
+        "showDatasets": "Vis kun datasett",
+        "showServices": "Vis kun tjenester",
         "metadataCatalogueResults": "Søkeresultat",
         "show": "Vis kartlag",
         "hide": "Skjul kartlag",
@@ -45,6 +48,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Søkeordet må inneholde minst ett tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall,  backspaces, spørsmålstegn (?), stjerne (*) og bindestrek (-).",
         "too_many_stars": "Søkeordet inneholder for mange stjerner. Det kan inneholde opptil N stjerner.",
         "searching": "Søker…",
+        "updated": "oppdateringsfrekvens",
         "grid": {
             "name": "Navn",
             "removeBBOX": "Skjul dekningsområde for data",
@@ -55,10 +59,9 @@ Oskari.registerLocalization(
         },
         "licenseText": "Hent lisens",
         "identificationCode": {
-            "creation": "creation",
-            "publication": "publication",
-            "revision": "revision"
+            "creation": "etablering",
+            "publication": "publisering",
+            "revision": "revidering"
         }
     }
-}
-);
+});

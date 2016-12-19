@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "Voeg nieuwe filter toe",
             "removeFilter": "Verwijder filter",
             "bbox": {
-                "title": "Kaartvenster filter",
                 "on": "Alleen de feature zichtbaar op het kaartvenster",
                 "off": "Alle features"
             },
-            "clickedFeatures": {
-                "title": "Feature selectie filter",
-                "label": "Alleen de features geselecteerd op de kaart"
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Filter de features door attribuutgegevens",
                 "placeholders": {
@@ -317,5 +313,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

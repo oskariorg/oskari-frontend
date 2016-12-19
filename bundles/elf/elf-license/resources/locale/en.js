@@ -66,8 +66,8 @@ Oskari.registerLocalization(
                 "message": "Licence has been concluded. Please check the licence information below:"
             },
             "licenseDurations": {
-                "D":"days",
-                "W":"weeks",
+                "D": "days",
+                "W": "weeks",
                 "M": "months",
                 "Y": "years"
             },
@@ -84,5 +84,4 @@ Oskari.registerLocalization(
             "yes": "Yes"
         }
     }
-}
-);
+});

@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "You can zoom in and out the map view in several ways. <br/><br/> Select a scale from the zoom bar. You can also click (+) and (-) buttons in the heads of the zoom bar. <br/> <br/> Use (+) and (-) keys in your keyboard. <br/> <br/> Double-click the map view or use a \"magnifier tool\" to zoom in the map view."
         }
     }
-}
-);
+});

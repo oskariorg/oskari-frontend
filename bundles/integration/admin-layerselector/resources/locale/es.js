@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Capas del Mapa",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -133,7 +133,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI de estilo (XSLT)",
             "gfiStyleDesc": "Definir un estilo para obtener la información de característica (GFI) como transformación XSLT.",
             "manualRefresh": "Renovación manual.",
-            "resolveDepth": "NOT TRANSLATED",
+            "resolveDepth": "",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID es una técnica tile matrix identificador. Se actualiza automáticamente desde la respuesta GetCapabilities.",
             "matrixSet": "JSON para WMTS capa",
@@ -190,5 +190,4 @@ Oskari.registerLocalization(
         "delete": "Retirar",
         "ok": "OK"
     }
-}
-);
+});

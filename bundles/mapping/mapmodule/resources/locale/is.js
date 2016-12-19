@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kortalög",
                 "chooseDefaultBaseLayer": "Veldu kortalag fyrir bakgrunninn",
-                "chooseOtherLayers": "NOT TRANSLATED"
+                "chooseOtherLayers": "Velja önnur kortalög"
             },
             "SearchPlugin": {
                 "placeholder": "Leita að staðsetningu",
@@ -58,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Fitjur",
                 "description": "Lýsing",
                 "link": "Vefslóð",
-                "name": "Nafn"
+                "name": "Nafn",
+                "noAttributeData": "Ekki er hægt að sýna eigindi, vinsamlegast opnaðu fitjugögn til að sjá falin eigindi."
             },
             "PublisherToolbarPlugin": {
                 "test": "Prufa",
@@ -109,5 +110,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

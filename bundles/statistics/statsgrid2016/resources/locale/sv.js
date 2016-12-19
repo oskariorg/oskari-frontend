@@ -41,7 +41,6 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "YTTERLIGA VILLKOR OCH FUNKTIONER",
                 "showMapLayers": "Visa kartlager"
-
             }
         },
         "statsgrid": {
@@ -72,7 +71,6 @@ Oskari.registerLocalization(
             "showMap": "Visa karta",
             "showTable": "Show tabell"
         },
-
         "classify": {
             "classify": "Klassificering",
             "classifymethod": "Klassificeringsmetod",
@@ -103,6 +101,5 @@ Oskari.registerLocalization(
             "info2": "Välj färgerna genom att klicka på färggruppen",
             "cancel": "Avbryt"
         }
-
     }
 });

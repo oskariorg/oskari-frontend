@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "El color de relleno válido. Los valores tienen que estar entre 0 y 255"
         }
     }
-}
-);
+});

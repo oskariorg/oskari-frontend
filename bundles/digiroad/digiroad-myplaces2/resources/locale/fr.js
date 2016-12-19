@@ -194,5 +194,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Wrong fill-in colour."
         }
     }
-}
-);
+});

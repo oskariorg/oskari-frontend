@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Andmete import",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tool": {
             "tooltip": "Impordi oma andmed"
         },
@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Minu andmestikud"
         }
     }
-}
-);
+});

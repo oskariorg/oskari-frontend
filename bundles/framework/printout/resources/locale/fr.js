@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

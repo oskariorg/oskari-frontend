@@ -50,5 +50,4 @@ Oskari.registerLocalization(
             "tags": "kaart venster, gebruikershandleiding"
         }
     }
-}
-);
+});

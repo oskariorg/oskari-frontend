@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Tölfræðileg gildi",
         "selectionTools": {
             "title": "Veldu fitjur á kortinu.",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Frá efsta lagi",
             "selectAll": "Frá öllum lögum",
             "link": {
@@ -95,10 +95,9 @@ Oskari.registerLocalization(
         },
         "gridFooter": {
             "aggregateColumnField": "Talning",
-            "differenceMessage": "NOT TRANSLATED",
+            "differenceMessage": "Mismunurinn á óleyfðum fitjugildum er sýnt með gildi",
             "noDataMessage": "Talning = Fjöldi fitja án óheimilla aðgerða",
             "noDataCommonMessage": "Það eru óheimil gildi í gögnunum."
         }
     }
-}
-);
+});

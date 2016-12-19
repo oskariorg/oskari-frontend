@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "The fill colour is invalid. All the RGB values must be between 0 and 255."
         }
     }
-}
-);
+});

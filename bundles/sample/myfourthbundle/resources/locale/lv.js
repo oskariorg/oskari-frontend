@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "tooltip": "Click me!",
         "toolClicked": "Tool clicked"
     }
-}
-);
+});

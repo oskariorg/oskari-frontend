@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "I layer della mia mappa"
         }
     }
-}
-);
+});

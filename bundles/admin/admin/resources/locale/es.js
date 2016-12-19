@@ -1,33 +1,32 @@
 Oskari.registerLocalization(
 {
-    "lang": "is",
+    "lang": "sk",
     "key": "GenericAdmin",
     "value": {
-        "title": "Ógilt lykilorð eða notandanafn!!",
-        "desc": "Notandanafn",
+        "title": "Neplatné heslo alebo prihlasovacie meno",
+        "desc": "Prihlasovacie meno",
         "tile": {
-            "title": "Lykilorð"
+            "title": "Heslo"
         },
         "flyout": {
-            "title": "Skrá inn",
+            "title": "Prihlásiť",
             "defaultviews": {
-                "title": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "headerName": "NOT TRANSLATED",
-                "globalViewTitle": "NOT TRANSLATED",
-                "setButton": "NOT TRANSLATED",
-                "forceButton": "NOT TRANSLATED",
+                "title": "",
+                "desc": "",
+                "headerName": "",
+                "globalViewTitle": "",
+                "setButton": "",
+                "forceButton": "",
                 "notifications": {
-                    "errorTitle": "NOT TRANSLATED",
-                    "warningTitle": "NOT TRANSLATED",
-                    "successTitle": "NOT TRANSLATED",
-                    "errorLoadingFailed": "NOT TRANSLATED",
-                    "errorUpdating": "NOT TRANSLATED",
-                    "listTitle": "NOT TRANSLATED",
-                    "viewUpdated": "NOT TRANSLATED"
+                    "errorTitle": "",
+                    "warningTitle": "",
+                    "successTitle": "",
+                    "errorLoadingFailed": "",
+                    "errorUpdating": "",
+                    "listTitle": "",
+                    "viewUpdated": ""
                 }
             }
         }
     }
-}
-);
+});

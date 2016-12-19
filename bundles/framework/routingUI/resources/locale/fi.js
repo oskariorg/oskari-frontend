@@ -13,8 +13,8 @@ Oskari.registerLocalization(
                 "cancel": "Sulje",
                 "getRoute": "Hae reitti"
             },
-            "startingPointTooltip":"Lähtöpiste",
-            "finishingPointTooltip":"Saapumispiste",
+            "startingPointTooltip": "Lähtöpiste",
+            "finishingPointTooltip": "Saapumispiste",
             "startingPoint": "Lähtöpiste",
             "finishingPoint": "Saapumispiste"
         },
@@ -36,5 +36,4 @@ Oskari.registerLocalization(
             "showRoute": "Näytä reitti"
         }
     }
-}
-);
+});

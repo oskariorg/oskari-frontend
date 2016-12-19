@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "Enregistrer",
         "selectRole": "Role"
     }
-}
-);
+});

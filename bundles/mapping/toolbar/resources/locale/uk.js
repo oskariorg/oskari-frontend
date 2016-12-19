@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ок",
                 "title": "Посилання на вигляд карти"
             },
-            "print": {
-                "tooltip": "Друк"
-            },
             "history": {
                 "reset": "Повернутись до початкового вигляду",
                 "back": "Попередній вигляд",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

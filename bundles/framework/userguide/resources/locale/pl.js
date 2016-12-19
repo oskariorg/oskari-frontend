@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Oskari instrukcja użytkownika",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Instrukcja korzystania z mapy"

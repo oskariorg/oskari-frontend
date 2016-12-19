@@ -225,5 +225,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

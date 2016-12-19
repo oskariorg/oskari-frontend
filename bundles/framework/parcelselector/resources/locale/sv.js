@@ -1,18 +1,19 @@
-Oskari.registerLocalization({
-    "lang" : "fi",
-    "key" : "ParcelSelector",
-    "value" : {
-        "title" : "...",
-        "button" : "...",
-        "errors" : {
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "ParcelSelector",
+    "value": {
+        "title": "...",
+        "button": "...",
+        "errors": {
             "title": "...",
-            "illegalInput" : "..."
+            "illegalInput": "..."
         },
-        "description" : "...",
-        "filter" : {
-            "text" : "...",
-            "parcel" : "...",
-            "registerUnit" : "..."
+        "description": "...",
+        "filter": {
+            "text": "...",
+            "parcel": "...",
+            "registerUnit": "..."
         },
         "buttons": {
             "ok": "..."

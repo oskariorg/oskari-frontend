@@ -14,89 +14,89 @@ Oskari.registerLocalization(
             "loginShort": "Увійдіть в систему для використання"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "",
+            "editCategory": "",
+            "deleteCategory": "",
+            "edit": "",
+            "delete": "",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "",
+                "desc": "",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
+                "edit": "",
+                "delete": ""
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "",
+                    "confirm": "",
+                    "btnDelete": "",
+                    "btnCancel": "",
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Додати точку",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ви можете зберегти або намалювати більше точок в одному кресленні",
                 "edit": "Клікніть на точку і утримуйте курсор для її переміщення|",
                 "save": "Зберегти місцеположення"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Додати лінію",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ви можете намалювати і зберегти більше лінійв одному кресленні",
                 "edit": "Редагуйте лінію клікнувши і утримуючи в точках розлому",
                 "save": "Зберегти фігури",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Додати полігон",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ви можете зберігати більше полігонів в однову кресленні.",
                 "edit": "Щоб відредагувати форму полігону переміщуйте вузлові точки полігона",
                 "save": "Зберегти фігуру",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             }
         },
         "buttons": {
             "ok": "ОК",
             "cancel": "Скасувати",
-            "close": "NOT TRANSLATED",
+            "close": "",
             "finish": "Закінчити креслення",
             "save": "Зберегти",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Переміщення місць та видалення",
             "deleteCategory": "Видалити",
             "deleteCategoryAndPlaces": "Видалити категорію та місця",
@@ -116,26 +116,25 @@ Oskari.registerLocalization(
                 "placeholder": "Описати місце"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Шар карти",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "",
+                "placename": "",
+                "placedesc": "",
+                "image": ""
             },
             "edit": {
                 "title": "Редагувати шар карти",
@@ -175,102 +174,102 @@ Oskari.registerLocalization(
                 "cancel": "Назад"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "notification": {
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Опис шару містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс.",
             "dotSize": "Розмір точки не вписується в допуски (1-5)",
             "dotColor": "Неправильний колір точки.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Розмір лінії не вписується в допуски (1-50)",
             "lineColor": "Неправильний колір лінії.",
             "areaLineSize": "Розмір точки не вписується в допуски (1-50)",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Неправильний колір заливки."
         }
     }
-}
-);
+});

@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Datensatz importieren",
             "description": "Eigene Datensätze können in den Formaten shp-, gpx oder mif/mid in eine ZIP-Datei oder KMZ-Datei (zipped kml) importiert werden. Die Datei darf maximal 5000 Objekte enthalten.",
-            "help": "NOT TRANSLATED",
+            "help": "",
             "actions": {
                 "cancel": "Abbrechen",
                 "next": "Weiter"
@@ -19,9 +19,9 @@ Oskari.registerLocalization(
             "file": {
                 "submit": "Senden",
                 "fileOverSizeError": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED"
+                    "title": "",
+                    "message": "",
+                    "close": ""
                 }
             },
             "layer": {
@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Eigener Datensatz"
         }
     }
-}
-);
+});

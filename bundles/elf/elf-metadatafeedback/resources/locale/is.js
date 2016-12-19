@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Það tókst að vista endurgjöf þína."
         }
     }
-}
-);
+});

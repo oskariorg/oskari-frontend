@@ -26,5 +26,4 @@ Oskari.registerLocalization(
             "tags": "map window,user guide"
         }
     }
-}
-);
+});

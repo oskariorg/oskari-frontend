@@ -44,7 +44,8 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Færni",
-            "confirmResourceKeyChange": "Nafninu eða slóðinni fyrir þetta kortalg hefur verið breytt. Af öryggisástæðum munu notendaréttindin fyrir kortalagið vera fjarlægð og þú þarft að búa þau til aftur. Viltu halda áfram?",
+            "capabilitiesRemarks": "(*) Núverandi CRS kort fær ekki stuðning í þjónustufærni",
+            "confirmResourceKeyChange": "Nafninu eða slóðinni fyrir þetta kortlag hefur verið breytt. Af öryggisástæðum munu notendaréttindin fyrir kortalagið vera fjarlægð og þú þarft að búa þau til aftur. Viltu halda áfram?",
             "confirmDeleteLayerGroup": "Flokkurinn með kortalögunum verður fjarlægður. Viltu halda áfram?",
             "confirmDeleteLayer": "Kortalagið verður fjarlægt. Viltu halda áfram?",
             "layertypes": {
@@ -113,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Skilgreina ógagnsæið sem er notað sjálfkrafa. Ef ógagnsæið er 100% hylur það öll lög undir laginu. Ef ógagnsæið er 0% er það alveg gangsætt. Notendur geta stjórnað gagnsæinu í \"Valin lög\" valmyndinni.",
             "style": "Sjálfgefinn stíll",
             "styleDesc": "Valmöguleikar á stíl eru sóttir sjálfkrafa úr svari frá GetCapabilities. Veldu sjálfgefinn stíl úr listanum. Ef það eru nokkrir möguleikar getur notandinn valið þema úr \"Valin lög\" valmyndinni.",
+            "importStyle": "Nýr sld stíll",
+            "addNewStyle": "Bæta við nýjum SLD stíl",
+            "sldStyleName": "Stílnafn",
+            "sldFileContentDesc": "Afrita/Líma SLD skráar innihald (xml) á textasvæði",
+            "sldFileContent": "Innihald SLD skrár",
+            "sldStylesFetchError": "Gat ekki sótt SLD stíla",
+            "addSldStyleDesc": "Velja stíla fyrir þetta lag",
+            "addSldStyle": "Val á SLD stílum",
             "minScale": "Lágmarks mælikvarði.",
             "minScaleDesc": "Lágmarks mælikvarði er sóttur sjálfkrafa úr svari frá GetCapabilities. Kortalagið sést einungis ef mælikvarðinn er umfram þau mörk. Mælikvarðar eru skilgreindir sem mælikvarðanefnarar. Ef mörk mælikvarða eru ekki skilgreind eru kortalögin sýnd í öllum mælikvörðum.",
             "minScalePlaceholder": "Lágmarks mælikvarði 5669294 (1:5669294)",
@@ -133,6 +142,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI stíll (XSLT)",
             "gfiStyleDesc": "Skilgreindu stíl fyrir Fá upplýsingar um fitju (GFI) sem XSLT umbreytingu. Handvirk uppfærsla.",
             "manualRefresh": "Handvirk uppfærsla",
+            "resolveDepth": "Leysa dýpt",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID er auðkenni fyrir tæknileg flísafylki. Það er sótt sjálfvirkt úr svari frá GetCapabilities.",
             "matrixSet": "JSON fyrir WMTS lag",
@@ -189,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Fjarlægja",
         "ok": "Í lagi"
     }
-}
-);
+});

@@ -71,7 +71,6 @@ Oskari.registerLocalization(
             "showMap": "Show map",
             "showTable": "Show table"
         },
-
         "classify": {
             "classify": "Classification",
             "classifymethod": "Classification method",

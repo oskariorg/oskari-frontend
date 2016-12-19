@@ -8,5 +8,4 @@ Oskari.registerLocalization(
         "noLegendsText": "No map legends available",
         "invalidLegendUrl": "Map legend not available"
     }
-}
-);
+});

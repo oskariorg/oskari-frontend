@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "Printout",
     "value": {
-        "title": "Prindi kaardivaade",
-        "flyouttitle": "Prindi kaardivaade",
+        "title": "Trüki kaart",
+        "flyouttitle": "Trüki kaart",
         "desc": "",
-        "btnTooltip": "Prindi kaart png pildiformaadis või pdf dokumendina",
+        "btnTooltip": "Trüki kaart png pildiformaadis või pdf dokumendina",
         "BasicView": {
-            "title": "Prindi kaardivaade",
+            "title": "Trüki kaardivaade",
             "name": {
                 "label": "Kaardi nimi",
                 "placeholder": "kohustuslik",
-                "tooltip": "Kirjuta oma trükise nimi. Märgi keel, mida kasutad kaardikihtidel."
+                "tooltip": "Kirjuta trükise nimi. Märgi keel, mida kasutad kaardikihtidel."
             },
             "language": {
                 "label": "Keel",
@@ -25,7 +25,7 @@ Oskari.registerLocalization(
             },
             "size": {
                 "label": "Suurus ja  suund",
-                "tooltip": "Vali trükimall.Nätav eelvaates.",
+                "tooltip": "Vali trükimall. Nähtav eelvaates.",
                 "options": [
                     {
                         "id": "A4",
@@ -68,7 +68,7 @@ Oskari.registerLocalization(
             "location": {
                 "label": "Asukoht ja suurendusaste",
                 "tooltip": "Väljatrüki mõõtkava vastab eelvaate aknas olevale.",
-                "zoomlevel": "Suurendusaste"
+                "zoomlevel": "Mõõtkava"
             },
             "settings": {
                 "label": "Lisaseaded",
@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "Legend",
+                "label": "Kaardi legend",
                 "tooltip": "Määra legendi asukoht trükisel. Kui asukoht on määramata, siis legendi trükisele ei kuvata.",
                 "options": [
                     {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

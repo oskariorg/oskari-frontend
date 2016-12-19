@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kartlag",
                 "type-wfs": "Dataprodukt"
             },
+            "refresh_load": {
+                "tooltip": "Oppfrisk kartlaget. Data blir ikkje oppdatert automatisk i kartet."
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Vel førekomstar frå kartlaget",
@@ -90,7 +93,7 @@ Oskari.registerLocalization(
                     "selectIndicator": "Vel indikator",
                     "selectReadyButton": "Klar",
                     "getAggregateAnalysisFailed": "Aggregerte data ikkje funne",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
+                    "noAggregateAnalysisPopupTitle": "Statistiske verdiar ikkje funne",
                     "noAggregateAnalysisPopupContent": "Du har ikkje gjort nokon aggregert analyse. Du kan setje saman dine eigne aggregerte data ved hjelpp av analysefunksjonen, og så filtrere på verdiar."
                 },
                 "validation": {
@@ -103,5 +106,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});
