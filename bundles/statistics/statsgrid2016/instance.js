@@ -27,6 +27,10 @@ Oskari.clazz.define(
         };
 
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
+
+        this._publishedComponents = {
+            panelClassification: null
+        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -167,7 +171,8 @@ Oskari.clazz.define(
                         extraFeatures: true,
                         areaSelection: true,
                         mouseEarLegend: true,
-                        showLegend: true
+                        showLegend: true,
+                        allowClassification: true
                     };
                     var map = jQuery('#contentMap');
                     if(map.hasClass('mapPublishMode')) {
@@ -176,12 +181,14 @@ Oskari.clazz.define(
                         conf.areaSelection = false;
                         conf.mouseEarLegend = false;
                         conf.showLegend = true;
+                        conf.allowClassification = true;
                     } else if(!map.hasClass('published')) {
                         conf.search = true;
                         conf.extraFeatures = true;
                         conf.areaSelection = true;
                         conf.mouseEarLegend = true;
                         conf.showLegend = false;
+                        conf.allowClassification = true;
                     }
 
                     conf = jQuery.extend({}, defaultConf, this.getConfiguration());
@@ -220,6 +227,8 @@ Oskari.clazz.define(
             var me = this;
             var sb = me.getSandbox();
             var locale = this.getLocalization();
+
+            me.conf.publishedClassification = true;
 
             jQuery('.statsgrid-legend-flyout-published').show();
 
@@ -281,13 +290,24 @@ Oskari.clazz.define(
                                 var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
                                 var container = jQuery('<div class="accordion-published"></div>');
 
-                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panel.setTitle(locale.legend.title);
-                                panel.setContent(me.__sideTools.legend.comp.getClassification());
-                                panel.setVisible(true);
-                                panel.open();
+                                // classification
+                                if(me.conf.allowClassification) {
+                                    me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                    me._publishedComponents.panelClassification.setVisible(true);
+                                    me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
+                                    var editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me);
+                                    var editClassificationElement = editClassification.getElement();
+                                    me._publishedComponents.panelClassification.setContent(editClassificationElement);
+                                    accordion.addPanel(me._publishedComponents.panelClassification);
+                                }
 
-                                accordion.addPanel(panel);
+                                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                panelLegend.setTitle(locale.legend.title);
+                                panelLegend.setContent(me.__sideTools.legend.comp.getClassification());
+                                panelLegend.setVisible(true);
+                                panelLegend.open();
+
+                                accordion.addPanel(panelLegend);
                                 accordion.insertTo(container);
 
                                 me.__sideTools.legend.flyout.setContent(container);
@@ -482,6 +502,18 @@ Oskari.clazz.define(
                 state.active = active.hash;
             }
             return state;
+        },
+
+        /**
+         * @method  @public classificationVisible change published map classification visibility. Only call this in publisher!
+         * @param  {Boolean} visible visible or not
+         */
+        classificationVisible: function(visible) {
+            var me = this;
+
+            if(me._publishedComponents.panelClassification) {
+                me._publishedComponents.panelClassification.setVisible(visible);
+            }
         }
 
     }, {
