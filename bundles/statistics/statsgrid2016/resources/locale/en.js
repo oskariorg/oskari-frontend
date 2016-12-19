@@ -88,7 +88,9 @@ Oskari.registerLocalization(
             "modes": {
                 "distinct": "Continuous",
                 "discontinuous": "Discrete"
-            }
+            },
+            "editClassifyTitle": "Edit classification",
+            "classifyFieldsTitle": "Classification values"
         },
         "colorset": {
             "button": "Colors",

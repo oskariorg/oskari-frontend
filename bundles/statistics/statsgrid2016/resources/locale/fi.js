@@ -88,7 +88,9 @@ Oskari.registerLocalization(
             "modes": {
                 "distinct": "Jatkuva",
                 "discontinuous": "Epäjatkuva"
-            }
+            },
+            "editClassifyTitle": "Muokkaa luokittelua",
+            "classifyFieldsTitle": "Luokitteluarvot"
         },
         "colorset": {
             "button": "Värit",

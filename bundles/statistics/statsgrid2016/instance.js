@@ -296,14 +296,18 @@ Oskari.clazz.define(
                                 var container = jQuery('<div class="accordion-published"></div>');
 
                                 // classification
-                                if(me.conf.allowClassification) {
-                                    me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                    me._publishedComponents.panelClassification.setVisible(true);
-                                    me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-                                    var editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me);
-                                    var editClassificationElement = editClassification.getElement();
-                                    me._publishedComponents.panelClassification.setContent(editClassificationElement);
-                                    accordion.addPanel(me._publishedComponents.panelClassification);
+
+                                me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                me._publishedComponents.panelClassification.setVisible(true);
+                                me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
+
+                                var editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me);
+                                var editClassificationElement = editClassification.getElement();
+                                me._publishedComponents.panelClassification.setContent(editClassificationElement);
+                                accordion.addPanel(me._publishedComponents.panelClassification);
+                                if(!me.conf.allowClassification) {
+                                    editClassification.setEnabled(false);
+                                    me._publishedComponents.panelClassification.setTitle(locale.classify.classifyFieldsTitle);
                                 }
 
                                 var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
