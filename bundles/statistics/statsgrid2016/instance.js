@@ -230,6 +230,28 @@ Oskari.clazz.define(
          */
         renderPublishedLegend: function(config){
             var me = this;
+            if(me.plugin) {
+                return;
+            }
+            config = config || me.getConfiguration();
+            var sandbox = me.getSandbox();
+            var locale = this.getLocalization();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
+
+            var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+            mapModule.registerPlugin(plugin);
+            mapModule.startPlugin(plugin);
+            this.plugin = plugin;
+
+
+            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+                mapModule.redrawPluginUIs(true);
+            }
+
+            return;
+            var me = this;
             var sb = me.getSandbox();
             var locale = this.getLocalization();
 

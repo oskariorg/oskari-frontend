@@ -268,8 +268,10 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
               padding: 1px 2px; }
 
 .statsgrid-legend-flyout-published {
-  top: 0;
-  right: 0; }
+  pointer-events: auto;
+  text-align: left; }
+  .statsgrid-legend-flyout-published .oskari-flyout {
+    position: relative; }
   .statsgrid-legend-flyout-published div.oskari-flyoutheading {
     display: none; }
   .statsgrid-legend-flyout-published div.oskari-flyouttoolbar {

@@ -65,7 +65,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	        var popup = me.__popup || me.__templates.popup.clone();
 
 	        if(!me.__popup) {
-	        	jQuery('body').append(popup);
+                if(!me.options.container) {
+	        	  jQuery('body').append(popup);
+                } else {
+                    me.options.container.append(popup);
+                }
 	        	popup.find('.icon-close').bind('click', function(){
 	        		me.hide();
 	        	});
