@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._messageDialog = null;
         me._clazz = 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin';
         me._defaultLocation = 'top right';
-        me._index = 10;
+        me._index = 9;
         me._name = 'ClassificationToolPlugin';
         me._toolOpen = false;
         me._flyout = null;
