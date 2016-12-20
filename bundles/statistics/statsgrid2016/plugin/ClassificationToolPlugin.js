@@ -29,7 +29,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         };
 
         me._publishedComponents = {
-            panelClassification: null
+            panelClassification: null,
+            editClassification: null
         };
 
         me._mobileDefs = {
@@ -171,18 +172,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                                     me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                                     me._publishedComponents.panelClassification.setVisible(true);
                                     me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-                                    var editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me._instance);
-                                    var editClassificationElement = editClassification.getElement();
+                                    me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me._instance);
+                                    var editClassificationElement = me._publishedComponents.editClassification.getElement();
                                     me._publishedComponents.panelClassification.setContent(editClassificationElement);
                                     accordion.addPanel(me._publishedComponents.panelClassification);
                                     if(!config.allowClassification) {
-                                        editClassification.setEnabled(false);
+                                        me._publishedComponents.editClassification.setEnabled(false);
                                         me._publishedComponents.panelClassification.setTitle(locale.classify.classifyFieldsTitle);
                                     }
 
                                     var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                                     panelLegend.setTitle(locale.legend.title);
-                                    panelLegend.setContent(me.__sideTools.legend.comp.getClassification());
+
+                                    var classification = me.__sideTools.legend.comp.getClassification();
+                                    classification.find('.accordion-theming').remove();
+                                    panelLegend.setContent(classification);
                                     panelLegend.setVisible(true);
                                     panelLegend.open();
 
@@ -214,17 +218,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 });
 
             }
-
-/*
-TODO: mobile vs desktop handling
- */
-/*
-            if(isMobile) {
-                me._element.hide();
-            } else {
-                me._element.show();
-            }
-*/
             return me._element;
         },
 
@@ -417,6 +410,12 @@ TODO: mobile vs desktop handling
                     me._panel.open();
                 }
             });
+        },
+        setEnabled: function(enabled) {
+            var me = this;
+            if(me._publishedComponents.editClassification) {
+                me._publishedComponents.editClassification.setEnabled(enabled);
+            }
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

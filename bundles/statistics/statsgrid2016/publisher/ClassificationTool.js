@@ -3,10 +3,15 @@ function() {
 }, {
     index : 1,
     group: 'data',
-    allowedLocations : [],
-    allowedSiblings : [],
+    allowedLocations : ['top left', 'top right'],
+    lefthanded: 'top left',
+    righthanded: 'top right',
 
-    groupedSiblings : false,
+    allowedSiblings : [
+        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+        'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+    ],
 
     /**
      * Initialize tool
@@ -35,7 +40,7 @@ function() {
         var me = this;
         if(!me.__tool) {
             me.__tool = {
-                id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
+                id: 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin',
                 title: 'allowClassification',
                 config: {
                     allowClassification: false

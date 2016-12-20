@@ -238,7 +238,6 @@ Oskari.clazz.define(
             var locale = this.getLocalization();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
-
             var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
@@ -251,118 +250,6 @@ Oskari.clazz.define(
             }
 
             return;
-            var me = this;
-            var sb = me.getSandbox();
-            var locale = this.getLocalization();
-
-            me.conf.publishedClassification = true;
-
-            jQuery('.statsgrid-legend-flyout-published').show();
-
-            if(config.showLegend === false) {
-                jQuery('.statsgrid-legend-flyout-published').hide();
-                return;
-            }
-
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-
-            var state = service.getStateService();
-            var ind = state.getActiveIndicator();
-            if(!ind) {
-                return;
-            }
-
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-                if(err) {
-                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                    return;
-                }
-                var classify = service.getClassificationService().getClassification(data);
-                if(!classify) {
-                    me.log.warn('Error getting indicator classification', data);
-                    return;
-                }
-
-                var flyout = me.getFlyout();
-
-                // format regions to groups for url
-                var regiongroups = classify.getGroups();
-                var classes = [];
-                regiongroups.forEach(function(group) {
-                    // make each group a string separated with comma
-                    classes.push(group.join());
-                });
-
-                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
-                var colors = [];
-                colorsWithoutHash.forEach(function(color) {
-                    colors.push('#' + color);
-                });
-
-                var state = service.getStateService();
-
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
-                    if(err) {
-                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                        return;
-                    }
-                    flyout.getLegendFlyout(
-                    {
-                        callbacks: {
-                            show: function() {
-                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                var container = jQuery('<div class="accordion-published"></div>');
-
-                                // classification
-
-                                me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                me._publishedComponents.panelClassification.setVisible(true);
-                                me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-
-                                var editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me);
-                                var editClassificationElement = editClassification.getElement();
-                                me._publishedComponents.panelClassification.setContent(editClassificationElement);
-                                accordion.addPanel(me._publishedComponents.panelClassification);
-                                if(!me.conf.allowClassification) {
-                                    editClassification.setEnabled(false);
-                                    me._publishedComponents.panelClassification.setTitle(locale.classify.classifyFieldsTitle);
-                                }
-
-                                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panelLegend.setTitle(locale.legend.title);
-                                panelLegend.setContent(me.__sideTools.legend.comp.getClassification());
-                                panelLegend.setVisible(true);
-                                panelLegend.open();
-
-                                accordion.addPanel(panelLegend);
-                                accordion.insertTo(container);
-
-                                me.__sideTools.legend.flyout.setContent(container);
-                            },
-                            after: function(){
-                                me.__sideTools.legend.flyout.show();
-                            }
-                        },
-                        locale: {
-                            title: ''
-                        },
-                        cls: 'statsgrid-legend-flyout-published'
-                    }, me);
-
-                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-                        var ind = event.getCurrent();
-                        if(ind) {
-                            me.updatePublishedFlyoutTitle(ind, config);
-                        }
-                    });
-
-                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
-                });
-            });
         },
         /**
          * @method  @public updatePublishedFlyoutTitle update published map legend
@@ -542,9 +429,10 @@ Oskari.clazz.define(
         classificationVisible: function(visible) {
             var me = this;
 
-            if(me._publishedComponents.panelClassification) {
-                me._publishedComponents.panelClassification.setVisible(visible);
+            if(me.plugin) {
+                me.plugin.setEnabled(visible);
             }
+
         }
 
     }, {
