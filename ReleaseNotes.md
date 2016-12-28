@@ -2,6 +2,10 @@
 
 ## 1.41.0
 
+### fullscreen
+
+Map full screen mode now resetting when pressing reset view tools.
+
 ### statistics/statsgrid2016
 
 Now user can edit indicator classification on normal map side.

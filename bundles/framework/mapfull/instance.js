@@ -503,6 +503,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
+            this.adjustMapSize();
         },
 
         /**
@@ -607,9 +608,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         toggleFullScreen: function () {
-            jQuery('#' + this.contentMapDivId).toggleClass(
-                'oskari-map-window-fullscreen'
-            );
+
             this.adjustMapSize();
         },
 
