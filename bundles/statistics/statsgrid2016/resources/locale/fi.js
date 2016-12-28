@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Valitse aineisto",
                 "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
                 "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
-                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut",
-                "refineSearchTooltip2": "Aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Hae aineiston tiedot",
                 "defaultPlaceholder": "Valitse arvo",
                 "selectionValues": {

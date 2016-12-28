@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Välj datamängd",
                 "noResults": "Inga sökresultat hittades med sökorden",
                 "refineSearchLabel": "Förfina innehållet av den valda datamängen",
-                "refineSearchTooltip1": "Du får fram fler alternativ efter att du har valt",
-                "refineSearchTooltip2": "datakällan och datamändgen.",
+                "refineSearchTooltip1": "Du får fram fler alternativ efter att du har valt datakällan och datamändgen.",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Hämta datamängdens uppgifter",
                 "defaultPlaceholder": "Välj värde",
                 "selectionValues": {
