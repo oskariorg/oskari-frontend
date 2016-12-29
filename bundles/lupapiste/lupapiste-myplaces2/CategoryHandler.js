@@ -239,7 +239,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
          *
          */
         _processStartupLinkLayers: function (sandbox) {
-            var mapLayers = sandbox.getRequestParameter('mapLayers');
+            var mapLayers = Oskari.util.getRequestParam('mapLayers');
 
             if (mapLayers === null || mapLayers === "") {
                 // no linked layers

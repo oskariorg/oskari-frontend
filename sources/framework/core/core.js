@@ -23,9 +23,6 @@
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
-        // map domain object
-        this._map = null;
-
         // Sandbox that handles communication
         // this._sandbox is inserted when sandbox is created by src/sandbox_factory.
 
@@ -78,7 +75,6 @@
 
             // build up domain
             log.debug('Sandbox ready, building up domain...');
-            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             // run all enhancements
             this.enhancements = [
@@ -368,16 +364,6 @@
         },
 
         /**
-         * @method getMap
-         * Returns map domain object
-         *
-         * @return {Oskari.mapframework.domain.Map}
-         */
-        getMap: function () {
-            return this._map;
-        },
-
-        /**
          * @method getSandbox
          * Returns reference to sandbox
          *
@@ -385,28 +371,6 @@
          */
         getSandbox: function () {
             return this._sandbox;
-        },
-
-        /**
-         * @method getRequestParameter
-         * Returns a request parameter from query string
-         * http://javablog.info/2008/04/17/url-request-parameters-using-javascript/
-         * @param {String} name - parameter name
-         * @return {String} value for the parameter or null if not found
-         */
-        getRequestParameter: function (name) {
-            // FIXME explain regex, fix escaping
-            name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
-            var regexS = '[\\?&]' + name + '=([^&#]*)',
-                regex = new RegExp(regexS),
-                results = regex.exec(window.location.href),
-                ret;
-            if (results === null || results === undefined) {
-                ret = null;
-            } else {
-                ret = results[1];
-            }
-            return ret;
         },
 
         /**
