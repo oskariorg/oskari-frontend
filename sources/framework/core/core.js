@@ -23,8 +23,6 @@
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
-        this._servicesByQName = {};
-
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
 
@@ -106,6 +104,10 @@
         dispatch: function (event) {
             // TODO: to be removed.
             Oskari.getSandbox().notifyAll(event);
+        },
+        getLayerService : function() {
+            // TODO: to be removed.
+            return Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         },
 
         /**
@@ -349,30 +351,6 @@
          */
         enableDebug: function () {
             this._debug = true;
-        },
-
-        /**
-         * @method registerService
-         * Registers given service to Oskari so bundles can get reference to it from sandbox
-         *
-         * @param {Oskari.mapframework.service.Service}
-         *            service service to register
-         */
-        registerService: function (service) {
-            this._servicesByQName[service.getQName()] = service;
-            //this.registerFrameworkComponentToRuntimeEnvironment(service, service.getName());
-        },
-
-        /**
-         * @method getService
-         * Returns a registered service with given name
-         *
-         * @param {String} name
-         * @return {Oskari.mapframework.service.Service}
-         *            service or undefined if not found
-         */
-        getService: function (type) {
-            return this._servicesByQName[type];
         },
 
         /**

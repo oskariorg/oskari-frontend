@@ -17,9 +17,7 @@
          * @return {Boolean} true if the layer is added to map
          */
         isLayerAlreadySelected: function (id) {
-            var mapLayerService = this.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                ),
+            var mapLayerService = this.getLayerService(),
                 layer = mapLayerService.findMapLayer(id, this._selectedLayers);
 
             //var layer = this.findMapLayer(id, this._selectedLayers);
@@ -36,9 +34,7 @@
          * Layer domain object if found matching id or null if not found
          */
         findMapLayerFromSelectedMapLayers: function (id) {
-            var mapLayerService = this.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                ),
+            var mapLayerService = this.getLayerService(),
                 layer = mapLayerService.findMapLayer(id, this._selectedLayers);
 
             return layer;
@@ -54,9 +50,7 @@
          * @return {Boolean} True if the layer is highlighted
          */
         isMapLayerAlreadyHighlighted: function (id) {
-            var mapLayerService = this.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                ),
+            var mapLayerService = this.getLayerService(),
                 layer = mapLayerService.findMapLayer(
                     id,
                     this._mapLayersHighlighted
@@ -82,9 +76,7 @@
          * Layer domain object if found matching id or null if not found
          */
         findMapLayerFromAllAvailable: function (id, name) {
-            var mapLayerService = this.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                ),
+            var mapLayerService = this.getLayerService(),
                 layer,
                 selector = 'no selector';
             if (id) {

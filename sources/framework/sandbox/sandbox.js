@@ -10,6 +10,7 @@
     var user;
     var ajaxUrl;
     var log;
+    var services = {};
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -141,7 +142,7 @@
              *            service service to register
              */
             registerService: function (service) {
-                this._core.registerService(service);
+                services[service.getQName()] = service;
             },
 
             /**
@@ -152,7 +153,7 @@
              * @return {Oskari.mapframework.service.Service}
              */
             getService: function (type) {
-                return this._core.getService(type);
+                return services[type];
             },
 
             /**
