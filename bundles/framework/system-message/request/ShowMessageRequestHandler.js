@@ -11,9 +11,6 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
     function (instance) {
         this.instance = instance;
     }, {
-      // var requestBuilder = sandbox.getRequestBuilder('SystemMessage.ShowMessageRequest');
-      // var request = requestBuilder('testing', 'info');
-      // sandbox.request('system-message', request);
       handleRequest: function (core, request) {
         this.instance.messages.push(request.getMessage().fontcolor(request.getUrgencyLevel()));
         this.instance.showStatusMessage(request.getMessage());
