@@ -393,7 +393,7 @@
          * @method getSandbox
          * Returns reference to sandbox
          *
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this._sandbox;

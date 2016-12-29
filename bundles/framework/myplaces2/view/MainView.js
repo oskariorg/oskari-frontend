@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.instance.sandbox;

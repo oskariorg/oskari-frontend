@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.myplaces2.request.PublishCategoryRequest
  * Requests a "my place" maplayer/category to be made publishable or private
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategoryRequest',

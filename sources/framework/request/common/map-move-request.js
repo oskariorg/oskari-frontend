@@ -5,7 +5,7 @@
  * Map sends out Oskari.mapframework.event.common.AfterMapMoveEvent after it has
  * processed the request and the map has been moved.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',

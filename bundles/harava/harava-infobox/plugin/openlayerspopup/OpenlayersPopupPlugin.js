@@ -409,7 +409,7 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
         unregister: function () {},
         /**
          * @method startPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * mapmodule.Plugin protocol method.
          * Sets sandbox and registers self to sandbox
          */
@@ -420,7 +420,7 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
         },
         /**
          * @method stopPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * mapmodule.Plugin protocol method.
          * Unregisters self from sandbox
          */
@@ -433,13 +433,13 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.Openlay
         },
         /**
          * @method start
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Module protocol method - does nothing atm
          */
         start: function (sandbox) {},
         /**
          * @method stop
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Module protocol method - does nothing atm
          */
         stop: function (sandbox) {}

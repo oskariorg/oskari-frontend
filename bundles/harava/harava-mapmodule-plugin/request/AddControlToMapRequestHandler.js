@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddControlToMapReque
  * @method create called automatically on construction
  * @static
  *
- * @param {Oskari.mapframework.sandbox.Sandbox}
+ * @param {Oskari.Sandbox}
  *            sandbox reference to sandbox
  * @param {Oskari.mapframework.ui.module.common.MapModule}
  *            mapModule reference to mapmodule

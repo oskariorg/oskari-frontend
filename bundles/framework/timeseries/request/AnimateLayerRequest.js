@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest
  * Request timeseries to open maplayer for timeseries animate
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.request.AnimateLayerRequest',

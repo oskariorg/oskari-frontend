@@ -3,7 +3,7 @@
  *
  * Requests that the given maplayer is moved to a new position in the selected maplayers stack.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest',

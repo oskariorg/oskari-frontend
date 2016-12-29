@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox
+ * @class Oskari.Sandbox
  *
  * Sandbox is the component providing bundles ways to get information about the status of the system
  * and communicate to other bundles using requests and events. Sandbox is created at the same time as

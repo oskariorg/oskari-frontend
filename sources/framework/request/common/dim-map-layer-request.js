@@ -6,7 +6,7 @@
  * WFS layers to hide featuretype grid and disable selection clicks on map
  * Opposite of Oskari.mapframework.request.common.HighlightMapLayerRequest
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.request.common.DimMapLayerRequest',

@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequest
  * Requests a start geometry search
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequest',

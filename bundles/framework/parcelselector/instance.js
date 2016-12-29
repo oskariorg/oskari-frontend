@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.ParcelSelectorIns
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox} Oskari sandbox.
+         * @return {Oskari.Sandbox} Oskari sandbox.
          */
         getSandbox: function () {
             return this.sandbox;

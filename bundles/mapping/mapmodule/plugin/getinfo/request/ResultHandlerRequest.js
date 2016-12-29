@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequest
  * Adds filterin button to layerlist.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz

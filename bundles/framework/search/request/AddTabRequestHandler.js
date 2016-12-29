@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddTabRequestHand
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+ * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
  * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
  *          reference to search

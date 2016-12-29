@@ -10,7 +10,7 @@ Oskari.clazz.define(
      * @method create called automatically on construction
      * @static
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
 

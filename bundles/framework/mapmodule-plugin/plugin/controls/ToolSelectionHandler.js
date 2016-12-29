@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
      * @method create called automatically on construction
      * @static
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox}
+     * @param {Oskari.Sandbox}
      *            sandbox reference to sandbox
      * @param {Oskari.mapframework.mapmodule.ControlsPlugin}
      *            controlsPlugin reference to controlsPlugin

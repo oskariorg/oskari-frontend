@@ -6,7 +6,7 @@
  *
  * Requests are used to tell another part of the application to do something.
  * They can only be sent from registered Oskari.mapframework.module.Module
- * implementations (see Oskari.mapframework.sandbox.Sandbox.register()).
+ * implementations (see Oskari.Sandbox.register()).
  * If you want to tell the rest of the application that something happened,
  * use an implementation of Oskari.mapframework.event.Event instead.
  *
@@ -20,7 +20,7 @@
  * sandbox.request('MyModule', request);
  * </pre>
  *
- * In the above sandbox is reference to Oskari.mapframework.sandbox.Sandbox.
+ * In the above sandbox is reference to Oskari.Sandbox.
  *
  * Requests are listened to with classes implementing the
  * Oskari.mapframework.core.RequestHandler protocol.

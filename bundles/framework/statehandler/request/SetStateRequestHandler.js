@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SetStateReq
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      * @param {Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance} statehandler
      *          reference to statehandler
