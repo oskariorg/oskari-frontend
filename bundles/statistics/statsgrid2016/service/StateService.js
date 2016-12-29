@@ -94,7 +94,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 if(!suppressEvent && eventBuilder) {
                     this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
                 }
+                me.setActiveIndicator(indicatorHash);
             }
+
         },
         /**
          * Gets classification
