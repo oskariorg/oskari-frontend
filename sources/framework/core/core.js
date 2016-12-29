@@ -137,10 +137,6 @@
                 this._handleHighlightMapLayerRequest(request);
                 return true;
             },
-            'HighlightWFSFeatureRequest': function (request) {
-                this.handleHighlightWFSFeatureRequest(request);
-                return true;
-            },
             'DimMapLayerRequest': function (request) {
                 this._handleDimMapLayerRequest(request.getMapLayerId());
                 return true;
