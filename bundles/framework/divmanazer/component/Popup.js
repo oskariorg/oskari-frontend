@@ -502,7 +502,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         /**
          * @method adaptToMapSize
          * Makes dialog to adapt to mobile size screens and keeps it on the screen when screen size is changed
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox for registering events
+         * @param {Oskari.Sandbox} sandbox for registering events
          * @param {String} popupName any identifier for the popup. This is needed for listening events
          */
         adaptToMapSize: function (sandbox, popupName) {

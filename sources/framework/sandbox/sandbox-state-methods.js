@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox.stateMethods
+ * @class Oskari.Sandbox.stateMethods
  *
  * This category class adds state methods to Oskari sandbox as they were in
  * the class itself.
  */
-Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
+Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
     /**
      * @method registerAsStateful
      * Registers given bundle instance to sandbox as stateful

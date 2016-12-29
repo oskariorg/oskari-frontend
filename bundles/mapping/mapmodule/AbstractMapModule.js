@@ -117,7 +117,7 @@ Oskari.clazz.define(
         /**
          * @method init
          * Implements Module protocol init method. Creates the Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @return {Map}
          */
         init: function (sandbox) {
@@ -162,7 +162,7 @@ Oskari.clazz.define(
          * Starts the plugins registered on the map and adds
          * selected layers on the map if layers were selected before
          * mapmodule was registered to listen to these events.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          */
         start: function (sandbox) {
             var me = this;
@@ -214,7 +214,7 @@ Oskari.clazz.define(
          * @method stop
          * implements BundleInstance protocol stop method
          * Stops the plugins registered on the map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          */
         stop: function (sandbox) {
 
@@ -314,7 +314,7 @@ Oskari.clazz.define(
         /**
          * @method _initImpl
          * Init for implementation specific functionality.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @param {Map} map
          * @return {Map}
          */
@@ -1378,7 +1378,7 @@ Oskari.clazz.define(
         /**
          * @method getSandbox
          * Returns reference to Oskari sandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this._sandbox;

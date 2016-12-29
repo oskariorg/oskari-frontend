@@ -4,7 +4,7 @@
  * Requests for core to handle ctrl button key release
  * Opposite of Oskari.mapframework.request.common.CtrlKeyDownRequest
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.request.common.CtrlKeyUpRequest',

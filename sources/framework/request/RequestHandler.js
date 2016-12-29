@@ -8,7 +8,7 @@
  * sandbox.addRequestHandler('NameForYourRequest', requestHandler);
  * </pre>
  *
- * In the above sandbox is reference to Oskari.mapframework.sandbox.Sandbox.
+ * In the above sandbox is reference to Oskari.Sandbox.
  */
 Oskari.clazz.define('Oskari.mapframework.core.RequestHandler',
     /**

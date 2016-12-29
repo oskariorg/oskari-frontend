@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox
+ * @class Oskari.Sandbox
  *
  * Sandbox is the component providing bundles ways to get information about the status of the system
  * and communicate to other bundles using requests and events. Sandbox is created at the same time as
@@ -11,7 +11,7 @@
     var ajaxUrl;
     var log;
 
-    Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
+    Oskari.clazz.define('Oskari.Sandbox',
 
         /**
          * @method create called automatically on construction
@@ -1066,7 +1066,7 @@
  * Deprecated sandbox functions
  * ***********************************************************************************************
  */
-    Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'deprecated-sb-methods', {
+    Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
         /**
          * @method printDebug
          * Utility method for printing debug messages to browser console

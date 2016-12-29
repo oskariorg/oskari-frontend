@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox.mapLayerMethods
+ * @class Oskari.Sandbox.mapLayerMethods
  *
  * This category class adds map layers related methods to Oskari sandbox as they
  * were in the class itself.
  */
-Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods', {
+Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
 
     /**
      * @method findMapLayerFromAllAvailable

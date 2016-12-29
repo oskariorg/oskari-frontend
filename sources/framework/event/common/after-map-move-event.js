@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
         /**
          * @method getMarker
          * @return {Boolean} this should be removed, always set to false
-         * @deprecated use Oskari.mapframework.sandbox.Sandbox.getMap() ->
+         * @deprecated use Oskari.Sandbox.getMap() ->
          * Oskari.mapframework.domain.Map.isMarkerVisible()
          */
         getMarker: function () {

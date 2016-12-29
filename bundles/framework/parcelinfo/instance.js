@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance",
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sbx) {
@@ -42,7 +42,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance",
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox} Oskari sandbox
+         * @return {Oskari.Sandbox} Oskari sandbox
          */
         getSandbox: function () {
             return this.sandbox;

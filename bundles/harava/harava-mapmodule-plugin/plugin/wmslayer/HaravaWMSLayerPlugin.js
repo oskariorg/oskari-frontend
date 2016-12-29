@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     init : function(sandbox) {
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stopPlugin : function(sandbox) {
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     start : function(sandbox) {
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stop : function(sandbox) {

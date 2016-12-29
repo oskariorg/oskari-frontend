@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance
  *
  * Main component and starting point for the "selected layers" functionality.
- * Lists all the layers available in Oskari.mapframework.sandbox.Sandbox.findAllSelectedMapLayers()
+ * Lists all the layers available in Oskari.Sandbox.findAllSelectedMapLayers()
  * and updates UI if maplayer related events (#eventHandlers) are received.
  *
  * See Oskari.mapframework.bundle.layerselection2.LayerSelectionBundle for bundle definition.
@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;

@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox.abstractionMethods
+ * @class Oskari.Sandbox.abstractionMethods
  *
  * This category class adds abstraction methods to Oskari sandbox as they were in
  * the class itself.
  */
-Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-methods', {
+Oskari.clazz.category('Oskari.Sandbox', 'abstraction-methods', {
     /**
      * @method domSelector
      * Abstraction method for DOM selector f.ex. jQuery

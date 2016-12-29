@@ -2,16 +2,19 @@
 
 ## 1.41.0
 
+### Oskari 2.0 preparations
+
+- Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
+
 ### fullscreen
 
 Map full screen mode now resetting when pressing reset view tools.
 
 ### statistics/statsgrid2016
 
-Now user can edit indicator classification on normal map side.
-Publisher can also define if classification is enabled to show on published map.
-Published map not open now defaults grid component.
-
+Users can now edit indicator classification on geoportal views.
+Publisher can define if classification can be changed on published map.
+Grid component is no longer shown initially on startup.
 
 ### divmanazer
 

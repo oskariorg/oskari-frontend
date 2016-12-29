@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
      * @method create called automatically on construction
      * @static
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      * @param {String}
      *            mapLayerUrl ajax URL for map layer operations (not used atm)

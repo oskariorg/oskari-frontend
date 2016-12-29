@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      */
     function (sandbox) {
         this.__sandbox = sandbox;
