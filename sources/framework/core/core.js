@@ -141,10 +141,6 @@
                 this.handleHighlightWFSFeatureRequest(request);
                 return true;
             },
-            'HideMapMarkerRequest': function (request) {
-                this._handleHideMapMarkerRequest(request);
-                return true;
-            },
             'DimMapLayerRequest': function (request) {
                 this._handleDimMapLayerRequest(request.getMapLayerId());
                 return true;

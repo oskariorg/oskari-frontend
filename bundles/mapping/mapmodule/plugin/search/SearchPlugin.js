@@ -541,9 +541,7 @@ Oskari.clazz.define(
 
         /**
          * @private @method _hideSearch
-         * Hides the search result and sends out Oskari.mapframework.request.common.HideMapMarkerRequest
-         *
-         *
+         * Hides the search result and sends out MapModulePlugin.RemoveMarkersRequest
          */
         _hideSearch: function() {
             var me = this;
