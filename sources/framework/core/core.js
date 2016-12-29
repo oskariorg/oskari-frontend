@@ -23,9 +23,6 @@
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
-        // Sandbox that handles communication
-        // this._sandbox is inserted when sandbox is created by src/sandbox_factory.
-
         this._servicesByQName = {};
 
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
@@ -54,27 +51,10 @@
         /**
          * @method init
          * Inits Oskari core so bundles can reference components/services through sandbox
-         *
-         * @param {Oskari.mapframework.service.Service[]} services
-         *            array of services that are available
          */
-        init: function (services) {
+        init: function () {
             log.debug('Initializing core...');
-            services = services || [];
-            var sandbox = this._sandbox,
-                s;
 
-            // Register services
-            if (services) {
-                for (s = 0; s < services.length; s += 1) {
-                    this.registerService(services[s]);
-                }
-            }
-
-            // build up domain
-            log.debug('Sandbox ready, building up domain...');
-
-            // run enhancement
             this.handleMapLinkParams();
 
             log.debug('Modules started. Core ready.');
@@ -124,7 +104,8 @@
          *            event - event to dispatch
          */
         dispatch: function (event) {
-            this._sandbox.notifyAll(event);
+            // TODO: to be removed.
+            Oskari.getSandbox().notifyAll(event);
         },
 
         /**
@@ -392,16 +373,6 @@
          */
         getService: function (type) {
             return this._servicesByQName[type];
-        },
-
-        /**
-         * @method getSandbox
-         * Returns reference to sandbox
-         *
-         * @return {Oskari.Sandbox}
-         */
-        getSandbox: function () {
-            return this._sandbox;
         },
 
         /**

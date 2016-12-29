@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var sandbox = core.getSandbox();
+            var sandbox = this.sandbox;
             if (request.getName() === 'LupaPisteMyPlaces.EditPlaceRequest') {
                 this._handleEditPlace(sandbox, request);
             } else if (request.getName() === 'LupaPisteMyPlaces.EditCategoryRequest') {

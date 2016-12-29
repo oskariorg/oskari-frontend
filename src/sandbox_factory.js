@@ -20,7 +20,6 @@
                 newCore = true;
             }
             var sb = o.clazz.create('Oskari.Sandbox', wannabeCore, getName(sandboxName));
-            wannabeCore._sandbox = sb;
             if(newCore) {
                 wannabeCore.init();
             }
