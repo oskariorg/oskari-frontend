@@ -20,14 +20,14 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
      * @param {Number/OpenLayers.Bounds/Object} zoom (optional)
      *            zoomlevel (0-12) or OpenLayers.Bounds to zoom to or an object with property scale { scale : 10000 }. 
      *            If not given the map zoom level stays as it was.
-     * @param {Boolean} marker
-     *            true if map should add a marker to this location (optional, defaults to false)
+     * @param {Boolean} deprecated
+     *            not used for anything
      *
      * @param {string} srsName
      *
      */
 
-    function (centerX, centerY, zoom, marker, srsName) {
+    function (centerX, centerY, zoom, deprecated, srsName) {
         this._creator = null;
 
         this._centerX = centerX;
@@ -35,8 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
         this._centerY = centerY;
 
         this._zoom = zoom;
-
-        this._marker = marker;
 
         this._projectionCode = srsName;
 
@@ -72,13 +70,6 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
          */
         getZoom: function () {
             return this._zoom;
-        },
-        /**
-         * @method getMarker
-         * @return {Boolean} true if map should add a marker to this location
-         */
-        getMarker: function () {
-            return this._marker;
         },
         /**
          * @method getSrsName

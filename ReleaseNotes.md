@@ -5,8 +5,12 @@
 ### Oskari 2.0 preparations
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
+
+#### Marker handling changes
 - AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.
 - HideMapMarkerRequest was removed as it's no longer used and is misleading. Use MapModulePlugin.MarkerVisibilityRequest instead.
+- setMarkerVisible() and isMarkerVisible() in sandbox.getMap() has been removed as they are deprecated and misleading.
+- marker flag in MapMoveRequest and AfterMapMoveEvent is no longer handled in any way (both had the flag, but it hasn't been handled in some time now. Value in event was always false)
 
 ### fullscreen
 

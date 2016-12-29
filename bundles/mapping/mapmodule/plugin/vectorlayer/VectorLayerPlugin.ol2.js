@@ -482,7 +482,7 @@ Oskari.clazz.define(
                     center = new OpenLayers.LonLat((right - ((right - left) / 2)), (top - ((top - bottom) / 2)));
                 }
 
-                mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
+                mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
                 me._sandbox.request(me, mapmoveRequest);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.

@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
                 var lonlat = map.getView().getCenter();
                 me.updateDomain();
-                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
+                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), me.getMapScale());
                 sandbox.notifyAll(sboxevt);
             });
 

@@ -32,11 +32,6 @@
                 keepLayersOrder = true;
             }
 
-            function checkBoolean (bln) {
-                return bln === true || bln === 'true';
-            }
-            core.getMap().setMarkerVisible(checkBoolean(markerVisible) || checkBoolean(markerVisibleOption2));
-
             if (coord === null || zoomLevel === null) {
                 // not a link
                 return;

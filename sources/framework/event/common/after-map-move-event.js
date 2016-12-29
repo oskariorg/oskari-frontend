@@ -16,19 +16,16 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
      *            latitude
      * @param {Number} zoom
      *            map zoomlevel (0-12)
-     * @param {Boolean} marker
-     *            this should be removed, always sent as false
      * @param {Number} scale
      *            map scale
      * @param {String} creator
      *            class identifier of an object that sends an event
      */
-    function (centerX, centerY, zoom, marker, scale, creator) {
+    function (centerX, centerY, zoom, scale, creator) {
         this._creator = creator || null;
         this._centerX = centerX;
         this._centerY = centerY;
         this._zoom = zoom;
-        this._marker = marker;
         this._scale = scale;
     }, {
         /** @static @property __name event name */
@@ -69,15 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
             return this._zoom;
         },
         /**
-         * @method getMarker
-         * @return {Boolean} this should be removed, always set to false
-         * @deprecated use Oskari.Sandbox.getMap() ->
-         * Oskari.mapframework.domain.Map.isMarkerVisible()
-         */
-        getMarker: function () {
-            return this._marker;
-        },
-        /**
          * @method getScale
          * @return {Number} map scale
          */
@@ -91,7 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
                 centerX: me._centerX,
                 centerY: me._centerY,
                 zoom: me._zoom,
-                marker: me._marker,
+                marker: false,
                 scale: me._scale
             };
         }
@@ -102,5 +90,3 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
          */
         'protocol': ['Oskari.mapframework.event.Event']
     });
-
-/* Inheritance */

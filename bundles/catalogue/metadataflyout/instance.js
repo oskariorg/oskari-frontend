@@ -248,12 +248,6 @@ Oskari.clazz.define(
                 /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
             },
             /**
-             * @method AfterMapLayerRemoveEvent
-             */
-            AfterMapMoveEvent: function (event) {
-                /* this might react when map moved */
-            },
-            /**
              * @method userinterface.ExtensionUpdatedEvent
              * Fetch when flyout is opened
              */
