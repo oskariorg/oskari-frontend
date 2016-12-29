@@ -19,7 +19,7 @@
                 wannabeCore = o.clazz.create('Oskari.mapframework.core.Core');
                 newCore = true;
             }
-            var sb = o.clazz.create('Oskari.mapframework.sandbox.Sandbox', wannabeCore, getName(sandboxName));
+            var sb = o.clazz.create('Oskari.Sandbox', wannabeCore, getName(sandboxName));
             wannabeCore._sandbox = sb;
             if(newCore) {
                 wannabeCore.init();

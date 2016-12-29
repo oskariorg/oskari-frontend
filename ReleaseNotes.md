@@ -2,6 +2,10 @@
 
 ## 1.41.0
 
+### Oskari 2.0 preparations
+
+- Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
+
 ### statistics/statsgrid2016
 
 Now user can edit indicator classification on normal map side.
