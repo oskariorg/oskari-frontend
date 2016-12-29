@@ -416,6 +416,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             if(me._publishedComponents.editClassification) {
                 me._publishedComponents.editClassification.setEnabled(enabled);
             }
+        },
+        stopPlugin: function(){
+            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

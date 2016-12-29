@@ -1,0 +1,23 @@
+$messageIcon: url("../images/about.png");
+
+div#oskari-system-messages{
+  bottom:1em;
+  position: fixed;
+  display:table;
+  padding-left: 0.3em;
+  text-overflow: ellipsis;
+}
+div.messageIcon{
+  background-image: $messageIcon;
+  width: 2em;
+  height: 2em;
+  display:inline-block;
+  float:left;
+}
+div.messagetext{
+  width:140px;
+  font-size: 85%;
+  color:white;
+  padding-left: 0.4em;
+  float:right;
+}
