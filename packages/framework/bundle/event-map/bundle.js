@@ -75,9 +75,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/after-map-move-start-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-show-map-layer-info-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/mouse-hover-event.js"
 		}, {
 			"type" : "text/javascript",

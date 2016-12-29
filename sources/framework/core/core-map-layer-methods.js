@@ -257,23 +257,8 @@
 
 
         /**
-         * @private @method _handleShowMapLayerInfoRequest
-         * Handles ShowMapLayerInfoRequest, sends out an AfterShowMapLayerInfoEvent
-         *
-         * @param {Oskari.mapframework.request.common.ShowMapLayerInfoRequest} request
-         *
-         */
-        _handleShowMapLayerInfoRequest: function (request) {
-            var mapLayer = this.findMapLayerFromAllAvailable(request.getMapLayerId()),
-                event = this.getEventBuilder('AfterShowMapLayerInfoEvent')(mapLayer);
-
-            this.copyObjectCreatorToFrom(event, request);
-            this.dispatch(event);
-        },
-
-        /**
-         * @private @method _handleShowMapLayerInfoRequest
-         * Handles ShowMapLayerInfoRequest, sorts selected layers array so
+         * @private @method _handleRearrangeSelectedMapLayerRequest
+         * Handles RearrangeSelectedMapLayerRequest, sorts selected layers array so
          * that layer with given id is positioned into given index
          * and all the rest are pushed one step further. Sends out an AfterRearrangeSelectedMapLayerEvent
          *
