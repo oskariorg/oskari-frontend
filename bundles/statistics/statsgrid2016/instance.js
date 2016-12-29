@@ -55,11 +55,9 @@ Oskari.clazz.define(
                 cel.addClass('statsgrid');
             }
 
-            if(typeof conf.showLegend === 'boolean' && conf.showLegend) {
+            if(typeof conf.showLegend === 'boolean' && conf.showLegend && me.hasPublished()) {
                 me.renderPublishedLegend(conf);
             }
-
-
 
             if(me.hasPublished() && conf.grid) {
                 me.renderToggleButtons();
@@ -122,15 +120,15 @@ Oskari.clazz.define(
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
-                this.statsService.notifyOskariEvent(evt);
                 if(!this.statsService) {
                     return;
                 }
 
+                this.statsService.notifyOskariEvent(evt);
+
                 var state = this.statsService.getStateService();
                 var activeIndicator = state.getActiveIndicator();
                 var hash = state.getHash(evt.getDatasource(), evt.getIndicator(), evt.getSelections());
-
                 if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && !activeIndicator) {
                     state.setActiveIndicator(hash);
                 } else if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && activeIndicator) {
@@ -207,7 +205,7 @@ Oskari.clazz.define(
                     this.getFlyout().handleClose();
                 }
 
-                if(conf.showLegend === true) {
+                if(conf.showLegend === true && me.hasPublished()) {
                     me.renderPublishedLegend(conf);
                 }
             },
@@ -230,24 +228,31 @@ Oskari.clazz.define(
          */
         renderPublishedLegend: function(config){
             var me = this;
-            if(me.plugin) {
-                return;
-            }
+
             config = config || me.getConfiguration();
             var sandbox = me.getSandbox();
             var locale = this.getLocalization();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
-            var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
-            mapModule.registerPlugin(plugin);
-            mapModule.startPlugin(plugin);
-            this.plugin = plugin;
-
-
-            //get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile() && this.plugin.hasUI()) {
-                mapModule.redrawPluginUIs(true);
+            if(config.showLegend) {
+                config.publishedClassification = true;
+                if(me.plugin) {
+                   return;
+                }
+                var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+                mapModule.registerPlugin(plugin);
+                mapModule.startPlugin(plugin);
+                me.plugin = plugin;
+                //get the plugin order straight in mobile toolbar even for the tools coming in late
+                if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+                    mapModule.redrawPluginUIs(true);
+                }
+            } else if(this.plugin) {
+                config.publishedClassification = false;
+                mapModule.stopPlugin(me.plugin);
+                me.plugin = null;
             }
+
 
             return;
         },
@@ -326,6 +331,7 @@ Oskari.clazz.define(
             if(state.regionset) {
                 service.setRegionset(state.regionset);
             }
+
             if(state.indicators) {
                 state.indicators.forEach(function(ind) {
                     service.addIndicator(ind.ds, ind.id, ind.selections, ind.classification);
