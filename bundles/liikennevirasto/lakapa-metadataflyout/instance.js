@@ -244,16 +244,19 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
 //        console.log("metadataflyout.showExtentOnMap", Oskari.getSandbox().getMap().getSrsName(), "should match", "EPSG:3067");
 
-        var event = me.getSandbox().getEventBuilder("FeaturesAvailableEvent")(
-            this.layer,
-            feats,
-            "application/nlsfi-x-openlayers-feature",
-            Oskari.getSandbox().getMap().getSrsName(),
-            //"EPSG:3067",
-            "replace"
-        );
-
-        me.sandbox.notifyAll(event);
+        var eventBuilder = me.getSandbox().getEventBuilder("FeaturesAvailableEvent");
+        // FIXME: FeaturesAvailableEvent has been removed. Use MapModulePlugin.AddFeaturesToMapRequest instead.
+        if(eventBuilder) {
+            var event = eventBuilder(
+                this.layer,
+                feats,
+                "application/nlsfi-x-openlayers-feature",
+                Oskari.getSandbox().getMap().getSrsName(),
+                //"EPSG:3067",
+                "replace"
+            );
+            me.sandbox.notifyAll(event);
+        }
     },
     /**
      * @method setState

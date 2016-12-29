@@ -124,9 +124,6 @@ Oskari.clazz.define(
                 AfterMapLayerRemoveEvent: function(event) {
                     me.afterMapLayerRemoveEvent(event);
                 },
-                FeaturesAvailableEvent: function(event) {
-                    me.handleFeaturesAvailableEvent(event);
-                },
                 AfterChangeMapLayerOpacityEvent: function(event) {
                     me._afterChangeMapLayerOpacityEvent(event);
                 }
@@ -682,39 +679,6 @@ Oskari.clazz.define(
             }
             // should have only one, return always the first one
             return layers[0];
-        },
-        /**
-         * @method handleFeaturesAvailableEvent
-         * Handle features available event.
-         *
-         * @param {object} event
-         */
-        handleFeaturesAvailableEvent: function(event) {
-            var me = this,
-                mimeType = event.getMimeType(),
-                features = event.getFeatures(),
-                op = event.getOp(),
-                mapLayer = this.getMap().getLayersByName(
-                    me._olLayerPrefix
-                )[0];
-
-            if (!mapLayer) {
-                return;
-            }
-
-            if (op && op === 'replace') {
-                mapLayer.removeFeatures(mapLayer.features);
-            }
-
-            var format = this._supportedFormats[mimeType];
-
-            if (!format) {
-                return;
-            }
-
-            var fc = format.read(features);
-
-            mapLayer.addFeatures(fc);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

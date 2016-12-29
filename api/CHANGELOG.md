@@ -15,6 +15,10 @@ Some extra tags:
 
 The marker flag has been removed as it was misleading. The value was always false.
 
+### [rem] FeaturesAvailableEvent
+
+Event removed as deprecated and unsupported. Use MapModulePlugin.AddFeaturesToMapRequest instead.
+
 ## 1.40
 
 ### [mod] [rpc] InfoBox.ShowInfoBoxRequest

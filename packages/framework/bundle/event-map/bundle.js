@@ -63,9 +63,6 @@ function() {
 
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/features-available-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/after-map-layer-add-event.js"
 		}, {
 			"type" : "text/javascript",

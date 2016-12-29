@@ -12,7 +12,7 @@
  * Code snippet example to creating and sending out an event:
  * <pre>
  * // get a builder method for the requested event type.
- * var eventBuilder = sandbox.getEventBuilder('FeaturesAvailableEvent');
+ * var eventBuilder = sandbox.getEventBuilder('SomeOskariEvent');
  * // create the event with the builder method
  * var event = eventBuilder(...event init params...);
  * // send the request to the application
@@ -30,7 +30,7 @@
  *  },
  *  // declare eventhandlers for the module
  *  eventHandlers : {
- *       'FeaturesAvailableEvent' : function(event) {
+ *       'SomeOskariEvent' : function(event) {
  *           alert('I got a ' + event.getName());
  *      }
  *  },
