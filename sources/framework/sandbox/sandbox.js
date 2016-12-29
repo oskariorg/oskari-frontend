@@ -29,6 +29,7 @@
             var me = this;
 
             me._core = core;
+            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             /*
              * All registered listeners in map key: event name value:

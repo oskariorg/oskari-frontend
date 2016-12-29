@@ -23,9 +23,6 @@
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
-        // map domain object
-        this._map = null;
-
         // Sandbox that handles communication
         // this._sandbox is inserted when sandbox is created by src/sandbox_factory.
 
@@ -78,7 +75,6 @@
 
             // build up domain
             log.debug('Sandbox ready, building up domain...');
-            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             // run all enhancements
             this.enhancements = [
@@ -365,16 +361,6 @@
          */
         getService: function (type) {
             return this._servicesByQName[type];
-        },
-
-        /**
-         * @method getMap
-         * Returns map domain object
-         *
-         * @return {Oskari.mapframework.domain.Map}
-         */
-        getMap: function () {
-            return this._map;
         },
 
         /**

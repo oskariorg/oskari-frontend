@@ -13,7 +13,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      * @return {Oskari.mapframework.domain.Map}
      */
     getMap: function () {
-        return this._core.getMap();
+        return this._map;
     },
 
     /**
@@ -29,7 +29,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      *          Refreshes the map state so that the added layers are shown correctly
      */
     syncMapState: function (blnInitialMove, mapModule) {
-        var mapDomain = this._core.getMap(),
+        var mapDomain = this.getMap(),
             zoom = mapDomain.getZoom(),
             maxZoom = 13;
 
