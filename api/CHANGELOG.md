@@ -9,9 +9,15 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.41
+
+### [mod] [rpc] AfterMapMoveEvent
+
+The marker flag has been removed as it was misleading. The value was always false.
+
 ## 1.40
 
-## [mod] [rpc] InfoBox.ShowInfoBoxRequest
+### [mod] [rpc] InfoBox.ShowInfoBoxRequest
 
 Updating existing infibox in mobile mode had timing problems and ended in javascript error and/or popup being closed instead of updated. This has been fixed.
 

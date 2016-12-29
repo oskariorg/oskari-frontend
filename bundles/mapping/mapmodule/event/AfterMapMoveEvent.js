@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
                 centerX: me._centerX,
                 centerY: me._centerY,
                 zoom: me._zoom,
-                marker: false,
                 scale: me._scale
             };
         }
