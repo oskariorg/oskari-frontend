@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -15,8 +16,8 @@ Oskari.registerLocalization({
             "abstract": "Basic information",
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
-            "quality":"Data quality",
-            "actions":"Actions",
+            "quality": "Data quality",
+            "actions": "Actions",
             "xml": "ISO 19139 XML file",
             "coverage": {
                 "removeBBOX": "Hide coverage area",
@@ -42,7 +43,6 @@ Oskari.registerLocalization({
                         "label": "UTF7",
                         "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
                     },
-
                     "utf8": {
                         "label": "UTF8",
                         "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
@@ -386,7 +386,7 @@ Oskari.registerLocalization({
                 }
             },
             "qualityContent": {
-                "qualityPassTrue":"Dataset is conformant to the specification.",
+                "qualityPassTrue": "Dataset is conformant to the specification.",
                 "qualityPassFalse": "Dataset is not conformant to the specification."
             },
             "heading": {
@@ -420,26 +420,25 @@ Oskari.registerLocalization({
                 "temporalExtent": "Temporal extents",
                 "topicCategory": "Topic categories",
                 "useLimitation": "Use limitations",
-
-                "absoluteExternalPositionalAccuracy":"Absolute external positional accuracy",
-                "accuracyOfTimeMeasurement":"Accuracy of time measurement",
-                "completenessCommission":"Completeness commission",
-                "completenessOmission":"Completeness omission",
-                "conceptualConsistency":"Conceptual consistency",
-                "domainConsistency":"Domain consistency",
-                "formatConsistency":"Format consistency",
-                "griddedDataPositionalAccuracy":"Gridded data positional accuracy",
-                "nonQuantitativeAttributeAccuracy":"Non quantitative attribute accuracy",
-                "quantitativeAttributeAccuracy":"Quantitative attribute accuracy",
-                "relativeInternalPositionalAccuracy":"Relative internal positional accuracy",
-                "temporalConsistency":"Temporal consistency",
-                "temporalValidity":"Temporal validity",
-                "thematicClassificationCorrectness":"Thematic classification correctness",
-                "topologicalConsistency":"Topological consistency"
+                "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
+                "accuracyOfTimeMeasurement": "Accuracy of time measurement",
+                "completenessCommission": "Completeness commission",
+                "completenessOmission": "Completeness omission",
+                "conceptualConsistency": "Conceptual consistency",
+                "domainConsistency": "Domain consistency",
+                "formatConsistency": "Format consistency",
+                "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
+                "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
+                "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
+                "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
+                "temporalConsistency": "Temporal consistency",
+                "temporalValidity": "Temporal validity",
+                "thematicClassificationCorrectness": "Thematic classification correctness",
+                "topologicalConsistency": "Topological consistency"
             },
             "layerList": {
                 "title": "Map layers",
-                "show":"Show map layer",
+                "show": "Show map layer",
                 "hide": "Hide map layer"
             }
         },

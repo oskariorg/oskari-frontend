@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "PersonalData",
     "value": {
@@ -59,7 +60,7 @@ Oskari.registerLocalization({
             "publishedmaps": {
                 "title": "Ενσωματωμένοι χάρτες",
                 "show": "Εμφάνιση στον χάρτη",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Επεξεργασία",
                 "publish": "Δημοσίευση χάρτη",
                 "unpublish": "Αναστροφή δημοσίευσης χάρτη",
@@ -68,13 +69,13 @@ Oskari.registerLocalization({
                     "name": "Όνομα",
                     "domain": "Ρυθμίσεις χάρτη",
                     "publish": "Κατάσταση",
-                    "show": "NOT TRANSLATED",
+                    "show": "",
                     "html": " ",
                     "edit": " ",
                     "delete": " "
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Αλλαγή ονόματος χάρτη",

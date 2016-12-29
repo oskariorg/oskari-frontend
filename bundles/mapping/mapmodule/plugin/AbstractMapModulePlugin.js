@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Sets sandbox and registers self to sandbox. Constructs the plugin UI
          * and displays it.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         startPlugin: function (sandbox) {
@@ -251,7 +251,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * mapmodule.Plugin protocol method.
          * Unregisters self from sandbox and removes plugins UI from screen.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
             var me = this,
@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Start plugin as module by calling _registerImpl, which is overwritten
          * by the implementation when needed.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         start: function (sandbox) {
@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Stop plugin as module by calling _registerImpl, which is overwritten
          * by the implementation when needed.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         stop: function (sandbox) {

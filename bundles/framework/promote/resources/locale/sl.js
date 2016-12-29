@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Prijavljeni uporabniki",
         "desc": "S prijavo je na voljo več funkcionalnosti."
     }
-}
-);
+});

@@ -43,5 +43,4 @@ Oskari.registerLocalization(
         "failed_to_get_roles_title": "Roolien haku epäonnistui",
         "failed_to_get_roles_message": "Roolien haku epäonnistui, tarkista oskari-control-admin saatavuus."
     }
-}
-);
+});

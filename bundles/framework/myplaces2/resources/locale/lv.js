@@ -14,89 +14,89 @@ Oskari.registerLocalization(
             "loginShort": "Lūdzam pieteikties, lai izmantotu"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "",
+            "editCategory": "",
+            "deleteCategory": "",
+            "edit": "",
+            "delete": "",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "",
+                "desc": "",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
+                "edit": "",
+                "delete": ""
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "",
+                    "confirm": "",
+                    "btnDelete": "",
+                    "btnCancel": "",
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Pievienot punktu",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Jūs varat saglabāt vai uzzīmēt vairāk punktu vienā un tai pašā zīmējumā",
                 "edit": "Pārvietot punktu klikšķinot un pavelkot",
                 "save": "Saglabāt atrašanās vietu"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Pievienot līniju",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Jūs varat saglabāt vai uzzīmēt vairāk līniju vienā un tai pašā zīmējumā",
                 "edit": "Pabeidziet līniju nospiežot un pavelkot tās pārrāvuma punktu",
                 "save": "Saglabāt formu",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Pievienot apgabalu",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Jūs varat saglabāt vai uzzīmēt vairāk daudzstūru vienā un tai pašā zīmējumā",
                 "edit": "Rediģēt apgabala formu klikšķinot un pavelkot uz tā robežlīnijas esošos lūzuma punktus",
                 "save": "Saglabāt formu",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             }
         },
         "buttons": {
             "ok": "Labi",
             "cancel": "Atcelt",
-            "close": "NOT TRANSLATED",
+            "close": "",
             "finish": "Pabeigt zīmējumu",
             "save": "Saglabāt",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Pārvietot vietas un izdzēst",
             "deleteCategory": "Izdzēst",
             "deleteCategoryAndPlaces": "Izdzēst kategoriju un vietas",
@@ -116,26 +116,25 @@ Oskari.registerLocalization(
                 "placeholder": "Aprakstīt vietu"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Kartes slānis",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "",
+                "placename": "",
+                "placedesc": "",
+                "image": ""
             },
             "edit": {
                 "title": "Rediģēt kartes slāni",
@@ -175,102 +174,102 @@ Oskari.registerLocalization(
                 "cancel": "Atpakaļ"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "notification": {
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Slāņa apraksts satur neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes",
             "dotSize": "Punkta lielums neatbilst izmēra ierobežojumiem (1-5)",
             "dotColor": "Nepareiza punkta krāsa",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Līnijas biezums neatbilst izmēra ierobežojumiem (1-50)",
             "lineColor": "Nepareiza līnijas krāsa",
             "areaLineSize": "Platības malas izmērs neatbilst izmēra ierobežojumiem (0-50)",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Nepareizi aizpildīta krāsa"
         }
     }
-}
-);
+});

@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
 
                     var isAccordion = true;
 
-                    if(!me._accordion) {
+                    if(!me._accordion && !me.instance.conf.publishedClassification) {
                         me._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 
                         me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -152,15 +152,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                     me.__legendElement.append(jQueryLegend);
 
                     // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
-                    if(isAccordion) {
+                    if(!me.instance.conf.publishedClassification) {
+                        if(isAccordion) {
+                            setTimeout(function(){
+                                me._addEditHandlers();
+                            }, 0);
+                        }
+
                         setTimeout(function(){
-                            me._addEditHandlers();
+                            me._refreshEditClassification();
                         }, 0);
                     }
-
-                    setTimeout(function(){
-                        me._refreshEditClassification();
-                    }, 0);
 
                 });
 

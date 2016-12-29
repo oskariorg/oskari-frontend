@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequest
  * Requests a WFS own style to be shown
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz

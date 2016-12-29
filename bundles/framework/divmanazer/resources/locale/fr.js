@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "Ajouter un nouveau filtre",
             "removeFilter": "Supprimer le filtre",
             "bbox": {
-                "title": "Filtre de la fenêtre de la carte",
                 "on": "Seule l'entité visible sur la fenêtre de la carte.",
                 "off": "Toutes les entités"
             },
-            "clickedFeatures": {
-                "title": "Filtre de sélection d'entité",
-                "label": "Uniquement les entités sélectionnées sur la carte."
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Filtrer les entités par données attributaires",
                 "placeholders": {
@@ -322,5 +318,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

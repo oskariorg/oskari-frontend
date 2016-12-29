@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 reverseColors: false
             }
         };
+        this._timers = {};
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -93,8 +94,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.ClassificationChangedEvent');
                 if(!suppressEvent && eventBuilder) {
                     this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
+                    me.setActiveIndicator(indicatorHash);
                 }
             }
+
         },
         /**
          * Gets classification
@@ -156,23 +159,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         setActiveIndicator : function(indicatorHash) {
             var me = this;
-            var previous = this.activeIndicator;
 
-            // reset previous
-            me.activeIndicator = null;
-            this.indicators.forEach(function(ind) {
-                if(ind.hash === indicatorHash) {
-                    me.activeIndicator = ind;
+            clearTimeout(me._timers.setActiveIndicator);
+
+            // This must be on some way to discard set active indicator if calling repeatly.
+            // Because of published map editing, active indicator is changed always when adding indicator.
+            me._timers.setActiveIndicator = setTimeout(function(){
+                var previous = me.activeIndicator;
+
+                // reset previous
+                me.activeIndicator = null;
+                me.indicators.forEach(function(ind) {
+                    if(ind.hash === indicatorHash) {
+                        me.activeIndicator = ind;
+                    }
+                });
+                // get a default if requested was not found
+                if(!me.activeIndicator) {
+                    me.activeIndicator = me.getActiveIndicator();
                 }
-            });
-            // get a default if requested was not found
-            if(!this.activeIndicator) {
-                this.activeIndicator = this.getActiveIndicator();
-            }
 
-            // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.activeIndicator, previous));
+                // notify
+                var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
+                me.sandbox.notifyAll(eventBuilder(me.activeIndicator, previous));
+            }, 100);
         },
         /**
          * Returns object describing the active indicator or null if there are no indicators selected.
@@ -197,6 +207,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
          * @param {Object} classification indicator classification
+         *
          * @return {Object}            an object describing the added indicator (includes parameters as an object)
          */
         addIndicator : function(datasrc, indicator, selections, classification) {
@@ -212,6 +223,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
+
+
 
             return ind;
         },

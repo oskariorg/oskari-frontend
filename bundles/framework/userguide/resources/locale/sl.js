@@ -50,5 +50,4 @@ Oskari.registerLocalization(
             "tags": "okno karte,uporabniški priročnilk"
         }
     }
-}
-);
+});

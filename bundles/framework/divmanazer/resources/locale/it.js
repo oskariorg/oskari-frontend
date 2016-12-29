@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "Aggiungi un filtro",
             "removeFilter": "Cancella il filtro",
             "bbox": {
-                "title": "Filtro finestra mappa",
                 "on": "Solo gli elementi visibili in mappa.",
                 "off": "Tutti gli elementi."
             },
-            "clickedFeatures": {
-                "title": "Filtra sulla selezione.",
-                "label": "Solo gli elementi selezionati in mappa,"
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Filtra gli elementi in base agli attributi.",
                 "placeholders": {
@@ -290,8 +286,8 @@ Oskari.registerLocalization(
                     "attribute-value": "Valore"
                 },
                 "info": {
-                    "bboxOff":"",
-                    "filterByGeometrySelected":""
+                    "bboxOff": "",
+                    "filterByGeometrySelected": ""
                 },
                 "equals": "è uguale a",
                 "like": "è simile a",
@@ -318,9 +314,8 @@ Oskari.registerLocalization(
                 "operator_missing": "Non è stato scelto alcun operatore.",
                 "value_missing": "Non è stato selezionato alcun valore.",
                 "boolean_operator_missing": "Non è stato selezionato alcun operatore logico.",
-                "bbox_selected_with_no_properties":""
+                "bbox_selected_with_no_properties": ""
             }
         }
     }
-}
-);
+});

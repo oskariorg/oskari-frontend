@@ -124,7 +124,7 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Give the URL address of the map legend.",
             "legendUrl": "Legend URL selection",
             "legendUrlDesc": "Select default legend via legend url selection",
-            "noServiceLegendUrl":"Legend URL is not in wms service legends",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Additional content for \"Get Feature Info\"-dialog.",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
@@ -187,5 +187,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});

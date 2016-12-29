@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistične vrednosti",
         "selectionTools": {
             "title": "Izberi pojave na karti",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Od sloja, ki je na vrhu",
             "selectAll": "Od vseh slojev",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "V podatkih obstajajo nedovoljene vrednosti"
         }
     }
-}
-);
+});

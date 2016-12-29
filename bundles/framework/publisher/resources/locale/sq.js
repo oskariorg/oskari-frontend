@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Emri i hartës",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Jepi hartës tuaj një emër përshkrues. Ju lutem vini re gjuhën e ndërveprimit të përdoruesit"
             },
             "language": {
@@ -53,95 +53,95 @@ Oskari.registerLocalization(
                 "ControlsPlugin": "Lëvizja e aktivizuar",
                 "SearchPlugin": "Kërko emrin e adresës dhe të vendit",
                 "GetInfoPlugin": "Vegla pyetësor (query) për të dhënat për vendet",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Shtresat e hartës",
                 "defaultLayer": "(Shtresa automatike/e parazgjedhur)",
                 "useAsDefaultLayer": "Përdor si shtresë automatike/të parazgjedhur"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "E vogël",
                 "medium": "E mesme",
                 "large": "E madhe",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Madhësia e zakonshme",
                 "width": "gjerësia",
                 "height": "gjetësia",
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
                 "ok": "OK (prano)",
                 "replace": "Rivendos",
                 "cancel": "Anulo",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -164,8 +164,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Paraqit shtresat e hartës në meny",
                 "info": "Përzgjedh hartat në sfond. Ju mund ta vendosni sfondin e parazgjedhur të hartës në dritaren e hartës për parapamje për shtypje",
-                "tooltip": "Harta në sfond paraqitet si shtresa e fundit e hartës. Kur i zgjedhni shtresat e hartës që të përdoren si shtresë e fundit, vetëm nga një shtresë mund të duket njëkohësisht, dhe ju mund të kaloni nga njëra tek tjetra. Ju mund ta vendosni hartën në sfond të parazgjedhur në hartën me parapamje",
-                "promote": "Paraqit imazhet ajrore?"
+                "tooltip": "Harta në sfond paraqitet si shtresa e fundit e hartës. Kur i zgjedhni shtresat e hartës që të përdoren si shtresë e fundit, vetëm nga një shtresë mund të duket njëkohësisht, dhe ju mund të kaloni nga njëra tek tjetra. Ju mund ta vendosni hartën në sfond të parazgjedhur në hartën me parapamje"
             },
             "preview": "Parapamja e hartës që do të futet",
             "location": "Lokacioni dhe niveli i zmadhimit",
@@ -179,16 +178,14 @@ Oskari.registerLocalization(
                 "name": "Emri është informatë e kërkuar",
                 "nohelp": "Nuk ka ndihmë në dispozicion",
                 "saveFailed": "Publikimi i hartës dështoi. Ju lutem provoni më vonë",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Emri i ueb faqes përmban karaktere/shkronja të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse."
             }
         },
         "NotLoggedView": {
             "text": "Ju duhet të kyçeni para se ta përdorni funksionin e futjes",
             "signup": "Kyçuni",
-            "signupUrl": "/web/sq/login",
-            "register": "Regjistrohuni",
-            "registerUrl": "/web/sq/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Regjistrohuni"
         },
         "StartView": {
             "text": "Ju mund ta futni pamjen e hartës që sapo e keni krijuar në ueb faqen e juaj apo të punëdhënësit tuaj",
@@ -197,7 +194,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Shtresat e hartës të cilat i keni zgjedhur nuk mund të futen I Menyja Shtresat e hartës së zgjedhur tregon nëse mundet apo jo të futet një shtresë e hartës",
             "layerlist_denied": "Nuk mund të futet",
             "denied_tooltip": "Siguruesit e të dhënave të këtyre hartave nuk kanë dhënë leje për publikimin e këtyre materialeve në ueb faqet tjera. Shih të drejtat për publikim në menynë shtresat e hartës së zgjedhur para se të bëhet futja",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Vazhdo",
                 "continueAndAccept": "Prano Kushtet e përdorimit dhe vazhdo",
@@ -211,16 +208,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -231,5 +222,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

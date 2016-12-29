@@ -1,10 +1,11 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "lt",
     "key": "DivManazer",
     "value": {
         "LanguageSelect": {
             "title": "Kalba",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "languages": {
                 "af": "afrikanų",
                 "ak": "akanų",

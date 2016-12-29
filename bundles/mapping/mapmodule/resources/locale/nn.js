@@ -38,7 +38,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kartlag",
-                "chooseDefaultBaseLayer": "Vel bakgrunnskart"
+                "chooseDefaultBaseLayer": "Vel bakgrunnskart",
+                "chooseOtherLayers": "Vel andre kartlag"
             },
             "SearchPlugin": {
                 "placeholder": "Søk posisjon",
@@ -57,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Førekomstar",
                 "description": "Framstilling",
                 "link": "Nettadresse",
-                "name": "Namn"
+                "name": "Namn",
+                "noAttributeData": "Ingen eigenskapar å vise, ver grei å opne objekteigenskapar for å sjå skjulte eigenskapar"
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
@@ -78,7 +80,7 @@ Oskari.registerLocalization(
                 },
                 "form": {
                     "title": "Punktstil",
-                    "tooltip": "",
+                    "tooltip": "Definer stil for kartmarkør",
                     "symbol": {
                         "label": "Ikon"
                     },
@@ -87,7 +89,7 @@ Oskari.registerLocalization(
                     },
                     "color": {
                         "label": "Farge",
-                        "labelOr": "NOT TRANSLATED",
+                        "labelOr": "eller",
                         "labelCustom": "Spesialfarge (RGB 0-255)"
                     },
                     "preview": {
@@ -108,5 +110,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

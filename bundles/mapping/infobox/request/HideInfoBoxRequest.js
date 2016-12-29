@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequest
  * Requests a map popup/infobox to be hidden, if id for popup is not given -> Hides all popups
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequest',

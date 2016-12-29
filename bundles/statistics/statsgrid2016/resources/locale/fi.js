@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Valitse aineisto",
                 "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
                 "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
-                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut",
-                "refineSearchTooltip2": "Aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Hae aineiston tiedot",
                 "defaultPlaceholder": "Valitse arvo",
                 "selectionValues": {
@@ -41,7 +41,6 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "LISÄEHDOT JA -OMINAISUUDET",
                 "showMapLayers": "Näytä karttatasot"
-
             }
         },
         "statsgrid": {
@@ -72,10 +71,7 @@ Oskari.registerLocalization(
             "showMap": "Näytä kartta",
             "showTable": "Näytä taulukko"
         },
-
-
         "classify": {
-            "editClassifyTitle": "Muokkaa luokittelua",
             "classify": "Luokittelu",
             "classifymethod": "Luokittelutapa",
             "classes": "Luokkajako",
@@ -92,7 +88,9 @@ Oskari.registerLocalization(
             "modes": {
                 "distinct": "Jatkuva",
                 "discontinuous": "Epäjatkuva"
-            }
+            },
+            "editClassifyTitle": "Muokkaa luokittelua",
+            "classifyFieldsTitle": "Luokitteluarvot"
         },
         "colorset": {
             "button": "Värit",
@@ -105,6 +103,5 @@ Oskari.registerLocalization(
             "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
             "cancel": "Peruuta"
         }
-
     }
 });

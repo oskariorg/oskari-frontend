@@ -38,10 +38,10 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Upplýsingar um leyfi.",
-            "licenseModelDescriptionsTitle": "NOT TRANSLATED",
+            "licenseModelDescriptionsTitle": "ELF afurðir eru núna einungis með leyfi fyrir til nota við þróun og mat um ákveðinn tíma og á takmörkuðum grundvelli:",
             "licenseModelDescriptions": {
-                "evaluation": "NOT TRANSLATED",
-                "developer": "NOT TRANSLATED"
+                "evaluation": "Matsleyfi – Þú getur fengið aðgang að og notað ELF vörur í þeim tilgangi að meta hvernig þær henta fyrir eigin not.",
+                "developer": "Þróunarleyfi – Þú getur fengið aðgang að og notað ELF vörur í þeim tilgangi að þróa eigin vörur."
             },
             "licenseModelsTitle": "Leyfismódel",
             "noRightToAnyLicenseModels": "Þú hefur ekki réttindi til að skoða leyfismódel.",
@@ -64,7 +64,14 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "URL-þjónusta leyfis: {serviceurl}",
             "licenceConcluded": {
                 "message": "Leyfið hefur verið búið til. Vinsamlegast skoðaðu upplýsingarnar um leyfið hér að neðan."
-            }
+            },
+            "licenseDurations": {
+                "D": "dagar",
+                "W": "vikur",
+                "M": "mánuðir",
+                "Y": "ár"
+            },
+            "registerLinkText": "Skrá"
         },
         "buttons": {
             "close": "Loka",
@@ -77,5 +84,4 @@ Oskari.registerLocalization(
             "yes": "Já"
         }
     }
-}
-);
+});

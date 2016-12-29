@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Falsche Füllfarbe. Geben Sie einen Wert zwischen 0-255 ein."
         }
     }
-}
-);
+});

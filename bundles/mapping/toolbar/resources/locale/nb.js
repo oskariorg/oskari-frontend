@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Lag en lenke til kartutsnittet"
             },
-            "print": {
-                "tooltip": "Skriv ut kartutsnittet"
-            },
             "history": {
                 "reset": "Gå til standard kartutsnitt",
                 "back": "Gå tilbake til forrige kartutsnitt",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

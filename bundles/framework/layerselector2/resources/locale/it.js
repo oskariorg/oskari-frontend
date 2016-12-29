@@ -65,10 +65,10 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Sinonimo",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
@@ -82,5 +82,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

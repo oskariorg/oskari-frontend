@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * Returns reference to Oskari sandbox
          *
          *
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -503,6 +503,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
+            this.adjustMapSize();
         },
 
         /**
@@ -607,9 +608,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         toggleFullScreen: function () {
-            jQuery('#' + this.contentMapDivId).toggleClass(
-                'oskari-map-window-fullscreen'
-            );
+
             this.adjustMapSize();
         },
 

@@ -1,18 +1,19 @@
-Oskari.registerLocalization({
-	"lang" : "sv",
-	"key" : "FeatureSelector",
-	"value" : {
-		"title" : "Företeelser",
-		"desc" : "",
+Oskari.registerLocalization(
+{
+    "lang": "sv",
+    "key": "FeatureSelector",
+    "value": {
+        "title": "Företeelser",
+        "desc": "",
         "success": "",
-		"errors" : {
+        "errors": {
             "title": "Fel!",
             "generic": "Systemfel. Försök på nytt senare.",
-			"loadFailed" : "Fel i laddningen av företeelser. Ladda ned sidan på nytt i din läsare.",
+            "loadFailed": "Fel i laddningen av företeelser. Ladda ned sidan på nytt i din läsare.",
             "noResults": "ökningen gav inga resultat.",
             "dataSendFailed": "Tietojen lähettäminen epäonnistui."
-		},
-		"notification": {
+        },
+        "notification": {
             "featureEdited": {
                 "title": "Tiedot lähetetty Digiroad-ylläpitoon",
                 "message": "Löydät omat muokkauksesi Omat tiedot -valikosta."
@@ -22,6 +23,6 @@ Oskari.registerLocalization({
                 "message": "Et voi muokata maanteiden ominaisuustietoja!"
             }
         },
-        "loading" : "Laddar..."
-	}
+        "loading": "Laddar..."
+    }
 });

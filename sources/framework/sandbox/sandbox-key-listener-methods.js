@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox.keyListenerMethods
+ * @class Oskari.Sandbox.keyListenerMethods
  *
  * This category class adds key listener methods to Oskari sandbox as they were in
  * the class itself.
  */
-Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-methods', {
+Oskari.clazz.category('Oskari.Sandbox', 'key-listener-methods', {
 
     /**
      * @method isCtrlKeyDown

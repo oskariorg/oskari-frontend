@@ -44,6 +44,7 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "This map layer group will be deleted. Do you want to continue?",
             "confirmDeleteLayer": "This map layer will be deleted. Do you want to continue?",
@@ -113,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Define the layer opacity. If the setting is 0%, the layer will be completely transparent.",
             "style": "Default style",
             "styleDesc": "Default style",
+            "importStyle": "New sld style",
+            "addNewStyle": "Add new SLD style",
+            "sldStyleName": "Style name",
+            "sldFileContentDesc": "Copy/paste SLD file content (xml) to text area",
+            "sldFileContent": "SLD file content",
+            "sldStylesFetchError": "Couldn't get SLD styles",
+            "addSldStyleDesc": "Select styles for the current layer",
+            "addSldStyle": "Sld style selection",
             "minScale": "Minimum scale",
             "minScaleDesc": "Minimum scale",
             "minScalePlaceholder": "Minimum scale",
@@ -133,6 +142,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "GFI style (XSLT)",
             "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve depth",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "The identifier for WMTS TileMatrixSet",
             "matrixSet": "JSON for WMTS layer",
@@ -189,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});

@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.toolbar.request.ToolbarRequest
  * Requests for toolbar to create/show/hide/remove a toolbar.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequest',

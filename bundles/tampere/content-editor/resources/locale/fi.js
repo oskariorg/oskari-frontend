@@ -26,7 +26,7 @@ Oskari.registerLocalization(
                 "area": "Lisää alue",
                 "geometryEdit": "Muokkaa geometriaa",
                 "remove": "Poista yksittäinen geometria"
-              },
+            },
             "featureUpdate": {
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",

@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {

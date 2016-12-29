@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             "inspire": "Inspire metaúdaje",
             "jhs": "ISO 19115 metaúdaje",
             "quality": "Kvalita údajov",
-            "actions": "NOT TRANSLATED",
+            "actions": "",
             "xml": "ISO 19139 XML súbor",
             "map": "Geografický rozsah",
             "pdf": "Vytlačiť",
@@ -433,9 +433,9 @@ Oskari.registerLocalization(
                 "topologicalConsistency": "Topologická konzistencia"
             },
             "layerList": {
-                "title": "NOT TRANSLATED",
-                "show": "NOT TRANSLATED",
-                "hide": "NOT TRANSLATED"
+                "title": "",
+                "show": "",
+                "hide": ""
             }
         },
         "tile": {
@@ -443,5 +443,4 @@ Oskari.registerLocalization(
             "tooltip": "Podmienky použitia a dostupnosť údajového súboru sú uvedené v popise metaúdajov."
         }
     }
-}
-);
+});

@@ -191,5 +191,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Okända regioner",
         "loginToSaveIndicator": "För att spara din egen indikator måste du logga in."
     }
-}
-);
+});

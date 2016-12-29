@@ -1156,7 +1156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
           var loc = me._locale;
           var conf = me._config;
           projection = projection || me._previousProjection || me.getMapModule().getProjection;
-          var showDegrees = (me._mapmodule.getProjectionUnits() === 'degrees') ? true : false;
+          var showDegrees = (me._mapModule.getProjectionUnits() === 'degrees') ? true : false;
 
           if(!_.has(conf.projectionShowFormat, projection)){
             me._log.debug('Not specified projection format. Used defaults from map projection units.');

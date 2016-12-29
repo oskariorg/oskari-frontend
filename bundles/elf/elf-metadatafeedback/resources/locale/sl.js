@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Shranjevanje povratnih informacij je bilo uspešno."
         }
     }
-}
-);
+});

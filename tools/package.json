@@ -22,7 +22,8 @@
     "trim": "./node_modules/.bin/grunt trimtrailingspaces",
     "lint": "./node_modules/.bin/jshint ../bundles",
     "oskari2excel": "./node_modules/.bin/grunt genL10nExcels",
-    "excel2oskari": "./node_modules/.bin/grunt impL10nExcels"
+    "excel2oskari": "./node_modules/.bin/grunt impL10nExcels",
+    "clean-l10n": "./node_modules/.bin/grunt localizationJSCleanup"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",

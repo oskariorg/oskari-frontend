@@ -426,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Interface method for the plugin protocol.
          * Register request handlers.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         startPlugin: function (sandbox) {
@@ -449,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Interface method for the plugin protocol.
          * Unregister request handlers.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         stopPlugin: function (sandbox) {
@@ -749,7 +749,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this._sandbox;

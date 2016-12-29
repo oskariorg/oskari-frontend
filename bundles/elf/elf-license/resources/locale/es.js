@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Error al obtener la información de la licencia",
                 "message": "No es posible obtener la información de la licencia"
             },
-            "failedGetLicenseInformation": {
-                "title": "fallo en la obtención de la información de la licencia",
-                "message": "no es posible conectar con el servidor de la licencia"
-            },
             "cannotGetLicensePrice": {
                 "title": "fallo en la obtención del precio de la  licencia",
                 "message": "no es posible obtener el precio de la licencia"
@@ -59,13 +55,6 @@ Oskari.registerLocalization(
                 "summary": "Leea la  licencia y aceptela presionando 'Terminar'. Si quieres editar algunos campos de la solicitud, regrese a pulsando botón 'retornar'. También puede abandonar su solicitud pulsando el botón 'Cerrar'",
                 "orderDetails": "arriba verá  la información de la solicitud  de licencia. Cierre el cuadro de diálogo pulsando el botón 'Cerrar'. Si desea desactivar su orden pulse el botón \"desactivar licencia\"."
             },
-            "concludeSuccessTitle": "licencia finalizada satisfactoriamente",
-            "conclude": {
-                "title": "detalles de la solicitud de licencia",
-                "productid": "producto",
-                "licenseid": "licencia",
-                "validto": "valida hasta"
-            },
             "deactivateConfirm": {
                 "title": "licencia desactivada",
                 "message": "quiere desactivar la licencia"
@@ -88,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "si"
         }
     }
-}
-);
+});

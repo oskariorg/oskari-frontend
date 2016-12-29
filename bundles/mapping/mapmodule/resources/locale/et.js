@@ -30,7 +30,7 @@ Oskari.registerLocalization(
                 "link": "Andmeallikas",
                 "popup": {
                     "title": "Andmeallikad",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Sulge"
@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kihid",
                 "chooseDefaultBaseLayer": "Vali aluskaart",
-                "chooseOtherLayers": "NOT TRANSLATED"
+                "chooseOtherLayers": "Select other map layers"
             },
             "SearchPlugin": {
                 "placeholder": "Leia asukoht",
@@ -47,7 +47,7 @@ Oskari.registerLocalization(
                 "title": "Otsingutulemused",
                 "close": "Sulge otsingutulemused",
                 "noresults": "Otsing ei andnud tulemusi. Proovi teise otsisõnaga.",
-                "toomanyresults": "Otsing antus rohkem kui 100 vastet. Muuda otsing detailsemaks.",
+                "toomanyresults": "Otsing andis rohkem kui 100 vastet. Muuda otsing detailsemaks.",
                 "column_name": "Nimi",
                 "column_village": "Omavalitsus",
                 "column_type": "Tüüp"
@@ -58,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Objektid",
                 "description": "Kirjeldus",
                 "link": "Lehe aadress",
-                "name": "Nimi"
+                "name": "Nimi",
+                "noAttributeData": "Puuduvad andmed, mida näidata, ava \"Objekti info\" et näha peidetud andmeid."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
@@ -84,11 +85,11 @@ Oskari.registerLocalization(
                         "label": "Ikoon"
                     },
                     "size": {
-                        "label": "Size"
+                        "label": "Suurus"
                     },
                     "color": {
-                        "label": "Colour",
-                        "labelOr": "or",
+                        "label": "Värvus",
+                        "labelOr": "või",
                         "labelCustom": "Määra värv(RGB 0-255)"
                     },
                     "preview": {
@@ -109,5 +110,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -242,7 +242,7 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Lisaseaded",
                     "dataSource": "Andmeallikas",
-                    "metadata": "Viide metaadnmetele",
+                    "metadata": "Viide metaandmetele",
                     "export_selection": "Ekspordi ainult valitud elemendid"
                 },
                 "columns": {
@@ -264,58 +264,66 @@ Oskari.registerLocalization(
             }
         },
         "FilterDialog": {
-            "title": "Filter",
-            "description": "Filter values on map layer:",
-            "cancelButton": "Cancel",
-            "clearButton": "Clear filter",
-            "refreshButton": "Refresh filter",
-            "addFilter": "Add filter",
-            "removeFilter": "Remove filter",
+            "title": "Filtreeri objektid",
+            "description": "Filtreeri objektid kihilt",
+            "cancelButton": "Tühista",
+            "clearButton": "Tühista andmefilter",
+            "refreshButton": "Värskenda andmefilter",
+            "addFilter": "Lisa andmefilter",
+            "removeFilter": "Eemalda fiter",
+            "content": {
+                "title": "Ruumifilter"
+            },
             "bbox": {
-                "title": "Map filter",
-                "on": "Only features visible on the map",
-                "off": "All features"
+                "on": "Objektid, mis on nähtavad kaardil",
+                "off": "Kõik objektid"
             },
             "clickedFeatures": {
-                "title": "Feature filter",
-                "label": "Only features selected on the map"
+                "clickedFeaturesLabel": "Objektid, mis on kaardil selekteeritud",
+                "filterByGeometryLabel": "Objektid, mis vastavad selekteeritud tingumusele",
+                "filterByGeometryIntersect": "Objektid, mis lõikuvad määratud alaga",
+                "filterByGeometryContains": "Objektid, mis asuvad määratud ala sees"
             },
             "values": {
-                "title": "Attribute filter",
+                "title": "Andmefilter",
                 "placeholders": {
-                    "case-sensitive": "Filter is case-sensitive",
-                    "attribute": "Attribute",
-                    "boolean": "Logical operator",
-                    "operator": "Operator",
-                    "attribute-value": "Value"
+                    "case-sensitive": "Filter on tõstutundlik",
+                    "attribute": "Atribuut",
+                    "boolean": "Loogiline operaator",
+                    "operator": "Operaator",
+                    "attribute-value": "Väärtus"
                 },
-                "equals": "on yhtäsuuri kuin",
-                "like": "on likimäärin yhtäsuuri kuin",
-                "notEquals": "on erisuuri kuin",
-                "notLike": "on likimäärin erisuuri kuin",
-                "greaterThan": "on suurempi kuin",
-                "lessThan": "on pienempi kuin",
-                "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
-                "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
-            },
-            "aggregateAnalysisFilter": {
-                "addAggregateFilter": "Use statistical values",
-                "aggregateValueSelectTitle": "Select Statistical Values",
-                "selectAggregateAnalyse": "Select analysis layer",
-                "selectIndicator": "Select property",
-                "selectReadyButton": "Close",
-                "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
-                "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
-                "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
+                "info": {
+                    "bboxOff": "Ilma ruumifiltrita lisatakse analüüsi kõik objektid. Palun lisage andmefilter või märgistage märkeruut \"Objektid, mis on kaardiaknas nähtavad\" ruumifiltri alajotuses.",
+                    "filterByGeometrySelected": "Atribuudifiltrit saab rakendada vaid juhul, kui ülal on märgistatud märkeruut \"Kõik objektid\"."
+                },
+                "equals": "võrdub",
+                "like": "on nagu",
+                "notEquals": "ei võrdu",
+                "notLike": "ei ole nagu",
+                "greaterThan": "on suurem kui",
+                "lessThan": "on vähem kui",
+                "greaterThanOrEqualTo": "on suurem/võrdne",
+                "lessThanOrEqualTo": "on väiksem/võrdne"
             },
             "validation": {
-                "title": "Features could not be filtered. The following errors occurred:",
-                "attribute_missing": "The attribute is missing.",
-                "operator_missing": "The operator is missing.",
-                "value_missing": "The value is missing.",
-                "boolean_operator_missing": "The logical operator is missing."
+                "title": "Objekte ei saa filtreerida alljärgneval põhjusel:",
+                "attribute_missing": "Atribuut puudub, määra atribuut ja proovi uuesti",
+                "operator_missing": "Operaator puudub, määra operaator ja proovi uuesti",
+                "value_missing": "Väärtus puudub, kirjuta väärtus ja proovi uuesti",
+                "boolean_operator_missing": "Loogiline operaator puudub, määra see ja proovi uuesti",
+                "bbox_selected_with_no_properties": "Ilma ruumifiltrita lisatakse analüüsi kõik objektid. Palun lisage andmefilter või märgistage märkeruut \"Objektid, mis on kaardiaknas nähtavad\" ruumifiltri alajotuses."
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Kasuta statistilisi väärtusi",
+                "aggregateValueSelectTitle": "Määra statistilised väärtused",
+                "selectAggregateAnalyse": "Määra analüüsitav kaardikiht",
+                "selectIndicator": "Määra üksus",
+                "selectReadyButton": "Sulge",
+                "getAggregateAnalysisFailed": "Statistilisi väärtusi ei saa esile tuua",
+                "noAggregateAnalysisPopupTitle": "Statistilisi väärtusi ei leitud",
+                "noAggregateAnalysisPopupContent": "Selle kihi kohta statistika puudub, Saate need leida kasutades analüüsi funktsiooni."
             }
         }
     }
-}
-);
+});

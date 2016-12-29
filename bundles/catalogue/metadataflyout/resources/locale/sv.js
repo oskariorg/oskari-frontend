@@ -441,5 +441,4 @@ Oskari.registerLocalization(
             "tooltip": "Villkoren för användning och tillgängligheten av dataset är dokumenterade i metadatabeskrivningen."
         }
     }
-}
-);
+});

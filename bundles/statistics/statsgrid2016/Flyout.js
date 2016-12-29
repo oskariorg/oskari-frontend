@@ -57,7 +57,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                             options.callbacks.show(popup);
                          }
                     },
-                    cls: options.cls
+                    cls: options.cls,
+                    container: options.container
                 });
             }
 

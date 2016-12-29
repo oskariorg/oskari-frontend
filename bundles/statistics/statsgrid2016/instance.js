@@ -27,6 +27,10 @@ Oskari.clazz.define(
         };
 
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
+
+        this._publishedComponents = {
+            panelClassification: null
+        };
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -51,9 +55,10 @@ Oskari.clazz.define(
                 cel.addClass('statsgrid');
             }
 
-            if(typeof conf.showLegend === 'boolean' && conf.showLegend) {
+            if(typeof conf.showLegend === 'boolean' && conf.showLegend && me.hasPublished()) {
                 me.renderPublishedLegend(conf);
             }
+
             if(me.hasPublished() && conf.grid) {
                 me.renderToggleButtons();
                 me.changePosition({top:0,left:0});
@@ -102,6 +107,8 @@ Oskari.clazz.define(
                 }
             });
 
+            map.trigger('click');
+
             jQuery('body').append(toggleButtons);
         },
         hasPublished: function(){
@@ -113,15 +120,15 @@ Oskari.clazz.define(
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
-                this.statsService.notifyOskariEvent(evt);
                 if(!this.statsService) {
                     return;
                 }
 
+                this.statsService.notifyOskariEvent(evt);
+
                 var state = this.statsService.getStateService();
                 var activeIndicator = state.getActiveIndicator();
                 var hash = state.getHash(evt.getDatasource(), evt.getIndicator(), evt.getSelections());
-
                 if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && !activeIndicator) {
                     state.setActiveIndicator(hash);
                 } else if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && activeIndicator) {
@@ -167,7 +174,8 @@ Oskari.clazz.define(
                         extraFeatures: true,
                         areaSelection: true,
                         mouseEarLegend: true,
-                        showLegend: true
+                        showLegend: true,
+                        allowClassification: true
                     };
                     var map = jQuery('#contentMap');
                     if(map.hasClass('mapPublishMode')) {
@@ -176,12 +184,14 @@ Oskari.clazz.define(
                         conf.areaSelection = false;
                         conf.mouseEarLegend = false;
                         conf.showLegend = true;
+                        conf.allowClassification = true;
                     } else if(!map.hasClass('published')) {
                         conf.search = true;
                         conf.extraFeatures = true;
                         conf.areaSelection = true;
                         conf.mouseEarLegend = true;
                         conf.showLegend = false;
+                        conf.allowClassification = true;
                     }
 
                     conf = jQuery.extend({}, defaultConf, this.getConfiguration());
@@ -195,7 +205,7 @@ Oskari.clazz.define(
                     this.getFlyout().handleClose();
                 }
 
-                if(conf.showLegend === true) {
+                if(conf.showLegend === true && me.hasPublished()) {
                     me.renderPublishedLegend(conf);
                 }
             },
@@ -218,100 +228,33 @@ Oskari.clazz.define(
          */
         renderPublishedLegend: function(config){
             var me = this;
-            var sb = me.getSandbox();
+
+            config = config || me.getConfiguration();
+            var sandbox = me.getSandbox();
             var locale = this.getLocalization();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
-            jQuery('.statsgrid-legend-flyout-published').show();
-
-            if(config.showLegend === false) {
-                jQuery('.statsgrid-legend-flyout-published').hide();
-                return;
-            }
-
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-
-            var state = service.getStateService();
-            var ind = state.getActiveIndicator();
-            if(!ind) {
-                return;
-            }
-
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-                if(err) {
-                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                    return;
+            if(config.showLegend) {
+                config.publishedClassification = true;
+                if(me.plugin) {
+                   return;
                 }
-                var classify = service.getClassificationService().getClassification(data);
-                if(!classify) {
-                    me.log.warn('Error getting indicator classification', data);
-                    return;
+                var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+                mapModule.registerPlugin(plugin);
+                mapModule.startPlugin(plugin);
+                me.plugin = plugin;
+                //get the plugin order straight in mobile toolbar even for the tools coming in late
+                if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+                    mapModule.redrawPluginUIs(true);
                 }
+            } else if(this.plugin) {
+                config.publishedClassification = false;
+                mapModule.stopPlugin(me.plugin);
+                me.plugin = null;
+            }
 
-                var flyout = me.getFlyout();
 
-                // format regions to groups for url
-                var regiongroups = classify.getGroups();
-                var classes = [];
-                regiongroups.forEach(function(group) {
-                    // make each group a string separated with comma
-                    classes.push(group.join());
-                });
-
-                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
-                var colors = [];
-                colorsWithoutHash.forEach(function(color) {
-                    colors.push('#' + color);
-                });
-
-                var state = service.getStateService();
-
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
-                    if(err) {
-                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                        return;
-                    }
-                    flyout.getLegendFlyout(
-                    {
-                        callbacks: {
-                            show: function() {
-                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                var container = jQuery('<div class="accordion-published"></div>');
-
-                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panel.setTitle(locale.legend.title);
-                                panel.setContent(me.__sideTools.legend.comp.getClassification());
-                                panel.setVisible(true);
-                                panel.open();
-
-                                accordion.addPanel(panel);
-                                accordion.insertTo(container);
-
-                                me.__sideTools.legend.flyout.setContent(container);
-                            },
-                            after: function(){
-                                me.__sideTools.legend.flyout.show();
-                            }
-                        },
-                        locale: {
-                            title: ''
-                        },
-                        cls: 'statsgrid-legend-flyout-published'
-                    }, me);
-
-                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-                        var ind = event.getCurrent();
-                        if(ind) {
-                            me.updatePublishedFlyoutTitle(ind, config);
-                        }
-                    });
-
-                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
-                });
-            });
+            return;
         },
         /**
          * @method  @public updatePublishedFlyoutTitle update published map legend
@@ -388,6 +331,7 @@ Oskari.clazz.define(
             if(state.regionset) {
                 service.setRegionset(state.regionset);
             }
+
             if(state.indicators) {
                 state.indicators.forEach(function(ind) {
                     service.addIndicator(ind.ds, ind.id, ind.selections, ind.classification);
@@ -482,6 +426,19 @@ Oskari.clazz.define(
                 state.active = active.hash;
             }
             return state;
+        },
+
+        /**
+         * @method  @public classificationVisible change published map classification visibility. Only call this in publisher!
+         * @param  {Boolean} visible visible or not
+         */
+        classificationVisible: function(visible) {
+            var me = this;
+
+            if(me.plugin) {
+                me.plugin.setEnabled(visible);
+            }
+
         }
 
     }, {

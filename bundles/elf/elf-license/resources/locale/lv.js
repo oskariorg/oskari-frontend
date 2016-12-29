@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Error for getting license information",
                 "message": "Cannot get license information"
             },
-            "failedGetLicenseInformation": {
-                "title": "Failed to get license information",
-                "message": "Cannot connect to license server"
-            },
             "cannotGetLicensePrice": {
                 "title": "Failed to get license price",
                 "message": "Cannot get license price"
@@ -59,13 +55,6 @@ Oskari.registerLocalization(
                 "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
                 "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
             },
-            "concludeSuccessTitle": "License concluded successfully",
-            "conclude": {
-                "title": "License order details",
-                "productid": "Product",
-                "licenseid": "License",
-                "validto": "Valid to"
-            },
             "deactivateConfirm": {
                 "title": "License deactivate",
                 "message": "Do you want deactivate your license?"
@@ -88,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Yes"
         }
     }
-}
-);
+});

@@ -445,8 +445,11 @@ div.oskari-flyoutcontent{
 }
 
 .statsgrid-legend-flyout-published {
-    top: 0;
-    right:0;
+    pointer-events: auto;
+    text-align: left;
+    .oskari-flyout {
+        position: relative;
+    }
 
     div.oskari-flyoutheading {
         display:none;
@@ -523,6 +526,103 @@ div.oskari-flyoutcontent{
             }
         }
     }
+
+
+    .accordion-published {
+            margin: 0;
+            .accordion {
+                margin: 0;
+                .accordion_panel {
+                    overflow:visible;
+                    position:relative;
+                    .header {
+                        margin: 0;
+                        .headerIcon {
+                            margin: 0;
+                            margin-left: 4px;
+                        }
+                        .headerText {
+                            font-size: 12px;
+                            padding: 0;
+                            font-weight: normal;
+                        }
+                    }
+
+                    .content {
+                        div {
+                            margin: 0;
+                            margin-left: 4px;
+                            margin-top: 2px;
+
+                            &.value {
+                                margin-left:12px;
+                            }
+                        }
+
+                        .geostats-legend div {
+                            margin: 3px 10px 5px 10px;
+                        }
+
+                        margin: 0;
+                        padding: 0;
+                        .classifications {
+                            margin:0;
+                            margin-bottom: 10px;
+
+                            .classification-method, .classification-count, .classification-mode, .classification-colors,
+                            .classification-color-set {
+                                margin: 0;
+                            }
+
+                            div.oskari-color-selection-main {
+                                margin: 4px;
+                                margin-left: 12px;
+                                div.oskari-selected-color {
+                                    margin:0;
+                                    div {
+                                        margin:0;
+                                    }
+                                }
+                                div.color-selection-arrow {
+                                    margin:0;
+                                    div {
+                                        margin:0;
+                                    }
+                                }
+                                div.oskari-color {
+                                    margin:0;
+                                }
+
+                                div.oskari-color-selection {
+                                    margin:0;
+                                    div {
+                                        margin: 0;
+                                    }
+                                }
+                            }
+
+                            button {
+                                &.reverse-colors{
+                                    margin-left: 12px;
+                                    width: $buttonWidth;
+                                    padding: 4px 5px;
+                                }
+                            }
+
+                            .label {
+                                font-weight: bold;
+                                font-size: 12px;
+                            }
+                            select {
+                                width: $inputWidth;
+                                font-size: 12px;
+                                padding: 1px 2px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 }
 

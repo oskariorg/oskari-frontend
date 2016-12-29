@@ -243,7 +243,7 @@ Oskari.registerLocalization(
                     "title": "Weitere Einstellungen",
                     "dataSource": "Datenquelle",
                     "metadata": "Link zu Metadaten",
-                    "export_selection": "NOT TRANSLATED"
+                    "export_selection": ""
                 },
                 "columns": {
                     "title": "Spalten",
@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "Neuen Filter hinzufügen",
             "removeFilter": "Filter löschen",
             "bbox": {
-                "title": "Filter Kartenausschnitt",
                 "on": "Nur sichtbare Objekte im Kartenausschnitt.",
                 "off": "Alle Objekte."
             },
-            "clickedFeatures": {
-                "title": "Filter Objektauswahl",
-                "label": "Nur die markierten Objekte in der Karte."
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Objekte nach Attributen auswählen",
                 "placeholders": {
@@ -317,5 +313,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

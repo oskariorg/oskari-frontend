@@ -337,8 +337,8 @@ Oskari.clazz.define(
                 return;
             }
             var me = this,
-                element = me.getElement(),
-                layer,
+                element = me.getElement();
+            var layer,
                 layerIds = me.getConfig().baseLayers,
                 list = element.find('ul'),
                 listItem,

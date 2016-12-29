@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Välj datamängd",
                 "noResults": "Inga sökresultat hittades med sökorden",
                 "refineSearchLabel": "Förfina innehållet av den valda datamängen",
-                "refineSearchTooltip1": "Du får fram fler alternativ efter att du har valt",
-                "refineSearchTooltip2": "datakällan och datamändgen.",
+                "refineSearchTooltip1": "Du får fram fler alternativ efter att du har valt datakällan och datamändgen.",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Hämta datamängdens uppgifter",
                 "defaultPlaceholder": "Välj värde",
                 "selectionValues": {
@@ -41,7 +41,6 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "YTTERLIGA VILLKOR OCH FUNKTIONER",
                 "showMapLayers": "Visa kartlager"
-
             }
         },
         "statsgrid": {
@@ -72,7 +71,6 @@ Oskari.registerLocalization(
             "showMap": "Visa karta",
             "showTable": "Show tabell"
         },
-
         "classify": {
             "classify": "Klassificering",
             "classifymethod": "Klassificeringsmetod",
@@ -90,7 +88,9 @@ Oskari.registerLocalization(
             "modes": {
                 "distinct": "Kontinuerlig",
                 "discontinuous": "Separat"
-            }
+            },
+            "editClassifyTitle": "Edit classification",
+            "classifyFieldsTitle": "Classification values"
         },
         "colorset": {
             "button": "Färger",
@@ -103,6 +103,5 @@ Oskari.registerLocalization(
             "info2": "Välj färgerna genom att klicka på färggruppen",
             "cancel": "Avbryt"
         }
-
     }
 });

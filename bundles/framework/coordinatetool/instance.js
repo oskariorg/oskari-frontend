@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
 
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sbx) {
@@ -40,7 +40,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -108,7 +108,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * Creates the coordinate tool service and registers it to the sandbox.
          *
          * @method createService
-         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param  {Oskari.Sandbox} sandbox
          * @param  {}  configuration   conf.reverseGeocodingIds is in use
          * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
          */

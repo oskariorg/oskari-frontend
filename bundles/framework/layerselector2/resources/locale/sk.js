@@ -53,11 +53,11 @@ Oskari.registerLocalization(
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unknown"
+                "iconClass": "backendstatus-neznámy"
             },
             "UNSTABLE": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unstable"
+                "iconClass": "backendstatus-nestabilný"
             }
         },
         "buttons": {
@@ -82,5 +82,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

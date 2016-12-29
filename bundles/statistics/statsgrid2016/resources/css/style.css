@@ -268,8 +268,10 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
               padding: 1px 2px; }
 
 .statsgrid-legend-flyout-published {
-  top: 0;
-  right: 0; }
+  pointer-events: auto;
+  text-align: left; }
+  .statsgrid-legend-flyout-published .oskari-flyout {
+    position: relative; }
   .statsgrid-legend-flyout-published div.oskari-flyoutheading {
     display: none; }
   .statsgrid-legend-flyout-published div.oskari-flyouttoolbar {
@@ -313,6 +315,67 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
         margin-left: 4px; }
     .statsgrid-legend-flyout-published div.accordion div.accordion_panel.open div.header {
       background-color: #F3F3F3; }
+  .statsgrid-legend-flyout-published .accordion-published {
+    margin: 0; }
+    .statsgrid-legend-flyout-published .accordion-published .accordion {
+      margin: 0; }
+      .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel {
+        overflow: visible;
+        position: relative; }
+        .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .header {
+          margin: 0; }
+          .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .header .headerIcon {
+            margin: 0;
+            margin-left: 4px; }
+          .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .header .headerText {
+            font-size: 12px;
+            padding: 0;
+            font-weight: normal; }
+        .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content {
+          margin: 0;
+          padding: 0; }
+          .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content div {
+            margin: 0;
+            margin-left: 4px;
+            margin-top: 2px; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content div.value {
+              margin-left: 12px; }
+          .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .geostats-legend div {
+            margin: 3px 10px 5px 10px; }
+          .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications {
+            margin: 0;
+            margin-bottom: 10px; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .classification-method, .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .classification-count, .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .classification-mode, .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .classification-colors,
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .classification-color-set {
+              margin: 0; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main {
+              margin: 4px;
+              margin-left: 12px; }
+              .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-selected-color {
+                margin: 0; }
+                .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-selected-color div {
+                  margin: 0; }
+              .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.color-selection-arrow {
+                margin: 0; }
+                .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.color-selection-arrow div {
+                  margin: 0; }
+              .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-color {
+                margin: 0; }
+              .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-color-selection {
+                margin: 0; }
+                .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications div.oskari-color-selection-main div.oskari-color-selection div {
+                  margin: 0; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications button.reverse-colors {
+              margin-left: 12px;
+              width: 86%;
+              padding: 4px 5px; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications .label {
+              font-weight: bold;
+              font-size: 12px; }
+            .statsgrid-legend-flyout-published .accordion-published .accordion .accordion_panel .content .classifications select {
+              width: 94%;
+              font-size: 12px;
+              padding: 1px 2px; }
 
 /** Toggle buttons */
 .statsgrid-published-toggle-buttons {

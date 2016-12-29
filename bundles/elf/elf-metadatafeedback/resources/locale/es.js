@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "opinión de los usuarios",
-            "subject": "tema",
-            "subjectPlaceholder": "titulo del tema de su opinión",
             "ratingScore": "valor de la calificación",
             "ratingJustification": "justificación de la calificación"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "especificación del objetivo",
-            "targetIdentification": "identificación del objetivo",
-            "targetCode": "codigo del objetivo",
-            "targetCodeNotDefined": "no definido",
-            "targetCodespace": "codespace del objetivo",
-            "primaryTargetCodeSpaceNotDefined": "no definido",
-            "natureOfTarget": "naturaleza del objetivo"
+            "tabTitle": "Feedback",
+            "average": "Average rating"
         },
         "userInformation": {
             "userInformation": "información del usurio",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "los comentarios se salvaron con éxito"
         }
     }
-}
-);
+});

@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "Mes couches cartographiques"
         }
     }
-}
-);
+});
