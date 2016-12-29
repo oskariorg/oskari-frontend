@@ -29,8 +29,8 @@ Oskari.registerLocalization(
                     },
                     "tooltips": {
                         "point": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "line": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "area": "Lisää väliaikainen piste käytettäväksi analyysin pohjana."
+                        "line": "Lisää väliaikainen viiva käytettäväksi analyysin pohjana.",
+                        "area": "Lisää väliaikainen alue käytettäväksi analyysin pohjana."
                     },
                     "modes": {
                         "area": "Väliaikainen alue",
