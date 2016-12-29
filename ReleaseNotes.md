@@ -5,6 +5,7 @@
 ### Oskari 2.0 preparations
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
+- Moved MapMoveRequest and AfterMapMoveEvent file from under sources to mapmodule
 
 #### Marker handling changes
 - AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.
