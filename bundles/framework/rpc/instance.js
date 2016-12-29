@@ -106,7 +106,7 @@ Oskari.clazz.define(
             );
 
             // Makes it possible to post requests
-            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom, marker, srsName]]})
+            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom]]})
             channel.bind(
                 'postRequest',
                 function (trans, params) {

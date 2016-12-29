@@ -117,10 +117,6 @@
                 this._handleRemoveMapLayerRequest(request);
                 return true;
             },
-            'ShowMapLayerInfoRequest': function (request) {
-                this._handleShowMapLayerInfoRequest(request);
-                return true;
-            },
             'RearrangeSelectedMapLayerRequest': function (request) {
                 this._handleRearrangeSelectedMapLayerRequest(request);
                 return true;
@@ -135,10 +131,6 @@
             },
             'HighlightMapLayerRequest': function (request) {
                 this._handleHighlightMapLayerRequest(request);
-                return true;
-            },
-            'HighlightWFSFeatureRequest': function (request) {
-                this.handleHighlightWFSFeatureRequest(request);
                 return true;
             },
             'DimMapLayerRequest': function (request) {

@@ -177,29 +177,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
         },
 
         /**
-         * @method setMarkerVisible
-         * true if marker is shown on map
-         *
-         * @param {Boolean} markerVisible
-         *            true if marker is shown on map
-         */
-        setMarkerVisible: function (markerVisible) {
-            this._markerVisible = (markerVisible === true || markerVisible === 'true');
-        },
-        /**
-         * @method isMarkerVisible
-         * true if marker is shown on map
-         *
-         * @return {Boolean}
-         *            true if marker is shown on map
-         */
-        isMarkerVisible: function () {
-            if (this._markerVisible === true) {
-                return true;
-            }
-            return false;
-        },
-        /**
          * @method setWidth
          * width of map window
          *

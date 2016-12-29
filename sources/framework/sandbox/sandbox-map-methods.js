@@ -16,7 +16,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
         return this._core.getMap();
     },
 
-    /** 
+    /**
      *
      * @method syncMapState
      * Convenience method to send out a map move request with the values on
@@ -31,7 +31,6 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
     syncMapState: function (blnInitialMove, mapModule) {
         var mapDomain = this._core.getMap(),
             zoom = mapDomain.getZoom(),
-            marker = mapDomain.isMarkerVisible(),
             maxZoom = 13;
 
         if(mapModule) {
@@ -44,10 +43,10 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
             // so if zoom == max zoom level -> send a dummy request to get openlayers working
             // correctly
             // TODO: find out why OL needs this
-            this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0, false));
+            this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0));
         }
-        
-        this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom, marker));
+
+        this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom));
     },
 
     /**

@@ -865,7 +865,7 @@ Oskari.clazz.define(
             bounds = olLayer.getDataExtent();
             center = bounds.getCenterLonLat();
 
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, bounds, false);
+            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center.lon, center.lat, bounds);
             me.sandbox.request(me, mapmoveRequest);
 
             }else{
@@ -937,7 +937,7 @@ Oskari.clazz.define(
 
            sandbox.request(
                 me.getName(),
-                moveReqBuilder(result.lon, result.lat, zoom, false)
+                moveReqBuilder(result.lon, result.lat, zoom)
             );
 
             if(drawVector){

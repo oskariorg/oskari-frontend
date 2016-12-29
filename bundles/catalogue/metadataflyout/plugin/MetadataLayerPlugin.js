@@ -37,10 +37,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                     me.afterMapLayerRemoveEvent(event);
                 },
 
-                FeaturesAvailableEvent: function (event) {
-                    me.handleFeaturesAvailableEvent(event);
-                },
-
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     me.afterChangeMapLayerOpacityEvent(event);
                 }
@@ -223,55 +219,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
             return this.getMap().getLayersByName('layer_' + layer.getId());
-        },
-
-        /**
-         * @method handleFeaturesAvailableEvent
-         */
-        handleFeaturesAvailableEvent: function (event) {
-            var fc,
-                features,
-                format,
-                layer = event.getMapLayer(),
-                mapLayer,
-                mimeType,
-                op,
-                ownedLayer;
-
-            if (layer === null || layer === undefined) {
-                return;
-            }
-
-            ownedLayer = this.getMapLayer();
-            if (layer.getId() + '' !== ownedLayer.getId() + '') {
-                return;
-            }
-
-            mimeType = event.getMimeType();
-            features = event.getFeatures();
-            op = event.getOp();
-            format = this._supportedFormats[mimeType];
-
-            if (!format) {
-                return;
-            }
-
-            fc = format.read(features);
-
-            this._features = fc;
-
-            mapLayer = this.getMap().getLayersByName(
-                'layer_' + layer.getId()
-            )[0];
-            if (!mapLayer) {
-                return;
-            }
-
-            if (op === 'replace') {
-                mapLayer.removeFeatures(mapLayer.features);
-            }
-
-            mapLayer.addFeatures(fc);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

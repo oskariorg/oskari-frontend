@@ -665,7 +665,7 @@ Oskari.clazz.define(
                                     } else {
                                         //else just set center.
                                         setTimeout(function() {
-                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y]);
                                         }, 1000);
                                     }
                                 }
