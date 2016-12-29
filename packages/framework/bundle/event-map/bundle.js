@@ -69,9 +69,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/after-map-layer-remove-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-move-start-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"
 		}
         ],

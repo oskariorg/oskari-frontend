@@ -404,6 +404,9 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/event/MapClickedEvent.js"
                 }, {
                     "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapmodule/event/MapMoveStartEvent.js"
+                }, {
+                    "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"
                 }, {
                     "type": "text/javascript",
