@@ -75,9 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 MapClickedEvent: function(event) {
                     me.__mapClick(event);
                 },
-                AfterHideMapMarkerEvent: function(event) {
-                    me.afterHideMapMarkerEvent(event);
-                },
                 'Toolbar.ToolbarLoadedEvent': function() {
                     me._registerTools();
                 },
@@ -265,19 +262,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         getMarkersLayer: function() {
             // call _createMapMarkerLayer if not created yet?
             return this.__layer;
-        },
-
-        /***********************************************************
-         * Handle HideMapMarkerEvent
-         *
-         * @param {Object}
-         *            event
-         */
-        afterHideMapMarkerEvent: function(event) {
-            var markerLayer = this.getMarkersLayer();
-            if (markerLayer) {
-                markerLayer.setVisible(false);
-            }
         },
 
         /**

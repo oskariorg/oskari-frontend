@@ -71,9 +71,6 @@ function() {
 			"src" : "../../../../sources/framework/request/common/show-map-layer-info-request.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/hide-map-marker-request.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/ctrl-key-down-request.js"
 		}, {
 			"type" : "text/javascript",

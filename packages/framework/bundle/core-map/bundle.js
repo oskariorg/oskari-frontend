@@ -58,9 +58,6 @@ function() {
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-map-layer-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-map-methods.js"
 		}
 		],
 		"resources" : []
