@@ -56,7 +56,7 @@
                 return;
             }
             log.debug('This is startup by link, moving map...');
-            core.getMap().moveTo(longitude, latitude, zoomLevel);
+            Oskari.getSandbox().getMap().moveTo(longitude, latitude, zoomLevel);
         }
     }, {
         /**
