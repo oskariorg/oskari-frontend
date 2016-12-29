@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Select an indicator",
                 "noResults": "No search results found",
                 "refineSearchLabel": "Refine selected content",
-                "refineSearchTooltip1": "To view the options you must first select",
-                "refineSearchTooltip2": "The data provider and data.",
+                "refineSearchTooltip1": "To view the options you must first select the data provider and data",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Get data",
                 "defaultPlaceholder": "Select value",
                 "selectionValues": {
