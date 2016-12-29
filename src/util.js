@@ -496,5 +496,26 @@ Oskari.util = (function () {
         return (matches1 && matches2);
     };
 
+    /**
+     * @method getRequestParam
+     * Returns a request parameter from query string
+     * http://javablog.info/2008/04/17/url-request-parameters-using-javascript/
+     * @param {String} name - parameter name
+     * @param {String} defaultValue - default value if param is not set
+     * @return {String} value for the parameter or null if not found
+     */
+    util.getRequestParam = function (name, defaultValue) {
+        // FIXME explain regex, fix escaping
+        name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+        var regexS = '[\\?&]' + name + '=([^&#]*)',
+            regex = new RegExp(regexS),
+            results = regex.exec(window.location.href);
+        if (results === null || results === undefined) {
+            return defaultValue || null;
+        }
+        return results[1];
+    };
+
+
     return util;
 }());

@@ -6,6 +6,7 @@
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
 - Moved domain/Map from core to sandbox.
+- Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
 
 #### Request/Event refactoring
 - Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent

@@ -516,18 +516,6 @@
             },
 
             /**
-             * @method getRequestParameter
-             * Returns a request parameter from query string
-             * http://javablog.info/2008/04/17/url-request-parameters-using-javascript/
-             * @param {String} name - parameter name
-             * @return {String} value for the parameter or null if not found
-             */
-            getRequestParameter: function (name) {
-                return this._core.getRequestParameter(name);
-            },
-
-
-            /**
              * @method getBrowserWindowSize
              * Returns an object with properties width and height as the window size in pixels
              * @return {Object} object with properties width and height as the window size in pixels

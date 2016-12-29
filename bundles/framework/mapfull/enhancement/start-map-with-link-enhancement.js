@@ -20,17 +20,13 @@
          */
         enhance: function(core) {
             log.debug('Checking if map is started with link...');
-
-            var coord = core.getRequestParameter('coord'),
-                zoomLevel = core.getRequestParameter('zoomLevel'),
-                mapLayers = core.getRequestParameter('mapLayers'),
-                markerVisible = core.getRequestParameter('showMarker'),
-                markerVisibleOption2 = core.getRequestParameter('isCenterMarker'),
-                keepLayersOrder = core.getRequestParameter('keepLayersOrder');
-
-            if (keepLayersOrder === null) {
-                keepLayersOrder = true;
-            }
+            var reqParam = Oskari.util.getRequestParam;
+            var coord = reqParam('coord'),
+                zoomLevel = reqParam('zoomLevel'),
+                mapLayers = reqParam('mapLayers'),
+                markerVisible = reqParam('showMarker'),
+                markerVisibleOption2 = reqParam('isCenterMarker'),
+                keepLayersOrder = reqParam('keepLayersOrder', true);
 
             if (coord === null || zoomLevel === null) {
                 // not a link
