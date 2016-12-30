@@ -10,7 +10,11 @@
 - Removed core.getSandbox(). Use Oskari.getSandbox() instead.
 - Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.
 - Added convenience methods to Oskari.util.isNumberBetween() to detect if a number is in range and Oskari.util.arrayMove() to re-order items inside an array.
-- Selected layers are now tracked in sandbox.getMap() object instead of core.
+- Selected layers are now tracked in sandbox.getMap() object instead of core:
+
+    core.getAllSelectedLayers() -> map.getLayers()
+    core.isLayerAlreadySelected(id) -> map.isLayerSelected(id)
+    core.findMapLayerFromSelectedMapLayers(id) -> map.getSelectedLayer(id)
 
 #### Request/Event refactoring
 - Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent
