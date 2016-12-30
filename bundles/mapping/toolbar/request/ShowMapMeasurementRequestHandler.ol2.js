@@ -42,9 +42,8 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.sandbox = core.getSandbox();
             var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
-            this.gfiReqBuilder = this.sandbox.getRequestBuilder(gfiRn);
+            this.gfiReqBuilder = this._toolbar.getSandbox().getRequestBuilder(gfiRn);
             this._showMeasurementResults(request.getValue());
         },
         getValue: function () {
@@ -72,7 +71,7 @@ Oskari.clazz.define(
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                         //enable gfi
                         if (me.gfiReqBuilder) {
-                            me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
+                            me._toolbar.getSandbox().request(me._toolbar, me.gfiReqBuilder(true));
                         }
 
                         me._dialog.close(true);
@@ -107,7 +106,7 @@ Oskari.clazz.define(
                     me._hideResultsInPlugin(true);
                     //enable gfi
                     if (me.gfiReqBuilder) {
-                        me.sandbox.request(me._toolbar, me.gfiReqBuilder(true));
+                        me._toolbar.getSandbox().request(me._toolbar, me.gfiReqBuilder(true));
                     }
                 });
 

@@ -23,11 +23,6 @@
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
-        // Sandbox that handles communication
-        // this._sandbox is inserted when sandbox is created by src/sandbox_factory.
-
-        this._servicesByQName = {};
-
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
 
@@ -54,35 +49,49 @@
         /**
          * @method init
          * Inits Oskari core so bundles can reference components/services through sandbox
-         *
-         * @param {Oskari.mapframework.service.Service[]} services
-         *            array of services that are available
-         * @param {Oskari.mapframework.enhancement.Enhancement[]} enhancements
-         *            array of enhancements that should be executed before starting map
          */
-        init: function (services) {
+        init: function () {
             log.debug('Initializing core...');
-            services = services || [];
-            var sandbox = this._sandbox,
-                s;
 
-            // Register services
-            if (services) {
-                for (s = 0; s < services.length; s += 1) {
-                    this.registerService(services[s]);
-                }
-            }
-
-            // build up domain
-            log.debug('Sandbox ready, building up domain...');
-
-            // run all enhancements
-            this.enhancements = [
-                Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement')
-            ];
-            this._doEnhancements(this.enhancements);
+            this.handleMapLinkParams();
 
             log.debug('Modules started. Core ready.');
+        },
+        handleMapLinkParams: function() {
+            log.debug('Checking if map is started with link...');
+            var reqParam = Oskari.util.getRequestParam;
+            var coord = reqParam('coord'),
+                zoomLevel = reqParam('zoomLevel'),
+                mapLayers = reqParam('mapLayers'),
+                markerVisible = reqParam('showMarker'),
+                markerVisibleOption2 = reqParam('isCenterMarker'),
+                keepLayersOrder = reqParam('keepLayersOrder', true);
+
+            if (coord === null || zoomLevel === null) {
+                // not a link
+                return;
+            }
+
+            var splittedCoord;
+
+            /*
+             * Coordinates can be splitted either with new "_" or
+             * old "%20"
+             */
+            if (coord.indexOf('_') >= 0) {
+                splittedCoord = coord.split('_');
+            } else {
+                splittedCoord = coord.split('%20');
+            }
+
+            var longitude = splittedCoord[0],
+                latitude = splittedCoord[1];
+            if (longitude === null || latitude === null) {
+                log.debug('Could not parse link location. Skipping.');
+                return;
+            }
+            log.debug('This is startup by link, moving map...');
+            Oskari.getSandbox().getMap().moveTo(longitude, latitude, zoomLevel);
         },
 
         /**
@@ -93,7 +102,12 @@
          *            event - event to dispatch
          */
         dispatch: function (event) {
-            this._sandbox.notifyAll(event);
+            // TODO: to be removed.
+            Oskari.getSandbox().notifyAll(event);
+        },
+        getLayerService : function() {
+            // TODO: to be removed.
+            return Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         },
 
         /**
@@ -337,40 +351,6 @@
          */
         enableDebug: function () {
             this._debug = true;
-        },
-
-        /**
-         * @method registerService
-         * Registers given service to Oskari so bundles can get reference to it from sandbox
-         *
-         * @param {Oskari.mapframework.service.Service}
-         *            service service to register
-         */
-        registerService: function (service) {
-            this._servicesByQName[service.getQName()] = service;
-            //this.registerFrameworkComponentToRuntimeEnvironment(service, service.getName());
-        },
-
-        /**
-         * @method getService
-         * Returns a registered service with given name
-         *
-         * @param {String} name
-         * @return {Oskari.mapframework.service.Service}
-         *            service or undefined if not found
-         */
-        getService: function (type) {
-            return this._servicesByQName[type];
-        },
-
-        /**
-         * @method getSandbox
-         * Returns reference to sandbox
-         *
-         * @return {Oskari.Sandbox}
-         */
-        getSandbox: function () {
-            return this._sandbox;
         },
 
         /**

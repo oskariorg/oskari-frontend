@@ -7,6 +7,8 @@
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
 - Moved domain/Map from core to sandbox.
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
+- Removed core.getSandbox(). Use Oskari.getSandbox() instead.
+- Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.
 
 #### Request/Event refactoring
 - Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent

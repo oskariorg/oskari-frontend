@@ -42,10 +42,6 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.sandbox = core.getSandbox();
-            var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
-            this.gfiReqBuilder = this.sandbox.getRequestBuilder(gfiRn);
-
             this._showMeasurementResults(request.getValue());
         },
         getValue: function () {
