@@ -573,40 +573,6 @@
                 requestHandlers[requestName] = handler;
             },
             /**
-             * @method addRequestHandler
-             * Registers a request handler for requests with the given name
-             * NOTE: only one request handler can be registered/request
-             * @param {String} requestName - name of the request
-             * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-             */
-            addRequestHandler: function (requestName, handlerClsInstance) {
-                this.requestHandler(requestName, handlerClsInstance);
-                /*
-                return this._core.addRequestHandler(
-                    requestName,
-                    handlerClsInstance
-                );
-*/
-            },
-
-            /**
-             * @method removeRequestHandler
-             * Unregisters a request handler for requests with the given name
-             * NOTE: only one request handler can be registered/request
-             * @param {String} requestName - name of the request
-             * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-             */
-            removeRequestHandler: function (requestName, handlerInstance) {
-                this.requestHandler(requestName, null);
-                /*
-                return this._core.removeRequestHandler(
-                    requestName,
-                    handlerInstance
-                );
-*/
-            },
-
-            /**
              * @method _debugPushRequest
              * @private
              * Adds request to list so we can show a debugging diagram with
@@ -1062,9 +1028,45 @@
  * Deprecated sandbox functions
  * ***********************************************************************************************
  */
+    // Warn 2 times before falling silent
+    var warnMessagesSent = {};
+    var warnDeprecated = function(msg) {
+        if(!warnMessagesSent[msg]) {
+            warnMessagesSent[msg] = 0;
+        }
+        warnMessagesSent[msg]++;
+        if(warnMessagesSent[msg] < 3) {
+            log.warn(msg)
+        }
+    };
+
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
+        /**
+         * @method addRequestHandler
+         * Registers a request handler for requests with the given name
+         * NOTE: only one request handler can be registered/request
+         * @param {String} requestName - name of the request
+         * @param {Oskari.mapframework.core.RequestHandler} handlerInstance request handler
+         */
+        addRequestHandler: function (requestName, handlerInstance) {
+            warnDeprecated('Sandbox.addRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, handlerInstance) instead.');
+            this.requestHandler(requestName, handlerInstance);
+        },
+
+        /**
+         * @method removeRequestHandler
+         * Unregisters a request handler for requests with the given name
+         * NOTE: only one request handler can be registered/request
+         * @param {String} requestName - name of the request
+         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
+         */
+        removeRequestHandler: function (requestName, handlerInstance) {
+            warnDeprecated('Sandbox.removeRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, null) instead.');
+            this.requestHandler(requestName, null);
+        },
+
         isCtrlKeyDown : function() {
-            log.warn('Sandbox.isCtrlKeyDown() is deprecated. It works on Openlayers 2 only.');
+            warnDeprecated('Sandbox.isCtrlKeyDown() is deprecated. It works on Openlayers 2 only.');
             return Oskari.ctrlKeyDown();
         },
         /**
@@ -1076,7 +1078,7 @@
          * @return {Function} builder function for given request
          */
         getRequestBuilder: function (name) {
-            log.debug('Sandbox.getRequestBuilder() is deprecated. Use Oskari.requestBuilder() instead.');
+            warnDeprecated('Sandbox.getRequestBuilder() is deprecated. Use Oskari.requestBuilder() instead.');
             return Oskari.requestBuilder(name);
         },
 
@@ -1089,7 +1091,7 @@
          * @return {Function} builder function for given event
          */
         getEventBuilder: function (name) {
-            log.debug('Sandbox.getEventBuilder() is deprecated. Use Oskari.eventBuilder() instead.');
+            warnDeprecated('Sandbox.getEventBuilder() is deprecated. Use Oskari.eventBuilder() instead.');
             return Oskari.eventBuilder(name);
         },
         /**
@@ -1098,7 +1100,7 @@
          */
         printDebug: function () {
             // commented out printDebug warning since there are so many usages
-            //log.warn('Sandbox.printDebug is deprecated');
+            warnDeprecated('Sandbox.printDebug is deprecated - use Oskari.log() instead');
             log.debug.apply(log, arguments);
         },
         /**
@@ -1106,7 +1108,7 @@
          * Utility method for printing warn messages to browser console
          */
         printWarn: function () {
-            log.warn('Sandbox.printWarn is deprecated - use Oskari.log() instead');
+            warnDeprecated('Sandbox.printWarn is deprecated - use Oskari.log() instead');
             log.warn.apply(log, arguments);
             //log.warn(arguments);
         },
@@ -1115,7 +1117,7 @@
          * Utility method for printing error messages to browser console
          */
         printError: function () {
-            log.warn('Sandbox.printError is deprecated - use Oskari.log() instead');
+            warnDeprecated('Sandbox.printError is deprecated - use Oskari.log() instead');
             log.error.apply(log, arguments);
             //log.error(arguments);
         }
