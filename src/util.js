@@ -515,6 +515,57 @@ Oskari.util = (function () {
         }
         return results[1];
     };
+    /**
+     * Returns true if first param is a number with value between start-stop parameters
+     * @param  {Number}  num   [description]
+     * @param  {Number}  start [description]
+     * @param  {Number}  stop  [description]
+     * @return {Boolean}       [description]
+     */
+    util.isNumberBetween = function(num, start, stop) {
+        if(typeof num !== 'number') {
+            return false;
+        }
+        return num >= start && num <= stop;
+    };
+
+    /**
+     * Moves item in array using from and to parameters as indexes.
+     * Returns boolean indicating if something was changed.
+     * @param  {Object[]} array array to re-order
+     * @param  {Number}   from  index for item to move
+     * @param  {Number}   to    index to move the item to
+     * @return {Boolean}  true if order was changed
+     */
+    util.arrayMove = function(array, from, to) {
+        // normalize
+        if(!array || !array.length || !array.splice) {
+            return false;
+        }
+        if(!util.isNumberBetween(from, 0, array.length -1)) {
+            from = array.length - 1;
+        }
+        if(!util.isNumberBetween(to, 0, array.length -1)) {
+            to = array.length - 1;
+        }
+        if(from === to) {
+            return false;
+        }
+        // From http://jsperf.com/arraymove-many-sizes
+        if (Math.abs(from - to) > 60) {
+            array.splice(to, 0, array.splice(from, 1)[0]);
+        } else {
+            // works better when we are not moving things very far
+            var target = array[from];
+            var inc = (to - from) / Math.abs(to - from);
+            var current = from;
+            for (; current != to; current += inc) {
+                array[current] = array[current + inc];
+            }
+            array[to] = target;
+        }
+        return true;
+    };
 
 
     return util;

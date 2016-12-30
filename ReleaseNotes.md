@@ -9,6 +9,7 @@
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
 - Removed core.getSandbox(). Use Oskari.getSandbox() instead.
 - Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.
+- Added convenience methods to Oskari.util.isNumberBetween() to detect if a number is in range and Oskari.util.arrayMove() to re-order items inside an array.
 
 #### Request/Event refactoring
 - Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent
