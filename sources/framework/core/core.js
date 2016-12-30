@@ -131,14 +131,6 @@
             'DimMapLayerRequest': function (request) {
                 this._handleDimMapLayerRequest(request.getMapLayerId());
                 return true;
-            },
-            'CtrlKeyDownRequest': function (request) {
-                Oskari.ctrlKeyDown(true);
-                return true;
-            },
-            'CtrlKeyUpRequest': function (request) {
-                Oskari.ctrlKeyDown(false);
-                return true;
             }
         },
 

@@ -49,13 +49,11 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
                 break;
             case 17:
                 // CTRL
-                this.sandbox.postRequestByName('CtrlKeyDownRequest');
-                //this.core.processRequest(this.core.getRequestBuilder()());
+                Oskari.ctrlKeyDown(true);
                 break;
             case 27:
                 // ESC
                 this.sandbox.postRequestByName('EscPressedEvent');
-                //this.core.dispatch(this.core.getEventBuilder('EscPressedEvent')());
                 break;
             case 33:
                 // Page Up. Same in all browsers.
@@ -105,8 +103,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         switch (evt.keyCode) {
             // CTRL
         case 17:
-            this.sandbox.postRequestByName('CtrlKeyUpRequest');
-            //this.core.processRequest(this.core.getRequestBuilder('CtrlKeyUpRequest')());
+            Oskari.ctrlKeyDown(false);
             break;
         case 37:
         case 38:
@@ -125,7 +122,6 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         case 189:
         case 95:
             this.mapmodule.notifyMoveEnd();
-            //this.core.processRequest(this.core.getRequestBuilder('MapNotMovingRequest')());
             break;
         }
     },

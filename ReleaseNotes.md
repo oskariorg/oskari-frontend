@@ -32,6 +32,7 @@
 - ShowMapLayerInfoRequest moved from under sources to backendstatus as it is bundle specific request
 - AfterShowMapLayerInfoEvent removed as backendstatus was the only user and it can react to request without the event.
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
+- Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
 
 #### Marker handling changes
 - AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.

@@ -63,12 +63,6 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/remove-map-layer-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/ctrl-key-down-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/ctrl-key-up-request.js"
 		}
 		],
 		"resources" : []
