@@ -56,6 +56,10 @@
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
+            hasHandler : function(requestName) {
+                //TODO: actual implementation after handlers moved from core to sandbox
+                return !!requestName;
+            },
 
             /**
              * @method disableDebug
@@ -289,7 +293,8 @@
              * @return {Function} builder function for given request
              */
             getRequestBuilder: function (name) {
-                return this._core.getRequestBuilder(name);
+                return Oskari.requestBuilder(name);
+                //this._core.getRequestBuilder(name);
             },
 
             /**
@@ -301,7 +306,7 @@
              * @return {Function} builder function for given event
              */
             getEventBuilder: function (name) {
-                return this._core.getEventBuilder(name);
+                return Oskari.eventBuilder(name);
             },
 
             /**

@@ -12,9 +12,20 @@
 - Added convenience methods to Oskari.util.isNumberBetween() to detect if a number is in range and Oskari.util.arrayMove() to re-order items inside an array.
 - Selected layers are now tracked in sandbox.getMap() object instead of core:
 
+```javascript
     core.getAllSelectedLayers() -> map.getLayers()
     core.isLayerAlreadySelected(id) -> map.isLayerSelected(id)
     core.findMapLayerFromSelectedMapLayers(id) -> map.getSelectedLayer(id)
+```
+
+- Removed methods from core _getQNameForRequest(), _getQNameForEvent()
+- Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
+
+```javascript
+    core.getRequestBuilder() -> Oskari.requestBuilder()
+    core.getEventBuilder() -> Oskari.eventBuilder()
+```
+
 
 #### Request/Event refactoring
 - Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent

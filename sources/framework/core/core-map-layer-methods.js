@@ -132,9 +132,9 @@
             this.getMapState().addLayer(mapLayer, asBaseLayer);
             var evt;
             if (mapLayer.isBaseLayer() || isBaseMap) {
-                evt = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
+                evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
             } else {
-                evt = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, true, isBaseMap);
+                evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(mapLayer, true, isBaseMap);
             }
             me.copyObjectCreatorToFrom(evt, request);
             me.dispatch(evt);
@@ -166,7 +166,7 @@
             var mapLayer = this.findMapLayerFromAllAvailable(id);
 
             // finally notify sandbox
-            var event = this.getEventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
+            var event = Oskari.eventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
             this.copyObjectCreatorToFrom(event, request);
             this.dispatch(event);
         },
@@ -192,7 +192,7 @@
             var newPosition = this.getMapState().getLayerIndex(id);
             var layer = this.getMapState().getSelectedLayer(id);
             // notify listeners
-            var event = this.getEventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldPosition, newPosition);
+            var event = Oskari.eventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldPosition, newPosition);
             this.copyObjectCreatorToFrom(event, request);
             this.dispatch(event);
         },
@@ -211,7 +211,7 @@
             }
             layer.setOpacity(request.getOpacity());
 
-            var event = this.getEventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
+            var event = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
             this.copyObjectCreatorToFrom(event, request);
             this.dispatch(event);
         },
@@ -231,7 +231,7 @@
             // Check for magic string
             if (request.getStyle() !== '!default!') {
                 layer.selectStyle(request.getStyle());
-                var event = this.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                var event = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                 this.copyObjectCreatorToFrom(event, request);
                 this.dispatch(event);
             }
@@ -256,7 +256,7 @@
                 if (!id || mapLayer.getId() + '' === id + '') {
                     highlightedMapLayers.splice(i);
                     // Notify that dim has occured
-                    evt = this.getEventBuilder('AfterDimMapLayerEvent')(mapLayer);
+                    evt = Oskari.eventBuilder('AfterDimMapLayerEvent')(mapLayer);
                     this.dispatch(evt);
                     return;
                 }
@@ -305,7 +305,7 @@
             );
 
             // finally notify sandbox
-            var evt = this.getEventBuilder('AfterHighlightMapLayerEvent')(mapLayer);
+            var evt = Oskari.eventBuilder('AfterHighlightMapLayerEvent')(mapLayer);
             this.copyObjectCreatorToFrom(evt, request);
             this.dispatch(evt);
         },
@@ -331,7 +331,7 @@
                 return;
             }
 
-            var event = this.getEventBuilder('AfterDimMapLayerEvent')(mapLayer);
+            var event = Oskari.eventBuilder('AfterDimMapLayerEvent')(mapLayer);
             this.dispatch(event);
         }
     });

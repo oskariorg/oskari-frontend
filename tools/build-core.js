@@ -22,6 +22,7 @@ var files = [
     '../src/util.js',
     '../src/sandbox_factory.js',
     '../src/i18n.js',
+    '../src/message_types.js',
     // class system
     '../src/O2ClassSystem.js',
     '../src/bundle_manager.js',
