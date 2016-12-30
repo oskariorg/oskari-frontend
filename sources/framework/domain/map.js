@@ -368,10 +368,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
                 // no layer to move
                 return false;
             }
-            if(typeof newIndex !== 'number' || newIndex < 0 || newIndex >= list.length) {
+            if(!Oskari.util.isNumberBetween(newIndex, 0, list.length -1) {
                 // if not valid index -> treat as "move to last"
                 newIndex = list.length - 1;
             }
-            return Oskari.util.arrayMove(list, currentIndex, newIndex);;
+            return Oskari.util.arrayMove(list, currentIndex, newIndex);
         }
     });
