@@ -11,6 +11,7 @@
     var ajaxUrl;
     var log;
     var services = {};
+    var requestHandlers = {};
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -294,7 +295,6 @@
              */
             getRequestBuilder: function (name) {
                 return Oskari.requestBuilder(name);
-                //this._core.getRequestBuilder(name);
             },
 
             /**
@@ -576,7 +576,26 @@
             copyObjectCreatorToFrom: function (objTo, objFrom) {
                 return this._core.copyObjectCreatorToFrom(objTo, objFrom);
             },
-
+            /**
+             * @method requestHandler
+             * Registers a request handler for requests with the given name and handler or returns the handler for
+             * request if handler is undefined.
+             *
+             * NOTE: only one request handler can be registered/request
+             * @param {String} requestName - name of the request
+             * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
+             */
+            requestHandler : function(requestName, handler) {
+                if(typeof handler === 'undefined') {
+                    // getter
+                    return requestHandlers[requestName];
+                }
+                if(requestHandlers[requestName] && handler !== null) {
+                    log.warn('Overwriting request handler!!');
+                }
+                // setter, removal with handler value <null>
+                requestHandlers[requestName] = handler;
+            },
             /**
              * @method addRequestHandler
              * Registers a request handler for requests with the given name
@@ -585,10 +604,13 @@
              * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
              */
             addRequestHandler: function (requestName, handlerClsInstance) {
+                this.requestHandler(requestName, handlerClsInstance);
+                /*
                 return this._core.addRequestHandler(
                     requestName,
                     handlerClsInstance
                 );
+*/
             },
 
             /**
@@ -599,10 +621,13 @@
              * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
              */
             removeRequestHandler: function (requestName, handlerInstance) {
+                this.requestHandler(requestName, null);
+                /*
                 return this._core.removeRequestHandler(
                     requestName,
                     handlerInstance
                 );
+*/
             },
 
             /**

@@ -28,19 +28,6 @@
 
         // Allow multiple highlight layers
         this._allowMultipleHighlightLayers = false;
-
-        this._availableRequestsByName = {};
-        this._availableEventsByName = {};
-
-        /**
-         * @property externalHandlerCls
-         * External Request handlers that bundles have registered are stored here
-         * NOTE: only one request handler can be registered/request
-         * NOTE: was static but moved to instance to enable multi sandbox configurations
-         */
-        this.externalHandlerCls = {
-
-        };
     }, {
 
         /**
@@ -196,7 +183,7 @@
                 };
             } else {
                 // handlers registered by bundle
-                handlerClsInstance = this.externalHandlerCls[requestName];
+                handlerClsInstance = Oskari.getSandbox().requestHandler(requestName); //this.externalHandlerCls[requestName];
                 if (handlerClsInstance && handlerClsInstance.handleRequest) {
                     return function(core, request) {
                         handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
@@ -204,37 +191,6 @@
                 }
             }
             return undefined;
-        },
-
-        /**
-         * @method addRequestHandler
-         * Registers a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-         */
-        addRequestHandler: function (requestName, handlerClsInstance) {
-            if (!handlerClsInstance) {
-                log.warn('Adding non-existent handler for', requestName);
-            }
-            if (this.externalHandlerCls[requestName]) {
-                log.warn('Overriding an existing requesthandler for', requestName);
-            }
-            this.externalHandlerCls[requestName] = handlerClsInstance;
-        },
-
-        /**
-         * @method removeRequestHandler
-         * Unregisters a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-         */
-        removeRequestHandler: function (requestName, handlerInstance) {
-            if (this.externalHandlerCls[requestName] === handlerInstance) {
-                this.externalHandlerCls[requestName] = null;
-                delete this.externalHandlerCls[requestName];
-            }
         },
 
 
