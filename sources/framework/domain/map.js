@@ -10,7 +10,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.domain.Map',
 
-    /** 
+    /**
      * @method create called automatically on construction
      * @static
      */

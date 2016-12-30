@@ -286,30 +286,6 @@
             },
 
             /**
-             * @method getRequestBuilder
-             *
-             * Access to request builder that creates requests by name
-             * rather than by class name
-             * @param {String} name request name that we are creating
-             * @return {Function} builder function for given request
-             */
-            getRequestBuilder: function (name) {
-                return Oskari.requestBuilder(name);
-            },
-
-            /**
-             * @method getEventBuilder
-             *
-             * Access to event builder that creates events by name
-             *
-             * @param {String} name request name that we are creating
-             * @return {Function} builder function for given event
-             */
-            getEventBuilder: function (name) {
-                return Oskari.eventBuilder(name);
-            },
-
-            /**
              * @method request
              * Registered modules can request work to be done using this method
              *
@@ -1087,6 +1063,35 @@
  * ***********************************************************************************************
  */
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
+        isCtrlKeyDown : function() {
+            log.warn('Sandbox.isCtrlKeyDown() is deprecated. It works on Openlayers 2 only.');
+            return Oskari.ctrlKeyDown();
+        },
+        /**
+         * @method getRequestBuilder
+         *
+         * Access to request builder that creates requests by name
+         * rather than by class name
+         * @param {String} name request name that we are creating
+         * @return {Function} builder function for given request
+         */
+        getRequestBuilder: function (name) {
+            log.debug('Sandbox.getRequestBuilder() is deprecated. Use Oskari.requestBuilder() instead.');
+            return Oskari.requestBuilder(name);
+        },
+
+        /**
+         * @method getEventBuilder
+         *
+         * Access to event builder that creates events by name
+         *
+         * @param {String} name request name that we are creating
+         * @return {Function} builder function for given event
+         */
+        getEventBuilder: function (name) {
+            log.debug('Sandbox.getEventBuilder() is deprecated. Use Oskari.eventBuilder() instead.');
+            return Oskari.eventBuilder(name);
+        },
         /**
          * @method printDebug
          * Utility method for printing debug messages to browser console

@@ -23,9 +23,6 @@
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
 
-        // is Ctrl key down
-        this._ctrlKeyDown = false;
-
         // Allow multiple highlight layers
         this._allowMultipleHighlightLayers = false;
     }, {
@@ -136,11 +133,11 @@
                 return true;
             },
             'CtrlKeyDownRequest': function (request) {
-                this._handleCtrlKeyDownRequest();
+                Oskari.ctrlKeyDown(true);
                 return true;
             },
             'CtrlKeyUpRequest': function (request) {
-                this._handleCtrlKeyUpRequest();
+                Oskari.ctrlKeyDown(false);
                 return true;
             }
         },
@@ -183,7 +180,7 @@
                 };
             } else {
                 // handlers registered by bundle
-                handlerClsInstance = Oskari.getSandbox().requestHandler(requestName); //this.externalHandlerCls[requestName];
+                handlerClsInstance = Oskari.getSandbox().requestHandler(requestName);
                 if (handlerClsInstance && handlerClsInstance.handleRequest) {
                     return function(core, request) {
                         handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
