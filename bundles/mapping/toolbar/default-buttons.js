@@ -30,6 +30,7 @@ Oskari.clazz.category(
          * mapfull start()
          */
         _addDefaultButtons: function () {
+            this.dialog = null;
             var me = this,
                 loc = this.getLocalization('buttons'),
                 sandbox = this.getSandbox(),
@@ -151,6 +152,15 @@ Oskari.clazz.category(
                             tooltip: loc.link.tooltip,
                             sticky: false,
                             callback: function () {
+                              if( me.dialog ){
+                                me.dialog.close();
+                                me.dialog = null;
+                                return;
+                              }
+                                me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                                me.dialog.onClose(function(){
+                                  me.dialog = null;
+                                });
                                 var mapUrlPrefix = me.__getMapUrl();
                                 var linkParams = me.getSandbox().generateMapLinkParameters({});
                                 // This is kinda ugly...
@@ -158,20 +168,19 @@ Oskari.clazz.category(
                                 if (linkParams.indexOf('&markers=') === -1) {
                                     linkParams += '&showMarker=true';
                                 }
-                                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                                dialog.addClass('no_resize');
+                                me.dialog.addClass('no_resize');
                                 var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                                 okBtn.setTitle(loc.link.ok);
                                 okBtn.addClass('primary');
                                 okBtn.setHandler(function () {
-                                    dialog.close();
+                                    me.dialog.close();
                                     me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
                                 });
 
                                 var linkContent = '<div class="linkcontent">' +
                                     mapUrlPrefix + linkParams + '</div>';
                                 me.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest');
-                                dialog.show(loc.link.title, linkContent, [okBtn]);
+                                me.dialog.show(loc.link.title, linkContent, [okBtn]);
                             }
                         }
                     }
