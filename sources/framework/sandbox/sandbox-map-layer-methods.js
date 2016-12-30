@@ -16,8 +16,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      *  layer domain object if found matching id or null if not found
      */
     findMapLayerFromAllAvailable: function (id, name) {
-        var layer = this._core.findMapLayerFromAllAvailable(id, name);
-        return layer;
+        return this.getService('Oskari.mapframework.service.MapLayerService').findMapLayer(id);
     },
 
     /**
@@ -26,7 +25,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
      */
     findAllSelectedMapLayers: function () {
-        var layersList = this._core.getAllSelectedLayers();
+        var layersList = this.getMap().getLayers();
         // copy the array so changing it wont change the core data
         return layersList.slice(0);
     },
@@ -40,8 +39,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      *  layer domain object if found matching id or null if not found
      */
     findMapLayerFromSelectedMapLayers: function (layerId) {
-        var layer = this._core.findMapLayerFromSelectedMapLayers(layerId);
-        return layer;
+        return this.getMap().getSelectedLayer(layerId);
     },
 
     /**
@@ -52,7 +50,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @return {Boolean} true if the layer is added to map
      */
     isLayerAlreadySelected: function (id) {
-        return this._core.isLayerAlreadySelected(id);
+        return this.getMap().isLayerSelected(id);
     },
 
     /**

@@ -17,9 +17,6 @@
      */
     function () {
 
-        // Currently selected layers, array of MapLayer objects
-        this._selectedLayers = [];
-
         // Currently Highlighted maplayers
         this._mapLayersHighlighted = [];
 
@@ -108,6 +105,10 @@
         getLayerService : function() {
             // TODO: to be removed.
             return Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        },
+        getMapState : function() {
+            // TODO: to be removed.
+            return Oskari.getSandbox().getMap();
         },
 
         /**

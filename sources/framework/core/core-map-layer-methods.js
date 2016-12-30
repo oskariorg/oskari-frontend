@@ -8,37 +8,6 @@
     var log = Oskari.log('Core');
 
     Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
-        /**
-         * @public @method isLayerAlreadySelected
-         * Checks if the layer matching the id is added to map
-         *
-         * @param {String} id ID of the layer to check
-         *
-         * @return {Boolean} true if the layer is added to map
-         */
-        isLayerAlreadySelected: function (id) {
-            var mapLayerService = this.getLayerService(),
-                layer = mapLayerService.findMapLayer(id, this._selectedLayers);
-
-            //var layer = this.findMapLayer(id, this._selectedLayers);
-            return (layer !== null && layer !== undefined);
-        },
-
-        /**
-         * @method findMapLayerFromSelectedMapLayers
-         * Returns the layer domain object matching the id if it is added to map
-         *
-         * @param {String} id ID of the layer to get
-         *
-         * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
-         * Layer domain object if found matching id or null if not found
-         */
-        findMapLayerFromSelectedMapLayers: function (id) {
-            var mapLayerService = this.getLayerService(),
-                layer = mapLayerService.findMapLayer(id, this._selectedLayers);
-
-            return layer;
-        },
 
         /**
          * @public @method isMapLayerAlreadyHighlighted
@@ -96,17 +65,6 @@
         },
 
         /**
-         * @public @method getAllSelectedLayers
-         * Returns all currently selected map layers
-         *
-         *
-         * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         */
-        getAllSelectedLayers: function () {
-            return this._selectedLayers;
-        },
-
-        /**
          * @public @method getAllHighlightedMapLayers
          * Returns all currently highlighted map layers
          *
@@ -147,7 +105,8 @@
                 'Trying to add map layer with id "' + id + '" AS ' +
                 (isBaseMap ? ' BASE ' : ' NORMAL ')
             );
-            if (me.isLayerAlreadySelected(id)) {
+
+            if (me.getMapState().isLayerSelected(id)) {
                 log.debug(
                     'Attempt to select already selected layer "' + id + '"'
                 );
@@ -163,30 +122,14 @@
                 return;
             }
             // FIXME make sure isBaseMap is a boolean and use if (isBaseMap) {...
+            // FIXME: this shouldn't modify the maplayer itself!!!
             if (isBaseMap == true) {
                 mapLayer.setType('BASE_LAYER');
             }
 
-            var newLayerIndex = -1;
-
             // if we need keep layers order, i.e. when map is accessed by link
-            if (keepLayersOrder !== null && keepLayersOrder !== undefined && keepLayersOrder) {
-                this._selectedLayers.push(mapLayer);
-            } else {
-                if (mapLayer.isBaseLayer() || isBaseMap == true) {
-                    var newSelectedLayers = [],
-                        i;
-
-                    newSelectedLayers.push(mapLayer);
-                    for (i = 0; i < this._selectedLayers.length; i += 1) {
-                        newSelectedLayers.push(this._selectedLayers[i]);
-                    }
-                    delete this._selectedLayers;
-                    this._selectedLayers = newSelectedLayers;
-                } else {
-                    this._selectedLayers.push(mapLayer);
-                }
-            }
+            var asBaseLayer = keepLayersOrder !== true && (mapLayer.isBaseLayer() || isBaseMap == true);
+            this.getMapState().addLayer(mapLayer, asBaseLayer);
             var evt;
             if (mapLayer.isBaseLayer() || isBaseMap) {
                 evt = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
@@ -206,45 +149,26 @@
          *
          */
         _handleRemoveMapLayerRequest: function (request) {
-            var me = this,
-                id = request.getMapLayerId();
+            var id = request.getMapLayerId();
 
             log.debug('Trying to remove map layer with id "' + id + '"');
-            if (!me.isLayerAlreadySelected(id)) {
+
+            if(!this.getMapState().removeLayer(id)) {
                 log.debug('Attempt to remove layer "' + id + '" that is not selected.');
                 return;
             }
 
-            var index = -1,
-                n,
-                mapLayer = me.findMapLayerFromAllAvailable(id);
-
-            for (n = 0; n < me._selectedLayers.length; n += 1) {
-                if (me._selectedLayers[n] === mapLayer) {
-                    index = n;
-                    break;
-                }
-            }
-            me._selectedLayers.splice(index, 1);
-
-            if (me.isMapLayerAlreadyHighlighted(id)) {
+            if (this.isMapLayerAlreadyHighlighted(id)) {
                 // remove it from highlighted list
                 log.debug('Maplayer is also highlighted, removing it from highlight list.');
-                me._handleDimMapLayerRequest(id);
+                this._handleDimMapLayerRequest(id);
             }
-
-            /* AH-2186
-             * Layer visibility is set back to true... somewhere.
-             * So set it to visible for the layer object as well.
-             */
-            if (mapLayer) {
-                mapLayer.setVisible(true);
-            }
+            var mapLayer = this.findMapLayerFromAllAvailable(id);
 
             // finally notify sandbox
-            var event = me.getEventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
-            me.copyObjectCreatorToFrom(event, request);
-            me.dispatch(event);
+            var event = this.getEventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
+            this.copyObjectCreatorToFrom(event, request);
+            this.dispatch(event);
         },
 
 
@@ -258,60 +182,17 @@
          *
          */
         _handleRearrangeSelectedMapLayerRequest: function (request) {
-            var requestToPosition = request.getToPosition(),
-                requestMapLayerId = request.getMapLayerId(),
-                modifiedLayer = null,
-                oldPosition = 0;
 
-            if (requestMapLayerId !== null && requestMapLayerId !== undefined && requestToPosition !== null && requestToPosition !== undefined) {
-                modifiedLayer = this.findMapLayerFromSelectedMapLayers(requestMapLayerId);
-
-                var newSelectedLayers = [],
-                    itemsAdded = 0,
-                    lastHandledIndex = 0,
-                    i,
-                    layer;
-                // -1 is for the last position.
-                if (requestToPosition < 0) {
-                    requestToPosition = this._selectedLayers.length + requestToPosition;
-                }
-
-                // loop through layers so that we have enough elements before new position
-                for (i = 0; itemsAdded < requestToPosition; i += 1) {
-                    lastHandledIndex += 1;
-
-                    layer = this._selectedLayers[i];
-
-                    if (layer.getId() + '' === requestMapLayerId + '') {
-                        oldPosition = i;
-                        continue;
-                    }
-
-                    newSelectedLayers.push(layer);
-                    itemsAdded += 1;
-                }
-
-                // now we got start of the array ready. Next add modified one.
-                newSelectedLayers.push(modifiedLayer);
-
-                // Finally add rest to array
-                for (i = lastHandledIndex; i < this._selectedLayers.length; i += 1) {
-                    layer = this._selectedLayers[i];
-
-                    if (layer.getId() + '' === requestMapLayerId + '') {
-                        oldPosition = i;
-                        continue;
-                    }
-                    newSelectedLayers.push(layer);
-                }
-
-                // clear carbage
-                delete this._selectedLayers;
-                this._selectedLayers = newSelectedLayers;
+            var id = request.getMapLayerId();
+            var oldPosition = this.getMapState().getLayerIndex(id);
+            var moved = this.getMapState().moveLayer(id, request.getToPosition());
+            if(!moved) {
+                return;
             }
-
+            var newPosition = this.getMapState().getLayerIndex(id);
+            var layer = this.getMapState().getSelectedLayer(id);
             // notify listeners
-            var event = this.getEventBuilder('AfterRearrangeSelectedMapLayerEvent')(modifiedLayer, oldPosition, requestToPosition);
+            var event = this.getEventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldPosition, newPosition);
             this.copyObjectCreatorToFrom(event, request);
             this.dispatch(event);
         },
@@ -324,7 +205,7 @@
          *
          */
         _handleChangeMapLayerOpacityRequest: function (request) {
-            var layer = this.findMapLayerFromSelectedMapLayers(request.getMapLayerId());
+            var layer = this.getMapState().getSelectedLayer(request.getMapLayerId());
             if (!layer) {
                 return;
             }
@@ -343,7 +224,7 @@
          *
          */
         _handleChangeMapLayerStyleRequest: function (request) {
-            var layer = this.findMapLayerFromSelectedMapLayers(request.getMapLayerId());
+            var layer = this.getMapState().getSelectedLayer(request.getMapLayerId());
             if (!layer) {
                 return;
             }
@@ -413,7 +294,7 @@
                 this._removeHighLightedMapLayer();
             }
 
-            var mapLayer = this.findMapLayerFromSelectedMapLayers(id);
+            var mapLayer = this.getMapState().getSelectedLayer(id);
             if (!mapLayer) {
                 return;
             }

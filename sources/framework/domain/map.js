@@ -50,11 +50,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
         // @property {OpenLayers.Bounds} maximumExtent configured for the map { left: NaN, top: NaN, right: NaN, bottom: NaN }
         this.maxExtent = null;
 
-        // @property {Boolean} _isMoving true when map is being dragged 
+        // @property {Boolean} _isMoving true when map is being dragged
         this._isMoving = false;
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = "EPSG:3067";
+
+        // moved from core
+        this._selectedLayers = [];
     }, {
         /**
          * @method moveTo
@@ -297,5 +300,78 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
          */
         getSrsName: function () {
             return this._projectionCode;
+        },
+        getLayers : function() {
+            return this._selectedLayers || [];
+        },
+        /**
+         * @public @method getSelectedLayer
+         * Checks if the layer matching the id is added to map
+         *
+         * @param {String} id ID of the layer to check
+         * @return {Oskari.mapframework.domain.AbstractLayer|null} layer or null if not found
+         */
+        getSelectedLayer: function (id) {
+            var normalizedId = id + '';
+            var list = this.getLayers();
+            var len = list.length;
+            for (var i = 0; i < len; ++i) {
+                if(list[i].getId() + '' === normalizedId) {
+                    return list[i];
+                }
+            }
+            return null;
+        },
+        getLayerIndex: function (id) {
+            var normalizedId = id + '';
+            var list = this.getLayers();
+            var len = list.length;
+            for (var i = 0; i < len; ++i) {
+                if(list[i].getId() + '' === normalizedId) {
+                    return i;
+                }
+            }
+            return -1;
+        },
+        /**
+         * @public @method isLayerSelected
+         * Checks if the layer matching the id is added to map
+         *
+         * @param {String} id ID of the layer to check
+         * @return {Boolean} true if the layer is added to map
+         */
+        isLayerSelected: function (id) {
+            return !!this.getSelectedLayer(id);
+        },
+        addLayer : function(layer, asBaseLayer) {
+            if(asBaseLayer) {
+                this.getLayers().unshift(layer);
+            } else {
+                this.getLayers().push(layer);
+            }
+        },
+        removeLayer : function(id) {
+            var list = this.getLayers();
+            var indexToRemove = this.getLayerIndex(id);
+            if(indexToRemove === -1) {
+                // not found
+                //Oskari.log('map.state').debug('Attempt to remove layer "' + id + '" that is not selected.');
+                return false;
+            }
+            list.splice(indexToRemove, 1);
+            return true;
+        },
+        moveLayer : function(id, newIndex) {
+            var list = this.getLayers();
+            var currentIndex = this.getLayerIndex(id);
+            if(currentIndex === -1) {
+                // no layer to move
+                return false;
+            }
+            if(typeof newIndex !== 'number' || newIndex < 0 || newIndex >= list.length) {
+                // if not valid index -> treat as "move to last"
+                newIndex = list.length - 1;
+            }
+            return Oskari.util.arrayMove(list, currentIndex, newIndex);;
         }
     });
