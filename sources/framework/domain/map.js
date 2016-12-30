@@ -368,7 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
                 // no layer to move
                 return false;
             }
-            if(!Oskari.util.isNumberBetween(newIndex, 0, list.length -1) {
+            if(!Oskari.util.isNumberBetween(newIndex, 0, list.length -1)) {
                 // if not valid index -> treat as "move to last"
                 newIndex = list.length - 1;
             }
