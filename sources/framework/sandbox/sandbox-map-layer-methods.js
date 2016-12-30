@@ -29,6 +29,15 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
         // copy the array so changing it wont change the core data
         return layersList.slice(0);
     },
+    /**
+     * @method findAllHighlightedLayers
+     * Returns all currently highlighted map layers
+     * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+     */
+    findAllHighlightedLayers: function () {
+        var layersList = this.getMap().getActivatedLayers();
+        return layersList.slice(0);;
+    },
 
     /**
      * @method findMapLayerFromSelectedMapLayers
@@ -53,15 +62,6 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
         return this.getMap().isLayerSelected(id);
     },
 
-    /**
-     * @method findAllHighlightedLayers
-     * Returns all currently highlighted map layers
-     * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-     */
-    findAllHighlightedLayers: function () {
-        var layer = this._core.getAllHighlightedMapLayers();
-        return layer;
-    },
 
     /**
      * @method isMapLayerHighLighted
@@ -71,14 +71,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @return {Boolean} true if the layer is highlighted
      */
     isMapLayerHighLighted: function (id) {
-        var highlighted = this.findAllHighlightedLayers(),
-            i;
-        for (i = 0; i < highlighted.length; i++) {
-            if (highlighted[i].getId() + '' === id + '') {
-                return true;
-            }
-        }
-        return false;
+        return this.getMap().isLayerActivated(id);
     },
 
     /**
@@ -88,7 +81,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @param {Boolean} allow - true to allow, false to restrict to one highlight at a time
      */
     allowMultipleHighlightLayers: function (allow) {
-        this._core.allowMultipleHighlightLayers(allow);
+        this.getMap().allowMultipleActivatedLayers(allow);
     },
 
     /**

@@ -10,30 +10,6 @@
     Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
 
         /**
-         * @public @method isMapLayerAlreadyHighlighted
-         * Checks if the layer matching the id is "highlighted". Highlighted
-         * wfslayer responds to map clicks by highlighting a clicked feature.
-         *
-         * @param {String} id ID of the layer to check
-         *
-         * @return {Boolean} True if the layer is highlighted
-         */
-        isMapLayerAlreadyHighlighted: function (id) {
-            var mapLayerService = this.getLayerService(),
-                layer = mapLayerService.findMapLayer(
-                    id,
-                    this._mapLayersHighlighted
-                );
-
-            if (layer === null || layer === undefined) {
-                log.debug(
-                    '[core-map-layer-methods] ' + id + ' is not yet highlighted.'
-                );
-            }
-            return (layer !== null && layer !== undefined);
-        },
-
-        /**
          * @public @method findMapLayerFromAllAvailable
          * Finds map layer from all available. Uses
          * Oskari.mapframework.service.MapLayerService.
@@ -64,28 +40,6 @@
             return layer;
         },
 
-        /**
-         * @public @method getAllHighlightedMapLayers
-         * Returns all currently highlighted map layers
-         *
-         *
-         * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         */
-        getAllHighlightedMapLayers: function () {
-            return this._mapLayersHighlighted;
-        },
-
-        /**
-         * @public @method allowMultipleHighlightLayers
-         * Allow multiple layers to be highlighted at once
-         *
-         * @param {Boolean} allow
-         * True to allow, false to restrict to onehighlight at a time
-         *
-         */
-        allowMultipleHighlightLayers: function (allow) {
-            this._allowMultipleHighlightLayers = allow;
-        },
 
         /**
          * @private @method handleAddMapLayerRequest
@@ -150,25 +104,7 @@
          */
         _handleRemoveMapLayerRequest: function (request) {
             var id = request.getMapLayerId();
-
-            log.debug('Trying to remove map layer with id "' + id + '"');
-
-            if(!this.getMapState().removeLayer(id)) {
-                log.debug('Attempt to remove layer "' + id + '" that is not selected.');
-                return;
-            }
-
-            if (this.isMapLayerAlreadyHighlighted(id)) {
-                // remove it from highlighted list
-                log.debug('Maplayer is also highlighted, removing it from highlight list.');
-                this._handleDimMapLayerRequest(id);
-            }
-            var mapLayer = this.findMapLayerFromAllAvailable(id);
-
-            // finally notify sandbox
-            var event = Oskari.eventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
-            this.copyObjectCreatorToFrom(event, request);
-            this.dispatch(event);
+            this.getMapState().removeLayer(id);
         },
 
 
@@ -235,104 +171,6 @@
                 this.copyObjectCreatorToFrom(event, request);
                 this.dispatch(event);
             }
-        },
-
-        /**
-         * @private @method _removeHighLightedMapLayer
-         * Removes layer with given id from highlighted layers.
-         * If id is not given -> removes all layers from highlighted layers
-         *
-         * @param {String} id of the layer to remove or leave undefined to remove all
-         *
-         */
-        _removeHighLightedMapLayer: function (id) {
-            var highlightedMapLayers = this.getAllHighlightedMapLayers(),
-                i,
-                mapLayer,
-                evt;
-
-            for (i = 0; i < highlightedMapLayers.length; i += 1) {
-                mapLayer = highlightedMapLayers[i];
-                if (!id || mapLayer.getId() + '' === id + '') {
-                    highlightedMapLayers.splice(i);
-                    // Notify that dim has occured
-                    evt = Oskari.eventBuilder('AfterDimMapLayerEvent')(mapLayer);
-                    this.dispatch(evt);
-                    return;
-                }
-            }
-        },
-
-        /**
-         * @private @method _handleHighlightMapLayerRequest
-         * Handles HighlightMapLayerRequest, sends out an AfterHighlightMapLayerEvent.
-         * Highlighted wfslayer responds to map clicks by highlighting a clicked feature.
-         *
-         * @param {Oskari.mapframework.request.common.HighlightMapLayerRequest} request
-         *
-         */
-        _handleHighlightMapLayerRequest: function (request) {
-            var creator = this.getObjectCreator(request),
-                id = request.getMapLayerId();
-
-            log.debug(
-                '[core-map-layer-methods] Trying to highlight map ' +
-                'layer with id "' + id + '"'
-            );
-            if (this.isMapLayerAlreadyHighlighted(id)) {
-                log.warn(
-                    '[core-map-layer-methods] Attempt to highlight ' +
-                    'already highlighted wms feature info ' + 'map layer "' + id +
-                    '"'
-                );
-                return;
-            }
-
-            if (this._allowMultipleHighlightLayers == true) {
-                this._removeHighLightedMapLayer(id);
-            } else {
-                this._removeHighLightedMapLayer();
-            }
-
-            var mapLayer = this.getMapState().getSelectedLayer(id);
-            if (!mapLayer) {
-                return;
-            }
-            this._mapLayersHighlighted.push(mapLayer);
-            log.debug(
-                '[core-map-layer-methods] Adding ' + mapLayer + ' (' +
-                mapLayer.getId() + ') to highlighted list.'
-            );
-
-            // finally notify sandbox
-            var evt = Oskari.eventBuilder('AfterHighlightMapLayerEvent')(mapLayer);
-            this.copyObjectCreatorToFrom(evt, request);
-            this.dispatch(evt);
-        },
-
-        /**
-         * @private @method _handleDimMapLayerRequest
-         * Handles DimMapLayerRequest, sends out an AfterDimMapLayerEvent.
-         * Highlighted wfslayer responds to map clicks by highlighting a clicked feature.
-         * This removes the layer from highlighted list
-         *
-         * @param {Oskari.mapframework.request.common.DimMapLayerRequest} request
-         *
-         */
-        _handleDimMapLayerRequest: function (layerId) {
-            if (this._allowMultipleHighlightLayers == true) {
-                this._removeHighLightedMapLayer(layerId);
-            } else {
-                this._removeHighLightedMapLayer();
-            }
-
-            var mapLayer = this.findMapLayerFromAllAvailable(layerId);
-            if (!mapLayer) {
-                return;
-            }
-
-            var event = Oskari.eventBuilder('AfterDimMapLayerEvent')(mapLayer);
-            this.dispatch(event);
         }
     });
 

@@ -22,9 +22,6 @@
 
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
-
-        // Allow multiple highlight layers
-        this._allowMultipleHighlightLayers = false;
     }, {
 
         /**
@@ -125,11 +122,11 @@
                 return true;
             },
             'HighlightMapLayerRequest': function (request) {
-                this._handleHighlightMapLayerRequest(request);
+                this.getMapState().activateLayer(request.getMapLayerId());
                 return true;
             },
             'DimMapLayerRequest': function (request) {
-                this._handleDimMapLayerRequest(request.getMapLayerId());
+                this.getMapState().deactivateLayer(request.getMapLayerId());
                 return true;
             }
         },

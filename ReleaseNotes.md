@@ -17,6 +17,15 @@
     core.isLayerAlreadySelected(id) -> map.isLayerSelected(id)
     core.findMapLayerFromSelectedMapLayers(id) -> map.getSelectedLayer(id)
 ```
+- Activated or "highlighted" layers are now tracked in sandbox.getMap() object instead of core:
+
+```javascript
+    core.getAllHighlightedMapLayers() -> map.getActivatedLayers()
+    core.isMapLayerAlreadyHighlighted(id) -> map.isLayerActivated(id)
+    core._handleHighlightMapLayerRequest() -> map.activateLayer(id)
+    core._removeHighLightedMapLayer() -> map.deactivateLayer(optionalId)
+    core.allowMultipleHighlightLayers() -> map.allowMultipleActivatedLayers()
+```
 
 - Removed methods from core _getQNameForRequest(), _getQNameForEvent()
 - Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
