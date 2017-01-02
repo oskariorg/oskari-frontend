@@ -38,7 +38,7 @@ Oskari.clazz.define('map.layer.activation.request',
          */
         getLayerId: function () {
             return this._mapLayerId;
-        }
+        },
         /**
          * @method isActivated
          * @return {Boolean} true if activated, false if deactivated
