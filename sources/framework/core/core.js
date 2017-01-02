@@ -16,10 +16,6 @@
      * @static
      */
     function () {
-
-        // Currently Highlighted maplayers
-        this._mapLayersHighlighted = [];
-
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
     }, {
@@ -82,10 +78,6 @@
         dispatch: function (event) {
             // TODO: to be removed.
             Oskari.getSandbox().notifyAll(event);
-        },
-        getLayerService : function() {
-            // TODO: to be removed.
-            return Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         },
         getMapState : function() {
             // TODO: to be removed.

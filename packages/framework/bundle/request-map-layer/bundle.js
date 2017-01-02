@@ -58,9 +58,6 @@ function() {
 		"scripts" : [
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/rearrange-selected-map-layer-request.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/change-map-layer-opacity-request.js"
 		}, {
 			"type" : "text/javascript",

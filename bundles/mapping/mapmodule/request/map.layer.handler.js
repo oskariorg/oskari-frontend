@@ -36,6 +36,8 @@ Oskari.clazz.define('map.layer.handler',
                 this.mapState.addLayer(layer, request._creator);
             } else if('RemoveMapLayerRequest' === request.getName()) {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
+            } else if('RearrangeSelectedMapLayerRequest' === request.getName()) {
+                this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
             }
         }
     }, {

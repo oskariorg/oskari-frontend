@@ -27,7 +27,7 @@
     core.allowMultipleHighlightLayers() -> map.allowMultipleActivatedLayers()
 ```
 
-- Removed methods from core _getQNameForRequest(), _getQNameForEvent()
+- Removed methods from core _getQNameForRequest(), _getQNameForEvent(), findMapLayerFromAllAvailable() as they were not intended for external use anyway.
 - Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
 
 ```javascript
@@ -35,9 +35,11 @@
     core.getEventBuilder() -> Oskari.eventBuilder()
 ```
 
+#### Service refactoring
+- MapLayerService moved from under sources to mapmodule.
 
 #### Request/Event refactoring
-- Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent
+- Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent, MouseHoverEvent, AddMapLayerRequest, RemoveMapLayerRequest, RearrangeSelectedMapLayerRequest, AfterMapLayerAddEvent, AfterChangeMapLayerOpacityEvent, AfterRearrangeSelectedMapLayerEvent, AfterMapLayerRemoveEvent, AfterChangeMapLayerStyleEvent
 - ShowMapLayerInfoRequest moved from under sources to backendstatus as it is bundle specific request
 - AfterShowMapLayerInfoEvent removed as backendstatus was the only user and it can react to request without the event.
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
