@@ -101,15 +101,6 @@
          * NOTE: only one request handler can be registered/request
          */
         defaultRequestHandlers: {
-            'AddMapLayerRequest': function (request) {
-                var layer = this.findMapLayerFromAllAvailable(request.getMapLayerId());
-                this.getMapState().addLayer(layer, request._creator);
-                return true;
-            },
-            'RemoveMapLayerRequest': function (request) {
-                this.getMapState().removeLayer(request.getMapLayerId(), request._creator);
-                return true;
-            },
             'RearrangeSelectedMapLayerRequest': function (request) {
                 this.getMapState().moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
                 return true;

@@ -57,17 +57,7 @@ function() {
 	"source" : {
 
 		"scripts" : [
-		/*
-		 * map base (includes layer basics, map basics )
-		 */
-
 		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-layer-add-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-layer-remove-event.js"
-		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"
 		}

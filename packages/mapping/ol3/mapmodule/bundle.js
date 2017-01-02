@@ -372,7 +372,13 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.handler.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.add.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.remove.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.handler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveRequest.js"
@@ -414,6 +420,12 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.activation.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.add.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.remove.js"
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"

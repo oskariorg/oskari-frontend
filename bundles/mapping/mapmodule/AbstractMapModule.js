@@ -186,6 +186,7 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(this, p);
                 }
             }
+            var layerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             //register request handlers
             this.requestHandlers = {
@@ -194,15 +195,17 @@ Oskari.clazz.define(
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
-                mapLayerActivationHandler: Oskari.clazz.create('map.layer.activation.handler', sandbox.getMap())
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), layerService)
             };
 
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
-            sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
-            sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
-            sandbox.addRequestHandler('map.layer.activation', this.requestHandlers.mapLayerActivationHandler);
+            sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+            sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
+            sandbox.requestHandler('map.layer.activation', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('RemoveMapLayerRequest', this.requestHandlers.mapLayerHandler);
 
             this.started = this._startImpl();
             var size = this.getSize();
