@@ -71,7 +71,7 @@ Oskari.clazz.define(
             return;
         }
         me.started = true;
-        var sandbox = Oskari.getSandbox( 'sandbox' );
+        var sandbox = Oskari.getSandbox();
         me.setSandbox( sandbox );
         this.localization = Oskari.getLocalization( this.getName() );
         this.systemMessageService = this.createService( sandbox );
@@ -120,13 +120,16 @@ Oskari.clazz.define(
       },
       showStatusMessage: function(message){
         var me = this;
-        var message = message;
-        if(!message){
-          message = this.messages[this.messages.length-1];
+        if(!message && this.messages.length){
+            message = this.messages[this.messages.length-1];
         }
-        $('.messagetext').text(message);
+        if(!message) {
+          return;
+        }
+        var el = jQuery('.messagetext');
+        el.text(message);
         setTimeout(function() {
-        $('.messagetext').fadeOut(500);
+          el.fadeOut(500);
         }, 5000);
       },
       /**
@@ -151,7 +154,7 @@ Oskari.clazz.define(
             dialog.close();
             me.popupIsOpen = false;
           });
-          message = message.join("</br>");
+          message = message.join("<br/>");
           dialog.show( title, message, [btn] );
           dialog.moveTo( jQuery( '.messageIcon' ), 'top', true );
       }
