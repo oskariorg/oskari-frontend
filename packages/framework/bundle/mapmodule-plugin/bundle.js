@@ -390,6 +390,12 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveRequest.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.handler.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/controls/ToolSelectionHandler.js"
                 }, {
                     "type": "text/javascript",
@@ -415,6 +421,9 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/MapClickedEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.activation.js"
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"

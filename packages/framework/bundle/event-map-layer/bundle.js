@@ -70,12 +70,6 @@ Oskari.clazz.define("Oskari.mapframework.event.map.layer.Bundle",
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../sources/framework/event/common/after-change-map-layer-style-event.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../sources/framework/event/common/after-highlight-map-layer-event.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../sources/framework/event/common/after-dim-map-layer-event.js"
                 }
             ],
             "resources": []

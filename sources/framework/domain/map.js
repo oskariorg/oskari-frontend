@@ -471,7 +471,7 @@
             this.getActivatedLayers().push(layer);
 
             // finally notify sandbox
-            var evt = Oskari.eventBuilder('AfterHighlightMapLayerEvent')(layer);
+            var evt = Oskari.eventBuilder('map.layer.activation')(layer, true);
             // TODO: setter?
             evt._creator = triggeredBy;
             this._sandbox.notifyAll(evt);
@@ -481,10 +481,10 @@
             var sandbox = this._sandbox;
             var list = this.getActivatedLayers();
             var removalList = [];
-            var evtBuilder = Oskari.eventBuilder('AfterDimMapLayerEvent');
+            var evtBuilder = Oskari.eventBuilder('map.layer.activation');
             function notifyDim(removalList) {
                 removalList.forEach(function(layer) {
-                    var evt = evtBuilder(layer);
+                    var evt = evtBuilder(layer, false);
                     // TODO: setter?
                     evt._creator = triggeredBy;
                     sandbox.notifyAll(evt);

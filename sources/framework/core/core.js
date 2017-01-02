@@ -121,14 +121,6 @@
             'ChangeMapLayerStyleRequest': function (request) {
                 this._handleChangeMapLayerStyleRequest(request);
                 return true;
-            },
-            'HighlightMapLayerRequest': function (request) {
-                this.getMapState().activateLayer(request.getMapLayerId(), request._creator);
-                return true;
-            },
-            'DimMapLayerRequest': function (request) {
-                this.getMapState().deactivateLayer(request.getMapLayerId(), request._creator);
-                return true;
             }
         },
 
