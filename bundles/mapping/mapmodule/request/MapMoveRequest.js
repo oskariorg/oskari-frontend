@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
      * @param {Number} centerY
      *            latitude
      * @param {Number/OpenLayers.Bounds/Object} zoom (optional)
-     *            zoomlevel (0-12) or OpenLayers.Bounds to zoom to or an object with property scale { scale : 10000 }. 
+     *            zoomlevel (0-12) or OpenLayers.Bounds to zoom to or an object with property scale { scale : 10000 }.
      *            If not given the map zoom level stays as it was.
      * @param {Boolean} deprecated
      *            not used for anything

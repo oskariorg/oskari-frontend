@@ -580,10 +580,8 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         stop: function () {
-            var me = this;
-            var sandbox = me.sandbox();
             // unregister module from sandbox
-            me.sandbox.unregister(me);
+            this.sandbox.unregister(this);
         }
     }, {
         protocol: ['Oskari.bundle.BundleInstance',

@@ -16,6 +16,11 @@ function( message, level ) {
 }, {
   /** @static @property __name request name */
   __name: 'SystemMessage.ShowMessageRequest',
+  colors : {
+      'info' : 'blue',
+      'warning' : 'orange',
+      'error' : 'red'
+  },
   /**
    * @method getName
    * @return {String} request name
@@ -32,19 +37,8 @@ function( message, level ) {
   /**
    * @method getUrgency
    */
-  getUrgencyLevel: function(){
-    switch(this._level){
-      case 'info':
-        this._messagecolor = 'blue';
-        break;
-      case 'warning':
-        this._messagecolor = 'orange';
-        break;
-      case 'error':
-        this._messagecolor = 'red';
-        break;
-    }
-      return this._messagecolor
+  getUrgencyLevel: function() {
+    return this.colors[this.level] || 'gray';
   }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']

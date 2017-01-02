@@ -154,8 +154,7 @@ Oskari.clazz.define(
           message = message.join("</br>");
           dialog.show( title, message, [btn] );
           dialog.moveTo( jQuery( '.messageIcon' ), 'top', true );
-      },
-
+      }
     }, {
         /**
          * @property {String[]} protocol
