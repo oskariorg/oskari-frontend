@@ -389,8 +389,8 @@
         },
         moveLayer : function(id, newIndex) {
             var list = this.getLayers();
-            var currentIndex = this.getLayerIndex(id);
-            if(currentIndex === -1) {
+            var oldIndex = this.getLayerIndex(id);
+            if(oldIndex === -1) {
                 // no layer to move
                 return false;
             }
@@ -398,7 +398,13 @@
                 // if not valid index -> treat as "move to last"
                 newIndex = list.length - 1;
             }
-            return Oskari.util.arrayMove(list, currentIndex, newIndex);
+
+            var moved = Oskari.util.arrayMove(list, oldIndex, newIndex);
+            var layer = this.getSelectedLayer(id);
+            // notify listeners
+            var evt = Oskari.eventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldIndex, newIndex);
+            this._sandbox.notifyAll(evt);
+            return moved;
         },
         /************************************************
         * Activated or "highlighted" layers

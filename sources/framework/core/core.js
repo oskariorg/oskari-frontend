@@ -106,11 +106,11 @@
                 return true;
             },
             'RemoveMapLayerRequest': function (request) {
-                this._handleRemoveMapLayerRequest(request);
+                this.getMapState().removeLayer(request.getMapLayerId());
                 return true;
             },
             'RearrangeSelectedMapLayerRequest': function (request) {
-                this._handleRearrangeSelectedMapLayerRequest(request);
+                this.getMapState().moveLayer(request.getMapLayerId(), request.getToPosition());
                 return true;
             },
             'ChangeMapLayerOpacityRequest': function (request) {

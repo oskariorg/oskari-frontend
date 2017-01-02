@@ -95,45 +95,6 @@
         },
 
         /**
-         * @private @method _handleRemoveMapLayerRequest
-         * Handles RemoveMapLayerRequests, removes the map layer from selected layers and sends out
-         * an AfterMapLayerRemoveEvent to signal that a map layer has been removed from selected.
-         *
-         * @param {Oskari.mapframework.request.common.RemoveMapLayerRequest} request
-         *
-         */
-        _handleRemoveMapLayerRequest: function (request) {
-            var id = request.getMapLayerId();
-            this.getMapState().removeLayer(id);
-        },
-
-
-        /**
-         * @private @method _handleRearrangeSelectedMapLayerRequest
-         * Handles RearrangeSelectedMapLayerRequest, sorts selected layers array so
-         * that layer with given id is positioned into given index
-         * and all the rest are pushed one step further. Sends out an AfterRearrangeSelectedMapLayerEvent
-         *
-         * @param {Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest} request
-         *
-         */
-        _handleRearrangeSelectedMapLayerRequest: function (request) {
-
-            var id = request.getMapLayerId();
-            var oldPosition = this.getMapState().getLayerIndex(id);
-            var moved = this.getMapState().moveLayer(id, request.getToPosition());
-            if(!moved) {
-                return;
-            }
-            var newPosition = this.getMapState().getLayerIndex(id);
-            var layer = this.getMapState().getSelectedLayer(id);
-            // notify listeners
-            var event = Oskari.eventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldPosition, newPosition);
-            this.copyObjectCreatorToFrom(event, request);
-            this.dispatch(event);
-        },
-
-        /**
          * @private @method _handleChangeMapLayerOpacityRequest
          * Handles ChangeMapLayerOpacityRequest, sends out an AfterChangeMapLayerOpacityEvent
          *
