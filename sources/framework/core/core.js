@@ -106,11 +106,11 @@
                 return true;
             },
             'RemoveMapLayerRequest': function (request) {
-                this.getMapState().removeLayer(request.getMapLayerId());
+                this.getMapState().removeLayer(request.getMapLayerId(), request._creator);
                 return true;
             },
             'RearrangeSelectedMapLayerRequest': function (request) {
-                this.getMapState().moveLayer(request.getMapLayerId(), request.getToPosition());
+                this.getMapState().moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
                 return true;
             },
             'ChangeMapLayerOpacityRequest': function (request) {
@@ -122,11 +122,11 @@
                 return true;
             },
             'HighlightMapLayerRequest': function (request) {
-                this.getMapState().activateLayer(request.getMapLayerId());
+                this.getMapState().activateLayer(request.getMapLayerId(), request._creator);
                 return true;
             },
             'DimMapLayerRequest': function (request) {
-                this.getMapState().deactivateLayer(request.getMapLayerId());
+                this.getMapState().deactivateLayer(request.getMapLayerId(), request._creator);
                 return true;
             }
         },

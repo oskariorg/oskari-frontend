@@ -369,7 +369,7 @@
             }
             return true;
         },
-        removeLayer : function(id) {
+        removeLayer : function(id, triggeredBy) {
             var list = this.getLayers();
             var indexToRemove = this.getLayerIndex(id);
             if(indexToRemove === -1) {
@@ -384,10 +384,12 @@
             list.splice(indexToRemove, 1);
             // notify
             var evt = Oskari.eventBuilder('AfterMapLayerRemoveEvent')(layer);
+            // TODO: setter?
+            evt._creator = triggeredBy;
             this._sandbox.notifyAll(evt);
             return true;
         },
-        moveLayer : function(id, newIndex) {
+        moveLayer : function(id, newIndex, triggeredBy) {
             var list = this.getLayers();
             var oldIndex = this.getLayerIndex(id);
             if(oldIndex === -1) {
@@ -403,6 +405,8 @@
             var layer = this.getSelectedLayer(id);
             // notify listeners
             var evt = Oskari.eventBuilder('AfterRearrangeSelectedMapLayerEvent')(layer, oldIndex, newIndex);
+            // TODO: setter?
+            evt._creator = triggeredBy;
             this._sandbox.notifyAll(evt);
             return moved;
         },
@@ -446,7 +450,7 @@
         isLayerActivated: function (id) {
             return this.getLayerIndex(id, this.getActivatedLayers()) !== -1;
         },
-        activateLayer : function(id) {
+        activateLayer : function(id, triggeredBy) {
             if(!this.isLayerSelected(id)) {
                 log.warn('Trying to activate layer that is not selected. Skipping id ' + id);
                 return false;
@@ -458,23 +462,28 @@
             var layer = this.getSelectedLayer(id);
             // check if multiactivation is allowed -> deactivate the previous if not
             if(!this.allowMultipleActivatedLayers() && this.getActivatedLayers().length !== 0) {
-                this.deactivateLayer();
+                this.deactivateLayer(undefined, triggeredBy);
             }
             this.getActivatedLayers().push(layer);
 
             // finally notify sandbox
             var evt = Oskari.eventBuilder('AfterHighlightMapLayerEvent')(layer);
+            // TODO: setter?
+            evt._creator = triggeredBy;
             this._sandbox.notifyAll(evt);
             return true;
         },
-        deactivateLayer : function(id) {
+        deactivateLayer : function(id, triggeredBy) {
             var sandbox = this._sandbox;
             var list = this.getActivatedLayers();
             var removalList = [];
             var evtBuilder = Oskari.eventBuilder('AfterDimMapLayerEvent');
             function notifyDim(removalList) {
                 removalList.forEach(function(layer) {
-                    sandbox.notifyAll(evtBuilder(layer));
+                    var evt = evtBuilder(layer);
+                    // TODO: setter?
+                    evt._creator = triggeredBy;
+                    sandbox.notifyAll(evt);
                 });
             }
             if(typeof id === 'undefined') {
