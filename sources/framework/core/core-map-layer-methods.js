@@ -40,60 +40,6 @@
             return layer;
         },
 
-
-        /**
-         * @private @method handleAddMapLayerRequest
-         * Handles AddMapLayerRequests, adds the map layer to selected layers and sends out
-         * an AfterMapLayerAddEvent to signal that a map layer has been selected.
-         *
-         * @param {Oskari.mapframework.request.common.AddMapLayerRequest} request
-         *
-         */
-        _handleAddMapLayerRequest: function (request) {
-            var me = this,
-                id = request.getMapLayerId(),
-                keepLayersOrder = request.getKeepLayersOrder(), // TODO we need to pass this as false from layerselector...
-                isBaseMap = request.isBasemap();
-
-            log.debug(
-                'Trying to add map layer with id "' + id + '" AS ' +
-                (isBaseMap ? ' BASE ' : ' NORMAL ')
-            );
-
-            if (me.getMapState().isLayerSelected(id)) {
-                log.debug(
-                    'Attempt to select already selected layer "' + id + '"'
-                );
-                return;
-            }
-
-            var mapLayer = me.findMapLayerFromAllAvailable(id);
-            if (!mapLayer) {
-                // not found, ignore
-                log.debug(
-                    'Attempt to select layer that is not available "' + id + '"'
-                );
-                return;
-            }
-            // FIXME make sure isBaseMap is a boolean and use if (isBaseMap) {...
-            // FIXME: this shouldn't modify the maplayer itself!!!
-            if (isBaseMap == true) {
-                mapLayer.setType('BASE_LAYER');
-            }
-
-            // if we need keep layers order, i.e. when map is accessed by link
-            var asBaseLayer = keepLayersOrder !== true && (mapLayer.isBaseLayer() || isBaseMap == true);
-            this.getMapState().addLayer(mapLayer, asBaseLayer);
-            var evt;
-            if (mapLayer.isBaseLayer() || isBaseMap) {
-                evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
-            } else {
-                evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(mapLayer, true, isBaseMap);
-            }
-            me.copyObjectCreatorToFrom(evt, request);
-            me.dispatch(evt);
-        },
-
         /**
          * @private @method _handleChangeMapLayerOpacityRequest
          * Handles ChangeMapLayerOpacityRequest, sends out an AfterChangeMapLayerOpacityEvent

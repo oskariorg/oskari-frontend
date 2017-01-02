@@ -545,7 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addSelectLayerButton.setTitle(this.__loc.layers.addselect);
             addSelectLayerButton.setHandler(function () {
-                var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer, false);
+                var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
                 me.__sandbox.request(me.__instance, request);
                 // this intentionally refers to the current DOM element
                 this.blur();

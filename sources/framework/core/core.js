@@ -102,7 +102,8 @@
          */
         defaultRequestHandlers: {
             'AddMapLayerRequest': function (request) {
-                this._handleAddMapLayerRequest(request);
+                var layer = this.findMapLayerFromAllAvailable(request.getMapLayerId());
+                this.getMapState().addLayer(layer, request._creator);
                 return true;
             },
             'RemoveMapLayerRequest': function (request) {

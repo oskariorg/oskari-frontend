@@ -2122,8 +2122,8 @@ Oskari.clazz.define(
         afterMapLayerAddEvent: function (event) {
             var map = this.getMap(),
                 layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
+                keepLayersOrder = true,
+                isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),
                 layerFunctions = [];
 

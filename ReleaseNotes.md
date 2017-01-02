@@ -42,6 +42,7 @@
 - AfterShowMapLayerInfoEvent removed as backendstatus was the only user and it can react to request without the event.
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
 - Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
+- Removed all other parameters from AddMapLayerRequest other than layer ID. Layer order is no longer affected by the boolean parameters when adding layers to map.
 
 #### Marker handling changes
 - AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.

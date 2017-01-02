@@ -941,7 +941,7 @@ function(locale, conf) {
 		        			me.selectedCropping!='lastreqular' &&
 		        			me.selectedCropping!='mapextent'
 		        				){
-		        		me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedCropping, true, false, false]);
+		        		me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedCropping, true]);
 		        	} else {
 		        		me._activateCropSelectedArea();
 		        	}
@@ -966,7 +966,7 @@ function(locale, conf) {
             var transportActiveLayers = activeLayers[me.selectedTransport];
 
             jQuery.each(transportActiveLayers, function(index, layerName){
-                me._sandbox.postRequestByName('AddMapLayerRequest', [layerName, true, false, false]);
+                me._sandbox.postRequestByName('AddMapLayerRequest', [layerName, true]);
             });
         },500);
 

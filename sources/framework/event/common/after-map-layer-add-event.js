@@ -15,23 +15,11 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapLayerAddEvent',
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            mapLayer added map layer (matching one in MapLayerService)
-     * @param {Boolean}
-     *            keepLayersOrder should order of layers be reserved (optional,
-     * defaults to false)
-     * @param {Boolean}
-     *            isBasemap (optional, defaults to false)
      */
 
-    function (mapLayer, keepLayersOrder, isBasemap) {
+    function (mapLayer) {
         this._creator = null;
         this._mapLayer = mapLayer;
-        this._keepLayersOrder = keepLayersOrder;
-
-        if (isBasemap) {
-            this._isBasemap = isBasemap;
-        } else {
-            this._isBasemap = false;
-        }
     }, {
         /** @static @property __name event name */
         __name: "AfterMapLayerAddEvent",
@@ -57,14 +45,14 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapLayerAddEvent',
          * @return {Boolean} boolean true if we should keep the layer order
          */
         getKeepLayersOrder: function () {
-            return this._keepLayersOrder;
+            return true;
         },
         /**
          * @method isBasemap
          * @return {Boolean} boolean true if this is a basemap
          */
         isBasemap: function () {
-            return this._isBasemap;
+            return this.getMapLayer().isBaseLayer();
         }
     }, {
         /**
@@ -73,5 +61,3 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapLayerAddEvent',
          */
         'protocol': ['Oskari.mapframework.event.Event']
     });
-
-/* Inheritance */

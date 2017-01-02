@@ -240,7 +240,7 @@ Oskari.clazz.define(
 
             me.getSandbox().postRequestByName(
                 'AddMapLayerRequest',
-                [newSelectionId, false]
+                [newSelectionId]
             );
 
             // - move new selection to bottom (see layerselection._layerOrderChanged(item))

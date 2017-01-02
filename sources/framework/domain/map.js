@@ -357,16 +357,20 @@
         isLayerSelected: function (id) {
             return this.getLayerIndex(id) !== -1;
         },
-        addLayer : function(layer, asBaseLayer) {
+        addLayer : function(layer, triggeredBy) {
+            if(!layer || !layer.getId()) {
+                log.warn('Attempt to add layer that is not available.');
+                return;
+            }
             if(this.isLayerSelected(layer.getId())) {
                 log.warn('Layer already added. Skipping id ' + layer.getId());
                 return false;
             }
-            if(asBaseLayer) {
-                this.getLayers().unshift(layer);
-            } else {
-                this.getLayers().push(layer);
-            }
+            this.getLayers().push(layer);
+            var evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(layer);
+            // TODO: setter?
+            evt._creator = triggeredBy;
+            this._sandbox.notifyAll(evt);
             return true;
         },
         removeLayer : function(id, triggeredBy) {
