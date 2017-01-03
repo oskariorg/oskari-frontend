@@ -75,7 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          * @param {String[]} options for GFI output
          */
         setAvailableQueryFormats: function (options) {
-            
             this._availableQueryFormats = options || [];
         },
         /**
