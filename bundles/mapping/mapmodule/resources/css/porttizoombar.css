@@ -3,7 +3,7 @@ div.pzbDiv div.pzbDiv-plus {
   cursor: pointer;
   cursor: zoom-in;
   width: 18px;
-  height: 46px; }
+  height: 34px; }
 div.pzbDiv div.pzbDiv-minus {
   background-image: url("../images/zoombar_minus.png");
   cursor: pointer;
