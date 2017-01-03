@@ -10,6 +10,9 @@
   }
 }
 */
+/*
+Searches dom for element with id="oskari-system-messages", that is used for displaying messages.
+*/
 Oskari.clazz.define(
   'Oskari.framework.bundle.system-message.SystemBundleInstance',
 
@@ -19,6 +22,7 @@ Oskari.clazz.define(
       this._localization = null;
       this.messages = [];
       this.popupIsOpen = false;
+      this.messageElement = null;
   }, {
       /**
        * @static
@@ -70,12 +74,12 @@ Oskari.clazz.define(
         if ( me.started ) {
             return;
         }
+        me.initDomElements();
         me.started = true;
         var sandbox = Oskari.getSandbox();
         me.setSandbox( sandbox );
         this.localization = Oskari.getLocalization( this.getName() );
         this.systemMessageService = this.createService( sandbox );
-        me.initDomElements();
         sandbox.register( me );
         this.getMessages();
 
@@ -110,7 +114,13 @@ Oskari.clazz.define(
       },
       initDomElements: function(){
           var me = this;
-          var icon = jQuery( "div.messageIcon" );
+          //Get reference to the div we use to show the messages
+          this.messageElement = $('#oskari-system-messages');
+          if(!this.messageElement){
+            Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
+            return;
+          }
+          var icon = this.messageElement.find( "div.messageIcon");
           icon.on("click", this, function(e){
               e.data.showMessagesPopup( e.data.localization.title, e.data.messages );
           });
@@ -126,7 +136,7 @@ Oskari.clazz.define(
         if(!message) {
           return;
         }
-        var el = jQuery('.messagetext');
+        var el = this.messageElement.find('.messagetext');
         el.text(message);
         setTimeout(function() {
           el.fadeOut(500);
