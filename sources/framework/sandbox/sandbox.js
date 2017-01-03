@@ -73,6 +73,7 @@
                     return isDebugMode;
                 }
                 isDebugMode = !!setDebug;
+                log.enableDebug(isDebugMode);
                 return isDebugMode;
             },
 
