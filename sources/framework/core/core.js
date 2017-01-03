@@ -16,8 +16,6 @@
      * @static
      */
     function () {
-        // Are we currently printing debug (as of 2012-09-24 debug by default false)
-        this._debug = false;
     }, {
 
         /**
@@ -58,22 +56,6 @@
             }
             log.debug('This is startup by link, moving map...');
             Oskari.getSandbox().getMap().moveTo(longitude, latitude, zoomLevel);
-        },
-
-        /**
-         * @method disableDebug
-         * Disables debug logging
-         */
-        disableDebug: function () {
-            this._debug = false;
-        },
-
-        /**
-         * @method enableDebug
-         * Enables debug logging
-         */
-        enableDebug: function () {
-            this._debug = true;
         }
     });
 }(Oskari));

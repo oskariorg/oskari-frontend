@@ -12,6 +12,7 @@
     var log;
     var services = {};
     var requestHandlers = {};
+    var isDebugMode = false;
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -44,50 +45,35 @@
             me._modulesByName = {};
             me._statefuls = {};
 
-            /* as of 2012-09-24 debug by default false */
-            me.debugRequests = false;
-            me.debugEvents = false;
             me.requestEventLog = [];
             me.requestEventStack = [];
 
             // TODO: move to some conf?
             /* as of 2012-09-24 debug by default false */
-            me.gatherDebugRequests = false;
             me.maxGatheredRequestsAndEvents = 4096;
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
+            /**
+             * Returns true if anything is registered as a handler for the request.
+             * @param  {String}  requestName request to check
+             * @return {Boolean}             true if request is being handled.
+             */
             hasHandler : function(requestName) {
                 return !!requestHandlers[requestName];
             },
-
             /**
-             * @method disableDebug
-             * Disables debug messaging and sequence diagram gathering
-             * if( core is set ) also core debug will be disabled
+             * Get value if no parameter is given, set value with parameter
+             * @param  {Boolean} setDebug optional parameter to set the debug mode
+             * @return {Boolean}          true if debug is enabled
              */
-            disableDebug: function () {
-                this.debugRequests = false;
-                this.debugEvents = false;
-                this.gatherDebugRequests = false;
-                if (this._core) {
-                    this._core.disableDebug();
+            debug: function (setDebug) {
+                if(typeof setDebug === 'undefined') {
+                    // getter
+                    return isDebugMode;
                 }
-            },
-
-            /**
-             * @method enableDebug
-             * Enables debug messaging and sequence diagram gathering (by default not enabled)
-             * if( core is set ) also core debug will be enabled
-             */
-            enableDebug: function () {
-                this.debugRequests = true;
-                this.debugEvents = true;
-                this.gatherDebugRequests = true;
-                if (this._core) {
-                    this._core.enableDebug();
-                }
-
+                isDebugMode = !!setDebug;
+                return isDebugMode;
             },
 
             /**
@@ -316,7 +302,7 @@
                 }
                 request._creator = creatorName;
 
-                if (this.gatherDebugRequests) {
+                if (this.debug()) {
                     this._pushRequestAndEventGather(creatorName + '->Sandbox: ', request.getName());
                 }
 
@@ -404,20 +390,20 @@
 
                     request._creator = creatorComponent;
 
-                    if (me.gatherDebugRequests) {
+                    if (me.debug()) {
                         me._pushRequestAndEventGather(
                             creatorComponent + '->Sandbox: ',
                             request.getName()
                         );
                     }
 
-                    if (this.debugRequests) {
+                    if (me.debug()) {
                         me._debugPushRequest(creatorComponent, request);
                     }
 
                     rv = me.processRequest(request);
 
-                    if (this.debugRequests) {
+                    if (me.debug()) {
                         me._debugPopRequest();
                     }
 
@@ -474,7 +460,7 @@
                             'Notifying module \'' + module.getName() + '\'.'
                         );
 
-                        if (this.gatherDebugRequests) {
+                        if (this.debug()) {
                             this._pushRequestAndEventGather(
                                 'Sandbox->' + module.getName() + ':', eventName
                             );
@@ -560,7 +546,7 @@
              * @param {Oskari.mapframework.request.Request} req - request that was sent
              */
             _debugPushRequest: function (creator, req) {
-                if (!this.debugRequests) {
+                if (!this.debug()) {
                     return;
                 }
                 var reqLog = {
@@ -579,7 +565,7 @@
              * Pops the request from the debugging stack
              */
             _debugPopRequest: function () {
-                if (!this.debugRequests) {
+                if (!this.debug()) {
                     return;
                 }
                 this.requestEventStack.pop();
@@ -596,7 +582,7 @@
              * @param {Oskari.mapframework.event.Event} evt - event that was sent
              */
             _debugPushEvent: function (creator, target, evt) {
-                if (!this.debugEvents) {
+                if (!this.debug()) {
                     return;
                 }
                 this._eventLoopGuard += 1;
@@ -623,7 +609,7 @@
              * Pops the event from the debugging stack
              */
             _debugPopEvent: function () {
-                if (!this.debugEvents) {
+                if (!this.debug()) {
                     return;
                 }
                 this._eventLoopGuard -= 1;

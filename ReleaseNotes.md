@@ -35,6 +35,11 @@
     core.getRequestBuilder() -> Oskari.requestBuilder()
     core.getEventBuilder() -> Oskari.eventBuilder()
 ```
+- Refactored sandbox methods (debug state can be asked by sandbox.debug()):
+```javascript
+    sandbox.disableDebug() -> sandbox.debug(false)
+    sandbox.enableDebug() -> sandbox.debug(true)
+```
 
 #### Service refactoring
 - MapLayerService moved from under sources to mapmodule.
