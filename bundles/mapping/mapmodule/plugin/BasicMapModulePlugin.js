@@ -371,10 +371,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
             var themeColors = this.getMapModule().getThemeColours();
-            var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            if(buttons && !addToolButtonBuilder) {
+            if(buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 return true;
             }
+            var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
             if (addToolButtonBuilder) {
                 for (var tool in buttons) {
@@ -396,10 +396,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-            if(buttons && !removeToolButtonBuilder) {
+            if(buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
                 return true;
             }
+            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
                 var buttonConf = buttons[tool];

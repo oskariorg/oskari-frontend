@@ -94,14 +94,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                     }
                 }
             }
-            sandbox.addRequestHandler('Toolbar.AddToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.addRequestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.addRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.addRequestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.addRequestHandler('Toolbar.ToolbarRequest', this.requestHandlers.toolbarRequestHandler);
+            sandbox.requestHandler('Toolbar.AddToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+            sandbox.requestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+            sandbox.requestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
+            sandbox.requestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+            sandbox.requestHandler('Toolbar.ToolbarRequest', this.requestHandlers.toolbarRequestHandler);
 
             /* temporary fix */
-            sandbox.addRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
+            sandbox.requestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
