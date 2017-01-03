@@ -27,9 +27,7 @@ function(instance) {
   init: function() {
   },
   getLayerStatus: function() {
-    //ajax call here
-    var msg = "Valittu taso Sotkanet indikaattori ei latautunut";
-    this._instance.messages.push(msg);
+    // this._instance.messages.push();
     this._instance.showStatusMessage();
   }
 },{
