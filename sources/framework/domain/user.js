@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
      */
 
     function (userData) {
-
         this._loggedIn = false;
         this._roles = [];
         if (userData) {
@@ -140,25 +139,24 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
         /**
          * Returns true if user has any role matching any id provided as param
          * @method hasRole
-         * 
-         * @param {Number[]} list of ids
+         *
+         * @param {Number|Number[]} list of ids
          * @return {Boolean} true if any id match roles that user has
          */
-        hasRole: function (ids) {
-            if (ids && ids.length) {
-                var i, ilen, j, jlen, role, roles = this.getRoles();
-                ilen = ids.length;
-                jlen = roles.length;
-                for (i = 0; i < ilen; i++) {
-                    id = ids[i];
-                    for (j = 0; j < jlen; j++) {
-                        role = roles[j];
-                        if (id === role.id) {
-                            return true;
-                        }
-                    }
-                }
+        hasRole: function (idList) {
+            if(typeof idList === 'number') {
+                idList = [idList];
             }
-            return false;
+            if(!idList || typeof idList.forEach !== 'function') {
+                return false;
+            }
+            var found = false;
+            var userRoles = this.getRoles();
+            userRoles.forEach(function(role) {
+                if(idList.indexOf(role.id) !== -1) {
+                    found = true;
+                }
+            });
+            return found;
         }
     });
