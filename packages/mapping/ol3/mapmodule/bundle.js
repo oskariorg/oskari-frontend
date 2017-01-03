@@ -385,7 +385,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapmodule/service/map-layer-service.js"
+                    "src" : "../../../../bundles/mapping/mapmodule/service/map.layer.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapmodule/service/map.state.js"
                 },
 
                 /**

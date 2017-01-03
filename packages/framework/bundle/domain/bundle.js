@@ -57,9 +57,6 @@ function() {
 	"source" : {
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/map.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/user.js"
 		}],
 		"resources" : []
