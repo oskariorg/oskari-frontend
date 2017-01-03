@@ -56,12 +56,7 @@ function() {
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
 
-		"scripts" : [
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"
-		}
-        ],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

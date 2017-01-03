@@ -433,6 +433,9 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.activation.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.add.js"
                 }, {
                     "type": "text/javascript",
