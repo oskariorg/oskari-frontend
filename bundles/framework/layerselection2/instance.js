@@ -222,23 +222,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                     this.plugins['Oskari.userinterface.Tile'].refresh();
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
                 }
-            },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             * Disable preview on close, otherwise enable preview
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this;
-                if (event.getExtension().getName() !== me.getName()) {
-                    // not me -> do nothing
-                    return;
-                }
-                var doOpen = event.getViewState() !== "close";
-
-                /* let's not redo everything we've already done */
-                /*if (doOpen) {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
-            }*/
             }
         },
 
