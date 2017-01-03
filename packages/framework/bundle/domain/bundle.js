@@ -60,9 +60,6 @@ function() {
             "src" : "../../../../sources/framework/domain/AbstractLayer.js"
         }, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/vectorlayer.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/map.js"
 		}, {
 			"type" : "text/javascript",
