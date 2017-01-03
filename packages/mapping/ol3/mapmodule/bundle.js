@@ -67,6 +67,19 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/Plugin.js"
                 },
+                /*
+                 * domain
+                 */
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/AbstractLayer.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/style.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/tool.js"
+                },
                 /**
                  * controls plugin
                  */
