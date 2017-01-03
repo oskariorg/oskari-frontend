@@ -93,10 +93,6 @@
          * NOTE: only one request handler can be registered/request
          */
         defaultRequestHandlers: {
-            'RearrangeSelectedMapLayerRequest': function (request) {
-                this.getMapState().moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
-                return true;
-            },
             'ChangeMapLayerOpacityRequest': function (request) {
                 this._handleChangeMapLayerOpacityRequest(request);
                 return true;
