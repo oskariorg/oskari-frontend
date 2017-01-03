@@ -4,7 +4,7 @@
 
 ### Oskari 2.0 preparations
 
-- Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
+- Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox. This shouldn't affect any application as the main access point to get a reference is still Oskari.getSandbox().
 - Sandbox is now built-in to bundles/bundle.js instead of loaded separately as part of application.
 - Moved domain/Map from core to mapmodule as map.state service.
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
