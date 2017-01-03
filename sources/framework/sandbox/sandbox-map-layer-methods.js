@@ -92,13 +92,6 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @return {undefined}
      */
     removeMapLayer: function(layerId) {
-        // We need a fake request since
-        // the '_handleRemoveMapLayerRequest'
-        // expects one.
-        this._core._handleRemoveMapLayerRequest({
-            getMapLayerId: function() {
-                return layerId;
-            }
-        });
+        this.getMap().removeLayer(layerId);
     }
 });
