@@ -67,6 +67,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return this.__name;
         },
         /**
+         * @method getSandbox
+         * @return {Oskari.Sandbox}
+         */
+        getSandbox: function () {
+            return this._sandbox;
+        },
+        /**
          * @method addLayer
          * Adds the layer to them Oskari system so it can be added to the map etc.
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel

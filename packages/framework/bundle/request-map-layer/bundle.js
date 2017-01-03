@@ -55,14 +55,7 @@ function() {
 
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-		"scripts" : [
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/change-map-layer-opacity-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/change-map-layer-style-request.js"
-		}],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

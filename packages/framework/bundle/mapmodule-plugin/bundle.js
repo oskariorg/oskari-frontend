@@ -407,6 +407,12 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/map.layer.remove.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.opacity.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.style.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/map.layer.rearrange.js"
                 }, {
                     "type": "text/javascript",

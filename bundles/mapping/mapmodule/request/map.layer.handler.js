@@ -24,6 +24,8 @@ Oskari.clazz.define('map.layer.handler',
          *      request to handle
          */
         handleRequest: function (core, request) {
+            var sandbox = this.layerService.getSandbox();
+
             if('map.layer.activation' === request.getName()) {
                 var layerId = request.getLayerId();
                 if(request.isActivated()) {
@@ -38,6 +40,30 @@ Oskari.clazz.define('map.layer.handler',
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
             } else if('RearrangeSelectedMapLayerRequest' === request.getName()) {
                 this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
+            } else if('ChangeMapLayerOpacityRequest' === request.getName()) {
+                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+                if (!layer) {
+                    return;
+                }
+                layer.setOpacity(request.getOpacity());
+
+                var evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
+                evt._creator = request._creator;
+                sandbox.notifyAll(evt);
+            } else if('ChangeMapLayerStyleRequest' === request.getName()) {
+                if (request.getStyle() === '!default!') {
+                    // Check for magic string - should propably be removed...
+                    return;
+                }
+                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+                if (!layer) {
+                    return;
+                }
+                layer.selectStyle(request.getStyle());
+
+                var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                evt._creator = request._creator;
+                sandbox.notifyAll(evt);
             }
         }
     }, {

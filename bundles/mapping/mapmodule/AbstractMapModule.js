@@ -207,6 +207,8 @@ Oskari.clazz.define(
             sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('RemoveMapLayerRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('RearrangeSelectedMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerOpacityRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerStyleRequest', this.requestHandlers.mapLayerHandler);
 
             this.started = this._startImpl();
             var size = this.getSize();

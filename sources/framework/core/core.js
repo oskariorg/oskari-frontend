@@ -93,14 +93,6 @@
          * NOTE: only one request handler can be registered/request
          */
         defaultRequestHandlers: {
-            'ChangeMapLayerOpacityRequest': function (request) {
-                this._handleChangeMapLayerOpacityRequest(request);
-                return true;
-            },
-            'ChangeMapLayerStyleRequest': function (request) {
-                this._handleChangeMapLayerStyleRequest(request);
-                return true;
-            }
         },
 
         /**
