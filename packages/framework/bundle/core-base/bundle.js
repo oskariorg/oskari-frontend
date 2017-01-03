@@ -59,9 +59,6 @@ function() {
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-key-listener-methods.js"
 		}],
 		"resources" : []
 	},

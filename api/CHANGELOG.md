@@ -19,6 +19,27 @@ The marker flag has been removed as it was misleading. The value was always fals
 
 Event removed as deprecated and unsupported. Use MapModulePlugin.AddFeaturesToMapRequest instead.
 
+### [mod] AddMapLayerRequest
+
+Request only has one parameter: the layer ID. This simplifies layer order handling and makes it work more intuitively.
+
+### [rem] DimMapLayerRequest, HighlightMapLayerRequest, AfterDimMapLayerEvent and AfterHighlightMapLayerEvent
+
+The above requests and events have been merged to "map.layer.activation" request and event. It has a new boolean flag indicating activation/deactivation instead of own events/requests.
+
+### [rem] AfterShowMapLayerInfoEvent
+
+Event removed as backendstatus bundle sent it to itself reacting to ShowMapLayerInfoRequest that it also handles.
+
+### [rem] CtrlKeyDownRequest and CtrlKeyUpRequest
+
+Requests removed as deprecated. These should be events if anything. Oskari.ctrlKeyDown(blnPressed) can be used instead, but it's deprecated as well.
+
+### [rem] HideMapMarkerRequest and AfterHideMapMarkerEvent
+
+AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.
+HideMapMarkerRequest was removed as it's no longer used and is misleading. Use MapModulePlugin.MarkerVisibilityRequest instead.
+
 ## 1.40
 
 ### [mod] [rpc] InfoBox.ShowInfoBoxRequest

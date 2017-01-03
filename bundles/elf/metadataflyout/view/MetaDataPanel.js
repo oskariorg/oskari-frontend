@@ -839,7 +839,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 me.instance.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 labelText = me.locale.layerList.show;
             } else {
-                me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), layer.isVisible()]);
+                me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                 //turn visible in case was invisible
                 if (!layer.isVisible()) {
                     me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);

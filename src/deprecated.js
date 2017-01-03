@@ -1,12 +1,22 @@
 (function(o){
 	var log = Oskari.log('Oskari.deprecated');
+
+	// Warn 2 times before falling silent
+	var warnMessagesSent = {};
 	var warn = function(name) {
-		log.warn('Oskari.' + name + '() no longer has any effect and will be removed in future release. Remove calls to it.')
+		if(!warnMessagesSent[name]) {
+			warnMessagesSent[name] = 0;
+		}
+		warnMessagesSent[name]++;
+		if(warnMessagesSent[name] < 3) {
+			log.warn('Oskari.' + name + '() no longer has any effect and will be removed in future release. Remove calls to it.')
+		}
 	};
 
 	var mode = 'default';
     var domMgr;
     var dollarStore = o.createStore();
+    var _ctrlKeyDown = false;
 	var funcs = {
 
 	    /**
@@ -47,7 +57,21 @@
 	    $ : function (name, value) {
 	        return dollarStore.data(name, value);
 	    },
-	    setSandbox : function (name, sandbox) {}
+	    setSandbox : function (name, sandbox) {},
+
+        /**
+         * @method handleCtrlKeyDownRequest
+         * Sets flag to show that CTRL key is pressed down
+         * @private
+         */
+        ctrlKeyDown: function (isDown) {
+        	if(typeof isDown === 'undefined') {
+        		// getter
+        		return _ctrlKeyDown;
+        	}
+        	// setter
+            _ctrlKeyDown = !!isDown;
+        }
 	};
 	var attachWarning = function(name) {
 		return function() {

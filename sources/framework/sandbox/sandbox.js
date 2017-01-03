@@ -11,6 +11,7 @@
     var ajaxUrl;
     var log;
     var services = {};
+    var requestHandlers = {};
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -30,7 +31,7 @@
             var me = this;
 
             me._core = core;
-            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
+            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map', this);
 
             /*
              * All registered listeners in map key: event name value:
@@ -56,6 +57,10 @@
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
+            hasHandler : function(requestName) {
+                //TODO: actual implementation after handlers moved from core to sandbox
+                return !!requestName;
+            },
 
             /**
              * @method disableDebug
@@ -278,30 +283,6 @@
                 } else {
                     log.debug('Module does not listen to that event, skipping.');
                 }
-            },
-
-            /**
-             * @method getRequestBuilder
-             *
-             * Access to request builder that creates requests by name
-             * rather than by class name
-             * @param {String} name request name that we are creating
-             * @return {Function} builder function for given request
-             */
-            getRequestBuilder: function (name) {
-                return this._core.getRequestBuilder(name);
-            },
-
-            /**
-             * @method getEventBuilder
-             *
-             * Access to event builder that creates events by name
-             *
-             * @param {String} name request name that we are creating
-             * @return {Function} builder function for given event
-             */
-            getEventBuilder: function (name) {
-                return this._core.getEventBuilder(name);
             },
 
             /**
@@ -571,35 +552,26 @@
             copyObjectCreatorToFrom: function (objTo, objFrom) {
                 return this._core.copyObjectCreatorToFrom(objTo, objFrom);
             },
-
             /**
-             * @method addRequestHandler
-             * Registers a request handler for requests with the given name
+             * @method requestHandler
+             * Registers a request handler for requests with the given name and handler or returns the handler for
+             * request if handler is undefined.
+             *
              * NOTE: only one request handler can be registered/request
              * @param {String} requestName - name of the request
              * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
              */
-            addRequestHandler: function (requestName, handlerClsInstance) {
-                return this._core.addRequestHandler(
-                    requestName,
-                    handlerClsInstance
-                );
+            requestHandler : function(requestName, handler) {
+                if(typeof handler === 'undefined') {
+                    // getter
+                    return requestHandlers[requestName];
+                }
+                if(requestHandlers[requestName] && handler !== null) {
+                    log.warn('Overwriting request handler!!');
+                }
+                // setter, removal with handler value <null>
+                requestHandlers[requestName] = handler;
             },
-
-            /**
-             * @method removeRequestHandler
-             * Unregisters a request handler for requests with the given name
-             * NOTE: only one request handler can be registered/request
-             * @param {String} requestName - name of the request
-             * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-             */
-            removeRequestHandler: function (requestName, handlerInstance) {
-                return this._core.removeRequestHandler(
-                    requestName,
-                    handlerInstance
-                );
-            },
-
             /**
              * @method _debugPushRequest
              * @private
@@ -1056,14 +1028,79 @@
  * Deprecated sandbox functions
  * ***********************************************************************************************
  */
+    // Warn 2 times before falling silent
+    var warnMessagesSent = {};
+    var warnDeprecated = function(msg) {
+        if(!warnMessagesSent[msg]) {
+            warnMessagesSent[msg] = 0;
+        }
+        warnMessagesSent[msg]++;
+        if(warnMessagesSent[msg] < 3) {
+            log.warn(msg)
+        }
+    };
+
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
+        /**
+         * @method addRequestHandler
+         * Registers a request handler for requests with the given name
+         * NOTE: only one request handler can be registered/request
+         * @param {String} requestName - name of the request
+         * @param {Oskari.mapframework.core.RequestHandler} handlerInstance request handler
+         */
+        addRequestHandler: function (requestName, handlerInstance) {
+            warnDeprecated('Sandbox.addRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, handlerInstance) instead.');
+            this.requestHandler(requestName, handlerInstance);
+        },
+
+        /**
+         * @method removeRequestHandler
+         * Unregisters a request handler for requests with the given name
+         * NOTE: only one request handler can be registered/request
+         * @param {String} requestName - name of the request
+         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
+         */
+        removeRequestHandler: function (requestName, handlerInstance) {
+            warnDeprecated('Sandbox.removeRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, null) instead.');
+            this.requestHandler(requestName, null);
+        },
+
+        isCtrlKeyDown : function() {
+            warnDeprecated('Sandbox.isCtrlKeyDown() is deprecated. It works on Openlayers 2 only.');
+            return Oskari.ctrlKeyDown();
+        },
+        /**
+         * @method getRequestBuilder
+         *
+         * Access to request builder that creates requests by name
+         * rather than by class name
+         * @param {String} name request name that we are creating
+         * @return {Function} builder function for given request
+         */
+        getRequestBuilder: function (name) {
+            warnDeprecated('Sandbox.getRequestBuilder() is deprecated. Use Oskari.requestBuilder() instead.');
+            return Oskari.requestBuilder(name);
+        },
+
+        /**
+         * @method getEventBuilder
+         *
+         * Access to event builder that creates events by name
+         *
+         * @param {String} name request name that we are creating
+         * @return {Function} builder function for given event
+         */
+        getEventBuilder: function (name) {
+            warnDeprecated('Sandbox.getEventBuilder() is deprecated. Use Oskari.eventBuilder() instead.');
+            return Oskari.eventBuilder(name);
+        },
         /**
          * @method printDebug
          * Utility method for printing debug messages to browser console
          */
         printDebug: function () {
             // commented out printDebug warning since there are so many usages
-            //log.warn('Sandbox.printDebug is deprecated');
+            warnDeprecated('Sandbox.printDebug is deprecated - use Oskari.log() instead');
             log.debug.apply(log, arguments);
         },
         /**
@@ -1071,7 +1108,7 @@
          * Utility method for printing warn messages to browser console
          */
         printWarn: function () {
-            log.warn('Sandbox.printWarn is deprecated - use Oskari.log() instead');
+            warnDeprecated('Sandbox.printWarn is deprecated - use Oskari.log() instead');
             log.warn.apply(log, arguments);
             //log.warn(arguments);
         },
@@ -1080,7 +1117,7 @@
          * Utility method for printing error messages to browser console
          */
         printError: function () {
-            log.warn('Sandbox.printError is deprecated - use Oskari.log() instead');
+            warnDeprecated('Sandbox.printError is deprecated - use Oskari.log() instead');
             log.error.apply(log, arguments);
             //log.error(arguments);
         }

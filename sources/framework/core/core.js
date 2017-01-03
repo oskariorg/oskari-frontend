@@ -16,34 +16,8 @@
      * @static
      */
     function () {
-
-        // Currently selected layers, array of MapLayer objects
-        this._selectedLayers = [];
-
-        // Currently Highlighted maplayers
-        this._mapLayersHighlighted = [];
-
         // Are we currently printing debug (as of 2012-09-24 debug by default false)
         this._debug = false;
-
-        // is Ctrl key down
-        this._ctrlKeyDown = false;
-
-        // Allow multiple highlight layers
-        this._allowMultipleHighlightLayers = false;
-
-        this._availableRequestsByName = {};
-        this._availableEventsByName = {};
-
-        /**
-         * @property externalHandlerCls
-         * External Request handlers that bundles have registered are stored here
-         * NOTE: only one request handler can be registered/request
-         * NOTE: was static but moved to instance to enable multi sandbox configurations
-         */
-        this.externalHandlerCls = {
-
-        };
     }, {
 
         /**
@@ -105,9 +79,9 @@
             // TODO: to be removed.
             Oskari.getSandbox().notifyAll(event);
         },
-        getLayerService : function() {
+        getMapState : function() {
             // TODO: to be removed.
-            return Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            return Oskari.getSandbox().getMap();
         },
 
         /**
@@ -119,42 +93,6 @@
          * NOTE: only one request handler can be registered/request
          */
         defaultRequestHandlers: {
-            'AddMapLayerRequest': function (request) {
-                this._handleAddMapLayerRequest(request);
-                return true;
-            },
-            'RemoveMapLayerRequest': function (request) {
-                this._handleRemoveMapLayerRequest(request);
-                return true;
-            },
-            'RearrangeSelectedMapLayerRequest': function (request) {
-                this._handleRearrangeSelectedMapLayerRequest(request);
-                return true;
-            },
-            'ChangeMapLayerOpacityRequest': function (request) {
-                this._handleChangeMapLayerOpacityRequest(request);
-                return true;
-            },
-            'ChangeMapLayerStyleRequest': function (request) {
-                this._handleChangeMapLayerStyleRequest(request);
-                return true;
-            },
-            'HighlightMapLayerRequest': function (request) {
-                this._handleHighlightMapLayerRequest(request);
-                return true;
-            },
-            'DimMapLayerRequest': function (request) {
-                this._handleDimMapLayerRequest(request.getMapLayerId());
-                return true;
-            },
-            'CtrlKeyDownRequest': function (request) {
-                this._handleCtrlKeyDownRequest();
-                return true;
-            },
-            'CtrlKeyUpRequest': function (request) {
-                this._handleCtrlKeyUpRequest();
-                return true;
-            }
         },
 
         /**
@@ -195,7 +133,7 @@
                 };
             } else {
                 // handlers registered by bundle
-                handlerClsInstance = this.externalHandlerCls[requestName];
+                handlerClsInstance = Oskari.getSandbox().requestHandler(requestName);
                 if (handlerClsInstance && handlerClsInstance.handleRequest) {
                     return function(core, request) {
                         handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
@@ -205,137 +143,6 @@
             return undefined;
         },
 
-        /**
-         * @method addRequestHandler
-         * Registers a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-         */
-        addRequestHandler: function (requestName, handlerClsInstance) {
-            if (!handlerClsInstance) {
-                log.warn('Adding non-existent handler for', requestName);
-            }
-            if (this.externalHandlerCls[requestName]) {
-                log.warn('Overriding an existing requesthandler for', requestName);
-            }
-            this.externalHandlerCls[requestName] = handlerClsInstance;
-        },
-
-        /**
-         * @method removeRequestHandler
-         * Unregisters a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-         */
-        removeRequestHandler: function (requestName, handlerInstance) {
-            if (this.externalHandlerCls[requestName] === handlerInstance) {
-                this.externalHandlerCls[requestName] = null;
-                delete this.externalHandlerCls[requestName];
-            }
-        },
-
-        /**
-         * @method _getQNameForRequest
-         * Maps the request name to the corresponding request class name
-         * @param {String} name - name of the request
-         * @return {String} request class name matching the given request name
-         * @private
-         */
-        _getQNameForRequest: function (name) {
-            var qname = this._availableRequestsByName[name],
-                p;
-            if (!qname) {
-                log.debug('#!#!# ! Updating request metadata...');
-                var allRequests = Oskari.clazz.protocol('Oskari.mapframework.request.Request');
-                for (p in allRequests) {
-                    if (allRequests.hasOwnProperty(p)) {
-                        var pdefsp = allRequests[p],
-                            reqname = pdefsp._class.prototype.getName();
-                        this._availableRequestsByName[reqname] = p;
-                    }
-                }
-                log.debug('#!#!# ! Finished Updating request metadata...');
-                qname = this._availableRequestsByName[name];
-            }
-
-            return qname;
-        },
-
-        /**
-         * @method getRequestBuilder
-         * Gets a builder method for the request by request name
-         * @param {String} name - name of the request
-         * @return {Function} builder method for given request name or undefined if not found
-         */
-        getRequestBuilder: function (requestName) {
-            var qname = this._getQNameForRequest(requestName),
-                ret;
-            if (!qname) {
-                log.warn('No qname found for', requestName);
-                return undefined;
-            }
-            var handlerFunc = this.__getRequestHandlerFunction(requestName);
-            if(!handlerFunc) {
-                log.warn('Request ' + requestName + ' defined, but handler not registered. Perhaps timing issue?');
-                return undefined;
-            }
-            ret = Oskari.clazz.builder(qname);
-            if (!ret) {
-                log.warn('No request builder found for', requestName);
-            }
-            return ret;
-        },
-
-        /**
-         * @method _getQNameForEvent
-         * Maps the event name to the corresponding event class name
-         * @param {String} name - name of the event
-         * @return {String} event class name matching the given event name
-         * @private
-         */
-        _getQNameForEvent: function (name) {
-            var qname = this._availableEventsByName[name];
-            if (!qname) {
-                log.debug('#!#!# ! Updating event metadata...');
-
-                var allRequests = Oskari.clazz.protocol('Oskari.mapframework.event.Event'),
-                    p;
-
-                for (p in allRequests) {
-                    if (allRequests.hasOwnProperty(p)) {
-                        var pdefsp = allRequests[p],
-                            reqname = pdefsp._class.prototype.getName();
-                        this._availableEventsByName[reqname] = p;
-                    }
-                }
-                log.debug('#!#!# ! Finished Updating event metadata...');
-                qname = this._availableEventsByName[name];
-            }
-
-            return qname;
-        },
-
-        /**
-         * @method getEventBuilder
-         * Gets a builder method for the event by event name
-         * @param {String} eventName - name of the event
-         * @return {Function} builder method for given event name or undefined if not found
-         */
-        getEventBuilder: function (eventName) {
-            var qname = this._getQNameForEvent(eventName),
-                ret;
-            if (!qname) {
-                log.warn('No qname found for', eventName);
-                return undefined;
-            }
-            ret = Oskari.clazz.builder(qname);
-            if (!ret) {
-                log.warn('No event builder found for', eventName);
-            }
-            return ret;
-        },
 
         /**
          * @method disableDebug

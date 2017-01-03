@@ -380,6 +380,14 @@ Oskari.clazz.define(
                 },
 
                 /**
+                 * Services
+                 */
+                {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapmodule/service/map-layer-service.js"
+                },
+
+                /**
                  * Requests & handlers
                  */
                 {
@@ -388,6 +396,27 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapMoveRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.add.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.remove.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.opacity.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.style.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.rearrange.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.handler.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/mapmodule-plugin/plugin/controls/ToolSelectionHandler.js"
@@ -415,6 +444,27 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/MapClickedEvent.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.activation.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.add.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.remove.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.rearrange.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.opacity.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.style.js"
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"

@@ -1204,14 +1204,6 @@ Oskari.clazz.define(
                 // Hide layer
                 if (jQuery(this).html() === hideText) {
                     // Set previously selected layer only invisible
-                    /* if (layerSelected) {
-                     request = visibilityRequestBuilder(layer.getId(), false);
-                     // Unselect previously unselected layer
-                     } else {
-                     builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
-                     request = builder(layer.getId());
-                     }*/
-
                     builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
                     layerSelected = false;
 
@@ -1221,7 +1213,7 @@ Oskari.clazz.define(
                 } else {
                     // Select previously unselected layer
                     if (!layerSelected) {
-                        me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                     }
                     // Set layer visible
                     request = visibilityRequestBuilder(layer.getId(), true);

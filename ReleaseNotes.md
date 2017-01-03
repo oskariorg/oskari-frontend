@@ -9,12 +9,44 @@
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
 - Removed core.getSandbox(). Use Oskari.getSandbox() instead.
 - Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.
+- Added convenience methods to Oskari.util.isNumberBetween() to detect if a number is in range and Oskari.util.arrayMove() to re-order items inside an array.
+- Selected layers are now tracked in sandbox.getMap() object instead of core:
+
+```javascript
+    core.getAllSelectedLayers() -> map.getLayers()
+    core.isLayerAlreadySelected(id) -> map.isLayerSelected(id)
+    core.findMapLayerFromSelectedMapLayers(id) -> map.getSelectedLayer(id)
+```
+- Activated or "highlighted" layers are now tracked in sandbox.getMap() object instead of core:
+
+```javascript
+    core.getAllHighlightedMapLayers() -> map.getActivatedLayers()
+    core.isMapLayerAlreadyHighlighted(id) -> map.isLayerActivated(id)
+    core._handleHighlightMapLayerRequest() -> map.activateLayer(id)
+    core._removeHighLightedMapLayer() -> map.deactivateLayer(optionalId)
+    core.allowMultipleHighlightLayers() -> map.allowMultipleActivatedLayers()
+```
+
+- Removed methods from core _getQNameForRequest(), _getQNameForEvent(), findMapLayerFromAllAvailable() as they were not intended for external use anyway.
+- Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
+
+```javascript
+    core.getRequestBuilder() -> Oskari.requestBuilder()
+    core.getEventBuilder() -> Oskari.eventBuilder()
+```
+
+#### Service refactoring
+- MapLayerService moved from under sources to mapmodule.
 
 #### Request/Event refactoring
-- Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent and MouseHoverEvent
+- Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent, MouseHoverEvent, AddMapLayerRequest, RemoveMapLayerRequest, RearrangeSelectedMapLayerRequest, AfterMapLayerAddEvent, AfterChangeMapLayerOpacityEvent, AfterRearrangeSelectedMapLayerEvent, AfterMapLayerRemoveEvent, AfterChangeMapLayerStyleEvent, MapLayerEvent, ChangeMapLayerOpacityRequest, ChangeMapLayerStyleRequest, AfterChangeMapLayerOpacityEvent, AfterChangeMapLayerStyleEvent
 - ShowMapLayerInfoRequest moved from under sources to backendstatus as it is bundle specific request
 - AfterShowMapLayerInfoEvent removed as backendstatus was the only user and it can react to request without the event.
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
+- Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
+- Removed all other parameters from AddMapLayerRequest other than layer ID. Layer order is no longer affected by the boolean parameters when adding layers to map.
+- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "map.layer.activation" that now has a boolean indicating activation/deactivation.
+- AfterDimMapLayerEvent and AfterHighlightMapLayerEvent have been merged to a new event "map.layer.activation" that now has a boolean indicating activation/deactivation.
 
 #### Marker handling changes
 - AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.

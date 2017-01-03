@@ -186,6 +186,7 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(this, p);
                 }
             }
+            var layerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             //register request handlers
             this.requestHandlers = {
@@ -193,14 +194,21 @@ Oskari.clazz.define(
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
-                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this)
+                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), layerService)
             };
 
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
-            sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
-            sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
+            sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+            sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
+            sandbox.requestHandler('map.layer.activation', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('RemoveMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('RearrangeSelectedMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerOpacityRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerStyleRequest', this.requestHandlers.mapLayerHandler);
 
             this.started = this._startImpl();
             var size = this.getSize();
@@ -209,7 +217,6 @@ Oskari.clazz.define(
             me._adjustMobileMapSize();
             this.updateCurrentState();
         },
-
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -2122,8 +2129,8 @@ Oskari.clazz.define(
         afterMapLayerAddEvent: function (event) {
             var map = this.getMap(),
                 layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
+                keepLayersOrder = true,
+                isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),
                 layerFunctions = [];
 

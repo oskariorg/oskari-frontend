@@ -43,10 +43,10 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
             // so if zoom == max zoom level -> send a dummy request to get openlayers working
             // correctly
             // TODO: find out why OL needs this
-            this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0));
+            this._core.processRequest( Oskari.requestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0));
         }
 
-        this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom));
+        this._core.processRequest(Oskari.requestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom));
     },
 
     /**
