@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
          * Returns true if user has any role matching any id provided as param
          * @method hasRole
          *
-         * @param {Number|Number[]} list of ids
+         * @param {Number|Number[]} id or list of ids for roles
          * @return {Boolean} true if any id match roles that user has
          */
         hasRole: function (idList) {
