@@ -288,11 +288,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.params) {
                 layer.setParams(newLayerConf.params);
             }
-            
+
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
-            
             if (newLayerConf.type === 'wmslayer') {
                 // TODO: remove styles and wmsurls??
                 this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
@@ -371,16 +370,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
             var allLayers = pResp.layers,
                 i,
-                mapLayer,
-                existingLayer,
-                exSubLayers,
-                mapSubLayers,
-                subI,
-                existingSubLayer;
-
+                mapLayer;
 
             for (i = 0; i < allLayers.length; i++) {
-
                 mapLayer = this.createMapLayer(allLayers[i]);
                 if (!mapLayer) {
                     // unsupported map type, skip
@@ -394,8 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // notify components of added layer if not suppressed
             this._allLayersAjaxLoaded = true;
-            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
-            this._sandbox.notifyAll(evt);
+            this._sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
             if (callbackSuccess) {
                 callbackSuccess();
             }
@@ -633,7 +624,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 i,
                 subLayer,
                 subLayerOpacity;
-            //Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
             if (isBase) {
                 baseLayer.setAsBaseLayer();
             } else {
@@ -641,12 +631,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             baseLayer.setVisible(true);
-
-            //if (typeof baseMapJson.id !== 'string') {
-            //    baseLayer.setId(String(baseMapJson.id));
-            //} else {
             baseLayer.setId(baseMapJson.id);
-            //}
 
             baseLayer.setName(baseMapJson.name);
 
@@ -655,7 +640,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setRealtime(baseMapJson.realtime);
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
-            
             baseLayer.setAdmin(baseMapJson.admin);
 
             baseLayer.setDataUrl(baseMapJson.dataUrl);
@@ -680,7 +664,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             baseLayer.setLegendImage(baseMapJson.legendImage);
             baseLayer.setDescription(baseMapJson.info);
-
             baseLayer.setQueryable(false);
 
             if (baseMapJson.permissions) {
@@ -799,7 +782,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
 
-            // metadata 
+            // metadata
             layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
             if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
@@ -809,12 +792,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
 
-            // backendstatus 
+            // backendstatus
             if (mapLayerJson.backendStatus && layer.setBackendStatus) {
                 layer.setBackendStatus(mapLayerJson.backendStatus);
             }
 
-            // for grouping: organisation and inspire 
+            // for grouping: organisation and inspire
             if (mapLayerJson.orgName) {
                 layer.setOrganizationName(mapLayerJson.orgName);
             } else {
@@ -828,7 +811,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setVisible(true);
 
-            // extent  
+            // extent
             if (mapLayerJson.geom && layer.setGeometryWKT) {
                 layer.setGeometryWKT(mapLayerJson.geom);
             }
@@ -852,7 +835,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             layer.setLegendImage(mapLayerJson.legendImage);
-            
+
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!
                 layer.setLocalization(mapLayerJson.localization);
@@ -926,7 +909,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
          */
         populateStyles: function (layer, jsonLayer, defaultStyle) {
-
             var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style'),
                 i,
                 styleJson,
@@ -1005,7 +987,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws Error if layer with the given id was found
          */
         checkForDuplicateId: function (id, name) {
-
             if (this._reservedLayerIds[id] === true) {
                 var foundLayer = this.findMapLayer(id);
                 throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
@@ -1026,8 +1007,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         findMapLayer: function (id, layerList) {
             var i,
                 layer,
-                subLayers = [],
-                subLayer = null;
+                subLayers = [];
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
@@ -1061,8 +1041,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         findMapLayerByName: function (name, layerList) {
             var i,
                 layer,
-                subLayers = [],
-                subLayer = null;
+                subLayers = [];
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
