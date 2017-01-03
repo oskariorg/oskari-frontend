@@ -5,7 +5,8 @@
 ### Oskari 2.0 preparations
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox
-- Moved domain/Map from core to sandbox.
+- Sandbox is now built-in to bundles/bundle.js instead of loaded separately as part of application.
+- Moved domain/Map from core to mapmodule as map.state service.
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
 - Removed core.getSandbox(). Use Oskari.getSandbox() instead.
 - Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.

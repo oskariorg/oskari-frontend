@@ -109,10 +109,13 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
         }
     },
     setSessionExpiring: function (minutes, callback) {
-        var milliSeconds = 60 * 1000 * minutes,
-            expireTimeout = setTimeout(function () {
-                callback();
-            }, milliSeconds);
+        if(typeof minutes !== 'number' || typeof callback !== 'function') {
+            return;
+        }
+        var milliSeconds = 60 * 1000 * minutes;
+        setTimeout(function () {
+            callback();
+        }, milliSeconds);
     },
     extendSession: function (errorCallback) {
         var url = this.getAjaxUrl() + 'action_route=GetCurrentUser',

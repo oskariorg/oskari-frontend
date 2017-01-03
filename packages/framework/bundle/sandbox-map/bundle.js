@@ -55,16 +55,7 @@ function() {
 
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-		"scripts" : [{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/sandbox/sandbox-map-layer-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/sandbox/sandbox-map-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/sandbox/sandbox-abstraction-methods.js"
-		}],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {
