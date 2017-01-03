@@ -67,6 +67,19 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/Plugin.js"
                 },
+                /*
+                 * domain
+                 */
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/AbstractLayer.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/style.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/domain/tool.js"
+                },
                 /**
                  * controls plugin
                  */
@@ -278,6 +291,9 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/WmsLayerPlugin.ol3.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/wmslayer.js"
                 },
                 /**
                  * Vector Layer plugin
@@ -285,6 +301,9 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol3.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/vectorlayer.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/FeatureEvent.js"
@@ -366,7 +385,10 @@ Oskari.clazz.define(
                  */
                 {
                     "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapmodule/service/map-layer-service.js"
+                    "src" : "../../../../bundles/mapping/mapmodule/service/map.layer.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapmodule/service/map.state.js"
                 },
 
                 /**

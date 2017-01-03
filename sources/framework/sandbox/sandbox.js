@@ -12,6 +12,7 @@
     var log;
     var services = {};
     var requestHandlers = {};
+    var isDebugMode = false;
 
     Oskari.clazz.define('Oskari.Sandbox',
 
@@ -44,51 +45,35 @@
             me._modulesByName = {};
             me._statefuls = {};
 
-            /* as of 2012-09-24 debug by default false */
-            me.debugRequests = false;
-            me.debugEvents = false;
             me.requestEventLog = [];
             me.requestEventStack = [];
 
             // TODO: move to some conf?
             /* as of 2012-09-24 debug by default false */
-            me.gatherDebugRequests = false;
             me.maxGatheredRequestsAndEvents = 4096;
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
+            /**
+             * Returns true if anything is registered as a handler for the request.
+             * @param  {String}  requestName request to check
+             * @return {Boolean}             true if request is being handled.
+             */
             hasHandler : function(requestName) {
-                //TODO: actual implementation after handlers moved from core to sandbox
-                return !!requestName;
+                return !!requestHandlers[requestName];
             },
-
             /**
-             * @method disableDebug
-             * Disables debug messaging and sequence diagram gathering
-             * if( core is set ) also core debug will be disabled
+             * Get value if no parameter is given, set value with parameter
+             * @param  {Boolean} setDebug optional parameter to set the debug mode
+             * @return {Boolean}          true if debug is enabled
              */
-            disableDebug: function () {
-                this.debugRequests = false;
-                this.debugEvents = false;
-                this.gatherDebugRequests = false;
-                if (this._core) {
-                    this._core.disableDebug();
+            debug: function (setDebug) {
+                if(typeof setDebug === 'undefined') {
+                    // getter
+                    return isDebugMode;
                 }
-            },
-
-            /**
-             * @method enableDebug
-             * Enables debug messaging and sequence diagram gathering (by default not enabled)
-             * if( core is set ) also core debug will be enabled
-             */
-            enableDebug: function () {
-                this.debugRequests = true;
-                this.debugEvents = true;
-                this.gatherDebugRequests = true;
-                if (this._core) {
-                    this._core.enableDebug();
-                }
-
+                isDebugMode = !!setDebug;
+                return isDebugMode;
             },
 
             /**
@@ -315,20 +300,34 @@
                 if (creatorComponent === null || creatorComponent === undefined) {
                     throw 'Attempt to create request with unknown component \'' + creator + '\' as creator';
                 }
+                request._creator = creatorName;
 
-                this._core.setObjectCreator(request, creatorName);
-
-                log.debug('Module \'' + creatorName + '\' is requesting for \'' + this.getObjectName(request) + '\'...');
-
-                if (this.gatherDebugRequests) {
-                    this._pushRequestAndEventGather(creatorName + '->Sandbox: ', this.getObjectName(request));
+                if (this.debug()) {
+                    this._pushRequestAndEventGather(creatorName + '->Sandbox: ', request.getName());
                 }
 
                 this._debugPushRequest(creatorName, request);
-                rv = this._core.processRequest(request);
+                rv = this.processRequest(request);
                 this._debugPopRequest();
 
                 return rv;
+            },
+            /**
+             * @method processRequest
+             * Forwards requests to corresponding request handlers.
+             * If request doesn't have handler, prints warning to console.
+             * @param {Oskari.mapframework.request.Request} request to forward
+             * @return {Boolean} Returns true, if request was handled, false otherwise
+             */
+            processRequest: function (request) {
+                var requestName = request.getName();
+
+                var handlerClsInstance = this.requestHandler(requestName);
+                if (!handlerClsInstance || typeof handlerClsInstance.handleRequest !== 'function') {
+                    log.warn('No handler for request', requestName);
+                    return;
+                }
+                handlerClsInstance.handleRequest.apply(handlerClsInstance, [undefined, request]);
             },
 
             /**
@@ -350,7 +349,7 @@
                 log.debug(
                     '#!#!#! --------------> requestByName ' + requestName
                 );
-                var requestBuilder = this.getRequestBuilder(requestName),
+                var requestBuilder = Oskari.requestBuilder(requestName),
                     request = requestBuilder.apply(this, requestArgs || []);
                 return this.request(creator, request);
             },
@@ -379,31 +378,32 @@
              */
             postRequestByName: function (requestName, requestArgs) {
                 var me = this,
-                    requestBuilder = me.getRequestBuilder(requestName);
-                if (!requestBuilder) {
-                    log.debug('requestName is undefined');
+                    requestBuilder = Oskari.requestBuilder(requestName);
+                if (!requestBuilder || !this.hasHandler(requestName)) {
+                    log.warn('Trying to post request', requestName, 'that is undefined or missing a handler. Skipping!');
                     return;
                 }
                 window.setTimeout(function () {
                     var request = requestBuilder.apply(me, requestArgs || []),
-                        creatorComponent = this.postMasterComponent,
+                        creatorComponent = me.postMasterComponent,
                         rv = null;
-                    me._core.setObjectCreator(request, creatorComponent);
 
-                    if (me.gatherDebugRequests) {
+                    request._creator = creatorComponent;
+
+                    if (me.debug()) {
                         me._pushRequestAndEventGather(
                             creatorComponent + '->Sandbox: ',
-                            me.getObjectName(request)
+                            request.getName()
                         );
                     }
 
-                    if (this.debugRequests) {
+                    if (me.debug()) {
                         me._debugPushRequest(creatorComponent, request);
                     }
 
-                    rv = me._core.processRequest(request);
+                    rv = me.processRequest(request);
 
-                    if (this.debugRequests) {
+                    if (me.debug()) {
                         me._debugPopRequest();
                     }
 
@@ -460,7 +460,7 @@
                             'Notifying module \'' + module.getName() + '\'.'
                         );
 
-                        if (this.gatherDebugRequests) {
+                        if (this.debug()) {
                             this._pushRequestAndEventGather(
                                 'Sandbox->' + module.getName() + ':', eventName
                             );
@@ -468,7 +468,7 @@
                     }
 
                     this._debugPushEvent(
-                        this.getObjectCreator(event),
+                        event._creator || 'NA',
                         module,
                         event
                     );
@@ -517,42 +517,6 @@
             },
 
             /**
-             * @method getObjectName
-             * Returns Oskari event/request name from the event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @return {String} name
-             */
-            getObjectName: function (obj) {
-                return this._core.getObjectName(obj);
-            },
-            /**
-             * @method getObjectCreator
-             * Returns Oskari event/request creator from the event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @return {String} creator
-             */
-            getObjectCreator: function (obj) {
-                return this._core.getObjectCreator(obj);
-            },
-            /**
-             * @method setObjectCreator
-             * Sets a creator to Oskari event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @param {String} creator
-             */
-            setObjectCreator: function (obj, creator) {
-                return this._core.setObjectCreator(obj, creator);
-            },
-            /**
-             * @method copyObjectCreatorToFrom
-             * Copies creator from objFrom to objTo
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objTo
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objFrom
-             */
-            copyObjectCreatorToFrom: function (objTo, objFrom) {
-                return this._core.copyObjectCreatorToFrom(objTo, objFrom);
-            },
-            /**
              * @method requestHandler
              * Registers a request handler for requests with the given name and handler or returns the handler for
              * request if handler is undefined.
@@ -582,7 +546,7 @@
              * @param {Oskari.mapframework.request.Request} req - request that was sent
              */
             _debugPushRequest: function (creator, req) {
-                if (!this.debugRequests) {
+                if (!this.debug()) {
                     return;
                 }
                 var reqLog = {
@@ -601,7 +565,7 @@
              * Pops the request from the debugging stack
              */
             _debugPopRequest: function () {
-                if (!this.debugRequests) {
+                if (!this.debug()) {
                     return;
                 }
                 this.requestEventStack.pop();
@@ -618,7 +582,7 @@
              * @param {Oskari.mapframework.event.Event} evt - event that was sent
              */
             _debugPushEvent: function (creator, target, evt) {
-                if (!this.debugEvents) {
+                if (!this.debug()) {
                     return;
                 }
                 this._eventLoopGuard += 1;
@@ -645,7 +609,7 @@
              * Pops the event from the debugging stack
              */
             _debugPopEvent: function () {
-                if (!this.debugEvents) {
+                if (!this.debug()) {
                     return;
                 }
                 this._eventLoopGuard -= 1;

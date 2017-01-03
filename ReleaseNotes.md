@@ -27,12 +27,18 @@
     core.allowMultipleHighlightLayers() -> map.allowMultipleActivatedLayers()
 ```
 
-- Removed methods from core _getQNameForRequest(), _getQNameForEvent(), findMapLayerFromAllAvailable() as they were not intended for external use anyway.
+- Removed methods from core: _getQNameForRequest(), _getQNameForEvent(), findMapLayerFromAllAvailable() as they were not intended for external use.
+- Removed request/event handling methods from core and sandbox: getObjectName(), getObjectCreator(), setObjectCreator() and copyObjectCreatorToFrom() as they were not intended for external use.
 - Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
 
 ```javascript
     core.getRequestBuilder() -> Oskari.requestBuilder()
     core.getEventBuilder() -> Oskari.eventBuilder()
+```
+- Refactored sandbox methods (debug state can be asked by sandbox.debug()):
+```javascript
+    sandbox.disableDebug() -> sandbox.debug(false)
+    sandbox.enableDebug() -> sandbox.debug(true)
 ```
 
 #### Service refactoring
