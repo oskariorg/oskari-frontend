@@ -58,8 +58,7 @@
             me._eventLoopGuard = 0;
         }, {
             hasHandler : function(requestName) {
-                //TODO: actual implementation after handlers moved from core to sandbox
-                return !!requestName;
+                return !!requestHandlers[requestName];
             },
 
             /**
@@ -315,20 +314,34 @@
                 if (creatorComponent === null || creatorComponent === undefined) {
                     throw 'Attempt to create request with unknown component \'' + creator + '\' as creator';
                 }
-
-                this._core.setObjectCreator(request, creatorName);
-
-                log.debug('Module \'' + creatorName + '\' is requesting for \'' + this.getObjectName(request) + '\'...');
+                request._creator = creatorName;
 
                 if (this.gatherDebugRequests) {
-                    this._pushRequestAndEventGather(creatorName + '->Sandbox: ', this.getObjectName(request));
+                    this._pushRequestAndEventGather(creatorName + '->Sandbox: ', request.getName());
                 }
 
                 this._debugPushRequest(creatorName, request);
-                rv = this._core.processRequest(request);
+                rv = this.processRequest(request);
                 this._debugPopRequest();
 
                 return rv;
+            },
+            /**
+             * @method processRequest
+             * Forwards requests to corresponding request handlers.
+             * If request doesn't have handler, prints warning to console.
+             * @param {Oskari.mapframework.request.Request} request to forward
+             * @return {Boolean} Returns true, if request was handled, false otherwise
+             */
+            processRequest: function (request) {
+                var requestName = request.getName();
+
+                var handlerClsInstance = this.requestHandler(requestName);
+                if (!handlerClsInstance || typeof handlerClsInstance.handleRequest !== 'function') {
+                    log.warn('No handler for request', requestName);
+                    return;
+                }
+                handlerClsInstance.handleRequest.apply(handlerClsInstance, [undefined, request]);
             },
 
             /**
@@ -350,7 +363,7 @@
                 log.debug(
                     '#!#!#! --------------> requestByName ' + requestName
                 );
-                var requestBuilder = this.getRequestBuilder(requestName),
+                var requestBuilder = Oskari.requestBuilder(requestName),
                     request = requestBuilder.apply(this, requestArgs || []);
                 return this.request(creator, request);
             },
@@ -379,21 +392,22 @@
              */
             postRequestByName: function (requestName, requestArgs) {
                 var me = this,
-                    requestBuilder = me.getRequestBuilder(requestName);
-                if (!requestBuilder) {
-                    log.debug('requestName is undefined');
+                    requestBuilder = Oskari.requestBuilder(requestName);
+                if (!requestBuilder || !this.hasHandler(requestName)) {
+                    log.warn('Trying to post request', requestName, 'that is undefined or missing a handler. Skipping!');
                     return;
                 }
                 window.setTimeout(function () {
                     var request = requestBuilder.apply(me, requestArgs || []),
-                        creatorComponent = this.postMasterComponent,
+                        creatorComponent = me.postMasterComponent,
                         rv = null;
-                    me._core.setObjectCreator(request, creatorComponent);
+
+                    request._creator = creatorComponent;
 
                     if (me.gatherDebugRequests) {
                         me._pushRequestAndEventGather(
                             creatorComponent + '->Sandbox: ',
-                            me.getObjectName(request)
+                            request.getName()
                         );
                     }
 
@@ -401,7 +415,7 @@
                         me._debugPushRequest(creatorComponent, request);
                     }
 
-                    rv = me._core.processRequest(request);
+                    rv = me.processRequest(request);
 
                     if (this.debugRequests) {
                         me._debugPopRequest();
@@ -468,7 +482,7 @@
                     }
 
                     this._debugPushEvent(
-                        this.getObjectCreator(event),
+                        event._creator || 'NA',
                         module,
                         event
                     );
@@ -516,42 +530,6 @@
                 return size;
             },
 
-            /**
-             * @method getObjectName
-             * Returns Oskari event/request name from the event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @return {String} name
-             */
-            getObjectName: function (obj) {
-                return this._core.getObjectName(obj);
-            },
-            /**
-             * @method getObjectCreator
-             * Returns Oskari event/request creator from the event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @return {String} creator
-             */
-            getObjectCreator: function (obj) {
-                return this._core.getObjectCreator(obj);
-            },
-            /**
-             * @method setObjectCreator
-             * Sets a creator to Oskari event/request object
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-             * @param {String} creator
-             */
-            setObjectCreator: function (obj, creator) {
-                return this._core.setObjectCreator(obj, creator);
-            },
-            /**
-             * @method copyObjectCreatorToFrom
-             * Copies creator from objFrom to objTo
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objTo
-             * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objFrom
-             */
-            copyObjectCreatorToFrom: function (objTo, objFrom) {
-                return this._core.copyObjectCreatorToFrom(objTo, objFrom);
-            },
             /**
              * @method requestHandler
              * Registers a request handler for requests with the given name and handler or returns the handler for

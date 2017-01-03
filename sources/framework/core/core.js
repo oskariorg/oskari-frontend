@@ -33,13 +33,8 @@
         },
         handleMapLinkParams: function() {
             log.debug('Checking if map is started with link...');
-            var reqParam = Oskari.util.getRequestParam;
-            var coord = reqParam('coord'),
-                zoomLevel = reqParam('zoomLevel'),
-                mapLayers = reqParam('mapLayers'),
-                markerVisible = reqParam('showMarker'),
-                markerVisibleOption2 = reqParam('isCenterMarker'),
-                keepLayersOrder = reqParam('keepLayersOrder', true);
+            var coord = Oskari.util.getRequestParam('coord');
+            var zoomLevel = Oskari.util.getRequestParam('zoomLevel');
 
             if (coord === null || zoomLevel === null) {
                 // not a link
@@ -48,10 +43,7 @@
 
             var splittedCoord;
 
-            /*
-             * Coordinates can be splitted either with new "_" or
-             * old "%20"
-             */
+            // Coordinates can be separated either with new "_" or old "%20"
             if (coord.indexOf('_') >= 0) {
                 splittedCoord = coord.split('_');
             } else {
@@ -69,82 +61,6 @@
         },
 
         /**
-         * @method dispatch
-         * Dispatches given event to sandbox
-         *
-         * @param {Oskari.mapframework.event.Event}
-         *            event - event to dispatch
-         */
-        dispatch: function (event) {
-            // TODO: to be removed.
-            Oskari.getSandbox().notifyAll(event);
-        },
-        getMapState : function() {
-            // TODO: to be removed.
-            return Oskari.getSandbox().getMap();
-        },
-
-        /**
-         * @property defaultRequestHandlers
-         * @static
-         * Default Request handlers
-         * Core still handles some Requests sent by bundles.
-         * TODO: Request handling should be moved to apropriate bundles.
-         * NOTE: only one request handler can be registered/request
-         */
-        defaultRequestHandlers: {
-        },
-
-        /**
-         * @method processRequest
-         * Forwards requests to corresponding request handlers.
-         * If request doesn't have handler, prints warning to console.
-         * @param {Oskari.mapframework.request.Request} request to forward
-         * @return {Boolean} Returns true, if request was handled, false otherwise
-         */
-        processRequest: function (request) {
-            var requestName = request.getName(),
-                handlerFunc = this.__getRequestHandlerFunction(requestName);
-
-            if (handlerFunc) {
-                return handlerFunc(this, request);
-            } else {
-                log.warn('!!!');
-                log.warn('  There is no handler for');
-                log.warn('  \'' + request.getName() + '\'');
-                return false;
-            }
-        },
-        /**
-         * Determine handler for request form either internal (core) handlers or handlers 
-         * registered by bundles. 
-         * Wraps the functions to apply the correct scope and same parameters for each type.
-         * 
-         * @param  {String} requestName   name of the request to handle
-         * @return {function}             function to call for handling request
-         */
-        __getRequestHandlerFunction : function(requestName) {
-            var handlerFunc = this.defaultRequestHandlers[requestName],
-                handlerClsInstance;
-            if (handlerFunc) {
-                // found from core handlers
-                return function(core, request) {
-                    handlerFunc.apply(core, [request]);
-                };
-            } else {
-                // handlers registered by bundle
-                handlerClsInstance = Oskari.getSandbox().requestHandler(requestName);
-                if (handlerClsInstance && handlerClsInstance.handleRequest) {
-                    return function(core, request) {
-                        handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
-                    };
-                }
-            }
-            return undefined;
-        },
-
-
-        /**
          * @method disableDebug
          * Disables debug logging
          */
@@ -158,43 +74,6 @@
          */
         enableDebug: function () {
             this._debug = true;
-        },
-
-        /**
-         * @method getObjectName
-         * Returns Oskari event/request name from the event/request object
-         * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-         * @return {String} name
-         */
-        getObjectName: function (obj) {
-            return obj.__name;
-        },
-        /**
-         * @method getObjectCreator
-         * Returns Oskari event/request creator from the event/request object
-         * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-         * @return {String} creator
-         */
-        getObjectCreator: function (obj) {
-            return obj._creator;
-        },
-        /**
-         * @method setObjectCreator
-         * Sets a creator to Oskari event/request object
-         * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
-         * @param {String} creator
-         */
-        setObjectCreator: function (obj, creator) {
-            obj._creator = creator;
-        },
-        /**
-         * @method copyObjectCreatorToFrom
-         * Copies creator from objFrom to objTo
-         * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objTo
-         * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objFrom
-         */
-        copyObjectCreatorToFrom: function (objTo, objFrom) {
-            objTo._creator = objFrom._creator;
         }
     });
 }(Oskari));
