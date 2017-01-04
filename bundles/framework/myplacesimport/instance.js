@@ -41,7 +41,7 @@ function () {
         if (conf && conf.stateful === true) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
-        var isGuest = !sandbox.getUser().isLoggedIn();
+        var isGuest = !Oskari.user().isLoggedIn();
 
         if (isGuest) {
             // guest user, only show disabled button

@@ -83,7 +83,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
         init: function () {
 
             var loc = this.instance.getLocalization('tools'),
-                user = this.instance.sandbox.getUser();
+                user = Oskari.user();
 
             // different tooltip for guests - "Please log in to use"
             var guestPostfix = user.isLoggedIn() || this.conf.allowGuest === true ? '' : ' - ' + this.instance.getLocalization('guest').loginShort;
@@ -120,9 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                 sandbox.printDebug("Missing toolbar.");
             }
 
-            var user = me.instance.sandbox.getUser();
-
-            if (!user.isLoggedIn() && me.conf.allowGuest !== true) {
+            if (!Oskari.user().isLoggedIn() && me.conf.allowGuest !== true) {
                 // disable toolbar buttons for guests
                 // overrideable via conf.allowGuest
                 me.disableButtons();

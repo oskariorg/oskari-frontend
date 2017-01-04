@@ -827,7 +827,7 @@ Oskari.clazz.define(
             paramCont.append(button);
             button.find('input').click(function (e) {
                 // Warn the user if they're not logged in
-                if (!me.getSandbox() || !me.getSandbox().getUser().isLoggedIn()) {
+                if (!me.getSandbox() || !Oskari.user().isLoggedIn()) {
                     var dialog = Oskari.clazz.create(
                             'Oskari.userinterface.component.Popup'
                         ),

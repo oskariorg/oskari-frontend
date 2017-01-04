@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         getUserRole: function() {
           var me = this;
           if (me.availableOskariRoles) {
-            var user = me.getSandbox().getUser();
+            var user = Oskari.user();
             var userRoles = _.pluck(user.getRoles(), 'name');
             for (var i = 0; i < me.availableOskariRoles.length; i++) {
               if (me.userHasRole(me.availableOskariRoles[i])) {
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
           return "";
         },
         userHasRole: function(roleToCheck) {
-          var user = this.getSandbox().getUser();
+          var user = Oskari.user();
           var userRoles = _.pluck(user.getRoles(), 'name');
           return _.contains(userRoles, roleToCheck);
         },
@@ -180,9 +180,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         */
         updateFeedbackUI: function(metadata){
             var me = this,
-                el = me.getEl(),
-                sandbox = this.instance.sandbox,
-                user = sandbox.getUser();
+                el = me.getEl();
 
             me._metadata = metadata;
 

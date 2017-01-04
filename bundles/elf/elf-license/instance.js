@@ -455,7 +455,7 @@ function () {
         else {
             title.addClass('text');
             // If user has already logged in  then shows at no right to anyone license
-            if (me._sandbox.getUser().isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
             }
             // Else if user has not logged in then show log in message
@@ -682,7 +682,7 @@ function () {
         else {
             title.addClass('text');
             // If user has already logged in  then shows at no right to anyone license
-            if (me._sandbox.getUser().isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
             }
             // Else if user has not logged in then show log in message
@@ -735,7 +735,7 @@ function () {
             licenseDescriptions.remove();
             licenseDescriptionsTitle.remove();
             // If user has already logged in  then shows at no right to anyone license
-            if (me._sandbox.getUser().isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 title.html(me._locale.dialog.noRightToAnyLicenseModels);
             }
             // Else if user has not logged in then show log in message

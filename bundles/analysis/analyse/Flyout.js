@@ -143,7 +143,7 @@ Oskari.clazz.define(
 
             flyout.empty();
 
-            if (!sandbox.getUser().isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 this.view = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.NotLoggedIn',
                     this.instance,
                     this.instance.getLocalization('NotLoggedView'));

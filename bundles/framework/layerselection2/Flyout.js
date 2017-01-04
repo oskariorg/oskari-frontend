@@ -912,7 +912,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 loc = this.instance.getLocalization('layer'),
                 publishPermission = layer.getPermission('publish');
 
-            if (publishPermission === 'publication_permission_ok' && sandbox.getUser().isLoggedIn()) {
+            if (publishPermission === 'publication_permission_ok' && Oskari.user().isLoggedIn()) {
                 footer.find('div.layer-rights').html(
                     loc.rights.can_be_published_map_user.label
                 );

@@ -36,10 +36,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         start: function () {
             var me = this,
                 sandbox = this.instance.sandbox,
-                user = sandbox.getUser(),
                 p;
 
-            if (user.isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 sandbox.register(me);
                 for (p in me.eventHandlers) {
                     if (me.eventHandlers.hasOwnProperty(p)) {

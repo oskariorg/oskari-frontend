@@ -35,7 +35,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'abstraction-methods', {
      *      callback on action completed (optional)
      */
     ajax: function (url, success, failure, data, complete) {
-        var userIsLoggedIn = this.getUser().isLoggedIn();
+        var userIsLoggedIn = Oskari.user().isLoggedIn();
         // default to jQuery
         if (jQuery && jQuery.ajax) {
             var failureWrapper = function (jqXHR, textStatus, err) {

@@ -119,7 +119,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
     },
     extendSession: function (errorCallback) {
         var url = this.getAjaxUrl() + 'action_route=GetCurrentUser',
-            currentUuid = this.getUser().getUuid(),
+            currentUuid = Oskari.user().getUuid(),
             successCallback = function (res, textStatus, jqXHR) {
                 var resUuid = jqXHR.getResponseHeader('currentUserUid');
                 if (resUuid !== currentUuid) {

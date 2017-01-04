@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 tooltip: tbstt,
                 sticky: false,
                 // disable button for non logged in users
-                enabled : sandbox.getUser().isLoggedIn(),
+                enabled : Oskari.user().isLoggedIn(),
                 prepend: true,
                 callback: function () {
                     me._promptForView(function (name, description, isDefault) {

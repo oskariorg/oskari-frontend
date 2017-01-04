@@ -1009,7 +1009,6 @@ function(locale, conf) {
   	  	} else {
   	  	   me._addLayers();
   	  	   me._createCroppingSelection();
-  	  	   me._saveLastSelectedTransport();
   	  	}
     },
     /**
@@ -1218,7 +1217,7 @@ function(locale, conf) {
      */
     _saveLastSelectedRegion: function(geometryString){
     	var me = this;
-    	if(!me._sandbox.getUser().isLoggedIn()){
+    	if(!Oskari.user().isLoggedIn()){
     		return;
     	}
     	var dte = new Date();
@@ -1268,64 +1267,6 @@ function(locale, conf) {
             url : ajaxUrl + 'action_route=SaveSelectedRegion'
         });
 
-    },
-    /**
-     * @method _saveLastSelectedTransport
-     * @private
-     * Save last selected transport
-     */
-    _saveLastSelectedTransport: function(){
-    	var me = this;
-
-    	return;
-
-    	/*
-    	if(!me._sandbox.getUser().isLoggedIn()){
-    		return;
-    	}
-    	var dte = new Date();
-        var dteMs = dte.getTime();
-
-        if( me._pendingAjaxQuery2.busy && me._pendingAjaxQuery2.timestamp &&
-            	dteMs - me._pendingAjaxQuery2.timestamp < 500 ) {
-            	me._sandbox.printDebug("[LakapaTransportSelectorPlugin] Save last selected transport NOT SENT (time difference < 500ms)");
-            	return;
-        }
-
-        me._cancelAjaxRequest2();
-        me._startAjaxRequest2(dteMs);
-
-        var ajaxUrl = me._sandbox.getAjaxUrl();
-
-        jQuery.ajax({
-            beforeSend : function(x) {
-            	me._pendingAjaxQuery2.jqhr = x;
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json;charset=UTF-8");
-                }
-            },
-            success : function(resp) {
-            	me._finishAjaxRequest2();
-            },
-            error : function() {
-            	me._finishAjaxRequest2();
-                me._notifyAjaxFailure2();
-            },
-            always: function() {
-            	me._finishAjaxRequest2();
-            },
-            complete: function() {
-            	me._finishAjaxRequest2();
-            },
-            data : {
-                selectedTransport : me.selectedTransport,
-                lang: Oskari.getLang()
-            },
-            type : 'POST',
-            dataType : 'json',
-            url : ajaxUrl + 'action_route=SaveSelectedTransport'
-        });
-    	*/
     },
     /**
      * Unselect cropping tool

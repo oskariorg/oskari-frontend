@@ -174,7 +174,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                userUuid = sandbox.getUser().getUuid(),
+                userUuid = Oskari.user().getUuid(),
                 group = null,
                 n,
                 groupJSON,

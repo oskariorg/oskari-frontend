@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
-            if(sandbox.getUser().isLoggedIn()) {
+            if(Oskari.user().isLoggedIn()) {
                 request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
                     loc.layerFilter.buttons.publishable,
                     loc.layerFilter.tooltips.publishable,

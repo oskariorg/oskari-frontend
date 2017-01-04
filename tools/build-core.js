@@ -47,7 +47,7 @@ var files = [
 
 try {
     var FILENAME = '../bundles/bundle.js';
-    var concatOnly = true;
+    var concatOnly = false;
     var opts = {
         outSourceMap : "bundle.js.map",
         sourceMapIncludeSources : true,

@@ -5,6 +5,8 @@
 ### Oskari 2.0 preparations
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox. This shouldn't affect any application as the main access point to get a reference is still Oskari.getSandbox().
+- Oskari.mapframework.domain.User has been renamed Oskari.User. This shouldn't affect any application as the main access point to get a reference has been Oskari.getSandbox().getUser().
+- Oskari.getSandbox().getUser() and Oskari.getSandbox().setUser() has been deprecated. Oskari.user() should be used with param to set user, without param for getting the user.
 - Sandbox is now built-in to bundles/bundle.js instead of loaded separately as part of application.
 - Moved domain/Map from core to mapmodule as map.state service.
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()

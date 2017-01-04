@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             sandbox.addRequestHandler('StateHandler.SetStateRequest', this.requestHandlers.setStateHandler);
             sandbox.addRequestHandler('StateHandler.SaveStateRequest', this.requestHandlers.saveStateHandler);
 
-            if (this.getSandbox().getUser().isLoggedIn() && sessionLengthInMinutes > 0) {
+            if (Oskari.user().isLoggedIn() && sessionLengthInMinutes > 0) {
                 this.setSessionExpiring(sessionLengthInMinutes);
             }
         },

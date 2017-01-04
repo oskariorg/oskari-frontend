@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStor
         this.instance = instance;
         var conf = instance.conf;
         this.featureNS = (conf ? conf.wfstFeatureNS : null) || 'http://www.oskari.org';
-        var user = instance.getSandbox().getUser();
+        var user = Oskari.user();
         //TODO: use KVP uuidia
         this.uuid = user.getUuid();
 

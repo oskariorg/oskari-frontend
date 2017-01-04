@@ -507,6 +507,6 @@
             removalList = list.splice(indexToRemove, 1);
             notifyDim(removalList);
             return true;
-        },
+        }
     });
 }(Oskari));

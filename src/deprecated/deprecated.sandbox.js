@@ -14,7 +14,9 @@
 		getRequestBuilder : "Use Oskari.requestBuilder() instead.",
 		printDebug : "Use Oskari.log() instead.",
 		printWarn : "Use Oskari.log() instead.",
-		printError : "Use Oskari.log() instead."
+		printError : "Use Oskari.log() instead.",
+		setUser : "Use Oskari.user() instead.",
+		getUser : "Use Oskari.user() instead"
     };
     // Warn 2 times before falling silent
     var warnMessagesSent = {};
@@ -139,6 +141,30 @@
         printError: function () {
         	warn('printError');
             log.error.apply(log, arguments);
+        },
+
+        /**
+         * @method setUser
+         *
+         * Creates Oskari.User from the given data as current
+         * user
+         * @param {Object} userData
+         *     JSON presentation of user
+         */
+        setUser: function (userData) {
+        	warn('setUser');
+        	Oskari.user(userData);
+        },
+
+        /**
+         * @method getUser
+         * Returns current user. See #setUser
+         *
+         * @return {Oskari.User} user
+         */
+        getUser: function () {
+        	warn('getUser');
+        	return Oskari.user();
         }
     });
 

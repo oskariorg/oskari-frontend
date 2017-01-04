@@ -84,7 +84,7 @@ function() {
 
         me.sandbox.register(me);
 
-        if(!me.sandbox.getUser().isLoggedIn()){
+        if(!Oskari.user().isLoggedIn()){
         	return;
         }
 

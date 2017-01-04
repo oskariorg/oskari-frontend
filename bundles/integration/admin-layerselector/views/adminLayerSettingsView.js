@@ -160,7 +160,7 @@ define([
              */
             _rolesUpdateHandler: function () {
                 var sandbox = Oskari.getSandbox(),
-                    roles = sandbox.getUser().getRoles();
+                    roles = Oskari.user().getRoles();
 
                 this.roles = new userRoleCollection(roles).getRoles();
             },

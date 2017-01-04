@@ -165,12 +165,8 @@ Oskari.clazz.define(
             }
         },
         __getApikey : function() {
-            // prefer API key
-            if(this.plugin.getSandbox().getUser() && this.plugin.getSandbox().getUser().getAPIkey()) {
-                return this.plugin.getSandbox().getUser().getAPIkey();
-            }
-            // default to cookie...
-            return jQuery.cookie('JSESSIONID') || '';
+            // prefer API key - default to cookie or "no session"...
+            return Oskari.user().getAPIkey() || jQuery.cookie('JSESSIONID') || '';
         },
 
         /**

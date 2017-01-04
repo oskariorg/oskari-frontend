@@ -7,7 +7,6 @@
  * the Oskari Module protocol.
  */
 (function(Oskari) {
-    var user;
     var ajaxUrl;
     var log;
     var services = {};
@@ -80,32 +79,6 @@
                 isDebugMode = !!setDebug;
                 log.enableDebug(isDebugMode);
                 return isDebugMode;
-            },
-
-            /**
-             * @method setUser
-             *
-             * Creates Oskari.mapframework.domain.User from the given data as current
-             * user
-             * @param {Object} userData
-             *     JSON presentation of user
-             */
-            setUser: function (userData) {
-                user = Oskari.clazz.create('Oskari.mapframework.domain.User', userData);
-            },
-
-            /**
-             * @method getUser
-             * Returns current user. See #setUser
-             *
-             * @return {Oskari.mapframework.domain.User} user
-             */
-            getUser: function () {
-                if (!user) {
-                    // init user
-                    this.setUser();
-                }
-                return user;
             },
 
             /**
