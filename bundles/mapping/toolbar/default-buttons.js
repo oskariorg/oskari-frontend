@@ -153,7 +153,7 @@ Oskari.clazz.category(
                             sticky: false,
                             callback: function () {
                               if( me.dialog ){
-                                me.dialog.close();
+                                me.dialog.close(true);
                                 me.dialog = null;
                                 return;
                               }
