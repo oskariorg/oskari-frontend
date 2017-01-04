@@ -14,15 +14,16 @@
     var requestHandlers = {};
     var isDebugMode = false;
 
+
     Oskari.clazz.define('Oskari.Sandbox',
 
         /**
          * @method create called automatically on construction
          * @static
          *
-         * @param {Oskari.mapframework.core.Core} core
+         * @param {String} name optional name for non-default sandbox.
          */
-        function (core, name) {
+        function (name) {
             var postFix = '' ;
             if(name !== 'sandbox') {
                 postFix = '.' + name;
@@ -31,8 +32,9 @@
 
             var me = this;
 
-            me._core = core;
             this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map', this);
+            // assumes map is present
+            this.handleMapLinkParams();
 
             /*
              * All registered listeners in map key: event name value:
@@ -73,6 +75,7 @@
                     return isDebugMode;
                 }
                 isDebugMode = !!setDebug;
+                log.enableDebug(isDebugMode);
                 return isDebugMode;
             },
 
@@ -1005,6 +1008,37 @@
     };
 
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
+        /**
+         * Moved from core, to be removed
+         */
+        handleMapLinkParams: function() {
+            log.debug('Checking if map is started with link...');
+            var coord = Oskari.util.getRequestParam('coord');
+            var zoomLevel = Oskari.util.getRequestParam('zoomLevel');
+
+            if (coord === null || zoomLevel === null) {
+                // not a link
+                return;
+            }
+
+            var splittedCoord;
+
+            // Coordinates can be separated either with new "_" or old "%20"
+            if (coord.indexOf('_') >= 0) {
+                splittedCoord = coord.split('_');
+            } else {
+                splittedCoord = coord.split('%20');
+            }
+
+            var longitude = splittedCoord[0],
+                latitude = splittedCoord[1];
+            if (longitude === null || latitude === null) {
+                log.debug('Could not parse link location. Skipping.');
+                return;
+            }
+            log.debug('This is startup by link, moving map...');
+            this.getMap().moveTo(longitude, latitude, zoomLevel);
+        },
         /**
          * @method addRequestHandler
          * Registers a request handler for requests with the given name

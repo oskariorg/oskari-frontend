@@ -665,22 +665,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 request,
                 tool,
-                sandbox = this.getSandbox(),
-                reqBuilder;
+                sandbox = this.getSandbox();
 
             // Is button available or already added the button?
             if (!me._showMarkerButton || me._buttonsAdded) {
                 return;
             }
 
-            reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.AddToolButtonRequest'
-            );
-
-            if (!reqBuilder) {
+            if (!sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 // Couldn't get the request, toolbar not loaded
                 return;
             }
+            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {
