@@ -68,6 +68,22 @@
 
         this._allowMultipleActivatedLayers = false;
     }, {
+        /** @static @property __name service name */
+        __name: "mapmodule.state",
+        /**
+         * @method getQName
+         * @return {String} fully qualified name for service
+         */
+        getQName: function () {
+            return this.__name;
+        },
+        /**
+         * @method getName
+         * @return {String} service name
+         */
+        getName: function () {
+            return this.__name;
+        },
         /**
          * @method moveTo
          * Sets new center and zoomlevel for map domain (NOTE: DOESN'T ACTUALLY MOVE
@@ -508,5 +524,11 @@
             notifyDim(removalList);
             return true;
         }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.service.Service']
     });
 }(Oskari));
