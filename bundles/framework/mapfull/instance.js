@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // Init user
-            sandbox.setUser(conf.user);
+            Oskari.user(conf.user);
             sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
 
             // create services & enhancements
