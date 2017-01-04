@@ -9,7 +9,7 @@
 		}
 		warnMessagesSent[name]++;
 		if(warnMessagesSent[name] < 3) {
-			log.warn('Oskari.' + name + '() no longer has any effect and will be removed in future release. Remove calls to it.')
+			log.warn('Oskari.' + name + '() will be removed in future release. Remove calls to it.')
 		}
 	};
 

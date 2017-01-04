@@ -505,15 +505,13 @@ Oskari.util = (function () {
      * @return {String} value for the parameter or null if not found
      */
     util.getRequestParam = function (name, defaultValue) {
-        // FIXME explain regex, fix escaping
-        name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
-        var regexS = '[\\?&]' + name + '=([^&#]*)',
-            regex = new RegExp(regexS),
-            results = regex.exec(window.location.href);
-        if (results === null || results === undefined) {
-            return defaultValue || null;
-        }
-        return results[1];
+      var query = location.search.substr(1);
+      var result = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+      return result[name] || defaultValue;
     };
     /**
      * Returns true if first param is a number with value between start-stop parameters

@@ -56,6 +56,9 @@
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
+            getLog : function() {
+                return log;
+            },
             /**
              * Returns true if anything is registered as a handler for the request.
              * @param  {String}  requestName request to check
@@ -989,135 +992,4 @@
             }
         }
     );
-
-/**
- * ***********************************************************************************************
- * Deprecated sandbox functions
- * ***********************************************************************************************
- */
-    // Warn 2 times before falling silent
-    var warnMessagesSent = {};
-    var warnDeprecated = function(msg) {
-        if(!warnMessagesSent[msg]) {
-            warnMessagesSent[msg] = 0;
-        }
-        warnMessagesSent[msg]++;
-        if(warnMessagesSent[msg] < 3) {
-            log.warn(msg)
-        }
-    };
-
-    Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
-        /**
-         * Moved from core, to be removed
-         */
-        handleMapLinkParams: function() {
-            log.debug('Checking if map is started with link...');
-            var coord = Oskari.util.getRequestParam('coord');
-            var zoomLevel = Oskari.util.getRequestParam('zoomLevel');
-
-            if (coord === null || zoomLevel === null) {
-                // not a link
-                return;
-            }
-
-            var splittedCoord;
-
-            // Coordinates can be separated either with new "_" or old "%20"
-            if (coord.indexOf('_') >= 0) {
-                splittedCoord = coord.split('_');
-            } else {
-                splittedCoord = coord.split('%20');
-            }
-
-            var longitude = splittedCoord[0],
-                latitude = splittedCoord[1];
-            if (longitude === null || latitude === null) {
-                log.debug('Could not parse link location. Skipping.');
-                return;
-            }
-            log.debug('This is startup by link, moving map...');
-            this.getMap().moveTo(longitude, latitude, zoomLevel);
-        },
-        /**
-         * @method addRequestHandler
-         * Registers a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerInstance request handler
-         */
-        addRequestHandler: function (requestName, handlerInstance) {
-            warnDeprecated('Sandbox.addRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, handlerInstance) instead.');
-            this.requestHandler(requestName, handlerInstance);
-        },
-
-        /**
-         * @method removeRequestHandler
-         * Unregisters a request handler for requests with the given name
-         * NOTE: only one request handler can be registered/request
-         * @param {String} requestName - name of the request
-         * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
-         */
-        removeRequestHandler: function (requestName, handlerInstance) {
-            warnDeprecated('Sandbox.removeRequestHandler() is deprecated. Use Sandbox.requestHandler(requestName, null) instead.');
-            this.requestHandler(requestName, null);
-        },
-
-        isCtrlKeyDown : function() {
-            warnDeprecated('Sandbox.isCtrlKeyDown() is deprecated. It works on Openlayers 2 only.');
-            return Oskari.ctrlKeyDown();
-        },
-        /**
-         * @method getRequestBuilder
-         *
-         * Access to request builder that creates requests by name
-         * rather than by class name
-         * @param {String} name request name that we are creating
-         * @return {Function} builder function for given request
-         */
-        getRequestBuilder: function (name) {
-            warnDeprecated('Sandbox.getRequestBuilder() is deprecated. Use Oskari.requestBuilder() instead.');
-            return Oskari.requestBuilder(name);
-        },
-
-        /**
-         * @method getEventBuilder
-         *
-         * Access to event builder that creates events by name
-         *
-         * @param {String} name request name that we are creating
-         * @return {Function} builder function for given event
-         */
-        getEventBuilder: function (name) {
-            warnDeprecated('Sandbox.getEventBuilder() is deprecated. Use Oskari.eventBuilder() instead.');
-            return Oskari.eventBuilder(name);
-        },
-        /**
-         * @method printDebug
-         * Utility method for printing debug messages to browser console
-         */
-        printDebug: function () {
-            // commented out printDebug warning since there are so many usages
-            warnDeprecated('Sandbox.printDebug is deprecated - use Oskari.log() instead');
-            log.debug.apply(log, arguments);
-        },
-        /**
-         * @method printWarn
-         * Utility method for printing warn messages to browser console
-         */
-        printWarn: function () {
-            warnDeprecated('Sandbox.printWarn is deprecated - use Oskari.log() instead');
-            log.warn.apply(log, arguments);
-            //log.warn(arguments);
-        },
-        /**
-         * @method printError
-         * Utility method for printing error messages to browser console
-         */
-        printError: function () {
-            warnDeprecated('Sandbox.printError is deprecated - use Oskari.log() instead');
-            log.error.apply(log, arguments);
-            //log.error(arguments);
-        }
-    });
 }(Oskari));

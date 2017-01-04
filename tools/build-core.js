@@ -39,16 +39,18 @@ var files = [
 	'../src/loader.js',
     '../src/oskari.app.js',
     // deprecated functions
-    '../src/module_spec.js',
-    '../src/builder_api.js',
-    '../src/deprecated.js'
+    '../src/deprecated/module_spec.js',
+    '../src/deprecated/builder_api.js',
+    '../src/deprecated/deprecated.core.js',
+    '../src/deprecated/deprecated.sandbox.js'
 ];
 
 try {
     var FILENAME = '../bundles/bundle.js';
-    var concatOnly = false;
+    var concatOnly = true;
     var opts = {
-        //outSourceMap : FILENAME + ".map",
+        outSourceMap : "bundle.js.map",
+        sourceMapIncludeSources : true,
         warnings : true,
         compress : true
     };
@@ -60,6 +62,7 @@ try {
     }
     var result = UglifyJS.minify(files, opts);
 	fs.writeFileSync(FILENAME, result.code);
+    fs.writeFileSync(FILENAME + ".map", result.map);
 } catch (e) {
     console.log(e);
     var err = new Error('Uglification failed.');
