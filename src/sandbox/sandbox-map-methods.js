@@ -13,7 +13,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      * @return {Oskari.mapframework.domain.Map}
      */
     getMap: function () {
-        return this._map;
+        return this.getService('mapmodule.state');
     },
 
     /**

@@ -30,11 +30,6 @@
             log = Oskari.log('Sandbox' + postFix);
 
             var me = this;
-
-            this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map', this);
-            // assumes map is present
-            this.handleMapLinkParams();
-
             /*
              * All registered listeners in map key: event name value:
              * array of modules who are interested in this type of event

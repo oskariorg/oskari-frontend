@@ -115,6 +115,40 @@ Oskari.clazz.define(
         };
     }, {
         /**
+         * Moved from core, to be removed
+         */
+        handleMapLinkParams: function(stateService) {
+            this.log.debug('Checking if map is started with link...');
+            var coord = Oskari.util.getRequestParam('coord', null);
+            var zoomLevel = Oskari.util.getRequestParam('zoomLevel', null);
+
+            if (coord === null || zoomLevel === null) {
+                // not a link
+                return;
+            }
+
+            var splittedCoord;
+
+            // Coordinates can be separated either with new "_" or old "%20"
+            if (coord.indexOf('_') >= 0) {
+                splittedCoord = coord.split('_');
+            } else if (coord.indexOf('%20') >= 0) {
+                splittedCoord = coord.split('%20');
+            } else {
+                // coordinate format not recognized
+                return;
+            }
+
+            var longitude = splittedCoord[0],
+                latitude = splittedCoord[1];
+            if (longitude === null || latitude === null) {
+                this.log.debug('Could not parse link location. Skipping.');
+                return;
+            }
+            this.log.debug('This is startup by link, moving map...');
+            stateService.moveTo(longitude, latitude, zoomLevel);
+        },
+        /**
          * @method init
          * Implements Module protocol init method. Creates the Map.
          * @param {Oskari.Sandbox} sandbox
@@ -127,6 +161,10 @@ Oskari.clazz.define(
             );
 
             me._sandbox = sandbox;
+
+            var stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
+            sandbox.registerService(stateService);
+            this.handleMapLinkParams(stateService);
 
             if (me._options) {
                 if (me._options.resolutions) {

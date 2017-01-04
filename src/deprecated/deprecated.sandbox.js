@@ -31,41 +31,6 @@
     };
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
         /**
-         * Moved from core, to be removed
-         */
-        handleMapLinkParams: function() {
-        	warn('handleMapLinkParams');
-            log.debug('Checking if map is started with link...');
-            var coord = o.util.getRequestParam('coord', null);
-            var zoomLevel = o.util.getRequestParam('zoomLevel', null);
-
-            if (coord === null || zoomLevel === null) {
-                // not a link
-                return;
-            }
-
-            var splittedCoord;
-
-            // Coordinates can be separated either with new "_" or old "%20"
-            if (coord.indexOf('_') >= 0) {
-                splittedCoord = coord.split('_');
-            } else if (coord.indexOf('%20') >= 0) {
-                splittedCoord = coord.split('%20');
-            } else {
-                // coordinate format not recognized
-            	return;
-            }
-
-            var longitude = splittedCoord[0],
-                latitude = splittedCoord[1];
-            if (longitude === null || latitude === null) {
-                log.debug('Could not parse link location. Skipping.');
-                return;
-            }
-            log.debug('This is startup by link, moving map...');
-            this.getMap().moveTo(longitude, latitude, zoomLevel);
-        },
-        /**
          * @method addRequestHandler
          * Registers a request handler for requests with the given name
          * NOTE: only one request handler can be registered/request
