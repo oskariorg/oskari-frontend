@@ -5,11 +5,11 @@ div.pzbDiv div.pzbDiv-plus {
   width: 18px;
   height: 34px; }
 div.pzbDiv div.pzbDiv-minus {
-  background-image: url("../images/zoombar_minus.png");
+  background-image: url("../images/zoombar_minus-patched.png");
   cursor: pointer;
   cursor: zoom-out;
   width: 18px;
-  height: 18px; }
+  height: 23px; }
 div.pzbDiv div.ui-slider-vertical {
   cursor: pointer; }
   div.pzbDiv div.ui-slider-vertical .ui-slider-handle {
