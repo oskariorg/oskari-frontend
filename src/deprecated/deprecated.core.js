@@ -17,7 +17,18 @@
     var domMgr;
     var dollarStore = o.createStore();
     var _ctrlKeyDown = false;
+    var isDebug = false;
 	var funcs = {
+        /**
+         * @public @method Oskari.setDebugMode
+         * @param {boolean} d Debug mode on/off
+         */
+        setDebugMode: function (d) {
+            isDebug = !!d;
+        },
+        isDebug : function() {
+            return isDebug;
+        },
 
 	    /**
 	     * @public @static @method Oskari.setLoaderMode
