@@ -69,18 +69,17 @@ Oskari.clazz.define(
          * creates and registers request handlers
          *
          */
-        start: function() {
+        start: function(sandbox) {
             var me = this;
-            if (me.started) {
+            var canBeStarted = me.initDomElements();
+            if(!canBeStarted) {
+                // element not found
                 return;
             }
-            me.initDomElements();
-            me.started = true;
-            var sandbox = Oskari.getSandbox();
-            me.setSandbox(sandbox);
+            me.setSandbox(sandbox || Oskari.getSandbox());
             this.localization = Oskari.getLocalization(this.getName());
             this.systemMessageService = this.createService(sandbox);
-            sandbox.register(me);
+            me.getSandbox().register(me);
             this.getMessages();
 
             // create request handlers
@@ -118,12 +117,13 @@ Oskari.clazz.define(
             this.messageElement = $('#oskari-system-messages');
             if (!this.messageElement.length) {
                 Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
-                return;
+                return false;
             }
             var icon = this.messageElement.find("div.messageIcon");
             icon.on("click", this, function(e) {
                 e.data.showMessagesPopup(e.data.localization.title, e.data.messages);
             });
+            return true;
         },
         getMessages: function() {
             this.getService().getLayerStatus();
