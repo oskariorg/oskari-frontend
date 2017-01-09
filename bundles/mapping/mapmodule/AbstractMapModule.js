@@ -801,7 +801,6 @@ Oskari.clazz.define(
             mapVO.setWidth(size.width);
             mapVO.setHeight(size.height);
 
-            mapVO.setExtent(this.getCurrentExtent());
             mapVO.setBbox(this.getCurrentExtent());
             mapVO.setMaxExtent(this.getMaxExtent());
         },

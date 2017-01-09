@@ -535,7 +535,7 @@ Oskari.clazz.define(
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName(),
-                bbox = me.ol2ExtentOl3Transform(map.getExtent()),
+                bbox = me.ol2ExtentOl3Transform(map.getBbox()),
                 zoom = map.getZoom(),
                 scale = map.getScale(),
                 layers = this._getLayers();
@@ -709,7 +709,7 @@ Oskari.clazz.define(
             // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
-                bbox = map.getExtent();
+                bbox = map.getBbox();
                 zoom = map.getZoom();
 
                 this.getHighlightImage(
@@ -848,7 +848,7 @@ Oskari.clazz.define(
 
             // update tiles
             srs = map.getSrsName();
-            bbox = map.getExtent();
+            bbox = map.getBbox();
             zoom = map.getZoom();
 
             grid = me.getGrid();
@@ -909,7 +909,7 @@ Oskari.clazz.define(
 
             var map = me.getSandbox().getMap();
             var srs = map.getSrsName();
-            var bbox = map.getExtent();
+            var bbox = map.getBbox();
             var zoom = map.getZoom();
             var layers = me.getSandbox().findAllSelectedMapLayers();
 
@@ -1111,7 +1111,7 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
-                mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
+                mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getBbox()),
                 z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
                 grid = {

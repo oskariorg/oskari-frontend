@@ -530,7 +530,7 @@ Oskari.clazz.define(
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName(),
-                bbox = map.getExtent(),
+                bbox = map.getBbox(),
                 zoom = map.getZoom(),
                 scale = map.getScale(),
                 geomRequest = false,
@@ -597,7 +597,7 @@ Oskari.clazz.define(
             // update zoomLevel and highlight pictures
             // must be updated also in map move, because of hili in bordertiles
             srs = map.getSrsName();
-            bbox = map.getExtent();
+            bbox = map.getBbox();
             zoom = map.getZoom();
 
             // if no connection or the layer is not registered, get highlight with URL
@@ -749,7 +749,7 @@ Oskari.clazz.define(
             // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
-                bbox = map.getExtent();
+                bbox = map.getBbox();
                 zoom = map.getZoom();
 
                 this.getHighlightImage(
@@ -930,7 +930,7 @@ Oskari.clazz.define(
 
             // update tiles
             srs = map.getSrsName();
-            bbox = map.getExtent();
+            bbox = map.getBbox();
             zoom = map.getZoom();
             grid = me.getGrid();
 
@@ -992,7 +992,7 @@ Oskari.clazz.define(
 
             // update tiles
             srs = map.getSrsName();
-            bbox = map.getExtent();
+            bbox = map.getBbox();
             zoom = map.getZoom();
             grid = me.getGrid();
 

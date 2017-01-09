@@ -192,7 +192,7 @@ Oskari.clazz.define(
             this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
-                bbox = this.plugin.getSandbox().getMap().getExtent(),
+                bbox = this.plugin.getSandbox().getMap().getBbox(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getScaleArray();
 

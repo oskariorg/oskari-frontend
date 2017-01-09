@@ -8,7 +8,8 @@
 - Oskari.mapframework.domain.User has been renamed Oskari.User. This shouldn't affect any application as the main access point to get a reference has been Oskari.getSandbox().getUser().
 - Oskari.getSandbox().getUser() and Oskari.getSandbox().setUser() has been deprecated. Oskari.user() should be used with param to set user, without param for getting the user.
 - Sandbox is now built-in to bundles/bundle.js instead of loaded separately as part of application.
-- Moved domain/Map from core to mapmodule as map.state service.
+- Moved domain/Map from core to mapmodule as 'map.state' service.
+- Removed setExtent() and deprecated getExtent() from 'map.state' service. Use setBbox() and getBbox() instead as they operate the same variables.
 - Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
 - Removed core.getSandbox(). Use Oskari.getSandbox() instead.
 - Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.

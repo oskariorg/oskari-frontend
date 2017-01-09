@@ -11,6 +11,11 @@
 (function(Oskari) {
     var log = Oskari.log('map.state');
 
+    // moved from core
+    var _selectedLayers = [];
+    var _activatedLayers = [];
+    var _allowMultipleActivatedLayers = false;
+
     Oskari.clazz.define('Oskari.mapframework.domain.Map',
 
     /**
@@ -48,9 +53,6 @@
         // @property {Number} resolution current map resolution (float)
         this.resolution = null;
 
-        // @property {OpenLayers.Bounds} current map extent { left: NaN, top: NaN, right: NaN, bottom: NaN }
-        this.extent = null;
-
         // @property {OpenLayers.Bounds} maximumExtent configured for the map { left: NaN, top: NaN, right: NaN, bottom: NaN }
         this.maxExtent = null;
 
@@ -59,14 +61,6 @@
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = "EPSG:3067";
-
-        // moved from core
-        this._selectedLayers = [];
-
-        // moved from core "highlighted" layers
-        this._activatedLayers = [];
-
-        this._allowMultipleActivatedLayers = false;
     }, {
         /** @static @property __name service name */
         __name: "mapmodule.state",
@@ -86,19 +80,16 @@
         },
         /**
          * @method moveTo
-         * Sets new center and zoomlevel for map domain (NOTE: DOESN'T ACTUALLY MOVE
-         * THE MAP)
+         * Sets new center and zoomlevel for map domain
+         * (NOTE: DOESN'T ACTUALLY MOVE THE MAP)
          *
-         * @param {Number}
-         *            x
-         * @param {Number}
-         *            y
-         * @param {Number}
-         *            zoom map zoomlevel
+         * @param {Number} x
+         * @param {Number} y
+         * @param {Number} zoom map zoomlevel
          */
         moveTo: function (x, y, zoom) {
-            this._centerX = x; // Math.floor(x);
-            this._centerY = y; //Math.floor(y);
+            this._centerX = x;
+            this._centerY = y;
             this._zoom = zoom;
         },
         /**
@@ -190,7 +181,7 @@
          */
         getBbox: function () {
             // bbox should be removed since it's the same as extent
-            return this._bbox || this.getExtent();
+            return this._bbox;
         },
         /**
          * @method getBbox
@@ -202,6 +193,17 @@
         getBboxAsString: function () {
             var bbox = this.getBbox() || {};
             return [bbox.left, bbox.bottom, bbox.right, bbox.top].join(',');
+        },
+        /**
+         * @method getExtent
+         * Extent in map implementation (openlayers)
+         *
+         * @return {OpenLayers.Bounds}
+         *            extent
+         */
+        getExtent: function () {
+            log.warn('getExtent() is deprecated. Use getBbox() instead.');
+            return this.getBbox();
         },
 
         /**
@@ -265,27 +267,6 @@
             return this.resolution;
         },
         /**
-         * @method setExtent
-         * Extent in map implementation (openlayers)
-         *
-         * @param {OpenLayers.Bounds} e
-         *            extent
-         */
-        setExtent: function (e) {
-            this.extent = e;
-            /* e is this kind of oject  { left: l, top: t, right: r, bottom: b }*/
-        },
-        /**
-         * @method getExtent
-         * Extent in map implementation (openlayers)
-         *
-         * @return {OpenLayers.Bounds}
-         *            extent
-         */
-        getExtent: function () {
-            return this.extent;
-        },
-        /**
          * @method setMaxExtent
          * Max Extent in map implementation (openlayers)
          *
@@ -294,7 +275,6 @@
          */
         setMaxExtent: function (me) {
             this.maxExtent = me;
-            /* me is this kind of oject { left: l, top: t, right: r, bottom: b }*/
         },
         /**
          * @method getMaxExtent
@@ -346,7 +326,7 @@
         * Selected layers
         ************************************************** */
         getLayers : function() {
-            return this._selectedLayers || [];
+            return _selectedLayers || [];
         },
         /**
          * @public @method getSelectedLayer
@@ -434,7 +414,7 @@
         * Activated or "highlighted" layers
         ************************************************** */
         getActivatedLayers : function() {
-            return this._activatedLayers || [];
+            return _activatedLayers || [];
         },
         /**
          * If no parameter is given, returns the state of the flag. With parameter sets the flag.
@@ -444,20 +424,20 @@
         allowMultipleActivatedLayers : function(allow) {
             if(typeof allow === 'undefined') {
                 // getter
-                return this._allowMultipleActivatedLayers;
+                return _allowMultipleActivatedLayers;
             }
             // setter
             var newValue = !!allow;
             var activated = this.getActivatedLayers();
             // check if we have too many activated layers when turned off
-            if(newValue === false && newValue !== this._allowMultipleActivatedLayers && activated.length > 1) {
+            if(newValue === false && newValue !== _allowMultipleActivatedLayers && activated.length > 1) {
                 var latestActivated = activated[activated.length -1];
                 // deactivate all
                 this.deactivateLayer();
                 // reactivate the latest
                 this.activateLayer(latestActivated.getId());
             }
-            this._allowMultipleActivatedLayers = newValue;
+            _allowMultipleActivatedLayers = newValue;
             return newValue;
         },
         /**
@@ -509,7 +489,7 @@
             if(typeof id === 'undefined') {
                 // remove all
                 removalList = list.slice(0);
-                this._activatedLayers = [];
+                _activatedLayers = [];
                 notifyDim(removalList);
                 return removalList.length !== 0;
             }
