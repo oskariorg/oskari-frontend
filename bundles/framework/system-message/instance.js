@@ -59,7 +59,7 @@ Oskari.clazz.define(
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function() {
-            var me = this;
+
         },
         /**
          * @method start
@@ -111,6 +111,12 @@ Oskari.clazz.define(
         getService: function() {
             return this.systemMessageService;
         },
+        /**
+         * @public @method initDomElements
+         * Creates reference to DOM elements of the bundle
+         *
+         * @return {Boolean} returns true if elements found, else false
+         */
         initDomElements: function() {
             var me = this;
             //Get reference to the div we use to show the messages
@@ -127,9 +133,16 @@ Oskari.clazz.define(
             return true;
         },
         getMessages: function() {
-            this.getService().getLayerStatus();
+            this.getService().getStatusMessages();
         },
-        showStatusMessage: function(message) {
+        /**
+         * @public @method showStatusMessage
+         * Shows the newest status message in the sidebar
+         *
+         * @param {String} message element message
+         *
+         */
+         showStatusMessage: function(message) {
             var me = this;
             if (!message && this.messages.length) {
                 message = this.messages[this.messages.length - 1];
@@ -145,7 +158,7 @@ Oskari.clazz.define(
             // }, 5000);
         },
         /**
-         * @public @method showMessage
+         * @public @method showMessagesPopup
          * Shows user a message with ok button
          *
          * @param {String} title popup title

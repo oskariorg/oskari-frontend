@@ -26,7 +26,7 @@ function(instance) {
    */
   init: function() {
   },
-  getLayerStatus: function() {
+  getStatusMessages: function() {
     // this._instance.messages.push();
     this._instance.showStatusMessage();
   }
