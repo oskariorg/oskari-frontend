@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         _processStartupLinkLayers: function (sandbox) {
             var mapLayers = Oskari.util.getRequestParam('mapLayers');
 
-            if (mapLayers === null || mapLayers === '') {
+            if (!mapLayers) {
                 // no linked layers
                 return;
             }
