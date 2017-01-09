@@ -38,7 +38,7 @@ function( message, level ) {
    * @method getUrgency
    */
   getUrgencyLevel: function() {
-    return this.colors[this.level] || 'gray';
+    return this.colors[this._level] || 'gray';
   }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']
