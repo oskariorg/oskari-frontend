@@ -366,11 +366,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // create initial services that are available in this application
             var services = [];
             var sb = this.getSandbox();
-            var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
             var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
             var popupService = Oskari.clazz.create('Oskari.userinterface.component.PopupService', sb);
 
-            services.push(mapLayerService);
             services.push(searchService);
             services.push(popupService);
 

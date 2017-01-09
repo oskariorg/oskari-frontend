@@ -162,6 +162,13 @@ Oskari.clazz.define(
 
             me._sandbox = sandbox;
 
+            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(!mapLayerService) {
+                // create maplayer service to sandbox if it doesn't exist yet
+                mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
+                sandbox.registerService(mapLayerService);
+            }
+
             var stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
             sandbox.registerService(stateService);
             this.handleMapLinkParams(stateService);
