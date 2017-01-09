@@ -15,7 +15,7 @@ function( message, level ) {
   this._level = level;
 }, {
   /** @static @property __name request name */
-  __name: 'SystemMessage.ShowMessageRequest',
+  __name: 'ShowMessageRequest',
   colors : {
       'info' : 'blue',
       'warning' : 'orange',

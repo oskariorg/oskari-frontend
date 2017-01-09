@@ -202,9 +202,13 @@ var WGS84Units = mapModule.getProjectionUnits('EPSG:4326');
 console.log('WGS84 projection units = ' + WGS84Units);
 ```
 
-## myplaces2
+### myplaces2
 
 Renamed name-attributes on forms to data-name since atleast Chrome removes the name-attribute if there is another element with the same name.
+
+### system-message
+
+New bundle for displaying status messages for the user.
 
 ## 1.40.0
 

@@ -11,7 +11,7 @@ Curent urgency levels: info, warning, error.
 ## Example
 
 ```javascript
- var requestBuilder = sandbox.getRequestBuilder('SystemMessage.ShowMessageRequest');
+ var requestBuilder = Oskari.requestBuilder('ShowMessageRequest');
  var request = requestBuilder('testing', 'info');
- sandbox.request('system-message', request);
+ Oskari.getSandbox().request('system-message', request);
 ```

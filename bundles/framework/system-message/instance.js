@@ -90,7 +90,7 @@ Oskari.clazz.define(
         );
         // register request handlers
         sandbox.addRequestHandler(
-            'SystemMessage.ShowMessageRequest',
+            'ShowMessageRequest',
             me.showMessageRequestHandler
         );
       },
@@ -116,7 +116,7 @@ Oskari.clazz.define(
           var me = this;
           //Get reference to the div we use to show the messages
           this.messageElement = $('#oskari-system-messages');
-          if(!this.messageElement){
+          if(!this.messageElement.length){
             Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
             return;
           }
