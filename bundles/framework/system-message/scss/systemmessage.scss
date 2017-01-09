@@ -8,7 +8,6 @@ div#oskari-system-messages{
   text-overflow: ellipsis;
 }
 div.messageIcon{
-  background-image: $messageIcon;
   width: 2em;
   height: 2em;
   display:inline-block;
@@ -20,4 +19,7 @@ div.messagetext{
   color:white;
   padding-left: 0.4em;
   float:right;
+}
+div.iconImg {
+  background-image: $messageIcon;
 }

@@ -120,6 +120,7 @@ Oskari.clazz.define(
                 return false;
             }
             var icon = this.messageElement.find("div.messageIcon");
+            icon.addClass('iconImg');
             icon.on("click", this, function(e) {
                 e.data.showMessagesPopup(e.data.localization.title, e.data.messages);
             });
@@ -137,10 +138,11 @@ Oskari.clazz.define(
                 return;
             }
             var el = this.messageElement.find('.messagetext');
+            el.show();
             el.text(message);
-            setTimeout(function() {
-                el.fadeOut(500);
-            }, 5000);
+            // setTimeout(function() {
+            //     el.fadeOut(500);
+            // }, 5000);
         },
         /**
          * @public @method showMessage
