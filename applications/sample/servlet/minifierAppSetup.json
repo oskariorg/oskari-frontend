@@ -1,12 +1,6 @@
 {
 	"startupSequence": [
 		{
-			"instanceProps": {},
-			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-default-theme",
-			"fi": "OpenLayers",
-			"sv": "OpenLayers",
-			"en": "OpenLayers",
 			"bundlename": "openlayers-default-theme",
 			"metadata": {
 				"Import-Bundle": {
@@ -16,29 +10,13 @@
 					"openlayers-full-map": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Map",
-			"bundleinstancename": "mapfull",
-			"fi": "Map",
-			"sv": "Map",
-			"en": "Map",
 			"bundlename": "mapfull",
 			"metadata": {
 				"Import-Bundle": {
 					"mapwmts": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-  					"service-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map-layer": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
 	                "mapmodule-plugin": {
@@ -47,13 +25,7 @@
                     "ui-components": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
-	                "event-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "mapfull": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "core-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
 	                "oskariui": {
@@ -65,23 +37,8 @@
 	                "mapuserlayers": {
             			"bundlePath": "../../../packages/framework/bundle/"
           			},
- 					"request-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 					"mapstats": {
 	                    "bundlePath": "../../../packages/mapping/ol2/"
-	                },
-					"domain": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
- 					"core-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"request-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
                     "mapmyplaces": {
                         "bundlePath": "../../../packages/framework/bundle/"
@@ -89,20 +46,10 @@
 	                "mapanalysis": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
-					"service-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-					"event-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "maparcgis": {
 	                    "bundlePath": "../../../packages/arcgis/bundle/"
 	                }
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},
