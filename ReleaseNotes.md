@@ -82,7 +82,6 @@ Indicator listing from server can be partial and callback value for service.getI
     }
 ```
 
-
 ### divmanazer
 
 #### DefaultFlyout
