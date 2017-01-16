@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			return;
 		}
 
-		this.service.getIndicatorList(datasrc, function(err, indicators) {
+		this.service.getIndicatorList(datasrc, function(err, result) {
 			if(err) {
 				// notify error!!
 				return;
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			// add empty selection to show placeholder
 			select.append('<option></option>');
 
-			indicators.forEach(function(ind) {
+			result.indicators.forEach(function(ind) {
 				select.append(me.__templates.option({
 					id : ind.id,
 					name : Oskari.getLocalized(ind.name)

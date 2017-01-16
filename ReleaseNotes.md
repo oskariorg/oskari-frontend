@@ -73,6 +73,15 @@ Map full screen mode now resetting when pressing reset view tools.
 Users can now edit indicator classification on geoportal views.
 Publisher can define if classification can be changed on published map.
 Grid component is no longer shown initially on startup.
+Indicator listing from server can be partial and callback value for service.getIndicatorList() have been changed from array to object with the indicator array as "indicators" key:
+
+```javascript
+    {
+        complete : false,
+        indicators : [...]
+    }
+```
+
 
 ### divmanazer
 

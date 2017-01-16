@@ -211,7 +211,7 @@
                     me.cache.remove(cacheKey);
                     // try again after 10 seconds
                     me.getIndicatorList(ds, function(err, newList) {
-                        if(newList.length === previousList.length) {
+                        if(newList.indicators.length === previousList.length) {
                             // same list size??? somethings propably wrong
                             _log.warn('Same indicator list as in previous try. There might be some problems with the service');
                             return;
@@ -233,11 +233,10 @@
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
+                    me.cache.respondToQueue(cacheKey, null, pResp);
                     if(!pResp.complete) {
                         // wasn't complete dataset - remove from cache and poll for more
                         updateIncompleteIndicatorList(pResp.indicators);
-                    } else {
-                        me.cache.respondToQueue(cacheKey, null, pResp.indicators);
                     }
 
                 },
