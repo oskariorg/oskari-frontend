@@ -215,7 +215,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
             panel.setTitle(locale.panels.newSearch.title);
 
-            container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb).getPanelContent(config));
+            var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', this.instance, sb);
+            container.append(selectionComponent.getPanelContent(config));
 
             return {id:'newSearchPanel', panel:panel};
         },

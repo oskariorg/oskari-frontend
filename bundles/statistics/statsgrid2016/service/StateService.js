@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
         },
         /**
@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         selectRegion : function(region) {
             // notify only for now
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
             this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
 
@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 var previousClassification = indicator.classification;
                 indicator.classification = classification;
                 // notify
-                var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.ClassificationChangedEvent');
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
                 if(!suppressEvent && eventBuilder) {
                     this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
                     me.setActiveIndicator(indicatorHash);
@@ -180,7 +180,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 }
 
                 // notify
-                var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
                 me.sandbox.notifyAll(eventBuilder(me.activeIndicator, previous));
             }, 100);
         },
@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.indicators.push(ind);
 
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
 
 
@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.setActiveIndicator();
             }
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
             return removedIndicator;
         },
