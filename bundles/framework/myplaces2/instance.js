@@ -67,11 +67,10 @@ Oskari.clazz.define(
         showMessage: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-              dialog.makeModal();
-
             okBtn.setHandler(function () {
                 dialog.close(true);
             });
+            dialog.makeModal();
             dialog.show(title, message, [okBtn]);
         },
         /**

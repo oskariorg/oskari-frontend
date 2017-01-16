@@ -10,6 +10,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
     function () {
         this.cache = {};
     }, {
+        remove : function(key) {
+            this.cache[key] = null;
+        },
         put : function(key, value) {
             this.cache[key] = value;
         },

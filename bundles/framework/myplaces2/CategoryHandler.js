@@ -332,9 +332,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
+            dialog.makeModal();
             dialog.show(catLoc.title, content, buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
-            dialog.makeModal();
             //bind listeners etc. for category form
             form.start();
 
@@ -356,6 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 row.append(errors[i].error);
                 content.append(row);
             }
+            dialog.makeModal();
             dialog.show(loc.validation.title, content, [okBtn]);
 
         },
