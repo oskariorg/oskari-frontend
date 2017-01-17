@@ -558,6 +558,15 @@
 			}
 		  }
 		}
+        }, {
+            "bundlename": "system-message",
+            "metadata": {
+                "Import-Bundle": {
+                    "system-message": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
 	  }
 	]
 }
