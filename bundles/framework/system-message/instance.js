@@ -30,6 +30,7 @@ Oskari.clazz.define(
         this.messages = [];
         this.popupIsOpen = false;
         this.messageElement = null;
+        this._dialog = null;
     }, {
         /**
          * @static
@@ -183,21 +184,23 @@ Oskari.clazz.define(
          */
         showMessagesPopup: function(title, message) {
             if (this.popupIsOpen) {
+                this._dialog.close(true);
+                this.popupIsOpen = false;
                 return;
             }
             var me = this;
             this.popupIsOpen = true;
-            var dialog = Oskari.clazz.create(
+            this._dialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.Popup'
             );
-            var btn = dialog.createCloseButton('OK');
+            var btn = this._dialog.createCloseButton('OK');
             btn.setHandler(function() {
-                dialog.close();
+                me._dialog.close();
                 me.popupIsOpen = false;
             });
             message = message.join("<br/>");
-            dialog.show(title, message, [btn]);
-            dialog.moveTo(jQuery('.messageIcon'), 'top', true);
+            this._dialog.show(title, message, [btn]);
+            this._dialog.moveTo(jQuery('.messageIcon'), 'top', true);
         }
     }, {
         /**
