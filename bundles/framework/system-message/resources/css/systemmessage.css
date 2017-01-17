@@ -3,21 +3,49 @@ div#oskari-system-messages {
   position: fixed;
   display: table;
   padding-left: 0.3em;
-  text-overflow: ellipsis; }
+ }
 
 div.messageIcon {
   width: 2em;
   height: 2em;
   display: inline-block;
-  float: left; }
+  float: left;
+ }
 
 div.messagetext {
-  width: 140px;
+  width: 9.5em;
   font-size: 85%;
   color: white;
   padding-left: 0.4em;
   float: right; }
 
-  div.iconImg {
-    background-image: url("../images/about.png");
-  }
+div.message-container{
+  float:left;
+}
+.front, .back {
+	width: 2em;
+	height: 2em;
+}
+.flip{
+  transform: rotateX(180deg);
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  top:0;
+  left:0;
+  position: relative;
+}
+  /* hide back of pane during swap */
+div.front, div.back {
+	backface-visibility: hidden;
+}
+/* back pane, placed above front */
+.back {
+	z-index: 2;
+  background-color: #333438;
+}
+
+/* fron, initially hidden pane */
+.front {
+  background-image: url("../images/about.png");
+	transform: rotateX(180deg);
+}
