@@ -150,6 +150,9 @@ Oskari.clazz.define(
             'StatsGrid.ClassificationChangedEvent': function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.DatasourceEvent': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent' : function() {
                 // close/tear down tge ui when receiving the event
                 var sandbox = this.getSandbox();

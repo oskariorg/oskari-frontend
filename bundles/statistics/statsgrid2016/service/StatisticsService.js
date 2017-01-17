@@ -1,7 +1,10 @@
 /**
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
+(function(Oskari) {
+    var _log = Oskari.log('StatsGrid.StatisticsService');
+
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
 
     /**
      * @method create called automatically on construction
@@ -202,6 +205,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             }
 
             var me = this;
+            var updateIncompleteIndicatorList = function(previousList) {
+                _log.info('Indicator listing was not complete. Refreshing in 10 seconds');
+                setTimeout(function() {
+                    me.cache.remove(cacheKey);
+                    // try again after 10 seconds
+                    me.getIndicatorList(ds, function(err, newList) {
+                        if(newList.indicators.length === previousList.length) {
+                            // same list size??? somethings propably wrong
+                            _log.warn('Same indicator list as in previous try. There might be some problems with the service');
+                            return;
+                        }
+                        // send out event about new indicators
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        me.sandbox.notifyAll(eventBuilder(ds));
+                    });
+                }, 10000);
+            }
+
             // call GetIndicatorList with parameter datasource=ds
             // use first param as error indicator - null == no error
             jQuery.ajax({
@@ -212,7 +233,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp.indicators);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
+                    if(!pResp.complete) {
+                        // wasn't complete dataset - remove from cache and poll for more
+                        updateIncompleteIndicatorList(pResp.indicators);
+                    }
+
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicators');
@@ -441,3 +467,4 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });
+}(Oskari));
