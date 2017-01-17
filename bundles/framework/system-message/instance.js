@@ -17,6 +17,13 @@ Oskari.clazz.define(
     'Oskari.framework.bundle.system-message.SystemBundleInstance',
 
     function() {
+        this._messageField = jQuery('<div class="messagetext"></div>');
+        this._messageContainer = jQuery('<div class="message-container">'+
+                                        '<div class="iconFlip">' +
+                                        '<a href="#"><div class="messageIcon front"></div></a>' +
+                                        '<div class="iconBack back"></div>'+
+                                        '</div>'+
+                                        '</div>');
         this.sandbox = null;
         this.started = false;
         this._localization = null;
@@ -52,14 +59,6 @@ Oskari.clazz.define(
          */
         getSandbox: function() {
             return this.sandbox;
-        },
-
-        /**
-         * @method update
-         * implements BundleInstance protocol update method - does nothing atm
-         */
-        update: function() {
-
         },
         /**
          * @method start
@@ -119,14 +118,16 @@ Oskari.clazz.define(
          */
         initDomElements: function() {
             var me = this;
+            var container = me._messageContainer.clone();
+            var field = me._messageField.clone();
             //Get reference to the div we use to show the messages
             this.messageElement = $('#oskari-system-messages');
+            this.messageElement.append(container, field);
             if (!this.messageElement.length) {
                 Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
                 return false;
             }
             var icon = this.messageElement.find("div.messageIcon");
-            icon.addClass('iconImg');
             icon.on("click", this, function(e) {
                 e.data.showMessagesPopup(e.data.localization.title, e.data.messages);
             });
@@ -144,6 +145,7 @@ Oskari.clazz.define(
          */
          showStatusMessage: function(message) {
             var me = this;
+            me.toggleIcon();
             if (!message && this.messages.length) {
                 message = this.messages[this.messages.length - 1];
             }
@@ -153,9 +155,23 @@ Oskari.clazz.define(
             var el = this.messageElement.find('.messagetext');
             el.show();
             el.text(message);
-            // setTimeout(function() {
-            //     el.fadeOut(500);
-            // }, 5000);
+            if(this.messages.length === 0){
+              el.empty();
+            }
+        },
+        /**
+         * @public @method toggleIcon
+         * controls the visibility of the icon informing about messages
+         *
+         */
+        toggleIcon: function(){
+          var container = this.messageElement.find('div.message-container');
+          if(this.messages.length > 0 && !container.hasClass('.flip')){
+              container.addClass("flip");
+          }
+          if(this.messages.length === 0 && container.hasClass('flip')){
+            container.toggleClass("flip");
+          }
         },
         /**
          * @public @method showMessagesPopup
