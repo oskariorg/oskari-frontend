@@ -308,29 +308,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                     me.printout.hide();
                 }
                 me.printout.printMap(printParams);
-            },
-            /**
-             * Bundles could plot with prespcefied parcel conf
-             * @method Printout.PrintWithParcelUIEvent
-             * @param {Object} event
-             */
-            'Printout.PrintWithParcelUIEvent': function (event) {
-                var me = this,
-                    contentId = event.getContentId(),
-                    printParams = event.getPrintParams(),
-                    geoJson = event.getGeoJsonData(),
-                    tableJson = event.getTableData();
-
-                if (geoJson) {
-                    me.geoJson = geoJson;
-                }
-                if (tableJson) {
-                    me.tableJson = tableJson;
-                }
-                me.setPublishMode(true);
-                // configure UI
-                me.printout.modifyUIConfig4Parcel(printParams);
-                me.printout.setLayoutParams(printParams);
             }
         },
 

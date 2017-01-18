@@ -59,9 +59,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "src": "../../../../bundles/framework/printout/event/PrintWithoutUIEvent.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/event/PrintWithParcelUIEvent.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/event/PrintCanceledEvent.js"
         }, {
             "type": "text/css",
