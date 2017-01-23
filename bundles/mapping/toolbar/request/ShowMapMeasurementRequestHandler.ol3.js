@@ -66,7 +66,7 @@ Oskari.clazz.define(
                         me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, true]);
                         me._dialogShown = false;
                         // ask toolbar to select default tool
-                        var toolbarRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
 
                         me._dialog.close(true);
@@ -95,10 +95,7 @@ Oskari.clazz.define(
                 cancelBtn.setHandler(function () {
                     me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [false, false]);
                     // ask toolbar to select default tool
-                    var toolbarRequest =
-                        me._toolbar.getSandbox().getRequestBuilder(
-                            'Toolbar.SelectToolButtonRequest'
-                        )();
+                    var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
                 });
@@ -111,9 +108,8 @@ Oskari.clazz.define(
                     buttons: me._buttons
                 };
 
-                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
-                    'Toolbar.ToolContainerRequest'
-                )('set', me.toolContentDivData);
+                toolContainerRequest = Oskari.requestBuilder(
+                    'Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
                 me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
             }
             me.toolContentDivData.content.html(value);
@@ -126,9 +122,8 @@ Oskari.clazz.define(
          */
         _hideResultsInPlugin: function (isCancel) {
             var me = this,
-                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
-                    'Toolbar.ToolContainerRequest'
-                )('reset', me.toolContentDivData);
+                toolContainerRequest = Oskari.requestBuilder(
+                    'Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
             me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
             me.toolContentDivData = null;
         }

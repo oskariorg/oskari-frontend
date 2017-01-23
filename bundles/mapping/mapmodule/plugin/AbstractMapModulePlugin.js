@@ -220,20 +220,14 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             sandbox.register(me);
             me._eventHandlers = me.createEventHandlers();
             me._requestHandlers = me.createRequestHandlers();
-            for (handler in me._eventHandlers) {
-                if (me._eventHandlers.hasOwnProperty(handler)) {
-                    sandbox.registerForEventByName(me, handler);
-                }
-            }
 
-            for (handler in me._requestHandlers) {
-                if (me._requestHandlers.hasOwnProperty(handler)) {
-                    me._sandbox.addRequestHandler(
-                        handler,
-                        this._requestHandlers[handler]
-                    );
-                }
-            }
+            Object.keys(me._eventHandlers).forEach(function(key) {
+                sandbox.registerForEventByName(me, me._eventHandlers[key]);
+            });
+
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, me._requestHandlers[key]);
+            });
 
             var waitingForToolbar = me._startPluginImpl(sandbox);
             // Make sure plugin's edit mode is set correctly
@@ -259,20 +253,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
             me._stopPluginImpl(sandbox);
 
-            for (handler in me._eventHandlers) {
-                if (me._eventHandlers.hasOwnProperty(handler)) {
-                    sandbox.unregisterFromEventByName(me, handler);
-                }
-            }
+            Object.keys(me._eventHandlers).forEach(function(key) {
+                sandbox.unregisterFromEventByName(me, me._eventHandlers[key]);
+            });
 
-            for (handler in me._requestHandlers) {
-                if (me._requestHandlers.hasOwnProperty(handler)) {
-                    sandbox.removeRequestHandler(
-                        handler,
-                        this._requestHandlers[handler]
-                    );
-                }
-            }
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, null);
+            });
 
             sandbox.unregister(me);
             me._sandbox = null;

@@ -34,9 +34,9 @@ Oskari.clazz.category(
             var me = this,
                 loc = this.getLocalization('buttons'),
                 sandbox = this.getSandbox(),
-                reqBuilder = sandbox.getRequestBuilder('ToolSelectionRequest'),
+                reqBuilder = Oskari.requestBuilder('ToolSelectionRequest'),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
-                gfiReqBuilder = sandbox.getRequestBuilder(gfiRn),
+                gfiReqBuilder = Oskari.requestBuilder(gfiRn),
                 group;
 
             var buttonGroups = [{
@@ -48,7 +48,7 @@ Oskari.clazz.category(
                             sticky: false,
                             callback: function () {
                                 // statehandler reset state
-                                var rb = me.getSandbox().getRequestBuilder(
+                                var rb = Oskari.requestBuilder(
                                     'StateHandler.SetStateRequest'
                                 );
                                 if (rb) {

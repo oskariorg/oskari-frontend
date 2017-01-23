@@ -42,8 +42,6 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
-            this.gfiReqBuilder = this._toolbar.getSandbox().getRequestBuilder(gfiRn);
             this._showMeasurementResults(request.getValue());
         },
         getValue: function () {
@@ -67,7 +65,7 @@ Oskari.clazz.define(
                     cancelBtn.setHandler(function () {
                         me._dialogShown = false;
                         // ask toolbar to select default tool
-                        var toolbarRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                         //enable gfi
                         if (me.gfiReqBuilder) {
@@ -98,10 +96,7 @@ Oskari.clazz.define(
                 var cancelBtn = me._buttons[0];
                 cancelBtn.setHandler(function () {
                     // ask toolbar to select default tool
-                    var toolbarRequest =
-                        me._toolbar.getSandbox().getRequestBuilder(
-                            'Toolbar.SelectToolButtonRequest'
-                        )();
+                    var toolbarRequest =Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
                     //enable gfi
@@ -118,9 +113,7 @@ Oskari.clazz.define(
                     buttons: me._buttons
                 };
 
-                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
-                    'Toolbar.ToolContainerRequest'
-                )('set', me.toolContentDivData);
+                toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
                 me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
             }
             me.toolContentDivData.content.html(value);
@@ -133,9 +126,8 @@ Oskari.clazz.define(
          */
         _hideResultsInPlugin: function (isCancel) {
             var me = this,
-                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
-                    'Toolbar.ToolContainerRequest'
-                )('reset', me.toolContentDivData);
+                toolContainerRequest = Oskari.requestBuilder(
+                    'Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
             me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
             me.toolContentDivData = null;
         }

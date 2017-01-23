@@ -111,8 +111,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             }
 
             // Toolbar available
-            var eventBuilder = sandbox.getEventBuilder('Toolbar.ToolbarLoadedEvent');
-            var event = eventBuilder();
+            var event = Oskari.eventBuilder('Toolbar.ToolbarLoadedEvent')();
             sandbox.notifyAll(event);
         },
         /**
@@ -318,7 +317,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
-                sandbox.request(me, sandbox.getRequestBuilder('ShowMapMeasurementRequest')(msg || "", false, null, null));
+                sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || "", false, null, null));
 
             }
         },
@@ -340,13 +339,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             }
 
             /* temporary fix */
-            sandbox.removeRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
+            sandbox.requestHandler('ShowMapMeasurementRequest', null);
 
-            sandbox.removeRequestHandler('Toolbar.ToolbarRequest', this.requestHandlers.toolbarRequestHandler);
-            sandbox.removeRequestHandler('Toolbar.AddToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.removeRequestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.removeRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
-            sandbox.removeRequestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+            sandbox.requestHandler('Toolbar.ToolbarRequest', null);
+            sandbox.requestHandler('Toolbar.AddToolButtonRequest', null);
+            sandbox.requestHandler('Toolbar.RemoveToolButtonRequest', null);
+            sandbox.requestHandler('Toolbar.ToolButtonStateRequest', null);
+            sandbox.requestHandler('Toolbar.SelectToolButtonRequest', null);
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             me.sandbox.unregister(me);
