@@ -279,15 +279,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             );
 
             // register request handlers
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapResizeEnabledRequest',
                 me.mapResizeEnabledRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapWindowFullScreenRequest',
                 me.mapWindowFullScreenRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapSizeUpdateRequest',
                 me.mapSizeUpdateRequestHandler
             );
@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         _teardownState: function (module) {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 // remove all current layers
-                rbRemove = this.getSandbox().getRequestBuilder(
+                rbRemove = Oskari.requestBuilder(
                         'RemoveMapLayerRequest'
                 ),
                 i;
@@ -414,8 +414,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 i,
                 layer,
                 sandbox =  me.getSandbox(),
-                rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
+                rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 
@@ -434,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // setting state
             if (state.selectedLayers) {
-                rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
+                rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
 
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
