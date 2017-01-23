@@ -73,7 +73,7 @@ Oskari.clazz.define(
             var me = this;
             var sandbox = this._sandbox;
             Object.keys(me._requestHandlers).forEach(function(key) {
-                sandbox.requestHandler(key, me._requestHandlers[key]);
+                sandbox.requestHandler(key, null);
             });
             sandbox.unregisterStateful(me._clazz);
         },
