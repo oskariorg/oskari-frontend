@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             if(!searchUrl) {
                 this._searchUrl = sandbox.getAjaxUrl('GetSearchResult');
             }
-            sandbox.addRequestHandler('SearchRequest', this);
+            sandbox.requestHandler('SearchRequest', this);
             sandbox.registerService(this);
         }
     }, {
