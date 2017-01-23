@@ -54,14 +54,9 @@ Oskari.clazz.define(
             me._sandbox = sandbox;
 
             me._requestHandlers = me._createRequestHandlers();
-            for (var handler in me._requestHandlers) {
-                if (me._requestHandlers.hasOwnProperty(handler)) {
-                    me._sandbox.addRequestHandler(
-                        handler,
-                        this._requestHandlers[handler]
-                    );
-                }
-            }
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, me._requestHandlers[key]);
+            });
 
             sandbox.registerAsStateful(me._clazz, me);
         },
@@ -76,6 +71,10 @@ Oskari.clazz.define(
          */
         stopPlugin : function(sandbox) {
             var me = this;
+            var sandbox = this._sandbox;
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, me._requestHandlers[key]);
+            });
             sandbox.unregisterStateful(me._clazz);
         },
 
