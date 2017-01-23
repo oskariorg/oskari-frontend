@@ -970,7 +970,7 @@ Oskari.clazz.define(
                 request,
                 sandbox = me.getSandbox();
 
-            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest'))) {
+            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest')) {
                 return;
             }
             me._mobileToolbar = true;
