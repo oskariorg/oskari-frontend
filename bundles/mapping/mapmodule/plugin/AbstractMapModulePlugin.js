@@ -222,7 +222,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             me._requestHandlers = me.createRequestHandlers();
 
             Object.keys(me._eventHandlers).forEach(function(key) {
-                sandbox.registerForEventByName(me, me._eventHandlers[key]);
+                sandbox.registerForEventByName(me, key);
             });
 
             Object.keys(me._requestHandlers).forEach(function(key) {
@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             me._stopPluginImpl(sandbox);
 
             Object.keys(me._eventHandlers).forEach(function(key) {
-                sandbox.unregisterFromEventByName(me, me._eventHandlers[key]);
+                sandbox.unregisterFromEventByName(me, key);
             });
 
             Object.keys(me._requestHandlers).forEach(function(key) {

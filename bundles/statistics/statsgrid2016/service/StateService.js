@@ -178,7 +178,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 if(!me.activeIndicator) {
                     me.activeIndicator = me.getActiveIndicator();
                 }
-
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
                 me.sandbox.notifyAll(eventBuilder(me.activeIndicator, previous));

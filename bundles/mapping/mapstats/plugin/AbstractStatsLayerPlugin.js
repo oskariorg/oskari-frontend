@@ -228,9 +228,8 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                 });
             });
         },
-        _createEventHandlers: function () {
+        _createPluginEventHandlers: function () {
             var me = this;
-
             return {
                 'StatsGrid.ClassificationChangedEvent': function (event) {
                     me.renderActiveIndicator(event);
