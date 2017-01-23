@@ -6,7 +6,6 @@
 Oskari.clazz.define('Oskari.userinterface.component.SelectList',
 
   function(){
-    // this._placeholder = 'hello';
     this._option = jQuery('<option></option>');
     this._selectTemplate = jQuery('<div class="oskari-select">'+
                                   '<select></select>'+
@@ -44,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
           no_results_text: options.no_results_text,
           placeholder_text: options.placeholder_text,
           disable_search_threshold: options.disable_search_threshold ? options.disable_search_threshold : 10,
-          allow_single_deselect : allow_single_deselect ? allow_single_deselect : false
+          allow_single_deselect : options.allow_single_deselect ? options.allow_single_deselect : false
       });
       return el;
     },
