@@ -39,6 +39,25 @@
     core.getRequestBuilder() -> Oskari.requestBuilder()
     core.getEventBuilder() -> Oskari.eventBuilder()
 ```
+
+Note! sandbox.getRequestBuilder() was commonly used to check if the request is being handled:
+
+```javascript
+    var reqBuilder = sandbox.getRequestBuilder([regName]);
+    if (reqBuilder) { ... }
+```
+
+Oskari.requestHandler doesn't check this. You should use sandbox.hasHandler([reqName]) instead.
+
+```javascript
+    if (sandbox.hasHandler([regName])) {
+        var reqBuilder = Oskari.requestBuilder([regName]);
+        ...
+    }
+```
+
+Sandbox.getRequestBuilder() still works like before, but is deprecated and will be removed in a future release.
+
 - Refactored sandbox methods (debug state can be asked by sandbox.debug()):
 ```javascript
     sandbox.disableDebug() -> sandbox.debug(false)

@@ -541,7 +541,7 @@ Oskari.clazz.define(
         getUserLocation : function(callback, options) {
             var me = this;
             var sandbox = me.getSandbox();
-            var evtBuilder =  sandbox.getEventBuilder('UserLocationEvent');
+            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
@@ -828,7 +828,7 @@ Oskari.clazz.define(
                 heightNew = mapVO.getHeight();
             // send as an event forward
             if(width !== widthNew || height !== heightNew) {
-              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
+              var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
               sandbox.notifyAll(evt);
             }
         },
@@ -920,7 +920,7 @@ Oskari.clazz.define(
             this.getSandbox().getMap().setMoving(true);
             var centerX = this.getMapCenter().lon,
                 centerY = this.getMapCenter().lat,
-                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+                evt = Oskari.eventBuilder('MapMoveStartEvent')(centerX, centerY);
             this.getSandbox().notifyAll(evt);
         },
         /**
@@ -938,7 +938,7 @@ Oskari.clazz.define(
 
             var lonlat = this.getMapCenter();
             this.updateDomain();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
+            var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
@@ -968,30 +968,30 @@ Oskari.clazz.define(
         _createMobileToolbar: function () {
             var me = this,
                 request,
-                sandbox = me.getSandbox(),
-                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+                sandbox = me.getSandbox();
 
-            if (me._mobileToolbarId && builder) {
-                me._mobileToolbar = true;
-                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
-                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
-                // add toolbar when toolbarId and target container is configured
-                // We assume the first container is intended for the toolbar
-                request = builder(
-                        me._mobileToolbarId,
-                        'add',
-                        {
-                            show: true,
-                            toolbarContainer: me._toolbarContent,
-                            colours: {
-                                hover: this.getThemeColours().hoverColour,
-                                background: this.getThemeColours().backgroundColour
-                            },
-                            disableHover: true
-                        }
-                );
-                sandbox.request(me.getName(), request);
+            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest')) {
+                return;
             }
+            me._mobileToolbar = true;
+            me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+            me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+            // add toolbar when toolbarId and target container is configured
+            // We assume the first container is intended for the toolbar
+            request = Oskari.requestBuilder('Toolbar.ToolbarRequest')(
+                    me._mobileToolbarId,
+                    'add',
+                    {
+                        show: true,
+                        toolbarContainer: me._toolbarContent,
+                        colours: {
+                            hover: this.getThemeColours().hoverColour,
+                            background: this.getThemeColours().backgroundColour
+                        },
+                        disableHover: true
+                    }
+            );
+            sandbox.request(me.getName(), request);
         },
 
         setMobileMode: function (isInMobileMode) {

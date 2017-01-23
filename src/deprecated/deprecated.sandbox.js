@@ -68,6 +68,10 @@
          */
         getRequestBuilder: function (name) {
         	warn('getRequestBuilder');
+            if(!this.hasHandler(name)) {
+                log.warn('Request ' + name + ' defined, but handler not registered. Perhaps timing issue?');
+                return undefined;
+            }
             return Oskari.requestBuilder(name);
         },
 

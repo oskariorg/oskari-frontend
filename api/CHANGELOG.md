@@ -40,6 +40,10 @@ Requests removed as deprecated. These should be events if anything. Oskari.ctrlK
 AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.
 HideMapMarkerRequest was removed as it's no longer used and is misleading. Use MapModulePlugin.MarkerVisibilityRequest instead.
 
+### [rem] Printout.PrintWithParcelUIEvent
+
+Removed parcel application specific event from printout.
+
 ## 1.40
 
 ### [mod] [rpc] InfoBox.ShowInfoBoxRequest

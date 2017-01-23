@@ -505,7 +505,7 @@
                     return requestHandlers[requestName];
                 }
                 if(requestHandlers[requestName] && handler !== null) {
-                    log.warn('Overwriting request handler!!');
+                    log.warn('Overwriting request handler for "' + requestName + '"!!');
                 }
                 // setter, removal with handler value <null>
                 requestHandlers[requestName] = handler;

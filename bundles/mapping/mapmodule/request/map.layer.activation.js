@@ -20,7 +20,7 @@ Oskari.clazz.define('map.layer.activation.request',
      */
 
     function (layerId, isActivated) {
-        this._mapLayerId = _mapLayerId;
+        this._mapLayerId = layerId;
         this._isActivated = isActivated === true;
     }, {
         /** @static @property __name request name */

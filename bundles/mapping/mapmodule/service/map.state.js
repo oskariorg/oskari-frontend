@@ -455,7 +455,7 @@
                 log.warn('Trying to activate layer that is not selected. Skipping id ' + id);
                 return false;
             }
-            if(this.isLayerActivated(layer.getId())) {
+            if(this.isLayerActivated(id)) {
                 log.warn('Layer already activated. Skipping id ' + id);
                 return false;
             }

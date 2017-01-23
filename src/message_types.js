@@ -42,11 +42,6 @@
             log.warn('No builder found for', name);
             return undefined;
         }
-
-        if(!o.getSandbox().hasHandler(name)) {
-            log.warn('Request ' + name + ' defined, but handler not registered. Perhaps timing issue?');
-            return undefined;
-        }
         return Oskari.clazz.builder(qname);
     };
 
