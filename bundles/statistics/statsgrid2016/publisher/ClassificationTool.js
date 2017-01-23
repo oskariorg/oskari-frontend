@@ -22,6 +22,11 @@ function() {
     init: function (pdata) {
         var me = this;
 
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats && typeof stats.renderPublishedLegend === 'function') {
+            stats.renderPublishedLegend({showLegend:false});
+        }
+
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             me.setEnabled(true);
         } else {

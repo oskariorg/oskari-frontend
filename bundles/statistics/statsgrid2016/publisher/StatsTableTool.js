@@ -19,6 +19,10 @@ function() {
     init: function (pdata) {
         var me = this;
 
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats && typeof stats.renderToggleButtons === 'function') {
+            stats.renderToggleButtons(true);
+        }
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
             me.setEnabled(true);
         } else {
