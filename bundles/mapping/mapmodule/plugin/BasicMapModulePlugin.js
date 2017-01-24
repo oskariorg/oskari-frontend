@@ -374,9 +374,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if(buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 return true;
             }
-            var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
-            if (addToolButtonBuilder) {
+            if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
                 for (var tool in buttons) {
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if(buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
                 return true;
             }
-            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
                 var buttonConf = buttons[tool];

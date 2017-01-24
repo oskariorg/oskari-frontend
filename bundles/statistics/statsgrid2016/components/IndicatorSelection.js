@@ -147,7 +147,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		btn.insertTo(main);
 
 		indicatorSelector.on('change', function() {
-			params.indicatorSelected(selectionsContainer, dsSelector.val(), jQuery(this).val(), config, {dataLabelWithTooltips:dataLabelWithTooltips, btn: btn});
+			params.indicatorSelected(selectionsContainer,
+				dsSelector.val(),
+				jQuery(this).val(),
+				config,
+				{
+					dataLabelWithTooltips:dataLabelWithTooltips,
+					btn: btn
+				});
 		});
 
         this.service.on('StatsGrid.DatasourceEvent', function(evt) {

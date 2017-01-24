@@ -124,6 +124,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 						values.selections[select.attr('name')] = select.val();
 					});
 					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+					me.service.getStateService().setRegionset(jqSelect.val());
 
 					me.instance.getFlyout().closePanels();
 				});
@@ -186,57 +187,59 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 		var jqSelect = cont.find('.stats-regionset-selector');
 
 		// If there is indicators then do selections
-		if(allowedRegionsets.length > 0) {
-			if(indicator) {
-				// add empty selection to show placeholder
-				jqSelect.append('<option></option>');
+		if(!allowedRegionsets.length) {
+			return jqSelect;
+		}
+
+		if(indicator) {
+			// add empty selection to show placeholder
+			jqSelect.append('<option></option>');
+		}
+
+		var currentRegion = me.service.getStateService().getRegionset();
+
+		allowedRegionsets.forEach(function(regionset) {
+			var optionEl = jQuery(me.__templates.option(regionset));
+			if(regionset.id === currentRegion) {
+				optionEl.attr('selected', 'selected');
 			}
+			jqSelect.append(optionEl);
+		});
 
-			var currentRegion = me.service.getStateService().getRegionset();
-
-			allowedRegionsets.forEach(function(regionset) {
-				var optionEl = jQuery(me.__templates.option(regionset));
-				if(regionset.id === currentRegion) {
-					optionEl.attr('selected', 'selected');
-				}
-				jqSelect.append(optionEl);
+		if(changeEvent) {
+			jqSelect.on('change', function() {
+				var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
+				var value = jQuery(this).val();
+				log.info('Selected region ' + value);
+				me.service.getStateService().setRegionset(value);
 			});
-
-			if(changeEvent) {
-				jqSelect.on('change', function() {
+		}
+		// trigger change only then when active region is null
+		else {
+			jqSelect.on('change', function() {
+				var currentRegion = me.service.getStateService().getRegionset();
+				if(!currentRegion) {
 					var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
 					var value = jQuery(this).val();
 					log.info('Selected region ' + value);
 					me.service.getStateService().setRegionset(value);
-				});
-			}
-			// trigger change only then when active region is null
-			else {
-				jqSelect.on('change', function() {
-					var currentRegion = me.service.getStateService().getRegionset();
-					if(!currentRegion) {
-						var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
-						var value = jQuery(this).val();
-						log.info('Selected region ' + value);
-						me.service.getStateService().setRegionset(value);
-					}
-				});
-			}
-
-			// If current regionset is null then auto select first option
-			if(!currentRegion) {
-				jqSelect.find('option:nth-child(2)').prop('selected', true);
-				jqSelect.trigger('change');
-			}
-
-			jqSelect.chosen({
-				allow_single_deselect : true,
-				disable_search_threshold: 10,
-				width: '100%'
+				}
 			});
-
-			me.instance.addChosenHacks(jqSelect, addWidthHack);
 		}
+
+		// If current regionset is null then auto select first option
+		if(!currentRegion) {
+			jqSelect.find('option:nth-child(2)').prop('selected', true);
+			jqSelect.trigger('change');
+		}
+
+		jqSelect.chosen({
+			allow_single_deselect : true,
+			disable_search_threshold: 10,
+			width: '100%'
+		});
+
+		me.instance.addChosenHacks(jqSelect, addWidthHack);
 
 		return jqSelect;
 	}

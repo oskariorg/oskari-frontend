@@ -1227,11 +1227,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} value id for the column to be selected
          */
         selectColumn: function (value) {
+            // set selectedColumn in either case so render will use it immediately
+            this.__selectedColumn = value;
+
+            if(!this.table) {
+                return;
+            }
             // remove selection from headers
             this.table.find('th').removeClass('selected');
             // add selection to the one specified
             this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
-            this.__selectedColumn = value;
         },
         /**
          * @method getTable
