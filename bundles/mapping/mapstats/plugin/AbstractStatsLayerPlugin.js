@@ -55,6 +55,9 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                 'StatsGrid.RegionsetChangedEvent' : function (event) {
                     this.handleRegionsetChanged(event.getRegionset());
                 },
+                'StatsGrid.ClassificationChangedEvent': function (event) {
+                    me.renderActiveIndicator();
+                },
                 'StatsGrid.ActiveIndicatorChangedEvent' : function (event) {
                     var ind = event.getCurrent();
                     if(!ind) {
@@ -168,13 +171,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
 
             if(!ind) {
                 Oskari.log('AbstractStatsLayerPlugin').warn('Error getting active indicator');
-                me.__updateLayerParams(mapLayer, {
-                    VIS_NAME: layer.getLayerName(),
-                    VIS_ATTR: '',
-                    VIS_CLASSES: '',
-                    VIS_COLORS: ''
-                });
-
+                this.handleIndicatorRemoved();
                 return;
             }
 
@@ -227,17 +224,6 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     VIS_COLORS: 'choro:' + colors.join('|')
                 });
             });
-        },
-        _createPluginEventHandlers: function () {
-            var me = this;
-            return {
-                'StatsGrid.ClassificationChangedEvent': function (event) {
-                    me.renderActiveIndicator(event);
-                },
-                'StatsGrid.ActiveIndicatorChangedEvent': function (event) {
-                    me.renderActiveIndicator(event);
-                }
-            };
         }
         // implement : addMapLayerToMap() and __updateLayerParams()
     }, {
