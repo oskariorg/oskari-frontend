@@ -31,6 +31,8 @@ Oskari.clazz.define(
         this._publishedComponents = {
             panelClassification: null
         };
+
+        this._lastRenderMode = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -111,12 +113,8 @@ Oskari.clazz.define(
 
             jQuery('body').append(toggleButtons);
         },
-        hasPublished: function(){
-            var map = jQuery('#contentMap');
-            if(map.hasClass('mapPublishMode') ||  map.hasClass('published')) {
-                return true;
-            }
-            return false;
+        hasPublished: function() {
+            return 'geoportal' !== this._getRenderMode();
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
@@ -164,13 +162,14 @@ Oskari.clazz.define(
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
-                    this.visible = false;
                     return;
                 }
                 var me = this;
                 var isShown = event.getViewState() !== 'close';
                 this.visible = isShown;
                 var conf = this.getConfiguration();
+
+                var renderMode = this._getRenderMode();
                 if(isShown) {
                     var defaultConf = {
                         search: true,
@@ -180,15 +179,14 @@ Oskari.clazz.define(
                         showLegend: true,
                         allowClassification: true
                     };
-                    var map = jQuery('#contentMap');
-                    if(map.hasClass('mapPublishMode')) {
+                    if('publisher' === renderMode) {
                         conf.search = false;
                         conf.extraFeatures = false;
                         conf.areaSelection = false;
                         conf.mouseEarLegend = false;
                         conf.showLegend = true;
                         conf.allowClassification = true;
-                    } else if(!map.hasClass('published')) {
+                    } else if('geoportal' === renderMode) {
                         conf.search = true;
                         conf.extraFeatures = true;
                         conf.areaSelection = true;
@@ -199,8 +197,9 @@ Oskari.clazz.define(
 
                     conf = jQuery.extend({}, defaultConf, this.getConfiguration());
 
-                    if(conf.grid !== false) {
+                    if(conf.grid !== false && renderMode !== this._lastRenderMode) {
                         this.getFlyout().lazyRender(conf);
+                        this._lastRenderMode = renderMode;
                     }
 
                 }
@@ -208,7 +207,7 @@ Oskari.clazz.define(
                     this.getFlyout().handleClose();
                 }
 
-                if(conf.showLegend === true && me.hasPublished()) {
+                if(conf.showLegend === true && 'geoportal' !== renderMode) {
                     me.renderPublishedLegend(conf);
                 }
             },
@@ -222,6 +221,16 @@ Oskari.clazz.define(
                 this.getTile().setEnabled(this.hasData());
             }
         },
+        _getRenderMode : function() {
+            var map = jQuery('#contentMap');
+            if(map.hasClass('mapPublishMode')) {
+                return 'publisher';
+            } else if(!map.hasClass('published')) {
+                return 'geoportal';
+            }
+            return 'embedded';
+        },
+
         hasData: function () {
             return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
         },
