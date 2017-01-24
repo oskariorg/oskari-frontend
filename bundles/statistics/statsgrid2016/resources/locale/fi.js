@@ -9,6 +9,20 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Teemakartat"
         },
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Siirry teemakarttoihin",
+                "title": "Teemakartat"
+            },
+            "diagram_icon": {
+                "tooltip": "Näytä tiedot diagrammissa",
+                "title": "Diagrammi"
+            },
+            "statistics": {
+                "tooltip": "siirry teemakarttoihin",
+                "title": "Tilastot"
+            }
+        },
         "panels": {
             "newSearch": {
                 "title": "AINEISTOHAKU",

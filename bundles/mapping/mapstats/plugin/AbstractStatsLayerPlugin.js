@@ -30,12 +30,6 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
             // register domain builder
             mapLayerService.registerLayerModel(this.layertype,
                 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer');
-
-            var layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder',
-                this.getSandbox()
-            );
-            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
         getService : function() {
             // references to visualization from this
