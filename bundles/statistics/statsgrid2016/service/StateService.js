@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Object} selections object containing the parameters for the indicator
          * @param {Object} classification indicator classification
          *
-         * @return {Object}            an object describing the added indicator (includes parameters as an object)
+         * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
         addIndicator : function(datasrc, indicator, selections, classification) {
             var ind = {
@@ -217,6 +217,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 hash : this.getHash(datasrc, indicator, selections),
                 classification: classification
             };
+            var found = false;
+            this.indicators.forEach(function(existing) {
+                if(existing.hash === ind.hash) {
+                    found = true;
+                }
+            });
+            if(found) {
+                return false;
+            }
             this.indicators.push(ind);
 
             // notify
