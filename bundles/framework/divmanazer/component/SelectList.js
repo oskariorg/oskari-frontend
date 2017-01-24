@@ -21,16 +21,18 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       var select = this._selectTemplate.clone();
       //append empty options so we can use the placeholder
       var emptyoption = this._option.clone();
-      $(select).find('select').append(emptyoption);
+      select.find('select').append(emptyoption);
 
       for(var i = 0; i<data.length; i++){
         // datakey needs to be parsed to suit all incoming data
         var dataKey = data[i];
         var option = this._option.clone();
+        if(!dataKey.id && !dataKey.title){
+          option.val(dataKey).text(dataKey);
+        }
         option.val(dataKey.id).text(dataKey.title);
-        $(select).find('select').append(option);
+        select.find('select').append(option);
       }
-      select.css({'width':'205px'});
       return this.makeChosen(select, options);
     },
     /**@method makeChosen
