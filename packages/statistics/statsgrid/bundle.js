@@ -48,6 +48,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParameters.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetSelector.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
             }, {
                 "type": "text/javascript",

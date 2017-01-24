@@ -54,6 +54,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 
         me.spinner.insertTo(cont.parent().parent());
         me.spinner.start();
+        if(!this.regionSelector) {
+			this.regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
+        }
 
 		this.service.getIndicatorMetadata(datasrc, indId, function(err, indicator) {
             me.spinner.stop();
@@ -106,11 +109,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				}
 				selections.push(jqSelect);
 			});
-
-			var jqSelect = me.getRegionSelection(cont,indicator);
+			var regionSelect = me.regionSelector.create(indicator.regionsets);
+			cont.append(regionSelect.container);
 			// Add margin if there is selections
-			if(selections.length>0) {
-				jqSelect.parent().parent().addClass('margintop');
+			if(selections.length > 0) {
+				regionSelect.container.addClass('margintop');
 			}
 
 			if(elements.btn) {
@@ -123,124 +126,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 					selections.forEach(function(select) {
 						values.selections[select.attr('name')] = select.val();
 					});
-					me.service.getStateService().addIndicator(datasrc, indId, values.selections);
-					me.service.getStateService().setRegionset(jqSelect.val());
+					var added = me.service.getStateService().addIndicator(datasrc, indId, values.selections);
+					if(added === false) {
+						// already added, set as active instead
+						var hash = me.service.getStateService().getHash(datasrc, indId, values.selections);
+						me.service.getStateService().setActiveIndicator(hash);
+					}
+					me.service.getStateService().setRegionset(regionSelect.value());
 
 					me.instance.getFlyout().closePanels();
 				});
 				elements.btn.setEnabled(indicator.regionsets.length>0);
 			}
 		});
-	},
-
-	/**
-	 * Get region selection.
-	 * @method  @public getRegionSelection
-	 *
-	 * @param  {Object} cont      jQuery element
-	 * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
-	 * @return {Object}           jQuery element
-	 */
-	getRegionSelection: function(cont, indicator, addWidthHack, changeEvent) {
-		var me = this;
-		var locale = me.instance.getLocalization();
-		var panelLoc = locale.panels.newSearch;
-		var allRegionsets = me.service.getRegionsets();
-		var placeholderText = (panelLoc.selectionValues.regionset && panelLoc.selectionValues.regionset.placeholder) ? panelLoc.selectionValues.regionset.placeholder :panelLoc.defaultPlaceholder;
-		var label = (locale.parameters.regionset) ? locale.parameters.regionset : 'Regionset';
-		var select = me.__templates.select({
-			id : 'regionset',
-			clazz : 'stats-regionset-selector',
-			placeholder: placeholderText,
-			label: label
-		});
-		var allowedRegionsets = [];
-
-		var addAllowedRegionSets = function(indicatorRegionset){
-			var grepAllRegionsets = jQuery.grep(allRegionsets, function(regionset) {
-				return regionset.id === indicatorRegionset;
-			});
-
-			grepAllRegionsets.forEach(function(regionset){
-				allowedRegionsets.push(regionset);
-			});
-		};
-
-		if(indicator) {
-			indicator.regionsets.forEach(function(indicatorRegionset) {
-				addAllowedRegionSets(indicatorRegionset);
-			});
-
-			if(allowedRegionsets.length === 0) {
-				select = jQuery('<div class="noresults">'+panelLoc.noRegionset+'</div>');
-				select.addClass('margintop');
-			}
-		}
-		// No indicators, so this selection is showed by Datatable. DAtatable needs to show all regionsets of selected indicators.
-		else {
-			var indicatorRegions = me.service.getSelectedIndicatorsRegions();
-			indicatorRegions.forEach(function(indicatorRegionset) {
-				addAllowedRegionSets(indicatorRegionset);
-			});
-		}
-		cont.append(select);
-		var jqSelect = cont.find('.stats-regionset-selector');
-
-		// If there is indicators then do selections
-		if(!allowedRegionsets.length) {
-			return jqSelect;
-		}
-
-		if(indicator) {
-			// add empty selection to show placeholder
-			jqSelect.append('<option></option>');
-		}
-
-		var currentRegion = me.service.getStateService().getRegionset();
-
-		allowedRegionsets.forEach(function(regionset) {
-			var optionEl = jQuery(me.__templates.option(regionset));
-			if(regionset.id === currentRegion) {
-				optionEl.attr('selected', 'selected');
-			}
-			jqSelect.append(optionEl);
-		});
-
-		if(changeEvent) {
-			jqSelect.on('change', function() {
-				var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
-				var value = jQuery(this).val();
-				log.info('Selected region ' + value);
-				me.service.getStateService().setRegionset(value);
-			});
-		}
-		// trigger change only then when active region is null
-		else {
-			jqSelect.on('change', function() {
-				var currentRegion = me.service.getStateService().getRegionset();
-				if(!currentRegion) {
-					var log = Oskari.log('Oskari.statistics.statsgrid.IndicatorParameters');
-					var value = jQuery(this).val();
-					log.info('Selected region ' + value);
-					me.service.getStateService().setRegionset(value);
-				}
-			});
-		}
-
-		// If current regionset is null then auto select first option
-		if(!currentRegion) {
-			jqSelect.find('option:nth-child(2)').prop('selected', true);
-			jqSelect.trigger('change');
-		}
-
-		jqSelect.chosen({
-			allow_single_deselect : true,
-			disable_search_threshold: 10,
-			width: '100%'
-		});
-
-		me.instance.addChosenHacks(jqSelect, addWidthHack);
-
-		return jqSelect;
 	}
 });
