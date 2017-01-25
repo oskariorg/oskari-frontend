@@ -96,9 +96,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 				});
 
 				var dropdown = select.createSelectWithData(selections, options);
-				dropdown.on('click', {param:select}, function(e){
-					e.data.param.adjustChosen(this);
-				});
+				select.adjustChosen(dropdown);
+
 				tempSelect.find('.label').append(dropdown);
 				if(index > 0) {
 					dropdown.parent().addClass('margintop');
