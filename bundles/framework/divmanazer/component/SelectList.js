@@ -5,11 +5,13 @@
  */
 Oskari.clazz.define('Oskari.userinterface.component.SelectList',
 
-  function(){
+  function(id){
+    this.id = id;
     this._option = jQuery('<option></option>');
     this._selectTemplate = jQuery('<div class="oskari-select">'+
                                   '<select></select>'+
                                   '</div>');
+    this.element = null;
   },{
     /**@method createSelectWithData
     *  creates a select with data specified
@@ -19,6 +21,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
      */
     createSelectWithData: function(data, options){
       var select = this._selectTemplate.clone();
+
       //append empty options so we can use the placeholder
       var emptyoption = this._option.clone();
       select.find('select').append(emptyoption);
@@ -27,12 +30,14 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         // datakey needs to be parsed to suit all incoming data
         var dataKey = data[i];
         var option = this._option.clone();
+
         if(!dataKey.id && !dataKey.title){
           option.val(dataKey).text(dataKey);
         }
         option.val(dataKey.id).text(dataKey.title);
         select.find('select').append(option);
       }
+      this.element = select;
       return this.makeChosen(select, options);
     },
     /**@method makeChosen
@@ -48,6 +53,19 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
           allow_single_deselect : options.allow_single_deselect ? options.allow_single_deselect : false
       });
       return el;
+    },
+    getId: function(){
+      return this.id;
+    },
+    setValue: function(value){
+      this.element.find('select').val(value);
+    },
+    getValue: function(){
+      if(typeof this.element === 'undefined'){
+        Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't get value, no element set");
+        return;
+      }
+      return this.element.find('select').val();
     },
     /**@method adjustChosen
     *  checks if the dropdown needs to show up or down
