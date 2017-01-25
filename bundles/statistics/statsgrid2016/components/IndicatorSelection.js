@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		};
 		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 		var dropdown = select.createSelectWithData(sources, options);
-		dropdown.css({width:'206px'});
+		dropdown.css({width:'100%'});
 		dsSelector.append(dropdown);
 		select.adjustChosen(dropdown);
 
@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		};
 		var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 		var indicDropdown = select.createSelectWithData(undefined, indicOptions);
-		indicDropdown.css({width:'206px'});
+		indicDropdown.css({width:'100%'});
 		indicatorSelector.append(indicDropdown);
 		indicSelect.adjustChosen(indicDropdown);
 
