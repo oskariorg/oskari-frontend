@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 	}
 }, {
 	__templates : {
-		select : _.template('<div class="parameter"><div class="label">${label}</div><div class="select"><select data-placeholder="${placeholder}" name="${id}" class="${clazz}"></select></div><div class="clear"></div></div>'),
+		select : _.template('<div class="parameter"><div class="label">${label}</div><div class="clear"></div></div>'),
 		option : _.template('<option value="${id}">${name}</option>')
 	},
 
@@ -39,33 +39,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 			placeholder: loc.placeholderText,
 			label: loc.label
 		}));
-		//cont.append(select);
-		var jqSelect = fieldContainer.find('.stats-regionset-selector');
-		// add empty selection to show placeholder if reset is enabled
-		if(disableReset !== true) {
-			jqSelect.append('<option></option>');
-		}
-
-		allowedRegionsets.forEach(function(regionset) {
-			var optionEl = jQuery(me.__templates.option(regionset));
-			if(regionset.id === currentRegion) {
-				optionEl.attr('selected', 'selected');
-			}
-			jqSelect.append(optionEl);
-		});
-		// If current regionset is null then auto select first option
-		var currentRegion = me.service.getStateService().getRegionset();
-		if(!currentRegion) {
-			jqSelect.find('option:nth-child(2)').prop('selected', true);
-			jqSelect.trigger('change');
-		}
-
-		jqSelect.chosen({
+		var options = {
+			placeholder_text: loc.placeholder,
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
 			width: '100%'
-		});
+		};
+		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+		var dropdown = select.createSelectWithData(allowedRegionsets, options);
+		dropdown.css({width:'205px'});
+		fieldContainer.find('.label').append(dropdown);
+		select.adjustChosen(dropdown);
 
+		// 	if(regionset.id === currentRegion) {
+		// 		optionEl.attr('selected', 'selected');
+		// 	}
+
+		var jqSelect = dropdown.find('select');
 
 		return {
 			container : fieldContainer,
@@ -87,6 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 		var allowedRegionsets = [];
 		allRegionsets.forEach(function(regionset) {
 			if(restrictTo.indexOf(regionset.id) !== -1) {
+				regionset.title = regionset.name;
 				allowedRegionsets.push(regionset);
 			}
 		})
