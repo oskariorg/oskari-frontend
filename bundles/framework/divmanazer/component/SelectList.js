@@ -21,6 +21,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
      */
     createSelectWithData: function(data, options){
       var select = this._selectTemplate.clone();
+      if(data === undefined){
+        return this.makeChosen(select, options);
+      }
 
       //append empty options so we can use the placeholder
       var emptyoption = this._option.clone();
@@ -53,6 +56,31 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
           allow_single_deselect : options.allow_single_deselect ? options.allow_single_deselect : false
       });
       return el;
+    },
+    /**@method lateUpdate
+    *  updates an already defined chosen with new data
+    * @param {element} select jQuery chosen elemetn
+    * @param {data} data to apply
+     */
+    lateUpdate: function(select, data){
+      var me = this;
+      var chosen = select.find('select');
+      chosen.trigger('chosen:close');
+      //append empty options so we can use the placeholder
+      if(chosen.find('option').length === 0){
+        var emptyoption = this._option.clone();
+        chosen.append(emptyoption);
+      }
+      if(!this.element){
+        this.element = select;
+      }
+
+      data.forEach(function(choice){
+        var option = me._option.clone();
+        option.val(choice.id).text(choice.title);
+        chosen.append(option);
+      });
+      chosen.trigger('chosen:updated');
     },
     getId: function(){
       return this.id;
