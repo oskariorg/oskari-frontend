@@ -66,6 +66,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       var me = this;
       var chosen = select.find('select');
       chosen.trigger('chosen:close');
+      chosen.empty();
       //append empty options so we can use the placeholder
       if(chosen.find('option').length === 0){
         var emptyoption = this._option.clone();
