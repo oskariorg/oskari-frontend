@@ -140,8 +140,18 @@ div.oskari-flyoutcontent.statsgrid {
       font-style: italic; }
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections input.oskari-button {
       margin-left: 10px; }
+
+@keyframes statsgridcolumnselection {
+    from {background-color: #fbe978;}
+    to {background-color: #FDF8D9;}
+}
   div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
-    background-color: #FDF8D9; }
+    background-color: #FDF8D9;
+
+    animation-name: statsgridcolumnselection;
+    animation-duration: 0.5s;
+    animation-iteration-count: 2;
+     }
   div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
     border-bottom: 0;
     border-radius: 4px 4px 0 0;
