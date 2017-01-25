@@ -565,16 +565,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin,
                 i;
 
-            jQuery('.mapplugin.manageClassificationPlugin').remove();
-
             // resume normal plugins
             for (i = 0; i < me.normalMapPlugins.length; i += 1) {
                 plugin = me.normalMapPlugins[i];
                 mapModule.registerPlugin(plugin);
                 plugin.startPlugin(me.instance.sandbox);
-                if(plugin.showClassificationOptions && plugin.isVisible && plugin.isVisible() === true){
-                    plugin.showClassificationOptions(true);
-                }
                 if(plugin.refresh) {
                     plugin.refresh();
                 }

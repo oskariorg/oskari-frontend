@@ -191,6 +191,29 @@ function() {
                 statsGridState = me.__tool.config.state;
             }
             return me._filterIndicators(_.clone(statsGridState, true));
+        },
+        stop : function() {
+            var me = this;
+            if(me.__plugin) {
+                if(me.__sandbox){
+                    me.__plugin.stopPlugin(me.__sandbox);
+                }
+                me.__mapmodule.unregisterPlugin(me.__plugin);
+            }
+            //Destroys Grid - this is terrible
+            jQuery('#contentMap').width('');
+            jQuery('.oskariui-left')
+                .css({
+                    'width': '',
+                    'height': '',
+                    'float': ''
+                })
+                .removeClass('published-grid-left')
+                .empty();
+            jQuery('.oskariui-center').css({
+                'width': '100%',
+                'float': ''
+            }).removeClass('published-grid-center');
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

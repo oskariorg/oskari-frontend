@@ -168,6 +168,17 @@ function() {
             return {
                 classifyShown:  this.state.enabled
             };
+        },
+        stop : function() {
+            jQuery('.mapplugin.manageClassificationPlugin').remove();
+            var plugin = this.__plugin;
+            if(!plugin) {
+                return;
+            }
+            if(this.__sandbox) {
+                plugin.stopPlugin(this.__sandbox);
+            }
+            this.__mapmodule.unregisterPlugin(plugin);
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

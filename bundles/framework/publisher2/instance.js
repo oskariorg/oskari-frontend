@@ -167,13 +167,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 //call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);
-
-
-                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render.
-                //and that causes trouble.
-//                me.publisher.initPanels();
             } else {
-                me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
 
                 //change the mapmodule toolstyle back to normal
@@ -240,27 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
             return deniedLayers;
-        },
-
-        /**
-         * @method _destroyGrid
-         * Destroys Grid
-         * @private
-         */
-        _destroyGrid: function () {
-            jQuery('#contentMap').width('');
-            jQuery('.oskariui-left')
-                .css({
-                    'width': '',
-                    'height': '',
-                    'float': ''
-                })
-                .removeClass('published-grid-left')
-                .empty();
-            jQuery('.oskariui-center').css({
-                'width': '100%',
-                'float': ''
-            }).removeClass('published-grid-center');
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
