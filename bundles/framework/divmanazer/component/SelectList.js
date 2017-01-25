@@ -57,6 +57,14 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       });
       return el;
     },
+    /**@method selectFirstValue
+    *  makes the second value show instead of placeholder text
+    */
+    selectFirstValue: function(){
+      var chosen = this.element.find('select');
+      chosen.find('option:nth-child(2)').attr('selected', 'selected');
+      chosen.trigger('chosen:updated');
+    },
     /**@method lateUpdate
     *  updates an already defined chosen with new data
     * @param {element} select jQuery chosen elemetn
