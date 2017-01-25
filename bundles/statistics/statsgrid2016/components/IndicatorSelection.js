@@ -9,8 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		selections : _.template('<div class="statsgrid-indicator-selections"></div>'),
 		select : _.template('<div class="selection">'+
 			'<div class="title">${name}</div>'+
-			'<div>'+
-			'	<select data-placeholder="${placeholder}" class="${clazz}"></select>'+
+			'<div class=${clazz}>'+
 			'</div>'+
 			'</div>'),
 		headerWithTooltip:  _.template('<div class="selection tooltip">'+
@@ -27,43 +26,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 	 * @param  {Object} select  jQuery element of selection
 	 * @param  {Integer} datasrc datasource
 	 */
-	_populateIndicators : function(select, datasrc) {
+	_populateIndicators : function(select, dropdown, datasrc) {
 		var me = this;
-
-		select.trigger('chosen:close');
 
 		if(!datasrc || datasrc === '') {
 			return;
 		}
 
 		this.service.getIndicatorList(datasrc, function(err, result) {
+			var results = [];
+
 			if(err) {
 				// notify error!!
+				Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn(" Error getting indicator list");
 				return;
 			}
 
-			select.find('option').each(function(){
-				var el = jQuery(this);
-				var elValue = el.attr('value');
-				if(elValue !== null && elValue !== '') {
-					el.remove();
-				}
-			});
-
-			select.empty();
-
-			// add empty selection to show placeholder
-			select.append('<option></option>');
-
 			result.indicators.forEach(function(ind) {
-				select.append(me.__templates.option({
-					id : ind.id,
-					name : Oskari.getLocalized(ind.name)
-				}));
+				var resultObj = {
+					id: ind.id,
+					title: Oskari.getLocalized(ind.name)
+				}
+				results.push(resultObj);
+
 			});
-			// let chosen know options has been updated (liszt:updated is only needed for old chosen version)
-			select.trigger('chosen:updated');
-            me.spinner.stop();
+			select.lateUpdate(dropdown, results);
+			me.spinner.stop();
 		});
 	},
 
@@ -81,38 +69,48 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		var panelLoc = locale.panels.newSearch;
 		me.spinner.insertTo(main);
 
+		var datasources = this.service.getDatasource();
+		var sources = [];
+		datasources.forEach(function(ds){
+			var dataObj = {
+				id : ds.id,
+				title: ds.name
+			}
+			sources.push(dataObj);
+		});
 		// Datasources
-		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.datasourceTitle, clazz : 'stats-ds-selector', placeholder : locale.panels.newSearch.selectDatasourcePlaceholder})));
+		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.datasourceTitle, clazz : 'stats-ds-selector'})));
 		// chosen works better when it has context for the element, get a new reference for chosen
 		var dsSelector = main.find('.stats-ds-selector');
-		// Add empty option to show placeholder
-		dsSelector.append('<option></option>');
-		this.service.getDatasource().forEach(function(ds) {
-			dsSelector.append(me.__templates.option(ds));
-		});
-		dsSelector.chosen({
+		var options = {
+			placeholder_text : locale.panels.newSearch.selectDatasourcePlaceholder,
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
 			no_results_text: locale.panels.newSearch.noResults,
 			width: '100%'
-		});
+		};
+		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+		var dropdown = select.createSelectWithData(sources, options);
+		dropdown.css({width:'206px'});
+		dsSelector.append(dropdown);
+		select.adjustChosen(dropdown);
 
-		me.instance.addChosenHacks(dsSelector);
 		// Indicator list
-		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector', placeholder : locale.panels.newSearch.selectIndicatorPlaceholder})));
+		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector'})));
 		// chosen works better when it has context for the element, get a new reference for chosen
 		var indicatorSelector = main.find('.stats-ind-selector');
-		// add empty selection to show placeholder
-		indicatorSelector.append('<option></option>');
-		this._populateIndicators(indicatorSelector, dsSelector.val());
-
-		indicatorSelector.chosen({
+		var indicOptions = {
+			placeholder_text: locale.panels.newSearch.selectIndicatorPlaceholder,
 			allow_single_deselect : true,
 			disable_search_threshold: 10,
 			no_results_text: locale.panels.newSearch.noResults,
 			width: '100%'
-		});
-		me.instance.addChosenHacks(indicatorSelector);
+		};
+		var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+		var indicDropdown = select.createSelectWithData(undefined, indicOptions);
+		indicDropdown.css({width:'206px'});
+		indicatorSelector.append(indicDropdown);
+		indicSelect.adjustChosen(indicDropdown);
 
 		// Refine data label and tooltips
 		var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1:panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
@@ -127,7 +125,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			params.clean();
 
 			// If removed selection then need to be also update indicator selection
-			if(jQuery(this).val() === '') {
+			if(select.getValue() === '') {
 				indicatorSelector.val(indicatorSelector.find('option:first').val());
 				indicatorSelector.trigger('change');
 				indicatorSelector.trigger('chosen:updated');
@@ -137,7 +135,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 				me.spinner.start();
 			}
 
-			me._populateIndicators(indicatorSelector, jQuery(this).val());
+			me._populateIndicators(indicSelect, indicDropdown, select.getValue());
 		});
 
 		var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -148,8 +146,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 
 		indicatorSelector.on('change', function() {
 			params.indicatorSelected(selectionsContainer,
-				dsSelector.val(),
-				jQuery(this).val(),
+				select.getValue(),
+				indicSelect.getValue(),
 				config,
 				{
 					dataLabelWithTooltips:dataLabelWithTooltips,
@@ -158,12 +156,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 		});
 
         this.service.on('StatsGrid.DatasourceEvent', function(evt) {
-        	var currentDS = dsSelector.val();
+        	var currentDS = select.getValue();
         	if(currentDS !== evt.getDatasource()) {
         		return;
         	}
         	// update indicator list
-			me._populateIndicators(indicatorSelector, currentDS);
+			me._populateIndicators(indicSelect, indicDropdown, currentDS);
         });
 
 		return main;
