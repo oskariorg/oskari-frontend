@@ -68,13 +68,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         },
         /**
          * @method lazyRender
-         * Called when flyout is opened (by divmanazer)
+         * Called when flyout is opened (by instance)
          * Creates the UI for a fresh start.
          */
-        lazyRender: function (config) {
+        render: function (config) {
             var me = this;
             var locale = this.instance.getLocalization();
-
             // empties all
             this.getEl().empty();
             this.removeSideTools();

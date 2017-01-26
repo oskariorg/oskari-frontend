@@ -12,6 +12,20 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Gå till temakartor",
+                "title": "Temakartor"
+            },
+            "diagram_icon": {
+                "tooltip": "Visa diagram",
+                "title": "Diagram"
+            },
+            "statistics": {
+                "tooltip": "går till temakartor",
+                "title": "Statistik"
+            }
+        },
         "tab": {
             "title": "Indikatorer",
             "description": "Egna indikatorer",

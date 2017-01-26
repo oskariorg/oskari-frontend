@@ -12,6 +12,20 @@ Oskari.registerLocalization(
             "title": "",
             "message": ""
         },
+        "layertools": {
+            "table_icon": {
+                "tooltip": "",
+                "title": ""
+            },
+            "diagram_icon": {
+                "tooltip": "",
+                "title": ""
+            },
+            "statistics": {
+                "tooltip": "",
+                "title": ""
+            }
+        },
         "tab": {
             "title": "",
             "description": "",

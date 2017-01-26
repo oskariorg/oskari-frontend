@@ -12,6 +12,20 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Siirry teemakarttoihin",
+                "title": "Teemakartat"
+            },
+            "diagram_icon": {
+                "tooltip": "Näytä tiedot diagrammissa",
+                "title": "Diagrammi"
+            },
+            "statistics": {
+                "tooltip": "siirry teemakarttoihin",
+                "title": "Tilastot"
+            }
+        },
         "tab": {
             "title": "Indikaattorit",
             "description": "Omat indikaattorit",
