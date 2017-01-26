@@ -188,7 +188,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         getState: function () {
             return this.state;
         },
-
+        move : function(top, left) {
+            var flyout =  this.getEl().parent().parent();
+            if(typeof top === 'number' || typeof top === 'string'){
+                flyout.css('top', top);
+            }
+            if(typeof left === 'number' || typeof left === 'string'){
+                flyout.css('left', left);
+            }
+        },
         /**
          * @method close
          * Closes the flyout
