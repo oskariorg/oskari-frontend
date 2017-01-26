@@ -421,64 +421,6 @@ Oskari.clazz.define(
 			var uimode = state.view ? 'attach' : 'close';
 			sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
 		},
-		/**
-		 * addChosenHacks Add chosen hacks to element
-		 * FIXME: remove this when Oskari components have own working selection
-		 * @param {Jquery.element} element
-		 */
-		addChosenHacks: function(element, makeOverEl){
-			// Fixes chosen selection to visible when rendering chosen small height elements
-			element.on('chosen:showing_dropdown', function () {
-
-				jQuery(this).parents('div').each(function() {
-					var el = jQuery(this);
-					if(!el.hasClass('oskari-flyoutcontentcontainer')) {
-						el.css('overflow', 'visible');
-					}
-				});
-			});
-
-			// Fixes chosen selection go upper when chosen element is near by window bottom
-			element.on('chosen:showing_dropdown', function(event) {
-				var chosen_container = jQuery(event.target).next('.chosen-container');
-				var dropdown = chosen_container.find('.chosen-drop');
-				var dropdown_top = dropdown.offset().top - $(window).scrollTop();
-				var dropdown_height = dropdown.height();
-				var viewport_height = jQuery(window).height();
-
-				if ( dropdown_top + dropdown_height > viewport_height ) {
-					chosen_container.addClass('chosen-drop-up');
-				}
-			});
-			element.on('chosen:hiding_dropdown', function(event) {
-				jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
-			});
-
-
-			if(makeOverEl) {
-				element.on('chosen:showing_dropdown', function(event) {
-					var chosen_container = jQuery(event.target).next('.chosen-container');
-					var offset = chosen_container.offset();
-					var dropdown = chosen_container.find('.chosen-drop');
-					dropdown.css('position', 'fixed');
-					dropdown.css('width', '300px');
-					dropdown.css('top', (offset.top + chosen_container.height()) + 'px');
-					dropdown.css('left', offset.left + 'px');
-				});
-
-				element.on('chosen:hiding_dropdown', function(event) {
-					var chosen_container = jQuery(event.target).next('.chosen-container');
-
-					var dropdown = chosen_container.find('.chosen-drop');
-					dropdown.css('position', '');
-					dropdown.css('width', '');
-					dropdown.css('top', '');
-					dropdown.css('left', '');
-				});
-			}
-
-		},
-
 		getState: function () {
 			var me = this;
 			var service = this.statsService.getStateService();
