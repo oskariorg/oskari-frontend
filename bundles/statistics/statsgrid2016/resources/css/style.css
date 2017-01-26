@@ -142,7 +142,7 @@ div.oskari-flyoutcontent.statsgrid {
       margin-left: 10px; }
 
 @keyframes statsgridcolumnselection {
-    from {background-color: #fbe978;}
+    from {background-color: #ffd400;}
     to {background-color: #FDF8D9;}
 }
   div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
