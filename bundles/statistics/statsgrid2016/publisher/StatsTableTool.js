@@ -92,29 +92,20 @@ function() {
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats) {
-            stats.renderPublishedLegend({showLegend:true});
+        if(!stats) {
+            return;
         }
+        stats.renderPublishedLegend({showLegend:true});
 
         if(enabled === true) {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'detach', 'StatsGrid']);
-            stats.changePosition({
-                top: 0,
-                left: jQuery('.basic_publisher').width() + jQuery('#sidebar').width() + jQuery('#sidebar').position().left + jQuery('.basic_publisher').position().left
-            });
+            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[stats, 'detach', 'StatsGrid']);
+            // move flyout to the edge of the publish sidebar (only adds the toggle button - doesn't open the flyout)
+            stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
         } else {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'close', 'StatsGrid']);
+            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[stats, 'close', 'StatsGrid']);
         }
 
-        if(stats) {
-            stats.renderToggleButtons(!enabled);
-        }
-
-
-
-        if (typeof me.__handlers.MapSizeChanged === 'function') {
-            me.__handlers.MapSizeChanged();
-        }
+        stats.renderToggleButtons(!enabled);
     },
     /**
     * Is displayed.
