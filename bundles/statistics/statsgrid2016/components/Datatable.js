@@ -91,6 +91,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
         var me = this;
         var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
         var regionSelect = regionSelector.create(me.service.getSelectedIndicatorsRegions(), true);
+        if(!regionSelect) {
+            return;
+        }
         regionSelect.value(this.getCurrentRegionset());
 
         this.grid.setColumnUIName('region', function(content) {
