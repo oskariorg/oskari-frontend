@@ -17,6 +17,7 @@ $buttonWidth: 86%;
       }
   }
 
+
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
@@ -157,6 +158,11 @@ $buttonWidth: 86%;
     }
 }
 
+@keyframes statsgridcolumnselection {
+    from {background-color: #ffd400;}
+    to {background-color: #FDF8D9;}
+}
+
 div.oskari-flyoutcontent{
     &.statsgrid {
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
@@ -236,6 +242,9 @@ div.oskari-flyoutcontent{
 
         table.oskari-grid th.selected {
           background-color: #FDF8D9;
+            animation-name: statsgridcolumnselection;
+            animation-duration: 0.5s;
+            animation-iteration-count: 2;
         }
 
         /* Chosen fixes */

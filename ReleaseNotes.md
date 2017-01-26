@@ -106,6 +106,7 @@ Indicator listing from server can be partial and callback value for service.getI
 #### DefaultFlyout
 
 Improvements for sidetools buttons positions. Now sidetools are added to top and inside of flyout.
+Now has a move(top, left)-function to relocate the flyout.
 
 #### Popup
 
