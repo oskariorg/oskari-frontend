@@ -103,7 +103,7 @@ Oskari.clazz.define(
                 '  <select></select>' +
                 '</div>',
             regionSelect: '<div class="filter-region-select">' +
-                // '  <select class="filter-region-select" multiple tabindex="3"></select>' +
+                '  <select class="filter-region-select" multiple tabindex="3"></select>' +
                 '</div>',
             addOwnIndicator: '<div class="new-indicator-cont">' +
                 '  <input type="button"/>' +
@@ -301,7 +301,6 @@ Oskari.clazz.define(
                     '  </div>' +
                     '</div>'),
                 sel = dsElement.find('select');
-
 
             dsElement.find('label').text(me._locale.tab.grid.organization);
 
@@ -782,43 +781,43 @@ Oskari.clazz.define(
          */
         createIndicatorsSelect: function (container, data) {
             var me = this;
-            var indicData;
             // Indicators' select container etc.
             // FIXME select inside label
             var indi = jQuery(
                     '<div class="indicator-cont">' +
                     '  <div class="indisel selector-cont">' +
                     '    <label for="indi">' + me._locale.indicators + '</label>' +
+                    '    <select id="indi" name="indi" class="indi">' +
+                    '      <option value="" selected="selected"></option>' +
+                    '    </select>' +
                     '  </div>' +
                     '</div>'
-                );
-            //prepare data
+                ),
+                sel = indi.find('select'),
+                i,
+                indicData,
+                key,
+                value,
+                title,
+                opt;
+
             for (i = 0; i < data.length; i += 1) {
                 indicData = data[i];
-                //need to give correct object keys for the selectlist component
+
                 if (indicData.hasOwnProperty('id')) {
-                    data[i].id = indicData.id;
-                    data[i].title = indicData.title[Oskari.getLang()] || indicData.title;
+                    value = indicData.id;
+                    title = indicData.title[Oskari.getLang()];
+                    indicData.titlename = title;
+                    opt = jQuery('<option value="' + value + '">' + title + '</option>');
+                    opt.attr('data-isOwnIndicator', !!indicData.ownIndicator);
+                    //append option
+                    sel.append(opt);
                 }
             }
-            //create chosen with data
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-            var options = {
-                width: '100%',
-                no_results_text: this._locale.noMatch,
-                placeholder_text: this._locale.selectIndicator
-                };
-            var dropdown = select.createSelectWithData(data, options);
-            dropdown.find('select').addClass('indi').attr('id','indi');
-            dropdown.css({width:'205px'});
-            indi.find('.selector-cont').append(dropdown);
-            dropdown.on('click', {param:select}, function(e){
-              e.data.param.adjustChosen(this);
-            });
 
             // if the value changes, fetch indicator meta data
-            dropdown.change(function (e) {
-                var option = dropdown.find('option:selected'),
+            sel.change(function (e) {
+                var option = sel.find('option:selected'),
                     indicatorId = option.val(),
                     isOwn = option.attr('data-isOwnIndicator');
 
@@ -829,6 +828,11 @@ Oskari.clazz.define(
                     me.deleteDemographicsSelect(container);
                     me.getStatsIndicatorMeta(container, indicatorId);
                 }
+            });
+
+            // FIXME kindly explain why this magic number is here
+            sel.css({
+                'width': '205px'
             });
 
             var selectorsContainer = container.find('.selectors-container');
@@ -842,6 +846,12 @@ Oskari.clazz.define(
                 container.find('.data-source-select'),
                 container
             );
+
+            // we use chosen to create autocomplete version of indicator select element.
+            sel.chosen({
+                no_results_text: this._locale.noMatch,
+                placeholder_text: this._locale.selectIndicator
+            });
             // this gives indicators more space to show title on dropdown
             jQuery('.chzn-drop').css('width', '298px');
             jQuery('.chzn-search input').css('width', '263px');
@@ -860,7 +870,7 @@ Oskari.clazz.define(
             paramCont.append(button);
             button.find('input').click(function (e) {
                 // Warn the user if they're not logged in
-                if (!me.getSandbox() || !Oskari.user().isLoggedIn()) {
+                if (!me.getSandbox() || !me.getSandbox().getUser().isLoggedIn()) {
                     var dialog = Oskari.clazz.create(
                             'Oskari.userinterface.component.Popup'
                         ),
@@ -2794,7 +2804,6 @@ Oskari.clazz.define(
          */
         _createFilterByRegionSelect: function (container, regionCategory) {
             container.find('.filter-region-container').remove();
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 
             if (!regionCategory) {
                 return null;
@@ -2802,27 +2811,29 @@ Oskari.clazz.define(
 
             var regionCont = jQuery(this.templates.filterRow).clone(),
                 regionSelect = jQuery(this.templates.regionSelect).clone(),
-                regions = this.regionCategories[regionCategory];
+                regions = this.regionCategories[regionCategory],
+                rLen = regions.length,
+                regionOption,
+                region,
+                i;
 
             regionCont.addClass('filter-region-container');
 
-            var options = {
-                width: '90%',
-                no_results_text: this._locale.noRegionFound,
-                placeholder_text: this._locale.chosenRegionText
-            };
-            var dropdown = select.createSelectWithData(regions, options);
-            dropdown.css({width:'230px'});
-            dropdown.find('select').attr({tabindex:3, multiple:'multiple'});
-            dropdown.on('click', {param:select}, function(e){
-              e.data.param.adjustChosen(this);
-            });
+            for (i = 0; i < rLen; i += 1) {
+                region = regions[i];
+                regionOption = jQuery(this.templates.filterOption).clone();
+                regionOption.val(region.id).text(region.title);
+                regionSelect.find('select').append(regionOption);
+            }
 
             regionCont.find('.filter-label').text(this._locale.selectRegion);
             regionCont.find('.filter-value').append(regionSelect);
             container.find('.filter-container').append(regionCont);
-            container.find('div.filter-region-select').append(dropdown);
-
+            container.find('div.filter-region-select select').chosen({
+                width: '90%',
+                no_results_text: this._locale.noRegionFound,
+                placeholder_text: this._locale.chosenRegionText
+            });
         },
 
         /**
