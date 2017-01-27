@@ -13,14 +13,15 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
                                   '</div>');
     this.element = null;
   },{
-    /**@method createSelectWithData
+    /**@method create
     *  creates a select with data specified
     * @param {Object} data, needs to have the keys id and title to construct a list
     * @param {Object} options
     * @return {jQuery Element} a list with chosen applied
      */
-    createSelectWithData: function(data, options){
+    create: function(data, options){
       var select = this._selectTemplate.clone();
+      this.element = select;
       if(data === undefined){
         return this.makeChosen(select, options);
       }
@@ -40,7 +41,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         option.val(dataKey.id).text(dataKey.title);
         select.find('select').append(option);
       }
-      this.element = select;
       return this.makeChosen(select, options);
     },
     /**@method makeChosen
@@ -65,14 +65,14 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       chosen.find('option:nth-child(2)').attr('selected', 'selected');
       chosen.trigger('chosen:updated');
     },
-    /**@method lateUpdate
+    /**@method updateOptions
     *  updates an already defined chosen with new data
     * @param {element} select jQuery chosen elemetn
     * @param {data} data to apply
      */
-    lateUpdate: function(select, data){
+    updateOptions: function( data ){
       var me = this;
-      var chosen = select.find('select');
+      var chosen = this.element.find('select');
       chosen.trigger('chosen:close');
       chosen.empty();
       //append empty options so we can use the placeholder
@@ -95,6 +95,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       return this.id;
     },
     setValue: function(value){
+      if(!this.element.find('select')){
+        Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
+      }
       this.element.find('select').val(value);
     },
     getValue: function(){
@@ -108,8 +111,8 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     *  checks if the dropdown needs to show up or down
     * @param {element} select
      */
-    adjustChosen: function(select){
-      var selected = $(select).find('select');
+    adjustChosen: function(){
+      var selected = this.element.find('select');
       //check parent element(s) to apply overflow visible if needed
       selected.on('chosen:showing_dropdown', function () {
 
