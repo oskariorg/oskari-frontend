@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 	 * @param  {Object} select  jQuery element of selection
 	 * @param  {Integer} datasrc datasource
 	 */
-	_populateIndicators : function(select, dropdown, datasrc) {
+	_populateIndicators : function(select, datasrc) {
 		var me = this;
 
 		if(!datasrc || datasrc === '') {
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 				results.push(resultObj);
 
 			});
-			select.lateUpdate(dropdown, results);
+			select.updateOptions( results );
 			me.spinner.stop();
 		});
 	},
@@ -90,10 +90,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			width: '100%'
 		};
 		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-		var dropdown = select.createSelectWithData(sources, options);
+		var dropdown = select.create(sources, options);
 		dropdown.css({width:'100%'});
 		dsSelector.append(dropdown);
-		select.adjustChosen(dropdown);
+		select.adjustChosen();
 
 		// Indicator list
 		main.append(jQuery(this.__templates.select({name : locale.panels.newSearch.indicatorTitle, clazz : 'stats-ind-selector'})));
@@ -107,10 +107,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 			width: '100%'
 		};
 		var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-		var indicDropdown = select.createSelectWithData(undefined, indicOptions);
+		var indicDropdown = indicSelect.create(undefined, indicOptions);
 		indicDropdown.css({width:'100%'});
 		indicatorSelector.append(indicDropdown);
-		indicSelect.adjustChosen(indicDropdown);
+		indicSelect.adjustChosen();
 
 		// Refine data label and tooltips
 		var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({title: panelLoc.refineSearchLabel, tooltip1:panelLoc.refineSearchTooltip1 || '', tooltip2: panelLoc.refineSearchTooltip2 || ''}));
@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 				me.spinner.start();
 			}
 
-			me._populateIndicators(indicSelect, indicDropdown, select.getValue());
+			me._populateIndicators(indicSelect , select.getValue());
 		});
 
 		var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
         		return;
         	}
         	// update indicator list
-			me._populateIndicators(indicSelect, indicDropdown, currentDS);
+			me._populateIndicators(indicSelect, currentDS);
         });
 
 		return main;
