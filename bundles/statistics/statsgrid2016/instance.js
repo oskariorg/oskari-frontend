@@ -63,22 +63,9 @@ Oskari.clazz.define(
 
 			if(me.hasPublished() && conf.grid) {
 				me.renderToggleButtons();
-				me.changePosition({top:0,left:0});
+				me.getFlyout().move(0,0);
 			}
 			this.__setupLayerTools();
-		},
-		changePosition: function(position){
-			var me = this;
-			position = position || {};
-
-			var flyout =  me.getFlyout().getEl().parent().parent();
-
-			if(typeof position.top === 'number' || typeof position.top === 'string'){
-				flyout.css('top', position.top);
-			}
-			if(typeof position.left === 'number' || typeof position.left === 'string'){
-				flyout.css('left', position.left);
-			}
 		},
 		renderToggleButtons: function(remove){
 			var me = this;
@@ -298,39 +285,6 @@ Oskari.clazz.define(
 			me.sandbox.notifyAll(event);
 		},
 		/**
-		 * @method  @public renderPublishedLegend Render published  legend
-		 */
-		renderPublishedLegend: function(config){
-			var me = this;
-
-			config = config || me.getConfiguration();
-			var sandbox = me.getSandbox();
-			var locale = this.getLocalization();
-			var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
-			if(config.showLegend) {
-				config.publishedClassification = true;
-				if(me.plugin) {
-				   return;
-				}
-				var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
-				mapModule.registerPlugin(plugin);
-				mapModule.startPlugin(plugin);
-				me.plugin = plugin;
-				//get the plugin order straight in mobile toolbar even for the tools coming in late
-				if (Oskari.util.isMobile() && this.plugin.hasUI()) {
-					mapModule.redrawPluginUIs(true);
-				}
-			} else if(this.plugin) {
-				config.publishedClassification = false;
-				mapModule.stopPlugin(me.plugin);
-				me.plugin = null;
-			}
-
-
-			return;
-		},
-		/**
 		 * @method  @public updatePublishedFlyoutTitle update published map legend
 		 * @param  {Object} ind indicator
 		 * @param {Object} config config
@@ -443,18 +397,49 @@ Oskari.clazz.define(
 			}
 			return state;
 		},
+		/**
+		 * @method  @public renderPublishedLegend Render published  legend
+		 */
+		renderPublishedLegend: function(config){
+			var me = this;
+
+			config = config || me.getConfiguration();
+			var sandbox = me.getSandbox();
+			var locale = this.getLocalization();
+			var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
+			if(config.showLegend) {
+				config.publishedClassification = true;
+				if(me.plugin) {
+				   return;
+				}
+				var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+				mapModule.registerPlugin(plugin);
+				mapModule.startPlugin(plugin);
+				me.plugin = plugin;
+				//get the plugin order straight in mobile toolbar even for the tools coming in late
+				if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+					mapModule.redrawPluginUIs(true);
+				}
+			} else if(this.plugin) {
+				config.publishedClassification = false;
+				mapModule.stopPlugin(me.plugin);
+				me.plugin = null;
+			}
+
+
+			return;
+		},
 
 		/**
 		 * @method  @public classificationVisible change published map classification visibility. Only call this in publisher!
 		 * @param  {Boolean} visible visible or not
 		 */
 		classificationVisible: function(visible) {
-			var me = this;
-
-			if(me.plugin) {
-				me.plugin.setEnabled(visible);
+			if(!this.plugin) {
+				return;
 			}
-
+			this.plugin.setEnabled(visible);
 		}
 
 	}, {

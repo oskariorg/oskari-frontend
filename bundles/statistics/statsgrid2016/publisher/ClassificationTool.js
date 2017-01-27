@@ -23,7 +23,7 @@ function() {
         var me = this;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats && typeof stats.renderPublishedLegend === 'function') {
+        if(stats) {
             stats.renderPublishedLegend({showLegend:false});
         }
 
@@ -83,10 +83,7 @@ function() {
     */
 
     setEnabled : function(enabled) {
-        var me = this,
-            tool = me.getTool(),
-            statsLayer = me._getStatsLayer(),
-            request;
+        var me = this;
 
         if(typeof enabled !== 'boolean') {
             enabled = false;
@@ -133,6 +130,18 @@ function() {
             };
         } else {
             return {};
+        }
+    },
+    /**
+    * Stop tool.
+    * @method stop
+    * @public
+    */
+    stop: function() {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            // removed by not giving any param...
+            stats.renderPublishedLegend({});
         }
     }
 }, {
