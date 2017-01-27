@@ -59,7 +59,7 @@
              * @return {Boolean}             true if request is being handled.
              */
             hasHandler : function(requestName) {
-                return !!requestHandlers[requestName];
+                return !!requestHandlers[requestName] && !!Oskari.requestBuilder(requestName);
             },
             /**
              * Get value if no parameter is given, set value with parameter
