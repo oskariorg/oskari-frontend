@@ -79,12 +79,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             this.removeSideTools();
 
             config = config || {};
-
+            var title = locale.flyout.title;
+            var parent = this.getEl().parent().parent();
             if(this.instance.hasPublished()) {
-                var parent = this.getEl().parent().parent();
-                parent.find('.oskari-flyout-title p').html(locale.datatable);
+                parent.find('.oskari-flyout-title p').html(title);
                 // Remove close button from published
-                parent.find('.oskari-flyouttools').remove();
+                parent.find('.oskari-flyouttools').hide();
+            } else {
+                // resume defaults (important if user used publisher)
+                parent.find('.oskari-flyout-title p').html(title);
+                parent.find('.oskari-flyouttools').show();
             }
 
             if(config.mouseEarLegend === true) {
