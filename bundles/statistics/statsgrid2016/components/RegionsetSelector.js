@@ -46,10 +46,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 			width: '100%'
 		};
 		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-		var dropdown = select.createSelectWithData(allowedRegionsets, options);
+		var dropdown = select.create(allowedRegionsets, options);
 		dropdown.css({width:'205px'});
 		fieldContainer.find('.label').append(dropdown);
-		select.adjustChosen(dropdown);
+		select.adjustChosen();
 
 		// 	if(regionset.id === currentRegion) {
 		// 		optionEl.attr('selected', 'selected');

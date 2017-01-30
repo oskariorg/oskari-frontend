@@ -111,7 +111,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     me.service.getStateService().setRegionset(value);
                 });
                 tableHeader.find('.selection').append(regionSelect.container);
-                me.instance.addChosenHacks(regionSelect.field, true);
             }
             // Else remove area selection
             else {
