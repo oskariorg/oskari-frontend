@@ -22,7 +22,7 @@ Oskari.clazz.define(
 		};
 		this.visible = false;
 
-		this._templates= {
+		this._templates = {
 			publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
 		};
 
@@ -46,16 +46,7 @@ Oskari.clazz.define(
 			statsService.addDatasource(conf.sources);
 
 			this.getTile().setEnabled(this.hasData());
-			if(this.state) {
-				this.setState(this.state);
-			}
-
-			var tile = this.getTile();
-			var cel = tile.container;
-
-			if (!cel.hasClass('statsgrid')) {
-				cel.addClass('statsgrid');
-			}
+			this.setState();
 
 			if(typeof conf.showLegend === 'boolean' && conf.showLegend && me.hasPublished()) {
 				me.renderPublishedLegend(conf);
@@ -81,7 +72,7 @@ Oskari.clazz.define(
 			map.attr('title', me.getLocalization().published.showMap);
 			table.attr('title', me.getLocalization().published.showTable);
 
-			map.bind('click', function(){
+			map.bind('click', function() {
 				if(!map.hasClass('active')) {
 					table.removeClass('active');
 					map.addClass('active');
@@ -154,18 +145,15 @@ Oskari.clazz.define(
 				var me = this;
 				var wasClosed = event.getViewState() === 'close';
 				this.visible = !wasClosed;
-				var renderMode = this._getRenderMode();
-				var conf = this.__determineConfig(renderMode);
 				if(wasClosed){
 					this.getFlyout().handleClose();
+					return;
 				}
-				else if(conf.grid !== false && this._lastRenderMode !== renderMode) {
+				var renderMode = this._getRenderMode();
+				var conf = this.__determineConfig(renderMode);
+				if(conf.grid !== false && this._lastRenderMode !== renderMode) {
 					this.getFlyout().render(conf);
 					this._lastRenderMode = renderMode;
-				}
-
-				if(conf.showLegend === true && 'geoportal' !== renderMode) {
-					me.renderPublishedLegend(conf);
 				}
 			},
 			/**
@@ -353,7 +341,7 @@ Oskari.clazz.define(
 		 * @param {Object} state bundle state as JSON
 		 */
 		setState: function (state) {
-			state = state || {};
+			state = state || this.state || {};
 			var service = this.statsService.getStateService();
 			service.reset();
 			if(state.regionset) {
