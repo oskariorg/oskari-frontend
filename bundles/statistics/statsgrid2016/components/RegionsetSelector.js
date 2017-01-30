@@ -31,7 +31,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 		if(!allowedRegionsets.length) {
 			var select = jQuery('<div class="noresults">'+loc.noRegionset+'</div>');
 			select.addClass('margintop');
-			return select;
+			return {
+				container : select,
+				field : select,
+				value :function() {}
+			};
 		}
 		var fieldContainer = jQuery(me.__templates.select({
 			id : 'regionset',
