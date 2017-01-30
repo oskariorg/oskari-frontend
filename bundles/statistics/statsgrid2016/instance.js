@@ -423,6 +423,7 @@ Oskari.clazz.define(
 				}
 			} else if(this.plugin) {
 				config.publishedClassification = false;
+				mapModule.unregisterPlugin(me.plugin);
 				mapModule.stopPlugin(me.plugin);
 				me.plugin = null;
 			}
