@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     this.handleRegionsetChanged(event.getRegionset());
                 },
                 'StatsGrid.ClassificationChangedEvent': function (event) {
-                    me.renderActiveIndicator();
+                    this.renderActiveIndicator();
                 },
                 'StatsGrid.ActiveIndicatorChangedEvent' : function (event) {
                     var ind = event.getCurrent();
