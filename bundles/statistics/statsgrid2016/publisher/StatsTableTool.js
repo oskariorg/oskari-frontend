@@ -96,10 +96,8 @@ function() {
             return;
         }
         stats.renderPublishedLegend({showLegend:true});
-
         if(enabled === true) {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[stats, 'detach', 'StatsGrid']);
-            // move flyout to the edge of the publish sidebar (only adds the toggle button - doesn't open the flyout)
+            // reset flyout location to the edge of the publish sidebar (this doesn't open the flyout)
             stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
         } else {
             me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[stats, 'close', 'StatsGrid']);
