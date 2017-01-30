@@ -641,5 +641,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          */
         destroy: function () {
             this.mainPanel.remove();
+            // Resets map position and size to cover the whole space. Maybe find another way to do this?
+            jQuery('#contentMap').width('');
+            jQuery('.oskariui-left')
+                .css({
+                    'width': '',
+                    'height': '',
+                    'float': ''
+                })
+                .empty();
+            jQuery('.oskariui-center').css({
+                'width': '100%',
+                'float': ''
+            });
         }
     });

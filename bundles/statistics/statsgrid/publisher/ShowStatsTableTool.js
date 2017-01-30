@@ -223,20 +223,6 @@ function() {
                 }
                 me.__mapmodule.unregisterPlugin(me.__plugin);
             }
-            //Destroys Grid - this is terrible
-            jQuery('#contentMap').width('');
-            jQuery('.oskariui-left')
-                .css({
-                    'width': '',
-                    'height': '',
-                    'float': ''
-                })
-                .removeClass('published-grid-left')
-                .empty();
-            jQuery('.oskariui-center').css({
-                'width': '100%',
-                'float': ''
-            }).removeClass('published-grid-center');
         }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
