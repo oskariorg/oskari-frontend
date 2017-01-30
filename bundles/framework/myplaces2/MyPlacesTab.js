@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
              * @method MyPlaces.MyPlacesChangedEvent
              * Updates the category tabs and grids inside them with current data
              */
-            'MyPlaces.MyPlacesChangedEvent': function (event) {
+            'MyPlaces.MyPlacesChangedEvent': function () {
                 var me = this,
                     service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
                     categories = service.getAllCategories(),
@@ -341,10 +341,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             if (time.length > 0) {
                 value = time[0];
             }
-            // skip time
-            /*if(time.length > 1) {
-            value = value  + ' ' + time[1];
-        }*/
             return value;
         },
         /**

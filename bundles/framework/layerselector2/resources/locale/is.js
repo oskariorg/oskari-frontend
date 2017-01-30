@@ -43,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kortalagið getur verið ófánlegt í nokkra daga.",
                 "iconClass": "bakvinnslustaða-viðhald"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "bakvinnslustaða-í lagi"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

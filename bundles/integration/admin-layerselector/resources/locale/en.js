@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "Map layer",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "The map layer is currently available.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "The map layer is currently not available.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "There will be short breaks in the map layer's availability during the next few days.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "The map layer group will be removed. Do you want to continue?",
             "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
@@ -131,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Define the opacity that is used by default. If the opacity is 100%, it covers up all other layers below the layer. If the opacity is 0%, it is totally transparent. Users can control opacity in the ‘Selected Layers’ menu.",
             "style": "Default Style",
             "styleDesc": "The style options are fetched automatically from the GetCapabilities response. Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
+            "importStyle": "New sld style",
+            "addNewStyle": "Add new SLD style",
+            "sldStyleName":"Style name",
+            "sldFileContentDesc":"Copy/paste SLD file content (xml) to text area",
+            "sldFileContent":"SLD file content",
+            "sldStylesFetchError": "Couldn't get SLD styles",
+            "addSldStyleDesc": "Select styles for the current layer",
+            "addSldStyle": "Sld style selection",
             "minScale": "Minimum scale",
             "minScaleDesc": "The minimum scale is fetched automatically from the GetCapabilities response. The map layer is shown only if the scale is above this limit. Scales are defines as scale denominators. If scale limits are not defined, the map layers is shown at all scale levels.",
             "minScalePlaceholder": "Minimum scale in the form 5669294 (1:5669294)",

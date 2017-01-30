@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "NOT TRANSLATED",
             "geolocDesc": "NOT TRANSLATED",
             "noResults": "Ingen søkjeresultat",
+            "showMore": "Vis søkjealternativ",
+            "showLess": "Skjul søkjealternativ",
+            "emptyOption": "* Ingen val *",
             "errors": {
                 "searchTermMissing": "Søkjeord må skrivast inn",
                 "searchFailed": "Søket har feila. Ver grei og prøv om att seinare."

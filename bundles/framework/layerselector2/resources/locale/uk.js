@@ -42,13 +42,21 @@ Oskari.registerLocalization(
                 "tooltip": "На даний момент шар карти недоступний",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "На даний момент шар карти недоступний",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Шар карти може бути тимчасово недоступний протягом наступних декількох днів",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

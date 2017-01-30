@@ -74,7 +74,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.ParcelSelectorIns
 
             me.started = true;
 
-            sandbox = Oskari.$("sandbox");
+            sandbox = Oskari.getSandbox();
             me.sandbox = sandbox;
 
             sandbox.register(me);

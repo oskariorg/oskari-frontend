@@ -49,11 +49,11 @@ describe('Test Suite for mapwfs2 connections', function() {
         conf["mapfull"]["conf"]["plugins"].push(
             {
                 "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-                "config": { 
-                    hostname: wfsConf.hostname, 
-                    contextPath: wfsConf.contextPath, 
-                    port: wfsConf.port, 
-                    lazy: wfsConf.lazy 
+                "config": {
+                    hostname: wfsConf.hostname,
+                    contextPath: wfsConf.contextPath,
+                    port: wfsConf.port,
+                    lazy: wfsConf.lazy
                 }
             }
         );
@@ -105,12 +105,6 @@ describe('Test Suite for mapwfs2 connections', function() {
             sandbox = Oskari.getSandbox();
             module = sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin');
             mediator = module.getIO();
-            /*mediator.session = {
-                "clientId" : "testId",
-                "session" : "test_session",
-                "browser" : jQuery.browser.name,
-                "browserVersion" : jQuery.browser.versionNum
-            }*/
             connection = module.getConnection();
 
             done();
@@ -131,12 +125,7 @@ describe('Test Suite for mapwfs2 connections', function() {
         function setSubscriptions() {
             imageSub = cometd.subscribe('/wfs/image', function(resp) {
                 expect(resp.data).to.be.ok();
-                // There should be no data.data key in under IE v. 8
-                if (jQuery.browser.msie && jQuery.browser.versionNum < 8) {
-                    expect(resp.data.data).not.to.be.ok();
-                } else {
-                    expect(resp.data.data).to.be.ok();
-                }
+                expect(resp.data.data).to.be.ok();
                 imageURL = resp.data.url;
                 imageResp = true;
             });
@@ -202,8 +191,8 @@ describe('Test Suite for mapwfs2 connections', function() {
             cometd.publish('/service/wfs/init', {
                 "session" : 'test_session',
                 "language": Oskari.getLang(),
-                "browser" : jQuery.browser.name,
-                "browserVersion" : jQuery.browser.versionNum,
+                "browser" : '',
+                "browserVersion" : '',
                 "location": {
                     "srs": "EPSG:3067",
                     "bbox": [382396,6670334,389236,6672942],
@@ -225,7 +214,7 @@ describe('Test Suite for mapwfs2 connections', function() {
                 "mapScales": [5669294.4, 2834647.2, 1417323.6, 566929.44, 283464.72, 141732.36, 56692.944, 28346.472, 11338.5888, 5669.2944, 2834.6472, 1417.3236, 708.6618],
                 "layers": {'216': {'styleName': 'default'}}
             });
-            
+
             waitsFor(function() {
                 return (imageResp && propertiesResp && featureResp);
             }, function() {

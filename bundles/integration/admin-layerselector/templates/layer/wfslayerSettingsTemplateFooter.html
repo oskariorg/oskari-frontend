@@ -1,3 +1,62 @@
+
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-sld-style" class="add-layer-label"  title="<%= instance.getLocalization('admin').addSldStyleDesc %>"><%= instance.getLocalization('admin').addSldStyle %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <select id="add-layer-sld-style" class="admin-sld-styles" multiple="true">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="add-style-send">
+    <div class="add-layer-button-area">
+        <div class="input-controls">
+    <button id="import-layer-style-button" class="import-wfs-style-button"><%= instance.getLocalization('admin').importStyle %></button>
+       </div>
+    </div>
+    <div class="add-layer-style-import-block">
+        <div class="add-layer-record">
+            <div class="add-layer-style-import-title" title="<%= instance.getLocalization('admin').addNewStyle %>"><%= instance.getLocalization('admin').addNewStyle %></div>
+        </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-sld-style-sldname" class="add-layer-sld-style-label"  title="<%= instance.getLocalization('admin').sldStyleName %>"><%= instance.getLocalization('admin').sldStyleName %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="style-controls">
+                <input type="text" id="add-layer-sld-style-sldname" class="add-layer-sld-style-sldname mid"
+                       placeholder="<%= instance.getLocalization('admin').sldStyleName %>"
+                       value= "<%= model.getLayerName() %>" />
+                <div class="icon-close mid"></div>
+            </div>
+        </div>
+    </div>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-sld-file" class="add-layer-sld-file-label"
+                   title="<%= instance.getLocalization('admin').sldFileContentDesc %>"><%= instance.getLocalization('admin').sldFileContent %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="style-controls">
+
+                <textarea rows="3" cols="50" id="add-layer-sld-file" class="add-sld-file long"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="add-layer-button-area">
+        <div class="style-controls">
+            <button id="import-layer-style-save-button" class="save-wfs-style-button"><%= instance.getLocalization('save') %></button>
+            <button id="import-layer-style-cancel-button" class="cancel-wfs-style-button"><%= instance.getLocalization('cancel') %></button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- div class="add-layer-record">
+    <button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button>
+</div -->
 <div class="add-layer-record">
     <div class="add-layer-label-area">
         <label for="add-layer-jobtype" class="add-class-label"
@@ -62,8 +121,5 @@
 
     </div>
 </div>
-
-<!-- button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button -->
-
 
 

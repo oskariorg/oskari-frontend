@@ -42,13 +42,21 @@ Oskari.registerLocalization(
                 "tooltip": "A camada não está disponível",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "A camada não está disponível",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "A camada pode não estar disponível por alguns momentos nos próximos dias",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

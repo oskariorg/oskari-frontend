@@ -361,6 +361,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         setFlyout: function (f) {
             this.plugins['Oskari.userinterface.Flyout'] = f;
         },
+        getView: function () {
+            return this.plugins['Oskari.userinterface.View'];
+        },
 
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,

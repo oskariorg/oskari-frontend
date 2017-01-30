@@ -27,14 +27,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Tile',
          * @method setEl
          * @param {Object} el
          *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = jQuery(el);
             // disable until we get defaultlayer
             this.disable();
@@ -65,6 +61,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Tile',
          * Creates the UI for a fresh start
          */
         refresh: function () {
+
         },
         disable: function () {
             this.container.addClass('disabled');

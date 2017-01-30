@@ -52,33 +52,38 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this,
-                layerId = _.last(layer.getId().split('_')),
-                imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
-                //minresolution === maxscale and vice versa...
-                minResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
-                maxResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
-                sandbox = this.getSandbox(),
-                wms = {
-                    'URL': imgUrl,
-                    'LAYERS': layer.getRenderingElement(),
-                    'FORMAT': 'image/png'
-                },
-                openlayer = new ol.layer.Image({
-                    source: new ol.source.ImageWMS({
-                        url: wms.URL,
-                        params: {
-                            'LAYERS': wms.LAYERS,
-                            'FORMAT': wms.FORMAT
-                        },
-                        crossOrigin : layer.getAttributes('crossOrigin')
-                    }),
-                    minResolution: minResolution,
-                    maxResolution: maxResolution,
-                    visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
-                    opacity: layer.getOpacity() / 100
-                });
-            this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
+            var me = this;
+            var layerId = _.last(layer.getId().split('_'));
+            var imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&');
+
+            var sandbox = this.getSandbox();
+            var map = this.getMapModule();
+            var model = {
+                source: new ol.source.ImageWMS({
+                    url: imgUrl,
+                    params: {
+                        'LAYERS': layer.getRenderingElement(),
+                        'FORMAT': 'image/png'
+                    },
+                    crossOrigin : layer.getAttributes('crossOrigin')
+                }),
+                visible: layer.isInScale(map.getMapScale()) && layer.isVisible(),
+                opacity: layer.getOpacity() / 100
+            };
+            //minresolution === maxscale and vice versa...
+            if(layer.getMaxScale() && layer.getMaxScale() !== -1) {
+                model.minResolution = map.getResolutionForScale(layer.getMaxScale());
+            }
+            if(layer.getMinScale() && layer.getMinScale() !== -1) {
+                var maxResolution = map.getResolutionForScale(layer.getMinScale());
+                if(maxResolution !== map.getResolutionArray()[0]) {
+                    // ol3 maxReso is exclusive so don't set if it's the map max resolution
+                    model.maxResolution = maxResolution;
+                }
+            }
+
+            var openlayer = new ol.layer.Image(model);
+            map.addLayer(openlayer, !keepLayerOnTop);
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);

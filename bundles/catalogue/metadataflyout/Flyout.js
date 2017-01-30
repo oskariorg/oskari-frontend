@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         this.pages = {};
 
-        this.additionalTabs = {};
+        this.asyncTabs = {};
 
     }, {
 
@@ -112,8 +112,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     data: data
                 };
 
-                if (me.additionalTabs && !jQuery.isEmptyObject(me.additionalTabs)) {
-                    page.additionalTabs = me.additionalTabs;
+                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                    page.asyncTabs = me.asyncTabs;
                 }
             }
             for (p in this.pages) {
@@ -136,12 +136,23 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
         addTabs: function (data) {
-            //TODO: mechanism to add tab dynamically _after_ the flyout has already been created!
+
+            //add to bookkeeping
+            var me = this;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    this.additionalTabs[key] = data[key];
+                    me.asyncTabs[key] = data[key];
                 }
             }
+
+            //in case flyout already rendered add tabs to each page
+            for (var uuid in me.pages) {
+                if (me.pages.hasOwnProperty(uuid)) {
+                    me.pages[uuid].page.addTabsAsync(data);
+                }
+            }
+
+
         }
     }, {
         'protocol': ['Oskari.userinterface.Flyout']

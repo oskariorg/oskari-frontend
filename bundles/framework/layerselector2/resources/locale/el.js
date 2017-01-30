@@ -41,13 +41,21 @@ Oskari.registerLocalization({
                 "tooltip": "Το επίπεδο χάρτη είναι προσωρινά μη διαθέσιμο.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Το επίπεδο χάρτη είναι προσωρινά μη διαθέσιμο.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Το επίπεδο χάρτη μπορεί να είναι περιοδικά μη διαθέσιμο για τις επόμενες ημέρες.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Πληροφορίες για την κατάσταση του επιπέδου του χάρτη δεν διατίθενται,.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

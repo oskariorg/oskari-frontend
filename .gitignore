@@ -21,4 +21,4 @@ tools/test-results.xml
 *.tgz
 *.tar.gz
 bower_components/*
-
+.DS_Store

@@ -1,30 +1,9 @@
 Oskari.registerLocalization(
 {
     "lang": "nb",
-    "key": "admin-layerselector",
+    "key": "PersonalData",
     "value": {
-        "admin": {
-            "en": {
-                "title": "En",
-                "placeholder": "Navn på engelsk",
-                "descplaceholder": "Beskrivelse på engelsk"
-            },
-            "fi": {
-                "title": "Fi",
-                "placeholder": "Navn på finsk",
-                "descplaceholder": "Beskrivelse på finsk"
-            },
-            "sv": {
-                "title": "Sv",
-                "placeholder": "Navn på svensk",
-                "descplaceholder": "Beskrivelse på svensk"
-            },
-            "es": {
-                "title": "Es",
-                "placeholder": "Navn på spansk",
-                "descplaceholder": "Beskrivelse på spansk"
-            }
-        }
+        "notLoggedIn": "Mine data inneholder din brukerprofil, alle dine lagrede forekomster, kartutsnitt, 'embeddede kart' og datasett"
     }
 }
 );

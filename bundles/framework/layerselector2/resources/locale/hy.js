@@ -42,13 +42,21 @@ Oskari.registerLocalization(
                 "tooltip": "Քարտեզի շերտը ժամանակավորապես անհասանելի է",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Քարտեզի շերտը ժամանակավորապես անհասանելի է",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Քարտեզի շերտը պարբերաբար անհասանելի կլինի հաջորդ մի քանի օրվա ընթացքում",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

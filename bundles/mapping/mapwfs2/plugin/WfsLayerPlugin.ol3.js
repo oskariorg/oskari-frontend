@@ -165,6 +165,10 @@ Oskari.clazz.define(
                 return false;
             });
         },
+
+
+
+
         /**
          * @method refresh
          * Updates the plugins interface (hides if no manual load wfs layers selected)
@@ -182,7 +186,8 @@ Oskari.clazz.define(
                 countInscale = 0,
                 refresh_status1 = "all_invisible",
                 refresh_status2 = "all_not_in_scale",
-                scale = sandbox.getMap().getScale();
+                scale = sandbox.getMap().getScale(),
+                conf = me._config;
 
             if(this.getElement()) {
                 this.getElement().hide();
@@ -229,6 +234,40 @@ Oskari.clazz.define(
             }
             me.setVisible(isVisible);
 
+            // Change the style if in the conf
+            if (conf && conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, me.getElement());
+            } else {
+                var toolStyle = me.getToolStyleFromMapModule();
+                me.changeToolStyle(toolStyle, me.getElement());
+            }
+
+        },
+        /**
+         * @public @method changeToolStyle
+         * Changes the tool style of the plugin
+         *
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            var me = this,
+                el = div || me.getElement();
+
+            if (!el) {
+                return;
+            }
+
+            var styleClass = 'toolstyle-' + (style ? style : 'default');
+
+            var classList = el.attr('class').split(/\s+/);
+            for(var c=0;c<classList.length;c++){
+                var className = classList[c];
+                if(className.indexOf('toolstyle-') > -1){
+                    el.removeClass(className);
+                }
+            }
+            el.addClass(styleClass);
         },
         /**
          * @method checkManualRefreshState
@@ -544,7 +583,7 @@ Oskari.clazz.define(
                 var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids);
+                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids, false, true);
                 }
             });
         },
@@ -685,7 +724,6 @@ Oskari.clazz.define(
                     wfsFeatureIds
                 );
             }
-
             me.getIO().highlightMapLayerFeatures(
                 layerId,
                 wfsFeatureIds,
@@ -741,7 +779,7 @@ Oskari.clazz.define(
                 var OLLayer = this.getOLMapLayer(
                     event.getMapLayer()
                 );
-                OLLayer.redraw();
+                //OLLayer.redraw();
 
                 this.getIO().setMapLayerStyle(
                     event.getMapLayer().getId(),
@@ -1081,7 +1119,8 @@ Oskari.clazz.define(
                     rows: null,
                     columns: null
                 },
-                rowidx = 0;
+                rowidx = 0,
+                colidx = 0;
             var tileRangeExtentArray = tileGrid.getTileRangeForExtentAndResolutionWrapper(mapExtent, resolution);
             var tileRangeExtent = {
                 minX: tileRangeExtentArray[0],
@@ -1091,7 +1130,6 @@ Oskari.clazz.define(
             };
 
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
-                var colidx = 0;
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
                     var zxy = [z,ix,iy];
                     var tileBounds = tileGrid.getTileCoordExtent(zxy);
@@ -1399,6 +1437,7 @@ Oskari.clazz.define(
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),
+                mapmodule = me.getMapModule(),
                 layerId = layer.getId(),
                 layerIndex = null,
                 layerName = me.__layerPrefix + layerId + '_' + layerType,
@@ -1414,6 +1453,8 @@ Oskari.clazz.define(
             if (!imageUrl || !boundsObj) {
                 return;
             }
+
+
 
             if (layerType === me.__typeHighlight) {
                   ols = [imageSize.width,imageSize.height];  //ol.Size
@@ -1432,9 +1473,7 @@ Oskari.clazz.define(
                 wfsMapImageLayer.setOpacity(layer.getOpacity() / 100);
                 me.layerByName(layerName, wfsMapImageLayer);
                 me.getMapModule().addLayer(wfsMapImageLayer, layer, layerName);
-                wfsMapImageLayer.setVisibility(true);
-                // also for draw
-                wfsMapImageLayer.redraw(true);
+                wfsMapImageLayer.setVisible(true);
 
                 // if removed set to same index [but if wfsMapImageLayer created
                 // in add (sets just in draw - not needed then here)]
@@ -1446,8 +1485,8 @@ Oskari.clazz.define(
                 highlightLayer = me.getOLMapLayer(layer, me.__typeHighlight);
 
                 if (normalLayer && highlightLayer) {
-                    normalLayerIndex = map.getLayerIndex(normalLayer);
-                    map.setLayerIndex(highlightLayer,normalLayerIndex + 10);
+                    normalLayerIndex = mapmodule.getLayerIndex(normalLayer);
+                    map.getLayers().insertAt(normalLayerIndex, highlightLayer);
                 }
 
             } else { // "normal"

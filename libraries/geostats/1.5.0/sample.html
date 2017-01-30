@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+   <title>geostats.js (by simon georget)</title>
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+   <script type="text/javascript" src="lib/geostats.js"></script>
+   <script type="text/javascript" src="http://openlayers.org/api/2.11/OpenLayers.js"></script>
+   <script type="text/javascript" src="https://raw.github.com/gka/chroma.js/master/chroma.min.js"></script>
+   <script type="text/javascript" src="tests/openlayers_sample.js"></script>
+   <link rel="stylesheet" href="lib/geostats.css" type="text/css" />
+   <style type="text/css">
+	  <!--
+	  body {
+	    font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+	    color:#333;
+	    font-size: 0.8em;
+	    background-color: #F7F7F7;
+	  }
+	  #legend, #legend2, #legend3{float:left;width:28%;margin:0 2em 2em 2em;}
+
+	  .legend-block {
+		    border: 1px solid #555555;
+		    display: block;
+		    float: left;
+		    height: 12px;
+		    margin: 0.3em 0.8em 0 2em;
+		    width: 20px;
+		}
+	  .container {margin:0 auto;width:60%;}
+	  .serie strong {color:#333;}
+	  .serie {font-size: .9em;color:#555;}
+	  .classes {margin:0em 4em 2em;}
+	  .projectinfo {width:100%;text-align: center;margin:-3em 0 3em;}
+	  .legend p { height: 70px;color:#555;font-variant: small-caps;text-align: justify;border-top:1px dotted #ccc}
+	  a {color:#F47FE7;font-weight: bold;text-shadow: #fff 2px 2px 0px;text-decoration: none;}
+	  a:hover {color:#514F51;}
+	  #map, #map2, #map3 {width:100%;height:500px;border: 1px solid #ccc;background-color: #eee}
+	  h1 {color:#B5B1B1;text-shadow: #fff 2px 2px 0px;text-align: center;margin:2em 0;}
+	  h2 {color:#A2A3F2;text-shadow: #fff 2px 2px 0px;margin:2em 0 1em 0;}
+	  h3 {color:#555;font-size: .9em}
+	  hr {
+			height: 1px;
+			margin: -0.5em 0;
+			padding: 0;
+			color: #ddd;
+			background-color: #ddd;
+			border: 0;
+	  }
+	  pre {
+	  	-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+			background-color: #D3E5FF;
+	  }
+	  #footer {font-size:0.8em;text-align: center;color:#777;margin:2em 0 1em;padding:.3em}
+	  -->
+  </style>
+   <script type="text/javascript">
+   var callback_sample = function(c) {
+		return '<strong>' + c + '</strong>';
+	};
+	
+   	$(document).ready(function() {
+   		$.getJSON('tests/test.json',function(data) {
+   			var items = []; // will store values
+   			var uValues = []; // will store values
+   			
+   			// Don't forget to use firebug console to retrieve your data
+   			// console.log(data.features);
+   			
+   			$.each(data.features, function(i,feature){
+   				items.push(feature.properties.Pop_2006);
+   			});
+   			
+   			$.each(data.features, function(i,feature){
+   				uValues.push(feature.properties.value);
+   			});
+
+   			var dataJson = items;
+
+   			
+   			// Seventh serie
+   			serie7 = new geostats(dataJson);
+   			serie7.setPrecision(6);
+   			
+   			// we get Eq interval classification
+   			var a = serie7.getClassQuantile(5);
+   			//var a = serie7.getClassEqInterval(5);
+   			//var a = serie7.getClassJenks(3);
+   			var str  = '<strong>Classification Method : <\/strong>' + serie7.method + " :\n";
+   				str += '<div class="classes">';
+   			var ranges = serie7.ranges;
+   			for(i = 0; i < ranges.length ; i++) {
+   				str += ranges[i] + "\n";
+   			}
+   				str += '<\/div>';
+
+   	   		var content   = '';
+   	   			content  += '<h2>Sample 7 - Loading data from JSON file (with jQuery)<\/h2>';
+   	   			content  += '<p>' + nl2br(serie7.info()) + '<\/p>';
+   				content  += '<p>' + nl2br(str) + '<\/p>';
+				content  += '<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie7.getSortedlist() + '<\/p>';
+				content  += '<hr \/>';
+
+			jQuery('#sample-7').html(content);
+
+			// sample-8
+			// for openlayers representation
+   			var color_x  = new Array('#e2dee6', '#c2abdd', '#9d87b6', '#735a8f', '#3d2e4e');
+
+   			serie7.setColors(color_x);
+   			
+   			var class_x = ranges;
+   			var content = serie7.getHtmlLegend();
+   			serie7.legendSeparator = ' ⇔ ';
+   			serie7.setPrecision(2);
+   			var content_flare = serie7.getHtmlLegend(null, 'Customized legend, callback function (<em>here, values wrapped by strong tags<\/em>) and feature count', true, callback_sample, 'distinct');
+
+   			var content_legend3 = serie7.getHtmlLegend(null, 'Legend (real values, breaking continuous serie)', true, null, 'discontinuous', 'DESC');
+
+   			jQuery('#method').html('<p><strong>Classification Method : <\/strong>' + serie7.method + '<\/p>');
+   			jQuery('#legend p').before(content);
+   			
+   			jQuery('#legend2 p').before(content_flare);
+   			jQuery('#legend3 p').before(content_legend3);
+   			init(color_x, class_x);
+   			
+   			
+			// sample-10
+			// for openlayers representation
+   			
+   			serieUV = new geostats(uValues);
+   			var colors  = new Array('#2BCE72', '#FFC414', '#E069BC', '#4D8CEA');
+   			serieUV.setColors(colors);
+   			// we get Unique classification
+   			var values = serieUV.getClassUniqueValues();
+   			
+   			var legend = serieUV.getHtmlLegend(null, null, 1);
+   			
+   			jQuery('#legend4').html(legend);
+   			initUniqueValues(colors, values);
+
+   		
+   		// sample-11
+			// for openlayers representation
+	
+   			var color_x = chroma.scale('RdYlGn').domain([serie7.min(),serie7.max()], 5).colors()
+   			console.log(color_x);
+				serie7.setColors(color_x);
+
+				
+				var legend = serie7.getHtmlLegend(null, null, 1);
+				jQuery('#legend5').html(legend);
+				initChromaSample(color_x, class_x);
+   			
+   		});
+   		
+	 });
+ 	</script>
+   <script type="text/javascript">
+	// from https://raw.github.com/kvz/phpjs/master/functions/strings/nl2br.js
+	function nl2br (str, is_xhtml) {
+	    // http://kevin.vanzonneveld.net
+	    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	    // +   improved by: Philip Peterson
+	    // +   improved by: Onno Marsman
+	    // +   improved by: Atli ÃžÃ³r
+	    // +   bugfixed by: Onno Marsman
+	    // +      input by: Brett Zamir (http://brett-zamir.me)
+	    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	    // +   improved by: Brett Zamir (http://brett-zamir.me)
+	    // +   improved by: Maximusya
+	    // *     example 1: nl2br('Kevin\nvan\nZonneveld');
+	    // *     returns 1: 'Kevin<br />\nvan<br />\nZonneveld'
+	    // *     example 2: nl2br("\nOne\nTwo\n\nThree\n", false);
+	    // *     returns 2: '<br>\nOne<br>\nTwo<br>\n<br>\nThree<br>\n'
+	    // *     example 3: nl2br("\nOne\nTwo\n\nThree\n", true);
+	    // *     returns 3: '<br />\nOne<br />\nTwo<br />\n<br />\nThree<br />\n'
+	    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+
+	    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+	}
+	</script>
+</head>
+<body>
+
+<div class="container" id="top">
+	<h1>geostats - Javascript classification library <em>samples</em></h1>
+	<p class="projectinfo"><a href="https://github.com/simogeo/geostats" title="geostats Github page">Github page</a> - <a href="https://github.com/simogeo/geostats/archive/master.zip" title="geostats download">download (from github)</a></p>
+	<script type="text/javascript"><!--
+	
+	// Samples datasets
+	// test integer - 14 values
+	var a1 = Array(12, 22, 5, 8, 43, 2, 34, 12, 34, 36, 5, 21, 23, 45);
+	// test integer - 17 values
+	var a2 = Array(12, 22, 5, 8, 43, 2, 34, 12, 34, 36, 5, 21, 23, 45, 12, 31, 38);
+	// test float - 5 values
+	var a3 = Array(1.54567, 0.7623122, 1.895432, 2.435357, 0.11143);
+	// test integer - 10 values
+	var a4 = Array(12, 22, 5, 8, 43, 2, 34, 12, 34, 36);
+	// test float
+	var a5 = Array(0.1, 1.2, 3, 2.5, 1.6, 2.2, 3.1, 2.8, 1.1, 2.7, 7.1);
+	// test integer - 11 values
+	//var a6 = Array(12, 22, 18, 5, 8, 43, 2, 34, 12, 34, 36);
+	var a6 = Array(12, 22, 18, 5, 8, 43, 2, 34, 12, 34, 36, 4, 9, 35, 12, 42, 43, 56, 12, 23, 
+				43, 19, 11, -1, 51, -6, 34, 33,41, 45, 23, -3, 3, 54, 1, 18, 44, 41,28, 16, 19, 
+				35, 44, 21, 23, -3, 5, 64, 15, 17, 7, 93, 6, 16, 47, 13, 46, 53, 10, 30, 31, 32, 
+				58, 28, 32, 46,53, 31, 2, 36, 41, 23, 3, 8, 15, 54, 35, 79, 15, 83, 6,-9, 78, 74, 
+				56, 78, 45, 62, 19, 70, 23, 51, 73, 67, 78, 34, 52, 61, 60, 11, 26, 48, 15, 2);
+
+	// First serie
+	serie1 = new geostats(a1);
+	document.write('<h2>Sample 1 - basic statistics methods <\/h2>');
+	document.write('<p>geostats.min() : ' + serie1.min() + '<\/p>');
+	document.write('<p>geostats.max() : ' + serie1.max() + '<\/p>');
+	document.write('<p>geostats.sum() : ' + serie1.sum() + '<\/p>');
+	document.write('<p>geostats.pop() : ' + serie1.pop() + '<\/p>');
+	document.write('<p>geostats.mean() : ' + serie1.mean() + '<\/p>');
+	document.write('<p>geostats.median() : ' + serie1.median() + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie1.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+
+	// Second serie
+	serie2 = new geostats(a2);
+	document.write('<h2>Sample 2 - geostats.info() <\/h2>');
+	document.write('<p>' + nl2br(serie2.info()) + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie2.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+
+	// Third serie
+	serie3 = new geostats(a3);
+	document.write('<h2>Sample 3 - handle both integer and float values <\/h2>');
+	document.write('<p>' + nl2br(serie3.info()) + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie3.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+
+	// Fourth serie
+	serie4 = new geostats(a4);
+
+	// we get Eq interval classification 3 classes
+	var a = serie4.getClassEqInterval(3);
+	var str  = '<strong>Classification Method : <\/strong>' + serie4.method + " :\n";
+		str += '<div class="classes">';
+	
+	var ranges = serie4.ranges;
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+		str += '<\/div>';
+
+	// we get Eq interval classification 4 classes
+	var a = serie4.getClassEqInterval(4);
+	str += '<strong>Classification Method : <\/strong>' + serie4.method + " :\n";
+	str += '<div class="classes">';
+	
+	var ranges = serie4.ranges;
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+		str += '<\/div>';
+		
+	// we get Eq interval classification 5 classes
+	var a = serie4.getClassEqInterval(5);
+	str += '<strong>Classification Method : <\/strong>' + serie4.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie4.ranges;
+	
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+
+		
+	document.write('<h2>Sample 4 - classification : choose classes number <\/h2>');
+	document.write('<p>' + nl2br(serie4.info()) + '<\/p>');
+	document.write('<p>' + nl2br(str) + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie4.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+	
+	// Fifth serie
+	var serie5 = new geostats();
+	serie5.setSerie(a5);
+
+	// we get Eq interval classification
+	var a = serie5.getClassEqInterval(4);
+	var str  = '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+
+	// we get Quantile classification
+	var a = serie5.getClassQuantile(4);
+	str += '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+	
+	// we get Std Deviation classification
+	var a = serie5.getClassStdDeviation(4);
+	str += '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+	
+	// we get Arithmetic Progression classification
+	var a = serie5.getClassArithmeticProgression(4);
+	str += '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+	
+	// we get Arithmetic Progression classification
+	var a = serie5.getClassGeometricProgression(4);
+	str += '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+
+	// we get Jenks classification
+	var a = serie5.getClassJenks(4);
+	str += '<strong>Classification Method : <\/strong>' + serie5.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie5.ranges;
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+		
+	document.write('<h2>Sample 5 - classification : choose classification method<\/h2>');
+	document.write('<h3>Equal Interval, Quantile, Standard Deviation, Arithmetic Progression, Geometric Progression, Jenks<\/h3>');
+	document.write('<div>6 methods: <\/div>');
+	document.write('<ul>');
+	document.write('<li><em>geostats.getClassEqInterval(nbClass);<\/em><\/<li>');
+	document.write('<li><em>geostats.getClassQuantile(nbClass);<\/em><\/<li>');
+	document.write('<li><em>geostats.getClassStdDeviation(nbClass);<\/em><\/<li>');
+	document.write('<li><em>geostats.getClassArithmeticProgression(nbClass);<\/em><\/<li>');
+	document.write('<li><em>geostats.getClassGeometricProgression(nbClass);<\/em><\/<li>');
+	document.write('<li><em>geostats.getClassJenks(nbClass);<\/em><\/<li>');
+	document.write('<\/ul>');
+	document.write('<p>You can even use <em>geostats.setClassManually([0.1, 1.5, 2.2, 3.5, 7.1]);<\/em> method to classify manually your data. It will then be easy to render the legend.<\/p>');
+	document.write('<p>' + nl2br(serie5.info()) + '<\/p>');
+	document.write('<p>' + nl2br(str) + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie5.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+
+	// Sixth serie
+	var serie6 = new geostats(a6);
+
+	// we get Eq interval classification
+	serie6.getClassEqInterval(3);
+	var str  = '<strong>Classification Method : <\/strong>' + serie6.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie6.getRanges();
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+
+	// we get Quantile classification
+	serie6.getClassQuantile(5);
+	str += '<strong>Classification Method : <\/strong>' + serie6.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie6.getRanges();
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+
+	// we get Jenks classification
+	serie6.getClassJenks(4);
+	str += '<strong>Classification Method : <\/strong>' + serie6.method + " :\n";
+	str += '<div class="classes">';
+	var ranges = serie6.getRanges();
+	for(i = 0; i < ranges.length ; i++) {
+		str += ranges[i] + "\n";
+	}
+	str += '<\/div>';
+	
+		
+	document.write('<h2>Sample 6 - choose the right classification<\/h2>');
+	document.write('<p>' + nl2br(serie6.info()) + '<\/p>');
+	document.write('<p>' + nl2br(str) + '<\/p>');
+	document.write('<p class="serie"><strong>Serie (sorted) : <\/strong>' + serie6.getSortedlist() + '<\/p>');
+	document.write('<hr \/>');
+
+	document.write('<div id="sample-7"><\/div>');
+	--></script>
+	<div id="sample-8">
+		<h2>Sample 8 - a choropleth representation (using openlayers) with JSON input</h2>
+		<div id="method"></div>
+		<div id="map"></div>
+	</div>
+	<div id="sample-9">
+		<h2>Sample 9 - dynamic HTML legend with user input, feature count, callback function and display mode option</h2>
+		<div id="legend" class="legend">
+			<p>Call to legend method with default options</p>
+		</div>
+		<div id="legend2" class="legend">
+			<p>Call to legend method with options : customized text, callback function and 'distinct' mode. Decimal precision has been set to 2.</p>
+		</div>
+		<div id="legend3" class="legend">
+			<p>Call to legend method with options : 'discontinuous' mode, and descending order.</p>
+		</div>
+	</div>
+	<div style="clear:both"></div>
+	<div id="sample-10">
+		<h2>Sample 10 - Handle unique values</h2>
+		<div id="map2"></div>
+		<div id="legend4"></div>
+	</div>
+	<div id="sample-11">
+		<h2>Sample 11 -  a choropleth representation (using openlayers) with JSON input and <a href="https://github.com/gka/chroma.js">Chroma.js</a></h2>
+		<div id="chroma-code">
+			<pre>
+			<code>
+				// getting the color ramp from chroma by passing min, max values and number of classes
+				var color_x = chroma.scale('RdYlGn').domain([serie7.min(),serie7.max()], 5).colors();
+				
+				// setting colors into geostats
+				serie7.setColors(color_x);
+				
+				// rendering the html legend with geostats
+				jQuery('#legend5').html(serie7.getHtmlLegend(null, null, 1));
+				
+				// displaying map with openlayers
+				initChromaSample(color_x, class_x);
+			</code></pre>
+		</div>
+		<div id="map3"></div>
+		<div id="legend5"></div>
+	</div>
+	<div id="sample-12">
+		<h2>Sample 12 - Reading shapefile and creating choropleth map from attribute data</h2>
+		<div>Using geostats and <a href="http://github.com/wavded/js-shapefile-to-geojson">js-shapefile-to-geojson</a> (by <a href="https://github.com/wavded">Marc Harter</a>) to create thematic maps. <a href="./sample_shp.html">Access demo page.</a></div>
+	</div>
+	
+  <div id="footer"><em>geostats.js</em> - Copyright (c) 2011 Simon Georget - released under MIT license - <a href="https://github.com/simogeo/geostats" title="geostats Github page">Github page</a> | <a href="#top">Go to top</a></div>
+</div>
+</body>
+</html>

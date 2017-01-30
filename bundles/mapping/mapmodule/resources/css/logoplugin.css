@@ -6,8 +6,7 @@
   /* Force line to fit container */
   line-height: 15px;
   text-align: left;
-  text-shadow: 1px 0px 3px rgba(0, 0, 0, 0.5), -1px 0px 3px rgba(0, 0, 0, 0.5), 1px 0px 1px #000, -1px 0px 1px #000;
-  z-index: 100000000 !important; }
+  text-shadow: 1px 0px 3px rgba(0, 0, 0, 0.5), -1px 0px 3px rgba(0, 0, 0, 0.5), 1px 0px 1px #000, -1px 0px 1px #000; }
   .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
     color: inherit; }
   .logoplugin .icon {
@@ -36,3 +35,5 @@
     padding-bottom: 5px; }
   .data-sources-dialog .indicators {
     margin-top: 10px; }
+
+/*# sourceMappingURL=logoplugin.css.map */

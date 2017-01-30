@@ -22,28 +22,28 @@ Oskari.registerLocalization(
                 "tags": "kartvindu, brukerveiledning"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Kartverktøy",
+                "tags": "guide_tools"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Søk",
+                "tags": "guide_search"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Kartlag",
+                "tags": "guide_maplayers"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Kartutgivelse",
+                "tags": "guide_publishing"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Tematiske kart",
+                "tags": "guide_thematic"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Analyse",
+                "tags": "guide_analysis"
             }
         ],
         "help": {

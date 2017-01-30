@@ -1,28 +1,39 @@
 Oskari.registerLocalization(
 {
     "lang": "es",
-    "key": "admin-layerselector",
+    "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "admin": {
-            "en": {
-                "title": "En",
-                "placeholder": "Nombre en Inglés",
-                "descplaceholder": "Descripción en Inglés"
+        "flyout": {
+            "heading": {
+                "datasetInformation": "NOT TRANSLATED",
+                "contactInformation": "NOT TRANSLATED",
+                "metadataContact": "NOT TRANSLATED",
+                "technicalInformation": "NOT TRANSLATED",
+                "dataQuality": "NOT TRANSLATED"
             },
-            "fi": {
-                "title": "Fi",
-                "placeholder": "nombre en Finlandés",
-                "descplaceholder": "descripción en Finlandés"
-            },
-            "sv": {
-                "title": "Sv",
-                "placeholder": "Nombre en Sueco",
-                "descplaceholder": "Descripción enSueco"
-            },
-            "es": {
-                "title": "Es",
-                "placeholder": "Nombre en Español",
-                "descplaceholder": "descripción en Español"
+            "tableHeaders": {
+                "datasetInformation": {
+                    "referenceDate": "NOT TRANSLATED",
+                    "temporalInformation": "NOT TRANSLATED",
+                    "resourceLanguage": "NOT TRANSLATED",
+                    "bbox": "NOT TRANSLATED",
+                    "crs": "NOT TRANSLATED"
+                },
+                "contactInformation": {
+                    "pointOfContact": "NOT TRANSLATED"
+                },
+                "metadataContact": {
+                    "pointOfContact": "NOT TRANSLATED"
+                },
+                "technicalInformation": {
+                    "accessConstraintInformation": "NOT TRANSLATED",
+                    "lineage": "NOT TRANSLATED",
+                    "metadataChangeDate": "NOT TRANSLATED",
+                    "uniqueIdentifier": "NOT TRANSLATED"
+                },
+                "dataQuality": {
+                    "conformance": "NOT TRANSLATED"
+                }
             }
         }
     }

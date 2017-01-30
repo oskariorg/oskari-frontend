@@ -39,7 +39,7 @@ function () {
                 '           <div class="feedback-list-rating">'+
                 '               <%=feedback.score%>'+
                 '               <span class="feedbacklist-userrole">'+
-                '                   <%=locale.userInformation[feedback.userRole]%>'+
+                '                   <%=locale.userInformation[feedback.userRole] ? locale.userInformation[feedback.userRole] : feedback.userRole%>'+
                 '               </span>'+
                 '           </div>'+
                 '           <br/>'+
@@ -139,7 +139,8 @@ function () {
                     actionText: null,
                     showAction: function(metadata) {
                         //add the span with metadata's id to be able to identify and update rating later
-                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>&nbsp;'+me._getMetadataRating(metadata);
+                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>&nbsp;'+me._getAdminMetadataRating(metadata.latestAdminRating);
+
                         return true;
                     }
                 };
@@ -152,7 +153,7 @@ function () {
             var container = idSpan.parent();
             container.empty();
             container.append(idSpan);
-            container.append('&nbsp;'+this._getMetadataRating(metadata));
+            container.append('&nbsp;'+this._getAdminMetadataRating(metadata.latestAdminRating));
         },
         _addMetadataFeedbackTabToMetadataFlyout: function() {
             var me = this,
@@ -263,6 +264,12 @@ function () {
                 );
         },
 
+        _getAdminMetadataRating: function(score) {
+            if (!score) {
+                score = 0;
+            }
+            return this._getMetadataRating({score: score});
+        },
         /**
          * @method _getRatingInfo
          * @param {Object} metadata object
@@ -271,7 +278,6 @@ function () {
         _getMetadataRating: function(metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
-
             if (typeof metadata.score !== "undefined") {
                 var ratingSymbols = me._generateRatingSymbols(metadata.score);
                 for (j = 0; j < 5; j++) {

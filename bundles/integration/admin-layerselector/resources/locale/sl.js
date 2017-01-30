@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Sloj karte",
             "type-wfs": "Izdelek iz podatkov"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Sloj karte je trenutno na voljo",
-                "iconClass": "Zaledni sistem je vredu"
-            },
-            "DOWN": {
-                "tooltip": "Sloj karte trenutno ni na voljo",
-                "iconClass": "Zaledni sistem ne deluje"
-            },
-            "MAINTENANCE": {
-                "tooltip": "V naslednjih dneh se bodo pojavljale občasne prekinitve pri dostopu do slojev.",
-                "iconClass": "Vzdrževanje zalednega sistema"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "Zaledni sistem je vredu"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Zmogljivosti",
             "confirmResourceKeyChange": "Spremenil si enolično ime naslova za dostop do sloja. Zaradi varnosti, se bodo odstranile pravice uporabnikov za ta slojl in jih bo potrebno ponovno nastaviti. Ali želiš nadaljevati?",

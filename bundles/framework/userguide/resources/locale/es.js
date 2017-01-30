@@ -22,28 +22,28 @@ Oskari.registerLocalization(
                 "tags": "Guia de usuario para la ventana de mapa"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "Herramientas del mapa",
+                "tags": "herramientas guias"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "buscar",
+                "tags": "guia para busquedas"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "capas del mapa",
+                "tags": "guia de caoas del mpa"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "publicando mapa",
+                "tags": "publicando guia"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "mapas temáticos",
+                "tags": "gua temática"
             },
             {
-                "title": "NOT TRANSLATED",
-                "tags": "NOT TRANSLATED"
+                "title": "analisis",
+                "tags": "guia de analisis"
             }
         ],
         "help": {

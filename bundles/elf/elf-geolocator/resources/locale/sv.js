@@ -32,6 +32,9 @@ Oskari.registerLocalization(
             "geolocButton": "Plasera näraste plats",
             "geolocDesc": "Klicka kartan för att plasera närmaste plats",
             "noResults": "Inga sökresultat",
+            "showMore": "Visa sökalternativ",
+            "showLess": "Dölj sökalternativ",
+            "emptyOption": "* Inget val *",
             "errors": {
                 "searchTermMissing": "Sökord krävs",
                 "searchFailed": "Sök misslyckades. Prova på nytt senare."

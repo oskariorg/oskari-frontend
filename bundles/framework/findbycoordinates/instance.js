@@ -16,13 +16,46 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             active: false
         };
         this.searchUrl = undefined;
+        this._popup = null;
+        this._logger = Oskari.log('findbycoordinates');
+        this.POPUP_ID = "findbycoordinates-search-result";
     }, {
         __name : 'findbycoordinates',
         __templates : {
-            item : _.template('<h3>${ name }</h3>' +
-                   '<h3>${ info }</h3>' +
-                   '<p>${ lat }, ${ lon }</p>')
+            item : jQuery('<div>' +
+                '   <div class="channel_header">'+
+                '       <h3 class="channel_id"></h3>'+
+                '   </div>'+
+                '   <div class="channel_description icon-info"></div>'+
+                '   <div class="none"></div>'+
+                '   <div class="result">'+
+                '       <div class="name"></div>' +
+                '       <div class="info"></div>' +
+                '       <div class="lonlat"></div>' +
+                '   </div>'+
+                '</div>'),
+            popup: jQuery('<div class="findbycoordinates__popup__content"></div>'),
+            popupChannelResult: jQuery('<div class="channel_result">'+
+                '   <div class="channel_header">'+
+                '       <h3 class="channel_id"></h3>'+
+                '   </div>'+
+                '   <div class="channel_description icon-info"></div>'+
+                '   <div class="none"></div>'+
+                '   <div class="channel__results"></div>'+
+                '</div>'),
+            popupResult: jQuery('<div class="resultmarker">'+
+                '   <img alt="marker"></img>'+
+                '</div>'+
+                '<div class="nameinfo">'+
+                '   <div class="name"></div>'+
+                '   <div class="info"></div>'+
+                '   <div class="lonlat"></div>'+
+                '</div>'+
+                '<div class="none"></div>')
         },
+        __colors: ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
+            '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
+            ],
         getName : function () {
             return this.__name;
         },
@@ -100,9 +133,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method startTool
          */
         startTool: function () {
-            this.tool.active = true;
-            jQuery('#mapdiv').addClass('reverse-geocode');
-            this.enableGFI(false);
+            var me = this;
+            me.tool.active = true;
+            jQuery('#mapdiv').addClass('findbycoordinates-cursor');
+            me._hidePopups();
+            me.enableGFI(false);
         },
         /**
          * Stops the tool
@@ -111,9 +146,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method stopTool
          */
         stopTool: function () {
-            this.tool.active = false;
-            jQuery('#mapdiv').removeClass('reverse-geocode');
-            this.enableGFI(true);
+            var me = this,
+                sandbox = this.getSandbox(),
+                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+            if(spinnerRequestBuilder) {
+                sandbox.request(this, spinnerRequestBuilder(false));
+            }
+            me.tool.active = false;
+            jQuery('#mapdiv').removeClass('findbycoordinates-cursor');
+            me.enableGFI(true);
         },
         /**
          * @method enableGfi
@@ -154,6 +195,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             }
         },
         /**
+         * @method  @private _hidePopups Hide popups
+         */
+        _hidePopups: function(){
+            var me = this,
+                sandbox = this.getSandbox(),
+                infoBoxHideReqBuilder = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest');
+
+            if(me._popup){
+                me._popup.close();
+            }
+            if(infoBoxHideReqBuilder) {
+                sandbox.request(this, infoBoxHideReqBuilder(me.POPUP_ID));
+            }
+        },
+        /**
          * Sends the search request to the search service
          * and handles the response.
          *
@@ -162,14 +218,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @param  {Object} lonlat
          */
         __handleMapClick: function (lonlat) {
-            var me = this;
+            var me = this,
+                sandbox = this.getSandbox(),
+                spinnerRequestBuilder = sandbox.getRequestBuilder('ShowProgressSpinnerRequest');
+
+            if(spinnerRequestBuilder) {
+                sandbox.request(this, spinnerRequestBuilder(true));
+            }
 
             this.searchService.doSearch({
                 lon: lonlat.lon,
                 lat: lonlat.lat
             }, function (response) {
                 if (response) {
-                    me.handleResponse(response.locations);
+                    me.handleResponse(response);
                 }
                 me.stopTool();
                 me.selectDefaultTool();
@@ -177,6 +239,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me.getSandbox().printWarn(
                     'ReverseGeoCode search failed',
                     [].slice.call(arguments));
+
                 me.stopTool();
                 me.selectDefaultTool();
             });
@@ -188,43 +251,158 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @param  {Object} result
          */
         handleResponse: function (results) {
-            if (!results || !results.length) {
+            if (!results || results.totalCount < 1) {
                 return;
             }
 
             var me = this,
                 loc = this.getLocalization(),
                 sandbox = this.getSandbox(),
-                popupId = "findbycoordinates-search-result";
-            // get the location from first. This is error prone since locations may differ a bit
-            // Maybe find another way of doing this like a generic popup with markers for each location?
-            var lonlat =  {
-                lon: results[0].lon,
-                lat: results[0].lat
-            };
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
-            var infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest');
+                result;
 
-            var options = {
-                hidePrevious: true
-            };
+            // If there is only one response then show Infobox
+            if(results.totalCount === 1) {
+                result = results.locations[0];
+                var lonlat = {
+                        lon: result.lon,
+                        lat: result.lat
+                    },
+                    moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+                    infoBoxReqBuilder = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                    options = {
+                        hidePrevious: true
+                    };
 
-            if (moveReqBuilder) {
-                sandbox.request(this, moveReqBuilder(
-                    lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
-                    false, sandbox.getMap().getSrsName()));
-            }
-            if (infoBoxReqBuilder) {
-                var contents = [];
-                results.forEach(function(result) {
+                if (moveReqBuilder) {
+                    sandbox.request(this, moveReqBuilder(
+                        lonlat.lon, lonlat.lat, sandbox.getMap().getZoom(),
+                        false, sandbox.getMap().getSrsName()));
+                }
+                if (infoBoxReqBuilder) {
+                    var contents = [];
                     contents.push(me.__getInfoBoxHtml(result));
+                    sandbox.request(this, infoBoxReqBuilder(
+                        me.POPUP_ID, loc.resultsTitle,
+                        contents, lonlat, options));
+                }
+            }
+            // If there is more than one results then show results in popup
+            else {
+                var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService'),
+                    popupContent = me.__templates.popup.clone(),
+                    popupLocation = 'right',
+                    popupName = 'findbycoordinatespopup',
+                    mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    themeColours = mapmodule.getThemeColours(),
+                    closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined,
+                    oskariMarkers = Oskari.getMarkers(),
+                    markersLength = oskariMarkers.length,
+                    colorsLength = me.__colors.length,
+                    shapeIndex = 0,
+                    colorIndex = 0,
+                    addMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
+                    removeMarkerRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest'),
+                    MARKER_ID_PREFIX = 'findbycoordinates_';
+
+                // Close button
+                closeBtn.setTitle(loc.close);
+                closeBtn.setHandler(function() {
+                    me._popup.close();
                 });
-                contents.sort(function(a,b ) {
-                    return a.prio < b.prio;
+
+                // Create popup
+                me._popup = popupService.createPopup();
+                me._popup.createCloseIcon();
+                me._popup.onClose(function () {
+                    if (removeMarkerRequestBuilder) {
+                        for(var i=0;i<=me._markerMaxIndex;i++) {
+                            sandbox.request(me, removeMarkerRequestBuilder(MARKER_ID_PREFIX + i));
+                        }
+                    }
+                    me._markerMaxIndex = 0;
                 });
-                sandbox.request(this, infoBoxReqBuilder(
-                    popupId, loc.resultsTitle,
-                    contents, lonlat, options));
+
+                me._popup.addClass('findbycoordinates__popup');
+                me._popup.setColourScheme({
+                    'bgColour': themeColours.backgroundColour,
+                    'titleColour': themeColours.textColour,
+                    'iconCls': popupCloseIcon
+                });
+
+                me._popup.makeDraggable();
+
+                // If there is more than 2 results then add scrolls
+                if(results.locations.length>2) {
+                    me._popup.getJqueryContent().addClass('show-scroll');
+                }
+
+                // Loop results
+                for(var i=0, resultsCount=results.locations.length; i<resultsCount;i++) {
+                    if(i >= markersLength * colorsLength) {
+                        // If all markers and colors are used hten log warn and break results.
+                        this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.');
+                        break;
+                    }
+                    result = results.locations[i];
+                    var channelId = result.channelId,
+                        lang = (result.lang && typeof result.lang ==='string') ? result.lang.toUpperCase() : '',
+                        langText = (lang !== '') ? ' (' + lang + ')': '',
+                        channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+lang +'"]'),
+                        color = me.__colors[colorIndex];
+
+                    if(channelResults.length === 0) {
+                        channelResults = me.__templates.popupChannelResult.clone();
+                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId || '') + langText );
+                        if(loc.channelDescriptions[channelId]) {
+                            channelResults.find('.channel_description').attr('title', loc.channelDescriptions[channelId]);
+                        } else {
+                            channelResults.find('.channel_description').hide();
+                        }
+                        channelResults.attr('data-channel-id', channelId+lang);
+                        popupContent.append(channelResults);
+                    }
+
+                    var markerSvg = mapmodule.getSvg({
+                        shape:shapeIndex,
+                        color: color,
+                        stroke: '#000000'
+                    });
+
+                    var markerData = {
+                        x: result.lon,
+                        y: result.lat,
+                        color: color,
+                        msg : '',
+                        shape: shapeIndex,
+                        size: 3,
+                        stroke: '#000000'
+                    };
+
+                    var resultRow = this.__templates.popupResult.clone();
+                    resultRow.find('img').attr('src', markerSvg);
+                    resultRow.find('.name').html(result.name || '');
+                    resultRow.find('.info').html(result.village || '');
+                    resultRow.find('.lonlat').html(result.lon + ', ' + result.lat);
+
+                    channelResults.find('.channel__results').append(resultRow);
+                    if (addMarkerRequestBuilder) {
+                        sandbox.request(this, addMarkerRequestBuilder(markerData, MARKER_ID_PREFIX + i));
+                        me._markerMaxIndex = i;
+                    }
+                    colorIndex+=1;
+                    if(colorIndex>colorsLength-1) {
+                        colorIndex = 0;
+                        shapeIndex+=1;
+                    }
+
+                }
+
+                me._popup.show(loc.popupTitle, popupContent, [closeBtn]);
+
+                me._popup.moveTo(jQuery('#oskari_toolbar_selectiontools_findbycoordinates'), popupLocation, true);
+                me._popup.adaptToMapSize(sandbox, popupName);
+
             }
         },
         /**
@@ -236,17 +414,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var data = {
-                name : result.name,
-                info : result.village || result.type || "",
-                lon : result.lon,
-                lat : result.lat
-            };
+            var me = this,
+                loc = this.getLocalization(),
+                lang = (result.lang && typeof result.lang ==='string') ? ' (' + result.lang.toUpperCase() + ')' : '';
+
+            var item = this.__templates.item.clone();
+            item.find('.channel_id').html((loc.channels[result.channelId] || result.channelId || '') + lang);
+            if(loc.channelDescriptions[result.channelId]) {
+                item.find('.channel_description').attr('title', loc.channelDescriptions[result.channelId]);
+            } else {
+                item.find('.channel_description').hide();
+            }
+            item.find('.name').html(result.name);
+            item.find('.info').html(result.village || '');
+            item.find('.lonlat').html(result.lon + ', ' + result.lat);
             return {
                 // use higher priority for ones with "village" info more than ones that don't
                 // this way "nice-to-know" features like "what 3 words" are at the bottom
                 prio : (result.village) ? 1 : -1,
-                html : this.__templates.item(data)
+                html : item
             };
         }
     }, {

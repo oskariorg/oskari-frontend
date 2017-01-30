@@ -30,39 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdate
             var layerId = request.getLayerId();
             var forced = request.isForced();
             var params = request.getParameters();
-
-            var sandbox = this.sandbox;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId),
-                i;
-            var olLayerList,
-                count;
-            if (!layer) {
-                return;
-            }
-
-            if (params && layer.isLayerOfType("WMS")) {
-                olLayerList = this.mapModule.getOLMapLayers(layerId);
-                count = 0;
-                if (olLayerList) {
-                    count = olLayerList.length;
-                    for (i = 0; i < olLayerList.length; ++i) {
-                        olLayerList[i].mergeNewParams(params);
-                    }
-                }
-                this.sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layerId + ", found " + count);
-
-            } else {
-                olLayerList = this.mapModule.getOLMapLayers(layerId);
-                count = 0;
-                if (olLayerList) {
-                    count = olLayerList.length;
-                    for (i = 0; i < olLayerList.length; ++i) {
-                        olLayerList[i].redraw(forced);
-                    }
-                }
-                this.sandbox.printDebug("[MapLayerUpdateRequestHandler] Layer / update layer " + layerId + ", found " + count);
-            }
-
+            this.mapModule.handleMapLayerUpdateRequest(layerId, forced, params);
         }
     }, {
         /**

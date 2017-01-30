@@ -65,7 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keyboardEventTarget: document,
                 target: this.getMapElementId(),
                 controls: controls,
-                interactions: interactions
+                interactions: interactions,
+                loadTilesWhileInteracting: true,
+                loadTilesWhileAnimating: true
             });
 
             var projection = ol.proj.get(me.getProjection());
@@ -152,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __boundsToArray : function(bounds) {
             var extent = bounds || [];
-            if(bounds.left && bounds.top && bounds.right && bounds.bottom) {
+            if(!isNaN(bounds.left) && !isNaN(bounds.top) && !isNaN(bounds.right) && !isNaN(bounds.bottom)) {
               extent = [
                     bounds.left,
                     bounds.bottom,
@@ -292,7 +294,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         panMapByPixels: function (pX, pY, suppressStart, suppressEnd, isDrag) {
             var view = this.getMap().getView(),
-                centerCoords = view.getCenter();
+                centerCoords = view.getCenter(),
                 centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
                 newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels),
@@ -323,7 +325,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} transformed coordinates as object with lon and lat keys
          */
         transformCoordinates: function (pLonlat, srs, targetSRS) {
-
             if(!targetSRS) {
                 targetSRS = this.getProjection();
             }
@@ -341,6 +342,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                       lat : transformed[1]
                   };
             }
+
+            var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+            log.warn('SrsName not supported!');
             throw new Error('SrsName not supported!');
         },
         /**
@@ -493,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             /* insert at */
 
             if (index === layerIndex) {
-                return
+                return;
             } else if (index === layerColl.getLength()) {
                 /* to top */
                 layerColl.removeAt(layerIndex);
@@ -601,12 +605,25 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var image = {};
             var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
             styleDef.image.size = size;
-          	var svg = me.getSvg(styleDef.image);
-            if(svg) {
+
+            if(me.isSvg(style.image)) {
+                var svg = me.getSvg(styleDef.image);
                 image = new ol.style.Icon({
-              	    src: svg,
+                    src: svg,
                     size: [size, size],
                     imgSize: [size, size]
+                });
+                return image;
+            }
+            else if(style.image && style.image.shape) {
+                var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
+                var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
+                image = new ol.style.Icon({
+                    src: style.image.shape,
+                    anchorYUnits: 'pixels',
+                    anchorXUnits: 'pixels',
+                    anchorOrigin: 'bottom-left',
+                    anchor: [offsetX,offsetY]
                 });
                 return image;
             }
@@ -670,6 +687,63 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.text = textStyleJSON.labelText;
             }
             return new ol.style.Text(text);
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                zoomToBounds = null;
+
+            if (!feature) {
+                return;
+            }
+
+            if (feature && feature.getGeometry() && feature.getGeometry().getExtent()) {
+                var map = me.getMap();
+                bounds = feature.getGeometry().getExtent();
+                centroid = ol.extent.getCenter(bounds);
+                mapBounds = map.getView().calculateExtent(map.getSize());
+
+                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                if (ol.extent.getHeight(bounds) < ol.extent.getHeight(mapBounds) && ol.extent.getWidth(bounds) < ol.extent.getWidth(mapBounds)) {
+                    zoomToBounds = null;
+                } else {
+                    zoomToBounds = {
+                        'top': ol.extent.getTopLeft(bounds)[1],
+                        'left': ol.extent.getTopLeft(bounds)[0],
+                        'bottom': ol.extent.getBottomRight(bounds)[1],
+                        'right': ol.extent.getBottomRight(bounds)[0]
+                    };
+                }
+
+                var ret = {
+                    'x': centroid[0],
+                    'y': centroid[1],
+                    'bounds': zoomToBounds
+                };
+
+                return ret;
+            }
+
+            return null;
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new ol.format.WKT(),
+                feature = wktFormat.readFeature(wkt);
+
+            return feature;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
     }, {

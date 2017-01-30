@@ -53,8 +53,7 @@ Oskari.clazz.define(
                 layers.push(layer);
             }
 
-            layers.forEach(function(oskariLayer) {
-
+            layers.forEach(function (oskariLayer) {
                 // default params and options
                 var defaultParams = {
                         layers: oskariLayer.getLayerName(),
@@ -62,7 +61,7 @@ Oskari.clazz.define(
                         id: oskariLayer.getId(),
                         styles: oskariLayer.getCurrentStyle().getName(),
                         format: 'image/png',
-                        version : oskariLayer.getVersion() || '1.1.1'
+                        version: oskariLayer.getVersion() || '1.1.1'
                     },
                     defaultOptions = {
                         layerId: oskariLayer.getLayerName(),
@@ -72,7 +71,17 @@ Oskari.clazz.define(
                         buffer: 0
                     },
                     layerParams = oskariLayer.getParams(),
-                    layerOptions = oskariLayer.getOptions();
+                    layerOptions = oskariLayer.getOptions(),
+                    layerAttributes = oskariLayer.getAttributes();
+
+                if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
+                    defaultOptions.yx = _.clone(layerAttributes.reverseXY);
+                }
+
+                // Sub layers could be different types
+                if (oskariLayer.getLayerType() !== 'wms') {
+                    return;
+                }
 
                 if (oskariLayer.isRealtime()) {
                     var date = new Date();
@@ -106,6 +115,7 @@ Oskari.clazz.define(
                 olLayers.push(openLayer);
 
                 sandbox.printDebug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
+
 
             });
             // store reference to layers
@@ -168,6 +178,28 @@ Oskari.clazz.define(
                 });
                 oLayers[i].setVisibility(loopLayer.isInScale(scale));
                 oLayers[i].redraw(true);
+            }
+        },
+        updateLayerParams: function(layer, forced, params) {
+            var sandbox = this.getSandbox(),
+                i,
+                olLayerList,
+                count;
+
+            if (!layer) {
+                return;
+            }
+
+            if (params && layer.isLayerOfType("WMS")) {
+                olLayerList = this.mapModule.getOLMapLayers(layer.getId());
+                count = 0;
+                if (olLayerList) {
+                    count = olLayerList.length;
+                    for (i = 0; i < olLayerList.length; ++i) {
+                        olLayerList[i].mergeNewParams(params);
+                    }
+                }
+                sandbox.printDebug("[MapLayerUpdateRequestHandler] WMS layer / merge new params: " + layer.getId() + ", found " + count);
             }
         }
     },

@@ -48,6 +48,54 @@ div.geolocator-results div.search-results {
     text-decoration: none !important;
     margin-left: 40px; }
 
+div.geoLocatorRow div.rowLabel {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.geoLocatorDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.ui-country-autocomplete-widget {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.locationTypeDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.nameLanguageDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.moreLess {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
+div.geoLocatorRow {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
 .elf-fake-link {
   /* This should apparently look like a normal link */
   text-decoration: underline;

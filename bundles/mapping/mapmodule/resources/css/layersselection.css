@@ -1,9 +1,10 @@
 /* Mixins */
 div.mapplugin.layerselection {
+  clear: both;
   height: 37px;
   overflow: visible;
   max-width: 200px;
-  z-index: 100000000000000 !important; }
+  z-index: 15001 !important; }
   div.mapplugin.layerselection div.content {
     background-color: white;
     max-height: 95%; }
@@ -153,3 +154,11 @@ div.mapplugin.layerselection {
 
 .mapplugins.left div.mapplugin.layerselection div.published-styled-layerselector-content div.styled-header-arrow {
   margin-left: 12px !important; }
+
+div.mapplugin.layerselectionpopup div.content div.baseLayerHeader, div.mapplugin.layerselectionpopup div.content div.layerHeader {
+  font-weight: bold;
+  padding-bottom: 6px; }
+div.mapplugin.layerselectionpopup div.content div.layerHeader {
+  padding-top: 10px; }
+
+/*# sourceMappingURL=layersselection.css.map */

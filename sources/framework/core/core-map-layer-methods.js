@@ -4,9 +4,10 @@
  * This category class adds map layers related methods to Oskari core as they
  * were in the class itself.
  */
-Oskari.clazz.category(
-    'Oskari.mapframework.core.Core',
-    'map-layer-methods', {
+(function(Oskari) {
+    var log = Oskari.log('Core');
+
+    Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
         /**
          * @public @method isLayerAlreadySelected
          * Checks if the layer matching the id is added to map
@@ -62,7 +63,7 @@ Oskari.clazz.category(
                 );
 
             if (layer === null || layer === undefined) {
-                this.printDebug(
+                log.debug(
                     '[core-map-layer-methods] ' + id + ' is not yet highlighted.'
                 );
             }
@@ -95,7 +96,7 @@ Oskari.clazz.category(
             }
 
             if (layer === null || layer === undefined) {
-                this.printDebug('Cannot find map layer with ' + selector +
+                log.debug('Cannot find map layer with ' + selector +
                     ' from all available. ' +
                     'Check that current user has VIEW permissions to that layer.');
             }
@@ -150,12 +151,12 @@ Oskari.clazz.category(
                 keepLayersOrder = request.getKeepLayersOrder(), // TODO we need to pass this as false from layerselector...
                 isBaseMap = request.isBasemap();
 
-            me.printDebug(
+            log.debug(
                 'Trying to add map layer with id "' + id + '" AS ' +
                 (isBaseMap ? ' BASE ' : ' NORMAL ')
             );
             if (me.isLayerAlreadySelected(id)) {
-                me.printDebug(
+                log.debug(
                     'Attempt to select already selected layer "' + id + '"'
                 );
                 return;
@@ -164,7 +165,7 @@ Oskari.clazz.category(
             var mapLayer = me.findMapLayerFromAllAvailable(id);
             if (!mapLayer) {
                 // not found, ignore
-                me.printDebug(
+                log.debug(
                     'Attempt to select layer that is not available "' + id + '"'
                 );
                 return;
@@ -216,9 +217,9 @@ Oskari.clazz.category(
             var me = this,
                 id = request.getMapLayerId();
 
-            me.printDebug('Trying to remove map layer with id "' + id + '"');
+            log.debug('Trying to remove map layer with id "' + id + '"');
             if (!me.isLayerAlreadySelected(id)) {
-                me.printDebug('Attempt to remove layer "' + id + '" that is not selected.');
+                log.debug('Attempt to remove layer "' + id + '" that is not selected.');
                 return;
             }
 
@@ -236,7 +237,7 @@ Oskari.clazz.category(
 
             if (me.isMapLayerAlreadyHighlighted(id)) {
                 // remove it from highlighted list
-                me.printDebug('Maplayer is also highlighted, removing it from highlight list.');
+                log.debug('Maplayer is also highlighted, removing it from highlight list.');
                 me._handleDimMapLayerRequest(id);
             }
 
@@ -416,12 +417,12 @@ Oskari.clazz.category(
             var creator = this.getObjectCreator(request),
                 id = request.getMapLayerId();
 
-            this.printDebug(
+            log.debug(
                 '[core-map-layer-methods] Trying to highlight map ' +
                 'layer with id "' + id + '"'
             );
             if (this.isMapLayerAlreadyHighlighted(id)) {
-                this.printWarn(
+                log.warn(
                     '[core-map-layer-methods] Attempt to highlight ' +
                     'already highlighted wms feature info ' + 'map layer "' + id +
                     '"'
@@ -440,7 +441,7 @@ Oskari.clazz.category(
                 return;
             }
             this._mapLayersHighlighted.push(mapLayer);
-            this.printDebug(
+            log.debug(
                 '[core-map-layer-methods] Adding ' + mapLayer + ' (' +
                 mapLayer.getId() + ') to highlighted list.'
             );
@@ -475,5 +476,6 @@ Oskari.clazz.category(
             var event = this.getEventBuilder('AfterDimMapLayerEvent')(mapLayer);
             this.dispatch(event);
         }
-    }
-);
+    });
+
+}(Oskari));

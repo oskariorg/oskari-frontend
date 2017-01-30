@@ -107,13 +107,6 @@
         var appConfig = config || {};
 
         var globalExpose = {};
-
-        if(o.getLoaderMode() === 'dev') {
-            // config for dev mode
-            require.config({
-                urlArgs: "ts=" + (new Date()).getTime()
-            });
-        }
         // Listen to started bundles
         var result = {
             bundles : [],
@@ -202,7 +195,7 @@
                 }
                 if(Oskari.bundle(bundleToStart)) {
                     log.debug('Bundle preloaded ' + bundleToStart);
-                    me.startBundle(bundleToStart, config);
+                    me.startBundle(bundleToStart, config, configId);
                     this.processSequence(done);
                     return;
                 }
@@ -220,7 +213,7 @@
                     // Oskari.bundle_manager.installBundleClass(id, "Oskari.mapframework.domain.Bundle");
                     // loop all bundles and require sources from installs
                     me.processBundleJS(bundles, function() {
-                        me.startBundle(bundleToStart, config);
+                        me.startBundle(bundleToStart, config, configId);
                         me.processSequence(done);
                     });
                 }, function (err) {
@@ -228,7 +221,7 @@
                     me.processSequence(done);
                 });
             },
-            startBundle : function(bundleId, config) {
+            startBundle : function(bundleId, config, instanceId) {
                 var bundle = Oskari.bundle(bundleId);
                 if(!bundle) {
                     throw new Error('Bundle not loaded ' + bundleId);
@@ -238,7 +231,8 @@
                     throw new Error('Couldn\'t create an instance of bundle ' + bundleId);
                 }
                 instance.mediator = {
-                    bundleId : bundleId
+                    bundleId : bundleId,
+                    instanceId : instanceId
                 }
                 // quick'n'dirty property injection
                 for(var key in config) {

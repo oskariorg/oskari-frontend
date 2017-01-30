@@ -219,7 +219,7 @@ function () {
      */
     __renderPlan: function(plan){
         var me = this,
-            loc = me.localization
+            loc = me.localization,
             accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
             panel = null,
             titlePanel = jQuery('<div>'),

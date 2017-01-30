@@ -19,6 +19,10 @@ Oskari.registerLocalization(
             "quality": "Laatutiedot",
             "actions":"Toiminnot",
             "xml": "ISO 19139 XML -tiedosto",
+            "coverage": {
+                "removeBBOX": "Piilota kattavuusalue",
+                "showBBOX": "Näytä kattavuusalue"
+            },
             "map": "Kattavuus",
             "pdf": "Tuloste",
             "select_metadata_prompt": "Valitse metatieto klikkaamalla kuvaketta.",

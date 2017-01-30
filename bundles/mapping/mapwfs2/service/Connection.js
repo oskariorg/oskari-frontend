@@ -117,22 +117,10 @@ Oskari.clazz.define(
          * Get browser information
          */
         getBrowser: function () {
-            // FIXME get rid of jQuery.browser,
-            // use some plugin if you must
             this.browser = {
                 name: 'unknown',
-                versionNum: parseInt(jQuery.browser.version, 10)
+                versionNum: 0
             };
-
-            if (jQuery.browser.msie) {
-                this.browser.name = 'msie';
-            } else if (jQuery.browser.chrome) {
-                this.browser.name = 'chrome';
-            } else if (jQuery.browser.mozilla) {
-                this.browser.name = 'mozilla';
-            } else if (jQuery.browser.safari) {
-                this.browser.name = 'safari';
-            }
         },
 
         updateLazyDisconnect: function (isWFSOpen) {

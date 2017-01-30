@@ -99,9 +99,15 @@
   .divmanazerpopup div.close-icon {
     position: absolute;
     top: 8px;
-    right: 5px; }
+    right: 5px;
+    cursor: pointer; }
   .divmanazerpopup.mobile-popup {
     border: 2px solid silver;
     border-radius: 0px;
     max-width: 600px;
     margin-left: 0 !important; }
+  .divmanazerpopup table td {
+    text-align: left;
+    vertical-align: top; }
+
+/*# sourceMappingURL=popup.css.map */

@@ -12,6 +12,7 @@ Oskari.clazz.define(
         this._channel = null;
         this.eventHandlers = {};
         this.requestHandlers = {};
+        this.log = Oskari.log('RPC');
     },
     {
         /**
@@ -52,22 +53,22 @@ Oskari.clazz.define(
             this.__init(conf);
 
             if (!Channel) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
                 return;
             }
 
             if (domain === null || domain === undefined || !domain.length) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
                 return;
             }
 
             if (domain === '*') {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
                 return;
             }
 
             if (window === window.parent) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
                 return;
             }
 
@@ -167,7 +168,6 @@ Oskari.clazz.define(
                     }
                 }
             }
-
             if (allowedRequests === null || allowedRequests === undefined) {
                 allowedRequests = ['InfoBox.ShowInfoBoxRequest',
                     'InfoBox.HideInfoBoxRequest',
@@ -177,6 +177,7 @@ Oskari.clazz.define(
                     'MapModulePlugin.GetFeatureInfoRequest',
                     'MapModulePlugin.MapLayerVisibilityRequest',
                     'MapModulePlugin.RemoveMarkersRequest',
+                    'MapModulePlugin.MarkerVisibilityRequest',
                     'MapMoveRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
@@ -189,7 +190,8 @@ Oskari.clazz.define(
                     'MyLocationPlugin.GetUserLocationRequest',
                     'DrawTools.StartDrawingRequest',
                     'DrawTools.StopDrawingRequest',
-                    'MapModulePlugin.ZoomToFeaturesRequest'];
+                    'MapModulePlugin.ZoomToFeaturesRequest',
+                    'MapModulePlugin.MapLayerUpdateRequest'];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!
@@ -358,7 +360,7 @@ Oskari.clazz.define(
             useState : function(state) {
                 this.sandbox.useState(state);
             },
-            getFeatures: function(layerId) {
+            getFeatures: function(includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
@@ -367,7 +369,7 @@ Oskari.clazz.define(
                 }
                 var layers = plugin.getLayerIds();
                 layers.forEach(function(id) {
-                    if(layerId === true) {
+                    if(includeFeatures === true) {
                         features[id] = plugin.getLayerFeatures(id);
                     }
                     else {
@@ -432,37 +434,27 @@ Oskari.clazz.define(
             'use strict';
             var sb = this.sandbox;
             if(!origin) {
-                sb.printWarn('No origin in RPC message');
+                this.log.warn('No origin in RPC message');
                 // no origin, always deny
                 return false;
             }
             // Allow subdomains and different ports
-            var domain = this.conf.domain,
-                ret = origin.indexOf(domain) !== -1,
-                parts;
+            var domain = this.conf.domain
 
-            // always allow from localhost
-            if(origin.indexOf('http://localhost') === 0) {
-                return true;
-            }
+            var url = document.createElement('a');
+            url.href = origin;
+            var originDomain = url.hostname;
 
-            if (ret) {
-                parts = origin.split(domain);
-                if (parts) {
-                    ret = /^https?:\/\/([a-zA-Z0-9_-]+[.])*$/.test(parts[0]);
-                    if (ret && parts.length > 1) {
-                        ret = /^(:\d+)?$/.test(parts[1]);
-                    }
-                } else {
-                    // origin must have a protocol
-                    ret = false;
+            var allowed = originDomain.endsWith(domain);
+            if(!allowed) {
+                // always allow from localhost
+                if(originDomain === 'localhost') {
+                    this.log.warn('Origin mismatch, but allowing localhost. Published to: ' + domain);
+                    return true;
                 }
+                this.log.warn('Origin not allowed for RPC: ' + origin);
             }
-            if(!ret) {
-                sb.printWarn('Origin not allowed for RPC: ' + origin);
-            }
-
-            return ret;
+            return allowed;
         },
 
         /**

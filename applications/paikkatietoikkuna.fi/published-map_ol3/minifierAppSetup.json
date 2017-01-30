@@ -16,7 +16,7 @@
                     "bundlePath": "../../../packages/mapping/ol3/"
                 },
                 "mapstats": {
-                    "bundlePath": "../../../packages/mapping/ol3/"
+                    "bundlePath": "../../../packages/mapping/ol3/deprecated/"
                 },
                 "mapanalysis" : {
                     "bundlePath" : "../../../packages/mapping/ol3/"
@@ -183,5 +183,23 @@
                 }
             }
         }
-    }]
+    },
+    {
+            "title": "PostProcessor",
+            "fi": "PostProcessor",
+            "sv": "PostProcessor",
+            "en": "PostProcessor",
+            "bundlename": "postprocessor",
+            "bundleinstancename": "postprocessor",
+            "metadata": {
+                "Import-Bundle": {
+                    "postprocessor": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        }
+]
 }

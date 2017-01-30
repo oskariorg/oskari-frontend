@@ -4,7 +4,7 @@
  */
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule.VectorLayerPlugin',
-    function () {
+    function() {
         var me = this;
 
         me._clazz =
@@ -21,27 +21,27 @@ Oskari.clazz.define(
         this._features = {};
         this._layerStyles = {};
         this._defaultStyle = {
-            fill : {
-                color : 'rgba(255,0,255,0.2)'
+            fill: {
+                color: 'rgba(255,0,255,0.2)'
             },
-            stroke : {
-                color : 'rgba(0,0,0,1)',
-                width : 2
+            stroke: {
+                color: 'rgba(0,0,0,1)',
+                width: 2
             },
-            image : {
+            image: {
                 radius: 4,
-                fill : {
-                    color : 'rgba(0,0,0,1)'
+                fill: {
+                    color: 'rgba(0,0,0,1)'
                 }
             },
-            text : {
-                scale : 1.3,
-                fill : {
-                    color : 'rgba(0,0,0,1)'
+            text: {
+                scale: 1.3,
+                fill: {
+                    color: 'rgba(0,0,0,1)'
                 },
-                stroke : {
-                    color : 'rgba(255,255,255,1)',
-                    width : 2
+                stroke: {
+                    color: 'rgba(255,255,255,1)',
+                    width: 2
                 }
             }
         };
@@ -50,14 +50,14 @@ Oskari.clazz.define(
          * @method register
          * Interface method for the plugin protocol
          */
-        register: function () {
+        register: function() {
             this.getMapModule().setLayerPlugin('vectorlayer', this);
         },
         /**
          * @method unregister
          * Interface method for the plugin protocol
          */
-        unregister: function () {
+        unregister: function() {
             this.getMapModule().setLayerPlugin('vectorlayer', null);
         },
         /**
@@ -66,7 +66,7 @@ Oskari.clazz.define(
          * Start plugin implementation
          *
          */
-        _startPluginImpl: function () {
+        _startPluginImpl: function() {
             var me = this;
             me.registerVectorFormats();
             me._createConfiguredLayers();
@@ -75,16 +75,16 @@ Oskari.clazz.define(
         /**
          * @method  @private _createConfiguredLayers Create configured layers an their styles
          */
-        _createConfiguredLayers: function(){
+        _createConfiguredLayers: function() {
             var me = this,
                 conf = me.getConfig();
-            if(conf.layers) {
-                for(var i=0;i<conf.layers.length;i++) {
+            if (conf.layers) {
+                for (var i = 0; i < conf.layers.length; i++) {
                     var layer = conf.layers[i];
                     var layerId = layer.id;
                     var layerStyle = layer.style;
 
-                    if(!me._features[layerId]) {
+                    if (!me._features[layerId]) {
                         me._features[layerId] = [];
                     }
 
@@ -112,22 +112,22 @@ Oskari.clazz.define(
         },
 
         /**
-        * @method _createEventHandlers
-        * Create event handlers
-        * @private
-        *
-        */
-        _createEventHandlers: function () {
+         * @method _createEventHandlers
+         * Create event handlers
+         * @private
+         *
+         */
+        _createEventHandlers: function() {
             var me = this;
 
             return {
-                AfterMapLayerRemoveEvent: function (event) {
+                AfterMapLayerRemoveEvent: function(event) {
                     me.afterMapLayerRemoveEvent(event);
                 },
-                FeaturesAvailableEvent: function (event) {
+                FeaturesAvailableEvent: function(event) {
                     me.handleFeaturesAvailableEvent(event);
                 },
-                AfterChangeMapLayerOpacityEvent: function (event) {
+                AfterChangeMapLayerOpacityEvent: function(event) {
                     me._afterChangeMapLayerOpacityEvent(event);
                 }
             };
@@ -137,7 +137,7 @@ Oskari.clazz.define(
             var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
             var formatter = this._supportedFormats['GeoJSON'];
             var me = this;
-            _.forEach(features, function (feature) {
+            _.forEach(features, function(feature) {
                 var geojson = formatter.write([feature]);
                 clickEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
             });
@@ -147,7 +147,7 @@ Oskari.clazz.define(
          * @method preselectLayers
          * @public preselect layers
          */
-        preselectLayers: function (layers) {
+        preselectLayers: function(layers) {
             var sandbox = this.getSandbox(),
                 i,
                 ilen,
@@ -173,7 +173,7 @@ Oskari.clazz.define(
          * @param  {String} mimeType mime type
          * @param  {Function} formatImpl format implementation
          */
-        registerVectorFormat: function (mimeType, formatImpl) {
+        registerVectorFormat: function(mimeType, formatImpl) {
             this._supportedFormats[mimeType] = formatImpl;
         },
 
@@ -181,13 +181,13 @@ Oskari.clazz.define(
          * @method registerVectorFormats
          * Registers default vector formats
          */
-        registerVectorFormats: function () {
+        registerVectorFormats: function() {
             var me = this;
             this.registerVectorFormat('application/json',
                 new OpenLayers.Format.GeoJSON({}));
             this.registerVectorFormat('application/nlsfi-x-openlayers-feature',
-                function () {
-                    this.read = function (data) {
+                function() {
+                    this.read = function(data) {
                         return data;
                     };
                 }
@@ -204,18 +204,18 @@ Oskari.clazz.define(
          * @param {String} value the feature identifier value
          * @param {Oskari.mapframework.domain.VectorLayer} layer layer details OR {String} layerId
          */
-        removeFeaturesFromMap: function(identifier, value, layer){
+        removeFeaturesFromMap: function(identifier, value, layer) {
             var me = this,
                 foundFeatures,
                 olLayer,
                 layerId;
-            if(layer && layer !== null){
-                  if(layer instanceof OpenLayers.Layer.Vector) {
-                      layerId = layer.id;
-                  } else if(_.isString(layer)) {
-                      layerId = layer;
-                  }
-                  olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
+            if (layer && layer !== null) {
+                if (layer instanceof OpenLayers.Layer.Vector) {
+                    layerId = layer.id;
+                } else if (_.isString(layer)) {
+                    layerId = layer;
+                }
+                olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
             }
             // Removes only wanted features from the given maplayer
             if (olLayer) {
@@ -226,8 +226,8 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(me._layers[layerId]);
-                    this._removeFeaturesByAttribute(olLayer);
                     delete this._layers[layerId];
+                    delete this._features[layerId];
                 }
             }
             // Removes all features from all layers
@@ -236,22 +236,31 @@ Oskari.clazz.define(
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
-                        this._removeFeaturesByAttribute(olLayer);
                         delete this._layers[layerId];
+                        delete this._features[layerId];
                     }
                 }
             }
         },
-        _removeFeaturesByAttribute: function(olLayer, identifier, value, removeForSorting) {
-            var featuresToRemove = [];
+        _removeFeaturesByAttribute: function(olLayer, identifier, value) {
+            var me = this,
+                featuresToRemove = [];
 
             // add all features if identifier and value are missing or
             // if given -> features that have
             if (!identifier && !value) {
                 featuresToRemove = olLayer.features;
-            }
-            else {
+            } else {
+                // first try to find features by ol function
                 featuresToRemove = olLayer.getFeaturesByAttribute(identifier, value);
+                // if not found then check also feature data values (ol2 getFeaturesByAttribute not functionality right when features are added from GeoJSON?)
+                if(featuresToRemove === null || featuresToRemove.length === 0) {
+                  featuresToRemove = jQuery.grep(olLayer.features, function(f){
+                      var hasData = (f.data && f.data[identifier]) ? true : false;
+                      var hasWantedAttributes = (hasData && f.data[identifier] === value) ? true : false;
+                      return hasWantedAttributes;
+                  });
+                }
             }
 
             // notify other components of removal
@@ -262,26 +271,36 @@ Oskari.clazz.define(
             olLayer.removeFeatures(featuresToRemove);
             for (var i = 0; i < featuresToRemove.length; i++) {
                 var feature = featuresToRemove[i];
-                var featuresPrio = this._features[this._getLayerId(olLayer.name)][0].data;
-                if(!removeForSorting) {
-                    for(key in featuresPrio) {
-                        if(featuresPrio[key].id===feature.id) {
-                            featuresPrio.splice(key,1);
-                        }
-                    };
-                    var geojson = formatter.write([feature]);
-                    removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
-                }
+
+                // remove from "cache"
+                me._removeFromCache(this._getLayerId(olLayer.name), feature);
+                var geojson = formatter.write([feature]);
+                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
             }
             sandbox.notifyAll(removeEvent);
         },
-        _getGeometryType: function(geometry){
+        _removeFromCache : function(layerId, feature) {
+            var storedFeatures = this._features[layerId];
+            for (var i = 0; i < storedFeatures.length; i++) {
+                var featuresInDataset = storedFeatures[i].data;
+                for (var j = 0; j < featuresInDataset.length; j++) {
+                    if(feature === featuresInDataset[j]) {
+                        featuresInDataset.splice(j, 1);
+                    }
+                }
+                if(!featuresInDataset.length) {
+                    // remove block if empty
+                    storedFeatures.splice(i, 1);
+                }
+            }
+        },
+        _getGeometryType: function(geometry) {
             if (typeof geometry === 'string' || geometry instanceof String) {
                 return 'WKT';
             }
             return 'GeoJSON';
         },
-        _getLayerId : function(name) {
+        _getLayerId: function(name) {
             var index = this._olLayerPrefix.length;
             return name.substring(index);
         },
@@ -293,7 +312,7 @@ Oskari.clazz.define(
          * @param {Object} geometry the geometry WKT string or GeoJSON object
          * @param {Object} options additional options
          */
-        addFeaturesToMap: function(geometry, options){
+        addFeaturesToMap: function(geometry, options) {
             var me = this,
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
@@ -304,179 +323,175 @@ Oskari.clazz.define(
                 isOlLayerAdded = true,
                 styleMap = new OpenLayers.StyleMap();
 
-            if (!format) {
+            if (!format || !geometry) {
+                return;
+            }
+            if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
 
-            if (geometry) {
-                // if there's no layerId provided -> Just use a generic vector layer for all.
-                if (!options.layerId) {
-                    options.layerId = 'VECTOR';
-                };
-
-                if(!me._features[options.layerId]) {
-                  me._features[options.layerId] = [];
+            options = options || {};
+            // if there's no layerId provided -> Just use a generic vector layer for all.
+            if (!options.layerId) {
+                options.layerId = 'VECTOR';
+            };
+            if (!options.attributes) {
+                options.attributes = {};
+            }
+            if (!me._features[options.layerId]) {
+                me._features[options.layerId] = [];
+            }
+            var features = format.read(geometry);
+            if (options.attributes && options.attributes !== null) {
+                if (features instanceof Array && geometryType === 'GeoJSON') {
+                    // Remark: It is preferred to use GeoJSON properties for attributes
+                    // There could be many features in GeoJson and now attributes are set only for 1st feature
+                    features[0].attributes = options.attributes;
+                } else {
+                    features.attributes = options.attributes;
                 }
-                if(me.getMapModule().isValidGeoJson(geometry)) {
-                   var features = format.read(geometry);
-                   //if there's no layerId provided -> Just use a generic vector layer for all.
-                   if (!options.layerId) {
-                       options.layerId = 'VECTOR';
-                   }
-                   if (options.attributes && options.attributes !== null) {
-                       if(features instanceof Array && geometryType === 'GeoJSON'){
-                           // Remark: It is preferred to use GeoJSON properties for attributes
-                           // There could be many features in GeoJson and now attributes are set only for 1st feature
-                           features[0].attributes = options.attributes;
-                       } else {
-                           features.attributes = options.attributes;
-                       }
-                   }
-                   if(!Array.isArray(features)) {
-                       features = [features];
-                   }
-                   olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
-                   if (!olLayer) {
-                       var opacity = 100;
-                       if(layer){
-                           opacity = layer.getOpacity() / 100;
-                       }
-                       olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
-                       olLayer.events.register('click', this, function(e) {
-                           // clicking on map, check if feature is hit
-                           if (e.target && e.target._featureId) {
-                               me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
-                           }
-                           return true;
-                       });
-                       olLayer.setOpacity(opacity);
-                       isOlLayerAdded = false;
-                   }
+            }
+            if (!Array.isArray(features)) {
+                features = [features];
+            }
+            olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
+            if (!olLayer) {
+                var opacity = 100;
+                if (layer) {
+                    opacity = layer.getOpacity() / 100;
+                }
+                olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
+                olLayer.events.register('click', this, function(e) {
+                    // clicking on map, check if feature is hit
+                    if (e.target && e.target._featureId) {
+                        me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                    }
+                    return true;
+                });
+                olLayer.events.fallThrough = true;
+                olLayer.setOpacity(opacity);
+                isOlLayerAdded = false;
+            }
 
-                   if (options.clearPrevious === true) {
-                       this._removeFeaturesByAttribute(olLayer);
-                       olLayer.removeAllFeatures();
-                       olLayer.refresh();
-                       me._features[options.layerId] = [];
-                   }
+            if (options.clearPrevious === true) {
+                olLayer.removeAllFeatures();
+                olLayer.refresh();
+                me._features[options.layerId] = [];
+            }
 
-                   //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
-                   for (i=0; i < features.length; i++) {
-                       featureInstance = features[i];
-                       styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options));
-                       featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
-                   }
+            //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
+            for (i = 0; i < features.length; i++) {
+                featureInstance = features[i];
+                styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options));
+                featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
+            }
 
-                   if(options.cursor){
-                       for (i=0; i < features.length; i++) {
-                           featureInstance = features[i];
-                           if(featureInstance.style) {
-                               featureInstance.style.cursor = options.cursor;
-                           } else {
-                               featureInstance.style = {
-                                   cursor: options.cursor
-                               };
-                           }
-                       }
-                   }
+            if (options.cursor) {
+                for (i = 0; i < features.length; i++) {
+                    featureInstance = features[i];
+                    if (featureInstance.style) {
+                        featureInstance.style.cursor = options.cursor;
+                    } else {
+                        featureInstance.style = {
+                            cursor: options.cursor
+                        };
+                    }
+                }
+            }
 
-                   // prio handling
-                   var prio = options.prio || 0;
-                   me._features[options.layerId].push({
-                     data: features,
-                     prio: prio
-                   });
+            // prio handling
+            var prio = options.prio || 0;
+            me._features[options.layerId].push({
+                data: features,
+                prio: prio
+            });
 
-                   if(options.prio && !isNaN(options.prio)){
-                       this._removeFeaturesByAttribute(olLayer, null, null, true);
-                       olLayer.removeAllFeatures();
-                       olLayer.refresh();
+            if (options.prio && !isNaN(options.prio)) {
+                olLayer.removeAllFeatures();
+                olLayer.refresh();
 
-                       me._features[options.layerId].sort(function(a,b){
-                         return b.prio - a.prio;
-                       });
+                me._features[options.layerId].sort(function(a, b) {
+                    return b.prio - a.prio;
+                });
 
-                       _.forEach(me._features[options.layerId], function(featObj) {
-                           olLayer.addFeatures(featObj.data);
-                       });
-                   } else {
-                       olLayer.addFeatures(features);
-                   }
+                _.forEach(me._features[options.layerId], function(featObj) {
+                    olLayer.addFeatures(featObj.data);
+                });
+            } else {
+                olLayer.addFeatures(features);
+            }
 
 
-                   if(isOlLayerAdded === false) {
-                       me._map.addLayer(olLayer);
-                       me._map.setLayerIndex(
-                           olLayer,
-                           me._map.layers.length
-                       );
-                       me._layers[options.layerId] = olLayer;
-                   }
+            if (isOlLayerAdded === false) {
+                me._map.addLayer(olLayer);
+                me._map.setLayerIndex(
+                    olLayer,
+                    me._map.layers.length
+                );
+                me._layers[options.layerId] = olLayer;
+            }
 
-                   if (layer && layer !== null) {
-                       mapLayerService.addLayer(layer, false);
+            if (layer && layer !== null) {
+                mapLayerService.addLayer(layer, false);
 
-                       window.setTimeout(function(){
-                           var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
-                               me._sandbox.request(me.getName(), request);
-                           },
-                       50);
-                   }
-                   // notify other components that features have been added
-                   var formatter = this._supportedFormats['GeoJSON'];
-                   var sandbox = this.getSandbox();
-                   var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
-                   _.forEach(features, function (feature) {
-                       var geojson = formatter.write([feature]);
-                       addEvent.addFeature(feature.id, geojson, options.layerId);
-                   });
-                   sandbox.notifyAll(addEvent);
+                window.setTimeout(function() {
+                        var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+                        me._sandbox.request(me.getName(), request);
+                    },
+                    50);
+            }
+            // notify other components that features have been added
+            var formatter = this._supportedFormats['GeoJSON'];
+            var sandbox = this.getSandbox();
+            var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
+            _.forEach(features, function(feature) {
+                var geojson = formatter.write([feature]);
+                addEvent.addFeature(feature.id, geojson, options.layerId);
+            });
+            sandbox.notifyAll(addEvent);
 
-                   if(options.centerTo === true){
-                       var center, bounds;
-                       if(geometry.type !== 'FeatureCollection') {
-                           center = features[0].geometry.getCentroid();
-                           bounds = features[0].geometry.getBounds();
-                       } else {
-                           var bottom,
-                               left,
-                               top,
-                               right;
-                           for(var f=0;f<features.length;f++) {
-                               var feat = features[f];
-                               var featBounds = feat.geometry.getBounds();
-                               if(!bottom || featBounds.bottom<bottom) {
-                                   bottom = featBounds.bottom;
-                               }
-                               if(!left || featBounds.left<left) {
-                                   left = featBounds.left;
-                               }
-                               if(!top || featBounds.top>top) {
-                                   top = featBounds.top;
-                               }
-                               if(!right || featBounds.right>right) {
-                                   right = featBounds.right;
-                               }
-                           }
-                           bounds = new OpenLayers.Bounds();
-                           bounds.extend(new OpenLayers.LonLat(left,bottom));
-                           bounds.extend(new OpenLayers.LonLat(right,top));
-                           center = new OpenLayers.LonLat((right-((right-left)/2)),(top-((top-bottom)/2)));
-                       }
-
-                       mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
-                       me._sandbox.request(me, mapmoveRequest);
-
-                       // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
-                       if(options.minScale) {
-                           var currentScale = this.getMapModule().getMapScale();
-                           if(currentScale<options.minScale) {
-                               this.getMapModule().zoomToScale(options.minScale, true);
-                           }
-                       }
-                   }
+            if (options.centerTo === true) {
+                var center, bounds;
+                if (geometry.type !== 'FeatureCollection') {
+                    center = features[0].geometry.getCentroid();
+                    bounds = features[0].geometry.getBounds();
+                } else {
+                    var bottom,
+                        left,
+                        top,
+                        right;
+                    for (var f = 0; f < features.length; f++) {
+                        var feat = features[f];
+                        var featBounds = feat.geometry.getBounds();
+                        if (!bottom || featBounds.bottom < bottom) {
+                            bottom = featBounds.bottom;
+                        }
+                        if (!left || featBounds.left < left) {
+                            left = featBounds.left;
+                        }
+                        if (!top || featBounds.top > top) {
+                            top = featBounds.top;
+                        }
+                        if (!right || featBounds.right > right) {
+                            right = featBounds.right;
+                        }
+                    }
+                    bounds = new OpenLayers.Bounds();
+                    bounds.extend(new OpenLayers.LonLat(left, bottom));
+                    bounds.extend(new OpenLayers.LonLat(right, top));
+                    center = new OpenLayers.LonLat((right - ((right - left) / 2)), (top - ((top - bottom) / 2)));
                 }
 
+                mapmoveRequest = me._sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds, false);
+                me._sandbox.request(me, mapmoveRequest);
+
+                // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
+                if (options.minScale) {
+                    var currentScale = this.getMapModule().getMapScale();
+                    if (currentScale < options.minScale) {
+                        this.getMapModule().zoomToScale(options.minScale, true);
+                    }
+                }
             }
         },
         /**
@@ -503,7 +518,7 @@ Oskari.clazz.define(
          *     }
          * }
          */
-        getStyle : function(options) {
+        getStyle: function(options) {
             var me = this;
             var styles = options.featureStyle || me._layerStyles[options.layerId];
 
@@ -516,7 +531,7 @@ Oskari.clazz.define(
          * @private
          * Create request handlers.
          */
-        _createRequestHandlers: function () {
+        _createRequestHandlers: function() {
             var me = this,
                 sandbox = me.getSandbox();
             return {
@@ -540,7 +555,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.VectorLayer} layer
          * @param {Boolean} keepLayerOnTop keep layer on top
          */
-        addMapLayerToMap: function (layer, keepLayerOnTop) {
+        addMapLayerToMap: function(layer, keepLayerOnTop) {
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
@@ -590,7 +605,7 @@ Oskari.clazz.define(
          *
          * @param {Object} event
          */
-        afterMapLayerRemoveEvent: function (event) {
+        afterMapLayerRemoveEvent: function(event) {
             var layer = event.getMapLayer();
 
             this.removeMapLayerFromMap(layer);
@@ -602,7 +617,7 @@ Oskari.clazz.define(
          * @private
          * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent} event
          */
-        _afterChangeMapLayerOpacityEvent: function (event) {
+        _afterChangeMapLayerOpacityEvent: function(event) {
             var me = this,
                 layer = event.getMapLayer();
 
@@ -627,7 +642,7 @@ Oskari.clazz.define(
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        removeMapLayerFromMap: function (layer) {
+        removeMapLayerFromMap: function(layer) {
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
@@ -636,7 +651,7 @@ Oskari.clazz.define(
                 remLayer = this.getMap().getLayersByName(me._olLayerPrefix + layer.getId());
 
             // This should free all memory
-            if(remLayer[0]) {
+            if (remLayer[0]) {
                 remLayer[0].destroy();
             }
         },
@@ -646,24 +661,24 @@ Oskari.clazz.define(
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        getOLMapLayers: function (layer) {
+        getOLMapLayers: function(layer) {
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
             var ol = this.getLayerById(layer.getId());
-            if(!ol) {
+            if (!ol) {
                 return null;
             }
             // only single layer/id, wrap it in an array
             return [ol];
         },
-        getLayerById : function (id) {
-            if(!id) {
+        getLayerById: function(id) {
+            if (!id) {
                 return null;
             }
             var layers = this.getMap().getLayersByName(this._olLayerPrefix + id);
-            if(!layers || !layers.length) {
-              return null;
+            if (!layers || !layers.length) {
+                return null;
             }
             // should have only one, return always the first one
             return layers[0];
@@ -674,7 +689,7 @@ Oskari.clazz.define(
          *
          * @param {object} event
          */
-        handleFeaturesAvailableEvent: function (event) {
+        handleFeaturesAvailableEvent: function(event) {
             var me = this,
                 mimeType = event.getMimeType(),
                 features = event.getFeatures(),
@@ -712,4 +727,3 @@ Oskari.clazz.define(
         ]
     }
 );
-

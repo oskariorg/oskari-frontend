@@ -82,6 +82,9 @@ div.olPopup {
   /*height: 400px*/
   /*\0/ !important*/
   z-index: 16000; }
+  div.olPopup table td {
+    text-align: left;
+    vertical-align: top; }
 
 div.olPopupContent {
   overflow: visible;
@@ -115,3 +118,5 @@ div.divmanazerpopup.mobile-infobox {
   margin-top: -6px !important;
   margin-left: -4px !important;
   overflow: auto; }
+
+/*# sourceMappingURL=infobox_ol2.css.map */

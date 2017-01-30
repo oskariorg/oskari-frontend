@@ -270,13 +270,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
 
-                    if (layer && !event.getNop()) {
-                            this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
-                    }
-                    else if (layer && layer.isManualRefresh()) {
-                        this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                    }
 
+                    if (layer && layer.isManualRefresh()) {
+                        if (event.getNop()) {
+                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
+                        } else {
+                            if (event.getRequestType() !== event.type.image || layer._activeFeatures.length > 0) {
+                                //only update grid in case of active features... (or the grid gets reset for manual refresh wfs layers)
+                                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                            } else if (event.getRequestType() === event.type.image || layer._activeFeatures.length === 0) {
+                                this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
+                            }
+                        }
+                    } else if (layer && !event.getNop()) {
+                        this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                    }
                 }
                 if(event.getStatus() === event.status.error)  {
                     this.__loadingStatus['' + event.getLayerId()] = 'error';
@@ -408,7 +416,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapMoveEvent': function() {
                 var me = this;
                 me.plugin.mapStatusChanged();
-            }
+                this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
+            },
+
+            WFSFeatureGeometriesEvent: null
         },
 
         /**
@@ -483,7 +494,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-
             var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
                     instance: this
@@ -491,6 +501,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
+
+            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            if (Oskari.util.isMobile()) {
+                mapModule.redrawPluginUIs(true);
+            }
+
+            this.mapModule = mapModule;
         }
     }, {
         /**

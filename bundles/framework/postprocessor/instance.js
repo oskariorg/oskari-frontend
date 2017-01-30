@@ -56,7 +56,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          */
         _highlightFeature: function (layerId, featureId) {
             if (featureId && layerId) {
-
                 // move map to location
                 var points = this.state.featurePoints;
                 if (points) {
@@ -98,14 +97,60 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @param {Object[]} points array of objects containing lon/lat properties
          */
         _showPoints: function (points) {
-            var olPoints = new OpenLayers.Geometry.MultiPoint(),
+            var olPoints = {
+                _points: [],
+                addPoint: function(lon, lat) {
+                    this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
+                },
+                getBounds: function() {
+                    var top=0,
+                        left=0,
+                        bottom=0,
+                        right=0;
+
+                    // Calculate bbox
+                    left = this._points[0].lon;
+                    bottom = this._points[0].lat;
+
+                    for(var i=0;i<this._points.length;i++){
+                        var point = this._points[i];
+                        if(point.lon > right) {
+                            right = point.lon;
+                        }
+                        if(point.lat > top) {
+                            top = point.lat;
+                        }
+
+                        if(point.lon < left) {
+                            left = point.lon;
+                        }
+                        if(point.lat < bottom) {
+                            bottom = point.lat;
+                        }
+                    }
+
+                    return {
+                        left: left,
+                        bottom: bottom,
+                        right: right,
+                        top: top
+                    };
+                },
+                getCentroid: function() {
+                    var bbox = this.getBounds();
+                    return {
+                        x: bbox.left + (bbox.right - bbox.left)/2,
+                        y: bbox.bottom + (bbox.top - bbox.bottom)/2
+                    };
+
+                }
+            },
                 count,
                 point,
                 olPoint;
             for (count = 0; count < points.length; ++count) {
                 point = points[count];
-                olPoint = new OpenLayers.Geometry.Point(point.lon, point.lat);
-                olPoints.addPoint(olPoint);
+                olPoints.addPoint(point.lon, point.lat);
             }
             var bounds = olPoints.getBounds();
             var centroid = olPoints.getCentroid();

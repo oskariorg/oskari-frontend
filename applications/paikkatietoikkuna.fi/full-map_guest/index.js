@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
     }
 
     // remove host part from url
-    if (ajaxUrl.indexOf('http') == 0) {
+    if (ajaxUrl.indexOf('http') === 0) {
         var hostIdx = ajaxUrl.indexOf('://') + 3;
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);

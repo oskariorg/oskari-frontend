@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
         *
         */
         startPlugin: function () {
-            this.createUI();
         },
         /* App specific methods */
         createUI: function () {
@@ -77,32 +76,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
                 tabDef.instance = tab;
             });
             tabsContainer.insertTo(this.container);
-        },
-        getEventHandlers: function () {
-            var list = {};
-            _.each(this.tabs, function (tabDef) {
-                var p;
-                if (tabDef.instance.eventHandlers) {
-                    for (p in tabDef.instance.eventHandlers) {
-                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
-                            list[p] = true;
-                        }
-                    }
-                }
-            });
-            return list;
-        },
-        onEvent: function (event) {
-            _.each(this.tabs, function (tabDef) {
-                if (tabDef.instance.eventHandlers) {
-                    var handler = tabDef.instance.eventHandlers[event.getName()];
-                    if (!handler) {
-                        return;
-                    }
-                    handler.apply(tabDef.instance, [event]);
-
-                }
-            });
         },
         /**
          * @method _getLocalization

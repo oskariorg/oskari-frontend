@@ -20,7 +20,7 @@ http://wiki.open311.org/GeoReport_v2/#get-service-requests
   <td>/* srs </td><td> String </td><td> Coordinate system of front end map</td><td>EPSG:3067 </td><td> </td>
 </tr>
 <tr>
-  <td>/* getServiceRequests </td><td> JSON </td><td> filter params for selecting feedbacks </td><td>{"start_date": "2016-04-01T00:00:00Z","status": "open,closed"} </td><td>http://wiki.open311.org/GeoReport_v2/#get-service-requests </td>
+  <td>/* payload </td><td> JSON </td><td> filter params for selecting feedbacks </td><td>{"start_date": "2016-04-01T00:00:00Z","status": "open,closed"} </td><td>http://wiki.open311.org/GeoReport_v2/#get-service-requests </td>
 </tr>
 
 
@@ -36,7 +36,7 @@ http://wiki.open311.org/GeoReport_v2/
 
 <pre class="event-code-block">
 <code>
-  getServiceRequests content                                                              required item
+  payload content                                                              required item
     service_request_id 	To call multiple Service Requests at once,
                         multiple service_request_id can be declared; comma delimited. 	No
                         This overrides all other arguments.
@@ -59,7 +59,7 @@ http://wiki.open311.org/GeoReport_v2/
                         the ones described in the standard specification.
                         These data are nested in the 'extended_attributes' parameter in the Service Request response.
                         In order to retrieve the new supplemental details,
-                        add the query parameter “extensions=true” to the request 	No
+                        add the query parameter ï¿½extensions=trueï¿½ to the request 	No
                         See chapter on Extensions.
     service_object_type	Describes the point of interest reference which is used
                         for identifying the request object. 	No
@@ -84,15 +84,29 @@ http://wiki.open311.org/GeoReport_v2/
                         the updated_after time and the updated_before time.
                         This is useful for downloading a changeset that includes changes to older requests or
                         to just query very recent changes. 	No
+    Extension=geometry:
+    bbox                Search bounding box (bbox=lon_min,lat_min,lon_max,lat_max)
+    lat 	            Latitude using the (WGS84) projection. 	No/No, if bbox is availabe
+    long 	            Longitude using the (WGS84) projection. No/No, if bbox is availabe
+    radius 	            Search radius ( unit=m). No/No, if bbox is availabe
      
 </code>
 </pre>
 
 
 ### Oskari request parameter defaults
-There are also parameters, which are not in request api, but are defined in OPT server and Oskari server configs
+There are also parameters, which are not in request api, but must be defined in Oskari publisher when creating the embedded map.
 
-<u>Oskari server configs</u>
+Use Oskari map publishing method for to define these properties for the embedded map
+
+<u>Oskari embedded map configs for feedbackService</u>
+
+    1. **base url**, Open311 service base url
+    2. **api_key** value in Open311 post request - posting is not allowed without api key in general
+    3. **service extensions**,
+    Url, key and extensions are not visible to the user
+
+ --> http://wiki.open311.org/GeoReport_v2/#get-service-requests
 
 
 
@@ -101,16 +115,34 @@ There are also parameters, which are not in request api, but are defined in OPT 
 <pre class="event-code-block">
 <code>
   var filterdata = {
-                  "start_date": "2016-04-01T00:00:00Z",
-                  "status": "open,closed"
-                };
-                var data = {
-                "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
-                "srs":"EPSG:3067",
-                "getServiceRequests": JSON.stringify(filterdata)
-                };
-                channel.postRequest('GetFeedbackRequest', [data]);
-            
+    "start_date": "2016-04-01T00:00:00Z",
+    "status": "open,closed"
+  };
+  var data = {
+  "baseUrl": "https://asiointi.hel.fi/palautews/rest/v1",
+  "srs":"EPSG:3067",
+  "payload": filterdata
+  };
+  channel.postRequest('GetFeedbackRequest', [data]);
+
+</code>
+</pre>
+
+<pre class="event-code-block">
+<code>
+  channel.getMapBbox(function (data) {
+        var filterdata = {
+            "start_date": "2016-09-01T00:00:00Z",
+            "bbox": data.left + ',' + data.bottom + ',' + data.right + ',' + data.top,
+            "status": "open,closed"
+        };
+        var data = {
+            "srs": "EPSG:3067",
+            "payload": filterdata
+        };
+        channel.postRequest('GetFeedbackRequest', [data]);
+    });
+
 </code>
 </pre>
 

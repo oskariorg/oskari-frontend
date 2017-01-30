@@ -15,22 +15,30 @@ Oskari.registerLocalization(
                 "title": "Coordinates",
                 "searchButton": "Center map",
                 "addMarkerButton": "Add marker",
-                "info": "Click a location on the map to view the coordinates or enter coordinates and click 'Center map'.",
+                "info": "Type coordinates or click a point on the map.",
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
-                "lon": "E / lon:",
-                "lat": "N / lat:"
+                "lon": "Lon",
+                "lat": "Lat",
+                "n": "N",
+                "e": "E",
+                "p": "N",
+                "i": "E"
             },
             "reversegeocode": {
                 "errorTitle": "Reverse geocoding error",
                 "error": "Error to get reverse geocode for the current position",
                 "WHAT3WORDS_CHANNEL": {
-                    "label": "What3words: "
+                    "label": "what3words: "
                 },
                 "NLS_NEAREST_FEATURE_CHANNEL": {
                     "label": "Address: "
-                }
+                },
+                "TM35LEHTIJAKO_CHANNEL": {
+                    "label": "Map sheet: "
+                },
+                "moreInfo" : "Show more info on current position."
             },
             "tooltip": {
                 "tool": "Show coordinates or type coordinates and focus map on them.",
@@ -78,7 +86,12 @@ Oskari.registerLocalization(
                    "EPSG:2391": "KKJ zone 1",
                    "EPSG:2392": "KKJ zone 2",
                    "EPSG:2394": "KKJ zone 4"
-                }
+                },
+                "emergencyCallLabel": "The coordinates recommended to be used in emergency calls are",
+                "emergencyCallLabelAnd": "and",
+                "showCoordinateFormatDisplay":"Show coordinates &raquo;",
+                "showInputValues":"&laquo; Input values"
+
             },
             "cannotTransformCoordinates" : {
                 "title": "Error",

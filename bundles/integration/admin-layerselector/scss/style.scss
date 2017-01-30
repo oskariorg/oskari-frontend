@@ -174,38 +174,6 @@ div.admin-layerselector {
             margin-top: 4px;
         }
 
-        div.backendstatus-down {
-            height: 20px !important;
-            margin-bottom: 2px; 
-            cursor: pointer;
-        }
-
-        div.backendstatus-maintenance {
-            height: 20px !important;
-            margin-bottom: 2px; 
-            cursor: pointer;
-        }
-
-        div.backendstatus-ok {
-            height: 20px !important;
-            margin-top: -2px;
-            margin-bottom: 2px;
-            cursor: pointer;
-        }
-
-        div.backendstatus-unknown {
-            height: 20px !important;
-            margin-bottom: 2px; 
-        }
-
-        div.layer-backendstatus-icon {
-            float : left;
-            width : 20px;
-            height: 16px;
-            margin-right: 4px;
-            background-repeat: no-repeat;
-        }
-
         div.layer-icon {
             float : left;
             width : 16px;
@@ -329,6 +297,7 @@ div.admin-layerselector {
 
     .add-layer-record,
     .add-layer-send,
+    .add-layer-style,
     .add-class-record,
     .add-class-send,
     .add-group-record {
@@ -336,6 +305,12 @@ div.admin-layerselector {
         margin-bottom: 8px;
         overflow: hidden;
         position: relative;
+    }
+
+    .add-layer-style-import-block {
+        display:none;
+        margin: 8px;
+        border: 2pt solid blue;
     }
 
     .add-layer-separation {

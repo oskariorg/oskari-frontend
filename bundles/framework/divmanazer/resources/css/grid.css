@@ -1,13 +1,3 @@
-th.asc {
-  background-image: url("../images/asc_arrow.png");
-  background-repeat: no-repeat;
-  background-position: right center; }
-
-th.desc {
-  background-image: url("../images/desc_arrow.png");
-  background-repeat: no-repeat;
-  background-position: right center; }
-
 div.column-selector-placeholder {
   border-style: none;
   float: left;
@@ -80,10 +70,8 @@ input.excelExportButton {
 
 table.oskari-grid [class*="span"] {
   float: none; }
-
 table.oskari-grid td {
-  padding: 5px; }
-
+  padding: 1px 5px 0 5px; }
 table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;
@@ -92,14 +80,22 @@ table.oskari-grid td, table.oskari-grid th {
   text-overflow: ellipsis; }
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
-
 table.oskari-grid th {
   padding: 0px;
-  background-color: #F3F3F3; }
+  background-color: #F3F3F3;
+  position: relative; }
   table.oskari-grid th a {
     color: inherit;
     line-height: 28px;
     padding: 5px; }
+  table.oskari-grid th.asc {
+    background-image: url("../images/asc_arrow.png");
+    background-repeat: no-repeat;
+    background-position: right center; }
+  table.oskari-grid th.desc {
+    background-image: url("../images/desc_arrow.png");
+    background-repeat: no-repeat;
+    background-position: right center; }
   table.oskari-grid th.closedSubTable {
     background-image: url("../images/icon-arrow-right.png");
     background-repeat: no-repeat;
@@ -108,10 +104,10 @@ table.oskari-grid th {
     background-image: url("../images/icon-arrow-left.png");
     background-repeat: no-repeat;
     background-position: right center; }
-
+table.oskari-grid tr.selected {
+  background-color: #FDF8D9; }
 table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
-
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
 
@@ -121,3 +117,5 @@ table.oskari-grid tr:last-child td {
     float: left; }
     .oskari-grid-export fieldset.oskari-formcomponent label {
       width: 170px; }
+
+/*# sourceMappingURL=grid.css.map */

@@ -47,6 +47,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
         this._maplayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
+        this.asyncTabs = {};
         /**
          * @static @private @property _templates HTML/underscore templates for the User Interface
          */
@@ -55,27 +56,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             tabs: {
                 'title': _.template(
                     '<article>' +
-                    '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic">' +
-                    '            <img src="<%- graphic.fileName %>" />' +
-                    '        </div>' +
-                    '    <% }); %>' +
-
-
                     '    <% if (identification.abstractText.length) { %>' +
-                    '        <h2><%= identification.type === "data" ? locale.heading.abstractTextData : locale.heading.abstractTextService %></h2>' +
                     '        <% _.forEach(identification.abstractText, function (paragraph) { %>' +
                     '            <p><%= paragraph %></p>' +
                     '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataDateStamp.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataDateStamp + '</h2>' +
-                    '        <p><%- metadataDateStamp %></p>' +
+                    '           <% if (identification.type === "service") {%>'+
+                    '               <p><%=identification.serviceType%></p>'+
+                    '           <% } %>'+
                     '    <% } %>' +
 
                     '    <% if (onlineResources.length) { %>' +
-                    '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
                     '        <% _.forEach(onlineResources, function (onlineResource) { %>' +
                     '            <% if (onlineResource.url.length) { %>' +
@@ -84,223 +74,194 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% }); %>' +
                     '        </ul>' +
                     '    <% } %>' +
+                    '   <hr class="elf-metadata-divider">'+
 
-                    '    <% if (identification.languages.length) { %>' +
-                    '        <h2>' + this.locale.heading.resourceLanguage + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.languages, function (language) { %>' +
-                    '             <li><%= locale.languages[language] || language %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
+                    '   <h2>'+this.locale.heading.datasetInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.referenceDate+'</td>'+
+                    '           <td>'+
+                    '               <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
+                    '               (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
+                    '               %>)</p>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.temporalInformation+'</td>'+
+                    '           <td>'+
+                    '           <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
+                    '               <p><%= temporalExtent.begin %> - <%= temporalExtent.end %></p>' +
+                    '           <% }); %>' +
+                                        //TODO: "updated:" + maintenanceAndUpdateFrequency
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.descriptiveKeyword+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.descriptiveKeywords, function (keyword) { %>' +
+                    '                   <% if (keyword.length) { %>' +
+                    '                       <li><%- keyword %></li>' +
+                    '                   <% } %>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.datasetInformation.resourceLanguage+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.languages, function (language) { %>' +
+                    '                   <li><%= locale.languages[language] || language %></li>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <% if (geom) { %>'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
+                    '               <td>'+
+                    '                   <a href="javascript:void(0)" class="metadata_coverage_bbox_link">'+
+                                            this.locale.coverage.showBBOX +
+                    '                   </a>'+
+                    '               </td>'+
+                    '           </tr>'+
+                    '       <% } %>'+
 
-                    '    <% if (identification.topicCategories.length) { %>' +
-                    '        <h2>' + this.locale.heading.topicCategory + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.topicCategories, function (topicCategory) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {description: topicCategory}).description %>"><%= (locale.codeLists["gmd:MD_TopicCategoryCode"][topicCategory] || {label: topicCategory}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.temporalExtents.length) { %>' +
-                    '        <h2>' + this.locale.heading.temporalExtent + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
-                    '            <li><%= temporalExtent.begin %> - <%= temporalExtent.end %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.spatialResolutions.length) { %>' +
-                    '        <h2>' + this.locale.heading.spatialResolution + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
-                    '            <li>1: <%- resolution %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.responsibleParties.length) { %>' +
-                    '        <h2>' + this.locale.heading.responsibleParty + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
-                    '            <li><%- responsibleParty.organisationName %></li>' +
-                    '            <% if (responsibleParty.electronicMailAddresses.length) { %>' +
-                    '                <ul>' +
-                    '                <% _.forEach(responsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
-                    '                    <li><%- electronicMailAddress %></li>' +
-                    '                <% }); %>' +
+                    '       <% if (typeof referenceSystems !== "undefined" && referenceSystems.length) {%>'+
+                    '       <tr>'+
+                    '           <td>'+
+                                    this.locale.tableHeaders.datasetInformation.crs+
+                    '           </td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(referenceSystems, function(referenceSystem) { %>'+
+                    '                   <li><%=referenceSystem%></li>' +
+                    '               <% }); %>'+
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <% } %>'+
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.contactInformation.pointOfContact+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '               <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
+                    '                   <li><%- responsibleParty.organisationName %></li>' +
+                    '                   <% if (responsibleParty.electronicMailAddresses.length) { %>' +
+                    '                       <ul>' +
+                    '                       <% _.forEach(responsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
+                    '                           <li><%- electronicMailAddress %></li>' +
+                    '                       <% }); %>' +
+                    '                       </ul>' +
+                    '                   <% } %>' +
+                    '                   </li>' +
+                    '               <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.metadataContact+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.metadataContact.pointOfContact+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(metadataResponsibleParties, function (metadataResponsibleParty) { %>' +
+                    '                       <li><%- metadataResponsibleParty.organisationName %>' +
+                    '                       <% if (metadataResponsibleParty.electronicMailAddresses.length) { %>' +
+                    '                           <ul>' +
+                    '                               <% _.forEach(metadataResponsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
+                    '                               <li><%- electronicMailAddress %></li>' +
+                    '                           <% }); %>' +
+                    '                           </ul>' +
+                    '                       <% } %>' +
+                    '                       </li>' +
+                    '                   <% }); %>' +
                     '                </ul>' +
-                    '            <% } %>' +
-                    '        </li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
+                    '   <hr class="elf-metadata-divider">'+
+                    '   <h2>'+this.locale.heading.technicalInformation+'</h2>'+
+                    '   <table class="elf-metadata-table-no-border">'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.accessConstraintInformation+'</td>'+
+                    '           <td>'+
+                    '               <% _.forEach(identification.useLimitations, function (useLimitation) { %>' +
+                    '                   <% _.forEach(useLimitation, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '               <% _.forEach(identification.otherConstraints, function (otherConstraint) { %>' +
+                    '                   <% _.forEach(otherConstraint, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '               <ul>'+
+                    '               <% _.forEach(identification.classifications, function (classification) { %>' +
+                    '                   <li title="<%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {description: classification}).description %>"><%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {label: classification}).label %></li>' +
+                    '               <% }); %>' +
+                    '               </ul>'+
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.spatialRepresentationType+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(identification.spatialRepresentationTypes, function (spatialRepresentationType) { %>' +
+                    '                       <li title="<%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {description: spatialRepresentationType}).description %>"><%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {label: spatialRepresentationType}).label %></li>' +
+                    '                   <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.heading.spatialResolution+'</td>'+
+                    '           <td>'+
+                    '               <ul>' +
+                    '                   <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
+                    '                       <li>1: <%- resolution %></li>' +
+                    '                   <% }); %>' +
+                    '               </ul>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.lineage+'</td>'+
+                    '           <td>'+
+                    '               <% _.forEach(dataQualities, function (dataQuality) { %>' +
+                    '                   <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
+                    '                       <p><%= paragraph %></p>' +
+                    '                   <% }); %>' +
+                    '               <% }); %>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '       <tr>'+
+                    '           <td>'+this.locale.tableHeaders.technicalInformation.metadataChangeDate+" / "+this.locale.tableHeaders.technicalInformation.uniqueIdentifier+'</td>'+
+                    '           <td>'+
+                    '               <%- metadataDateStamp %> / <%- fileIdentifier %></p>' +
+                    '           </td>'+
+                    '       </tr>'+
+                    '   </table>'+
 
-                    '    <% if (identification.citation.date.date.length) { %>' +
-                    '        <h2>' + this.locale.heading.citationDate + '</h2>' +
-                    '        <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
-                    '        (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
-                    '        %>)</p>' +
-                    '    <% } %>' +
-
-                    '    <% if (distributionFormats.length) { %>' +
-                    '        <h2>' + this.locale.heading.distributionFormat + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(distributionFormats, function (distributionFormat) { %>' +
-                    '            <li><%- distributionFormat.name %> <%= distributionFormat.version ? "(" + distributionFormat.version + ")" : "" %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.spatialRepresentationTypes.length) { %>' +
-                    '        <h2>' + this.locale.heading.spatialRepresentationType + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.spatialRepresentationTypes, function (spatialRepresentationType) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {description: spatialRepresentationType}).description %>"><%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {label: spatialRepresentationType}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (fileIdentifier.length) { %>' +
-                    '        <h2>' + this.locale.heading.fileIdentifier + '</h2>' +
-                    '        <p><%- fileIdentifier %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataStandardName.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataStandardName + '</h2>' +
-                    '        <p><%- metadataStandardName %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataStandardVersion.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataStandardVersion + '</h2>' +
-                    '        <p><%- metadataStandardVersion %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataLanguage.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataLanguage + '</h2>' +
-                    '        <p><%= locale.languages[metadataLanguage] || metadataLanguage %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataCharacterSet.length) { %>' +
-                    '        <h2>' + this.locale.heading.metadataCharacterSet + '</h2>' +
-                    '        <p title="<%= (locale.codeLists["gmd:MD_CharacterSetCode"][metadataCharacterSet] || {description: metadataCharacterSet}).description %>"><%= (locale.codeLists["gmd:MD_CharacterSetCode"][metadataCharacterSet] || {label: metadataCharacterSet}).label %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (metadataResponsibleParties.length) { %>' +
-                    '    <h2>' + this.locale.heading.metadataOrganisation + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(metadataResponsibleParties, function (metadataResponsibleParty) { %>' +
-                    '            <li><%- metadataResponsibleParty.organisationName %>' +
-                    '            <% if (metadataResponsibleParty.electronicMailAddresses.length) { %>' +
-                    '                <ul>' +
-                    '                <% _.forEach(metadataResponsibleParty.electronicMailAddresses, function (electronicMailAddress) { %>' +
-                    '                    <li><%- electronicMailAddress %></li>' +
-                    '                <% }); %>' +
-                    '                </ul>' +
-                    '            <% } %>' +
-                    '        </li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (scopeCodes.length) { %>' +
-                    '        <h2>' + this.locale.heading.scopeCode + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(scopeCodes, function (scopeCode) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_ScopeCode"][scopeCode] || {description: scopeCode}).description %>"><%= (locale.codeLists["gmd:MD_ScopeCode"][scopeCode] || {label: scopeCode}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.citation.resourceIdentifiers.length) { %>' +
-                    '        <h2>' + this.locale.heading.resourceIdentifier + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.citation.resourceIdentifiers, function (resourceIdentifier) { %>' +
-                    '            <li><%- resourceIdentifier.codeSpace %>.<%- resourceIdentifier.code %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.operatesOn.length) { %>' +
-                    '        <h2>' + this.locale.heading.operatesOn + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.operatesOn, function (uuid) { %>' +
-                    '            <li><%- uuid %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.serviceType.length) { %>' +
-                    '        <h2>' + this.locale.heading.serviceType + '</h2>' +
-                    '        <p><%- identification.serviceType %> <%= identification.serviceTypeVersion ? "(" + identification.serviceTypeVersion + ")" : "" %></p>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.descriptiveKeywords.length) { %>' +
-                    '        <h2>' + this.locale.heading.descriptiveKeyword + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.descriptiveKeywords, function (keyword) { %>' +
-                    '            <% if (keyword.length) { %>' +
-                    '                <li><%- keyword %></li>' +
-                    '            <% } %>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (dataQualities.length) { %>' +
-                    '        <h2>' + this.locale.heading.reportConformance + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.reportConformances, function (reportConformance) { %>' +
-                    '                <p><%= reportConformance %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.accessConstraints.length) { %>' +
-                    '        <h2>' + this.locale.heading.accessConstraint + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.accessConstraints, function (accessConstraint) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_RestrictionCode"][accessConstraint] || {description: accessConstraint}).description %>"><%= (locale.codeLists["gmd:MD_RestrictionCode"][accessConstraint] || {label: accessConstraint}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.otherConstraints.length) { %>' +
-                    '        <h2>' + this.locale.heading.otherConstraint + '</h2>' +
-                    '        <% _.forEach(identification.otherConstraints, function (otherConstraint) { %>' +
-                    '            <% _.forEach(otherConstraint, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.classifications.length) { %>' +
-                    '        <h2>' + this.locale.heading.classification + '</h2>' +
-                    '        <ul>' +
-                    '        <% _.forEach(identification.classifications, function (classification) { %>' +
-                    '            <li title="<%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {description: classification}).description %>"><%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {label: classification}).label %></li>' +
-                    '        <% }); %>' +
-                    '        </ul>' +
-                    '    <% } %>' +
-
-                    '    <% if (identification.useLimitations.length) { %>' +
-                    '        <h2>' + this.locale.heading.useLimitation + '</h2>' +
-                    '        <% _.forEach(identification.useLimitations, function (useLimitation) { %>' +
-                    '            <% _.forEach(useLimitation, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
+                    '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>'+
+                    '       <div class="metadatatab-rating-container">'+
+                    '       <hr class="elf-metadata-divider">'+
+                    '       <h2>'+this.locale.heading.dataQuality+'</h2>'+
+                    '       <table class="elf-metadata-table-no-border">'+
+                    '           <tr>'+
+                    '               <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
+                    '               <td>'+
+                    '                   <div class="metadata-feedback-rating ratingInfo"></div>'+
+                    '               </td>'+
+                    '           </tr>'+
+                    '       </table>'+
+                    '       </div>'+
+                    '   <% } %>'+
                     '</article>'
                 ),
                 'quality': _.template(
@@ -576,9 +537,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
-            var additionalTabsFound = false;
+            var asyncTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
+                        continue;
+                    }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
                     );
@@ -590,23 +563,23 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
-                    } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
-                        additionalTabsFound = true;
-                        var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
+                    } else if (me.asyncTabs && me.asyncTabs[tabId] && me.asyncTabs[tabId].tabActivatedCallback) {
+                        asyncTabsFound = true;
+                        var newTabTitle = me.asyncTabs[tabId].title ? me.asyncTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
                     }
+
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
-
                 }
             }
 
             /*add the tab change event listener only once.*/
-            if (additionalTabsFound) {
+            if (asyncTabsFound) {
                 me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
-                        if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
-                            me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
                         }
                     }
                 });
@@ -634,6 +607,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         },
         /**
          * @public method addTabs
+         * The "synchronous" way of adding tabs by external bundles (=external bundles have already finished loading before rendering this)
          *
          * @param {Object} tabsJSON
          * {
@@ -652,11 +626,58 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function(tabsJSON) {
-            //TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
-            me._additionalTabs = tabsJSON;
+            me.asyncTabs = tabsJSON;
             for (var tabId in tabsJSON) {
                 me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
+            }
+        },
+        addTabsAsync: function(tabsJSON) {
+            var me = this,
+                model = me._model;
+
+            for (var tabId in tabsJSON) {
+                me.asyncTabs[tabId] = tabsJSON[tabId];
+                if (tabsJSON.hasOwnProperty(tabId)) {
+
+                    //only show quality tab for services and datasets
+                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
+                        continue;
+                    }
+
+                    //license tab but no license url -> skip rendering the tab.
+                    if (tabId === 'license' && (!model.license || model.license === "")) {
+                        continue;
+                    }
+
+                    //feedback tab added asynchronously -> also get and reveal the ratings under metadata tab...
+                    if (tabId === 'feedback' && model.amount) {
+                        me.getMetadataTabRatingStars();
+                    }
+
+                    var entry = Oskari.clazz.create(
+                        'Oskari.userinterface.component.TabPanel'
+                    );
+                    entry.setId(tabId);
+
+                    if (tabsJSON[tabId].tabActivatedCallback) {
+                        var newTabTitle = tabsJSON[tabId].title ? tabsJSON[tabId].title : "";
+                        entry.setTitle(newTabTitle);
+                    }
+                    me._tabContainer.addPanel(entry);
+                    me._tabs[tabId] = entry;
+                }
+            }
+
+            if (!me._tabContainer.tabChangeListeners || me._tabContainer.tabChangeListeners.length === 0) {
+                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                    if (newTab && newTab.getId() && !newTab.content) {
+                        if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
+                            me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        }
+                    }
+                });
             }
         },
 
@@ -690,7 +711,43 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     links = entry;
                 }
             }
+            if(!me.instance.conf.hideShowCoverageLink || me.instance.conf.hideShowCoverageLink !== true) {
+                if (me._model.geom) {
+                    entry = jQuery('<a/>');
+                    entry.addClass('metadata_coverage_bbox_link');
+                    entry.attr('href','javascript:void(0)');
+                    entry.html(me.instance._locale.flyout.coverage.showBBOX);
+
+
+                    if(links){
+                        links = links.add(entry);
+                    } else {
+                        links = entry;
+                    }
+                }
+            }
             me.addActions(links);
+
+            //Add click handler for the show coverage - link (under both metadata tab & actions tab)
+            jQuery('.metadata_coverage_bbox_link').on('click', function() {
+                me.toggleCoverage(jQuery(this));
+            });
+
+            //set rating stars if available (an administrator has rated the metadata)
+            if (me._model.latestAdminRating) {
+                me.getMetadataTabRatingStars();
+            }
+        },
+        getMetadataTabRatingStars: function() {
+            var me = this;
+            //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
+            var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance("catalogue.bundle.metadatafeedback");
+            if (metadataFeedbackBundle) {
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+"&nbsp;");
+                jQuery('div.metadatatab-rating-container').show();
+            } else {
+                jQuery('div.metadatatab-rating-container').hide();
+            }
         },
         /**
          * @method addActions
@@ -705,13 +762,47 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container.append('<br/>');
             });
         },
+        toggleCoverage: function(entry) {
+            var me = this,
+                coverageVisible = entry.hasClass('metadata-coverage-visible');
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
 
+            if (coverageVisible) {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .removeClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.showBBOX);
+
+                var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                me.instance.sandbox.postRequestByName(rn, null);
+            } else {
+                jQuery('a.metadata_coverage_bbox_link')
+                    .addClass('metadata-coverage-visible')
+                    .html(me.instance._locale.flyout.coverage.removeBBOX);
+
+                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                me.instance.sandbox.postRequestByName(rn, [me._model.geom, {
+                    layerId: 'METADATACATALOGUE_VECTORLAYER',
+                    clearPrevious: true,
+                    layerOptions: null,
+                    centerTo: true,
+                    featureStyle: style
+                }]);
+            }
+
+        },
         renderMapLayerList: function() {
             var me = this,
                 container = me._tabs['actions'].getContainer(),
                 layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
                 layerListHeader;
-
             container.find('table.metadataSearchResult').remove();
             container.append(me._templates['layerList']());
 
@@ -756,11 +847,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 labelText = me.locale.layerList.hide;
             }
             return labelText;
-        },
-        _toggleMetadataCoverage: function() {
-            var me = this;
-            me._model;
-
         },
         isLayerSelected: function(layer) {
             var me = this,
