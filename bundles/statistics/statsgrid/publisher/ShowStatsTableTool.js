@@ -53,6 +53,27 @@ function() {
         return me.__tool;
     },
     /**
+     * If the tool requires space for the UI next to the map return the required height/width
+     * @return {Object} object with keys height and width used for map size calculation
+     */
+    getAdditionalSize : function() {
+        // publisher-tools should provide information if they need screen estate from map
+        var statsGrid = this.__sandbox.getStatefulComponents().statsgrid || { state : {} };
+        var width = 0;
+        if(this.isEnabled()) {
+            if (statsGrid.state.indicators) {
+                //indicators + municipality (name & code)
+                columns = statsGrid.state.indicators.length + 2;
+                //grid column width is 80 by default
+                width = columns * 80;
+            }
+        }
+        return {
+            height: 0,
+            width : width
+        };
+    },
+    /**
     * Get stats layer.
     * @method @private _getStatsLayer
     *
@@ -81,13 +102,13 @@ function() {
     */
 
     setEnabled : function(enabled) {
+        if(this.isEnabled() === enabled) {
+            return;
+        }
         var me = this,
             tool = me.getTool(),
             statsLayer = me._getStatsLayer(),
-            request,
-            elLeft;
-
-        me.state.enabled = enabled;
+            request;
 
         if(!me.__plugin && enabled) {
             me.statsService = Oskari.clazz.create(
@@ -95,7 +116,7 @@ function() {
                 me.__instance
             );
             if(statsLayer) {
-                request = me.__sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
+                request = Oskari.requestBuilder('StatsGrid.StatsGridRequest')(false, statsLayer);
                 me.__sandbox.request(me.__instance, request);
             }
             me.__sandbox.registerService(me.statsService);
@@ -103,9 +124,11 @@ function() {
             me.__mapmodule.registerPlugin(me.__plugin);
             me.statsContainer = jQuery(me.templates.publishedGridTemplate);
         }
+        me.state.enabled = enabled;
+        var elLeft = jQuery('.oskariui-left');
 
         if(enabled === true) {
-            elLeft = jQuery('.oskariui-left');
+
             elLeft.html(me.statsContainer);
             me.__plugin.startPlugin(me.__sandbox);
             me.__plugin.createStatsOut(me.statsContainer);

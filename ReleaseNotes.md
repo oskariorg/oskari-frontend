@@ -239,6 +239,12 @@ Renamed name-attributes on forms to data-name since atleast Chrome removes the n
 
 New bundle for displaying status messages for the user.
 
+### publisher2
+
+Tools now have getAdditionalSize() which returns { width : 0, height : 0} by default. Tools can now tell if the map should be resized to make room for a tool.
+
+Statsgrid specific code has been removed from publisher. The grid-component now uses getAdditionalSize() to request space for itself.
+
 ## 1.40.0
 
 ## myplaces2
