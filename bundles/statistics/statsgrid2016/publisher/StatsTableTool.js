@@ -7,9 +7,7 @@ function() {
     allowedSiblings : [],
 
     groupedSiblings : false,
-    templates: {
-        publishedGridTemplate: '<div class="publishedgrid" ></div>'
-    },
+    templates: {},
     /**
      * Initialize tool
      * @params {} state data
@@ -20,9 +18,10 @@ function() {
         var me = this;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        /*
         if(stats && typeof stats.renderToggleButtons === 'function') {
             stats.renderToggleButtons(true);
-        }
+        }*/
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
             me.setEnabled(true);
         } else {
@@ -68,7 +67,7 @@ function() {
             layer;
         for (i = 0; i < selectedLayers.length; i += 1) {
             layer = selectedLayers[i];
-            if (layer.getLayerType() === 'stats') {
+            if (layer.isLayerOfType('stats')) {
                 statsLayer = layer;
                 break;
             }
