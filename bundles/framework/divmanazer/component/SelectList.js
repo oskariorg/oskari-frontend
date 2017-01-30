@@ -99,6 +99,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
       }
       this.element.find('select').val(value);
+      this.element.find('select').trigger('chosen:updated');
     },
     getValue: function(){
       if(typeof this.element === 'undefined'){
