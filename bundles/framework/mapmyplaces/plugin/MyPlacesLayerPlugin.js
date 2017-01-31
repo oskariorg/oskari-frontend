@@ -723,7 +723,11 @@ Oskari.clazz.define(
             if(!ol) {
                 return;
             }
-            ol.redraw(!!forced);
+            params = params || {};
+            if(forced) {
+                params._ts = Date.now()
+            }
+            ol.mergeNewParams(params);
         },
 
         /**
