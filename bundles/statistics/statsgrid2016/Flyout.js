@@ -66,6 +66,45 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 options.callbacks.after();
             }
         },
+        showLegend : function(enabled) {
+            if(!enabled) {
+                this.removeSideTools();
+                return;
+            }
+            var me = this;
+            var locale = this.instance.getLocalization();
+            this.addSideTool(locale.legend.title, function(el){
+                me.__sideTools.legend.sideTool = el;
+
+                me.getLegendFlyout(
+                {
+                    callbacks: {
+                        close: function() {
+                            me.__sideTools.legend.opened = false;
+                        },
+                        show: function(popup) {
+                            var classification = me.__sideTools.legend.comp.getClassification();
+
+                            me.__sideTools.legend.flyout.setContent(classification);
+
+                            me.setSideToolPopupPosition(popup);
+                        },
+                        after: function(){
+                            if(me.__sideTools.legend.opened) {
+                                me.__sideTools.legend.flyout.hide();
+                                me.__sideTools.legend.opened = false;
+                            } else {
+                                me.__sideTools.legend.flyout.show();
+                                me.__sideTools.legend.opened = true;
+                            }
+
+                        }
+                    },
+                    locale: locale.legend,
+                    cls: 'statsgrid-legend-flyout'
+                }, me);
+            });
+        },
         /**
          * @method lazyRender
          * Called when flyout is opened (by instance)
@@ -76,12 +115,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var locale = this.instance.getLocalization();
             // empties all
             this.getEl().empty();
-            this.removeSideTools();
 
             config = config || {};
             var title = locale.flyout.title;
             var parent = this.getEl().parent().parent();
-            if(this.instance.hasPublished()) {
+            if(this.instance.isEmbedded()) {
                 parent.find('.oskari-flyout-title p').html(title);
                 // Remove close button from published
                 parent.find('.oskari-flyouttools').hide();
@@ -91,39 +129,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 parent.find('.oskari-flyouttools').show();
             }
 
-            if(config.mouseEarLegend === true) {
-                this.addSideTool(locale.legend.title, function(el){
-                    me.__sideTools.legend.sideTool = el;
-
-                    me.getLegendFlyout(
-                    {
-                        callbacks: {
-                            close: function() {
-                                me.__sideTools.legend.opened = false;
-                            },
-                            show: function(popup) {
-                                var classification = me.__sideTools.legend.comp.getClassification();
-
-                                me.__sideTools.legend.flyout.setContent(classification);
-
-                                me.setSideToolPopupPosition(popup);
-                            },
-                            after: function(){
-                                if(me.__sideTools.legend.opened) {
-                                    me.__sideTools.legend.flyout.hide();
-                                    me.__sideTools.legend.opened = false;
-                                } else {
-                                    me.__sideTools.legend.flyout.show();
-                                    me.__sideTools.legend.opened = true;
-                                }
-
-                            }
-                        },
-                        locale: locale.legend,
-                        cls: 'statsgrid-legend-flyout'
-                    }, me);
-                });
-            }
             this.addContent(this.getEl(), config);
         },
 

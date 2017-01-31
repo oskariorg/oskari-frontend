@@ -23,10 +23,9 @@ function() {
         var me = this;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats) {
-            stats.renderPublishedLegend({showLegend:false});
+        if(stats && this.isDisplayed()) {
+            stats.showLegendOnMap(true);
         }
-
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             me.setEnabled(true);
         } else {
@@ -93,7 +92,7 @@ function() {
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            stats.classificationVisible(enabled);
+            stats.enableClassification(enabled);
         }
     },
     /**
@@ -140,8 +139,7 @@ function() {
     stop: function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if(stats) {
-            // removed by not giving any param...
-            stats.renderPublishedLegend({});
+            stats.showLegendOnMap(false);
         }
     }
 }, {

@@ -10,7 +10,6 @@ Oskari.clazz.define(
 	/**
 	 * @static constructor function
 	 */
-
 	function () {
 		// these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
 		this.defaultConf = {
@@ -22,10 +21,6 @@ Oskari.clazz.define(
 		};
 		this.visible = false;
 
-		this._templates = {
-			publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
-		};
-
 		this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
 
 		this._publishedComponents = {
@@ -33,6 +28,8 @@ Oskari.clazz.define(
 		};
 
 		this._lastRenderMode = null;
+
+		this.togglePlugin = null;
 	}, {
 		afterStart: function (sandbox) {
 			var me = this;
@@ -44,56 +41,34 @@ Oskari.clazz.define(
 
 			var conf = this.getConfiguration() || {};
 			statsService.addDatasource(conf.sources);
-
+			// disable tile if we don't have anything to show or enable if we do
 			this.getTile().setEnabled(this.hasData());
+			// setup initial state
 			this.setState();
 
-			if(typeof conf.showLegend === 'boolean' && conf.showLegend && me.hasPublished()) {
-				me.renderPublishedLegend(conf);
+			if(this.isEmbedded()) {
+				// start in an embedded map mode
+				if(conf.grid) {
+					me.showToggleButtons(true);
+				}
+				me.showLegendOnMap(true);
 			}
 
-			if(me.hasPublished() && conf.grid) {
-				me.renderToggleButtons();
-				me.getFlyout().move(0,0);
-			}
 			this.__setupLayerTools();
 		},
-		renderToggleButtons: function(remove){
-			var me = this;
-			if(remove){
-				jQuery('.statsgrid-published-toggle-buttons').remove();
-				return;
-			}
-			var toggleButtons = me._templates.publishedToggleButtons.clone();
-			var map = toggleButtons.find('.map');
-			var table = toggleButtons.find('.table');
-			table.addClass('active');
-
-			map.attr('title', me.getLocalization().published.showMap);
-			table.attr('title', me.getLocalization().published.showTable);
-
-			map.bind('click', function() {
-				if(!map.hasClass('active')) {
-					table.removeClass('active');
-					map.addClass('active');
-					me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'close', 'StatsGrid']);
-				}
-			});
-
-			table.bind('click', function(){
-				if(!table.hasClass('active')) {
-					map.removeClass('active');
-					table.addClass('active');
-					me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'detach', 'StatsGrid']);
-				}
-			});
-
-			map.trigger('click');
-
-			jQuery('body').append(toggleButtons);
+		isEmbedded: function() {
+			return jQuery('#contentMap').hasClass('published');
 		},
-		hasPublished: function() {
-			return 'geoportal' !== this._getRenderMode();
+		hasData: function () {
+			return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
+		},
+
+		/**
+		 * Fetches reference to the map layer service
+		 * @return {Oskari.mapframework.service.MapLayerService}
+		 */
+		getLayerService : function() {
+			return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
 		},
 		eventHandlers: {
 			'StatsGrid.IndicatorEvent' : function(evt) {
@@ -106,6 +81,7 @@ Oskari.clazz.define(
 				var state = this.statsService.getStateService();
 				var activeIndicator = state.getActiveIndicator();
 				var hash = state.getHash(evt.getDatasource(), evt.getIndicator(), evt.getSelections());
+				// FIXME: setActiveIndicator should handle this internally...
 				if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && !activeIndicator) {
 					state.setActiveIndicator(hash);
 				} else if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && activeIndicator) {
@@ -153,6 +129,7 @@ Oskari.clazz.define(
 				var conf = this.__determineConfig(renderMode);
 				if(conf.grid !== false && this._lastRenderMode !== renderMode) {
 					this.getFlyout().render(conf);
+					this.getFlyout().showLegend(!this.isEmbedded());
 					this._lastRenderMode = renderMode;
 				}
 			},
@@ -217,17 +194,6 @@ Oskari.clazz.define(
 			return 'embedded';
 		},
 
-		hasData: function () {
-			return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
-		},
-
-		/**
-		 * Fetches reference to the map layer service
-		 * @return {Oskari.mapframework.service.MapLayerService}
-		 */
-		getLayerService : function() {
-			return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-		},
 		/**
 		 * Adds the Feature data tool for layer
 		 * @param  {String| Number} layerId layer to process
@@ -385,50 +351,59 @@ Oskari.clazz.define(
 			}
 			return state;
 		},
+		showToggleButtons: function(enabled) {
+			var me = this;
+			if(!enabled && this.togglePlugin){
+				this.togglePlugin.remove();
+				return;
+			}
+			if(!this.togglePlugin) {
+				this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
+			}
+			me.getFlyout().move(0,0);
+			jQuery('body').append(this.togglePlugin.create());
+		},
 		/**
-		 * @method  @public renderPublishedLegend Render published  legend
+		 * @method  @public showLegendOnMap Render published  legend
 		 */
-		renderPublishedLegend: function(config){
+		showLegendOnMap: function(enabled){
 			var me = this;
 
-			config = config || me.getConfiguration();
+			var config = me.getConfiguration();
 			var sandbox = me.getSandbox();
 			var locale = this.getLocalization();
 			var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
-			if(config.showLegend) {
-				config.publishedClassification = true;
+			if(!enabled) {
 				if(me.plugin) {
-				   return;
+					mapModule.unregisterPlugin(me.plugin);
+					mapModule.stopPlugin(me.plugin);
+					me.plugin = null;
 				}
-				var plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
-				mapModule.registerPlugin(plugin);
-				mapModule.startPlugin(plugin);
-				me.plugin = plugin;
-				//get the plugin order straight in mobile toolbar even for the tools coming in late
-				if (Oskari.util.isMobile() && this.plugin.hasUI()) {
-					mapModule.redrawPluginUIs(true);
-				}
-			} else if(this.plugin) {
-				config.publishedClassification = false;
-				mapModule.unregisterPlugin(me.plugin);
-				mapModule.stopPlugin(me.plugin);
-				me.plugin = null;
+				return;
 			}
 
-
+			if(!me.plugin) {
+				me.plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+			}
+			mapModule.registerPlugin(me.plugin);
+			mapModule.startPlugin(me.plugin);
+			//get the plugin order straight in mobile toolbar even for the tools coming in late
+			if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+				mapModule.redrawPluginUIs(true);
+			}
 			return;
 		},
 
 		/**
-		 * @method  @public classificationVisible change published map classification visibility. Only call this in publisher!
+		 * @method  @public enableClassification change published map classification visibility.
 		 * @param  {Boolean} visible visible or not
 		 */
-		classificationVisible: function(visible) {
+		enableClassification: function(enabled) {
 			if(!this.plugin) {
 				return;
 			}
-			this.plugin.setEnabled(visible);
+			this.plugin.setEnabled(enabled);
+			this.getConfiguration().allowClassification = enabled;
 		}
 
 	}, {

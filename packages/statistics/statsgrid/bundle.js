@@ -57,6 +57,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/ExtraFeatures.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/plugin/TogglePlugin.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
             }, {
                 "type": "text/javascript",

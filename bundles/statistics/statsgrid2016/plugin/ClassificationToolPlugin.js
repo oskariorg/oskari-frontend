@@ -105,119 +105,114 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
 
             var isMobile = Oskari.util.isMobile();
 
-            if(me._element === null) {
-                me._element = me._templates.classification.clone();
-                config.publishedClassification = true;
-                jQuery('.statsgrid-legend-flyout-published').show();
+            if(me._element !== null) {
+                return me._element;
+            }
+            me._element = me._templates.classification.clone();
+            config.publishedClassification = true;
+            jQuery('.statsgrid-legend-flyout-published').show();
 
-                if(config.showLegend === false) {
-                    jQuery('.statsgrid-legend-flyout-published').hide();
+            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            if(!service) {
+                // not available yet
+                return;
+            }
+
+            var state = service.getStateService();
+            var ind = state.getActiveIndicator();
+            if(!ind) {
+                return;
+            }
+
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+                if(err) {
+                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                    return;
+                }
+                var classify = service.getClassificationService().getClassification(data);
+                if(!classify) {
+                    me.log.warn('Error getting indicator classification', data);
                     return;
                 }
 
-                var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-                if(!service) {
-                    // not available yet
-                    return;
-                }
+                var flyout = me._instance.getFlyout();
 
-                var state = service.getStateService();
-                var ind = state.getActiveIndicator();
-                if(!ind) {
-                    return;
-                }
-
-                service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-                    if(err) {
-                        me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                        return;
-                    }
-                    var classify = service.getClassificationService().getClassification(data);
-                    if(!classify) {
-                        me.log.warn('Error getting indicator classification', data);
-                        return;
-                    }
-
-                    var flyout = me._instance.getFlyout();
-
-                    // format regions to groups for url
-                    var regiongroups = classify.getGroups();
-                    var classes = [];
-                    regiongroups.forEach(function(group) {
-                        // make each group a string separated with comma
-                        classes.push(group.join());
-                    });
-
-                    var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
-                    var colors = [];
-                    colorsWithoutHash.forEach(function(color) {
-                        colors.push('#' + color);
-                    });
-
-                    var state = service.getStateService();
-
-                    service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
-                        if(err) {
-                            me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                            return;
-                        }
-                        flyout.getLegendFlyout(
-                        {
-                            callbacks: {
-                                show: function() {
-                                    var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                    var container = jQuery('<div class="accordion-published"></div>');
-
-                                    // classification
-                                    me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                    me._publishedComponents.panelClassification.setVisible(true);
-                                    me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-                                    me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me._instance);
-                                    var editClassificationElement = me._publishedComponents.editClassification.getElement();
-                                    me._publishedComponents.panelClassification.setContent(editClassificationElement);
-                                    accordion.addPanel(me._publishedComponents.panelClassification);
-                                    if(!config.allowClassification) {
-                                        me._publishedComponents.editClassification.setEnabled(false);
-                                        me._publishedComponents.panelClassification.setTitle(locale.classify.classifyFieldsTitle);
-                                    }
-
-                                    var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                    panelLegend.setTitle(locale.legend.title);
-
-                                    var classification = me.__sideTools.legend.comp.getClassification();
-                                    classification.find('.accordion-theming').remove();
-                                    panelLegend.setContent(classification);
-                                    panelLegend.setVisible(true);
-                                    panelLegend.open();
-
-                                    accordion.addPanel(panelLegend);
-                                    accordion.insertTo(container);
-
-                                    me.__sideTools.legend.flyout.setContent(container);
-                                },
-                                after: function(){
-                                    me.__sideTools.legend.flyout.show();
-                                }
-                            },
-                            locale: {
-                                title: ''
-                            },
-                            cls: 'statsgrid-legend-flyout-published',
-                            container: me._element
-                        }, me);
-
-                        service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-                            var ind = event.getCurrent();
-                            if(ind) {
-                                me.updatePublishedFlyoutTitle(ind, config);
-                            }
-                        });
-
-                        me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
-                    });
+                // format regions to groups for url
+                var regiongroups = classify.getGroups();
+                var classes = [];
+                regiongroups.forEach(function(group) {
+                    // make each group a string separated with comma
+                    classes.push(group.join());
                 });
 
-            }
+                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
+                var colors = [];
+                colorsWithoutHash.forEach(function(color) {
+                    colors.push('#' + color);
+                });
+
+                var state = service.getStateService();
+
+                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
+                    if(err) {
+                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
+                        return;
+                    }
+                    flyout.getLegendFlyout(
+                    {
+                        callbacks: {
+                            show: function() {
+                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                                var container = jQuery('<div class="accordion-published"></div>');
+
+                                // classification
+                                me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                me._publishedComponents.panelClassification.setVisible(true);
+                                me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
+                                me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me._instance);
+                                var editClassificationElement = me._publishedComponents.editClassification.getElement();
+                                me._publishedComponents.panelClassification.setContent(editClassificationElement);
+                                accordion.addPanel(me._publishedComponents.panelClassification);
+                                if(!config.allowClassification) {
+                                    me._publishedComponents.editClassification.setEnabled(false);
+                                    me._publishedComponents.panelClassification.setTitle(locale.classify.classifyFieldsTitle);
+                                }
+
+                                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                                panelLegend.setTitle(locale.legend.title);
+
+                                var classification = me.__sideTools.legend.comp.getClassification();
+                                classification.find('.accordion-theming').remove();
+                                panelLegend.setContent(classification);
+                                panelLegend.setVisible(true);
+                                panelLegend.open();
+
+                                accordion.addPanel(panelLegend);
+                                accordion.insertTo(container);
+
+                                me.__sideTools.legend.flyout.setContent(container);
+                            },
+                            after: function(){
+                                me.__sideTools.legend.flyout.show();
+                            }
+                        },
+                        locale: {
+                            title: ''
+                        },
+                        cls: 'statsgrid-legend-flyout-published',
+                        container: me._element
+                    }, me);
+
+                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+                        var ind = event.getCurrent();
+                        if(ind) {
+                            me.updatePublishedFlyoutTitle(ind, config);
+                        }
+                    });
+
+                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
+                });
+            });
             return me._element;
         },
 

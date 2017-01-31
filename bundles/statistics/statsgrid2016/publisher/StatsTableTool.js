@@ -18,10 +18,6 @@ function() {
         var me = this;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        /*
-        if(stats && typeof stats.renderToggleButtons === 'function') {
-            stats.renderToggleButtons(true);
-        }*/
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
             me.setEnabled(true);
         } else {
@@ -94,15 +90,12 @@ function() {
         if(!stats) {
             return;
         }
-        stats.renderPublishedLegend({showLegend:true});
-        if(enabled === true) {
-            // reset flyout location to the edge of the publish sidebar (this doesn't open the flyout)
-            stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
-        } else {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[stats, 'close', 'StatsGrid']);
-        }
+        stats.showToggleButtons(enabled);
 
-        stats.renderToggleButtons(!enabled);
+        if(enabled) {
+            // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
+            stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
+        }
     },
     /**
     * Is displayed.
@@ -120,30 +113,33 @@ function() {
         var me = this,
             statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
         // just to make sure if user removes the statslayer while in publisher
-        // if there is no statslayer on map -> don't setup publishedgrid
+        // if there is no statslayer on map -> don't setup statsgrid
         // otherwise always return the state even if grid is not selected so
-        //  publishedgrid gets the information it needs to render map correctly
+        // statsgrid gets the information it needs to render map correctly
         var statslayerOnMap = this._getStatsLayer();
-        if(statslayerOnMap && statsGridState) {
-            // without view = true -> the sidepanel is not shown when the statsgrid bundle starts
-            statsGridState.view = me.state.enabled;
-            return {
-                configuration: {
-                    statsgrid: {
-                        state: statsGridState,
-                        conf : {
-                            grid: me.state.enabled,
-                            areaSelection: false,
-                            search: false,
-                            extraFeatures: false,
-                            mouseEarLegend: false,
-                            showLegend: true
-                        }
+        if(!statslayerOnMap || !statsGridState) {
+            return null;
+        }
+        return {
+            configuration: {
+                statsgrid: {
+                    state: statsGridState,
+                    conf : {
+                        grid: me.state.enabled,
+                        areaSelection: false,
+                        search: false,
+                        extraFeatures: false,
+                        mouseEarLegend: false,
+                        showLegend: true
                     }
                 }
-            };
-        } else {
-            return null;
+            }
+        };
+    },
+    stop : function() {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            stats.showToggleButtons(false);
         }
     }
 }, {
