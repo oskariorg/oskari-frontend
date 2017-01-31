@@ -5,7 +5,7 @@
       text-align: center;
     }
     th {
-      padding: 2px 5px; 
+      padding: 2px 5px;
     }
   }
 }
@@ -17,37 +17,43 @@ table.layer-rights-table {
     th:first-child {
       width: 40%;
       padding: 2px 5px;
-      text-align: center; 
-      min-width: 380px;
+      min-width: 360px;
     }
     th {
-      width: 15%; 
+      width: 15%;
     }
   }
+  tr.control{
+    padding-left: 370px;
+    border-bottom: thin solid silver;
+  td {
+    width: 25%;
+    min-width: 80px;
+  }
+}
 
   tbody {
-    @media screen and (max-height: 600px) {    
-      max-height: 86px;  
+    @media screen and (max-height: 600px) {
+      max-height: 86px;
     }
     @media screen and (max-height: 800px) and (min-height: 600px) {
-      max-height: 280px; 
+      max-height: 280px;
     }
     @media screen and (min-height: 800px) {
-      max-height: 480px; 
+      max-height: 480px;
     }
 
     position: relative;
     display: block;
     width: 100%;
-    overflow: auto; 
+    overflow: auto;
     tr {
       td:first-child {
         width: 40%;
-        text-align: center; 
-        min-width: 380px;
+        min-width: 370px;
       }
       td {
-        width: 15%; 
+        width: 15%;
       }
     }
   }

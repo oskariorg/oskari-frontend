@@ -96,14 +96,23 @@ Oskari.clazz.define(
 
         me._wellknownStyles = {};
 
-        me._isInMobileMode;
-        me._mobileToolbar;
+        me._isInMobileMode = null;
+        me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
-        me._toolbarContent;
+        me._toolbarContent = null;
 
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
+        this.log = Oskari.log('AbstractMapModule');
 
+
+        this.templates = {
+            'crosshair': jQuery(
+                '<div class="oskari-crosshair">'+
+                    '<div class="oskari-crosshair-vertical-bar"></div>'+
+                    '<div class="oskari-crosshair-horizontal-bar"></div>'+
+                '</div>')
+        };
     }, {
         /**
          * @method init
@@ -113,7 +122,7 @@ Oskari.clazz.define(
          */
         init: function (sandbox) {
             var me = this;
-            sandbox.printDebug(
+            this.log.debug(
                 'Initializing oskari map module...#############################################'
             );
 
@@ -133,6 +142,10 @@ Oskari.clazz.define(
             }
 
             me._map = me.createMap();
+
+            if (me._options.crosshair) {
+                me.toggleCrosshair(true);
+            }
 
             // changed to resolutions based map zoom levels
             // -> calculate scales array for backward compatibility
@@ -157,7 +170,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            sandbox.printDebug('Starting ' + this.getName());
+            this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins
             Oskari.on('app.start', function(details) {
@@ -231,6 +244,13 @@ Oskari.clazz.define(
             },
             'Toolbar.ToolbarLoadedEvent': function() {
                 this.startLazyPlugins();
+            },
+            'RPCUIEvent': function(event) {
+                var me = this;
+                if(event.getBundleId()==='mapmodule.crosshair') {
+                    var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
+                    me.toggleCrosshair(show);
+                }
             }
         },
 
@@ -340,7 +360,7 @@ Oskari.clazz.define(
         getMapEl: function () {
             var mapDiv = jQuery('#' + this.getMapElementId());
             if (!mapDiv.length) {
-                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
+                this.log.warn('mapDiv not found with #' + this._mapDivId);
             }
             return mapDiv;
         },
@@ -453,8 +473,8 @@ Oskari.clazz.define(
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
-                // accept an hour long cached position
-                opts.maximumAge = 3600000;
+                // don't accept cached position
+                opts.maximumAge = 0;
             }
             if(!opts.hasOwnProperty('timeout')) {
                 // timeout after 6 seconds
@@ -477,7 +497,7 @@ Oskari.clazz.define(
                     function (errors) {
                         // if users just ignores/closes the browser dialog
                         // -> error handler won't be called in most browsers
-                        sandbox.printWarn('Error getting user location', errors);
+                        me.log.warn('Error getting user location', errors);
                         // notify callback and event without lonlat to signal failure
                         sandbox.notifyAll(evtBuilder());
                         if(typeof callback === 'function') {
@@ -547,33 +567,31 @@ Oskari.clazz.define(
          * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
          * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds
          * If the boundaries are within current zoomlevel or undefined, returns the current zoomLevel
-         * @param {Number} maxScale maximum scale boundary (optional)
          * @param {Number} minScale minimum scale boundary (optional)
+         * @param {Number} maxScale maximum scale boundary (optional)
          * @return {Number} zoomLevel (0-12)
          */
-        getClosestZoomLevel: function (maxScale, minScale) {
+        getClosestZoomLevel: function (minScale, maxScale) {
             var zoomLevel = this.getMapZoom();
-            // FIXME: shouldn't we check appropriate level if even one is defined? '||' should be '&&'?
-            if (!minScale || !maxScale) {
-                return zoomLevel;
-            }
-
             var scale = this.getMapScale(),
                 scaleList = this.getScaleArray(),
                 i;
+            // default to values from scaleList if missing
+            minScale = minScale || scaleList[0];
+            maxScale = maxScale || scaleList[scaleList.length -1];
 
-            if (scale < minScale) {
+            if (scale < maxScale) {
                 // zoom out
                 //for(i = this._mapScales.length; i > zoomLevel; i--) {
                 for (i = zoomLevel; i > 0; i -= 1) {
-                    if (scaleList[i] >= minScale) {
+                    if (scaleList[i] >= maxScale) {
                         return i;
                     }
                 }
-            } else if (scale > maxScale) {
+            } else if (scale > minScale) {
                 // zoom in
                 for (i = zoomLevel; i < scaleList.length; i += 1) {
-                    if (scaleList[i] <= maxScale) {
+                    if (scaleList[i] <= minScale) {
                         return i;
                     }
                 }
@@ -768,7 +786,7 @@ Oskari.clazz.define(
                     if(typeof layersPlugin.preselectLayers !== 'function') {
                         continue;
                     }
-                    sandbox.printDebug('preselecting ' + p);
+                    this.log.debug('preselecting ' + p);
                     layersPlugin.preselectLayers(layers);
                 }
             }
@@ -925,7 +943,6 @@ Oskari.clazz.define(
             var me = this;
             var modeChanged = false;
             var mobileDiv = this.getMobileDiv();
-
             if (Oskari.util.isMobile()) {
                 modeChanged = (me.getMobileMode() === true) ? false : true;
                 me.setMobileMode(true);
@@ -935,14 +952,26 @@ Oskari.clazz.define(
             }
 
             if (modeChanged) {
-                var sortedList = this._getSortedPlugins();
-                _.each(sortedList, function(plugin) {
-                    if (plugin && typeof plugin.redrawUI === 'function') {
-                        plugin.redrawUI(me.getMobileMode(), modeChanged);
-                    }
-                });
+                me.redrawPluginUIs(modeChanged);
             }
             me._adjustMobileMapSize();
+        },
+        /**
+         * @method redrawPluginUIs
+         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar.
+         * Basically just redraws the whole toolbar with the tools in correct order.
+         *
+         * @param {boolean} modeChanged whether there was a transition between mobile <> desktop
+         *
+         */
+        redrawPluginUIs: function(modeChanged) {
+            var me = this,
+                sortedList = me._getSortedPlugins();
+            _.each(sortedList, function(plugin) {
+                if (plugin && typeof plugin.redrawUI === 'function') {
+                    plugin.redrawUI(me.getMobileMode(), modeChanged);
+                }
+            });
         },
         /**
          * Get a sorted list of plugins. This is used to control order of elements in the UI.
@@ -1062,6 +1091,22 @@ Oskari.clazz.define(
             return this._cursorStyle;
         },
 
+        /**
+         * @method toggleCrosshair
+         * toggles the crosshair marking the center of the map
+         */
+        toggleCrosshair: function(show) {
+            var me = this,
+                crosshair = null,
+                mapEl = me.getMapEl();
+
+            mapEl.find('div.oskari-crosshair').remove();
+            if (show) {
+                crosshair = me.templates.crosshair.clone();
+                mapEl.append(crosshair);
+            }
+        },
+
 /*---------------- /THEME ------------------- */
 
 /* --------------- CONTROLS ------------------------ */
@@ -1123,7 +1168,7 @@ Oskari.clazz.define(
          */
         setLayerPlugin: function (id, plug) {
             if (id === null || id === undefined || !id.length) {
-                this._sandbox.printWarn(
+                this.log.warn(
                     'Setting layer plugin', plug, 'with a non-existent ID:', id
                 );
             }
@@ -1182,10 +1227,15 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             plugin.setMapModule(this);
             var pluginName = plugin.getName();
-            sandbox.printDebug(
+            this.log.debug(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
+            if(this._pluginInstances[pluginName]) {
+                this.log.warn(
+                    '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
+                );
+            }
             this._pluginInstances[pluginName] = plugin;
         },
         /**
@@ -1199,7 +1249,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug(
+            this.log.debug(
                 '[' + this.getName() + ']' + ' Unregistering ' + pluginName
             );
             plugin.unregister();
@@ -1217,7 +1267,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
                 var tryAgainLater = plugin.startPlugin(sandbox);
                 if(tryAgainLater && typeof plugin.redrawUI === 'function') {
@@ -1225,7 +1275,7 @@ Oskari.clazz.define(
                 }
             } catch (e) {
                 // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                sandbox.printWarn(
+                this.log.warn(
                     'Unable to start plugin: ' + pluginName + ': ' +
                     e
                 );
@@ -1246,7 +1296,7 @@ Oskari.clazz.define(
                 var tryAgainLater = plugin.redrawUI(me.getMobileMode(), !!force);
                 if(tryAgainLater) {
                     if(force) {
-                        me.getSandbox().printWarn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
+                        me.log.warn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
                     }
                     me.lazyStartPlugins.push(plugin);
                 }
@@ -1262,7 +1312,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 pluginName = plugin.getName();
 
-            sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+            this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.stopPlugin(sandbox);
         },
         /**
@@ -1369,9 +1419,56 @@ Oskari.clazz.define(
          * @param  {Object} styles styles object
          */
         registerWellknownStyle: function(key, styles) {
-            var me = this;
+            var me = this,
+                sandbox = this.getSandbox();
+
             if(key && styles){
-                me._wellknownStyles[key] = styles;
+                var styleKey = Oskari.util.sanitize(key);
+                var sanitizedStyles = {};
+                var added = 0;
+
+                for(var name in styles) {
+                    var styleName = Oskari.util.sanitize(name);
+                    var style = styles[name];
+
+                    // if supported style format. Currently now supported only svg.
+                    if(style && typeof style.data === 'string' && style.data.indexOf('<svg')>-1) {
+                        if(!sanitizedStyles[styleKey]){
+                            sanitizedStyles[styleKey] = {};
+                        }
+                        sanitizedStyles[styleKey][styleName] = {
+                            offsetX: (style.offsetX !== null && Oskari.util.isNumber(style.offsetX)) ? parseFloat(Oskari.util.sanitize(style.offsetX)) : null,
+                            offsetY: (style.offsetY !== null && Oskari.util.isNumber(style.offsetY)) ? parseFloat(Oskari.util.sanitize(style.offsetY)) : null,
+                            data: (style.data !== null) ? Oskari.util.sanitize(style.data) : null
+                        };
+
+                        if(styleName && !sanitizedStyles[styleKey][styleName].data) {
+                            delete sanitizedStyles[styleKey][styleName];
+                        } else {
+                            added++;
+                        }
+                    }
+                }
+
+                if(added === 0) {
+                    me.log.warn('Cannot add wellknown style for key=' + key + ', please check request!');
+                    delete sanitizedStyles[styleKey];
+                }
+
+                if(styleKey && sanitizedStyles[styleKey]) {
+                    if(me._wellknownStyles[styleKey]){
+                        me.log.warn('Founded allready added wellknown style for key=' + key + ', merging styles');
+                        for(var sanitizedStyleName in sanitizedStyles[styleKey]) {
+                            if(me._wellknownStyles[styleKey][sanitizedStyleName]) {
+                                me.log.warn('Founded allready added wellknown style for key=' + key + ' and style name='+sanitizedStyleName+', replacing style');
+                            }
+                            me._wellknownStyles[styleKey][sanitizedStyleName] = sanitizedStyles[styleKey][sanitizedStyleName];
+                        }
+                    }
+                    else {
+                        me._wellknownStyles[styleKey] = sanitizedStyles[styleKey];
+                    }
+                }
             }
         },
 
@@ -1384,13 +1481,21 @@ Oskari.clazz.define(
          * @return {Object} returns styles for wanted key or if defined also style name return only wanted style
          */
         getWellknownStyle: function(key, style) {
-            var me = this;
-            if(!me._wellknownStyles[key]) {
-                return null;
+            var me = this,
+                sandbox = this.getSandbox();
+
+            if(!me._wellknownStyles[key] && !style) {
+                this.log.warn('Not found wellknown markers for key=' + key + ', returning default markers');
+                return Oskari.getMarkers();
             }
 
             if(key && style){
-                return me._wellknownStyles[key][style]
+                if(me._wellknownStyles[key] && me._wellknownStyles[key][style]) {
+                    return me._wellknownStyles[key][style];
+                } else {
+                    this.log.warn('Not found wellknown markers for key=' + key + ' and style=' + style + ', returning default marker');
+                    return Oskari.getDefaultMarker();
+                }
             } else {
                 return me._wellknownStyles[key];
             }
@@ -1400,54 +1505,84 @@ Oskari.clazz.define(
 
 
 /* --------------- SVG MARKER ------------------------ */
+        isSvg: function(style){
+            if(!isNaN(style.shape)) {
+                return true;
+            }
+            // marker shape is svg
+            else if((typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg')>-1))  {
+                return true;
+            }
+            // Marker is welknown named svg marker
+            else if( typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.key && style.shape.name) {
+                return true;
+            }
+
+            return false;
+        },
         /**
          * Gets the svg marker to be used draw marker
          * @method  @public getSvg
-         * @param  {Object} markerStyle marker style
+         * @param  {Object} style marker style
          * @return {String} marget svg image format
          */
-        getSvg: function(markerStyle){
+        getSvg: function(style){
             var sandbox = this.getSandbox(),
                 marker = this._markerTemplate.clone(),
                 svgObject = null,
                 isWellknownMarker = false;
 
             // marker shape is number --> find it from Oskari.getMarkers()
-            if(!isNaN(markerStyle.shape)) {
+            if(!isNaN(style.shape)) {
                 var markers = Oskari.getMarkers();
-                svgObject = markers[markerStyle.shape];
+                svgObject = markers[style.shape];
                 if(!svgObject) {
-                    svgObject = markers[this._defaultMarker.shape];
+                    svgObject = Oskari.getDefaultMarker();
                 }
 
-                if(markerStyle.color) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', markerStyle.color);
+                if(style.color) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', style.color);
                 }
-                if(markerStyle.stroke) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', markerStyle.stroke);
+                if(style.stroke) {
+                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', style.stroke);
                 }
             }
             // marker shape is svg
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
-                markerStyle.shape.data && markerStyle.shape.x && markerStyle.shape.y) {
+            else if((typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg')>-1 )) {
+                var offset = {
+                    x: style.offsetX || style.shape.x,
+                    y: style.offsetY || style.shape.y
+                };
+
+                if(isNaN(offset.x)) {
+                    offset.x = 16;
+                }
+
+                if(isNaN(offset.y)) {
+                    offset.y = 16;
+                }
+
                 svgObject = {
-                    data: markerStyle.shape.data,
-                    x: markerStyle.shape.x,
-                    y: markerStyle.shape.y
+                    data: style.shape.data || style.shape,
+                    offsetX: offset.x,
+                    offsetY: offset.y
                 };
             }
-            else if( typeof markerStyle.shape === 'object' && markerStyle.shape !== null &&
-                markerStyle.shape.key && markerStyle.shape.name) {
-                svgObject = this.getWellknownStyle(markerStyle.shape.key, markerStyle.shape.name);
+            // Marker is welknown named svg marker
+            else if( typeof style.shape === 'object' && style.shape !== null &&
+                style.shape.key && style.shape.name) {
+                svgObject = this.getWellknownStyle(style.shape.key, style.shape.name);
                 if(svgObject === null) {
-                    sandbox.printWarn('Not identified wellknown marker shape. Not handled getSvg.');
+                    this.log.warn('Not identified wellknown marker shape. Not handled getSvg.');
                     return null;
                 }
                 isWellknownMarker = true;
             }
             // marker icon not found
             else {
-                sandbox.printWarn('Not identified marker shape. Not handled getSvg.');
                 return null;
             }
 
@@ -1455,9 +1590,9 @@ Oskari.clazz.define(
 
             marker.append(svgObject.data);
 
-            if(isWellknownMarker && markerStyle.shape.color) {
-                marker.find('.normal-color').attr('fill', markerStyle.shape.color);
-                var shadowRgb = Oskari.util.hexToRgb(markerStyle.shape.color);
+            if(isWellknownMarker && style.shape.color) {
+                marker.find('.normal-color').attr('fill', style.shape.color);
+                var shadowRgb = Oskari.util.hexToRgb(style.shape.color);
                 shadowRgb.r -= 30;
                 shadowRgb.g -= 30;
                 shadowRgb.b -= 30;
@@ -1476,11 +1611,9 @@ Oskari.clazz.define(
 
             var markerHTML = marker.outerHTML();
 
-
-
-            if(markerStyle.size) {
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', markerStyle.size);
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', markerStyle.size);
+            if(style.size) {
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', style.size);
+                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', style.size);
             } else {
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
@@ -1512,24 +1645,32 @@ Oskari.clazz.define(
             }
 
             var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
-            var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && marker.data.shape.data) ? true : false;
+            var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))) ? true : false;
 
             var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
 
-
             var markerDetails = {
-                x: 16,
-                y: 16
+                offsetX: 16,
+                offsetY: 16
             };
 
-            if(isMarker && isMarkerShape && marker.data.shape < Oskari.getMarkers().length){
-                markerDetails = Oskari.getMarkers()[marker.data.shape];
+            if(isMarker && isMarkerShape){
+                if(marker.data.shape < Oskari.getMarkers().length) {
+                    markerDetails = Oskari.getMarkers()[marker.data.shape];
+                }
+                else {
+                    markerDetails = Oskari.getDefaultMarker();
+                }
             } else if(isCustomMarker) {
-                markerDetails = marker.data.shape;
+                markerDetails = {
+                    data: marker.data.shape.data,
+                    offsetX: marker.data.shape.x || marker.data.offsetX,
+                    offsetY: marker.data.shape.x || marker.data.offsetY
+                };
             }
 
-            var dx = !isNaN(markerDetails.x) ? markerDetails.x : 16;
-            var dy = !isNaN(markerDetails.y) ? markerDetails.y : 16;
+            var dx = !isNaN(markerDetails.offsetX) ? markerDetails.offsetX : 16;
+            var dy = !isNaN(markerDetails.offsetY) ? markerDetails.offsetY : 16;
 
             var diff = markerSize/32;
 
@@ -1564,8 +1705,8 @@ Oskari.clazz.define(
             var htmlObject = jQuery(svgObject.data);
             var defaultCenter = this._defaultMarker.size / 2;
 
-            var dx = !isNaN(svgObject.x) ? svgObject.x : 16;
-            var dy = !isNaN(svgObject.y) ? svgObject.y : 16;
+            var dx = !isNaN(svgObject.offsetX) ? svgObject.offsetX : 16;
+            var dy = !isNaN(svgObject.offsetY) ? svgObject.offsetY : 16;
 
             var x = defaultCenter - dx;
             var y = defaultCenter - (defaultCenter - dy);
@@ -1591,7 +1732,7 @@ Oskari.clazz.define(
            htmlObject.find('path').attr(attr,value);
 
            if(htmlObject.find('path').length>1) {
-              sandbox.printWarn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+              this.log.warn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
            }
 
            return htmlObject.outerHTML();
@@ -1639,9 +1780,7 @@ Oskari.clazz.define(
                 j,
                 el;
 
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
+            var removeClasses = function(el) {
                 el.removeClass(function (index, classes) {
                     var removeThese = '',
                         classNames = classes.split(' ');
@@ -1656,6 +1795,11 @@ Oskari.clazz.define(
                     // Return the class names to be removed.
                     return removeThese;
                 });
+            };
+
+            for (i = 0; i < elements.length; i += 1) {
+                el = elements[i];
+                removeClasses(el);
 
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
@@ -1931,7 +2075,7 @@ Oskari.clazz.define(
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
                     if (!layersPlugin) {
-                        me.getSandbox().printWarn(
+                        me.log.warn(
                             'LayerPlugins has no entry for "' + p + '"'
                         );
                     }
@@ -2018,6 +2162,27 @@ Oskari.clazz.define(
             }
             //checkig other things, will be added later...
             return false;
+        },
+        /**
+         * @method handleMapLayerUpdateRequest
+         * Update layer params and force update (wms) or force redraw for other layer types
+         * @param layerId
+         * @param {boolean} forced
+         * @param {Object} params
+         */
+        handleMapLayerUpdateRequest: function(layerId, forced, params) {
+            var me = this,
+            	sandbox = me.getSandbox(),
+            	layerPlugins = me.getLayerPlugins(),
+            	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+
+            _.each(layerPlugins, function (plugin) {
+                // true if either plugin doesn't have the function or says the layer is supported.
+                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
+                if (_.isFunction(plugin.updateLayerParams) && isSupported) {
+                    plugin.updateLayerParams(layer, forced, params);
+                }
+            });
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

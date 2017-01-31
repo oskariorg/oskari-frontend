@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Karttataso on saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Karttataso ei ole saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Karttatason saatavuudessa on tiedossa katkoksia lähipäivinä.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Nykyisen kartan koordinaatisto ei ole tuettuna palvelun capabilities tiedoissa",
             "confirmResourceKeyChange": "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
             "confirmDeleteLayerGroup": "Karttatasoryhmä poistetaan. Haluatko jatkaa?",
             "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
@@ -93,7 +76,7 @@ Oskari.registerLocalization(
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
             "getInfo": "Hae tiedot",
-            "editWfs": "Muokkaa WFS-tiedostoa",
+            "editWfs": "Muokkaa WFS-tietoja",
             "selectClass": "Valitse aihe",
             "selectClassDesc": "Valitse listalta karttatasoa kuvaava aihe.",
             "baseName": "Taustakarttatason nimi",
@@ -131,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Määrittele, mikä on karttatason oletuspeittävyys. Jos peittävyys on 100 %, se peittää kaikki alla olevat tasot. Jos taas peittävyys on 0 %, karttataso ei näy lainkaan. Palvelun käyttäjät voivat sää-tää peittävyyttä ”Valitut karttatasot” -valikon kautta.",
             "style": "Oletustyyli",
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta. Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
+            "importStyle": "Uusi SLD tyyli",
+            "addNewStyle": "Lisää uuden SLD tyylin sisältö",
+            "sldStyleName":"Tyylin nimi",
+            "sldFileContentDesc":"Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
+            "sldFileContent":"SLD:n sisältö",
+            "sldStylesFetchError": "SLD stilen kunde inte hämtas",
+            "addSldStyleDesc": "Valitse listalta, mitä tyylejä käytetään ko tasolle",
+            "addSldStyle": "Sld tyylivalinta",
             "minScale": "Pienin mittakaava",
             "minScaleDesc": "Pienin mittakaava haetaan automaattisesti GetCapabilities-vastausviestistä. Se on pienin mittakaava, jolla karttataso näytetään. Anna mittakaava mittakaavalukuna. Jos mittakaavarajoja ei ole määritelty, karttataso näytetään kaikilla mittakaavatasoilla.",
             "minScalePlaceholder": "Pienin mittakaava muodossa 5669294 (1:5669294)",

@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         addLayer: function (layerModel, suppressEvent) {
             if(!layerModel) {
-                this._sandbox.printWarn('Called addLayer without a layer!');
+                Oskari.log(this.getName()).warn('Called addLayer without a layer!');
                 return;
             }
             // if parent id is present, forward to addSubLayer()
@@ -464,19 +464,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {{Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getNewestLayers: function (count) {
-            var me = this,
-                list = [],
-                i,
-                layer,
-                layersWhereCreatedDate,
-                newestToOldestLayers;
+            var list = [],
+                i;
 
-            
-            layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer, indeksi) {
+            var layersWhereCreatedDate = jQuery.grep(this._loadedLayersList, function(layer) {
                 return  layer._created !== null && !isNaN(layer._created.getTime());
             });
-            
-            newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
+
+            var newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
                 if(a.getCreated()>b.getCreated()) {
                     return -1;
                 } else if(a.getCreated()<b.getCreated()) {
@@ -486,9 +481,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
 
             });
-            
+
             for (i = 0; i<newestToOldestLayers.length; i++) {
-                list.push(newestToOldestLayers[i]);                
+                list.push(newestToOldestLayers[i]);
                 if(list.length === count) {
                     break;
                 }
@@ -553,7 +548,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            layer model handler instance
          */
         registerLayerModelBuilder: function (type, specHandlerClsInstance) {
-            this._sandbox.printDebug("[MapLayerService] registering handler for type " + type);
+            Oskari.log(this.getName()).debug("[MapLayerService] registering handler for type " + type);
             this.modelBuilderMapping[type] = specHandlerClsInstance;
         },
         /**
@@ -757,17 +752,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _createActualMapLayer: function (mapLayerJson) {
             if (!mapLayerJson) {
-                // sandbox.printDebug
-                /*
-                 * console.log("[LayersService] " + "Trying to create mapLayer
-                 * without " + "backing JSON data - id: " +mapLayerId);
-                 */
+                 //Oskari.log(this.getName()).warn("Trying to create mapLayer without JSON data");
                 return null;
             }
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
-                this._sandbox.printWarn("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
+                Oskari.log(this.getName()).warn("Unknown layer type: " + mapLayerJson.type);
                 return null;
             }
             //these may be implemented as jsonHandler
@@ -783,12 +774,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // set common map layer data
             layer.setAsNormalLayer();
-            //if (typeof mapLayerJson.id !== 'string') {
-            //    layer.setId(String(mapLayerJson.id));
-            //} else {
             layer.setId(mapLayerJson.id);
-            //}
-            
+
             layer.setName(mapLayerJson.name);
             if(mapLayerJson.layerName) {
                 layer.setLayerName(mapLayerJson.layerName);
@@ -992,6 +979,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if(defaultStyle) {
                 layer.addStyle(defaultStyle);
                 layer.selectStyle(defaultStyle.getName());
+            }
+            if (layer.getLayerType() === 'wfs') {
+                //style none -> not rendered in transport
+                var locNoneStyle = layer.localization['none-style'];
+                var noneStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+                noneStyle.setName("oskari_none");
+                noneStyle.setTitle(locNoneStyle);
+                noneStyle.setLegend("");
+                layer.addStyle(noneStyle);
             }
 
             return layer;

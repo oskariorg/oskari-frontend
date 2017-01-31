@@ -292,57 +292,6 @@ Oskari.registerLocalization(
                 "analyse": "Create analysis",
                 "data": "Add the map layers"
             },
-            "filter": {
-                "title": "Filtering",
-                "description": "Filter the features at the layer",
-                "clearButton": "Clear the filter",
-                "refreshButton": "Refresh the filter",
-                "addFilter": "Add a new filter.",
-                "removeFilter": "Remove the filter.",
-                "content": {
-                    "title": "NOT TRANSLATED"
-                },
-                "bbox": {
-                    "on": "Only the features visible on the map window",
-                    "off": "All features"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Only the features selected on the map",
-                    "filterByGeometryLabel": "NOT TRANSLATED",
-                    "filterByGeometryIntersect": "NOT TRANSLATED",
-                    "filterByGeometryContains": "NOT TRANSLATED"
-                },
-                "values": {
-                    "title": "Filter",
-                    "placeholders": {
-                        "case-sensitive": "Case sensitive",
-                        "attribute": "Attribute",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Value"
-                    },
-                    "info": {
-                        "bboxOff": "NOT TRANSLATED",
-                        "filterByGeometrySelected": "NOT TRANSLATED"
-                    },
-                    "equals": "equals",
-                    "like": "is like",
-                    "notEquals": "does not equal",
-                    "notLike": "is not like",
-                    "greaterThan": "is greater than",
-                    "lessThan": "is less than",
-                    "greaterThanOrEqualTo": "is greater than or equal to",
-                    "lessThanOrEqualTo": "is less than or equal to"
-                },
-                "validation": {
-                    "title": "The following errors prevented the filter refreshing:",
-                    "attribute_missing": "The attribute is missing.",
-                    "operator_missing": "The operator is missing.",
-                    "value_missing": "The value is missing.",
-                    "boolean_operator_missing": "The logical operator is missing.",
-                    "bbox_selected_with_no_properties": "NOT TRANSLATED"
-                }
-            },
             "help": "Help",
             "success": {
                 "layerAdded": {

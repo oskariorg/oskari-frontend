@@ -7,6 +7,7 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
     /**
      * @method create called automatically on construction
      * @static
+     * 
      */
 
     function () {
@@ -97,6 +98,12 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/statsgrid/UserIndicatorsTab.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/publisher/ShowStatsTableTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/statsgrid/publisher/ClassifyTool.js"
+            }, {
                 "type": "text/css",
                 "src": "../../../../bundles/statistics/statsgrid/resources/css/style.css"
             }, {
@@ -166,10 +173,10 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
                 "type": "text/javascript"
             }, {
-                "src": "../../../../libraries/chosen/chosen.jquery.js",
+                "src": "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
                 "type": "text/javascript"
             }, {
-                "src": "../../../../libraries/chosen/chosen.css",
+                "src": "../../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
             }],
             "locales": [{

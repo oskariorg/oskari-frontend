@@ -26,6 +26,15 @@ Oskari.clazz.define(
         this.selectedTab = null;
         this.active = false;
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
+
+        this.templateLocateOnMap = jQuery('<div class="featuredata-go-to-location"></div>');
+        this.locateOnMapIcon = 2;
+        this.colors = {
+            locateOnMap: {
+                active: '#ffde00',
+                normal: '#000000'
+            }
+        };
         // Resizability of the flyout
         this.resizable = true;
         // Is layout currently resizing?
@@ -33,11 +42,20 @@ Oskari.clazz.define(
         // The size of the layout has been changed (needed when changing tabs)
         this.resized = false;
 
+        this.locateOnMapFID = null;
+
         // templates
         this.template = {};
-        for (p in this.__templates) {
+        for (var p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
                 this.template[p] = jQuery(this.__templates[p]);
+            }
+        }
+
+
+        for (var t in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(t)) {
+                me.sandbox.registerForEventByName(me, t);
             }
         }
     }, {
@@ -207,8 +225,7 @@ Oskari.clazz.define(
 
         addFilterFunctionality: function (event, layer) {
             var me = this,
-                prevJson,
-                loc = this.instance.getLocalization('layer'),
+                prevJson;
 
                 // this is needed to add the functionality to filter with aggregate analyse values
                 // if value is true, the link to filter with aggregate analyse values is added to dialog
@@ -217,12 +234,10 @@ Oskari.clazz.define(
             var fixedOptions = {
                 bboxSelection: true,
                 clickedFeaturesSelection: false,
-                addLinkToAggregateValues: isAggregateValueAvailable,
-                loc: loc
+                addLinkToAggregateValues: isAggregateValueAvailable
             };
             me.filterDialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.FilterDialog',
-                loc,
                 fixedOptions
             );
 
@@ -236,7 +251,6 @@ Oskari.clazz.define(
                 me.aggregateAnalyseFilter = Oskari.clazz.create(
                     'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                     me.instance,
-                    me.instance.getLocalization('layer'),
                     me.filterDialog
                 );
 
@@ -461,7 +475,9 @@ Oskari.clazz.define(
             var me = this,
                 panel = this.layers['' + layer.getId()],
                 isOk = this.tabsContainer.isSelected(panel),
-                conf = me.instance.conf;
+                conf = me.instance.conf,
+                isManualRefresh = layer.isManualRefresh(),
+                allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
 
             if (isOk) {
                 panel.getContainer().empty();
@@ -485,6 +501,14 @@ Oskari.clazz.define(
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
+
+
+
+                //ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
+                if (allowLocateOnMap) {
+                    fields.unshift('locate_on_map');
+                }
+
                 hiddenFields.push('__fid');
                 hiddenFields.push('__centerX');
                 hiddenFields.push('__centerY');
@@ -496,6 +520,8 @@ Oskari.clazz.define(
                     panel.locales = locales;
                     panel.propertiesChanged = true;
                 }
+
+                var visibleFields = [];
 
                 if (!panel.grid || panel.propertiesChanged) {
                     panel.propertiesChanged = false;
@@ -550,10 +576,7 @@ Oskari.clazz.define(
                     };
 
                     // filter out certain fields
-                    var visibleFields = [],
-                        i;
-
-                    for (i = 0; i < fields.length; i += 1) {
+                    for (var i = 0; i < fields.length; i += 1) {
                         if (!contains(hiddenFields, fields[i])) {
                             visibleFields.push(fields[i]);
                         }
@@ -572,10 +595,91 @@ Oskari.clazz.define(
 
                     panel.grid = grid;
                 }
+                model.fields.push('');
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
                     grid.setNumericField(field, me._fixedDecimalCount);
                 });
+
+                //custom renderer for locating feature on map
+                if (allowLocateOnMap) {
+                    panel.grid.setColumnUIName('locate_on_map', ' ');
+                    panel.grid.setColumnValueRenderer('locate_on_map', function(name, data) {
+                        var div = me.templateLocateOnMap.clone();
+                        var fid = data.__fid;
+                        div.attr('data-fid', fid);
+
+                        var markers = Oskari.getMarkers();
+                        var normalIcon = markers[me.locateOnMapIcon];
+                        var normalIconObj = jQuery(normalIcon.data);
+                        normalIconObj.find('path').attr({
+                            fill: me.colors.locateOnMap.normal,
+                            stroke: '#000000'
+                        });
+                        normalIconObj.attr({
+                            x: 0,
+                            y: 0
+                        });
+                        var activeIcon = markers[me.locateOnMapIcon];
+                        var activeIconObj = jQuery(activeIcon.data);
+                        activeIconObj.find('path').attr({
+                            fill: me.colors.locateOnMap.active,
+                            stroke: '#000000'
+                        });
+                        activeIconObj.attr({
+                            x: 0,
+                            y: 0
+                        });
+
+                        div.html(normalIconObj.outerHTML());
+
+                        if(me.locateOnMapFID !== null && me.locateOnMapFID !== undefined && fid === me.locateOnMapFID) {
+                            div.html(activeIconObj.outerHTML());
+                        }
+
+                        div.on('click', function(event) {
+                            // Save clicked feature fid to check centered status
+                            me.locateOnMapFID  = fid;
+                            jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
+                            jQuery(this).html(activeIconObj.outerHTML());
+
+                            var feature = null;
+                            //create the eventhandler for this particular fid
+                            me.instance.eventHandlers.WFSFeatureGeometriesEvent = function(event) {
+                                var wkts = event.getGeometries(),
+                                    wkt;
+                                for (var i = 0; i < wkts.length; i++) {
+                                    if (wkts[i][0] === fid) {
+                                        wkt = wkts[i][1];
+                                        break;
+                                    }
+                                }
+                                var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
+                                if (viewportInfo) {
+
+                                    //feature didn't fit -> zoom to bounds
+                                    if (viewportInfo.bounds) {
+                                        setTimeout(function() {
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
+                                        }, 1000);
+                                    } else {
+                                        //else just set center.
+                                        setTimeout(function() {
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
+                                        }, 1000);
+                                    }
+                                }
+                                me.instance.sandbox.unregisterFromEventByName(me.instance, "WFSFeatureGeometriesEvent");
+                                me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
+                            };
+                            me.instance.sandbox.registerForEventByName(me.instance, "WFSFeatureGeometriesEvent");
+
+                        });
+                        return div;
+                    });
+                }
+
+
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
@@ -593,7 +697,6 @@ Oskari.clazz.define(
 
                 // Extra header message on top of grid
                 this._appendHeaderMessage(panel, locales, layer);
-
             }
         },
         setGridOpacity: function (layer, opacity) {

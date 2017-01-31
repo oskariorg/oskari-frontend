@@ -37,7 +37,16 @@ Oskari.clazz.define("Oskari.statistics.statsgraphs.StatsGraphsBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgraphs/Flyout.js"
-            }],
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgraphs/Chart1Tab.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgraphs/Chart2Tab.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgraphs/Chart3Tab.js"
+            },],
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",

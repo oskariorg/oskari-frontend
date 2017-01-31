@@ -1,3 +1,7 @@
+$lightBgColor: rgba(255,255,255,0.9);
+$darkBgColor: rgba(20,20,20,0.8);
+$toolShadow: 1px 1px 2px rgba(0,0,0,0.6);
+
 /* Mixins */
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
@@ -10,19 +14,96 @@
     background-clip: padding-box;
 }
 
-div.mapplugins .mappluginsContainer .mappluginsContent div.mapwfs2plugin.mapplugin {
-    clear: both;
-    display: block;
-    background: #3c3c3c;
-    @include border-radius(2px);
-    line-height: 28px;
-    margin: 10px auto;
-    padding: 0 9px;
+div.mapplugins {
+    .mappluginsContainer {
+        .mappluginsContent {
+            div.mapwfs2plugin.mapplugin {
+                clear: both;
+                display: block;
+                background: #3c3c3c;
+                @include border-radius(2px);
+                line-height: 28px;
+                margin: 10px auto;
+                padding: 0 9px;
+                float: right;
 
-    a {
-        color: white;
-        text-decoration: none;
+                a {
+                    color: white;
+                    text-decoration: none;
+                }
+
+                /* default and rounded-dark theme */
+                &.toolstyle-default, &.toolstyle-rounded-dark {
+                    background-color: $darkBgColor;
+                    a {
+                        color: $lightBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+
+                /* rounded-light theme */
+                &.toolstyle-rounded-light {
+                    background-color: $lightBgColor;
+                    a {
+                        color: $darkBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+
+                /* sharp-dark theme */
+                &.toolstyle-sharp-dark {
+                    background-color: $darkBgColor;
+                    a {
+                        color: $lightBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+
+                /* sharp-light theme */
+                &.toolstyle-sharp-light {
+                    background-color: $lightBgColor;
+                    a {
+                        color: $darkBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+
+                /* 3d-dark theme */
+                &.toolstyle-3d-dark {
+                    background-color: $darkBgColor;
+                    a {
+                        color: $lightBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+                /* 3d-light theme */
+                &.toolstyle-3d-light {
+                    background-color: $lightBgColor;
+                    a {
+                        color: $darkBgColor;
+                    }
+                    box-shadow: $toolShadow;
+                    -moz-box-shadow: $toolShadow;
+                    -webkit-box-shadow: $toolShadow;
+                    -o-box-shadow: $toolShadow;
+                }
+            }
+        }
     }
-
 }
 

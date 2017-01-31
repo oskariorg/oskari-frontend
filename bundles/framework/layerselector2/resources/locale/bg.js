@@ -42,13 +42,21 @@ Oskari.registerLocalization(
                 "tooltip": "В момента картният слой е недостъпен",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "В момента картният слой е недостъпен",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Картният слой периодично може да е недостъпен през следващите няколко дни",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

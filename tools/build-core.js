@@ -6,19 +6,32 @@ var fs = require('fs');
 var os = require('os');
 var UglifyJS = require('uglify-js');
 
-
 var files = [
+    // libraries
 	'../libraries/requirejs/require-2.2.0.min.js',
 	'../libraries/requirejs/text-plugin-2.0.14.js',
     '../libraries/mobile-detect/mobile-detect-1.3.2.js',
+    '../libraries/dompurify/purify_0.8.0.min.js',
 	'../src/polyfills.js',
+    // Core Oskari
 	'../src/oskari.js',
+    '../src/counter.js',
     '../src/logger.js',
     '../src/store.js',
     '../src/events.js',
+    '../src/util.js',
+    '../src/sandbox_factory.js',
     '../src/i18n.js',
-	'../src/util.js',
-	'../src/loader.js'
+    // class system
+    '../src/O2ClassSystem.js',
+    '../src/bundle_manager.js',
+    // Oskari application helpers
+	'../src/loader.js',
+    '../src/oskari.app.js',
+    // deprecated functions
+    '../src/module_spec.js',
+    '../src/builder_api.js',
+    '../src/deprecated.js'
 ];
 
 try {

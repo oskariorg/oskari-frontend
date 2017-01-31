@@ -61,6 +61,9 @@ Oskari.clazz.define(
         /* visible layer switch off enable/disable */
         me._isSticky = null;
 
+        /* is linked layer ('sublayer') - no UI in layer selection */
+        me._isLinkedLayer = null;
+
         me._inspireName = null;
         me._organizationName = null;
         me._dataUrl = null;
@@ -844,6 +847,21 @@ Oskari.clazz.define(
             return this._isSticky;
         },
         /**
+         * @method setLinkedlayer
+         * True if layer is linked to other layer as 'sublayer'
+         * @param {Boolean} isLinkedLayer
+         */
+        setLinkedLayer: function (isLinkedLayer) {
+            this._isLinkedLayer = isLinkedLayer;
+        },
+        /**
+         * @method isLinkedlayer
+         * True if layer is linked to other layer as 'sublayer'
+         */
+        isLinkedLayer: function () {
+            return this._isLinkedLayer;
+        },
+        /**
          * @method setQueryable
          * True if we should call GFI on the layer
          * @param {Boolean} queryable
@@ -914,7 +932,7 @@ Oskari.clazz.define(
             } else {
                 // Otherwise just check if the scale falls between min/max scales
                 if ((scale > this.getMaxScale() || !this.getMaxScale()) &&
-                    (scale < this.getMinScale()) || !this.getMinScale()) {
+                    (scale < this.getMinScale() || !this.getMinScale())) {
                     _inScale = true;
                 }
             }

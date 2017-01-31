@@ -68,6 +68,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/event/ExtensionUpdatedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/event/UIChangeEvent.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Accordion.js"
             }, {
                 "type": "text/javascript",
@@ -90,6 +93,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Popup.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/component/PopupService.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Overlay.js"
@@ -222,6 +228,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/extension/DefaultFlyout.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/extension/ExtraFlyout.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/extension/DefaultExtension.js"

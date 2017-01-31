@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "kartlager",
             "type-wfs": "Dataprodukt"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Kartlagret är tillgängligt just nu.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Kartlagret är inte tillgängligt just nu.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Kart CRS är inte understödja i service capabilities",
             "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
             "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
             "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
@@ -130,7 +113,15 @@ Oskari.registerLocalization(
             "opacity": "Opacitet",
             "opacityDesc": "Lagrets opacitet (0% gör lagret genomskinligt)",
             "style": "Förvald utseende",
-            "styleDesc": "Förvald utseende",
+            "addSldStyleDesc": "Välj stil för kart lag",
+            "addSldStyle": "Välj sld stil",
+            "importStyle": "Ny SLD stil",
+            "addNewStyle": "Sätta ny SLD stil",
+            "sldStyleName":"Stil namn",
+            "sldFileContentDesc":"Kopiera/sätta SLD fil innehåll (xml) till tekst block",
+            "sldFileContent":"SLD fil innehåll",
+            "styleDesc": "Förvald stil",
+            "sldStylesFetchError": "Cou SLD styles",
             "minScale": "Minimi&shy;skala",
             "minScaleDesc": "Lagrets minimiskala (1:5669294)",
             "minScalePlaceholder": "5669294 (1:5669294)Lagrets minimiskala",

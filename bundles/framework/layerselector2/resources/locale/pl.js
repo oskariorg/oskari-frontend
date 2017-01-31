@@ -41,13 +41,21 @@ Oskari.registerLocalization({
                 "tooltip": "Warstwa mapy jest obecnie niedostępna.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Warstwa mapy jest obecnie niedostępna.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Warstwa mapy może być okresowo niedostęna.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informacja o statusie warstwy mapy jest niedostępna.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

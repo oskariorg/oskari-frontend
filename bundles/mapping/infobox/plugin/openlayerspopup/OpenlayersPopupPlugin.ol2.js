@@ -111,7 +111,7 @@ Oskari.clazz.define(
                 lat = position.lat;
             } else {
                 // Send a status report of the popup (it is not open)
-                var evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                var evtB = me.getSandbox().getEventBuilder('InfoBox.InfoBoxEvent');
                 var evt = evtB(id, false);
                 me.getSandbox().notifyAll(evt);
                 return;
@@ -121,9 +121,19 @@ Oskari.clazz.define(
                     currPopup.lonlat.lon === lon &&
                     currPopup.lonlat.lat === lat);
 
+            if (currPopup && !refresh) {
+                if (me._popups[id].type === "mobile") {
+                    me._popups[id].popup.dialog.remove();
+                    me._popups[id].popup.__notifyListeners('close');
+                } else {
+                    me.close(id);
+                }
+
+                delete me._popups[id];
+            }
+
             if (refresh) {
-                contentData = me._getChangedContentData(
-                    currPopup.contentData.slice(), contentData.slice());
+                contentData = currPopup.contentData.concat(contentData);
                 currPopup.contentData = contentData;
             }
             me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, options, refresh, additionalTools, marker);
@@ -135,12 +145,15 @@ Oskari.clazz.define(
         _renderPopup: function (id, contentData, title, lonlat, options, refresh, additionalTools, marker) {
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
-                popupContent = me._renderPopupContent(id, title, contentDiv, additionalTools),
+                sanitizedTitle = Oskari.util.sanitize(title),
+                popupContent = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools),
                 popup,
                 colourScheme = options.colourScheme,
-                font = options.font;
+                font = options.font,
+                popupType,
+                popupDOM;
 
-                jQuery(contentDiv).addClass('infoboxPopupNoMargin');
+            jQuery(contentDiv).addClass('infoboxPopupNoMargin');
 
 
             if (!options.mobileBreakpoints) {
@@ -150,12 +163,13 @@ Oskari.clazz.define(
 
             if (refresh) {
                 popup = me._popups[id].popup;
+
                 if (isInMobileMode) {
-                    var popupType = "mobile";
+                    popupType = "mobile";
                     popup.setContent(contentDiv);
                 } else {
-                    var popupDOM = jQuery('#' + id),
-                        popupType = "desktop";
+                    popupDOM = jQuery('#' + id);
+                    popupType = "desktop";
                     popup.setContentHTML(popupContent);
                     if (colourScheme) {
                         me._changeColourScheme(colourScheme, popupDOM, id);
@@ -163,28 +177,25 @@ Oskari.clazz.define(
                 }
             } else if (isInMobileMode) {
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var popupTitle = title,
-                    popupContent = contentDiv,
-                    popupType = "mobile";
+                popupType = "mobile";
+
                 popup.createCloseIcon();
                 me._showInMobileMode(popup);
 
                 if (font) {
                     popup.setFont(font);
                 }
-                popup.show(popupTitle, popupContent);
+                popup.show(sanitizedTitle, contentDiv);
                 if (colourScheme) {
                     popup.setColourScheme(colourScheme);
                 }
                 popup.onClose(function () {
-                    if (me._popups[id] && me._popups[id].type === "mobile") {
-                        delete me._popups[id];
-                    }
+                    me.close(id);
                 });
                 //clear the ugly backgroundcolor from the popup content
                 jQuery(popup.dialog).css('background-color','inherit');
             } else {
-                var popupType = "desktop";
+                popupType = "desktop";
 
                 popup = new OpenLayers.Popup(
                     id,
@@ -213,7 +224,7 @@ Oskari.clazz.define(
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
 
-                var popupDOM = jQuery('#' + id);
+                popupDOM = jQuery('#' + id);
                 // Set the colour scheme if one provided
                 if (colourScheme) {
                     me._changeColourScheme(colourScheme, popupDOM, id);
@@ -245,6 +256,29 @@ Oskari.clazz.define(
                 isInMobileMode: isInMobileMode,
                 type: popupType
             };
+
+            // Fix popup header height to match title content height if using desktop popup
+            if(title && !isInMobileMode) {
+                var popupEl = jQuery(popup.div);
+                var popupHeaderEl = popupEl.find('.popupHeader');
+
+                var fixSize = {
+                    top: 0,
+                    left: 0,
+                    height: 0
+                };
+
+                var popupHeaderChildrens = popupHeaderEl.children();
+                popupHeaderChildrens.each(function(){
+                    var popupHeaderChildren = jQuery(this);
+                    fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
+                    fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
+                    fixSize.height += popupHeaderChildren.height();
+                });
+
+                var fixedHeight = fixSize.height;
+                popupHeaderEl.height(fixedHeight);
+            }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 
@@ -339,27 +373,35 @@ Oskari.clazz.define(
                     actionTemplate,
                     btn,
                     link,
-                    currentGroup
-                    group = -1;
+                    currentGroup,
+                    group = -1,
+                    sanitizedHtml;
 
-                contentWrapper.append(datum.html);
+                if (typeof datum.html === "string") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html);
+                } else if (typeof datum.html === "object") {
+                    sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
+                }
+
+                contentWrapper.append(sanitizedHtml);
 
                 contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 if (actions) {
                     _.forEach(actions, function (action) {
+                        var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === "link") {
                             actionTemplate = me._actionLink.clone();
                             link = actionTemplate.find('a');
                             link.attr('contentdata', index);
                             link.attr('id', 'oskari_' + id + '_actionLink');
-                            link.append(action.name);
+                            link.append(sanitizedActionName);
                         } else {
                             actionTemplate = me._actionButton.clone();
                             btn = actionTemplate.find('input');
                             btn.attr({
                                 contentdata: index,
-                                value: action.name
+                                value: sanitizedActionName
                             });
                         }
 
@@ -389,7 +431,7 @@ Oskari.clazz.define(
             if (isMobilePopup) {
                 popup.dialog[0].onclick = function (evt) {
                     me._handleInfoboxClick(evt, id, contentData, additionalTools);
-                }
+                };
             } else {
                  // override
                 popup.events.un({
@@ -424,7 +466,7 @@ Oskari.clazz.define(
                     if (typeof actionObject.action === 'function') {
                         actionObject.action();
                     } else {
-                        event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
+                        var event = sandbox.getEventBuilder('InfoboxActionEvent')(id, text, actionObject.action);
                         sandbox.notifyAll(event);
                     }
                 }
@@ -442,71 +484,6 @@ Oskari.clazz.define(
             if(!link.is('a') || link.parents('.getinforesult_table').length) {
                 evt.stopPropagation();
             }
-        },
-
-        /**
-         * Merges the given new data to the old data.
-         * If there's a fragment with the same layerId in both,
-         * the new one replaces it.
-         *
-         * @method _getChangedContentData
-         * @private
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _getChangedContentData: function (oldData, newData) {
-            oldData = oldData || [];
-            newData = newData || [];
-            var nLen = newData.length,
-                oLen = oldData.length;
-
-            for (var i = 0; i < oLen; i += 1) {
-                for (var j = 0; j < nLen; j += 1) {
-                    if (newData[j].layerId &&
-                        newData[j].layerId === oldData[i].layerId) {
-                        oldData[i] = newData[j];
-                        newData.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-
-            return this._mergeContentData(oldData, newData);
-        },
-
-        /**
-         * Merge content data
-         * @method  @private_mergeContentData
-         * @param  {Object[]} oldData
-         * @param  {Object[]} newData
-         * @return {Object[]}
-         */
-        _mergeContentData: function(oldData, newData){
-            var retData,
-                i,
-                j,
-                nLen,
-                oLen,
-                found,
-                notSameData = [];
-
-            for (j = 0, nLen = newData.length; j < nLen; j += 1) {
-                found = false;
-                for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
-                    if(newData[j].html === oldData[i].html && newData[j].layerId === oldData[i].layerId){
-                        found = true;
-                    }
-                }
-
-                if(!found){
-                    notSameData.push(newData[j]);
-                }
-            }
-
-            retData = oldData.concat(notSameData);
-
-            return retData;
         },
 
         /**
@@ -609,23 +586,16 @@ Oskari.clazz.define(
                 'z-index': '16000'
             });
 
-            if (jQuery.browser.msie) {
-                // allow scrolls to appear in IE, but not in any other browser
-                // instead add some padding to the wrapper to make it look better
-                wrapper.css({
-                    'padding-bottom': '5px'
-                });
-            } else {
-                var height = wrapper.height();
-                height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-                var isOverThanMax = height > maxHeight ? true : false;
-                content.css({
-                    'height': height
-                });
-                if(!isOverThanMax) {
-                    popup.css('min-height', 'inherit');
-                }
+            var height = wrapper.height();
+            height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
+            var isOverThanMax = height > maxHeight ? true : false;
+            content.css({
+                'height': height
+            });
+            if(!isOverThanMax) {
+                popup.css('min-height', 'inherit');
             }
+
         },
 
         /**
@@ -750,7 +720,7 @@ Oskari.clazz.define(
                     if (popup.isInMobileMode) {
                         //are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
-                            popup.popup.close();
+                            popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
@@ -816,37 +786,43 @@ Oskari.clazz.define(
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id) {
+        close: function (id, position) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             var pid,
-                popup;
+                popup,
+                event,
+                sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
-                        if(popup.type && popup.type === 'mobile') {
-                            popup.popup.close();
+                        delete this._popups[pid];
+                        if(popup.type === 'mobile') {
+                            popup.popup.close(true);
                         } else {
                             popup.popup.destroy();
                         }
-
-                        delete this._popups[pid];
+                        event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(pid, false);
+                        sandbox.notifyAll(event);
                     }
                 }
                 return;
             }
             // id specified, delete only single popup
-            if (this._popups[id]) {
-                if (this._popups[id].popup) {
-                    var popup = this._popups[id].popup;
-                    if(popup.type && popup.type === 'mobile') {
-                        popup.close();
-                    } else {
-                        popup.destroy();
-                    }
-                }
+            popup = this._popups[id];
+            if (popup) {
                 delete this._popups[id];
+                if (!popup.popup) {
+                    return;
+                }
+                if(popup.type === 'mobile') {
+                    popup.popup.close();
+                } else {
+                    popup.popup.destroy();
+                }
+                event = sandbox.getEventBuilder('InfoBox.InfoBoxEvent')(id, false);
+                sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },

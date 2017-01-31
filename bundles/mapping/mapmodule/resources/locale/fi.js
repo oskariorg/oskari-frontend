@@ -58,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Kohteet",
                 "description": "Kuvaus",
                 "link": "Verkko-osoite",
-                "name": "Nimi"
+                "name": "Nimi",
+                "noAttributeData": "Ei näytettäviä ominaisuustietoja. Avaa kohdetiedot nähdäksesi piilotetut ominaisuustiedot."
             },
             "PublisherToolbarPlugin": {
                 "test": "testi",
@@ -75,7 +76,7 @@ Oskari.registerLocalization(
             "MarkersPlugin": {
                 "buttons": {
                     "add": "Tee karttamerkintä.",
-                    "clear": "Poista kaikki merkinnät."
+                    "clear": "Poista kaikki merkinnät"
                 },
                 "form": {
                     "title": "Karttamerkinnän esitystapa",

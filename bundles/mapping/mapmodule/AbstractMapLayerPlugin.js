@@ -12,7 +12,6 @@ Oskari.clazz.define(
     function () {
         this.mapModule = null;
         this.pluginName = null;
-        this._sandbox = null;
         this._supportedFormats = {};
 
         this.tileSize = [256, 256];
@@ -30,7 +29,7 @@ Oskari.clazz.define(
         },
 
         getSandbox : function() {
-            return this._sandbox;
+            return this.getMapModule().getSandbox();
         },
         /**
          * @method getMapModule
@@ -195,6 +194,13 @@ Oskari.clazz.define(
          * @return {Object[]} map engine implementation object for maplayers
          */
         getOLMapLayers: function (layer) {
+            if(typeof layer === 'number' || typeof layer === 'string') {
+                // if number or string -> find corresponding layer from selected
+                layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layer);
+            }
+            if(!layer) {
+                return null;
+            }
             if (!this.isLayerSupported(layer)) {
                 return null;
             }
@@ -304,8 +310,25 @@ Oskari.clazz.define(
          */
         _updateLayer : function(layer) {
             this.getSandbox().printDebug('TODO: update layer on map');
+        },
+        /**
+         * @method updateLayerParams
+         * A generic implementation of forcing a redraw on a layer. Override in layer plugins where necessary.
+         */
+        updateLayerParams: function(layer, forced, params) {
+            var olLayerList = this.getMapModule().getOLMapLayers(layer.getId());
+            count = 0;
+            if (olLayerList) {
+                count = olLayerList.length;
+                for (i = 0; i < olLayerList.length; ++i) {
+                    if (olLayerList[i].redraw && typeof(olLayerList[i].redraw) === 'function') {
+                        olLayerList[i].redraw(forced);
+                    } else if (olLayerList[i].getSource && typeof(olLayerList[i].getSource()) === 'function') {
+                        olLayerList[i].getSource().updateParams(params);
+                    }
+                }
+            }
         }
-
     }, {
         extend : ["Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin"],
         /**

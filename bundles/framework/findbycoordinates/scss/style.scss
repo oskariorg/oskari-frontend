@@ -10,6 +10,78 @@
     background-clip: padding-box;
 }
 
-div.reverse-geocode {
+/* Cursor when tool activated */
+div.findbycoordinates-cursor {
     cursor: crosshair;
+}
+
+/* More than one result popup styles */
+div.findbycoordinates__popup {
+    div.content {
+        max-height: 400px;
+        overflow: hidden;
+
+        &.show-scroll {
+            overflow-y: auto;
+        }
+    }
+
+    .findbycoordinates__popup__content {
+        width: 400px;
+
+        .channel_result {
+            .channel_header {
+                float: left;
+            }
+
+            .channel_description {
+                float: left;
+                margin-left: 12px;
+                margin-top: 3px;
+            }
+
+            .none {
+                clear: both;
+            }
+
+            .channel__results {
+                .nameinfo {
+                    float: left;
+                    padding: 4px;
+                }
+
+                .resultmarker {
+                    float: left;
+                    padding: 4px;
+                    width: 64px;
+                    height: 64px;
+                }
+
+                .none {
+                    clear: both;
+                }
+            }
+        }
+    }
+}
+
+/* One result popup styles */
+#oskari_findbycoordinates-search-result_contentWrapper {
+    .channel_header {
+        float: left;
+    }
+
+    .channel_description {
+        float: left;
+        margin-left: 12px;
+        margin-top: 3px;
+    }
+
+    .none {
+        clear: both;
+    }
+
+    .result {
+        margin-left: 24px;
+    }
 }

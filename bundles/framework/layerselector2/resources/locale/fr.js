@@ -8,15 +8,15 @@ Oskari.registerLocalization(
         "errors": {
             "title": "Erreur !",
             "generic": "Une erreur système s’est produite. Veuillez réessayer plus tard.",
-            "loadFailed": "L’erreur dans le chargement des couches cartographiques s’est produite. Recharger la page web dans votre navigateur puis sélectionnez à nouveau les couches cartographiques.",
-            "noResults": "Pas de résultats.",
-            "noResultsForKeyword": "Aucune couche cartographique trouvée avec ce mot clé.",
+            "loadFailed": "Une erreur s’est produite dans le chargement des couches cartographiques. Rechargez la page web dans votre navigateur puis sélectionnez à nouveau les couches cartographiques.",
+            "noResults": "Pas de résultats. Vérifiez vos critères de recherches.",
+            "noResultsForKeyword": "Aucune couche cartographique trouvée avec ce mot-clef.",
             "minChars": "Saisissez au moins quatre caractères. Les caractères autorisés sont les lettres de a à z, å, ä, ö, les chiffres, la touche effacement et les tirets."
         },
         "loading": "Recherche en cours…",
         "filter": {
             "text": "Rechercher parmi les couches cartographiques.",
-            "keywordsTitle": "Mots clé :",
+            "keywordsTitle": "Mots-clef :",
             "shortDescription": "Rechercher parmi les couches cartographiques par le nom de la couche cartographique, le nom du producteur de données ou le mot clé décrivant la couche cartographique.",
             "description": "Saisissez une partie du nom de la couche cartographique, le nom du producteur de données ou le mot clé décrivant la couche cartographique. La recherche par mot clé démarre lorsqu’au moins quatre caractères sont saisis. Les caractères autorisés sont les lettres de a à z, å, ä, ö, les chiffres, la touche effacement et les tirets.",
             "inspire": "Par thème",
@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Carte d’arrière-plan",
             "type-wms": "Couche cartographique (WMS, WMTS)",
-            "type-wfs": "Produit de données (WFS)"
+            "type-wfs": "Produit de données (WFS)",
+            "type-wfs-manual": "Rafraîchir les données en cliquant sur \"données objet\" ou \"bouton rafraîchissement\" dans la fenêtre cartographique."
         },
         "backendStatus": {
             "OK": {
@@ -42,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "La couche cartographique n’est pas disponible actuellement.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "La couche cartographique n’est pas disponible actuellement.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -63,13 +72,13 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Plus récent",
+                "stats": "Couches vecteur"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Montrer les ## couches cartographiques les plus récentes",
+                "stats": "Ne montrer que les couches vecteur",
+                "remove": "Supprimer le filtre"
             }
         }
     }

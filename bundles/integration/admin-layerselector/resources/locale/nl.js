@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Kaart laag",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "De kaart laag is beschikbaar.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "De kaart laag is niet beschikbaar.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Er zal een korte pauze in de beschikbaarheid van de kaart laag zijn tijdens de komende dagen.",
-                "iconClass": "backendstatus-onderhoud"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "confirmResourceKeyChange": "U heeft de unieke naam of het interface-adres voor deze kaartlaag gewijzigd. Om veiligheidsredenen zijn de gebruikers rechten voor deze kaart laag verwijderd en moet u ze opnieuw instellen. Wil je verdergaan?",

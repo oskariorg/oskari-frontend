@@ -120,24 +120,6 @@ define(["jquery"], function (jQuery) {
                 this.requestHandlers.modal = Oskari.clazz.create('Oskari.userinterface.bundle.ui.request.ModalDialogRequestHandler', this);
                 sandbox.addRequestHandler('userinterface.ModalDialogRequest', this.requestHandlers.modal);
 
-                /* removed for some reason or another */
-                //sandbox.registerAsStateful(this.mediator.bundleId, this);
-
-                /* IE fixes for flyout height others use CSS media query */
-                if (jQuery.browser.msie && jQuery.browser.version < "9.0") {
-                    toFix = this.compiledTemplates['Oskari.userinterface.Flyout'].children('.oskari-flyoutcontentcontainer');
-                    height = this.flyoutContainer.height();
-                    ieFixClasses = this.ieFixClasses;
-                    for (n = 0; n < ieFixClasses.length; n += 1) {
-                        fix = ieFixClasses[n];
-
-                        if (height >= fix.min && height <= fix.max) {
-                            toFix.addClass(fix.cls);
-                            break;
-                        }
-                    }
-
-                }
             },
             /**
              * @method update
@@ -356,22 +338,10 @@ define(["jquery"], function (jQuery) {
                     scroll: false,
                     stack: '.oskari-flyout',
                     create: function (event, ui) {
-                        /* IE8 works fine BUT IE9 needs fixed width to not jump flyout width during and after dragging */
-                        if (jQuery.browser.msie && jQuery.browser.version[0] === "9") {
-                            flyout.css('width', flyout.width() + "px");
-                        }
                     },
                     start: function () {
                         if (useHelper) {
                             flyout.css("display", "none");
-                        } else {
-                            /* Attempt to fix IE9 vs. draggable flyout width issues */
-                            /* this did not work */
-                            /* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
-                            flyout.css('width',flyout.width()+"px");
-                           }
-                           */
-
                         }
                     },
                     drag: function () {

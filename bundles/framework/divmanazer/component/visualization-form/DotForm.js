@@ -21,9 +21,9 @@ Oskari.clazz.define(
         this.messageEnabled = false;
 
         this.values = {
-            size: this.defaultValues.size,
-            color: this.defaultValues.color,
-            shape: this.defaultValues.shape,
+            size: this.defaultValues.size || 1,
+            color: this.defaultValues.color || 'ffde00',
+            shape: this.defaultValues.shape || 2,
             message: ''
         };
 
@@ -157,6 +157,7 @@ Oskari.clazz.define(
             };
 
             var markers = Oskari.getMarkers();
+
             for (var i=0;i<markers.length;i++) {
                 btnContainer = this.templateSymbolButton.clone();
 
@@ -459,11 +460,15 @@ Oskari.clazz.define(
             var marker = previewTemplate.find('#marker');
 
             var iconObj = Oskari.getMarkers()[me.values.shape];
+            if(!iconObj) {
+                iconObj = Oskari.getDefaultMarker();
+            }
             if(!iconObj){
                 preview.empty();
                 return;
             }
-            var size = 20+this.values.size*5;
+
+            var size = 20 + this.values.size * 5;
 
             var iconSvg = jQuery(iconObj.data);
             iconSvg.attr({

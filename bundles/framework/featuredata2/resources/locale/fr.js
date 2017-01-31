@@ -12,10 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Les données d'entités de cette couche cartographique ne peuvent être affichées à ce niveau d’échelle. Veuillez changer le niveau d’échelle sur la barre d’échelle.",
         "errordata": "Les données d'entités au niveau du serveur contiennent des erreurs. Veuillez mettre à jour la carte en la déplaçant légèrement.",
         "columnSelectorTooltip": "Sélectionnez des colonnes visibles.",
+        "featureDataPopup": "Valeurs statistiques",
         "selectionTools": {
             "title": "Sélectionnez des entités sur la carte.",
             "instructions": "NOT TRANSLATED",
-            "selectAll": "Select from all layers",
+            "selectFromTop": "A partir de la couche supérieure.",
+            "selectAll": "Dans toutes les couches",
             "link": {
                 "title": "Sélectionnez plus d'entités"
             },
@@ -89,60 +91,13 @@ Oskari.registerLocalization(
                 "type-base": "Carte d’arrière-plan",
                 "type-wms": "Couche cartographique",
                 "type-wfs": "Produit des données"
-            },
-            "filter": {
-                "title": "Filtre",
-                "description": "Sélectionnez les entités depuis la couche cartographique :",
-                "cancelButton": "Annuler",
-                "clearButton": "Effacer le filtre",
-                "refreshButton": "Rafraîchir le filtre",
-                "addFilter": "Ajouter un nouveau filtre",
-                "removeFilter": "Supprimer le filtre",
-                "bbox": {
-                    "title": "Filtre de la fenêtre de la carte",
-                    "on": "Seule l'entité visible sur la fenêtre de la carte.",
-                    "off": "Toutes les entités"
-                },
-                "clickedFeatures": {
-                    "title": "Filtre de sélection d'entité",
-                    "label": "Uniquement les entités sélectionnées sur la carte."
-                },
-                "values": {
-                    "title": "Filtrer les entités par données attributaires",
-                    "placeholders": {
-                        "case-sensitive": "Le filtre est sensible à la casse.",
-                        "attribute": "Attribut",
-                        "boolean": "Opérateur logique",
-                        "operator": "Opérateur",
-                        "attribute-value": "Valeur"
-                    },
-                    "equals": "est égal(e) à",
-                    "like": "est comme",
-                    "notEquals": "n’est pas égal(e) à",
-                    "notLike": "est différent(e) de",
-                    "greaterThan": "est supérieur(e) à",
-                    "lessThan": "est inférieur(e) à",
-                    "greaterThanOrEqualTo": "est supérieur(e) ou égal(e) à",
-                    "lessThanOrEqualTo": "est inférieur(e) ou égal(e) à"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Sélectionnez la valeur globale",
-                    "aggregateValueSelectTitle": "Utilisez la valeur globale dans le filtre",
-                    "selectAggregateAnalyse": "Sélectionnez l’analyse globale",
-                    "selectIndicator": "Sélectionnez l’indicateur",
-                    "selectReadyButton": "Prêt",
-                    "getAggregateAnalysisFailed": "Impossible de trouver les données agrégées",
-                    "noAggregateAnalysisPopupTitle": "L’analyse agrégée n’a pas trouvé",
-                    "noAggregateAnalysisPopupContent": "Vous n’avez réalisé aucune analyse globale. Vous pouvez créer vos propres données globales par la fonction d'analyse puis utiliser des valeurs lors du filtrage."
-                },
-                "validation": {
-                    "title": "Le filtre n’a pas pu être rafraîchi en raison des erreurs suivantes :",
-                    "attribute_missing": "L’attribut est manquant.",
-                    "operator_missing": "L’opérateur est manquant.",
-                    "value_missing": "La valeur est manquante.",
-                    "boolean_operator_missing": "L’opérateur logique est manquant."
-                }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Compte",
+            "differenceMessage": "La différence de valeurs d'objet ou caractéristique non-autorisé est présentée avec une valeur.",
+            "noDataMessage": "Compte  = Nombre d'objets avec des objets ou caractéristiques non autorisés.",
+            "noDataCommonMessage": "Il y a des valeurs d'objets ou caractéristiques non-autorisées dans les données."
         }
     }
 }

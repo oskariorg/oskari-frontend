@@ -41,13 +41,21 @@ Oskari.registerLocalization({
                 "tooltip": "Sloj karte trenutno nije dostupan.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Sloj karte trenutno nije dostupan.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Sloj karte možda povremeno neće biti dostupan tijekom sljedećih par dana.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informacija o statusu sloja karte nije dostupna.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

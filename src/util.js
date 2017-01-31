@@ -23,7 +23,7 @@ Oskari.util = (function () {
             }
         }
         return false;
-    };
+    }
 
     /**
     * Checks at if value is number.
@@ -33,6 +33,9 @@ Oskari.util = (function () {
     * @param {Boolean} keepLeadingZero, need keep leading zero
     */
     util.isNumber = function(value, keepLeadingZero) {
+        if(value === null) {
+            return false;
+        }
         var reg = new RegExp('^[-+]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?$'),
             isNumber = true,
             i;
@@ -341,71 +344,183 @@ Oskari.util = (function () {
 
         return isMobile;
     };
+    /**
+     *
+     * Sanitizes input and returns a string containing the sanitized content that can be injected to document and shown to user.
+     * @param {String} content content to sanitize
+     * @return String
+     */
+    util.sanitize = function(content) {
+        return DOMPurify.sanitize(content, {SAFE_FOR_JQUERY: true, ADD_ATTR: ['target']});
+    };
 
-    /**
-     * Helper for sanitize()
-     * @private
-     * @param  {String} content
-     * @return {Element}
-     */
-    var parseXmlToElement = function(content) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(content, "text/xml");
-        return doc.documentElement;
-    }
-    /**
-     * Sanitizes input and returns a DOM element containing the sanitized content that can be injected to document and shown to user.
-     * Usage:
-     * // handles content as text content
-     * var element = sanitize('<script>alert("testing")</script>');
-     * // handles content as html, but removes script-tags
-     * var anotherElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>', true);
-     * // handles content as html, but removes script and style tags
-     * var stylishElement = sanitize('<div> <div>qwer <script> alert("asdf")</script>zxcv</div><style> body { display:none }</style></div>', ['script', 'style']);
-     * // handles content as Element - remove script-tags
-     * var domElement = sanitize(jQuery('<div> <div>qwer <script> alert("asdf")</script>zxcv</div></div>')[0], true);
-     * jQuery('body').append(element).append(anotherElement).append(stylishElement).append(domElement);
-     * @param {String|Element} content content to sanitize
-     * @return Element
-     */
-    util.sanitize = function(content, tagsToRemove) {
-        if(!content) {
-            // no content
-            return;
-        }
-        if(!tagsToRemove) {
-            // treat as text only
-            return document.createTextNode(content);
-        }
-        if(typeof tagsToRemove === 'boolean') {
-            // truthy check before so this must be boolean true
-            // by default remove script tags
-            tagsToRemove = ['script'];
-        }
-        var root = null;
-        if(typeof content === 'string') {
-            root = parseXmlToElement(content);
-        } else if(content instanceof Element) {
-            root = content;
+    var validCoordinates = function(point) {
+        if(!point && typeof point !== 'object' && isNaN(point.length) && point.length !== 2)  {
+            return false;
         } else {
-            throw new TypeError('Could\'t sanitize input ' + content);
+            return true;
         }
-        tagsToRemove.forEach(function(tag) {
-            var scripts = root.getElementsByTagName(tag);
-            for(var i = 0; i < scripts.length; ++i ) {
-                var node = scripts.item(i);
-                node.textContent = '';
-                if(typeof node.removeAttribute === 'function') {
-                    node.removeAttribute("src");
-                    node.removeAttribute("link");
-                    node.removeAttribute("href");
+    };
+
+    var coordChars = {
+        CHAR_DEG: "\u00B0",
+        CHAR_MIN: "\u0027",
+        CHAR_SEC: "\u0022",
+        CHAR_SEP: "\u0020"
+    };
+
+    var coordinateDMSDecode = function(value) {
+        var pattern1 = "";
+        var pattern2 = "";
+        var pattern3 = "";
+        if(typeof value === 'number') {
+            value = '' + value;
+        }
+        value = value.replace(Oskari.getDecimalSeparator(), '.');
+
+        // Allow deg min sec
+        // deg
+        pattern1 += "(-?\\d+)[";
+        pattern1 += coordChars.CHAR_DEG;
+        pattern1 += "d";
+        pattern1 += "]\\s*";
+
+        // min
+        pattern1 += "(\\d+)";
+        pattern1 += coordChars.CHAR_MIN;
+        pattern1 += "\\s*";
+
+        // sec
+        pattern1 += "(\\d+(?:\\.\\d+)?)";
+        pattern1 += coordChars.CHAR_SEC;
+
+
+        // Allow deg min
+        // deg
+        pattern2 += "(-?\\d+)[";
+        pattern2 += coordChars.CHAR_DEG;
+        pattern2 += "d";
+        pattern2 += "]\\s*";
+
+        // min
+        pattern2 += "(\\d+(?:\\.\\d+)?)";
+        pattern2 += coordChars.CHAR_MIN;
+        pattern2 += "\\s*";
+
+        // Allow deg
+        // deg
+        pattern3 += "(\\d+(?:\\.\\d+)?)[";
+        pattern3 += coordChars.CHAR_DEG;
+        pattern3 += "d";
+        pattern3 += "]\\s*";
+
+
+        if(value.match(new RegExp(pattern1)))  {
+            return value.match(new RegExp(pattern1));
+        } else if (value.match(new RegExp(pattern2))) {
+            return value.match(new RegExp(pattern2));
+        } else if (value.match(new RegExp(pattern3))) {
+            return value.match(new RegExp(pattern3));
+        } else {
+            return null;
+        }
+    };
+
+    util.coordinateMetricToDegrees = function(point, decimals){
+        var roundToDecimals = decimals || 0;
+        if(roundToDecimals>20) {
+            roundToDecimals = 20;
+        }
+        if(validCoordinates(point))  {
+            // first coordinate
+            var dms1 = NaN;
+            if(!coordinateDMSDecode(point[0])) {
+                var p1 = parseFloat(point[0]);
+                var d1 = p1|0;
+                var m1 = ((p1 - d1) * 60)|0;
+                var s1 = (p1 - d1 - m1/60) * 3600;
+                s1 = parseFloat(s1).toFixed(roundToDecimals);
+                s1 = '' + s1;
+                s1 = s1.replace('.', Oskari.getDecimalSeparator());
+                dms1 = d1 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m1 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s1 + coordChars.CHAR_SEC;
+            } else {
+                dms1 = point[0];
+            }
+
+            // second coordinate
+            var dms2 = NaN;
+            if(!coordinateDMSDecode(point[1])) {
+                var p2 = parseFloat(point[1]);
+                var d2 = p2|0;
+                var m2 = ((p2 - d2) * 60)|0;
+                var s2 = (p2 - d2 - m2/60) * 3600;
+                s2 = parseFloat(s2).toFixed(roundToDecimals);
+                s2 = '' + s2;
+                s2 = s2.replace('.', Oskari.getDecimalSeparator());
+                dms2 = d2 + coordChars.CHAR_DEG + coordChars.CHAR_SEP + m2 + coordChars.CHAR_MIN + coordChars.CHAR_SEP + s2 + coordChars.CHAR_SEC;
+            } else {
+                dms2 = point[1];
+            }
+
+            return [dms1, dms2];
+        } else {
+            return [NaN, NaN];
+        }
+    };
+
+    util.coordinateDegreesToMetric = function(point, decimals){
+        var roundToDecimals = decimals || 0;
+        if(roundToDecimals>20) {
+            roundToDecimals = 20;
+        }
+        if(validCoordinates(point))  {
+            // first coordinate
+            var dd1 = NaN;
+            var matches1 = coordinateDMSDecode(point[0]);
+
+            if (matches1) {
+                var d1 = parseFloat(matches1[1]);
+                var m1 = parseFloat(matches1[2]);
+                var s1 = parseFloat(matches1[3]);
+
+                if (!(isNaN(d1) || isNaN(m1) || isNaN(s1))) {
+                    dd1 = parseFloat(d1 + (m1 / 60.0) + (s1 / 3600)).toFixed(roundToDecimals);
+                } else if (!(isNaN(d1) || isNaN(m1))) {
+                    dd1 = parseFloat(d1 + (m1 / 60.0)).toFixed(roundToDecimals);
+                } else if (!(isNaN(d1))) {
+                    dd1 = parseFloat(d1).toFixed(roundToDecimals);
                 }
             }
-        });
 
-        // return as is as Element structure
-        return root;
-    }
+            // second coordinate
+            var dd2 = NaN;
+            var matches2 = coordinateDMSDecode(point[1]);
+
+            if (matches2) {
+                var d2 = parseFloat(matches2[1]);
+                var m2 = parseFloat(matches2[2]);
+                var s2 = parseFloat(matches2[3]);
+
+                if (!(isNaN(d2) || isNaN(m2) || isNaN(s2))) {
+                    dd2 = parseFloat(d2 + (m2 / 60.0) + (s2 / 3600)).toFixed(roundToDecimals);
+                } else if (!(isNaN(d2) || isNaN(m2))) {
+                    dd2 = parseFloat(d2 + (m2 / 60.0)).toFixed(roundToDecimals);
+                } else if (!(isNaN(d2))) {
+                    dd2 = parseFloat(d2).toFixed(roundToDecimals);
+                }
+            }
+
+            return [dd1,dd2];
+        } else {
+            return [NaN, NaN];
+        }
+    };
+
+    util.coordinateIsDegrees = function(point){
+        var matches1 = coordinateDMSDecode(point[0]);
+        var matches2 = coordinateDMSDecode(point[1]);
+        return (matches1 && matches2);
+    };
 
     return util;
 }());

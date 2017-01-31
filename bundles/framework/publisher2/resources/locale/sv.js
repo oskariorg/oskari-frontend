@@ -63,6 +63,8 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin":"Kartlagren meny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
+                "FeedbackServiceTool": "Feedback (Open311) functionality",
+                "CrosshairTool":"Visa kartans mittpunkt",
                 "toolbarToolNames": {
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
@@ -191,8 +193,8 @@ Oskari.registerLocalization(
                 "domainStart": "Skriv webbplatsens adress utan prefixerna http och www",
                 "name": "Kartans namn krävs",
                 "nohelp": "Användarhandledning är inte tillgänglig.",
-                "saveFailed": "Inbäddandet av kartan misslyckades. Försök på nytt senare.",
-                "nameIllegalCharacters": "Namnet på kartan innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck.",
+                "saveFailed": "Inbäddandet av kartan misslyckades. Försök på nytt senare. Fixa kart namn",
+                "nameIllegalCharacters": "Namnet på kartan innehåller otillåtna tecken (exempel html-tags). ",
                 "domainIllegalCharacters": "Namnet på webbplatsen innehåller otillåtna tecken. Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck."
             }
         },

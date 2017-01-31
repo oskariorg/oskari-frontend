@@ -7,6 +7,12 @@
     width: 90px;
     position: absolute;
     display: block;
+
+    map {
+        area {
+            outline: none;
+        }
+    }
 }
 
 .panbuttonDivImg {

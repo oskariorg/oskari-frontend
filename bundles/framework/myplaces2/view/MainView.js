@@ -270,13 +270,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     name: 'name',
                     error: loc.placeName
                 });
-            } else if (categoryHandler.hasIllegalChars(values.place.name)) {
+            } else if (Oskari.util.sanitize(values.place.name) !== values.place.name) {
                 errors.push({
                     name: 'name',
                     error: loc.placeNameIllegal
                 });
             }
-            if (categoryHandler.hasIllegalChars(values.place.desc)) {
+            if (Oskari.util.sanitize(values.place.desc) !== values.place.desc) {
                 errors.push({
                     name: 'desc',
                     error: loc.descIllegal
@@ -375,11 +375,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 oldCategory = place.getCategoryID();
             }
             place.setId(values.id);
-            place.setName(values.name);
+            place.setName(Oskari.util.sanitize(values.name));
             place.setLink(values.link);
             place.setImageLink(values.imageLink);
-            place.setDescription(values.desc);
-            place.setAttention_text(values.attention_text);
+            place.setDescription(Oskari.util.sanitize(values.desc));
+            place.setAttention_text(Oskari.util.sanitize(values.attention_text));
             place.setCategoryID(values.category);
             // fetch the latest geometry if edited after FinishedDrawingEvent
             place.setGeometry(this.drawPlugin.getDrawing());

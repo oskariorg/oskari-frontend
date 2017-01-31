@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTableHeader = jQuery(
             '<th><a href="JavaScript:void(0);"></a></th>'
         );
+        this.templateTableGroupingHeader = jQuery('<th class="grouping"></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
@@ -34,7 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorList = jQuery('<ul/>', {});
         this.templateColumnSelectorListItem = jQuery('<li>' +
             '<div>' +
-            '<input type="checkbox"/>' +
+            '<input type="checkbox" class="oskari-divmanazer-component-grid"/>' +
             '<label></label>' +
             '</div>' +
             '</li>'
@@ -42,6 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelectorClose = jQuery(
             '<div class="icon-close close-selector-button"></div>'
         );
+        this.templateTool = jQuery('<div></div>');
         this.dataSource = null;
         this.metadataLink = null;
         this.exportButton = null;
@@ -54,13 +56,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
+        this.autoHeightHeader = false;
         this.uiNames = {};
+        this.columnTools = {};
         this.valueRenderer = {};
 
         /* last sort parameters are saved so we can change sort direction if the
          * same column is sorted again
          */
         this.lastSort = null;
+
+        /** Grouping headers */
+        this._groupingHeaders = null;
+
+        Oskari.makeObservable(this);
     }, {
         /**
          * @method setDataModel
@@ -143,6 +152,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.resizableColumns = newResizableColumns;
         },
         /**
+         * @method  setAutoHeightHeader
+         * Sets the header table autosizeble
+         * @param {Integer} margin is setted some margin then autosize header
+         */
+        setAutoHeightHeader: function(margin) {
+            if(typeof margin === 'number') {
+                this.autoHeightHeader = margin;
+            }
+        },
+        /**
          * @method setColumnUIName
          * Sets an UI text for a given field.
          * The grid shows the UI name instead of the datas field name
@@ -152,6 +171,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setColumnUIName: function (fieldName, uiName) {
             this.uiNames[fieldName] = uiName;
+        },
+        /**
+         * @method setColumnTools
+         * Sets tools that should be shown on column
+         *
+         * @param {String} fieldName field name we want to replace in UI
+         * @param {Object[]} listOfTools tools that should be rendered for the column
+         */
+        setColumnTools: function (fieldName, listOfTools) {
+            this.columnTools[fieldName] = listOfTools;
         },
         /**
          * @method setColumnValueRenderer
@@ -368,6 +397,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         /**
+         * Set grouping headers for Grid
+         * @method  @public addGroupingHeader
+         * @param {Array} headers array of groupung header objects [{cls:'styleClass', text:'Grouping text'}]
+         */
+        setGroupingHeader: function(headers) {
+            this._groupingHeaders = headers;
+        },
+        /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
          * table.
@@ -381,6 +418,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             var me = this,
                 // print header
                 headerContainer = table.find('thead tr'),
+                tableHeader = table.find('thead'),
                 bodyContainer = table.find('tbody'),
                 i,
                 header,
@@ -399,6 +437,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // header reference needs some closure magic to work here
             headerClosureMagic = function (scopedValue) {
                 return function () {
+                    me.trigger('column.selected', scopedValue);
                     // reference to sort link element
                     var linky = jQuery(this),
                         // get previous selection
@@ -430,6 +469,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     for (j = 0; j < selection.length; j += 1) {
                         me.select(selection[j][idField], true);
                     }
+                    me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
                     return false;
                 };
             };
@@ -491,65 +534,146 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
             }
 
+            var headerLinkClosureMagic = function () {
+                var parentItem = jQuery(this).parent(),
+                    thisKey = parentItem.data('key');
+
+                if (parentItem.hasClass('closedSubTable')) {
+                    table.find('th.hidden.' + thisKey).removeClass('hidden');
+                    table.find('td.hidden.' + thisKey).removeClass('hidden');
+                    parentItem.removeClass('closedSubTable');
+                    parentItem.addClass('openSubTable');
+                } else {
+                    table.find('th.' + thisKey).not('.base').addClass('hidden');
+                    table.find('td.' + thisKey).not('.base').addClass('hidden');
+                    parentItem.removeClass('openSubTable');
+                    parentItem.addClass('closedSubTable');
+                }
+            };
+
+            if(me._groupingHeaders) {
+                var cols = 0;
+                var row = jQuery('<tr class="grouping"></tr>');
+                for(i =0; i < me._groupingHeaders.length; i+= 1) {
+                    var h = me._groupingHeaders[i];
+                    var groupHeader = me.templateTableGroupingHeader.clone();
+                    if(typeof h.cls === 'string') {
+                        groupHeader.addClass(h.cls);
+                    }
+                    if(typeof h.text === 'string'){
+                        groupHeader.html(h.text);
+                    }
+
+                    if(typeof h.colspan === 'number') {
+                        groupHeader.attr('colspan', h.colspan);
+                        cols += h.colspan;
+                    } else {
+                        cols++;
+                    }
+
+                    // Check last grouping header cell
+                    if(i === me._groupingHeaders.length-1 && cols < fullFieldNames.length && !h.colspan) {
+                        var lastColspan = (fullFieldNames.length - cols) + 1;
+                        groupHeader.attr('colspan', lastColspan);
+                    }
+                    row.append(groupHeader);
+                }
+                tableHeader.prepend(row);
+            }
+
+
             for (i = 0; i < fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
-                if (!uiName) {
-                    uiName = fieldName;
-                } else if (fieldName !== fullFieldNames[i][key]) {
-                    uiName = fieldName.replace(baseKey, uiName);
-                }
-                link.append(uiName);
-                header.attr('title',uiName);
-                if (me.lastSort && fieldName === me.lastSort.attr) {
-                    if (me.lastSort.descending) {
-                        header.addClass('desc');
-                    } else {
-                        header.addClass('asc');
-                    }
-                }
-                if (fullFieldNames[i].type === 'default') {
-                    link.bind('click', headerClosureMagic(fullFieldNames[i].key));
-                } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > 2) {
-                        header.addClass('closedSubTable');
-                        header.addClass('base');
-                    } else {
-                        header.addClass('openSubTable');
-                        header.addClass('base');
-                    }
-                    // Expand or close subtable
-                    // FIXME create function outside the loop
-                    link.bind('click', function () {
-                        var parentItem = jQuery(this).parent(),
-                            thisKey = parentItem.data('key');
 
-                        if (parentItem.hasClass('closedSubTable')) {
-                            table.find('th.hidden.' + thisKey).removeClass('hidden');
-                            table.find('td.hidden.' + thisKey).removeClass('hidden');
-                            parentItem.removeClass('closedSubTable');
-                            parentItem.addClass('openSubTable');
+                if(typeof uiName === 'function') {
+                    uiName(header);
+                } else {
+
+                    var tools = this.columnTools[baseKey] || [];
+                    if (!uiName) {
+                        uiName = fieldName;
+                    } else if (fieldName !== fullFieldNames[i][key]) {
+                        uiName = fieldName.replace(baseKey, uiName);
+                    }
+                    link.append(uiName);
+                    header.attr('title',uiName);
+                    if (me.lastSort && fieldName === me.lastSort.attr) {
+                        if (me.lastSort.descending) {
+                            header.addClass('desc');
                         } else {
-                            table.find('th.' + thisKey).not('.base').addClass('hidden');
-                            table.find('td.' + thisKey).not('.base').addClass('hidden');
-                            parentItem.removeClass('openSubTable');
-                            parentItem.addClass('closedSubTable');
+                            header.addClass('asc');
                         }
-                    });
+                    }
+                    if (fullFieldNames[i].type === 'default') {
+                        link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                        me.__attachHeaderTools(header, tools, fullFieldNames[i].key);
+                    } else if (fullFieldNames[i].type === 'object') {
+                        if (dataArray.length > 2) {
+                            header.addClass('closedSubTable');
+                            header.addClass('base');
+                        } else {
+                            header.addClass('openSubTable');
+                            header.addClass('base');
+                        }
+                        // Expand or close subtable
+                        link.bind('click', headerLinkClosureMagic);
+                    }
+
+                    if (fullFieldNames[i].visibility === 'hidden') {
+                        header.addClass('hidden');
+                    }
                 }
 
-                if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
-                }
-
-                header.addClass(fullFieldNames[i].baseKey);
                 header.data('key', fullFieldNames[i].baseKey);
                 header.data('value', fullFieldNames[i].subKey);
+
+                header.addClass(this.__getHeaderClass(fullFieldNames[i].baseKey));
+                if(me.__selectedColumn === fullFieldNames[i].baseKey) {
+                    header.addClass('selected');
+                }
                 headerContainer.append(header);
             }
+        },
+        /**
+         * Format value to usable css class.
+         * @param  {String} value column field name
+         * @return {String}       value with problematic characters removed/replaced
+         */
+        __getHeaderClass : function(value) {
+            if(!value) {
+                return value;
+            }
+            // replace " with empty string so html doesn't break
+            var result = value.split("\"").join("");
+            result = result.split(":").join("");
+            result = result.split(",").join("_");
+            result = result.split(".").join("_");
+            result = result.split("{").join("_");
+            result = result.split("}").join("_");
+            return result;
+        },
+        /**
+         * Adds any tools the user might have configured to the column header
+         * @param  {jQuery} header container to add to
+         * @param  {Object[]} tools  array of items with name and callback
+         * @param  {String} field  column name for the callback parameter
+         */
+        __attachHeaderTools : function(header, tools, field) {
+            var me = this;
+            tools.forEach(function(tool) {
+                var tpl = me.templateTool.clone();
+                tpl.append(tool.name);
+                if(tool.callback) {
+                    tpl.on('click', function() {
+                        tool.callback(field);
+                    });
+                }
+                header.append(tpl);
+            });
         },
 
         /**
@@ -648,7 +772,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
-            jQuery('input.column-selector-list-item').remove();
+            // FIXME check this how can be more spefied selctor?
+            jQuery('input.oskari-divmanazer-component-grid').remove();
             // Open or close the checkbox dropdown list
             me.visibleColumnSelector.click(function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
@@ -662,6 +787,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 columnSelector.css('visibility', 'hidden');
             });
             fields = me.model.getFields();
+
+            var checkbocInputChange = function () {
+                    var fieldSelectors = jQuery(
+                            'input.column-selector-list-item'
+                        ),
+                        oldFields = me.model.getFields(),
+                        newFields = [],
+                        k,
+                        l;
+
+                    for (k = 0; k < oldFields.length; k += 1) {
+                        for (l = 0; l < fieldSelectors.length; l += 1) {
+                            if (oldFields[k] === fieldSelectors[l].id) {
+                                if (fieldSelectors[l].checked) {
+                                    newFields.push(oldFields[k]);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (newFields.length > 0) {
+                        me.setVisibleFields(newFields);
+                    }
+                    me.renderTo(table.parent(), {
+                        columnSelector: 'open'
+                    });
+                };
 
             // Add field names to the list
             for (i = 0; i < fields.length; i += 1) {
@@ -690,33 +842,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 // Update visible fields after checkbox change
-                // FIXME create function outside the loop
-                checkboxInput.change(function () {
-                    var fieldSelectors = jQuery(
-                            'input.column-selector-list-item'
-                        ),
-                        oldFields = me.model.getFields(),
-                        newFields = [],
-                        k,
-                        l;
-
-                    for (k = 0; k < oldFields.length; k += 1) {
-                        for (l = 0; l < fieldSelectors.length; l += 1) {
-                            if (oldFields[k] === fieldSelectors[l].id) {
-                                if (fieldSelectors[l].checked) {
-                                    newFields.push(oldFields[k]);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    if (newFields.length > 0) {
-                        me.setVisibleFields(newFields);
-                    }
-                    me.renderTo(table.parent(), {
-                        columnSelector: 'open'
-                    });
-                });
+                checkboxInput.change(checkbocInputChange);
                 columnSelectorList.append(newColumn);
             }
             columnSelectorList.attr('class', 'column-selector-list');
@@ -868,6 +994,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             container.append(table);
+
+            // autosize header
+            if(typeof me.autoHeightHeader === 'number') {
+                var maxHeight = 0;
+                var thead = table.find('thead');
+                var theadRow = table.find('thead tr:not(.grouping)');
+
+                theadRow.find('th').each(function(){
+                    var el = jQuery(this);
+                    if(el.prop('scrollHeight')>maxHeight) {
+                        maxHeight = el.prop('scrollHeight');
+                    }
+                });
+
+                theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
+            }
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();
@@ -1080,6 +1222,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             return selection;
         },
         /**
+         * @method selectColumn
+         * Sets "selected" class to the column header
+         * @param {String} value id for the column to be selected
+         */
+        selectColumn: function (value) {
+            // remove selection from headers
+            this.table.find('th').removeClass('selected');
+            // add selection to the one specified
+            this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
+            this.__selectedColumn = value;
+        },
+        /**
          * @method getTable
          * Returns the grid table.
          *
@@ -1192,6 +1346,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 attr: pAttribute,
                 descending: pDescending
             };
+
             dataArray.sort(function (a, b) {
                 if (typeof a[pAttribute] === 'object' ||
                     typeof b[pAttribute] === 'object') {
@@ -1202,6 +1357,24 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var nameB = me._getAttributeValue(b, pAttribute);
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
+        },
+
+        sortBy: function(scopedValue, descending) {
+            var me = this;
+            // sort the results
+            me._sortBy(scopedValue, descending);
+            // populate table content
+            var fieldNames = me.fieldNames;
+            // if visible fields not given, show all
+            if (fieldNames.length === 0) {
+                fieldNames = me.model.getFields();
+            }
+            this.table.find('tbody').empty();
+            me._renderBody(this.table, fieldNames);
+            me.trigger('sort', {
+                        column : scopedValue,
+                        ascending : !descending
+                    });
         },
 
         /**
@@ -1218,7 +1391,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 numericValue,
                 split = pAttribute.split('.'); // if not found, try subtable
 
-            if (typeof nameA === 'undefined') {
+            if (typeof nameA === 'undefined' && split.length > 1) {
                 nameA = a[split[0]][split[1]];
             }
             if (!nameA) {
@@ -1270,6 +1443,54 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data = String(data);
             }
             return data;
+        },
+        //http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+        contentScroll : function(follow) {
+            var me = this;
+            if(this.__scrollSortFunc) {
+                this.off('sort', this.__scrollSortFunc);
+                this.__scrollSortFunc = null;
+            }
+            this.__scrollSortFunc = function() {
+                me.contentScroll(follow);
+            };
+            this.on('sort', this.__scrollSortFunc);
+            this.table.find('thead').css('display', 'block');
+            this.table.find('tbody').css({
+                'display' : 'block',
+                'overflow' : 'auto'
+            });
+            var dataCells = this.table.find('tbody tr:first').children();
+            this.table.find('thead tr').children().each(function(i, header) {
+                jQuery(header).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            dataCells.each(function(i, cell) {
+                jQuery(cell).css({
+                    'padding': '5px',
+                    'width': '120px',
+                    'max-width' : 'none'
+                });
+            });
+            var headerHeight = this.table.find('thead').height();
+            var pixelsFromTop = me.table[0].getBoundingClientRect().top;
+            var setHeight = function(force) {
+                var newTop = me.table[0].getBoundingClientRect().top;
+                if(!force && pixelsFromTop === newTop) {
+                    return;
+                }
+                pixelsFromTop = newTop;
+                var parentHeight = me.table.parent().parent().height();
+                me.table.find('tbody').height((parentHeight-headerHeight-pixelsFromTop) + 'px');
+            };
+            setHeight(true);
+            if(follow === true) {
+                clearInterval(this.sizeInterval);
+                this.sizeInterval = setInterval(setHeight, 1000);
+            }
         }
     }
 );

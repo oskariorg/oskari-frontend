@@ -10,7 +10,7 @@ http://wiki.open311.org/GeoReport_v2/#post-service-request
 
 ## Parameters
 
-(* means the parameter is required)
+(* means that the parameter is required)
 
 <table class="table">
 <tr>
@@ -23,7 +23,7 @@ http://wiki.open311.org/GeoReport_v2/#post-service-request
   <td>/* srs </td><td> String </td><td> Coordinate system of front end map</td><td>EPSG:3067 </td><td> </td>
 </tr>
 <tr>
-  <td>/* postServiceRequest </td><td> JSON </td><td> user's feedback data </td><td>see below example</td><td>http://wiki.open311.org/GeoReport_v2/#post-service-request</td>
+  <td>/* payload </td><td> JSON </td><td> user's feedback data </td><td>see below example</td><td>http://wiki.open311.org/GeoReport_v2/#post-service-request</td>
 </tr>
 
 
@@ -39,15 +39,15 @@ http://wiki.open311.org/GeoReport_v2/
 
 <pre class="event-code-block">
 <code>
-   postServiceRequest content                                                  Required item
+   payload content                                                  Required item
          api_key 	    Api key for submitting service requests 	        Yes (imported via properties)
          service_code 	The unique identifier for the service request type 	Yes
          description 	A full description of the service request. 	        Yes
                          This is free form text having min 10 and max 5,000 characters.
                          This may contain line breaks, but not html or code.
          title       	Title of the service requests 	No
-         lat 	Latitude using the (WGS84) projection. 	Yes
-         long 	Longitude using the (WGS84) projection. Yes
+         lat 	Latitude using the (WGS84) projection. 	Yes/No, if geometry availabe
+         long 	Longitude using the (WGS84) projection. Yes/No, if geometry availabe
          service_object_type                             No
          service_object_id                               No
          address_string 	Human readable address or description of the location. 	No
@@ -57,19 +57,25 @@ http://wiki.open311.org/GeoReport_v2/
          phone 	 	No
          media_url 	A URL to media associated with the request, e.g. an image 	No
          media 	Array of file uploads 	No
-            
+         geometry  geojson geometry (Point, LineString or Polygon) (service extension 'geometry') No
+
 </code>
 </pre>
 
 
 ### Oskari request parameter defaults
-There are also parameters, which are not in request api, but must be defined in Oskari server configs
+There are also parameters, which are not in request api, but must be defined in Oskari publisher when creating the embedded map.
 
-<u>Oskari server configs</u>
+Use Oskari map publishing method for to define these properties for the embedded map
 
-# api_key value in Open311 post request - posting is not allowed without api key
-# api key is not visible to the user
-feedback.open311.key=      --> http://wiki.open311.org/GeoReport_v2/#post-service-request
+<u>Oskari embedded map configs for feedbackService</u>
+
+    1. **base url**, Open311 service base url
+    2. **api_key** value in Open311 post request - posting is not allowed without api key in general
+    3. **service extensions**,
+    Url, key and extensions are not visible to the user
+
+ --> http://wiki.open311.org/GeoReport_v2/#post-service-request
 
 ## Examples
 
@@ -77,19 +83,40 @@ feedback.open311.key=      --> http://wiki.open311.org/GeoReport_v2/#post-servic
 <code>
    javascript
    var postdata = {
-                              "service_code": "180",
-                              "description": "Kampin bussipys‰kill‰ on roskis t‰ynn‰",
-                              "first_name" : "Oskari",
-                              "last_name" : "Olematon",
-                              "lat": "6674188.748000",
-                              "long": "384717.640000"
-                              };
-                              var data = {                              
-                              "srs":"EPSG:3067",
-                              "postServiceRequest": JSON.stringify(postdata)
-                              };
-                              channel.postRequest('PostFeedbackRequest', [data]);
-            
+      "service_code": "180",
+      "description": "Kampin bussipys√§kill√§ on roskis t√§ynn√§",
+      "first_name" : "Oskari",
+      "last_name" : "Olematon",
+      "lat": "6674188.748000",
+      "long": "384717.640000"
+    };
+    var data = {
+      "srs":"EPSG:3067",
+      "payload": postdata
+    };
+    channel.postRequest('PostFeedbackRequest', [data]);
+
+</code>
+</pre>
+
+<pre class="event-code-block">
+<code>
+   javascript
+   var postdata = {
+       "service_code": "180",
+       "description": "Vartiosaari kaipaa suojelua",
+       "first_name" : "Line",
+       "last_name" : "POC",
+       "geometry": {
+           "type": "LineString",
+           "coordinates": [ [393000,6673192],[393216,6673560],[393712,6673864],[393736,6673592]]}
+   };
+   var data = {
+       "srs":"EPSG:3067",
+       "payload": postdata
+   };
+   channel.postRequest('PostFeedbackRequest', [data]);
+
 </code>
 </pre>
 

@@ -37,6 +37,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHa
                 this._toolbar._removeToolbar(request.getId());
             } else if (requestOperation === 'changeName') {
                 this._toolbar.changeMenuToolbarTitle(request.getData());
+            } else if (requestOperation === 'update') {
+                this._toolbar._updateToolbar(request.getId(), request.getData());
             }
 
         },

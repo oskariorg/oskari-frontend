@@ -39,13 +39,11 @@ Oskari.clazz.define(
                 {
                     "type": "text/javascript",
                     "expose" : "ol",
-                    "src": "../../../../libraries/ol3/ol-v3.15.1-oskari.js"
+                    "src": "../../../../libraries/ol3/ol-v3.18.2-oskari.js"
                 },
                 /*
                  * Abstract base
                  */
-
-
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/AbstractMapModule.js"
@@ -170,7 +168,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol3.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap_ol3.css"
                 },
                 // ScaleBar
                 {
@@ -178,7 +176,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol3.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar_ol3.css"
                 },
                 // Markers plugin
                 {
@@ -205,6 +203,12 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js"
+                },{
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequestHandler.js"
                 },
                 // FullScreen
                 {
@@ -245,20 +249,20 @@ Oskari.clazz.define(
                 /**
                  * Layers plugin
                  */
-                
+
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol3.js"
-                }, 
+                },
 
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequest.js"
-                }, 
+                },
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequestHandler.ol3.js"
-                }, 
+                },
 
                 {
                     "type": "text/javascript",
@@ -398,14 +402,14 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/EscPressedEvent.js"
-                }, 
+                },
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/GetInfoResultEvent.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/MapSizeChangedEvent.js"
-                }, 
+                },
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js"
@@ -420,9 +424,9 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule.ol3.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule_ol3.css"
                 }
-                
+
             ],
             "locales": [{
                 "lang" : "hy",

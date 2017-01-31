@@ -56,7 +56,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             return;
         }
 
-
         // gather capabilities requests
         // make ajax call just once and invoke all callbacks once finished
         var triggerAjaxBln = false;
@@ -84,6 +83,26 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     }
 
                     var caps = format.read(responseXml);
+                    // Check if need reverse matrixset top left coordinates.
+                    // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
+                    // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
+                    var isTileMatrixSets = (caps && caps.Contents && caps.Contents.TileMatrixSet) ? true : false;
+                    if(isTileMatrixSets) {
+                        var matrixSets = caps.Contents.TileMatrixSet;
+                        for(var index = 0; index < matrixSets.length; index++) {
+                            var key = matrixSets[index].Identifier;
+                            var isReverseAttribute = (typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]) ? true : false;
+
+                            if(isReverseAttribute ) {
+                                var matrixSet = matrixSets[index];
+                                for (var i = 0; i < matrixSet.TileMatrix.length; i++) {
+                                    var matrix = matrixSet.TileMatrix[i];
+                                    matrix.TopLeftCorner.reverse();
+                                }
+                            }
+                        }
+                    }
+
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },

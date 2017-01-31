@@ -224,16 +224,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          */
         notifyLayerVisibilityChanged: function (layer) {
             var scaleOk = layer.isVisible(),
-                geometryMatch = layer.isVisible();         // if layer is visible check actual values
+                geometryMatch = layer.isVisible();// if layer is visible check actual values
 
             if (layer.isVisible()) {
                 scaleOk = this._isInScale(layer);
                 geometryMatch = this.isInGeometry(layer);
-            }         // setup openlayers visibility
-                     // NOTE: DO NOT CHANGE visibility in internal layer object (it will
-                     // change in UI also)
-                     // this is for optimization purposes
-
+            }
+            // setup openlayers visibility
+            // NOTE: DO NOT CHANGE visibility in internal layer object (it will
+            // change in UI also)
+            // this is for optimization purposes
             var map = this.getMap(),
                 mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
                 mapLayer = mapLayers.length ? mapLayers[0] : null;

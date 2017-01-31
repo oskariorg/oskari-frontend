@@ -91,45 +91,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 zoomMethod: null
             });
 
-            me._setupMapEvents(map);
-
             return map;
         },
 
-        /**
-         * Add map click handler
-         * @method @private _setupMapEvents
-         */
-        _setupMapEvents: function(map){
-            var me = this;
-            //Set up a click handler
-            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-                defaultHandlerOptions: {
-                    'double': true,
-                    'stopDouble': true
-                },
-
-                initialize: function(options) {
-                    this.handlerOptions = OpenLayers.Util.extend(
-                        {}, this.defaultHandlerOptions
-                    );
-                    OpenLayers.Control.prototype.initialize.apply(
-                        this, arguments
-                    );
-                    this.handler = new OpenLayers.Handler.Click(
-                        this, {
-                            'click': function(evt){
-                                me.__sendMapClickEvent(evt);
-                            }
-                        }, this.handlerOptions
-                    );
-                }
-            });
-
-            var click = new OpenLayers.Control.Click();
-            map.addControl(click);
-            click.activate();
-        },
         _startImpl: function () {
             this.getMap().render(this.getMapElementId());
             return true;
@@ -357,11 +321,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* Impl specific - PRIVATE
 ------------------------------------------------------------------> */
         _calculateScalesImpl: function (resolutions) {
+
             for (var i = 0; i < resolutions.length; i += 1) {
                 var calculatedScale = OpenLayers.Util.getScaleFromResolution(
                     resolutions[i],
-                    // always calculate to meters
-                    'm'
+                    this._options.units
                 );
                 calculatedScale = calculatedScale * 10000;
                 calculatedScale = Math.round(calculatedScale);
@@ -456,24 +420,35 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
+            var me = this;
             var style = jQuery.extend(true, {}, styleDef);
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
-            style.image.size = size;
 
-            var svg = this.getSvg(style.image);
-            if(svg) {
+            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
+            olStyle.graphicWidth = size;
+            olStyle.graphicHeight = size;
+
+            // If svg marker
+            if(me.isSvg(style.image)) {
+                var svg = this.getSvg(style.image);
                 olStyle.externalGraphic = svg;
             }
-
-            if(style.image.size) {
-                olStyle.graphicWidth = size;
-                olStyle.graphicHeight = size;
+            // else if external graphic
+            else if(style.image && style.image.shape) {
+                olStyle.externalGraphic = style.image.shape;
+                olStyle.graphicWidth = style.image.size || 32;
+                olStyle.graphicHeight = style.image.size || 32;
+                var offsetX = (!isNaN(style.image.offsetX))  ? style.image.offsetX : 16;
+                var offsetY = (!isNaN(style.image.offsetY))  ? style.image.offsetY : 16;
+                olStyle.graphicXOffset = -offsetX;
+                olStyle.graphicYOffset = -(32 - offsetY);
             }
+
             if(style.image.opacity) {
                 olStyle.fillOpacity = style.image.opacity;
             }
+
             if(style.stroke) {
                 if(style.stroke.color) {
                     olStyle.strokeColor = style.stroke.color;
@@ -524,7 +499,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                   olStyle.labelOutlineWidth = style.text.stroke.width;
               }
           }
-          if(style.labelAlign) {
+          if(style.text.labelAlign) {
              olStyle.labelAlign = style.text.labelAlign;
           }
           if(style.text.offsetX) {
@@ -541,6 +516,54 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
              olStyle.label = "${"+style.text.labelProperty+"}";
           }
             return olStyle;
+        },
+        /**
+         * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
+         * @param {String} wkt Well known text representation of the geometry
+         */
+        getViewPortForGeometry: function(wkt) {
+
+            if (!wkt) {
+                return null;
+            }
+            var me = this,
+                feature = me.getFeatureFromWKT(wkt),
+                centroid,
+                bounds,
+                mapBounds,
+                zoomToBounds = null;
+
+            if (!feature) {
+                return;
+            }
+
+            if (feature && feature.geometry && feature.geometry.getBounds()) {
+                bounds = feature.geometry.getBounds();
+                centroid = bounds.toGeometry().getCentroid();
+                mapBounds = me.getMap().getExtent();
+                //if both width and height are < mapbounds', no need to change the bounds. Otherwise use the feature's geometry's bounds.
+                if (bounds.getHeight() < mapBounds.getHeight() && bounds.getWidth() < mapBounds.getWidth()) {
+                    zoomToBounds = null;
+                } else {
+                    zoomToBounds = bounds;
+                }
+                return {
+                    'x': centroid.x,
+                    'y': centroid.y,
+                    'bounds': zoomToBounds
+                }
+            }
+
+            return null;
+        },
+        /**
+         * @method getFeatureFromWKT
+         */
+        getFeatureFromWKT: function(wkt) {
+            var wktFormat = new OpenLayers.Format.WKT(),
+                feature = wktFormat.read(wkt);
+
+            return feature;
         }
 /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 

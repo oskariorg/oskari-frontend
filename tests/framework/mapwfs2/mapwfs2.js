@@ -116,11 +116,11 @@ describe('Test Suite for mapwfs2', function() {
         conf["mapfull"]["conf"]["plugins"].push(
             {
                 "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-                "config": { 
+                "config": {
                     hostname: 'localhost',
                     contextPath: '/transport-0.0.1',
-                    port: '8888', 
-                    lazy: !ONLINE_TESTS 
+                    port: '8888',
+                    lazy: !ONLINE_TESTS
                 }
             }
         );
@@ -175,8 +175,8 @@ describe('Test Suite for mapwfs2', function() {
             mediator.session = {
                 "clientId" : "testId",
                 "session" : "test_session",
-                "browser" : jQuery.browser.name,
-                "browserVersion" : jQuery.browser.versionNum
+                "browser" : '',
+                "browserVersion" : ''
             }
             connection = module.getConnection();
             done();

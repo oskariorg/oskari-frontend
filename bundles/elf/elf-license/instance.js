@@ -20,7 +20,8 @@ function () {
         metadataFlyoutLicenseDialog: jQuery('<div class="elf_license_dialog" style="width:100%!important;">' +
             '   <div class="elf_license_dialog_license_data" style="height:auto!important;">' +
             '      <div class="elf_license_dialog_descriptions_title"></div>' +
-            '      <div class="elf_license_dialog_descriptions"></div>' +
+            '      <div>'+
+            '           <ul class="elf_license_dialog_descriptions"></ul>'+
             '      </div>' +
             '</div>'),
         licenseDialog: jQuery('<div class="elf_license_dialog">' +
@@ -232,8 +233,7 @@ function () {
         me._progressSpinner.insertTo(panel.html);
         me._progressSpinner.start();
 
-        //license info is the first / only item under the metadata's onlineresources. At least sometimes. This is hardly a bullet-proof solution...
-        var licenseUrl = metadataModel.onlineResources[0].url;
+        var licenseUrl = metadataModel.license;
         me.licenseService.doLicenseInformationSearch({
             id: licenseUrl
         }, function (response) {
@@ -460,7 +460,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                me._showLoginInfo(title);
             }
         }
 
@@ -478,6 +478,14 @@ function () {
             me._showLicenseDeactivateParams(data.licenseModels[0], data, infoForUser);
         }
 
+    },
+    _showLoginInfo: function(element){
+        var me = this,
+            html = jQuery('<div>')
+        element.html('<div>' +
+            me._locale.dialog.loginShort +
+            '</div>' +
+            '<div style="margin-top:20px;"><a href="http://locationframework.eu/content/registration" target="_blank">'+me._locale.dialog.registerLinkText+'</a></div>');
     },
     /**
      * Show license deactivate params dialog
@@ -679,7 +687,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                 me._showLoginInfo(title);
             }
         }
 
@@ -732,7 +740,7 @@ function () {
             }
             // Else if user has not logged in then show log in message
             else {
-                title.html(me._locale.dialog.loginShort);
+                 me._showLoginInfo(title);
             }
         }
         var licenseDialogLink = jQuery("<a>"+me._locale.getLicenseText+"</a>");

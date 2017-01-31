@@ -7,7 +7,6 @@
             return;
         }
 
-
         // setter
         if (key && value) {
             var currentValue = collection[key];
@@ -30,8 +29,11 @@
             };
             return result;
         } else {
+            if(!collection[key]) {
+                collection[key] = defaultValue(key);
+            }
             // return values registered for name
-            return collection[key] || defaultValue(key);
+            return collection[key];
         }
     };
     /*

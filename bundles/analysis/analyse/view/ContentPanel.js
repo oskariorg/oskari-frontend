@@ -508,7 +508,7 @@ Oskari.clazz.define(
                 this.featureLayer.events.on({
                     'featureselected': function (event) {
                         var wkt = new OpenLayers.Format.WKT(),
-                            featureWKT = wkt.write(event.feature);
+                            featureWKT = wkt.write(event.feature),
                             map = me.mapModule.getMap(),
                             sandbox = me.mapModule.getSandbox(),
                             layers = sandbox.findAllSelectedMapLayers();

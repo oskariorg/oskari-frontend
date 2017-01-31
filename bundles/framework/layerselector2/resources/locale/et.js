@@ -43,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Kaardikiht pole hetkel kättesaadav.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kaardikiht pole hetkel kättesaadav.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Lähipäevadel võib kaardikiht olla aegajalt kättesaamatu.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Kaardikihi oleku info pole kättesaadav.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {

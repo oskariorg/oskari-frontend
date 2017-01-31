@@ -86,17 +86,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             if (!statsLayer) {
                 return;
             }
-
             // Register grid plugin to the map.
             var gridConf = {
                 'published': true,
-                'state': me.state,
-                'layer': statsLayer
+                'state': me.state
             };
             var gridPlugin = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
                 gridConf,
-                locale
+                locale,
+                statsLayer
             );
             mapModule.registerPlugin(gridPlugin);
             mapModule.startPlugin(gridPlugin);

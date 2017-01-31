@@ -43,7 +43,19 @@ Oskari.clazz
 	     * Interface method implementation, calls #refresh()
 	     */
 	    startPlugin : function() {
-	      this.refresh();
+	    	var isContainer = (this.container && this.instance.mediator) ? true : false;
+            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
+            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+
+            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                this.container.addClass(this.instance.mediator.instanceId);
+            }
+
+            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                this.container.addClass(this.instance.mediator.bundleId);
+            }
+
+	      	this.refresh();
 	    },
 	    /**
 	     * @method stopPlugin

@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "Hilfe",
         "desc": "",
         "flyout": {
-            "title": "Paikkatietoikkuna Benutzerhandbuch",
+            "title": "Oskari Benutzerhandbuch",
             "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {

@@ -140,8 +140,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         setPublishMode: function (blnEnabled, deniedLayers, data) {
             var me = this,
                 map = jQuery('#contentMap');
+            // trigger an event letting other bundles know we require the whole UI
+            var eventBuilder = this.sandbox.getEventBuilder('UIChangeEvent');
+            this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
-            var statsLayer = this._resetStatsUI();
             if (blnEnabled) {
                 me.getService().setNonPublisherLayers(deniedLayers);
                 me.getService().removeLayers();
@@ -199,33 +201,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
+
+                var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+                if(stats && typeof stats.renderPublishedLegend === 'function') {
+                    stats.renderPublishedLegend({showLegend:false});
+                }
+                if(stats && typeof stats.renderToggleButtons === 'function') {
+                    stats.renderToggleButtons(true);
+                }
             }
-        },
-        /**
-         * Resets Thematic maps UI and returns the stats layer if found
-         * @return {Oskari.mapframework.bundle.mapstats.domain.StatsLayer} stats layer if one was in selected layers
-         */
-        _resetStatsUI : function() {
-            var me = this;
-            var sandbox = me.sandbox;
-            // check if statsgrid mode is on -> disable statsgrid mode
-            var statsLayers = _.filter(sandbox.findAllSelectedMapLayers(), function(layer) {
-                return layer.isLayerOfType('stats');
-            });
-
-            if(!statsLayers.length) {
-                // no statslayers
-                return;
-            }
-            // assume only one which is true for now.
-            var layer = statsLayers[0];
-
-            // TODO: replace with "ResetUIRequest" or similar (handled by divmanazer)
-            // or "ModeActivationEvent" which StatsGrid and others will listen and clear the UI.
-            var request = sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
-            sandbox.request(me.getName(), request);
-
-            return layer;
         },
         /**
          * @method hasPublishRight

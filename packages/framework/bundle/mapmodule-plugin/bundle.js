@@ -141,8 +141,14 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js"
+                },{
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequestHandler.js"
                 },
-                
+
                 /**
                  * Search plugin
                  */
@@ -188,7 +194,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol2.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap.ol2.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/indexmap_ol2.css"
                 },
                 // ScaleBar
                 {
@@ -196,7 +202,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol2.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar.ol2.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/scalebar_ol2.css"
                 },
                 // FullScreen
                 {
@@ -429,7 +435,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/panbuttons.css"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule.ol2.css"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/css/mapmodule_ol2.css"
                 }
             ],
             "locales": [{

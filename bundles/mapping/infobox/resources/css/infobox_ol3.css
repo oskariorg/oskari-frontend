@@ -7,7 +7,6 @@ div.popupHeaderArrow.no-position-info {
   display: inline-block;
   float: left;
   margin-top: 10px; }
-
 div.popupHeaderArrow.center-left {
   width: 0;
   height: 0;
@@ -20,7 +19,6 @@ div.popupHeaderArrow.center-left {
   left: 0;
   top: 50%;
   margin-top: 10px; }
-
 div.popupHeaderArrow.center-right {
   width: 0;
   height: 0;
@@ -33,7 +31,6 @@ div.popupHeaderArrow.center-right {
   right: 0;
   top: 50%;
   margin-top: 10px; }
-
 div.popupHeaderArrow.bottom-center {
   width: 0;
   height: 0;
@@ -48,7 +45,6 @@ div.popupHeaderArrow.bottom-center {
   top: 100%;
   margin-left: -10px;
   margin-top: 10px; }
-
 div.popupHeaderArrow.top-center {
   width: 0;
   height: 0;
@@ -60,7 +56,7 @@ div.popupHeaderArrow.top-center {
   position: absolute;
   left: 50%;
   top: 0;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: -10px; }
 
 div.olPopup {
@@ -79,7 +75,10 @@ div.olPopup {
   div.olPopup.bottom-center {
     margin-bottom: -10px; }
   div.olPopup.top-center {
-    margin-top: 25px; }
+    margin-top: 30px; }
+  div.olPopup table td {
+    text-align: left;
+    vertical-align: top; }
 
 div.infoboxPopupNoMargin {
   margin: 0 !important;
@@ -178,3 +177,5 @@ div.divmanazerpopup.mobile-infobox {
   margin-top: -6px !important;
   margin-left: -4px !important;
   overflow: auto; }
+
+/*# sourceMappingURL=infobox_ol3.css.map */

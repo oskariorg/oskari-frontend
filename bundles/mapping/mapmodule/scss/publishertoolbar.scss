@@ -11,8 +11,7 @@ $darkToolBackground: #212121;
 	display: block;
 	margin-bottom: 10px !important;
 	text-align: left;
-	z-index: 100000000 !important;	
-	
+
 	.icon {
 		display: inline-block;
 		height: $iconHeight;
@@ -58,8 +57,8 @@ $darkToolBackground: #212121;
 					height: $iconImageHeight;
 				}
 
-				div.tool.selected, 
-				div.tool:hover:not(.disabled), 
+				div.tool.selected,
+				div.tool:hover:not(.disabled),
 				div.tool:active:not(.disabled) {
 					background-color: $darkToolBackground;
 				}
@@ -67,7 +66,7 @@ $darkToolBackground: #212121;
 			}
 
 			div.toolrow:first-child {
-				border-top: none;			
+				border-top: none;
 			}
 
 		}
@@ -76,8 +75,8 @@ $darkToolBackground: #212121;
 			background-color: $darkColor;
 			border: none;
 
-			div.toolrow	div.tool.selected, 
-			div.toolrow	div.tool:hover:not(.disabled), 
+			div.toolrow	div.tool.selected,
+			div.toolrow	div.tool:hover:not(.disabled),
 			div.toolrow	div.tool:active:not(.disabled) {
 				background-color: $darkToolBackground;
 			}
@@ -88,8 +87,8 @@ $darkToolBackground: #212121;
 			background-color: $lightColor;
 			border: 1px solid $lightBorder;
 
-			div.toolrow	div.tool.selected, 
-			div.toolrow	div.tool:hover:not(.disabled), 
+			div.toolrow	div.tool.selected,
+			div.toolrow	div.tool:hover:not(.disabled),
 			div.toolrow	div.tool:active:not(.disabled) {
 				background-color: #eeeeee;
 			}
@@ -219,11 +218,11 @@ $darkToolBackground: #212121;
 	min-width: 50px;
 
   	.popup-body .content {
-		margin: 0px; 
+		margin: 0px;
 	}
 }
 
 .divmanazerpopup.toolbar-popup.bottom.mobile {
 	border: 2px solid silver;
-	border-radius: 0px; 
+	border-radius: 0px;
 }

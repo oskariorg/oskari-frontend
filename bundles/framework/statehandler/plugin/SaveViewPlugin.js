@@ -78,8 +78,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             }
             var data = {
                 currentViewId: me.handler.getCurrentViewId(),
+                srs: me.getSrsFromState(state),
                 viewData: state
             };
+
 
             if (view) {
                 data.viewName = view.name;
@@ -93,7 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             //Create Cookie of map state save
             jQuery.cookie.json = true;
             var expiredays = 7;
-
             jQuery.cookie("oskaristate", data, {
                 expires: expiredays
             });
@@ -123,6 +124,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
                     }
                 }
             });
+        },
+        getSrsFromState: function(state) {
+            if (Oskari.util.keyExists( state, 'mapfull.state.srs')) {
+                return state.mapfull.state.srs;
+            }
+            return null;
         },
         // TODO: move to some util
         serializeJSON: function (obj) {

@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             var me = this;
 
             // Should this not come as a param?
-            var sandbox = Oskari.$('sandbox');
+            var sandbox = Oskari.getSandbox();
             this.sandbox = sandbox;
 
             // register to sandbox as a module
@@ -66,7 +66,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             sandbox.request("lupakartta", request);
 
             hub.subscribe("documents-map", function (e) {
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-show-markers-request");
                 var bounds;
                 var requestBuilder;
@@ -102,7 +102,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             });
 
             hub.subscribe("inforequest-map-start", function (e) {
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request " + e.drawMode);
                 var config = {
                     drawMode: e.drawMode
@@ -127,7 +127,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
             hub.subscribe("map-get-geometry-request", function (e) {
 
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-stop-editing-request");
                 var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.GetGeometryRequest');
                 var request = requestBuilder(
@@ -156,7 +156,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
 
             hub.subscribe("map-draw-start", function (e) {
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] draw-request " + e.drawMode);
                 var config = {
                     drawMode: e.drawMode
@@ -206,7 +206,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
 
 
             hub.subscribe("map-clear-request", function (e) {
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-clear-request");
                 var requestBuilder = sandbox.getRequestBuilder('lupakartta.ClearMapRequest');
                 var request = requestBuilder();
@@ -214,7 +214,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
             });
 
             hub.subscribe("map-update-size", function (e) {
-                var sandbox = Oskari.$('sandbox');
+                var sandbox = Oskari.getSandbox();
                 sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-update-size");
                 //set new center to old center
                 var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
