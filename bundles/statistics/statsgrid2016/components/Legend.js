@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     /**
      * @method  @private _bindToEvents bind events
      */
-	_bindToEvents : function() {
+    _bindToEvents : function() {
         var me = this;
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
@@ -59,18 +59,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     /**
      * @method  @private _handleIndicatorRemoved handle indicator removed
      */
-	_handleIndicatorRemoved: function(){
-		var me = this;
-		me.__legendElement.html(me.__templates.noActiveSelection.clone());
-	},
+    _handleIndicatorRemoved: function(){
+        var me = this;
+        me.__legendElement.html(me.__templates.noActiveSelection.clone());
+    },
 
     /**
      * @method  @private _handleIndicatorChanged handle active indicator changed
      * @return {[type]} [description]
      */
-	_handleIndicatorChanged: function() {
-		this._renderActiveIndicator();
-	},
+    _handleIndicatorChanged: function() {
+        this._renderActiveIndicator();
+    },
 
     /**
      * @method  @private _renderActiveIndicator render active indicator changed
