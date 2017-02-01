@@ -20,14 +20,9 @@
     position: absolute;
     width: 94%;
     top: 0; }
-  .statsgrid-grid-table-header .selection .parameter .label {
-    display: none !important;
-    float: none !important; }
   .statsgrid-grid-table-header .selection .parameter .select {
     width: auto !important;
     float: none !important; }
-  .statsgrid-grid-table-header .selection .parameter .clear {
-    display: none !important; }
   .statsgrid-grid-table-header .title {
     font-weight: bold;
     font-size: 16px;

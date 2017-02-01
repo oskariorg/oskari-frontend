@@ -98,11 +98,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _setGridAreaSelection: function(regions,gridLoc){
         var me = this;
         var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
-        var regionSelect = regionSelector.create(me.service.getSelectedIndicatorsRegions(), true);
-        if(!regionSelect) {
-            return;
-        }
-        regionSelect.value(this.getCurrentRegionset());
 
         this.grid.setColumnUIName('region', function(content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
@@ -111,14 +106,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
             content.append(tableHeader);
 
-            // If not published, then show area selection
+            // regionset selection is shown if map is not embedded
             if(me.regionSelectorEnabled) {
+                var regionSelect = regionSelector.create(me.service.getSelectedIndicatorsRegions(), true);
+                if(!regionSelect) {
+                    return;
+                }
+                regionSelect.value(me.getCurrentRegionset());
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();
                     me.log.info('Selected region ' + value);
                     me.service.getStateService().setRegionset(value);
                 });
-                tableHeader.find('.selection').append(regionSelect.container);
+                // container includes
+                tableHeader.find('.selection').append(regionSelect.oskariSelect);
             }
             // Else remove area selection
             else {

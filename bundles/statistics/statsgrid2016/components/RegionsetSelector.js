@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 			return {
 				container : select,
 				field : select,
+				oskariSelect : select,
 				value :function() {}
 			};
 		}
@@ -51,7 +52,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 		};
 		var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 		var dropdown = select.create(allowedRegionsets, options);
-		dropdown.css({width:'205px'});
 		fieldContainer.find('.label').append(dropdown);
 		select.adjustChosen();
 
@@ -63,6 +63,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
 
 		return {
 			container : fieldContainer,
+			oskariSelect : fieldContainer.find('.oskari-select'),
 			value : function(value) {
 				if(typeof value === 'undefined') {
 					return jqSelect.val();

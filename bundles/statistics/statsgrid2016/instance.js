@@ -48,6 +48,8 @@ Oskari.clazz.define(
 			if(this.isEmbedded()) {
 				// start in an embedded map mode
 				if(conf.grid) {
+					// Embedded map might or might not have the grid.
+					// If it's enabled, show toggle buttons so user can toggle it on/off
 					me.showToggleButtons(true);
 				}
 				me.showLegendOnMap(true);
