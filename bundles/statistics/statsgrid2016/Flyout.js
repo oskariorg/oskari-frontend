@@ -228,8 +228,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             var locale = this.instance.getLocalization();
 
             panel.setTitle(locale.panels.extraFeatures.title);
-
-            container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', this.instance, sb).getPanelContent());
+            container.append(Oskari.clazz.create('Oskari.statistics.statsgrid.ExtraFeatures', sb, locale.panels.extraFeatures).getPanelContent());
 
             return {id:'extraFeaturesPanel', panel:panel};
         }
