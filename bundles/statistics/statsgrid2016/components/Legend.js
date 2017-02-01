@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this._container = jQuery('<div class="accordion-theming"></div>');
     this._notHandleColorSelect = false;
 
-    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.instance);
+    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.sb, this.locale);
     this.editClassificationElement = this.editClassification.getElement();
 }, {
     /****** PRIVATE METHODS ******/

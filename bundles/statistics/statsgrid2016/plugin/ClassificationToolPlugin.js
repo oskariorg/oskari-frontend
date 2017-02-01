@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                                 me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                                 me._publishedComponents.panelClassification.setVisible(true);
                                 me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-                                me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', me._instance);
+                                me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sb, me.locale);
                                 var editClassificationElement = me._publishedComponents.editClassification.getElement();
                                 me._publishedComponents.panelClassification.setContent(editClassificationElement);
                                 accordion.addPanel(me._publishedComponents.panelClassification);

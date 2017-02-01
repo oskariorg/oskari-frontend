@@ -1,9 +1,8 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(instance) {
-    this.instance = instance;
-    this.sb = this.instance.getSandbox();
+Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(sandbox, locale) {
+    this.sb = sandbox;
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
-    this.locale = this.instance.getLocalization();
+    this.locale = locale;
     this._bindToEvents();
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
