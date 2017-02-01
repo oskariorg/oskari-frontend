@@ -3,7 +3,6 @@
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultExtension class.
- *
  */
 Oskari.clazz.define(
 	'Oskari.statistics.statsgrid.StatsGridBundleInstance',
@@ -125,11 +124,10 @@ Oskari.clazz.define(
 					this.getFlyout().handleClose();
 					return;
 				}
-				var renderMode = this._getRenderMode();
-				var conf = this.__determineConfig(renderMode);
-				if(conf.grid !== false && this._lastRenderMode !== renderMode) {
-					this.getFlyout().render(conf);
-					this.getFlyout().showLegend(!this.isEmbedded());
+				var renderMode = this.isEmbedded();
+				// rendermode changes if we are in geoportal and open the flyout in publisher
+				if(this._lastRenderMode !== renderMode) {
+					this.getFlyout().render(renderMode);
 					this._lastRenderMode = renderMode;
 				}
 			},
@@ -155,43 +153,6 @@ Oskari.clazz.define(
 				}
 
 			}
-		},
-		__determineConfig : function(renderMode) {
-			var conf = this.getConfiguration();
-
-			var defaultConf = {
-				search: true,
-				extraFeatures: true,
-				areaSelection: true,
-				mouseEarLegend: true,
-				showLegend: true,
-				allowClassification: true
-			};
-			if('publisher' === renderMode) {
-				conf.search = false;
-				conf.extraFeatures = false;
-				conf.areaSelection = false;
-				conf.mouseEarLegend = false;
-				conf.showLegend = true;
-				conf.allowClassification = true;
-			} else if('geoportal' === renderMode) {
-				conf.search = true;
-				conf.extraFeatures = true;
-				conf.areaSelection = true;
-				conf.mouseEarLegend = true;
-				conf.showLegend = false;
-				conf.allowClassification = true;
-			}
-			return jQuery.extend({}, defaultConf, conf);
-		},
-		_getRenderMode : function() {
-			var map = jQuery('#contentMap');
-			if(map.hasClass('mapPublishMode')) {
-				return 'publisher';
-			} else if(!map.hasClass('published')) {
-				return 'geoportal';
-			}
-			return 'embedded';
 		},
 
 		/**
@@ -361,7 +322,7 @@ Oskari.clazz.define(
 				this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
 			}
 			me.getFlyout().move(0,0);
-			jQuery('body').append(this.togglePlugin.create());
+			jQuery('body').append(this.togglePlugin.create(me.visible));
 		},
 		/**
 		 * @method  @public showLegendOnMap Render published  legend

@@ -125,12 +125,7 @@ function() {
                 statsgrid: {
                     state: statsGridState,
                     conf : {
-                        grid: me.state.enabled,
-                        areaSelection: false,
-                        search: false,
-                        extraFeatures: false,
-                        mouseEarLegend: false,
-                        showLegend: true
+                        grid: me.state.enabled
                     }
                 }
             }

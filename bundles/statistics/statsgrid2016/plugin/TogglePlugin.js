@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
     this.locale = locale;
     this.element = null;
 }, {
-    create : function() {
+    create : function(tableShown) {
         if(this.element) {
             return this.element;
         }
@@ -30,8 +30,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
                 me.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'detach', 'StatsGrid']);
             }
         });
-
-        map.trigger('click');
+        if(tableShown) {
+            table.trigger('click');
+        } else {
+            map.trigger('click');
+        }
         this.element = toggleButtons;
         return this.element;
     },

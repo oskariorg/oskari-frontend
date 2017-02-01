@@ -29,14 +29,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
 	 * @param  {Object} el       jQuery element
 	 * @param  {Integer} datasrc indicator datasource
 	 * @param  {String} indId    indicator id
-	 * @param  {Object} config   config
 	 * @param  {Object} elements elements
 	 */
-	indicatorSelected : function(el, datasrc, indId, config, elements) {
+	indicatorSelected : function(el, datasrc, indId, elements) {
 		var me = this;
 		var locale = me.instance.getLocalization();
 		var panelLoc = locale.panels.newSearch;
-		config = config || {};
 		elements = elements || {};
 
 		this.clean();

@@ -64,10 +64,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
 
     /**
      * @method  @public getPanelContent get panel content
-     * @param  {Object} config config
      * @return {Object} jQuery element
      */
-    getPanelContent: function(config) {
+    getPanelContent: function() {
         var me = this;
         var main = jQuery(this.__templates.main());
         var locale = me.instance.getLocalization();
@@ -153,7 +152,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             params.indicatorSelected(selectionsContainer,
                 select.getValue(),
                 indicSelect.getValue(),
-                config,
                 {
                     dataLabelWithTooltips:dataLabelWithTooltips,
                     btn: btn

@@ -1,11 +1,13 @@
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, sandbox) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
+    this.locale = locale;
     this.sb = sandbox;
     this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
     this._bindToEvents();
+    this.regionSelectorEnabled = true;
+    this.indicatorRemovalEnabled = true;
 }, {
     __templates : {
         main : _.template('<div class="stats-table">'+
@@ -29,6 +31,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                 '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>')
+    },
+    showRegionsetSelector : function(enabled) {
+        this.regionSelectorEnabled = !!enabled;
+    },
+    showIndicatorRemoval : function(enabled) {
+        this.indicatorRemovalEnabled = !!enabled;
     },
 
     /****** PRIVATE METHODS ******/
@@ -89,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
      */
     _setGridAreaSelection: function(regions,gridLoc){
         var me = this;
-        var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.instance.getLocalization());
+        var regionSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', me.sb, me.locale);
         var regionSelect = regionSelector.create(me.service.getSelectedIndicatorsRegions(), true);
         if(!regionSelect) {
             return;
@@ -104,7 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
             content.append(tableHeader);
 
             // If not published, then show area selection
-            if(me.instance.getConfiguration().areaSelection) {
+            if(me.regionSelectorEnabled) {
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();
                     me.log.info('Selected region ' + value);
@@ -174,7 +182,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
      */
     _setIndicators: function(indicators, model, gridLoc){
         var me = this;
-        var locale = me.instance.getLocalization();
+        var locale = me.locale;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
 
         // done is called when we have indicator names for columns
@@ -212,7 +220,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
                     tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
                     // If not published then show close icon
-                    if(me.instance.getConfiguration().areaSelection) {
+                    if(me.indicatorRemovalEnabled) {
                         tableHeader.find('.icon').bind('click', function(){
                             log.info('Removing indicator ', + ind.hash);
                             me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
@@ -333,8 +341,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
      */
     render : function(el) {
         var me = this;
-        var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid || {};
+        var gridLoc = me.locale.statsgrid || {};
 
         var main = jQuery(this.__templates.main());
         me.spinner.insertTo(main);
@@ -398,8 +405,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(instance, 
     updateModel : function(model, regions) {
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
-        var locale = me.instance.getLocalization();
-        var gridLoc = locale.statsgrid || {};
+        var gridLoc = me.locale.statsgrid || {};
 
         var indicators = this.getIndicators();
 
