@@ -150,7 +150,7 @@ div.oskari-flyoutcontent.statsgrid {
 
     animation-name: statsgridcolumnselection;
     animation-duration: 0.5s;
-    animation-iteration-count: 2;
+    animation-iteration-count: 3;
      }
   div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
     border-bottom: 0;
