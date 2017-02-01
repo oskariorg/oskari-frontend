@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             grid.render(el);
 
         },
-        handleClose: function(){
+        onClose: function() {
             var me = this;
             for(var tool in me.__sideTools) {
                 if(me.__sideTools[tool] && me.__sideTools[tool].flyout) {

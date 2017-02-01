@@ -119,11 +119,9 @@ Oskari.clazz.define(
 					// not me/no data -> do nothing
 					return;
 				}
-				var me = this;
 				var wasClosed = event.getViewState() === 'close';
 				this.visible = !wasClosed;
 				if(wasClosed){
-					this.getFlyout().handleClose();
 					return;
 				}
 				var renderMode = this.isEmbedded();
