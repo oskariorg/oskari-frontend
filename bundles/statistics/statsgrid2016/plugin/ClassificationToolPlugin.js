@@ -254,16 +254,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 };
 
                 var link = getSourceLink(ind.hash);
-                var selectionsText = '';
 
                 var linkButton = '';
                 if(state.indicators.length>1) {
                     linkButton = '<div class="link">' + me._locale.statsgrid.source + ' ' + link.index + ' >></div>';
                 }
-                selectionsText = service.getSelectionsText(ind, function(text){
+                service.getUILabels(ind, function(labels){
                     me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
                         linkButton +
-                        '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                        '<div class="sourcename">' + labels.full + '</div>');
                 });
 /*
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');

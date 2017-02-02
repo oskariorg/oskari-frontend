@@ -146,11 +146,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                         link.handler();
                     });
                 }
-                // TODO: make synchronous version of getSelectionsText since we already have the metadata?
-                var selectionsText = service.getSelectionsText(ind, function(text){
+                service.getUILabels(ind, function(labels){
                     me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
                         linkButton +
-                        '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                        '<div class="sourcename">' + labels.full + '</div>');
                 });
 /*
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
@@ -234,8 +233,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     return;
                 }
 
-                service.getSelectionsText(ind, function(text){
-                    var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
+                service.getUILabels(ind, function(labels){
+                    var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + labels.full);
                     var jQueryLegend = jQuery(legend);
 
                     var isAccordion = true;

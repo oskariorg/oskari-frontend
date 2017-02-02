@@ -67,12 +67,16 @@
             this.datasources.push(ds);
         },
 
-        getSelectionsText: function(indicator, callback) {
+        getUILabels: function(indicator, callback) {
             var me = this;
             var locale = this.locale;
-            var selectionsTexts = [];
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
 
             me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
+                var uiLabels = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
@@ -81,18 +85,32 @@
                             if(val !== (value.id || value)) {
                                 return;
                             }
-                            var name = value.name || value.id || value;
-                            var optName = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
-                            selectionsTexts.push(optName);
+                            var name = value.name;
+                            if(!name) {
+                                name = value.id || value;
+                                // try finding localization for the param
+                                // FIXME: get rid of this -> have server give ui labels
+                                name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                            }
+                            uiLabels.push( {
+                                selector : selector.id,
+                                id : value.id || value,
+                                valueLabel : name
+                            });
                         });
                     });
-
                 }
-
-                var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
-                if(typeof callback === 'function') {
-                    callback(selectionsText);
-                }
+                var preferredFormatting = [];
+                uiLabels.forEach(function(label) {
+                    preferredFormatting.push(uiLabels.valueLabel);
+                });
+                var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
+                callback({
+                    indicator : Oskari.getLocalized(ind.name),
+                    params : selectorsFormatted,
+                    full : name + ' ' + selectorsFormatted,
+                    paramsAsObject : uiLabels
+                });
             });
         },
         /**
