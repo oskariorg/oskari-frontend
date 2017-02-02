@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
                     tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
 
-                    me.service.getSelectionsText(ind, locale.panels.newSearch, function(text){
+                    me.service.getSelectionsText(ind, function(text){
                         tableHeader.find('.header').append(Oskari.getLocalized(indicator.name) + text).attr('title', Oskari.getLocalized(indicator.name) + text);
                     });
 

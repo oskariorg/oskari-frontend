@@ -34,7 +34,8 @@ Oskari.clazz.define(
             var me = this;
 
             // create the StatisticsService for handling ajax calls and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox);
+            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here
+            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
 

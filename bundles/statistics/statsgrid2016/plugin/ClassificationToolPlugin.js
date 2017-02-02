@@ -220,7 +220,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
          * @param  {Object} ind indicator
          * @param {Object} config config
          */
-        updatePublishedFlyoutTitle: function (ind, config){
+        updatePublishedFlyoutTitle: function (ind){
             var me = this;
             var sb = me.getSandbox();
 
@@ -260,17 +260,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 if(state.indicators.length>1) {
                     linkButton = '<div class="link">' + me._locale.statsgrid.source + ' ' + link.index + ' >></div>';
                 }
-                selectionsText = service.getSelectionsText(ind, me._locale.panels.newSearch, function(text){
+                selectionsText = service.getSelectionsText(ind, function(text){
                     me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
                         linkButton +
                         '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
                 });
-
+/*
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
                 me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
                     link.handler();
                 });
-
+*/
             });
 
         },

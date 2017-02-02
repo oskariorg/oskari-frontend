@@ -10,8 +10,9 @@
      * @method create called automatically on construction
      * @static
      */
-    function (sandbox) {
+    function (sandbox, locale) {
         this.sandbox = sandbox;
+        this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
@@ -66,23 +67,23 @@
             this.datasources.push(ds);
         },
 
-        getSelectionsText: function(indicator, locale, callback) {
+        getSelectionsText: function(indicator, callback) {
             var me = this;
+            var locale = this.locale;
             var selectionsTexts = [];
 
-            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind){
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
                     ind.selectors.forEach(function(selector) {
                         selector.allowedValues.forEach(function(value) {
-                            if(val === (value.id || value)) {
-                                var name = value.name || value.id || value;
-                                var optName = (locale.selectionValues[selector.id] && locale.selectionValues[selector.id][name]) ? locale.selectionValues[selector.id][name] : name;
-
-                                selectionsTexts.push(optName);
+                            if(val !== (value.id || value)) {
+                                return;
                             }
-
+                            var name = value.name || value.id || value;
+                            var optName = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                            selectionsTexts.push(optName);
                         });
                     });
 

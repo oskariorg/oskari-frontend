@@ -1,20 +1,20 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, locale) {
     this.sb = sandbox;
+    this.locale = locale;
+    this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
-    this.locale = locale;
     this._bindToEvents();
     this.__templates = {
-        legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
+        main: jQuery('<div class="statsgrid-legend-container"></div>'),
         noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
         noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
     };
-    this.__legendElement = this.__templates.legendContainer.clone();
-    this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
+    this.__legendElement = this.__templates.main.clone();
+    this.__element = this.__templates.main.clone();
     this._panel = null;
     this._accordion = null;
     this._container = jQuery('<div class="accordion-theming"></div>');
-    this._notHandleColorSelect = false;
 
     this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.sb, this.locale);
     this.editClassificationElement = this.editClassification.getElement();
@@ -73,6 +73,110 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         this._renderActiveIndicator();
     },
 
+    getActiveIndicator : function() {
+        if(!this.service) {
+            return false;
+        }
+
+        return this.service.getStateService().getActiveIndicator();
+    },
+    // Header
+    //   Source nn
+    //   Indicator name + params
+    //   (Next source link)
+    // Accordion (or note about "insufficient data")
+    //   Classification panel
+    //   Legend
+    //
+    // Alternatively note about no indicator selected
+    render : function(el) {
+        this.__element.empty();
+        var activeIndicator = this.getActiveIndicator();
+        if(!activeIndicator) {
+            this.__element.append(this.__templates.noActiveSelection.clone());
+            return;
+        }
+        this._renderHeader(activeIndicator);
+        // check if we have data to classify
+        // if no:
+        if(true) {
+            this.__element.append(this.__templates.noEnoughData.clone());
+            return;
+        }
+        // if yes:
+        this._renderClassification();
+        this._renderLegend(activeIndicator);
+
+    },
+        createHeader: function (activeIndicator, callback) {
+            var sb = this.getSandbox();
+            var locale = this.locale;
+
+            var service = this.service;
+            if(!service) {
+                // not available yet
+                return;
+            }
+            var stateService = this.service.getStateService();
+
+            this.service.getIndicatorMetadata(activeIndicator.datasource, activeIndicator.indicator, function(err, indicator) {
+
+                var getSourceLink = function(currentHash){
+                    var indicators = stateService.getIndicators();
+                    var currentIndex = stateService.getIndicatorIndex(currentHash);
+                    var nextIndicatorIndex = currentIndex + 1;
+                    if(nextIndicatorIndex === indicators.length) {
+                        nextIndicatorIndex = 0;
+                    }
+                    return {
+                        indexForUI: currentIndex + 1,
+                        handler: function(){
+                            var i = indicators[nextIndicatorIndex];
+                            stateService.setActiveIndicator(i.hash);
+                        }
+                    };
+                };
+
+                var link = getSourceLink(ind.hash);
+
+                var linkButton = '';
+                if(stateService.indicators.length > 1) {
+                    linkButton = jQuery('<div class="link">' + me._locale.statsgrid.source + ' ' + link.indexForUI + ' >></div>');
+                    linkButton.click(function(){
+                        link.handler();
+                    });
+                }
+                // TODO: make synchronous version of getSelectionsText since we already have the metadata?
+                var selectionsText = service.getSelectionsText(ind, function(text){
+                    me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                        linkButton +
+                        '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                });
+/*
+                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
+                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
+                    link.handler();
+                });
+*/
+            });
+
+        },
+    _renderBody : function(activeIndicator) {
+        if(!this.service) {
+            return false;
+        }
+        var me = this;
+        var stateService = this.service.getStateService();
+        var currentRegionset = stateService.getRegionset();
+
+        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, currentRegionset, function(err, data) {
+            if(err) {
+                me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
+                me.__legendElement.html(me.__templates.noEnoughData.clone());
+                return;
+            }
+        });
+    },
     /**
      * @method  @private _renderActiveIndicator render active indicator changed
      */
@@ -130,7 +234,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     return;
                 }
 
-                service.getSelectionsText(ind, me.locale.panels.newSearch, function(text){
+                service.getSelectionsText(ind, function(text){
                     var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
                     var jQueryLegend = jQuery(legend);
 
@@ -158,11 +262,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                             me._addEditHandlers();
                         }, 0);
                     }
-
+/*
                     setTimeout(function(){
                         me._refreshEditClassification();
                     }, 0);
-
+*/
                 });
 
             });
