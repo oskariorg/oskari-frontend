@@ -46,16 +46,15 @@ Oskari.clazz.define(
             this.setState();
 
             if(this.isEmbedded()) {
-                // start in an embedded map mode
-                if(conf.grid) {
-                    // Embedded map might or might not have the grid.
-                    // If it's enabled, show toggle buttons so user can toggle it on/off
-                    me.showToggleButtons(true);
-                }
+                // Start in an embedded map mode
+                // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
+                me.showToggleButtons(conf.grid !== false);
+                // Always show legend on map when embedded
                 me.showLegendOnMap(true);
+                // Classification can be disabled for embedded map
                 me.enableClassification(conf.allowClassification !== false);
             }
-
+            // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
         },
         isEmbedded: function() {

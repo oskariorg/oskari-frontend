@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._index = 9;
         me._name = 'ClassificationToolPlugin';
         me._toolOpen = false;
-        me._flyout = null;
         me.__sideTools = me._instance.__sideTools;
         me._element = null;
         me._templates = {
@@ -276,9 +275,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
 
         },
 
-        setFlyout: function(flyout){
-            this._flyout = flyout;
-        },
         teardownUI : function() {
             //remove old element
             var me = this;
