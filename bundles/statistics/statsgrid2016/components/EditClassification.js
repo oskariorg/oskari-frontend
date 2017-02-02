@@ -138,7 +138,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var state = me.service.getStateService();
         var ind = state.getActiveIndicator();
         classification = classification || state.getClassification(ind.hash);
-
+        if(!me._element) {
+            // FIXME: this happens if UI is rendered before adding any indicator
+            // 1) open classification 2) add indicator 3) this happens
+            // Happy case works ok:
+            // 1) add indicator 2) open classification 3) works correctly
+            // This doesn't work:
+            //me._element = this.getElement();
+        }
         me._element.find('select.method').val(classification.method);
 
         var amountRange = me.service.getColorService().getRange(classification.type);

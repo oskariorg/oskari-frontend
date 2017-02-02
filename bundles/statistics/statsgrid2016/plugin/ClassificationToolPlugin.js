@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                                 me._publishedComponents.panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                                 me._publishedComponents.panelClassification.setVisible(true);
                                 me._publishedComponents.panelClassification.setTitle(locale.classify.editClassifyTitle);
-                                me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sb, me.locale);
+                                me._publishedComponents.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sb, locale);
                                 var editClassificationElement = me._publishedComponents.editClassification.getElement();
                                 me._publishedComponents.panelClassification.setContent(editClassificationElement);
                                 accordion.addPanel(me._publishedComponents.panelClassification);
@@ -257,17 +257,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 var link = getSourceLink(ind.hash);
                 var selectionsText = '';
 
-                if(config.grid !== true || config.showLegend !== false) {
-                    var linkButton = '';
-                    if(state.indicators.length>1) {
-                        linkButton = '<div class="link">' + me._locale.statsgrid.source + ' ' + link.index + ' >></div>';
-                    }
-                    selectionsText = service.getSelectionsText(ind, me._locale.panels.newSearch, function(text){
-                        me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                            linkButton +
-                            '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
-                    });
+                var linkButton = '';
+                if(state.indicators.length>1) {
+                    linkButton = '<div class="link">' + me._locale.statsgrid.source + ' ' + link.index + ' >></div>';
                 }
+                selectionsText = service.getSelectionsText(ind, me._locale.panels.newSearch, function(text){
+                    me.__sideTools.legend.flyout.setTitle('<div class="header">' + me._locale.statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
+                        linkButton +
+                        '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
+                });
 
                 me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
                 me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
@@ -406,7 +404,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 }
             });
         },
-        setEnabled: function(enabled) {
+        enableClassification: function(enabled) {
             var me = this;
             if(me._publishedComponents.editClassification) {
                 me._publishedComponents.editClassification.setEnabled(enabled);

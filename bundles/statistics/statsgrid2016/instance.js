@@ -53,6 +53,7 @@ Oskari.clazz.define(
                     me.showToggleButtons(true);
                 }
                 me.showLegendOnMap(true);
+                me.enableClassification(conf.allowClassification !== false);
             }
 
             this.__setupLayerTools();
@@ -199,66 +200,6 @@ Oskari.clazz.define(
             var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
-        /**
-         * @method  @public updatePublishedFlyoutTitle update published map legend
-         * @param  {Object} ind indicator
-         * @param {Object} config config
-         */
-        updatePublishedFlyoutTitle: function (ind, config){
-            var me = this;
-            var sb = me.getSandbox();
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-            var state = service.getStateService();
-
-            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-
-                var getSourceLink = function(currentHash){
-                    var indicators = state.getIndicators();
-                    var currentIndex = state.getIndicatorIndex(currentHash);
-                    var nextIndicatorIndex = 1;
-                    if(currentIndex === indicators.length) {
-                        nextIndicatorIndex = 1;
-                    } else {
-                        nextIndicatorIndex=currentIndex + 1;
-                    }
-
-                    return {
-                        index: nextIndicatorIndex,
-                        handler: function(){
-                            var curIndex = nextIndicatorIndex-1;
-                            var i = indicators[curIndex];
-                            state.setActiveIndicator(i.hash);
-                        }
-                    };
-                };
-
-                var link = getSourceLink(ind.hash);
-                var selectionsText = '';
-
-                if(config.grid !== true || config.showLegend !== false) {
-                    var linkButton = '';
-                    if(state.indicators.length>1) {
-                        linkButton = '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>';
-                    }
-                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch, function(text){
-                        me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                            linkButton +
-                            '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
-                    });
-                }
-
-                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
-                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
-                    link.handler();
-                });
-
-            });
-
-        },
 
         /**
          * Sets the map state to one specified in the parameter. State is bundle specific, check the
@@ -363,8 +304,8 @@ Oskari.clazz.define(
             if(!this.plugin) {
                 return;
             }
-            this.plugin.setEnabled(enabled);
-            this.getConfiguration().allowClassification = enabled;
+            // TODO: setEnabled should be renamed allowClassification on plugin
+            this.plugin.enableClassification(enabled);
         }
 
     }, {

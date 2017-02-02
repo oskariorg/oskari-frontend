@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 };
             }
             if(!comp.__sideTools.legend.comp) {
-                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', me.instance);
+                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
             }
             if(!comp.__sideTools.legend.flyout) {
                 options = options || {};

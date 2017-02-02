@@ -1,10 +1,8 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
-    this.instance = instance;
-    this.sb = this.instance.getSandbox();
+Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, locale) {
+    this.sb = sandbox;
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
-    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this.locale = this.instance.getLocalization();
+    this.locale = locale;
     this._bindToEvents();
     this.__templates = {
         legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
@@ -21,6 +19,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
     this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.sb, this.locale);
     this.editClassificationElement = this.editClassification.getElement();
 }, {
+    allowClassification : function(enabled) {
+        this.editClassification.setEnabled(enabled);
+    },
     /****** PRIVATE METHODS ******/
 
     /**
@@ -41,7 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
-            me._handleRegionsetChanged(event.getRegionset());
+            me._renderActiveIndicator();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
@@ -129,13 +130,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                     return;
                 }
 
-                service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
+                service.getSelectionsText(ind, me.locale.panels.newSearch, function(text){
                     var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
                     var jQueryLegend = jQuery(legend);
 
                     var isAccordion = true;
 
-                    if(!me._accordion && !me.instance.conf.publishedClassification) {
+                    if(!me._accordion) {
                         me._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 
                         me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -152,17 +153,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
                     me.__legendElement.append(jQueryLegend);
 
                     // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
-                    if(!me.instance.conf.publishedClassification) {
-                        if(isAccordion) {
-                            setTimeout(function(){
-                                me._addEditHandlers();
-                            }, 0);
-                        }
-
+                    if(isAccordion) {
                         setTimeout(function(){
-                            me._refreshEditClassification();
+                            me._addEditHandlers();
                         }, 0);
                     }
+
+                    setTimeout(function(){
+                        me._refreshEditClassification();
+                    }, 0);
 
                 });
 
