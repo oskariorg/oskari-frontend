@@ -95,18 +95,19 @@
                             uiLabels.push( {
                                 selector : selector.id,
                                 id : value.id || value,
-                                valueLabel : name
+                                label : name
                             });
                         });
                     });
                 }
                 var preferredFormatting = [];
-                uiLabels.forEach(function(label) {
-                    preferredFormatting.push(uiLabels.valueLabel);
+                uiLabels.forEach(function(param) {
+                    preferredFormatting.push(param.label);
                 });
+                var name = Oskari.getLocalized(ind.name);
                 var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
                 callback({
-                    indicator : Oskari.getLocalized(ind.name),
+                    indicator : name,
                     params : selectorsFormatted,
                     full : name + ' ' + selectorsFormatted,
                     paramsAsObject : uiLabels
