@@ -325,307 +325,63 @@ div.oskari-flyoutcontent{
     }
 
 }
+/* ********************************************
+ * Statsgrid legend
+ * ******************************************* */
 
-
-.statsgrid-legend-flyout, .statsgrid-legend-flyout-published {
-    .statsgrid-legend-container {
-        font-size: 12px;
-        .legend-noactive {
-            margin: 3px 10px 5px 10px;
-        }
-        .geostats-legend {
-            font-size: 12px;
-
-            div.accordion {
-                div.accordion_panel {
-                    border: 0;
-                    border-top: 1px solid #C0D0D0;
-                    border-bottom: 1px solid #C0D0D0;
-                    div.content {
-                        padding: 10px;
-                    }
-                }
-            }
-        }
-        .geostats-legend-title {
-            font-weight: normal;
-        }
-
-        .accordion-theming {
-            margin: 0;
-            .accordion {
-                margin: 0;
-                .accordion_panel {
-                    overflow:visible;
-                    position:relative;
-                    .header {
-                        margin: 0;
-                        .headerIcon {
-                            margin: 0;
-                            margin-left: 4px;
-                        }
-                        .headerText {
-                            font-size: 12px;
-                            padding: 0;
-                            font-weight: normal;
-                        }
-                    }
-
-                    .content {
-                        div {
-                            margin: 0;
-                            margin-left: 4px;
-                            margin-top: 2px;
-
-                            &.value {
-                                margin-left:12px;
-                            }
-                        }
-
-
-                        margin: 0;
-                        padding: 0;
-                        .classifications {
-                            margin:0;
-                            margin-bottom: 10px;
-
-                            .classification-method, .classification-count, .classification-mode, .classification-colors,
-                            .classification-color-set {
-                                margin: 0;
-                            }
-
-                            div.oskari-color-selection-main {
-                                margin: 4px;
-                                margin-left: 12px;
-                                div.oskari-selected-color {
-                                    margin:0;
-                                    div {
-                                        margin:0;
-                                    }
-                                }
-                                div.color-selection-arrow {
-                                    margin:0;
-                                    div {
-                                        margin:0;
-                                    }
-                                }
-                                div.oskari-color {
-                                    margin:0;
-                                }
-
-                                div.oskari-color-selection {
-                                    margin:0;
-                                    div {
-                                        margin: 0;
-                                    }
-                                }
-                            }
-
-                            button {
-                                &.reverse-colors{
-                                    margin-left: 12px;
-                                    width: $buttonWidth;
-                                    padding: 4px 5px;
-                                }
-                            }
-
-                            .label {
-                                font-weight: bold;
-                            }
-                            select {
-                                width: $inputWidth;
-                                font-size: 12px;
-                                padding: 1px 2px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.statsgrid-legend-flyout-published {
+.statsgrid-legend-plugin {
+    border: 1px solid rgba(0,0,0,0.2);
     pointer-events: auto;
     text-align: left;
-    .oskari-flyout {
-        position: relative;
-    }
+}
 
-    div.oskari-flyoutheading {
-        display:none;
-    }
+.statsgrid-legend-container {
+    background-color: #FFFFFF;
+    width: 200px;
+    font-size: 12px;
 
-    div.oskari-flyouttoolbar {
-        height:auto;
-    }
-    div.oskari-flyouttools {
-        display: none;
-    }
-
-    div.statsgrid-legend-container {
-        div.geostats-legend-title {
-            display: none;
-        }
-
-        div.geostats-legend {
-            padding-top: 0;
-            padding-bottom:0;
-        }
-    }
-
-    div.oskari-flyout-title {
+    >div.header {
         background-color: #fdf8d9;
         margin: 0;
         height:auto;
         padding: 6px;
         width: 94%;
+        font-weight: bold;
 
-        div.header {
+        div.title {
             font-size: 14px;
-            font-weight: bold;
         }
-
         div.link {
             cursor:pointer;
             color:#4292c5;
-            position:absolute;
-            top:6px;
-            right:8px;
+            float: right;
             text-decoration: underline;
         }
-
         div.sourcename {
-            font-weight: bold;
-        }
-        p {
-            font-size: 12px;
+            font-weight: normal;
         }
     }
 
-    div.accordion {
-        div.accordion_panel {
-            border: none;
-            div.header {
-                background-color: #F3F3F3;
-
-                div.headerText {
-                    font-size: 12px;
-                    line-height: 12px;
-                    padding: 4px 8px 4px 4px;
-                }
-
-                div.headerIcon {
-                    margin-left: 4px;
-                }
-            }
-
-            &.open {
-                div.header {
-                    background-color: #F3F3F3;
-                }
-            }
-        }
+    .legend-noactive {
+        padding: 3px 10px 5px 10px;
     }
 
+    >.accordion .accordion_panel {
+        border: 0px;
 
-    .accordion-published {
+        .header .headerIcon {
             margin: 0;
-            .accordion {
-                margin: 0;
-                .accordion_panel {
-                    overflow:visible;
-                    position:relative;
-                    .header {
-                        margin: 0;
-                        .headerIcon {
-                            margin: 0;
-                            margin-left: 4px;
-                        }
-                        .headerText {
-                            font-size: 12px;
-                            padding: 0;
-                            font-weight: normal;
-                        }
-                    }
-
-                    .content {
-                        div {
-                            margin: 0;
-                            margin-left: 4px;
-                            margin-top: 2px;
-
-                            &.value {
-                                margin-left:12px;
-                            }
-                        }
-
-                        .geostats-legend div {
-                            margin: 3px 10px 5px 10px;
-                        }
-
-                        margin: 0;
-                        padding: 0;
-                        .classifications {
-                            margin:0;
-                            margin-bottom: 10px;
-
-                            .classification-method, .classification-count, .classification-mode, .classification-colors,
-                            .classification-color-set {
-                                margin: 0;
-                            }
-
-                            div.oskari-color-selection-main {
-                                margin: 4px;
-                                margin-left: 12px;
-                                div.oskari-selected-color {
-                                    margin:0;
-                                    div {
-                                        margin:0;
-                                    }
-                                }
-                                div.color-selection-arrow {
-                                    margin:0;
-                                    div {
-                                        margin:0;
-                                    }
-                                }
-                                div.oskari-color {
-                                    margin:0;
-                                }
-
-                                div.oskari-color-selection {
-                                    margin:0;
-                                    div {
-                                        margin: 0;
-                                    }
-                                }
-                            }
-
-                            button {
-                                &.reverse-colors{
-                                    margin-left: 12px;
-                                    width: $buttonWidth;
-                                    padding: 4px 5px;
-                                }
-                            }
-
-                            .label {
-                                font-weight: bold;
-                                font-size: 12px;
-                            }
-                            select {
-                                width: $inputWidth;
-                                font-size: 12px;
-                                padding: 1px 2px;
-                            }
-                        }
-                    }
-                }
-            }
+            margin-left: 4px;
         }
 
+        .header .headerText {
+            font-size: 12px;
+            padding: 0;
+            font-weight: normal;
+        }
+    }
 }
+
 
 
 /** Toggle buttons */
