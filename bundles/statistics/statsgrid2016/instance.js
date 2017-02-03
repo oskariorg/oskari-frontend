@@ -49,7 +49,7 @@ Oskari.clazz.define(
             if(this.isEmbedded()) {
                 // Start in an embedded map mode
                 // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
-                me.showToggleButtons(conf.grid !== false);
+                me.showToggleButtons(conf.grid !== false, this.state.view);
                 // Always show legend on map when embedded
                 me.showLegendOnMap(true);
                 // Classification can be disabled for embedded map
@@ -244,7 +244,7 @@ Oskari.clazz.define(
                     ds: ind.datasource,
                     id: ind.indicator,
                     selections: ind.selections,
-                    classification: service.getClassification(ind.hash)
+                    classification: service.getClassificationOpts(ind.hash)
                 });
             });
             var active = service.getActiveIndicator();
@@ -253,7 +253,7 @@ Oskari.clazz.define(
             }
             return state;
         },
-        showToggleButtons: function(enabled) {
+        showToggleButtons: function(enabled, visible) {
             var me = this;
             if(!enabled && this.togglePlugin){
                 this.togglePlugin.remove();
@@ -263,7 +263,7 @@ Oskari.clazz.define(
                 this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
             }
             me.getFlyout().move(0,0);
-            jQuery('body').append(this.togglePlugin.create(me.visible));
+            jQuery('body').append(this.togglePlugin.create(visible || me.visible));
         },
         /**
          * @method  @public showLegendOnMap Render published  legend

@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me.__sideTools = me._instance.__sideTools;
         me._element = null;
         me._templates = {
-            classification: jQuery('<div class="statsgrid-legend-flyout-published"></div>')
+            classification: jQuery('<div class="statsgrid-legend-plugin"></div>')
         };
 
         me._publishedComponents = {
@@ -48,6 +48,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             buttonGroup: 'mobile-toolbar'
         };
         me.log = Oskari.log('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin');
+
+        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, locale);
     }, {
 
         /**
@@ -97,7 +99,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
          */
         _createControlElement: function () {
             var me = this;
-
             var sb = me._sandbox;
             var locale = me._locale;
             var config = me._config;
@@ -108,6 +109,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 return me._element;
             }
             me._element = me._templates.classification.clone();
+            if(true) {
+                this.__legend.render(me._element);
+                return me._element;
+            }
             config.publishedClassification = true;
             jQuery('.statsgrid-legend-flyout-published').show();
 
@@ -179,10 +184,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
 
                                 var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                                 panelLegend.setTitle(locale.legend.title);
-
+/*
                                 var classification = me.__sideTools.legend.comp.getClassification();
                                 classification.find('.accordion-theming').remove();
                                 panelLegend.setContent(classification);
+                                */
                                 panelLegend.setVisible(true);
                                 panelLegend.open();
 
@@ -379,25 +385,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                 }
             }
             el.addClass(styleClass);
-        },
-        /**
-         * @method  @private addEditHandlers add edit handlers again
-         */
-        _addEditHandlers: function(){
-            var me = this;
-            if(!me.__legendElement || !me._panel) {
-                return;
-            }
-
-            me.__legendElement.find('.accordion_panel .header').bind('click', function(event){
-                var el = jQuery(this).parent();
-
-                if(el.hasClass('open')) {
-                    me._panel.close();
-                } else {
-                    me._panel.open();
-                }
-            });
         },
         enableClassification: function(enabled) {
             var me = this;

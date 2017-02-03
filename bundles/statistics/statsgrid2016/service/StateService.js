@@ -100,10 +100,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
         },
         /**
-         * Gets classification
+         * Gets getClassificationOpts
          * @param  {String} indicatorHash indicator hash
          */
-        getClassification : function(indicatorHash) {
+        getClassificationOpts : function(indicatorHash) {
             if(typeof indicatorHash === 'string') {
                 var indicator = this.getIndicator(indicatorHash);
                 if(indicator && indicator.classification) {
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             return this.indicators;
         },
         /**
-         * @method  @public getIndicatorIndex Gets indicator index startin number 1
+         * @method  @public getIndicatorIndex Gets indicator index startin number 0
          * @param  {String} indicatorHash indicator hash
          * @return {Integer} indicator index
          */
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             for(var i = 0;i<this.indicators.length; i++) {
                 var ind = this.indicators[i];
                 if(ind.hash === indicatorHash) {
-                    return i+1;
+                    return i;
                 }
             }
             return null;

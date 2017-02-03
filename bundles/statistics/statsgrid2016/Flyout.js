@@ -83,9 +83,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                             me.__sideTools.legend.opened = false;
                         },
                         show: function(popup) {
-                            var classification = me.__sideTools.legend.comp.getClassification();
-
-                            me.__sideTools.legend.flyout.setContent(classification);
+                            var container = jQuery('<div/>');
+                            var classification = me.__sideTools.legend.comp.render(container);
+                            me.__sideTools.legend.flyout.setContent(container);
 
                             me.setSideToolPopupPosition(popup);
                         },

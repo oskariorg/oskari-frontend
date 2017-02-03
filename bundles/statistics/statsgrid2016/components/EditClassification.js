@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         var state = me.service.getStateService();
         var ind = state.getActiveIndicator();
-        classification = classification || state.getClassification(ind.hash);
+        classification = classification || state.getClassificationOpts(ind.hash);
         if(!me._element) {
             // FIXME: this happens if UI is rendered before adding any indicator
             // 1) open classification 2) add indicator 3) this happens
