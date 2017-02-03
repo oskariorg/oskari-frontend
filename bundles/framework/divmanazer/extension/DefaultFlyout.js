@@ -94,7 +94,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
 
             if(typeof callback === 'function') {
                 sidelabel.on('click', function() {
-                    callback(jQuery(sidelabel));
+                    var position = me.getEl().parents('.oskari-flyout').position();
+                    var bounds = {
+                        left : position.left + sidelabel.position().left,
+                        top : position.top + sidelabel.position().top
+                    }
+                    bounds.right = bounds.left + sidelabel.outerWidth()
+                    bounds.bottom = bounds.top + sidelabel.height()
+                    callback(sidelabel, bounds);
                 });
             }
 

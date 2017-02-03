@@ -12,9 +12,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
-        this.__sideTools = {
-            legend: {}
-        };
     }, {
         /**
          * @method getName
@@ -32,39 +29,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
         },
-        getLegendFlyout: function(options, comp){
-            var me = this;
-            if(!comp.__sideTools) {
-                comp.__sideTools = {
-                    legend: {}
-                };
+        getLegendFlyout : function() {
+            if(this.__legendFlyout) {
+                return this.__legendFlyout;
             }
-            if(!comp.__sideTools.legend.comp) {
-                comp.__sideTools.legend.comp = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
-            }
-            if(!comp.__sideTools.legend.flyout) {
-                options = options || {};
-                options.locale = options.locale || { title: ''};
-                comp.__sideTools.legend.flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', me.instance, options.locale, {
-                    width: '200px',
-                    closeCallback: function(popup) {
-                         if(options.callbacks && typeof options.callbacks.close === 'function'){
-                            options.callbacks.close(popup);
-                         }
-                    },
-                    showCallback: function(popup) {
-                        if(options.callbacks && typeof options.callbacks.show === 'function'){
-                            options.callbacks.show(popup);
-                         }
-                    },
-                    cls: options.cls,
-                    container: options.container
-                });
-            }
-
-            if(options.callbacks && typeof options.callbacks.after === 'function') {
-                options.callbacks.after();
-            }
+            var locale = this.instance.getLocalization().legend;
+            var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', locale.title, {
+                width: '200px',
+                cls: 'statsgrid-legend-flyout'
+            });
+            this.__legendFlyout = flyout;
+            // render content
+            this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
+            var container = jQuery('<div/>');
+            this.__legend.render(container);
+            flyout.setContent(container);
+            return this.__legendFlyout;
         },
         showLegend : function(enabled) {
             if(!enabled) {
@@ -73,36 +53,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             }
             var me = this;
             var locale = this.instance.getLocalization();
-            this.addSideTool(locale.legend.title, function(el){
-                me.__sideTools.legend.sideTool = el;
-
-                me.getLegendFlyout(
-                {
-                    callbacks: {
-                        close: function() {
-                            me.__sideTools.legend.opened = false;
-                        },
-                        show: function(popup) {
-                            var container = jQuery('<div/>');
-                            var classification = me.__sideTools.legend.comp.render(container);
-                            me.__sideTools.legend.flyout.setContent(container);
-
-                            me.setSideToolPopupPosition(popup);
-                        },
-                        after: function(){
-                            if(me.__sideTools.legend.opened) {
-                                me.__sideTools.legend.flyout.hide();
-                                me.__sideTools.legend.opened = false;
-                            } else {
-                                me.__sideTools.legend.flyout.show();
-                                me.__sideTools.legend.opened = true;
-                            }
-
-                        }
-                    },
-                    locale: locale.legend,
-                    cls: 'statsgrid-legend-flyout'
-                }, me);
+            this.addSideTool(locale.legend.title, function(el, bounds) {
+                // lazy render
+                var flyout = me.getLegendFlyout();
+                if(flyout.isVisible()) {
+                    flyout.hide();
+                } else {
+                    // show and reset position
+                    me.setSideToolPopupPosition(bounds, flyout);
+                    flyout.show();
+                }
             });
         },
         /**
@@ -132,29 +92,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             this.addContent(this.getEl(), isEmbedded);
         },
 
-        setSideToolPopupPosition: function(popup) {
+        setSideToolPopupPosition: function(bounds, flyout) {
             var me = this;
-            var tool = me.__sideTools.legend.sideTool;
-            var position = tool.position();
-            var parent = tool.parents('.oskari-flyout');
-            if(parent.length === 0) {
-                return;
+            var left = bounds.right;
+            var size = flyout.getSize();
+            if(left + size.width > jQuery(window).width()) {
+                left = jQuery(window).width() - size.width;
             }
-            var left = parent.position().left + parent.outerWidth() + tool.width() - 16;
-
-            if(left + popup.width() > jQuery(window).width()) {
-                left = left - popup.width() - tool.width();
+            if(left < 0) {
+                left = 0;
             }
-            var top = parent.position().top + position.top;
-            if(top + popup.height() > jQuery(window).height()) {
-                top = top - (popup.height() - tool.height());
+            var top = bounds.top;
+            if(top + size.height > jQuery(window).height()) {
+                top = jQuery(window).height() - size.height;
             }
-            popup.css({
-                left: left,
-                top: top
-            });
-
-            popup.css('z-index', 20000);
+            if(top < 0) {
+                top = 0;
+            }
+            flyout.move(left, top);
+            flyout.bringToTop();
         },
         addContent : function (el, isEmbedded) {
             var sb = this.instance.getSandbox();
@@ -185,11 +141,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         },
         onClose: function() {
             var me = this;
-            for(var tool in me.__sideTools) {
-                if(me.__sideTools[tool] && me.__sideTools[tool].flyout) {
-                    me.__sideTools[tool].flyout.hide();
-                }
-            }
+            var legend = this.getLegendFlyout();
+            legend.hide();
         },
         closePanels: function() {
             var panels = this.__panels || [];
