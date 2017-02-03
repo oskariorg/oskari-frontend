@@ -60,8 +60,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                     flyout.hide();
                 } else {
                     // show and reset position
-                    me.setSideToolPopupPosition(bounds, flyout);
+                    flyout.move(bounds.right, bounds.top, true);
                     flyout.show();
+                    flyout.bringToTop();
                 }
             });
         },
@@ -92,26 +93,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             this.addContent(this.getEl(), isEmbedded);
         },
 
-        setSideToolPopupPosition: function(bounds, flyout) {
-            var me = this;
-            var left = bounds.right;
-            var size = flyout.getSize();
-            if(left + size.width > jQuery(window).width()) {
-                left = jQuery(window).width() - size.width;
-            }
-            if(left < 0) {
-                left = 0;
-            }
-            var top = bounds.top;
-            if(top + size.height > jQuery(window).height()) {
-                top = jQuery(window).height() - size.height;
-            }
-            if(top < 0) {
-                top = 0;
-            }
-            flyout.move(left, top);
-            flyout.bringToTop();
-        },
         addContent : function (el, isEmbedded) {
             var sb = this.instance.getSandbox();
 

@@ -125,9 +125,24 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    	}
             this.__popup.css('z-index', 20000);
 	    },
-	    move : function(left, top) {
+	    move : function(left, top, keepOnScreen) {
 	    	if(!this.__popup) {
 	    		return;
+	    	}
+	    	if(keepOnScreen) {
+	    		var size = this.getSize();
+	            if(left + size.width > jQuery(window).width()) {
+	                left = jQuery(window).width() - size.width;
+	            }
+	            if(left < 0) {
+	                left = 0;
+	            }
+	            if(top + size.height > jQuery(window).height()) {
+	                top = jQuery(window).height() - size.height;
+	            }
+	            if(top < 0) {
+	                top = 0;
+	            }
 	    	}
             this.__popup.css({
                 left: left,
