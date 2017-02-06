@@ -304,7 +304,6 @@ Oskari.clazz.define(
             if(!this.plugin) {
                 return;
             }
-            // TODO: setEnabled should be renamed allowClassification on plugin
             this.plugin.enableClassification(enabled);
         }
 

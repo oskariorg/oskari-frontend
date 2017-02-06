@@ -60,13 +60,11 @@ function() {
         // publisher-tools should provide information if they need screen estate from map
         var statsGrid = this.__sandbox.getStatefulComponents().statsgrid || { state : {} };
         var width = 0;
-        if(this.isEnabled()) {
-            if (statsGrid.state.indicators) {
-                //indicators + municipality (name & code)
-                columns = statsGrid.state.indicators.length + 2;
-                //grid column width is 80 by default
-                width = columns * 80;
-            }
+        if(this.isEnabled() && statsGrid.state.indicators) {
+            //indicators + municipality (name & code)
+            columns = statsGrid.state.indicators.length + 2;
+            //grid column width is 80 by default
+            width = columns * 80;
         }
         return {
             height: 0,

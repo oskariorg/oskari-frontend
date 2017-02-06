@@ -29,12 +29,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         var loc = this.localization;
         var allowedRegionsets = this.__getOptions(restrictTo);
         if(!allowedRegionsets.length) {
-            var select = jQuery('<div class="noresults">'+loc.noRegionset+'</div>');
-            select.addClass('margintop');
+            var noRegionSetResult = jQuery('<div class="noresults">'+loc.noRegionset+'</div>');
+            noRegionSetResult.addClass('margintop');
             return {
-                container : select,
-                field : select,
-                oskariSelect : select,
+                container : noRegionSetResult,
+                field : noRegionSetResult,
+                oskariSelect : noRegionSetResult,
                 value :function() {}
             };
         }
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
     __getOptions : function(restrictTo) {
         var allRegionsets = this.service.getRegionsets();
         if(!restrictTo) {
-            return allowedRegionsets;
+            return allRegionsets;
         }
         var allowedRegionsets = [];
         allRegionsets.forEach(function(regionset) {

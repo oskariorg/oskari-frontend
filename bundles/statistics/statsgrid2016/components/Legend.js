@@ -169,9 +169,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             };
             if(indicators.length < 2) {
                 // no need to setup link, remove it instead
-                var head = jQuery(headerTemplate(tplParams));
-                head.find('.link').remove();
-                callback(head);
+                var noLinksHeader = jQuery(headerTemplate(tplParams));
+                noLinksHeader.find('.link').remove();
+                callback(noLinksHeader);
                 return;
             }
 
