@@ -112,6 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 if(!regionSelect) {
                     return;
                 }
+                regionSelector.__setWidth(170);
                 regionSelect.value(me.getCurrentRegionset());
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();

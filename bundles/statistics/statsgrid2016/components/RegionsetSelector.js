@@ -8,7 +8,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         label : label,
         noRegionset : panelLoc.noRegionset,
         placeholder : placeholderText
-    }
+    };
+    this.dropdown = null;
 }, {
     __templates : {
         select : _.template('<div class="parameter"><div class="label">${label}</div><div class="clear"></div></div>'),
@@ -51,10 +52,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
             width: '100%'
         };
         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var dropdown = select.create(allowedRegionsets, options);
-        fieldContainer.find('.label').append(dropdown);
+        this.dropdown = select.create(allowedRegionsets, options);
+        fieldContainer.find('.label').append(this.dropdown);
         select.adjustChosen();
-        var jqSelect = dropdown.find('select');
+        var jqSelect = this.dropdown.find('select');
 
         return {
             container : fieldContainer,
@@ -68,6 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
             },
             field : jqSelect
         };
+    },
+    __setWidth : function ( width ){
+      this.dropdown.css({ width: width +'' });
     },
     __getOptions : function(restrictTo) {
         var allRegionsets = this.service.getRegionsets();
