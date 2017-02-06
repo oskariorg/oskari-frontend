@@ -99,8 +99,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @method @public setValue
          * Sets the component's value. Value ie wanted index color value.
          * @param {Integer} value
+         * @param {Boolean} silent if true -> don't call handler method
          */
-        setValue: function (value) {
+        setValue: function (value, silent) {
             var me = this;
             me._element.find('.oskari-color-selection .oskari-color-option').css('background-color', '#' + me._colorsConfig.menu).attr('data-selected', false);
             var option = me._element.find('.oskari-color-selection .oskari-color-option[data-id='+value+']');
@@ -112,7 +113,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                 me._selected.html(optionClone);
                 option.attr('data-selected', true);
                 option.css('background-color', '#' + me._colorsConfig.selected);
-                if(typeof me.getHandler() === 'function') {
+                if(!silent && typeof me.getHandler() === 'function') {
                     me.getHandler()(option.attr('data-id'));
                 }
                 me.close();
