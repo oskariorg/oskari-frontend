@@ -253,6 +253,23 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
     font-weight: normal;
  }
 
+.statsgrid-legend-container > .accordion .accordion_panel .content .classifications .label {
+  font-weight: bold;
+}
+
+.statsgrid-legend-container > .accordion .accordion_panel .content .classifications select {
+  width: 94%;
+  font-size: 12px;
+  padding: 1px 2px;
+}
+
+.statsgrid-legend-container > .accordion .accordion_panel .content .classifications button.reverse-colors {
+  margin-top: 5px;
+  margin-left: 12px;
+  width: 86%;
+  padding: 4px 5px;
+}
+
 /* /Legend */
 
 /** Toggle buttons */

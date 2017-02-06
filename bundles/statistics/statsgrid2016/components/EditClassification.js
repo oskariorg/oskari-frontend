@@ -272,6 +272,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         });
 
         me._initSelections();
+        this.setEnabled(this.__enabled);
 
         return me._element;
 
@@ -299,6 +300,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     setEnabled: function(enabled){
         var me = this;
         if(typeof enabled !== 'boolean') {
+            return;
+        }
+        this.__enabled = !!enabled;
+        if(!this._element) {
+            // not rendered yet
             return;
         }
         me._element.find('select').prop('disabled', !enabled).trigger('chosen:updated');

@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     this._bindToEvents();
 
     this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, locale);
-    this.editClassificationElement = this.editClassification.getElement();
     this._renderState = {};
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
@@ -61,25 +60,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             container.append(header);
             // start creating legend
             me._createLegend(activeIndicator, function(legendUI, classificationOpts) {
-                if(classificationOpts) {
-                    // we have a legend and should display options in accordion
-                    var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    panelLegend.setTitle(me.locale.legend.title);
-
-                    panelLegend.setContent(legendUI);
-                    panelLegend.open();
-
-                    accordion.addPanel(panelLegend);
-                    // TODO: render classification options
-                    // me._createClassificationUI(fn);
-
-                    // add accordion to the container
-                    accordion.insertTo(container);
-                } else {
+                if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
+                    return;
                 }
-                me._renderDone();
+                // we have a legend and should display options in accordion
+                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panelLegend.setTitle(me.locale.legend.title);
+
+                panelLegend.setContent(legendUI);
+                panelLegend.open();
+
+                // render classification options
+                me._createClassificationUI(classificationOpts, function(classificationUI) {
+
+                    var panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                    panelClassification.setTitle(me.locale.classify.editClassifyTitle);
+                    panelClassification.setContent(classificationUI);
+                    panelClassification.open();
+                    // add panels to accordion
+                    accordion.addPanel(panelClassification);
+                    accordion.addPanel(panelLegend);
+                    // add accordion to the container
+                    accordion.insertTo(container);
+                    // notify that we are done (to start a repaint if requested in middle of rendering)
+                    me._renderDone();
+                });
             });
         });
     },
@@ -200,9 +207,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     },
     _createClassificationUI : function(options, callback) {
         var me = this;
-        me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        me._panel.setTitle(me.locale.classify.editClassifyTitle);
-        me._panel.setContent(me.editClassificationElement);
-        me._accordion.addPanel(me._panel);
+        callback(this.editClassification.getElement());
     }
 });
