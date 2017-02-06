@@ -101,7 +101,7 @@ Oskari.clazz.define(
         // wellknown text for polygon geometry
         me._geometryWKT = null;
 
-        // Tools array for layer specific functions 
+        // Tools array for layer specific functions
         me._tools = [];
 
         /* link to metadata service */
@@ -781,7 +781,7 @@ Oskari.clazz.define(
 
             // Layer have tools
             if (this._tools.length > 0) {
-                // 
+                //
                 if (toolName !== '') {
                     for (i = 0; i < this._tools.length; i += 1) {
                         tool = this._tools[i];
