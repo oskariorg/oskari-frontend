@@ -32,6 +32,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             // values recognized by the code (and geostats)
             mode : ['distinct', 'discontinuous']
         },
+        getAvailableMethods: function() {
+            return limits.method.slice(0);
+        },
+        getAvailableModes: function() {
+            return limits.mode.slice(0);
+        },
         /**
          * Classifies given dataset.
          * Returns an object like :

@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     // Header
     //   Source nn
     //   Indicator name + params
-    //   (Next source link)
+    //   (Link to change source - only shown if we have more than one indicator)
     // Accordion (or note about "insufficient data")
     //   Classification panel
     //   Legend
@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 callback(me.__templates.error({msg : locale.legend.noEnough}));
                 return;
             }
-            var colors = service.getColorService().getColorsForClassification(classificationOpts)
+            var colors = service.getColorService().getColorsForClassification(classificationOpts, true)
             var legend = classification.createLegend(colors);
             callback(legend, classificationOpts);
         });

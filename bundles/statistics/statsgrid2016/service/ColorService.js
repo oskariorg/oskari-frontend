@@ -42,12 +42,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 max : 9
             }
         },
-        getColorsForClassification : function(classification) {
+        /**
+         * [getColorsForClassification description]
+         * @param  {Object} classification object with count as number, type as string, name as string and optional reverseColors boolean
+         * @param  {Boolean} includeHash    Boolean true to prefix hex with #. UI needs with #, server api without it
+         * @return {Object[]} array of colors to use for legend and map
+         */
+        getColorsForClassification : function(classification, includeHash) {
             var set = this.getColorset(classification.count, classification.type, classification.name);
 
             var colors = [];
             set.forEach(function(color) {
-                colors.push('#' + color);
+                if(includeHash) {
+                    color = '#' + color;
+                }
+                colors.push(color);
             });
             if(classification.reverseColors) {
                 colors.reverse();
@@ -116,74 +125,58 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             result = getArray(this.colorsets[0]);
             return result;
         },
-
-        getRange: function(type) {
-            var me = this;
-            var colors = me.getColors(type);
-            var getMax = function() {
-                var maxs = [], i, j;
-                // Get max number
-                for(i=0;i<colors.length;i++) {
-                    var l = colors[i].length;
-                    maxs.push(l);
-                }
-                // Get max same index
-                var index = 0;
-                for(i=0;i<maxs.lenght;i++) {
-                    var max = maxs[i];
-                    var sameOfBelow = [];
-                    for(j=0;j<maxs.length;j++) {
-                        if(max <= maxs[j]) {
-                            sameOfBelow.push(maxs[j]);
-                        }
-                    }
-                    if(sameOfBelow.length === maxs.length) {
-                        index = i;
-                    }
-                }
-                return maxs[index];
-            };
-            return {
-                min: 2,
-                max: getMax()
-            };
+        getAvailableTypes: function() {
+            return limits.type.slice(0);
         },
-
-        getColors: function(type, count, reverse){
+        /**
+         * Returns the min/max amount of colors for a type
+         * @param  {String} type Colorset type
+         * @return {Object} with keys min and max { min : 2, max : 9 }
+         */
+        getRange: function(type) {
+            var value = {
+                min : 2,
+                max : 2
+            };
+            this.colorsets.forEach(function(item) {
+                if(item.type !== type) {
+                    return;
+                }
+                var lastColorArray = item.colors[item.colors.length -1].split(',');
+                if(value.max < lastColorArray.length) {
+                    value.max = lastColorArray.length;
+                }
+            });
+            return value;
+        },
+        /**
+         * Options to show in classification UI for selected type and count
+         * @param  {String} type  Colorset type. Defaults to this.limits.defaultType
+         * @param  {Number} count amount of colors (throws an error if out of range)
+         * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
+         */
+        getOptionsForType: function(type, count) {
             var me = this,
                 i,
                 set;
             var colors = [];
-            reverse = reverse || false;
+            type = type || this.limits.defaultType;
+            var range = this.getRange(type);
+            if(typeof count !== 'number' || range.min > count || range.max < count) {
+                throw new Error('Invalid color count provided: ' + count +
+                    '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
+            }
 
-            // if type and count setted, return wanted colors
-            if(typeof type !== 'undefined' && typeof count !== 'undefined') {
-                for(i=0;i<me.colorsets.length;i++) {
-                    set = me.colorsets[i];
-                    if(set.type === type) {
-                        colors.push(me.getColorset(count, type, set.name));
-                    }
+            this.colorsets.forEach(function(set) {
+                if(set.type !== type) {
+                    return;
                 }
-            }
-            // else if type setted, return type colors
-            else if(typeof type !== 'undefined') {
-                 for(i=0;i<me.colorsets.length;i++) {
-                    set = me.colorsets[i];
-                    if(set.type === type) {
-                        colors.push(me.getColorset(set.colors.length + 1, type, set.name));
-                    }
-                }
-            }
-            // else return all
-            else {
-                for(i=0;i<me.colorsets.length;i++) {
-                    set = me.colorsets[i];
-                    colors.push(me.getColorset(set.colors.length + 1, set.type, set.name));
-                }
-            }
-            if(reverse) {
-                colors.reverse();
-            }
+                var colorset = me.getColorset(count, type, set.name);
+                colors.push({
+                    id : set.name,
+                    value : colorset
+                });
+            });
 
             return colors;
         },
