@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         select : _.template('<div class="parameter"><div class="label">${label}</div><div class="clear"></div></div>'),
         option : _.template('<option value="${id}">${name}</option>')
     },
-
     /**
      * Get region selection.
      * @method  @public create
@@ -45,6 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
             label: loc.label
         }));
         var options = {
+						allowReset:true,
             placeholder_text: loc.placeholder,
             allow_single_deselect : true,
             disable_search_threshold: 10,
