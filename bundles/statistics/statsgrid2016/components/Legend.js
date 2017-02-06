@@ -102,16 +102,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             me.render();
         });
 
-        me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
+        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
             me.render();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me.render();
-        });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me.render();
+            // update legendpanel in accordion if available
+            var accordion = me._accordion;
+            var state = me.service.getStateService();
+            var ind = state.getActiveIndicator();
+            // update legend in place instead of full render
+            accordion.panels.forEach(function(panel) {
+                if(!panel.getContainer().find('.geostats-legend').length) {
+                    return;
+                }
+                // found panel with legend - update content with new legend
+                me._createLegend(ind.hash, function(legend) {
+                    panel.setContent(legend);
+                });
+            });
         });
     },
 
