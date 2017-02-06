@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          * Creates the UI for a fresh start.
          */
         render: function (isEmbedded) {
-            var me = this;
             var locale = this.instance.getLocalization();
             // empties all
             this.getEl().empty();
@@ -121,7 +120,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
         },
         onClose: function() {
-            var me = this;
             var legend = this.getLegendFlyout();
             legend.hide();
         },
