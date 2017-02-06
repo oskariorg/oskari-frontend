@@ -115,12 +115,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             me._element.find('button.reverse-colors').removeClass('primary');
         }
         // update color selection values
-        var colors = me.service.getColorService().getOptionsForType(classification.type, classification.count);
-        if(classification.reverseColors) {
-            colors.reverse();
-        }
+        var colors = me.service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
         me._colorSelect.setColorValues(colors);
-        me._colorSelect.setValue(classification.name, true);
+        me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
     },
 

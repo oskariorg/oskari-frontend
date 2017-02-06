@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @param  {Number} count amount of colors (throws an error if out of range)
          * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
          */
-        getOptionsForType: function(type, count) {
+        getOptionsForType: function(type, count, reverse) {
             var me = this,
                 i,
                 set;
@@ -176,6 +176,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                     id : set.name,
                     value : colorset
                 });
+                if(reverse) {
+                    colorset.reverse();
+                }
             });
 
             return colors;

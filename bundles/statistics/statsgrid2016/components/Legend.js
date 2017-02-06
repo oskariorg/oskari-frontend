@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var container = this.__element;
         var accordion = this._accordion;
         // cleanup previous UI
+        // NOTE! detach classification before re-render to keep eventhandlers
         this.editClassification.getElement().detach();
         accordion.removeAllPanels();
         container.empty();
@@ -208,6 +209,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             if(!classification) {
                 me.log.warn('Error getting indicator classification', data);
                 callback(me.__templates.error({msg : locale.legend.noEnough}));
+                return;
+            }
+            if(classificationOpts.count !== classification.getGroups().length) {
+                // classification count changed!! -> show error + re-render
+                classificationOpts.count = classification.getGroups().length;
+                callback(me.__templates.error({msg : locale.legend.noEnough}));
+                stateService.setClassification(activeIndicator.hash, classificationOpts);
                 return;
             }
             var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
