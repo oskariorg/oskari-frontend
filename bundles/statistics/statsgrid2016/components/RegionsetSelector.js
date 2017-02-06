@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         };
     },
     __setWidth : function ( width ){
-      this.dropdown.css({ width: width +'' });
+      this.dropdown.css({ width: width });
     },
     __getOptions : function(restrictTo) {
         var allRegionsets = this.service.getRegionsets();
