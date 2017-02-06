@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
             label: loc.label
         }));
         var options = {
-						allowReset:true,
+            allowReset: false,
             placeholder_text: loc.placeholder,
             allow_single_deselect : true,
             disable_search_threshold: 10,
@@ -54,11 +54,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         var dropdown = select.create(allowedRegionsets, options);
         fieldContainer.find('.label').append(dropdown);
         select.adjustChosen();
-
-        //  if(regionset.id === currentRegion) {
-        //      optionEl.attr('selected', 'selected');
-        //  }
-
         var jqSelect = dropdown.find('select');
 
         return {
