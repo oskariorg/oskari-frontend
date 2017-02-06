@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     * @return {jQuery Element} a list with chosen applied
      */
     create: function(data, options){
-      options.allowReset = options.allowReset ? options.allowReset : false;
+      options.allowReset = options.allowReset === false ? options.allowReset : true;
       var select = this._selectTemplate.clone();
       this.element = select;
       if(data === undefined){
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       }
 
       //append empty options so we can use the placeholder
-      if(!options.allowReset){
+      if(options.allowReset){
         var emptyoption = this._option.clone();
         select.find('select').append(emptyoption);
       }
