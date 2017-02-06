@@ -100,13 +100,17 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * Sets the component's value. Value ie wanted index color value.
          * @param {Integer} value
          * @param {Boolean} silent if true -> don't call handler method
+         * @param {Boolean} defaultToFirst if true and requested value is not found -> use the first option as value
          */
-        setValue: function (value, silent) {
+        setValue: function (value, silent, defaultToFirst) {
             var me = this;
             me._element.find('.oskari-color-selection .oskari-color-option').css('background-color', '#' + me._colorsConfig.menu).attr('data-selected', false);
             var option = me._element.find('.oskari-color-selection .oskari-color-option[data-id='+value+']');
             var options = me._element.find('.oskari-color-selection .oskari-color-option');
             var optionClone = option.clone();
+            if(!optionClone.length && defaultToFirst) {
+                optionClone= jQuery(options[0]).clone();
+            }
             if(optionClone.length>0) {
                 me._selectedValue = value;
                 optionClone.css('background-color','transparent');
