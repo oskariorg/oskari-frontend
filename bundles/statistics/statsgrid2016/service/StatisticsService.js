@@ -10,8 +10,9 @@
      * @method create called automatically on construction
      * @static
      */
-    function (sandbox) {
+    function (sandbox, locale) {
         this.sandbox = sandbox;
+        this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
@@ -66,32 +67,51 @@
             this.datasources.push(ds);
         },
 
-        getSelectionsText: function(indicator, locale, callback) {
+        getUILabels: function(indicator, callback) {
             var me = this;
-            var selectionsTexts = [];
+            var locale = this.locale;
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
 
-            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind){
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
+                var uiLabels = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
                     ind.selectors.forEach(function(selector) {
                         selector.allowedValues.forEach(function(value) {
-                            if(val === (value.id || value)) {
-                                var name = value.name || value.id || value;
-                                var optName = (locale.selectionValues[selector.id] && locale.selectionValues[selector.id][name]) ? locale.selectionValues[selector.id][name] : name;
-
-                                selectionsTexts.push(optName);
+                            if(val !== (value.id || value)) {
+                                return;
                             }
-
+                            var name = value.name;
+                            if(!name) {
+                                name = value.id || value;
+                                // try finding localization for the param
+                                // FIXME: get rid of this -> have server give ui labels
+                                name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                            }
+                            uiLabels.push( {
+                                selector : selector.id,
+                                id : value.id || value,
+                                label : name
+                            });
                         });
                     });
-
                 }
-
-                var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
-                if(typeof callback === 'function') {
-                    callback(selectionsText);
-                }
+                var preferredFormatting = [];
+                uiLabels.forEach(function(param) {
+                    preferredFormatting.push(param.label);
+                });
+                var name = Oskari.getLocalized(ind.name);
+                var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
+                callback({
+                    indicator : name,
+                    params : selectorsFormatted,
+                    full : name + ' ' + selectorsFormatted,
+                    paramsAsObject : uiLabels
+                });
             });
         },
         /**

@@ -1,226 +1,208 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(instance) {
-    this.instance = instance;
-    this.sb = this.instance.getSandbox();
-    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
-    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this.locale = this.instance.getLocalization();
-    this._bindToEvents();
-    this.__templates = {
-        legendContainer: jQuery('<div class="statsgrid-legend-container"></div>'),
-        noActiveSelection: jQuery('<div class="legend-noactive">'+this.locale.legend.noActive+'</div>'),
-        noEnoughData: jQuery('<div class="legend-noactive">'+this.locale.legend.noEnough+'</div>')
-    };
-    this.__legendElement = this.__templates.legendContainer.clone();
+Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, locale) {
+    this.sb = sandbox;
+    this.locale = locale;
     this.log = Oskari.log('Oskari.statistics.statsgrid.Legend');
-    this._panel = null;
-    this._accordion = null;
-    this._container = jQuery('<div class="accordion-theming"></div>');
-    this._notHandleColorSelect = false;
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.__templates = {
+        error: _.template('<div class="legend-noactive">${ msg }</div>'),
+        header: _.template('<div class="header"><div class="link">${ link }</div><div class="title">${ source }</div><div class="sourcename">${ label }</div></div>')
+    };
+    this.__element = jQuery('<div class="statsgrid-legend-container"></div>');
+    this._bindToEvents();
 
-    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', this.instance);
+    this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, locale);
     this.editClassificationElement = this.editClassification.getElement();
+    this._renderState = {};
+    this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
+    allowClassification : function(enabled) {
+        this.editClassification.setEnabled(enabled);
+    },
+    // Header
+    //   Source nn
+    //   Indicator name + params
+    //   (Next source link)
+    // Accordion (or note about "insufficient data")
+    //   Classification panel
+    //   Legend
+    //
+    // Alternatively note about no indicator selected
+    render : function(el) {
+        if(this._renderState.inProgress) {
+            // handle render being called multiple times in quick succession
+            // previous render needs to end before repaint since we are doing async stuff
+            this._renderState.repaint = true;
+            this._renderState.el = el;
+            // need to call this._renderDone(); to trigger repaint after render done
+            return;
+        }
+        this._renderState.inProgress = true;
+        // start rendering
+        var me = this;
+        var container = this.__element;
+        var accordion = this._accordion;
+        // cleanup previous UI
+        accordion.removeAllPanels();
+        container.empty();
+        if(el) {
+            // attach container to parent if provided, otherwise updates UI in the current parent
+            el.append(container);
+        }
+        // check if we have an indicator to use or just render "no data"
+        var activeIndicator = this.service.getStateService().getActiveIndicator();
+        if(!activeIndicator) {
+            container.append(this.__templates.error({msg : this.locale.legend.noActive}));
+            me._renderDone();
+            return;
+        }
+        // Start creating the actual UI
+        this._createHeader(activeIndicator, function(header) {
+            // append header
+            container.append(header);
+            // start creating legend
+            me._createLegend(activeIndicator, function(legendUI, classificationOpts) {
+                if(classificationOpts) {
+                    // we have a legend and should display options in accordion
+                    var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                    panelLegend.setTitle(me.locale.legend.title);
+
+                    panelLegend.setContent(legendUI);
+                    panelLegend.open();
+
+                    accordion.addPanel(panelLegend);
+                    // TODO: render classification options
+                    // me._createClassificationUI(fn);
+
+                    // add accordion to the container
+                    accordion.insertTo(container);
+                } else {
+                    // didn't get classification options so not enough data to classify or other error
+                    container.append(legendUI);
+                }
+                me._renderDone();
+            });
+        });
+    },
     /****** PRIVATE METHODS ******/
 
     /**
      * @method  @private _bindToEvents bind events
      */
-	_bindToEvents : function() {
+    _bindToEvents : function() {
         var me = this;
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-            var ind = event.getCurrent();
-            if(!ind) {
-                // last indicator was removed -> no active indicators
-                me._handleIndicatorRemoved();
-            } else {
-                // active indicator changed -> update map
-                me._handleIndicatorChanged(ind.datasource, ind.indicator, ind.selections);
-            }
+            me.render();
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
-            me._handleRegionsetChanged(event.getRegionset());
+            me.render();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me._renderActiveIndicator();
-            setTimeout(function(){
-                me._addEditHandlers();
-            }, 200);
+            me.render();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me._renderActiveIndicator();
+            me.render();
         });
     },
 
     /**
-     * @method  @private _handleIndicatorRemoved handle indicator removed
+     * Triggers a new render when needed (render was called before previous was ready)
      */
-	_handleIndicatorRemoved: function(){
-		var me = this;
-		me.__legendElement.html(me.__templates.noActiveSelection.clone());
-	},
-
-    /**
-     * @method  @private _handleIndicatorChanged handle active indicator changed
-     * @return {[type]} [description]
-     */
-	_handleIndicatorChanged: function() {
-		this._renderActiveIndicator();
-	},
-
-    /**
-     * @method  @private _renderActiveIndicator render active indicator changed
-     */
-    _renderActiveIndicator: function(){
-        var me = this;
-        var service = me.service;
+    _renderDone : function() {
+        var state = this._renderState;
+        this._renderState = {};
+        if(state.repaint) {
+            this.render(state.el);
+        }
+    },
+    _createHeader: function (activeIndicator, callback) {
+        var service = this.service;
         if(!service) {
             // not available yet
             return;
         }
+        var sb = this.sb;
+        var headerTemplate = this.__templates.header;
+        var sourceUILabel = this.locale.statsgrid.source;
+        var stateService = this.service.getStateService();
+        var indicators = stateService.getIndicators();
 
-        var state = service.getStateService();
-        var ind = state.getActiveIndicator();
-        if(!ind) {
-            return;
-        }
-
-        me.__legendElement.empty();
-
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-            if(err) {
-                me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                me.__legendElement.html(me.__templates.noEnoughData.clone());
-                return;
+        var getSourceLink = function(currentHash){
+            var currentIndex = stateService.getIndicatorIndex(currentHash);
+            var nextIndicatorIndex = currentIndex + 1;
+            if(nextIndicatorIndex === indicators.length) {
+                nextIndicatorIndex = 0;
             }
-            var classification = state.getClassification(ind.hash);
-            var classify = service.getClassificationService().getClassification(data, classification);
-
-            if(!classify) {
-                me.log.warn('Error getting indicator classification', data);
-                me.__legendElement.html(me.__templates.noEnoughData.clone());
-                return;
-            }
-
-            // format regions to groups for url
-            var regiongroups = classify.getGroups();
-            var classes = [];
-            regiongroups.forEach(function(group) {
-                // make each group a string separated with comma
-                classes.push(group.join());
-            });
-
-            var colorsWithoutHash = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors)[classification.colorIndex];
-
-            var colors = [];
-            colorsWithoutHash.forEach(function(color) {
-                colors.push('#' + color);
-            });
-
-            var stateService = service.getStateService();
-
-            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-                if(err) {
-                    me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                    return;
+            return {
+                indexForUI: nextIndicatorIndex + 1,
+                handler: function() {
+                    var i = indicators[nextIndicatorIndex];
+                    stateService.setActiveIndicator(i.hash);
                 }
+            };
+        };
 
-                service.getSelectionsText(ind, me.instance.getLocalization().panels.newSearch, function(text){
-                    var legend = classify.createLegend(colors, me.locale.statsgrid.source + ' ' + stateService.getIndicatorIndex(ind.hash) + ': ' + Oskari.getLocalized(indicator.name) + text);
-                    var jQueryLegend = jQuery(legend);
-
-                    var isAccordion = true;
-
-                    if(!me._accordion && !me.instance.conf.publishedClassification) {
-                        me._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-
-                        me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                        me._panel.setVisible(true);
-                        me._panel.setTitle(me.locale.classify.editClassifyTitle);
-                        me._panel.setContent(me.editClassificationElement);
-                        me._accordion.addPanel(me._panel);
-                        me._accordion.insertTo(me._container);
-                        isAccordion = false;
-                    }
-
-                    me._container.insertAfter(jQueryLegend.find('.geostats-legend-title'));
-
-                    me.__legendElement.append(jQueryLegend);
-
-                    // the accordion header clicks not handlet correctly. Thats why we add custom click handler.
-                    if(!me.instance.conf.publishedClassification) {
-                        if(isAccordion) {
-                            setTimeout(function(){
-                                me._addEditHandlers();
-                            }, 0);
-                        }
-
-                        setTimeout(function(){
-                            me._refreshEditClassification();
-                        }, 0);
-                    }
-
-                });
-
-            });
-        });
-    },
-
-    /**
-     * @method  @private _changeColors Change colors
-     * @param  {Object} classification classification
-     */
-    _changeColors: function(classification){
-        var me = this;
-        me.editClassification.changeColors(classification);
-    },
-
-    /**
-     * @method  @private _refreshEditClassification refresh edit classification
-     */
-    _refreshEditClassification: function(){
-        var me = this;
-        if(!me.__legendElement || !me._panel) {
-            return;
-        }
-
-        me.editClassification.refresh();
-    },
-    /**
-     * @method  @private addEditHandlers add edit handlers again
-     */
-    _addEditHandlers: function(){
-        var me = this;
-        if(!me.__legendElement || !me._panel) {
-            return;
-        }
-
-        me.__legendElement.find('.accordion_panel .header').bind('click', function(event){
-            var el = jQuery(this).parent();
-
-            if(el.hasClass('open')) {
-                me._panel.close();
-            } else {
-                me._panel.open();
+        service.getUILabels(activeIndicator, function(labels) {
+            var tplParams = {
+                source : sourceUILabel + ' ' + (stateService.getIndicatorIndex(activeIndicator.hash) + 1),
+                link : '',
+                label : labels.full
+            };
+            if(indicators.length < 2) {
+                // no need to setup link, remove it instead
+                var head = jQuery(headerTemplate(tplParams));
+                head.find('.link').remove();
+                callback(head);
+                return;
             }
+
+            var link = getSourceLink(activeIndicator.hash);
+            tplParams.link = sourceUILabel + ' ' + link.indexForUI  + ' >>';
+            var head = jQuery(headerTemplate(tplParams));
+            var indicatorChangedLink = head.find('.link');
+            indicatorChangedLink.click(function(){
+                link.handler();
+            });
+            callback(head);
         });
     },
-
-    /****** PUBLIC METHODS ******/
-
-    /**
-     * @method  @public getClassification get classification element
-     * @return {Object} jQuery element of classification
-     */
-    getClassification: function(){
+    _createLegend : function(activeIndicator, callback) {
+        if(!this.service) {
+            return false;
+        }
         var me = this;
-        me.__legendElement.html(me.__templates.noActiveSelection.clone());
-        me._renderActiveIndicator();
-        return me.__legendElement;
-    }
+        var service = this.service;
+        var stateService = this.service.getStateService();
+        var currentRegionset = stateService.getRegionset();
+        var locale = this.locale;
 
+        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, currentRegionset, function(err, data) {
+            if(err) {
+                me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
+                callback(me.__templates.error({msg : locale.legend.noEnough}));
+                return;
+            }
+            var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+            var classification = service.getClassificationService().getClassification(data, classificationOpts);
+
+            if(!classification) {
+                me.log.warn('Error getting indicator classification', data);
+                callback(me.__templates.error({msg : locale.legend.noEnough}));
+                return;
+            }
+            var colors = service.getColorService().getColorsForClassification(classificationOpts)
+            var legend = classification.createLegend(colors);
+            callback(legend, classificationOpts);
+        });
+    },
+    _createClassificationUI : function(options, callback) {
+        var me = this;
+        me._panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        me._panel.setTitle(me.locale.classify.editClassifyTitle);
+        me._panel.setContent(me.editClassificationElement);
+        me._accordion.addPanel(me._panel);
+    }
 });
