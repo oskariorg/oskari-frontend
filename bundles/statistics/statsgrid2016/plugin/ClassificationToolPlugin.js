@@ -21,15 +21,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._index = 9;
         me._name = 'ClassificationToolPlugin';
         me._toolOpen = false;
-        me.__sideTools = me._instance.__sideTools;
         me._element = null;
         me._templates = {
             main: jQuery('<div class="statsgrid-legend-plugin"></div>')
-        };
-
-        me._publishedComponents = {
-            panelClassification: null,
-            editClassification: null
         };
 
         me._mobileDefs = {
@@ -161,10 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         },
 
         enableClassification: function(enabled) {
-            var me = this;
-            if(me._publishedComponents.editClassification) {
-                me._publishedComponents.editClassification.setEnabled(enabled);
-            }
+            this.__legend.allowClassification(enabled);
         },
         stopPlugin: function(){
             this.teardownUI();
