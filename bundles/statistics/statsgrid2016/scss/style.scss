@@ -379,9 +379,20 @@ div.oskari-flyoutcontent{
             padding: 0;
             font-weight: normal;
         }
+
+        .content .classifications {
+            .label {
+                font-weight: bold;
+            }
+
+            select {
+                width: 94%;
+                font-size: 12px;
+                padding: 1px 2px;
+            }
+        }
     }
 }
-
 
 
 /** Toggle buttons */
