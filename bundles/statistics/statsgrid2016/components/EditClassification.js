@@ -3,7 +3,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
     this.locale = locale;
-    this._bindToEvents();
+    var me = this;
+    me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+        me.setValues(event.getCurrent());
+    });
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
             '<div class="classification-options">'+
@@ -12,9 +15,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '<div class="method value">'+
                         '<select class="method">'+
                             // FIXME: use classificationService.getAvailableMethods()
-                            '<option value="jenks" selected="selected">'+this.locale.classify.jenks+'</option>'+
-                            '<option value="quantile">'+this.locale.classify.quantile+'</option>'+
-                            '<option value="equal">'+this.locale.classify.eqinterval+'</option>'+
+                            '<option value="jenks" selected="selected">'+this.locale.classify.methods.jenks+'</option>'+
+                            '<option value="quantile">'+this.locale.classify.methods.quantile+'</option>'+
+                            '<option value="equal">'+this.locale.classify.methods.equal+'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
@@ -52,9 +55,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '<div class="color-set value">'+
                         '<select class="color-set">'+
                             // FIXME: use colorService getAvailableTypes()
-                            '<option value="seq" selected="selected">'+ this.locale.colorset.sequential +'</option>'+
-                            '<option value="qual">'+ this.locale.colorset.qualitative +'</option>'+
-                            '<option value="div">'+ this.locale.colorset.divergent +'</option>'+
+                            '<option value="seq" selected="selected">'+ this.locale.colorset.seq +'</option>'+
+                            '<option value="qual">'+ this.locale.colorset.qual +'</option>'+
+                            '<option value="div">'+ this.locale.colorset.div +'</option>'+
                         '</select>'+
                     '</div>'+
                 '</div>'+
@@ -68,80 +71,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this.log = Oskari.log('Oskari.statistics.statsgrid.EditClassification');
 
     this._colorSelect = null;
-    this._notHandleColorSelect = false;
     this._element = null;
 }, {
     /****** PRIVATE METHODS ******/
 
     /**
-     * @method  @private _bindToEvents bind events
-     */
-    _bindToEvents : function() {
-        var me = this;
-
-        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-            var ind = event.getCurrent();
-            if(!ind) {
-                // last indicator was removed -> no active indicators
-                me._handleIndicatorRemoved();
-            } else {
-                // active indicator changed -> update map
-                me._handleIndicatorChanged(ind.datasource, ind.indicator, ind.selections);
-            }
-        });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me._handleClassificationChangedEvent(event.getCurrent());
-        });
-
-    },
-    _handleClassificationChangedEvent: function(current){
-        var me = this;
-        me._initSelections(current);
-    },
-
-    /**
-     * @method  @private _handleIndicatorRemoved handle indicator removed
-     */
-    _handleIndicatorRemoved: function(){
-        var me = this;
-        this._initSelections();
-    },
-
-    /**
-     * @method  @private _handleIndicatorChanged handle active indicator changed
-     * @return {[type]} [description]
-     */
-    _handleIndicatorChanged: function() {
-        this._initSelections();
-    },
-
-    /**
-     * @method  @private _changeColors change colors
-     * @param  {Object} classification object
-     */
-    _changeColors: function(classification){
-        var me = this;
-        if(!this._element) {
-            // not rendered yet
-            return;
-        }
-        classification = classification || me.getSelectedValues();
-        var colors = me.service.getColorService().getOptionsForType(classification.type, classification.count);
-        if(classification.reverseColors) {
-            colors.reverse();
-        }
-        me._colorSelect.setColorValues(colors);
-        me._notHandleColorSelect = true;
-        me._colorSelect.setValue(classification.name);
-        me._notHandleColorSelect = false;
-    },
-
-    /**
-     * @method  @private _initSelections init selections
+     * @method  @private setValues init selections
      * @param  {Object} classification
      */
-    _initSelections: function(classification){
+    setValues: function(classification){
         var me = this;
 
         if(!this._element) {
@@ -151,17 +89,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var state = me.service.getStateService();
         var ind = state.getActiveIndicator();
         classification = classification || state.getClassificationOpts(ind.hash);
-        if(!me._element) {
-            // FIXME: this happens if UI is rendered before adding any indicator
-            // 1) open classification 2) add indicator 3) this happens
-            // Happy case works ok:
-            // 1) add indicator 2) open classification 3) works correctly
-            // This doesn't work:
-            //me._element = this.getElement();
-        }
         me._element.find('select.method').val(classification.method);
 
         var amountRange = me.service.getColorService().getRange(classification.type);
+        // TODO: handle missing data: if we have data for 3 regions count can be 2.
+        // If we have data for 2 regions, no classification can be done.
         var amount = me._element.find('select.amount-class');
         amount.empty();
         var option = jQuery('<option></option>');
@@ -182,46 +114,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         } else {
             me._element.find('button.reverse-colors').removeClass('primary');
         }
-
-        me._addSelectHandlers();
-        me._changeColors(classification);
-    },
-
-    /**
-     * @method @private _addSelectHandlers add select handlers
-     */
-    _addSelectHandlers: function(){
-        var me = this;
-        if(!me._element) {
-            return;
+        // update color selection values
+        var colors = me.service.getColorService().getOptionsForType(classification.type, classification.count);
+        if(classification.reverseColors) {
+            colors.reverse();
         }
-
-        var state = me.service.getStateService();
-        var ind = state.getActiveIndicator();
-        if(!ind) {
-            return;
-        }
-
-        me._element.find('select').unbind('change');
-        me._element.find('select').bind('change', function(event){
-            event.stopPropagation();
-            me._changeColors();
-        });
-
-        me._element.find('button.reverse-colors').unbind('click');
-        me._element.find('button.reverse-colors').bind('click', function(){
-            var el = jQuery(this);
-            if(el.hasClass('primary')) {
-                el.removeClass('primary');
-            } else {
-                el.addClass('primary');
-            }
-            me.service.getStateService().setClassification(ind.hash, me.getSelectedValues());
-        });
-
+        me._colorSelect.setColorValues(colors);
+        me._colorSelect.setValue(classification.name, true);
         me._colorSelect.refresh();
     },
-
 
     /****** PUBLIC METHODS ******/
 
@@ -241,58 +142,53 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         };
     },
 
-    refresh: function(){
-        var me = this;
-        me._addSelectHandlers();
-    },
-
-
     /**
      * @method  @public getElement  get element
      * @return {Object} jQuery element object
      */
-    getElement: function(){
+    getElement: function() {
         var me = this;
         var service = me.service;
         if(!service) {
             // not available yet
             return;
         }
-
-        var state = service.getStateService();
-        var ind = state.getActiveIndicator();
-        if(!ind) {
-            return;
+        if(me._element) {
+            return me._element;
         }
-        if(!me._element){
-            me._element = me.__templates.classification.clone();
-        }
+        me._element = me.__templates.classification.clone();
+        me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+        me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
-        if(!me._colorSelect) {
-            me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
-            var el = me._colorSelect.getElement();
-            me._element.find('.classification-colors.value').append(el);
-        }
-
-        me._colorSelect.setHandler(function(selected){
-            if(!me._notHandleColorSelect) {
-                me.service.getStateService().setClassification(ind.hash, me.getSelectedValues());
-            }
-        });
-
-        me._initSelections();
+        // setup initial values
+        me.setValues();
+        // might have been set before render
         this.setEnabled(this.__enabled);
 
+        var stateService = me.service.getStateService();
+        var updateClassification = function() {
+            stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
+        };
+        me._colorSelect.setHandler(updateClassification);
+        me._element.find('select').bind('change', updateClassification);
+
+        me._element.find('button.reverse-colors').bind('click', function(){
+            var el = jQuery(this);
+            if(el.hasClass('primary')) {
+                el.removeClass('primary');
+            } else {
+                el.addClass('primary');
+            }
+            updateClassification();
+        });
         return me._element;
 
     },
-
-
     /**
      * @method  @public setEnabled set enabled
      * @param {Boolean} enabled is edit enabled or not
      */
-    setEnabled: function(enabled){
+    setEnabled: function(enabled) {
         var me = this;
         if(typeof enabled !== 'boolean') {
             return;

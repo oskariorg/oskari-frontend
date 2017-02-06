@@ -71,11 +71,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             var opts = this._validateOptions(options);
             var list = this._getDataAsList(indicatorData);
-            if(list.length < 2) {
+            if(list.length < 3) {
                 return;
             }
-            if(opts.count > list.length) {
-                opts.count = list.length;
+            if(opts.count >= list.length) {
+                opts.count = list.length -1;
             }
 
             if (this._hasNonNumericValues(list)) {

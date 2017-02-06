@@ -89,9 +89,11 @@ Oskari.registerLocalization(
             "classify": "Klassificering",
             "classifymethod": "Klassificeringsmetod",
             "classes": "Klasser",
-            "jenks": "Jenks intervall",
-            "quantile": "Kvantiler",
-            "eqinterval": "Lika intervall",
+            "methods" : {
+                "jenks": "Jenks intervall",
+                "quantile": "Kvantiler",
+                "equal": "Lika intervall",
+            },
             "manual": "Egna klasser",
             "manualPlaceholder": "Ange siffrorna, separerade med kommatecken.",
             "manualRangeError": "Klass intervallen bör vara nummer mellan {min} och {max}. Ingångs siffror separerade med kommatecken. Decimal separeras med en punkt.",
@@ -111,9 +113,9 @@ Oskari.registerLocalization(
             "flipButton": "Vänd färger",
             "themeselection": "Färgvalstema",
             "setselection": "Färgset urval",
-            "sequential": "Kvantitativ",
-            "qualitative": "Kvalitativ",
-            "divergent": "Delbar",
+            "seq": "Kvantitativ",
+            "qual": "Kvalitativ",
+            "div": "Delbar",
             "info2": "Välj färgerna genom att klicka på färggruppen",
             "cancel": "Avbryt"
         }

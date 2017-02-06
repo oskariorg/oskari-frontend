@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var container = this.__element;
         var accordion = this._accordion;
         // cleanup previous UI
+        this.editClassification.getElement().detach();
         accordion.removeAllPanels();
         container.empty();
         if(el) {

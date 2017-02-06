@@ -89,9 +89,11 @@ Oskari.registerLocalization(
             "classify": "Luokittelu",
             "classifymethod": "Luokittelutapa",
             "classes": "Luokkajako",
-            "jenks": "Luonnolliset välit",
-            "quantile": "Kvantiilit",
-            "eqinterval": "Tasavälit",
+            "methods" : {
+                "jenks": "Luonnolliset välit",
+                "quantile": "Kvantiilit",
+                "equal": "Tasavälit",
+            },
             "manual": "Luokittelu käsin",
             "manualPlaceholder": "Erota luvut pilkuilla.",
             "manualRangeError": "Luokkarajat ovat virheellisiä. Luokkarajojen on oltava välillä {min} - {max}. Erota luvut toisistaan pilkulla. Käytä desimaalierottimena pistettä. Korjaa luokkarajat ja yritä uudelleen.",
@@ -111,9 +113,9 @@ Oskari.registerLocalization(
             "flipButton": "Käännä värit",
             "themeselection": "Valitse luokkien värit",
             "setselection": "Jakauma",
-            "sequential": "Kvantitatiivinen",
-            "qualitative": "Kvalitatiivinen",
-            "divergent": "Jakautuva",
+            "seq": "Kvantitatiivinen",
+            "qual": "Kvalitatiivinen",
+            "div": "Jakautuva",
             "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
             "cancel": "Peruuta"
         }
