@@ -725,7 +725,7 @@ Oskari.clazz.define(
             }
             params = params || {};
             if(forced) {
-                params._ts = Date.now()
+                params._ts = Date.now();
             }
             ol.mergeNewParams(params);
         },

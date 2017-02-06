@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
             // Add grid
             var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb, this.instance.getLocalization());
-            grid.showRegionsetSelector(!isEmbedded)
+            grid.showRegionsetSelector(!isEmbedded);
             grid.showIndicatorRemoval(!isEmbedded);
             grid.render(el);
 

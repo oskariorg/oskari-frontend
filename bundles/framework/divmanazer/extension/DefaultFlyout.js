@@ -98,9 +98,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                     var bounds = {
                         left : position.left + sidelabel.position().left,
                         top : position.top + sidelabel.position().top
-                    }
-                    bounds.right = bounds.left + sidelabel.outerWidth()
-                    bounds.bottom = bounds.top + sidelabel.height()
+                    };
+                    bounds.right = bounds.left + sidelabel.outerWidth();
+                    bounds.bottom = bounds.top + sidelabel.height();
                     callback(sidelabel, bounds);
                 });
             }

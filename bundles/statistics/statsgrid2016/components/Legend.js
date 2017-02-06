@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 callback(me.__templates.error({msg : locale.legend.noEnough}));
                 return;
             }
-            var colors = service.getColorService().getColorsForClassification(classificationOpts, true)
+            var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
             var legend = classification.createLegend(colors);
             callback(legend, classificationOpts);
         });

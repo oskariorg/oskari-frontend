@@ -45,5 +45,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function(sandbox
         this.sb.postRequestByName('userinterface.UpdateExtensionRequest',[null, 'close', 'StatsGrid']);
         this.element.remove();
         this.element = null;
-    },
+    }
 });

@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
                 regionset.title = regionset.name;
                 allowedRegionsets.push(regionset);
             }
-        })
+        });
         return allowedRegionsets;
     }
 });

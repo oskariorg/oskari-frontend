@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
                 var resultObj = {
                     id: ind.id,
                     title: Oskari.getLocalized(ind.name)
-                }
+                };
                 results.push(resultObj);
 
             });
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             var dataObj = {
                 id : ds.id,
                 title: ds.name
-            }
+            };
             sources.push(dataObj);
         });
         // Datasources
