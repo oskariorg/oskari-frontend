@@ -11,6 +11,12 @@ Some extra tags:
 
 ## 1.41
 
+### [mod] [rpc] RouteResultEvent
+
+Now includes the parameters from the request under rawParams key. You can also send an additional id when making the request and the id will be returned under the rawParams. As some routes take longer to determine than others this can be used to detect order of the responses.
+
+Also a RouteResultEvent with success: false is now sent correctly if there's a network issue or some other internal problem.
+
 ### [mod] [rpc] AfterMapMoveEvent
 
 The marker flag has been removed as it was misleading. The value was always false.
