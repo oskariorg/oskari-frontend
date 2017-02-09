@@ -7,6 +7,7 @@ div.olMap {
   div.olMap.cursor-crosshair {
     cursor: crosshair; }
   div.olMap .oskari-crosshair {
+    pointer-events: none;
     right: 50%;
     bottom: 50%;
     width: 0px;

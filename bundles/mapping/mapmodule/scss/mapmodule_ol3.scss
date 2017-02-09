@@ -9,6 +9,7 @@ div.olMap {
 
     /*x marking the center of the map*/
     .oskari-crosshair {
+        pointer-events: none;
         right: 50%;
         bottom: 50%;
         width: 0px;
