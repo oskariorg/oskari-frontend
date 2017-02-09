@@ -159,8 +159,8 @@ Oskari.clazz.define(
             var me = this,
                 flyout = jQuery(me.container),
                 sandbox = me.instance.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'map.layer.activation'
+                reqBuilder = Oskari.requestBuilder(
+                    'activate.map.layer'
                 );
 
             flyout.empty();
@@ -898,7 +898,7 @@ Oskari.clazz.define(
                     gfiReqBuilder(!this.active)
                 );
             }
-            var activateReqBuilder = Oskari.requestBuilder('map.layer.activation');
+            var activateReqBuilder = Oskari.requestBuilder('activate.map.layer');
 
             // disabled
             if (!this.active &&this.selectedTab) {

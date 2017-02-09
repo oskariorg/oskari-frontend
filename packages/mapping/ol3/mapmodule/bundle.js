@@ -399,7 +399,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/ToolSelectionRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.activation.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/activate.map.layer.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/map.layer.add.js"

@@ -74,7 +74,7 @@ Sandbox.getRequestBuilder() still works like before, but is deprecated and will 
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
 - Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
 - Removed all other parameters from AddMapLayerRequest other than layer ID. Layer order is no longer affected by the boolean parameters when adding layers to map.
-- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "map.layer.activation" that now has a boolean indicating activation/deactivation.
+- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "activate.map.layer" that now has a boolean indicating activation/deactivation.
 - AfterDimMapLayerEvent and AfterHighlightMapLayerEvent have been merged to a new event "map.layer.activation" that now has a boolean indicating activation/deactivation.
 
 #### Marker handling changes
