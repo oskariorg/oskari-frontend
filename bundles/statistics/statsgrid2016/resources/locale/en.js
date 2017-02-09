@@ -89,9 +89,11 @@ Oskari.registerLocalization(
             "classify": "Classification",
             "classifymethod": "Classification method",
             "classes": "Class division",
-            "jenks": "Natural breaks",
-            "quantile": "Quantiles",
-            "eqinterval": "Equal intervals",
+            "methods" : {
+                "jenks": "Natural breaks",
+                "quantile": "Quantiles",
+                "equal": "Equal intervals",
+            },
             "manual": "Manual classification",
             "manualPlaceholder": "Separate values by a comma",
             "manualRangeError": "The class breaks are invalid. The break values should be between {min} and {max}. Separate values by a comma and decimals by a dot. Please check class breaks and try again.",
@@ -111,9 +113,9 @@ Oskari.registerLocalization(
             "flipButton": "Flip colors",
             "themeselection": "Select color scheme",
             "setselection": "Color set selection",
-            "sequential": "Quantitative",
-            "qualitative": "Qualitative",
-            "divergent": "Divisible",
+            "seq": "Quantitative",
+            "qual": "Qualitative",
+            "div": "Divisible",
             "info2": "Select colors by clicking a color group you want.",
             "cancel": "Cancel"
         }

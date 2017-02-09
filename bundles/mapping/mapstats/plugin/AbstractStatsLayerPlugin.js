@@ -210,7 +210,7 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
                     return;
                 }
 
-                var colors = me.service.getColorService().getColors(classification.type, classification.count, classification.reverseColors)[classification.colorIndex];
+                var colors = me.service.getColorService().getColorsForClassification(classification);
                 me.__updateLayerParams(mapLayer, {
                     VIS_NAME: layer.getLayerName(),
                     VIS_ATTR: attrs.regionIdTag,

@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
         this._tooltip = null;
         this._visible = true;
         this._element = this._templates.main.clone();
-        this._selectedIndex = null;
+        this._selectedValue = null;
         this._selected = null;
         this._selection = null;
     }, {
@@ -80,14 +80,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
         /**
          * @method @public getValue
-         * @return {Integer} selected index. If not anything selected then return -1
+         * @return {Integer|String} selected value
          */
         getValue: function () {
-            if(typeof this._selectedIndex === 'undefined') {
-                return -1;
-            }
-
-            return this._selectedIndex;
+            return this._selectedValue;
         },
 
         /**
@@ -103,22 +99,26 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @method @public setValue
          * Sets the component's value. Value ie wanted index color value.
          * @param {Integer} value
+         * @param {Boolean} silent if true -> don't call handler method
+         * @param {Boolean} defaultToFirst if true and requested value is not found -> use the first option as value
          */
-        setValue: function (value) {
+        setValue: function (value, silent, defaultToFirst) {
             var me = this;
-
             me._element.find('.oskari-color-selection .oskari-color-option').css('background-color', '#' + me._colorsConfig.menu).attr('data-selected', false);
-            var option = me._element.find('.oskari-color-selection .oskari-color-option[data-index='+value+']');
+            var option = me._element.find('.oskari-color-selection .oskari-color-option[data-id='+value+']');
             var options = me._element.find('.oskari-color-selection .oskari-color-option');
             var optionClone = option.clone();
-            if(optionClone.length>0 && value<options.length) {
-                me._selectedIndex = parseFloat(value);
+            if(!optionClone.length && defaultToFirst) {
+                optionClone= jQuery(options[0]).clone();
+            }
+            if(optionClone.length>0) {
+                me._selectedValue = value;
                 optionClone.css('background-color','transparent');
                 me._selected.html(optionClone);
                 option.attr('data-selected', true);
                 option.css('background-color', '#' + me._colorsConfig.selected);
-                if(typeof me.getHandler() === 'function') {
-                    me.getHandler()(option.attr('data-index'));
+                if(!silent && typeof me.getHandler() === 'function') {
+                    me.getHandler()(option.attr('data-id'));
                 }
                 me.close();
             }
@@ -156,36 +156,27 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
          * @param  {Object} colorsDef color defination
          * @return {Object} jQuery color option template
          */
-        _getColorTemplate: function(colorsDef){
+        _getColorTemplate: function(colorsDef, width){
             var me = this;
             if(colorsDef === null) {
                 return;
             }
-            var width = 6, template, i, color, opt;
-
             if(typeof colorsDef === 'string') {
-                opt = me._templates.emptyDiv.clone();
-                width = 16;
-                template = me._templates.color.clone();
-                template.css('background', '#' +colorsDef);
-                template.width(width);
+                // plain string - wrap to array and change width
+                return this._getColorTemplate([colorsDef], 16);
+            }
+            if (!colorsDef || typeof colorsDef.forEach !== 'function') {
+                // not an array
+                return;
+            }
+            var opt = me._templates.emptyDiv.clone();
+            colorsDef.forEach(function(color) {
+                var template = me._templates.color.clone();
+                template.css('background', '#' + color);
+                template.width(width || 6);
                 opt.append(template);
-                return opt;
-            }
-            else if (typeof colorsDef === 'object' && colorsDef.length > 0) {
-                opt = me._templates.emptyDiv.clone();
-                for(i=0;i<colorsDef.length;i++){
-                    color = colorsDef[i];
-                    template = me._templates.color.clone();
-                    template.css('background', '#' +color);
-                    template.width(width);
-                    opt.append(template);
-
-                }
-                return opt;
-            }
-
-            return null;
+            });
+            return opt;
         },
 
         /**
@@ -233,7 +224,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                 colorClickHandler: function(event){
                     event.stopPropagation();
                     var el = jQuery(this);
-                    me.setValue(el.attr('data-index'));
+                    me.setValue(el.attr('data-id'));
                 },
                 // Hover in handler
                 hoverIn: function(){
@@ -273,53 +264,54 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
 
             me._element.empty();
 
-            if(typeof colors === 'object' && colors.length>0){
-                me._selection.hide();
-
-                var colorsDef, colorSel, i;
-
-                for(i=0;i<colors.length;i++){
-                    colorsDef = colors[i];
-                    colorSel = me._getColorTemplate(colorsDef);
-                    if(!colorSel) {
-                        continue;
-                    }
-                    var opt = me._templates.option.clone();
-                    opt.css('background-color', '#' + me._colorsConfig.menu);
-                    opt.append(colorSel);
-                    opt.attr('data-index', i);
-
-                    var width = 6;
-                    if(typeof colorsDef === 'string') {
-                        width = 16;
-                    } else {
-                        width = 6 * colorsDef.length;
-                    }
-                    opt.find('.color').height(16).width(width).css('border', '1px solid #' + me._colorsConfig.colorBorder);
-
-                    opt.append('<div style="clear:both;"></div>');
-                    me._selection.append(opt);
-                }
-
-                me._selected.attr('data-state', 'closed');
-
-                var arrow = me._templates.arrow.clone();
-                var emptyDiv = me._templates.floatNone.clone();
-
-                me._element.append(me._selected);
-                me._element.append(arrow);
-                me._element.append(emptyDiv);
-
-                me._element.append(me._selection);
-
-                me._setHandlers();
-
-                jQuery(document).bind('click', function(){
-                    me.close();
-                });
-
-                me.close();
+            if(typeof colors !== 'object' || !colors.length){
+                // not an array
+                return;
             }
+            me._selection.hide();
+
+            colors.forEach(function(colorsDef, index) {
+                // colorsDef can be like '#FFFFFF', ['#FFFFFF'] or { id : <myid>, value : ['#FFFFFF']}
+                var colorset = colorsDef.value || colorsDef;
+                var colorSel = me._getColorTemplate(colorset);
+                if(!colorSel) {
+                    return;
+                }
+                var opt = me._templates.option.clone();
+                opt.css('background-color', '#' + me._colorsConfig.menu);
+                opt.append(colorSel);
+                opt.attr('data-id', colorsDef.id || index);
+
+                var width = 6;
+                if(typeof colorset === 'string') {
+                    width = 16;
+                } else {
+                    width = 6 * colorset.length;
+                }
+                opt.find('.color').height(16).width(width).css('border', '1px solid #' + me._colorsConfig.colorBorder);
+
+                opt.append('<div style="clear:both;"></div>');
+                me._selection.append(opt);
+            });
+
+            me._selected.attr('data-state', 'closed');
+
+            var arrow = me._templates.arrow.clone();
+            var emptyDiv = me._templates.floatNone.clone();
+
+            me._element.append(me._selected);
+            me._element.append(arrow);
+            me._element.append(emptyDiv);
+
+            me._element.append(me._selection);
+
+            me._setHandlers();
+
+            jQuery(document).bind('click', function(){
+                me.close();
+            });
+
+            me.close();
         },
         /**
          * @method _setVisibleImpl

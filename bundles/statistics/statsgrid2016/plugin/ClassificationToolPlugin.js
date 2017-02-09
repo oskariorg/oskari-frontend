@@ -108,7 +108,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         teardownUI : function() {
             //remove old element
             var me = this;
-
             this.removeFromPluginContainer(me._element, true, true);
             if (this._popup) {
                 this._popup.close(true);

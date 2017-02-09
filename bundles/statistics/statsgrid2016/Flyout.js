@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          * Creates the UI for a fresh start.
          */
         render: function (isEmbedded) {
-            var me = this;
             var locale = this.instance.getLocalization();
             // empties all
             this.getEl().empty();
@@ -115,13 +114,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
 
             // Add grid
             var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb, this.instance.getLocalization());
-            grid.showRegionsetSelector(!isEmbedded)
+            grid.showRegionsetSelector(!isEmbedded);
             grid.showIndicatorRemoval(!isEmbedded);
             grid.render(el);
 
         },
         onClose: function() {
-            var me = this;
             var legend = this.getLegendFlyout();
             legend.hide();
         },

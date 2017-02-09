@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     // Header
     //   Source nn
     //   Indicator name + params
-    //   (Next source link)
+    //   (Link to change source - only shown if we have more than one indicator)
     // Accordion (or note about "insufficient data")
     //   Classification panel
     //   Legend
@@ -41,6 +41,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var container = this.__element;
         var accordion = this._accordion;
         // cleanup previous UI
+        // NOTE! detach classification before re-render to keep eventhandlers
+        this.editClassification.getElement().detach();
         accordion.removeAllPanels();
         container.empty();
         if(el) {
@@ -102,16 +104,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             me.render();
         });
 
-        me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
+        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
             me.render();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me.render();
-        });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            me.render();
+            // update legendpanel in accordion if available
+            var accordion = me._accordion;
+            var state = me.service.getStateService();
+            var ind = state.getActiveIndicator();
+            // update legend in place instead of full render
+            accordion.panels.forEach(function(panel) {
+                if(!panel.getContainer().find('.geostats-legend').length) {
+                    return;
+                }
+                // found panel with legend - update content with new legend
+                me._createLegend(ind.hash, function(legend) {
+                    panel.setContent(legend);
+                });
+            });
         });
     },
 
@@ -160,9 +171,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             };
             if(indicators.length < 2) {
                 // no need to setup link, remove it instead
-                var head = jQuery(headerTemplate(tplParams));
-                head.find('.link').remove();
-                callback(head);
+                var noLinksHeader = jQuery(headerTemplate(tplParams));
+                noLinksHeader.find('.link').remove();
+                callback(noLinksHeader);
                 return;
             }
 
@@ -200,7 +211,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 callback(me.__templates.error({msg : locale.legend.noEnough}));
                 return;
             }
-            var colors = service.getColorService().getColorsForClassification(classificationOpts)
+            if(classificationOpts.count !== classification.getGroups().length) {
+                // classification count changed!! -> show error + re-render
+                classificationOpts.count = classification.getGroups().length;
+                callback(me.__templates.error({msg : locale.legend.noEnough}));
+                stateService.setClassification(activeIndicator.hash, classificationOpts);
+                return;
+            }
+            var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
             var legend = classification.createLegend(colors);
             callback(legend, classificationOpts);
         });

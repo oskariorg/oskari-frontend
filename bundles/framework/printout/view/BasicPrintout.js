@@ -663,9 +663,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (tableData) {
                 me.mainPanel.find('input[name=tabledata]').val(tableData);
             }
-            
+
             window.open('about:blank', 'map_popup_111', wopParm);
-            
+
             me.mainPanel.find('#oskari_print_formID').submit();
         },
 
@@ -732,7 +732,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 me.instance.getSandbox().printDebug('PRINT URL ' + url);
                 me.openURLinWindow(url, selections);
             }
-        },       
+        },
 
         /**
          * @public @method setLayoutParams

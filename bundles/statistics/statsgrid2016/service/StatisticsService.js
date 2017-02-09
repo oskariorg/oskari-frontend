@@ -241,7 +241,7 @@
                         me.sandbox.notifyAll(eventBuilder(ds));
                     });
                 }, 10000);
-            }
+            };
 
             // call GetIndicatorList with parameter datasource=ds
             // use first param as error indicator - null == no error
