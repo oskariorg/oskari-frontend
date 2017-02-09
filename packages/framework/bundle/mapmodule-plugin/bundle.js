@@ -423,19 +423,19 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/request/activate.map.layer.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.add.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/add.map.layer.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.remove.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/remove.map.layer.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.opacity.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/set.opacity.map.layer.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.style.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/set.style.map.layer.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/map.layer.rearrange.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/set.order.map.layer.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/map.layer.handler.js"
@@ -480,7 +480,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.remove.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.rearrange.js"
+                    "src": "../../../../bundles/mapping/mapmodule/event/map.layer.order.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.opacity.js"
