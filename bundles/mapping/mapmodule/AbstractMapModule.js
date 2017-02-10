@@ -248,7 +248,7 @@ Oskari.clazz.define(
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
             sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
-            sandbox.requestHandler('map.layer.activation', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('activate.map.layer', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('RemoveMapLayerRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('RearrangeSelectedMapLayerRequest', this.requestHandlers.mapLayerHandler);

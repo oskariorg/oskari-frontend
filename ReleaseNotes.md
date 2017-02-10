@@ -2,6 +2,10 @@
 
 ## 1.41.0
 
+### OpenLayers 3 update
+
+Updated OpenLayers from 3.18.2 to 3.20.1.
+
 ### Oskari 2.0 preparations
 
 - Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox. This shouldn't affect any application as the main access point to get a reference is still Oskari.getSandbox().
@@ -74,7 +78,7 @@ Sandbox.getRequestBuilder() still works like before, but is deprecated and will 
 - Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
 - Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
 - Removed all other parameters from AddMapLayerRequest other than layer ID. Layer order is no longer affected by the boolean parameters when adding layers to map.
-- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "map.layer.activation" that now has a boolean indicating activation/deactivation.
+- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "activate.map.layer" that now has a boolean indicating activation/deactivation.
 - AfterDimMapLayerEvent and AfterHighlightMapLayerEvent have been merged to a new event "map.layer.activation" that now has a boolean indicating activation/deactivation.
 
 #### Marker handling changes
@@ -85,7 +89,7 @@ Sandbox.getRequestBuilder() still works like before, but is deprecated and will 
 
 ### fullscreen
 
-Map full screen mode now resetting when pressing reset view tools.
+Map fullscreen mode now resetting when pressing reset view tools.
 
 ### statistics/statsgrid2016
 
@@ -169,7 +173,7 @@ Fixed Oskari.util.coordinateDegreesToMetric() and Oskari.util.coordinateMetricTo
 
 ### routingUI
 
-Now coordinates are rounded by current map projection definations. Round rules are defined by current map units.
+Now coordinates are rounded by current map projection definitions. Round rules are defined by current map units.
 
 Special projection rounding conf added. Now the bundle configuration can contain projection specified rounding rules. For example:
 ```javascript
