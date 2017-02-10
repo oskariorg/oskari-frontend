@@ -18,6 +18,7 @@ Oskari.registerLocalization(
                 "delete": "Poista",
                 "addFeature": "Lisää kohde",
                 "editFeature": "Muokkaa kohdetta",
+                "editMultipleFeatures": "Muokkaa useita kohteita",
                 "deleteFeature": "Poista kohde"
             },
             "tools": {

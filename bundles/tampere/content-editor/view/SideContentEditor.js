@@ -73,6 +73,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.processGFIRequest = true;
         me.GFIFirstRequestProcessed = false;
         me.highlightFeaturesIds = [];
+        me.editMultipleFeaturesButton = null;
     }, {
         __name: 'ContentEditor',
         /**
@@ -309,9 +310,23 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             });
             var addFeatureButtonContainer = $("<div />");
-
+            //Modify multiple features.
+            me.editMultipleFeaturesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            me.editMultipleFeaturesButton.setTitle(me.loc.buttons.editMultipleFeatures);
+            me.editMultipleFeaturesButton.setHandler(function () {
+                me.processGFIRequest = false;
+                if (me.featureDuringEdit) {
+                    me.featureDuringEdit = false;
+                    me._showEditUnsavedInfoModal();
+                } else {
+                    //me._addNewFeature();
+                }
+            });
+            me.editMultipleFeaturesButton.setEnabled(false);
+            me.editMultipleFeaturesButton.insertTo(addFeatureButtonContainer);
             addFeatureButton.insertTo(addFeatureButtonContainer);
             content.find('.content').append(addFeatureButtonContainer);
+
             me._addDrawTools(content);
 
             content.find('.content').append($("<div />").addClass("properties-container"));
@@ -667,6 +682,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             $(".properties-container").empty();
             if (fragments != null && fragments.length) {
+                if(fragments.length > 1) {
+                    me.editMultipleFeaturesButton.setEnabled(true);
+                } else {
+                    me.editMultipleFeaturesButton.setEnabled(false);
+                }
                 contentData.html = this._renderFragments(fragments, editableFeatureFid);
                 contentData.layerId = fragments[0].layerId;
                 contentData.layerName = fragments[0].layerName;
@@ -675,6 +695,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 $(".properties-container").append(contentData.html);
                 me._setDatepickerLanguage();
                 $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
+            } else {
+                me.editMultipleFeaturesButton.setEnabled(false);
             }
         },
         /**
@@ -945,7 +967,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _renderFragments: function (fragments, editableFeatureFid) {
             var me = this;
-
             return _.foldl(fragments, function (wrapper, fragment) {
                 var fragmentTitle = fragment.layerName,
                     fragmentMarkup = fragment.markup;
