@@ -38,6 +38,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getAvailableModes: function() {
             return limits.mode.slice(0);
         },
+        getAvailableOptions : function(data) {
+            var validOpts = {};
+            var list = this._getDataAsList(data);
+            validOpts.maxCount = list.length -1;
+            return validOpts;
+        },
         /**
          * Classifies given dataset.
          * Returns an object like :

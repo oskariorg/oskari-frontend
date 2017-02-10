@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
+                    me._renderDone();
                     return;
                 }
                 // we have a legend and should display options in accordion
