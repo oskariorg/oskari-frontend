@@ -73,11 +73,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._colorSelect = null;
     this._element = null;
 }, {
-    /****** PRIVATE METHODS ******/
-
     /**
-     * @method  @private setValues init selections
-     * @param  {Object} classification
+     * @method setValues init selections
+     * @param  {Object} classification options. Defaults to current active indicator options
      */
     setValues: function(classification){
         var me = this;
@@ -88,6 +86,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         }
         var state = me.service.getStateService();
         var ind = state.getActiveIndicator();
+        if(!ind) {
+            // no active indicator
+            return;
+        }
         classification = classification || state.getClassificationOpts(ind.hash);
         me._element.find('select.method').val(classification.method);
 
