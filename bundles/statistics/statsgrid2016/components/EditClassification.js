@@ -101,9 +101,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var option = jQuery('<option></option>');
         for(var i=amountRange.min;i<amountRange.max+1;i++) {
             var op = option.clone();
-            if(i===5) {
-                op.attr('selected', 'selected');
-            }
             op.html(i);
             op.attr('value', i);
             amount.append(op);

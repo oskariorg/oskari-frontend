@@ -225,6 +225,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     },
     _createClassificationUI : function(options, callback) {
         var me = this;
-        callback(this.editClassification.getElement());
+        var element = this.editClassification.getElement();
+        this.editClassification.setValues(options);
+        callback(element);
     }
 });
