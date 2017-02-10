@@ -76,6 +76,16 @@
             }
 
             me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
+                if(err) {
+                    callback({
+                        error : true,
+                        indicator : '',
+                        params : '',
+                        full : '',
+                        paramsAsObject : {}
+                    });
+                    return;
+                }
                 var uiLabels = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
