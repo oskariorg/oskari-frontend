@@ -58,6 +58,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         }
         // Start creating the actual UI
         this._createHeader(activeIndicator, function(header) {
+            if(!header) {
+                me._renderDone();
+                return;
+            }
             // append header
             container.append(header);
             // start creating legend
@@ -101,15 +105,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     _bindToEvents : function() {
         var me = this;
 
+        me.service.on('StatsGrid.IndicatorEvent', function(event) {
+            // if indicator is removed/added - recalculate the source 1/2 etc links
+            me.render();
+        });
+
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+            // Always show the active indicator - also handles "no indicator selected"
             me.render();
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
+            // need to update the legend as data changes when regionset changes
             me.render();
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            // doesn't need full update, but we need to update the legend part when classification changes
             // update legendpanel in accordion if available
             var accordion = me._accordion;
             var state = me.service.getStateService();
@@ -141,6 +153,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var service = this.service;
         if(!service) {
             // not available yet
+            callback();
             return;
         }
         var sb = this.sb;
