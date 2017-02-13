@@ -59,6 +59,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                     el.removeClass('active');
                 }
                 me._toolOpen = false;
+                me.getElement().detach();
                 me._popup.close(true);
             } else {
                 if(el) {
@@ -74,14 +75,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
          * @method @private _showPopup
          */
         _showPopup: function() {
-            var me = this,
-                //popupContent = me._templates.popupContent.clone(),
-                isMobile = Oskari.util.isMobile(),
-                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
-
-            me._popup = popupService.createPopup();
-            me._popup.show(null, me.getElement());
-
+            var popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
+            this._popup = popupService.createPopup();
+            this._popup.addClass('statsgrid-mobile-legend');
+            this._popup.show(null, this.getElement());
         },
 
         /**
@@ -106,10 +103,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         },
 
         teardownUI : function() {
-            //remove old element
+            //detach old element from screen
             var me = this;
             this.removeFromPluginContainer(me._element, true, true);
             if (this._popup) {
+                me.getElement().detach();
                 this._popup.close(true);
             }
             var mobileDefs = this.getMobileDefs();
@@ -135,13 +133,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             }
             this.teardownUI();
 
+            me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-
+                return;
             }
 
-            me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
         },
 
