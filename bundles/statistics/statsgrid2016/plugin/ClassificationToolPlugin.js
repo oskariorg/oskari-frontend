@@ -15,12 +15,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._mapmodule = mapmodule;
         me._sandbox = sandbox;
         me._instance = instance;
-        me._messageDialog = null;
         me._clazz = 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin';
         me._defaultLocation = 'top right';
         me._index = 9;
         me._name = 'ClassificationToolPlugin';
-        me._toolOpen = false;
         me._element = null;
         me._templates = {
             main: jQuery('<div class="statsgrid-legend-plugin"></div>')
@@ -33,7 +31,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
                     tooltip: '',
                     show: true,
                     callback: function () {
-                        me._toggleToolState();
+                        if(me._popup && me._popup.isVisible()) {
+                            me._popup.close(true);
+                        } else {
+                            me._showPopup();
+                        }
                     },
                     sticky: true,
                     toggleChangeIcon: true
@@ -47,36 +49,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
     }, {
 
         /**
-         * Toggle tool state.
-         * @method @private _toggleToolState
-         */
-        _toggleToolState: function(){
-           var me = this,
-                el = me.getElement();
-
-            if(me._toolOpen) {
-                if(el) {
-                    el.removeClass('active');
-                }
-                me._toolOpen = false;
-                me.getElement().detach();
-                me._popup.close(true);
-            } else {
-                if(el) {
-                    el.addClass('active');
-                }
-                me._toolOpen = true;
-                me._showPopup();
-            }
-        },
-
-        /**
          * Show popup.
          * @method @private _showPopup
          */
         _showPopup: function() {
+            var me = this;
+            var sandbox = me.getSandbox();
             var popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
             this._popup = popupService.createPopup();
+            this._popup.onClose(function() {
+                // detach so we dont lose eventlistener bindings
+                me.getElement().detach();
+                sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+            });
             this._popup.addClass('statsgrid-mobile-legend');
             this._popup.show(null, this.getElement());
         },
