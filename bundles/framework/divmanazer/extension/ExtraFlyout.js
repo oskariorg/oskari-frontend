@@ -163,5 +163,19 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    		width : this.__popup.outerWidth(),
 	    		height : this.__popup.height()
 	    	};
+        },
+        /**
+         * @method makeDraggable
+         * Makes dialog draggable with jQuery Event Drag plugin
+         * @param options  optional options for draggable
+         */
+        makeDraggable: function (options) {
+            var me = this,
+                dragOptions = options ? options : {
+                scroll: false,
+                handle: '.oskari-flyouttoolbar'
+            };
+            me.__popup.css('position', 'absolute');
+            me.__popup.draggable(dragOptions);
         }
 });
