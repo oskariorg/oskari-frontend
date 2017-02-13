@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
         option : _.template('<option value="${id}">${name}</option>')
     },
     /**
-     * Get region selection.
+     * Get regionset selection.
      * @method  @public create
      *
      * @param  {Number[]} restrictTo  restrict selection to regions with matching ids
@@ -24,7 +24,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
      * @return {Object}           jQuery element
      */
     create: function(restrictTo, disableReset) {
-         /*, addWidthHack, changeEvent*/
         var me = this;
         var loc = this.localization;
         var allowedRegionsets = this.__getOptions(restrictTo);
@@ -70,8 +69,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function(sa
             field : jqSelect
         };
     },
-    __setWidth : function ( width ){
-      this.dropdown.css({ width: width });
+    setWidth : function ( width ) {
+        if(!this.dropdown) {
+            return;
+        }
+        this.dropdown.css({ width: width });
     },
     __getOptions : function(restrictTo) {
         var allRegionsets = this.service.getRegionsets();

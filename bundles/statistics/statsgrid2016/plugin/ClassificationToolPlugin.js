@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             buttons:  {
                 'mobile-coordinatetool': {
                     iconCls: 'mobile-xy',
-                    tooltip: '',
+                    tooltip: locale.legend.title,
                     show: true,
                     callback: function () {
                         if(me._popup && me._popup.isVisible()) {

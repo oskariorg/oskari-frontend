@@ -18,9 +18,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     this._renderState.panels[this.locale.legend.title] = true
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
+    /**
+     * Enables/disables the classification editor form
+     * @param  {Boolean} enabled true to enable, false to disable
+     */
     allowClassification : function(enabled) {
         this.editClassification.setEnabled(enabled);
     },
+    /**
+     * Try to open the accordion panel holding the color <> number range UI
+     */
     openLegendPanel : function() {
         var panels = this._accordion.getPanels();
         var legendTitle = this.locale.legend.title;
@@ -108,7 +115,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     },
     /****** PRIVATE METHODS ******/
     /**
-     * Triggers a new render when needed (render was called before previous was ready)
+     * Triggers a new render when needed (if render was called before previous was finished)
      */
     _renderDone : function() {
         var state = this._renderState;
@@ -140,6 +147,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             }
         });
     },
+    /**
+     * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
+     * @param  {String} title UI label
+     * @return {Oskari.userinterface.component.AccordionPanel} panel without content
+     */
     _createAccordionPanel : function(title) {
         var me = this;
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -152,6 +164,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         panel.setTitle(title);
         return panel;
     },
+    /**
+     * Used to track accordion panel states (open/close)
+     * @param {Oskari.userinterface.component.AccordionPanel} panel panel that switched state
+     */
     _setPanelState :function(panel) {
         var panels = this._accordion.getPanels();
         if(!this._renderState.panels) {
@@ -160,8 +176,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         this._renderState.panels[panel.getTitle()] = panel.isOpen();
     },
     /**
-     * Creates the header for legend
-     * @param  {Object}   activeIndicator
+     * Creates the header part for the legend UI
+     * @param  {Object}   activeIndicator identifies the current active indicator
      * @param  {Function} callback        function to call with header element as param or undefined for error
      */
     _createHeader: function (activeIndicator, callback) {
@@ -216,9 +232,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             callback(head);
         });
     },
+    /**
+     * Creates the color <> number range UI
+     * @param  {Object}   activeIndicator identifies the current active indicator
+     * @param  {Function} callback        function to call with legend element as param or undefined for error
+     */
     _createLegend : function(activeIndicator, callback) {
         if(!this.service) {
-            return false;
+            callback();
+            return;
         }
         var me = this;
         var service = this.service;
@@ -252,6 +274,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             callback(legend, classificationOpts);
         });
     },
+    /**
+     * Creates the classification editor UI
+     * @param  {Object}   options  values for the classification form to use as initial values
+     * @param  {Function} callback function to call with editpr element as param or undefined for error
+     */
     _createClassificationUI : function(options, callback) {
         var me = this;
         var element = this.editClassification.getElement();
@@ -259,7 +286,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         callback(element);
     },
     /**
-     * @method  @private _bindToEvents bind events
+     * Listen to events that require re-rendering the UI
      */
     _bindToEvents : function() {
         var me = this;

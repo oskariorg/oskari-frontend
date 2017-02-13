@@ -32,12 +32,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>')
     },
-    showRegionsetSelector : function(enabled) {
-        this.regionSelectorEnabled = !!enabled;
-    },
-    showIndicatorRemoval : function(enabled) {
-        this.indicatorRemovalEnabled = !!enabled;
-    },
 
     /****** PRIVATE METHODS ******/
 
@@ -112,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 if(!regionSelect) {
                     return;
                 }
-                regionSelector.__setWidth(170);
+                regionSelector.setWidth(170);
                 regionSelect.value(me.getCurrentRegionset());
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();
@@ -338,6 +332,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     /****** PUBLIC METHODS ******/
 
+    showRegionsetSelector : function(enabled) {
+        this.regionSelectorEnabled = !!enabled;
+    },
+    showIndicatorRemoval : function(enabled) {
+        this.indicatorRemovalEnabled = !!enabled;
+    },
     /**
      * @method  @public render Render datatable
      * @param  {Object} el jQuery element
@@ -475,7 +475,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 }
             });
         });
-
-
     }
 });

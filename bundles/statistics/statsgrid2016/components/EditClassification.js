@@ -140,8 +140,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         });
     },
 
-    /****** PUBLIC METHODS ******/
-
     /**
      * @method  @public getSelectedValues gets selected values
      * @return {Object} selected values object
