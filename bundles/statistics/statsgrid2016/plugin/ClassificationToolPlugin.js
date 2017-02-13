@@ -21,8 +21,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._name = 'ClassificationToolPlugin';
         me._element = null;
         me._templates = {
-            main: jQuery('<div class="statsgrid-legend-plugin"></div>')
+            main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
         };
+        // for publisher dragndrop to work needs to have at least:
+        // -  mapplugin-class in parent template
+        // - _setLayerToolsEditModeImpl()
+        // - publisher tool needs to implement getPlugin()
+        // publisher tool writes location to statsgrid.conf.legendLocation since this is not only a plugin
+        //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
+        me.setLocation(config.legendLocation || me._defaultLocation);
 
         me._mobileDefs = {
             buttons:  {
@@ -67,6 +74,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         },
 
         /**
+         * @method _setLayerToolsEditModeImpl
+         * Called after layerToolsEditMode is set.
+         *
+         *
+         */
+        _setLayerToolsEditModeImpl: function () {
+            var me = this;
+            if(!me.getElement()) {
+                return;
+            }
+            if (!me.inLayerToolsEditMode()) {
+                me.setLocation(
+                    me.getElement().parents('.mapplugins').attr(
+                        'data-location'
+                    )
+                );
+            }
+        },
+        /**
          * Creates UI for coordinate display and places it on the maps
          * div where this plugin registered.
          * @private @method _createControlElement
@@ -87,10 +113,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             return me._element;
         },
 
-        teardownUI : function() {
+        teardownUI : function(stopping) {
             //detach old element from screen
             var me = this;
-            this.removeFromPluginContainer(me._element, true, true);
+            this.removeFromPluginContainer(me._element, !stopping);
             if (this._popup) {
                 me.getElement().detach();
                 this._popup.close(true);
@@ -140,7 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             this.__legend.allowClassification(enabled);
         },
         stopPlugin: function(){
-            this.teardownUI();
+            this.teardownUI(true);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
