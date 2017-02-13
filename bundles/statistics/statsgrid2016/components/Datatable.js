@@ -122,9 +122,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 // container includes
                 tableHeader.find('.selection').append(regionSelect.oskariSelect);
             }
-            // Else remove area selection
+            // Else only show current regionset without info
             else {
-                tableHeader.find('.selection').remove();
+                var regionsetDef = me.service.getRegionsets(me.getCurrentRegionset()) || {};
+                tableHeader.find('.selection').html(regionsetDef.name);
                 tableHeader.find('.info').remove();
             }
 
