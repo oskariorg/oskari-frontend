@@ -11,7 +11,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     this._bindToEvents();
 
     this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, locale);
-    this._renderState = {};
+    this._renderState = {
+        panels : {}
+    };
+    // initialize with legend panel open
+    this._renderState.panels[this.locale.legend.title] = true
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
     allowClassification : function(enabled) {
@@ -73,19 +77,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                     return;
                 }
                 // we have a legend and should display options in accordion
-                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panelLegend.setTitle(me.locale.legend.title);
+                var panelLegend = me._createAccordionPanel(me.locale.legend.title);
 
                 panelLegend.setContent(legendUI);
-                panelLegend.open();
 
                 // render classification options
                 me._createClassificationUI(classificationOpts, function(classificationUI) {
 
-                    var panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    panelClassification.setTitle(me.locale.classify.editClassifyTitle);
+                    var panelClassification = me._createAccordionPanel(me.locale.classify.editClassifyTitle);
                     panelClassification.setContent(classificationUI);
-                    panelClassification.open();
                     // add panels to accordion
                     accordion.addPanel(panelClassification);
                     accordion.addPanel(panelLegend);
@@ -98,57 +98,59 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         });
     },
     /****** PRIVATE METHODS ******/
-
-    /**
-     * @method  @private _bindToEvents bind events
-     */
-    _bindToEvents : function() {
+    _createAccordionPanel : function(title) {
         var me = this;
-
-        me.service.on('StatsGrid.IndicatorEvent', function(event) {
-            // if indicator is removed/added - recalculate the source 1/2 etc links
-            me.render();
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        panel.on('open', function() {
+            me.setPanelState(panel);
         });
-
-        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-            // Always show the active indicator - also handles "no indicator selected"
-            me.render();
+        panel.on('close', function() {
+            me.setPanelState(panel);
         });
-
-        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
-            // need to update the legend as data changes when regionset changes
-            me.render();
-        });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            // doesn't need full update, but we need to update the legend part when classification changes
-            // update legendpanel in accordion if available
-            var accordion = me._accordion;
-            var state = me.service.getStateService();
-            var ind = state.getActiveIndicator();
-            // update legend in place instead of full render
-            accordion.panels.forEach(function(panel) {
-                if(!panel.getContainer().find('.geostats-legend').length) {
-                    return;
-                }
-                // found panel with legend - update content with new legend
-                me._createLegend(ind.hash, function(legend) {
-                    panel.setContent(legend);
-                });
-            });
-        });
+        panel.setTitle(title);
+        return panel;
     },
-
     /**
      * Triggers a new render when needed (render was called before previous was ready)
      */
     _renderDone : function() {
         var state = this._renderState;
         this._renderState = {};
+        this._restorePanelState(this._accordion, state.panels);
         if(state.repaint) {
             this.render(state.el);
         }
     },
+
+    setPanelState :function(panel, isOpen) {
+        var panels = this._accordion.getPanels();
+        if(!this._renderState.panels) {
+            this._renderState.panels = {};
+        }
+        this._renderState.panels[panel.getTitle()] = isOpen || panel.isOpen();
+    },
+    _restorePanelState :function(accordion, state) {
+        if(!accordion || !state) {
+            return;
+        }
+        var panels = accordion.getPanels();
+        panels.forEach(function(panel) {
+            var panelState = state[panel.getTitle()];
+            if(typeof panelState !== 'boolean') {
+                return;
+            }
+            if(panelState) {
+                panel.open();
+            } else {
+                panel.close();
+            }
+        });
+    },
+    /**
+     * Creates the header for legend
+     * @param  {Object}   activeIndicator
+     * @param  {Function} callback        function to call with header element as param or undefined for error
+     */
     _createHeader: function (activeIndicator, callback) {
         var service = this.service;
         if(!service) {
@@ -242,5 +244,44 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         var element = this.editClassification.getElement();
         this.editClassification.setValues(options);
         callback(element);
+    },
+    /**
+     * @method  @private _bindToEvents bind events
+     */
+    _bindToEvents : function() {
+        var me = this;
+
+        me.service.on('StatsGrid.IndicatorEvent', function(event) {
+            // if indicator is removed/added - recalculate the source 1/2 etc links
+            me.render();
+        });
+
+        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+            // Always show the active indicator - also handles "no indicator selected"
+            me.render();
+        });
+
+        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
+            // need to update the legend as data changes when regionset changes
+            me.render();
+        });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            // doesn't need full update, but we need to update the legend part when classification changes
+            // update legendpanel in accordion if available
+            var accordion = me._accordion;
+            var state = me.service.getStateService();
+            var ind = state.getActiveIndicator();
+            // update legend in place instead of full render
+            accordion.panels.forEach(function(panel) {
+                if(!panel.getContainer().find('.geostats-legend').length) {
+                    return;
+                }
+                // found panel with legend - update content with new legend
+                me._createLegend(ind.hash, function(legend) {
+                    panel.setContent(legend);
+                });
+            });
+        });
     }
 });
