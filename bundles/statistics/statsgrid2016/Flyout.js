@@ -65,6 +65,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 } else {
                     // show and reset position
                     flyout.move(bounds.right, bounds.top, true);
+                    // init legend panel open when the flyout is opened
+                    me.__legend.openLegendPanel();
                     flyout.show();
                     flyout.bringToTop();
                 }

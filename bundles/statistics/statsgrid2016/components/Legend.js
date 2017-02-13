@@ -21,6 +21,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     allowClassification : function(enabled) {
         this.editClassification.setEnabled(enabled);
     },
+    openLegendPanel : function() {
+        var panels = this._accordion.getPanels();
+        var legendTitle = this.locale.legend.title;
+        panels.forEach(function(panel) {
+            if(panel.getTitle() === legendTitle) {
+                panel.open();
+            }
+        });
+    },
     // Header
     //   Source nn
     //   Indicator name + params
@@ -98,18 +107,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         });
     },
     /****** PRIVATE METHODS ******/
-    _createAccordionPanel : function(title) {
-        var me = this;
-        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        panel.on('open', function() {
-            me.setPanelState(panel);
-        });
-        panel.on('close', function() {
-            me.setPanelState(panel);
-        });
-        panel.setTitle(title);
-        return panel;
-    },
     /**
      * Triggers a new render when needed (render was called before previous was ready)
      */
@@ -121,14 +118,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             this.render(state.el);
         }
     },
-
-    setPanelState :function(panel, isOpen) {
-        var panels = this._accordion.getPanels();
-        if(!this._renderState.panels) {
-            this._renderState.panels = {};
-        }
-        this._renderState.panels[panel.getTitle()] = isOpen || panel.isOpen();
-    },
+    /**
+     * Restores legend/classification panels to given state (open/closed)
+     * @param  {Oskari.userinterface.component.Accordion} accordion
+     * @param  {Object} state     with keys as panel titles and value as boolean (true == open, false == closed)
+     */
     _restorePanelState :function(accordion, state) {
         if(!accordion || !state) {
             return;
@@ -145,6 +139,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 panel.close();
             }
         });
+    },
+    _createAccordionPanel : function(title) {
+        var me = this;
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        panel.on('open', function() {
+            me._setPanelState(panel);
+        });
+        panel.on('close', function() {
+            me._setPanelState(panel);
+        });
+        panel.setTitle(title);
+        return panel;
+    },
+    _setPanelState :function(panel) {
+        var panels = this._accordion.getPanels();
+        if(!this._renderState.panels) {
+            this._renderState.panels = {};
+        }
+        this._renderState.panels[panel.getTitle()] = panel.isOpen();
     },
     /**
      * Creates the header for legend
