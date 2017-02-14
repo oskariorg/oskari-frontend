@@ -182,7 +182,7 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
-div.oskari-flyoutcontent thead th {
+div.oskari-flyoutcontent.statsgrid thead th {
   border: none;
   border-bottom: 1px solid #E6E6E6;
   border-left: 1px solid #E6E6E6;
