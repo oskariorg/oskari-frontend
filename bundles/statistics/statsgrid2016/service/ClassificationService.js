@@ -90,6 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             var stats = new geostats(list);
+            stats.silent = true;
             stats.setPrecision(opts.precision);
 
             var a = stats.getClassQuantile(opts.count);
@@ -155,7 +156,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             // createLegend
             response.createLegend = function(colors, title) {
                 stats.setColors(colors);
-                return stats.getHtmlLegend(null, title || '', true, null, opts.mode);
+                var legendHTML = stats.getHtmlLegend(null, title || '', true, null, opts.mode);
+                return legendHTML;
             };
             return response;
         },

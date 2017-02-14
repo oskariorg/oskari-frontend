@@ -73,7 +73,8 @@ Oskari.registerLocalization(
         "legend": {
             "title": "Classification",
             "noActive": "No data selected, select data to view classification.",
-            "noEnough": "Dataset is too small for classification. Try another dataset or edit search options."
+            "noEnough": "Dataset is too small for classification. Try another dataset or edit search options.",
+            "cannotCreateLegend": "Cannot create legend. Try another classification options."
         },
         "parameters": {
             "sex": "Gender",
