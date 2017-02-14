@@ -4,8 +4,8 @@ function() {
     index : 1,
     group: 'data',
     allowedLocations : ['top left', 'top right'],
-    lefthanded: 'top left',
-    righthanded: 'top right',
+    lefthanded: 'top right',
+    righthanded: 'top left',
 
     allowedSiblings : [
         'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
@@ -31,6 +31,11 @@ function() {
         } else {
             me.setEnabled(false);
         }
+    },
+    // required for dragndrop in publisher - also plugin needs to 
+    getPlugin : function() {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        return stats.plugin;
     },
     /**
     * Get tool object.
@@ -122,7 +127,8 @@ function() {
                 configuration: {
                     statsgrid: {
                         conf : {
-                            allowClassification: me.state.enabled
+                            allowClassification: me.state.enabled,
+                            legendLocation : this.getPlugin().getLocation()
                         }
                     }
                 }

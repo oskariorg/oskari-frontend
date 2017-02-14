@@ -26,7 +26,7 @@ Oskari.clazz.define('map.layer.handler',
         handleRequest: function (core, request) {
             var sandbox = this.layerService.getSandbox();
 
-            if('map.layer.activation' === request.getName()) {
+            if('activate.map.layer' === request.getName()) {
                 var layerId = request.getLayerId();
                 if(request.isActivated()) {
                     this.mapState.activateLayer(layerId, request._creator);

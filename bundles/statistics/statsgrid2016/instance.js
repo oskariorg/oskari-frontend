@@ -74,24 +74,7 @@ Oskari.clazz.define(
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
-                if(!this.statsService) {
-                    return;
-                }
-
                 this.statsService.notifyOskariEvent(evt);
-
-                var state = this.statsService.getStateService();
-                var activeIndicator = state.getActiveIndicator();
-                var hash = state.getHash(evt.getDatasource(), evt.getIndicator(), evt.getSelections());
-                // FIXME: setActiveIndicator should handle this internally...
-                if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && !activeIndicator) {
-                    state.setActiveIndicator(hash);
-                } else if((!this.state || (this.state && !this.state.active)) && !evt.isRemoved() && activeIndicator) {
-                    state.setActiveIndicator(activeIndicator);
-                } else if(evt.isRemoved() && this.state && this.state.active === hash) {
-                    delete this.state.active;
-                }
-
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);

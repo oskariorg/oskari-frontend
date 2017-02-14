@@ -181,6 +181,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             'use strict';
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: getButton is deprecated, please use getElement instead.');
             return jQuery(this.getElement());
+        },
+
+        /**
+         * @method _setVisibleImpl
+         */
+        _setVisibleImpl: function (visible) {
+            'use strict';
+            this._element.visible = visible;
+            this._visible = visible;
+            this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']

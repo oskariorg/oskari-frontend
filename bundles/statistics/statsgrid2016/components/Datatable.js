@@ -32,12 +32,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>')
     },
-    showRegionsetSelector : function(enabled) {
-        this.regionSelectorEnabled = !!enabled;
-    },
-    showIndicatorRemoval : function(enabled) {
-        this.indicatorRemovalEnabled = !!enabled;
-    },
 
     /****** PRIVATE METHODS ******/
 
@@ -112,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 if(!regionSelect) {
                     return;
                 }
-                regionSelector.__setWidth(170);
+                regionSelector.setWidth(170);
                 regionSelect.value(me.getCurrentRegionset());
                 regionSelect.field.on('change', function() {
                     var value = jQuery(this).val();
@@ -122,9 +116,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 // container includes
                 tableHeader.find('.selection').append(regionSelect.oskariSelect);
             }
-            // Else remove area selection
+            // Else only show current regionset without info
             else {
-                tableHeader.find('.selection').remove();
+                var regionsetDef = me.service.getRegionsets(me.getCurrentRegionset()) || {};
+                tableHeader.find('.selection').html(regionsetDef.name);
                 tableHeader.find('.info').remove();
             }
 
@@ -337,6 +332,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     /****** PUBLIC METHODS ******/
 
+    showRegionsetSelector : function(enabled) {
+        this.regionSelectorEnabled = !!enabled;
+    },
+    showIndicatorRemoval : function(enabled) {
+        this.indicatorRemovalEnabled = !!enabled;
+    },
     /**
      * @method  @public render Render datatable
      * @param  {Object} el jQuery element
@@ -474,7 +475,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 }
             });
         });
-
-
     }
 });

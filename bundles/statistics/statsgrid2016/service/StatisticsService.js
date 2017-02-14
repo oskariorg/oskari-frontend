@@ -76,6 +76,16 @@
             }
 
             me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
+                if(err) {
+                    callback({
+                        error : true,
+                        indicator : '',
+                        params : '',
+                        full : '',
+                        paramsAsObject : {}
+                    });
+                    return;
+                }
                 var uiLabels = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
@@ -173,8 +183,13 @@
          * @param  {Function} callback  function to call with error or results
          */
         getRegions : function(regionset, callback) {
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
             if(!regionset || typeof callback !== 'function') {
                 // log error message
+                callback('Regionset missing');
                 return;
             }
             var me = this;
@@ -210,8 +225,13 @@
          * @param  {Function} callback function to call with error or results
          */
         getIndicatorList : function(ds, callback) {
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
             if(!ds || typeof callback !== 'function') {
                 // log error message
+                callback('Datasource missing');
                 return;
             }
             var cacheKey = 'GetIndicatorList_' + ds;
@@ -272,8 +292,13 @@
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorMetadata : function(ds, indicator, callback) {
-            if(!ds || !indicator || typeof callback !== 'function') {
+            if(typeof callback !== 'function') {
                 // log error message
+                return;
+            }
+            if(!ds || !indicator) {
+                // log error message
+                callback('Datasource or indicator missing');
                 return;
             }
             var me = this;
@@ -311,8 +336,13 @@
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorData : function(ds, indicator, params, regionset, callback) {
-            if(!ds ||!indicator || !regionset || typeof callback !== 'function') {
+            if(typeof callback !== 'function') {
                 // log error message
+                return;
+            }
+            if(!ds ||!indicator || !regionset) {
+                // log error message
+                callback('Datasource, regionset or indicator missing');
                 return;
             }
             var me = this;

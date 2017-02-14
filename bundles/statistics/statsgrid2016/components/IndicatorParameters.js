@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             });
 
             var regionSelect = me.regionSelector.create(indicator.regionsets);
-            me.regionSelector.__setWidth(205);
+            me.regionSelector.setWidth(205);
             // try to select the current regionset as default selection
             regionSelect.value(me.service.getStateService().getRegionset());
             cont.append(regionSelect.container);

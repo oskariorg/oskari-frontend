@@ -15,25 +15,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._mapmodule = mapmodule;
         me._sandbox = sandbox;
         me._instance = instance;
-        me._messageDialog = null;
         me._clazz = 'Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin';
         me._defaultLocation = 'top right';
         me._index = 9;
         me._name = 'ClassificationToolPlugin';
-        me._toolOpen = false;
         me._element = null;
         me._templates = {
-            main: jQuery('<div class="statsgrid-legend-plugin"></div>')
+            main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
         };
+        // for publisher dragndrop to work needs to have at least:
+        // -  mapplugin-class in parent template
+        // - _setLayerToolsEditModeImpl()
+        // - publisher tool needs to implement getPlugin()
+        // publisher tool writes location to statsgrid.conf.legendLocation since this is not only a plugin
+        //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
+        me.setLocation(config.legendLocation || me._defaultLocation);
 
         me._mobileDefs = {
             buttons:  {
                 'mobile-coordinatetool': {
                     iconCls: 'mobile-xy',
-                    tooltip: '',
+                    tooltip: locale.legend.title,
                     show: true,
                     callback: function () {
-                        me._toggleToolState();
+                        if(me._popup && me._popup.isVisible()) {
+                            me._popup.close(true);
+                        } else {
+                            me._showPopup();
+                        }
                     },
                     sticky: true,
                     toggleChangeIcon: true
@@ -47,43 +56,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
     }, {
 
         /**
-         * Toggle tool state.
-         * @method @private _toggleToolState
-         */
-        _toggleToolState: function(){
-           var me = this,
-                el = me.getElement();
-
-            if(me._toolOpen) {
-                if(el) {
-                    el.removeClass('active');
-                }
-                me._toolOpen = false;
-                me._popup.close(true);
-            } else {
-                if(el) {
-                    el.addClass('active');
-                }
-                me._toolOpen = true;
-                me._showPopup();
-            }
-        },
-
-        /**
          * Show popup.
          * @method @private _showPopup
          */
         _showPopup: function() {
-            var me = this,
-                //popupContent = me._templates.popupContent.clone(),
-                isMobile = Oskari.util.isMobile(),
-                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
-
-            me._popup = popupService.createPopup();
-            me._popup.show(null, me.getElement());
-
+            var me = this;
+            var sandbox = me.getSandbox();
+            var popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
+            this._popup = popupService.createPopup();
+            this._popup.onClose(function() {
+                // detach so we dont lose eventlistener bindings
+                me.getElement().detach();
+                sandbox.postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
+            });
+            this._popup.addClass('statsgrid-mobile-legend');
+            this._popup.show(null, this.getElement());
         },
 
+        /**
+         * @method _setLayerToolsEditModeImpl
+         * Called after layerToolsEditMode is set.
+         *
+         *
+         */
+        _setLayerToolsEditModeImpl: function () {
+            var me = this;
+            if(!me.getElement()) {
+                return;
+            }
+            if (!me.inLayerToolsEditMode()) {
+                me.setLocation(
+                    me.getElement().parents('.mapplugins').attr(
+                        'data-location'
+                    )
+                );
+            }
+        },
         /**
          * Creates UI for coordinate display and places it on the maps
          * div where this plugin registered.
@@ -105,11 +113,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             return me._element;
         },
 
-        teardownUI : function() {
-            //remove old element
+        teardownUI : function(stopping) {
+            //detach old element from screen
             var me = this;
-            this.removeFromPluginContainer(me._element, true, true);
+            this.removeFromPluginContainer(me._element, !stopping);
             if (this._popup) {
+                me.getElement().detach();
                 this._popup.close(true);
             }
             var mobileDefs = this.getMobileDefs();
@@ -135,13 +144,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             }
             this.teardownUI();
 
+            me._element = me._createControlElement();
             if (!toolbarNotReady && mapInMobileMode) {
                 // create mobile
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-
+                return;
             }
 
-            me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
         },
 
@@ -157,7 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             this.__legend.allowClassification(enabled);
         },
         stopPlugin: function(){
-            this.teardownUI();
+            this.teardownUI(true);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -73,11 +73,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._colorSelect = null;
     this._element = null;
 }, {
-    /****** PRIVATE METHODS ******/
-
     /**
-     * @method  @private setValues init selections
-     * @param  {Object} classification
+     * @method setValues init selections
+     * @param  {Object} classification options. Defaults to current active indicator options
      */
     setValues: function(classification){
         var me = this;
@@ -86,12 +84,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             // not rendered yet
             return;
         }
-        var state = me.service.getStateService();
+        var service = me.service;
+        var state = service.getStateService();
         var ind = state.getActiveIndicator();
+        if(!ind) {
+            // no active indicator
+            return;
+        }
         classification = classification || state.getClassificationOpts(ind.hash);
         me._element.find('select.method').val(classification.method);
 
-        var amountRange = me.service.getColorService().getRange(classification.type);
+        var amountRange = service.getColorService().getRange(classification.type);
         // TODO: handle missing data: if we have data for 3 regions count can be 2.
         // If we have data for 2 regions, no classification can be done.
         var amount = me._element.find('select.amount-class');
@@ -99,9 +102,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var option = jQuery('<option></option>');
         for(var i=amountRange.min;i<amountRange.max+1;i++) {
             var op = option.clone();
-            if(i===5) {
-                op.attr('selected', 'selected');
-            }
             op.html(i);
             op.attr('value', i);
             amount.append(op);
@@ -115,13 +115,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             me._element.find('button.reverse-colors').removeClass('primary');
         }
         // update color selection values
-        var colors = me.service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
+        var colors = service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
         me._colorSelect.setColorValues(colors);
         me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
-    },
 
-    /****** PUBLIC METHODS ******/
+        // disable invalid choices
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+            if(err) {
+                // propably nothing to tell the user at this point. There will be some invalid choices available on the form
+                return;
+            }
+            var validOptions = service.getClassificationService().getAvailableOptions(data);
+            if(validOptions.maxCount) {
+                var options = amount.find('option');
+                options.each(function(index, opt) {
+                    opt = jQuery(opt);
+                    if(opt.val() > validOptions.maxCount) {
+                        opt.attr('disabled', true);
+                    }
+                });
+            }
+
+        });
+    },
 
     /**
      * @method  @public getSelectedValues gets selected values

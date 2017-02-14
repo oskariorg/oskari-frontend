@@ -38,6 +38,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 width: '200px',
                 cls: 'statsgrid-legend-flyout'
             });
+            flyout.makeDraggable({
+                handle : '.oskari-flyouttoolbar, .statsgrid-legend-container > .header',
+                scroll : false
+            });
             this.__legendFlyout = flyout;
             // render content
             this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', this.instance.getSandbox(), this.instance.getLocalization());
@@ -61,6 +65,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 } else {
                     // show and reset position
                     flyout.move(bounds.right, bounds.top, true);
+                    // init legend panel open when the flyout is opened
+                    me.__legend.openLegendPanel();
                     flyout.show();
                     flyout.bringToTop();
                 }

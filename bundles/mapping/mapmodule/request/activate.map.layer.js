@@ -1,5 +1,5 @@
 /**
- * @class map.layer.activation.request
+ * @class activate.map.layer.request
  *
  * Requests for given map layer to be activated/deactivated on map.
  * This means f.ex. a WFS layers to show featuretype grid and enable selection clicks on map
@@ -7,7 +7,7 @@
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('map.layer.activation.request',
+Oskari.clazz.define('activate.map.layer.request',
 
     /**
      * @method create called automatically on construction
@@ -24,7 +24,7 @@ Oskari.clazz.define('map.layer.activation.request',
         this._isActivated = isActivated === true;
     }, {
         /** @static @property __name request name */
-        __name: "map.layer.activation",
+        __name: "activate.map.layer",
         /**
          * @method getName
          * @return {String} request name

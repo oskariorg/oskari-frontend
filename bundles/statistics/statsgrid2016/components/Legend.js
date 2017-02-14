@@ -11,11 +11,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     this._bindToEvents();
 
     this.editClassification = Oskari.clazz.create('Oskari.statistics.statsgrid.EditClassification', sandbox, locale);
-    this._renderState = {};
+    this._renderState = {
+        panels : {}
+    };
+    // initialize with legend panel open
+    this._renderState.panels[this.locale.legend.title] = true
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
+    /**
+     * Enables/disables the classification editor form
+     * @param  {Boolean} enabled true to enable, false to disable
+     */
     allowClassification : function(enabled) {
         this.editClassification.setEnabled(enabled);
+    },
+    /**
+     * Try to open the accordion panel holding the color <> number range UI
+     */
+    openLegendPanel : function() {
+        var panels = this._accordion.getPanels();
+        var legendTitle = this.locale.legend.title;
+        panels.forEach(function(panel) {
+            if(panel.getTitle() === legendTitle) {
+                panel.open();
+            }
+        });
     },
     // Header
     //   Source nn
@@ -58,6 +78,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         }
         // Start creating the actual UI
         this._createHeader(activeIndicator, function(header) {
+            if(!header) {
+                me._renderDone();
+                return;
+            }
             // append header
             container.append(header);
             // start creating legend
@@ -65,22 +89,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 if(!classificationOpts) {
                     // didn't get classification options so not enough data to classify or other error
                     container.append(legendUI);
+                    me._renderDone();
                     return;
                 }
                 // we have a legend and should display options in accordion
-                var panelLegend = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panelLegend.setTitle(me.locale.legend.title);
+                var panelLegend = me._createAccordionPanel(me.locale.legend.title);
 
                 panelLegend.setContent(legendUI);
-                panelLegend.open();
 
                 // render classification options
                 me._createClassificationUI(classificationOpts, function(classificationUI) {
 
-                    var panelClassification = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    panelClassification.setTitle(me.locale.classify.editClassifyTitle);
+                    var panelClassification = me._createAccordionPanel(me.locale.classify.editClassifyTitle);
                     panelClassification.setContent(classificationUI);
-                    panelClassification.open();
                     // add panels to accordion
                     accordion.addPanel(panelClassification);
                     accordion.addPanel(panelLegend);
@@ -93,53 +114,77 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         });
     },
     /****** PRIVATE METHODS ******/
-
     /**
-     * @method  @private _bindToEvents bind events
-     */
-    _bindToEvents : function() {
-        var me = this;
-
-        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-            me.render();
-        });
-
-        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
-            me.render();
-        });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
-            // update legendpanel in accordion if available
-            var accordion = me._accordion;
-            var state = me.service.getStateService();
-            var ind = state.getActiveIndicator();
-            // update legend in place instead of full render
-            accordion.panels.forEach(function(panel) {
-                if(!panel.getContainer().find('.geostats-legend').length) {
-                    return;
-                }
-                // found panel with legend - update content with new legend
-                me._createLegend(ind.hash, function(legend) {
-                    panel.setContent(legend);
-                });
-            });
-        });
-    },
-
-    /**
-     * Triggers a new render when needed (render was called before previous was ready)
+     * Triggers a new render when needed (if render was called before previous was finished)
      */
     _renderDone : function() {
         var state = this._renderState;
         this._renderState = {};
+        this._restorePanelState(this._accordion, state.panels);
         if(state.repaint) {
             this.render(state.el);
         }
     },
+    /**
+     * Restores legend/classification panels to given state (open/closed)
+     * @param  {Oskari.userinterface.component.Accordion} accordion
+     * @param  {Object} state     with keys as panel titles and value as boolean (true == open, false == closed)
+     */
+    _restorePanelState :function(accordion, state) {
+        if(!accordion || !state) {
+            return;
+        }
+        var panels = accordion.getPanels();
+        panels.forEach(function(panel) {
+            var panelState = state[panel.getTitle()];
+            if(typeof panelState !== 'boolean') {
+                return;
+            }
+            if(panelState) {
+                panel.open();
+            } else {
+                panel.close();
+            }
+        });
+    },
+    /**
+     * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
+     * @param  {String} title UI label
+     * @return {Oskari.userinterface.component.AccordionPanel} panel without content
+     */
+    _createAccordionPanel : function(title) {
+        var me = this;
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        panel.on('open', function() {
+            me._setPanelState(panel);
+        });
+        panel.on('close', function() {
+            me._setPanelState(panel);
+        });
+        panel.setTitle(title);
+        return panel;
+    },
+    /**
+     * Used to track accordion panel states (open/close)
+     * @param {Oskari.userinterface.component.AccordionPanel} panel panel that switched state
+     */
+    _setPanelState :function(panel) {
+        var panels = this._accordion.getPanels();
+        if(!this._renderState.panels) {
+            this._renderState.panels = {};
+        }
+        this._renderState.panels[panel.getTitle()] = panel.isOpen();
+    },
+    /**
+     * Creates the header part for the legend UI
+     * @param  {Object}   activeIndicator identifies the current active indicator
+     * @param  {Function} callback        function to call with header element as param or undefined for error
+     */
     _createHeader: function (activeIndicator, callback) {
         var service = this.service;
         if(!service) {
             // not available yet
+            callback();
             return;
         }
         var sb = this.sb;
@@ -187,9 +232,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             callback(head);
         });
     },
+    /**
+     * Creates the color <> number range UI
+     * @param  {Object}   activeIndicator identifies the current active indicator
+     * @param  {Function} callback        function to call with legend element as param or undefined for error
+     */
     _createLegend : function(activeIndicator, callback) {
         if(!this.service) {
-            return false;
+            callback();
+            return;
         }
         var me = this;
         var service = this.service;
@@ -223,8 +274,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             callback(legend, classificationOpts);
         });
     },
+    /**
+     * Creates the classification editor UI
+     * @param  {Object}   options  values for the classification form to use as initial values
+     * @param  {Function} callback function to call with editpr element as param or undefined for error
+     */
     _createClassificationUI : function(options, callback) {
         var me = this;
-        callback(this.editClassification.getElement());
+        var element = this.editClassification.getElement();
+        this.editClassification.setValues(options);
+        callback(element);
+    },
+    /**
+     * Listen to events that require re-rendering the UI
+     */
+    _bindToEvents : function() {
+        var me = this;
+
+        me.service.on('StatsGrid.IndicatorEvent', function(event) {
+            // if indicator is removed/added - recalculate the source 1/2 etc links
+            me.render();
+        });
+
+        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+            // Always show the active indicator - also handles "no indicator selected"
+            me.render();
+        });
+
+        me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
+            // need to update the legend as data changes when regionset changes
+            me.render();
+        });
+
+        me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
+            // doesn't need full update, but we need to update the legend part when classification changes
+            // update legendpanel in accordion if available
+            var accordion = me._accordion;
+            var state = me.service.getStateService();
+            var ind = state.getActiveIndicator();
+            // update legend in place instead of full render
+            accordion.panels.forEach(function(panel) {
+                if(!panel.getContainer().find('.geostats-legend').length) {
+                    return;
+                }
+                // found panel with legend - update content with new legend
+                me._createLegend(ind.hash, function(legend) {
+                    panel.setContent(legend);
+                });
+            });
+        });
     }
 });

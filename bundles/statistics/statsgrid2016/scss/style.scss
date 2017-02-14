@@ -401,6 +401,14 @@ div.oskari-flyoutcontent{
     }
 }
 
+/* Mobile popup tuning */
+.divmanazerpopup.statsgrid-mobile-legend {
+    .popup-body {
+        >div.content {
+            margin: 0px;
+        }
+    }
+}
 
 /** Toggle buttons */
 .statsgrid-published-toggle-buttons {
