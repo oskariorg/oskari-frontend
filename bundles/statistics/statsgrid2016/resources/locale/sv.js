@@ -73,7 +73,8 @@ Oskari.registerLocalization(
         "legend": {
             "title": "Klassificering",
             "noActive": "Ingen vald datamängd, välj en datamängd för att visa kartans klassificering.",
-            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
+            "noEnough": "Dataset is too small for classification. Try another dataset or edit search options.",
+            "cannotCreateLegend": "Cannot create legend. Try another classification options."
         },
         "parameters": {
             "sex": "Kön",

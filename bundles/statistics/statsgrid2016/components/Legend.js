@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         panels : {}
     };
     // initialize with legend panel open
-    this._renderState.panels[this.locale.legend.title] = true
+    this._renderState.panels[this.locale.legend.title] = true;
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 }, {
     /**
@@ -271,6 +271,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             }
             var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
             var legend = classification.createLegend(colors);
+            if(!legend) {
+                legend = '<div>'+locale.legend.cannotCreateLegend+'</div>';
+            }
             callback(legend, classificationOpts);
         });
     },
