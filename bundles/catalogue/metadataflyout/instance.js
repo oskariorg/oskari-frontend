@@ -15,6 +15,8 @@ Oskari.clazz.define(
         this.loader = null;
         this.layerPlugin = null;
         this.layer = null;
+        this.conf = this.conf || {};
+        this.state = this.state || {};
     }, {
         /**
          * @static

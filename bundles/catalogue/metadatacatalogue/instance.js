@@ -51,6 +51,8 @@ Oskari.clazz.define(
         this.drawCoverage = false;
         // Search result actions array.
         this.searchResultActions = [];
+        this.conf = this.conf || {};
+        this.state = this.state || {};
     }, {
         /**
          * @static
