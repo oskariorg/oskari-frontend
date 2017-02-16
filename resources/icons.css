@@ -1022,23 +1022,23 @@
     background-position: -3005px 0px !important;
 }
 
-.mobile-xy-dark {
+.mobile-statslegend-dark {
     width: 32px;
-    height: 32px;
+    height: 33px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -3037px 0px !important;
 }
 
-.mobile-xy-light {
+.mobile-statslegend-light {
     width: 32px;
-    height: 32px;
+    height: 33px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -3069px 0px !important;
 }
 
-.mobile-zoom-in-dark {
+.mobile-xy-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1046,7 +1046,7 @@
     background-position: -3101px 0px !important;
 }
 
-.mobile-zoom-in-light {
+.mobile-xy-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1054,7 +1054,7 @@
     background-position: -3133px 0px !important;
 }
 
-.mobile-zoom-out-dark {
+.mobile-zoom-in-dark {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1062,7 +1062,7 @@
     background-position: -3165px 0px !important;
 }
 
-.mobile-zoom-out-light {
+.mobile-zoom-in-light {
     width: 32px;
     height: 32px;
     background-image: url('icons.png') !important;
@@ -1070,12 +1070,28 @@
     background-position: -3197px 0px !important;
 }
 
+.mobile-zoom-out-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3229px 0px !important;
+}
+
+.mobile-zoom-out-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3261px 0px !important;
+}
+
 .mylocation-3d-dark {
     width: 35px;
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3229px 0px !important;
+    background-position: -3293px 0px !important;
 }
 
 .mylocation-3d-light {
@@ -1083,7 +1099,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3264px 0px !important;
+    background-position: -3328px 0px !important;
 }
 
 .mylocation-rounded-dark {
@@ -1091,7 +1107,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3299px 0px !important;
+    background-position: -3363px 0px !important;
 }
 
 .mylocation-rounded-light {
@@ -1099,7 +1115,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3334px 0px !important;
+    background-position: -3398px 0px !important;
 }
 
 .mylocation-sharp-dark {
@@ -1107,7 +1123,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3369px 0px !important;
+    background-position: -3433px 0px !important;
 }
 
 .mylocation-sharp-light {
@@ -1115,7 +1131,7 @@
     height: 35px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3404px 0px !important;
+    background-position: -3468px 0px !important;
 }
 
 .myplaces-area {
@@ -1123,7 +1139,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3439px 0px !important;
+    background-position: -3503px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -1131,7 +1147,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3467px 0px !important;
+    background-position: -3531px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -1139,7 +1155,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3499px 0px !important;
+    background-position: -3563px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -1147,7 +1163,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3531px 0px !important;
+    background-position: -3595px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -1155,7 +1171,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3563px 0px !important;
+    background-position: -3627px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -1163,7 +1179,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3595px 0px !important;
+    background-position: -3659px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -1171,7 +1187,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3627px 0px !important;
+    background-position: -3691px 0px !important;
 }
 
 .myplaces-line {
@@ -1179,7 +1195,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3659px 0px !important;
+    background-position: -3723px 0px !important;
 }
 
 .myplaces-point {
@@ -1187,7 +1203,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3687px 0px !important;
+    background-position: -3751px 0px !important;
 }
 
 .refresh {
@@ -1195,7 +1211,7 @@
     height: 16px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3715px 0px !important;
+    background-position: -3779px 0px !important;
 }
 
 .refresh:hover {
@@ -1203,7 +1219,7 @@
     height: 16px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3715px -16px !important;
+    background-position: -3779px -16px !important;
 }
 
 .selection-area {
@@ -1211,7 +1227,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3731px 0px !important;
+    background-position: -3795px 0px !important;
 }
 
 .selection-area:hover {
@@ -1219,7 +1235,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3731px -32px !important;
+    background-position: -3795px -32px !important;
 }
 
 .selection-circle {
@@ -1227,7 +1243,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3763px 0px !important;
+    background-position: -3827px 0px !important;
 }
 
 .selection-circle:hover {
@@ -1235,7 +1251,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3763px -32px !important;
+    background-position: -3827px -32px !important;
 }
 
 .selection-edit {
@@ -1243,7 +1259,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3795px 0px !important;
+    background-position: -3859px 0px !important;
 }
 
 .selection-edit:hover {
@@ -1251,7 +1267,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3795px -32px !important;
+    background-position: -3859px -32px !important;
 }
 
 .selection-line {
@@ -1259,7 +1275,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3827px 0px !important;
+    background-position: -3891px 0px !important;
 }
 
 .selection-line:hover {
@@ -1267,7 +1283,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3827px -32px !important;
+    background-position: -3891px -32px !important;
 }
 
 .selection-point {
@@ -1275,7 +1291,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3859px 0px !important;
+    background-position: -3923px 0px !important;
 }
 
 .selection-point:hover {
@@ -1283,7 +1299,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3859px -32px !important;
+    background-position: -3923px -32px !important;
 }
 
 .selection-remove {
@@ -1291,7 +1307,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3891px 0px !important;
+    background-position: -3955px 0px !important;
 }
 
 .selection-remove:hover {
@@ -1299,7 +1315,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3891px -32px !important;
+    background-position: -3955px -32px !important;
 }
 
 .selection-square {
@@ -1307,7 +1323,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3923px 0px !important;
+    background-position: -3987px 0px !important;
 }
 
 .selection-square:hover {
@@ -1315,7 +1331,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3923px -32px !important;
+    background-position: -3987px -32px !important;
 }
 
 .tool-draw-cut {
@@ -1323,7 +1339,7 @@
     height: 36px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3955px 0px !important;
+    background-position: -4019px 0px !important;
 }
 
 .tool-feature-selection-dark {
@@ -1331,7 +1347,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -3990px 0px !important;
+    background-position: -4054px 0px !important;
 }
 
 .tool-feature-selection-light {
@@ -1339,7 +1355,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4022px 0px !important;
+    background-position: -4086px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -1347,7 +1363,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4054px 0px !important;
+    background-position: -4118px 0px !important;
 }
 
 .tool-history-back-light {
@@ -1355,7 +1371,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4086px 0px !important;
+    background-position: -4150px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -1363,7 +1379,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4118px 0px !important;
+    background-position: -4182px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -1371,7 +1387,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4150px 0px !important;
+    background-position: -4214px 0px !important;
 }
 
 .tool-link-dark {
@@ -1379,7 +1395,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4182px 0px !important;
+    background-position: -4246px 0px !important;
 }
 
 .tool-link-light {
@@ -1387,7 +1403,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4214px 0px !important;
+    background-position: -4278px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -1395,7 +1411,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4246px 0px !important;
+    background-position: -4310px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -1403,7 +1419,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4278px 0px !important;
+    background-position: -4342px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -1411,7 +1427,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4310px 0px !important;
+    background-position: -4374px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -1419,7 +1435,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4342px 0px !important;
+    background-position: -4406px 0px !important;
 }
 
 .tool-pan-dark {
@@ -1427,7 +1443,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4374px 0px !important;
+    background-position: -4438px 0px !important;
 }
 
 .tool-pan-light {
@@ -1435,7 +1451,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4406px 0px !important;
+    background-position: -4470px 0px !important;
 }
 
 .tool-print-dark {
@@ -1443,7 +1459,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4438px 0px !important;
+    background-position: -4502px 0px !important;
 }
 
 .tool-print-light {
@@ -1451,7 +1467,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4470px 0px !important;
+    background-position: -4534px 0px !important;
 }
 
 .tool-reset-dark {
@@ -1459,7 +1475,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4502px 0px !important;
+    background-position: -4566px 0px !important;
 }
 
 .tool-reset-light {
@@ -1467,7 +1483,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4534px 0px !important;
+    background-position: -4598px 0px !important;
 }
 
 .tool-save-view-dark {
@@ -1475,7 +1491,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4566px 0px !important;
+    background-position: -4630px 0px !important;
 }
 
 .tool-save-view-light {
@@ -1483,7 +1499,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4598px 0px !important;
+    background-position: -4662px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -1491,7 +1507,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4630px 0px !important;
+    background-position: -4694px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -1499,7 +1515,7 @@
     height: 32px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4662px 0px !important;
+    background-position: -4726px 0px !important;
 }
 
 .upload-material-dark {
@@ -1507,7 +1523,7 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4694px 0px !important;
+    background-position: -4758px 0px !important;
 }
 
 .upload-material-light {
@@ -1515,6 +1531,6 @@
     height: 28px;
     background-image: url('icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -4722px 0px !important;
+    background-position: -4786px 0px !important;
 }
 

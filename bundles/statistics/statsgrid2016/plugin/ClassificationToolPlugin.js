@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
         me._mobileDefs = {
             buttons:  {
                 'mobile-coordinatetool': {
-                    iconCls: 'mobile-xy',
+                    iconCls: 'mobile-statslegend',
                     tooltip: locale.legend.title,
                     show: true,
                     callback: function () {
