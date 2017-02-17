@@ -117,6 +117,8 @@ Oskari.clazz.define(
                     this.getFlyout().render(renderMode);
                     this._lastRenderMode = renderMode;
                 }
+
+                this.getFlyout().setGridHeaderHeight();
             },
             /**
              * @method MapLayerEvent
