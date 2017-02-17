@@ -22,10 +22,6 @@ Oskari.clazz.define(
 
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
 
-        this._publishedComponents = {
-            panelClassification: null
-        };
-
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
@@ -34,7 +30,7 @@ Oskari.clazz.define(
             var me = this;
 
             // create the StatisticsService for handling ajax calls and common functionality.
-            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here
+            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
