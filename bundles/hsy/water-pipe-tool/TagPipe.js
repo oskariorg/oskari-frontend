@@ -378,9 +378,10 @@ Oskari.clazz.define(
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
                 listElaSelect.text(me._getLocalization("select_tag_pipe"));
+                listElaSelect.attr("data-diameter", data[i].properties.diameter);
                 listElaSelect.bind("click", {feature: geojsonObject}, function(e){
                     e.preventDefault();
-                    me._openForm(e, me, e.data.feature);
+                    me._openForm(e, me);
                     me._addFeaturesToMap(e.data.feature, 'HIGHLIGHT-TAG', true, null, true);
                 });
 
@@ -488,7 +489,7 @@ Oskari.clazz.define(
          * [_initFormRedirectSelect create select options from arrays]
          * @return {[array]} [different tag types]
          */
-        _initFormRedirectSelect: function(){
+        _initFormRedirectSelect: function(data){
             var me = this,
             output = [];
             output.push('<option value=""></option>');
@@ -504,13 +505,14 @@ Oskari.clazz.define(
          * @method _openForm opens redirect select and from change event form
          * Opens edit/create form depending on event target location
          */
-        _openForm: function (event, instance, data) {
+        _openForm: function (event, instance) {
             var me = instance,
                 direct = me.templates.formRedirect,
                 target = jQuery(event.target),
                 tagPipeSection = me.container.find(".tag-pipe-section"),
                 item = target.parents('li'),
-                uid = item.attr('data-id');
+                uid = item.attr('data-id'),
+                diameter = target.data('diameter');
 
                 if (uid && uid.length) {
                     me._activateNormalGFI(false);
@@ -518,7 +520,7 @@ Oskari.clazz.define(
                     me.state.mustacheActive = false;
                     var tagpipe = me._getTagPipe(parseInt(uid, 10));
                     target.hide();
-                    item.append(me._initForm(tagpipe.tag_type, tagpipe));
+                    item.append(me._initForm(tagpipe.tag_type, tagpipe, diameter));
 
                 }else{
 
@@ -544,7 +546,7 @@ Oskari.clazz.define(
                         }else{
                             me._manageHelp(true, me._getLocalization('help_insert'));
                             form.remove();
-                            tagPipeSection.append(me._initForm(value, null));
+                            tagPipeSection.append(me._initForm(value, null, diameter));
                         }
                     });
                     tagPipeSection.append(direct);
@@ -574,7 +576,7 @@ Oskari.clazz.define(
          * @param  {[array]} data [feature]
          * @return {[jquery object]}      [html]
          */
-        _initForm: function(type, tagpipe){
+        _initForm: function(type, tagpipe, diameter){
             var me = this,
             form = me.templates.form.clone(true),
             tagType = type.split("_");
@@ -603,7 +605,14 @@ Oskari.clazz.define(
                         '        <button tagtype="'+me.state.mustacheType+'" class="tag-pipe-details tag-pipe-calculate-btn">'+me._getLocalization('tag-pipe-calculate-btn')+'</button>' +
                         '    </label>'
                         );
-                    }else{
+                    } else if(item === 'tag-pipe-size' && diameter) {
+                        me.templates.form.detailinputs = jQuery(
+                        '    <label>' +
+                        '        <span></span>' +
+                        '        <input type="text" tagtype="'+me.state.mustacheType+'" name="'+item+'" value="'+diameter+'" class="tag-pipe-details '+elclass+'" language="'+item+'" required="required" />' +
+                        '    </label>'
+                        );
+                    } else {
                         me.templates.form.detailinputs = jQuery(
                         '    <label>' +
                         '        <span></span>' +
@@ -735,7 +744,7 @@ Oskari.clazz.define(
             type = tagType[1],
             pipeSizemm = parseInt(form.find("[name=tag-pipe-size]").val()),
             pipeSize = pipeSizemm/1000,
-            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()),
+            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()).toFixed(2),
             output = null;
 
             if(isNaN(pipeSizemm) || isNaN(bottomHeight)){
@@ -767,7 +776,7 @@ Oskari.clazz.define(
                 break;
             }
 
-            return (output > 0) ? "+" + parseFloat(output).toFixed(1) : parseFloat(output).toFixed(1);
+            return (output > 0) ? "+" + parseFloat(output).toFixed(2) : parseFloat(output).toFixed(2);
         },
         /**
          * [_calculateBarrageHeight calculates tag height from form]
@@ -779,9 +788,9 @@ Oskari.clazz.define(
             type = tagType[0],
             pipeSizemm = parseInt(form.find("[name=tag-pipe-size]").val()),
             pipeSize = pipeSizemm/1000,
-            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()),
-            groundHeight = parseFloat(form.find("[name=tag-ground-height]").val()),
-            minBarrageHeight = parseFloat(1.8),
+            bottomHeight = parseFloat(form.find("[name=tag-bottom-height]").val()).toFixed(2),
+            groundHeight = parseFloat(form.find("[name=tag-ground-height]").val()).toFixed(2),
+            minBarrageHeight = parseFloat(1.8).toFixed(2),
             output = null;
 
             switch (type) {
@@ -803,7 +812,7 @@ Oskari.clazz.define(
             }
 
             if(output > minBarrageHeight){
-                return "+"+parseFloat(output).toFixed(1);
+                return "+"+parseFloat(output).toFixed(2);
             }else{
                 return "+"+minBarrageHeight;
             }
@@ -971,7 +980,7 @@ Oskari.clazz.define(
 
                     if(input.attr("name") === "tag-type"){
                         input.val(me._getLocalization("tag-type-"+tagValue));
-                    }else{
+                    } else if(input.attr("name") !== "tag-pipe-size") {
                         input.val(tagValue);
                     }
                 });
@@ -1009,15 +1018,15 @@ Oskari.clazz.define(
                 url: me.sandbox.getAjaxUrl() + 'action_route=SearchTagPipe',
                 success: function (data) {
                     me._createList(me, data.tagpipes, me.state.filter, addLastOnMap);
-                 },
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
-                     me._openPopup(
-                         me._getLocalization('fetch_failed'),
-                         error
-                     );
-                 }
+                    me._openPopup(
+                        me._getLocalization('fetch_failed'),
+                        error
+                    );
+                }
             });
         },
 
