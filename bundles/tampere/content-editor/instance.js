@@ -192,10 +192,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @static
          */
         eventHandlers: {
-        	GetInfoResultEvent: function (evt) {
-        		if (this.sideContentEditor != null) {
-        			this.sideContentEditor._handleInfoResult(evt.getData());
-        		}
+            'GetInfoResultEvent': function (evt) {
+                if (this.sideContentEditor != null) {
+                    console.log("SideContentEditor.GetInfoResultEvent");
+                    this.sideContentEditor._handleInfoResult(evt.getData());
+                }
             },
             'DrawPlugin.FinishedDrawingEvent': function (evt) {
                 if ('ContentEditorDrawPlugin' !== evt.getCreatorId()) {
@@ -203,23 +204,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 }
                 this.sideContentEditor.prepareRequest(evt.getDrawing());
             },
-            WFSFeatureGeometriesEvent: function (evt)
+            'WFSFeatureGeometriesEvent': function (evt)
             {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.ParseWFSFeatureGeometries(evt);
                 }
             },
-            'MapClickedEvent': function (event) {
+            'MapClickedEvent': function (evt) {
                 if (this.sideContentEditor != null) {
-                    this.sideContentEditor.setClickCoords({x: event.getLonLat().lon, y: event.getLonLat().lat});
+                    console.log("SideContentEditor.MapClickedEvent");
+                    this.sideContentEditor.setClickCoords({x: evt.getLonLat().lon, y: evt.getLonLat().lat});
                 }
             },
-            'MapLayerEvent': function (event) {
-                if(event.getOperation() !== 'add')  {
+            'MapLayerEvent': function (evt) {
+                if(evt.getOperation() !== 'add')  {
                     // only handle add layer
                     return;
                 }
-                if(event.getLayerId()) {
+                if(evt.getLayerId()) {
                     this.__addTool(event.getLayerId());
                 }
                 else {
