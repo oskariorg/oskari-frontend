@@ -202,7 +202,9 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
 .statsgrid-legend-plugin {
   border: 1px solid rgba(0, 0, 0, 0.2);
   pointer-events: auto;
-  text-align: left; }
+  text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right; }
 
 .statsgrid-legend-container {
   background-color: #FFFFFF;
