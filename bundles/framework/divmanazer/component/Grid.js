@@ -971,16 +971,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     var additionalInfo = [];
                     if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
                         additionalInfo.push({
+                            type : 'datasource',
                             name : me._loc['export'].additional.dataSource,
                             value : exportForm.getElement().elements.dataSource.value
                         });
                     }
                     additionalInfo.push({
+                        type : 'layerName',
                         name : me._loc['export'].additional.layerName,
                         value : me._getLayerName()
                     });
                     if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
                         additionalInfo.push({
+                            type : 'metadata',
                             name : me._loc['export'].additional.metadata,
                             value : exportForm.getElement().elements.metadata.value
                         });
