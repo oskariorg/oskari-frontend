@@ -1342,6 +1342,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortBy: function (pAttribute, pDescending) {
+            if(!this.model) {
+                return;
+            }
             var me = this,
                 dataArray = me.model.getData();
             if (dataArray.length === 0) {
@@ -1365,6 +1368,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         sortBy: function(scopedValue, descending) {
+            if(!this.model) {
+                return;
+            }
             var me = this;
             // sort the results
             me._sortBy(scopedValue, descending);
