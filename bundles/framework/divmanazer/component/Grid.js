@@ -1033,6 +1033,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 theadRow.css('height', (me.autoHeightHeader + maxHeight) + 'px');
+                theadRow.addClass('autoheight');
+                // timeout hack is needed by IE 11. Otherwise header elements with css like
+                //   position : absolute, bottom : 0
+                // will render in wrong location.
+                // This will force a repaint which will fix the locations.
+                setTimeout(function() {
+                    theadRow.removeClass('autoheight');
+                    theadRow.hide();
+                    theadRow.show(0);
+                },1000);
             }
 
             if (me.resizableColumns) {
