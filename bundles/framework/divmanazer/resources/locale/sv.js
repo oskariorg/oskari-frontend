@@ -243,6 +243,7 @@ Oskari.registerLocalization(
                     "title": "Ytterligare inställningar",
                     "dataSource": "Datakälla",
                     "metadata": "Metadata länk",
+                    "layerName": "Kartlagrets namn",
                     "export_selection": "Exportera utvald objekter"
                 },
                 "columns": {

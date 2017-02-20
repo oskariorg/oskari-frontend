@@ -966,7 +966,28 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all', values.export_selection);
-                    exportForm.getElement().elements.layerName.value = me._getLayerName();
+
+                    // data at the end of the file
+                    var additionalInfo = [];
+                    if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
+                        additionalInfo.push({
+                            name : me._loc['export'].additional.dataSource,
+                            value : exportForm.getElement().elements.dataSource.value
+                        });
+                    }
+                    additionalInfo.push({
+                        name : me._loc['export'].additional.layerName,
+                        value : me._getLayerName()
+                    });
+                    if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
+                        additionalInfo.push({
+                            name : me._loc['export'].additional.metadata,
+                            value : exportForm.getElement().elements.metadata.value
+                        });
+                    }
+
+                    exportForm.getElement().elements.filename.value = me._getLayerName();
+                    exportForm.getElement().elements.additionalData.value = JSON.stringify(additionalInfo);
                     exportForm.getElement().elements.data.value = JSON.stringify(values.data);
                     exportForm.submit();
                     me.exportPopup.close(true);
@@ -1028,14 +1049,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 delimiter = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
                 additional = Oskari.clazz.create('Oskari.userinterface.component.Fieldset'),
                 input,
-                layerName,
+                filename,
                 me = this,
                 loc = me._loc['export'];
 
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');
             form.setAction(
-                Oskari.getSandbox().getAjaxUrl() + 'action_route=ExportTableFile'
+                Oskari.getSandbox().getAjaxUrl('ExportTableFile')
             );
             form.setMethod('POST');
 
@@ -1104,7 +1125,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             input.setName('dataSource');
             input.setTitle(loc.additional.dataSource);  // Doesn't go to backend in form submit
-            input.setValue(loc.additional.dataSource + ':' + this.getDataSource());
+            input.setValue(this.getDataSource());
             input.setEnabled(!!this.getDataSource());
             input.setChecked(!!this.getDataSource());
             additional.addComponent(input);
@@ -1114,7 +1135,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             input.setName('metadata');
             input.setTitle(loc.additional.metadata);
-            input.setValue(loc.additional.metadata + ':' + this.getMetadataLink());
+            input.setValue(this.getMetadataLink());
             input.setEnabled(!!this.getMetadataLink());
             input.setChecked(!!this.getMetadataLink());
             additional.addComponent(input);
@@ -1132,15 +1153,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             input.name = 'data';
             input.type = 'hidden';
 
-            layerName = document.createElement('input');
-            layerName.name = 'layerName';
-            layerName.type = 'hidden';
+            filename = document.createElement('input');
+            filename.name = 'filename';
+            filename.type = 'hidden';
 
             form.addComponent(format);
             form.addComponent(columns);
             form.addComponent(delimiter);
             form.addComponent(additional);
-            form.getElement().appendChild(layerName);
+            form.getElement().appendChild(filename);
+
+            var additionalDataJSON = document.createElement('input');
+            additionalDataJSON.name = 'additionalData';
+            additionalDataJSON.type = 'hidden';
+            form.getElement().appendChild(additionalDataJSON);
+
             form.getElement().appendChild(input);
 
             return form;

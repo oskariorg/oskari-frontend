@@ -243,6 +243,7 @@ Oskari.registerLocalization(
                     "title": "Additional settings",
                     "dataSource": "Data source",
                     "metadata": "Metadata link",
+                    "layerName": "Map layer name",
                     "export_selection": "Export only selected features"
                 },
                 "columns": {
