@@ -234,15 +234,22 @@ Oskari.clazz.define(
         },
         showToggleButtons: function(enabled, visible) {
             var me = this;
-            if(!enabled && this.togglePlugin){
-                this.togglePlugin.remove();
+            var sandbox = me.getSandbox();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if(!enabled) {
+                if(this.togglePlugin) {
+                    mapModule.unregisterPlugin(me.togglePlugin);
+                    mapModule.stopPlugin(me.togglePlugin);
+                }
                 return;
             }
             if(!this.togglePlugin) {
                 this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
             }
             me.getFlyout().move(0,0);
-            jQuery('body').append(this.togglePlugin.create(visible || me.visible));
+            mapModule.registerPlugin(me.togglePlugin);
+            mapModule.startPlugin(me.togglePlugin);
+            me.togglePlugin.showTable(visible || me.visible);
         },
         /**
          * @method  @public showLegendOnMap Render published  legend

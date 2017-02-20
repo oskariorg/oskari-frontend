@@ -269,12 +269,12 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
   margin: 2px 6px 2px 2px; }
 
 /** Toggle buttons */
-.statsgrid-published-toggle-buttons {
+div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
   border: 1px solid rgba(0, 0, 0, 0.2);
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  z-index: 100000; }
+  float: right;
+  z-index: 100000;
+  margin: 10px;
+   }
   .statsgrid-published-toggle-buttons .map {
     background-color: #3c3c3c;
     float: left;
