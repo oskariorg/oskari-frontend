@@ -88,8 +88,15 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             'UIChangeEvent' : function() {
-                // close/tear down tge ui when receiving the event
+                // close/tear down the ui when receiving the event
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                var flyout = this.getFlyout();
+                if(flyout) {
+                    var legend = this.getFlyout().getLegendFlyout();
+                    if(legend) {
+                        legend.hide();
+                    }
+                }
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent

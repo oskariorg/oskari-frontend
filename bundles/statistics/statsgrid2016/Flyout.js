@@ -125,10 +125,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             grid.render(el);
 
         },
-        onClose: function() {
-            var legend = this.getLegendFlyout();
-            legend.hide();
-        },
         closePanels: function() {
             var panels = this.__panels || [];
             _.each(panels, function(p) {
