@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "ContentEditorView": {
             "title": "Sisältöeditori",
             "featureModifyInfo": "Valitse kohde kartalta muokataksesi kohteen ominaisuuksia.",
+            "multipleFeatureModifyInfo": "Voit myös valita useita kohteita kartalta ctrl-nappi pohjassa ja muokata niitä.",
             "toolInfo": "Valitse piste-, viiva- tai aluepiirtotyökalu piirtääksesi uutta geometriaa.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
@@ -19,7 +20,9 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "editFeature": "Muokkaa kohdetta",
                 "editMultipleFeatures": "Muokkaa useita kohteita",
-                "deleteFeature": "Poista kohde"
+                "deleteFeature": "Poista kohde",
+                "yes": "Kyllä",
+                "no": "Ei"
             },
             "tools": {
                 "point": "Lisää piste",
@@ -32,6 +35,11 @@ Oskari.registerLocalization(
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",
                 "error": "Kohteen päivittäminen epäonnistui"
+            },
+            "multipleFeaturesUpdate": {
+                "header": "Kohteet päivitetty",
+                "success": "Kohteiden päivittäminen onnistui",
+                "error": "Kohteiden päivittäminen epäonnistui"
             },
             "featureDelete": {
                 "header": "Poista kohde",
@@ -62,6 +70,10 @@ Oskari.registerLocalization(
             "formValidationNumberError": {
                 "title": "Virheellinen numero",
                 "text": "Korjaa arvo numeroksi"
+            },
+            "modifyMultipleFeaturesConfirmation": {
+                "title": "Vahvista",
+                "text": "Haluatko asettaa kaikkien valitsemiesi kohteiden kenttien arvoksi antamasi arvot?"
             }
         }
     }

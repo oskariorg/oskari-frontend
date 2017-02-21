@@ -194,7 +194,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         eventHandlers: {
             'GetInfoResultEvent': function (evt) {
                 if (this.sideContentEditor != null) {
-                    console.log("SideContentEditor.GetInfoResultEvent");
                     this.sideContentEditor._handleInfoResult(evt.getData());
                 }
             },
@@ -212,12 +211,11 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             },
             'MapClickedEvent': function (evt) {
                 if (this.sideContentEditor != null) {
-                    console.log("SideContentEditor.MapClickedEvent");
                     this.sideContentEditor.setClickCoords({x: evt.getLonLat().lon, y: evt.getLonLat().lat});
                 }
             },
             'MapLayerEvent': function (evt) {
-                if(evt.getOperation() !== 'add')  {
+                if(evt.getOperation() !== 'add') {
                     // only handle add layer
                     return;
                 }

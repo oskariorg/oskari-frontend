@@ -31,6 +31,10 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
         },*/
         // View
         {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/tampere/content-editor/service/Mediator.js"
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/view/SideContentEditor.js"
         }, {
