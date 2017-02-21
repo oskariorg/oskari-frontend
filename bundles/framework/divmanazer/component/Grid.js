@@ -1435,7 +1435,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (typeof nameA === 'undefined' && split.length > 1) {
                 nameA = a[split[0]][split[1]];
             }
-            if (!nameA) {
+            if (!nameA && typeof nameA !== 'number') {
                 nameA = '';
             } else if (nameA.toLowerCase) {
                 nameA = nameA.toLowerCase();
