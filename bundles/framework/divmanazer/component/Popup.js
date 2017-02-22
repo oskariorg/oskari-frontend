@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._isVisible = true;
 
             var map = Oskari.getSandbox().getMap();
-            if(map) {
+            if(map && contentDiv.width() > map.getWidth()) {
                 this.dialog.css('max-width', map.getWidth() + 'px');
             }
 
