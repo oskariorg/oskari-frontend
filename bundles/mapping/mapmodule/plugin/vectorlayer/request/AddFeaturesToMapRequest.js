@@ -29,17 +29,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          * @method getGeometry
          * @return {String/Object} geometry
          */
-        getGeometry: function(){
+        getGeometry: function() {
             return this._geometry;
         },
         /**
          * @method getOptions
          * @return {String} get geometry type
          */
-        getOptions: function(){
-            if(typeof this._options.featureStyle.text.labelText === 'number'){
-               this._options.featureStyle.text.labelText = this._options.featureStyle.text.labelText.toString();
-            }
+        getOptions: function() {
             return this._options;
         }
     }, {
