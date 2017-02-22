@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Brukarar som er logga inn",
         "desc": "Fleire funksjoner er tilgjengelige om du loggar inn"
     }
-}
-);
+});

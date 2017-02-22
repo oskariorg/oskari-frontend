@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
      * @static
      * @param {String} url
      * @param {String} uuid current users uuid
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
+     * @param {Oskari.Sandbox} sandbox reference to Oskari sandbox
      * @param {Object} defaults category default values
      * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} pInstance
      *  instance to notify if problems with default category

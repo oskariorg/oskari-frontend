@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Búsqueda de localización",
         "invalid_characters": "El término de búsqueda contiene caracteres no válidos. Son válidos las letras de la a la z,  las letras å, ä y ö, los números,retornos, signos de interrogación (?), asteriscos (*) y guiones (-)",
         "searchDescription": "Búsqueda de una ubicación por nombre, dirección o identificador de parcela catastral",
-        "searchButton": "Búsqueda",
         "searchAssistance": "Escriba el término de búsqueda.",
         "searchResultCount": "La búsqueda devolvió",
         "searchResultCount2": "resultados",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Resultados de la búsqueda"
         }
     }
-}
-);
+});

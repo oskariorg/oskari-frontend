@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Jūs varat pietuvināt un attālināt karti izmantojot mēroga ritjoslu vai plusa un mīnusa pogas blakus ritjoslai. Padoms: Veicot dubultklikšķi uz kartes, Jūs varat tālummainīt izmantojot plusa un mīnusa taustiņus uz Jūsu tastatūras. Tāpat ir iespējams tālummainīt izmantojot Jūsu datorpeles rullīti."
         }
     }
-}
-);
+});

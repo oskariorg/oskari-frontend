@@ -39,10 +39,7 @@ Setting disableExport to true will remove Export button from the feature data gr
     <td> userinterface.RemoveExtensionRequest </td><td> Unregister from the UI in stop()-method</td>
   </tr>
   <tr>
-    <td> HighlightMapLayerRequest </td><td> Requests that a layer is "highlighted" (old mechanic) so highlighting and feature selection will occur using this layer. Sent when a tab is selected (tab presents one layers data)</td>
-  </tr>
-  <tr>
-    <td> DimMapLayerRequest </td><td> Requests that highlighting is removed from a layer (old mechanic) so highlighting and feature selection will be disabled on this layer. Sent when a tab is unselected/removed (tab presents one layers data).</td>
+    <td> map.layer.activation </td><td> Requests that a layer is activated/"highlighted" (old mechanic) so highlighting and feature selection will occur using this layer. Sent when a tab is selected or unselected (tab presents one layers data)</td>
   </tr>
   <tr>
     <td> userguide.ShowUserGuideRequest </td><td> Used to show additional data that wouldn't fit the normal grid. A link is shown instead on grid and clicking the link will open the additional data on user guide "popup".</td>

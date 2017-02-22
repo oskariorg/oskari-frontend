@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "cs",
     "key": "MapModule",
     "value": {
@@ -48,15 +49,15 @@ Oskari.registerLocalization({
                 "column_type": "Typ"
             },
             "GetInfoPlugin": {
-                "title": "NOT TRANSLATED",
-                "layer": "NOT TRANSLATED",
+                "title": "",
+                "layer": "",
                 "places": "Místa",
                 "description": "Popis",
                 "link": "URL-adresa",
                 "name": "Jméno"
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }

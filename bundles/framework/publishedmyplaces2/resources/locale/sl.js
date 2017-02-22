@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Barva polnila ne ustreza dovoljenim vrednostim med 0 in 255."
         }
     }
-}
-);
+});

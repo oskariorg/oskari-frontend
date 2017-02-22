@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Nesprávna farba výplne. Všetky RGB hodnoty musia byť medzi 0 a 255."
         }
     }
-}
-);
+});

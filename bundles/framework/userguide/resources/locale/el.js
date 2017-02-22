@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Οδηγός χρήστη OSKARI",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Οδηγός χρήστη χάρτη"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Η φόρτωση του οδηγού χρήστη απέτυχε. Παρακαλούμε δοκιμάστε πάλι αργότερα."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "kartfönstret,snappguide",
-            "contentPart": "body"
+            "tags": "kartfönstret,snappguide"
         }
     }
-}
-);
+});

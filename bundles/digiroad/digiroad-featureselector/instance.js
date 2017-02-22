@@ -53,7 +53,7 @@ function() {
     /**
      * @method getSandbox
      * Convenience method to call from Tile and Flyout
-     * @return {Oskari.mapframework.sandbox.Sandbox}
+     * @return {Oskari.Sandbox}
      */
     getSandbox: function() {
         return this.sandbox;

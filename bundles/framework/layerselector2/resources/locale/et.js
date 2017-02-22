@@ -11,16 +11,16 @@ Oskari.registerLocalization(
             "loadFailed": "Viga kaardikihtide laadimisel. Laadi lehekülg oma brauseris uuesti ning vali kaardikihid.",
             "noResults": "Otsingutulemusi ei leitud. Kontrollige otsisõnu.",
             "noResultsForKeyword": "Antud otsisõnale vastavat kaarti ei leitud.  Muutke otsisõna.",
-            "minChars": "Otsisõna on liiga lühike, nõuta vähemalt 4 tähemärki."
+            "minChars": "Otsisõna on liiga lühike, nõutav vähemalt 4 tähemärki."
         },
         "loading": "Otsin…",
         "filter": {
             "text": "Otsi kaardikihte",
             "keywordsTitle": "Märksõnad",
-            "shortDescription": "Search map layers by map layer name, data producer name or keyword.",
-            "description": "Search map layers by map layer name, data producer name or keyword. You can type a whole term or a part of it. The search term must be at least four characters long.",
+            "shortDescription": "Otsi kaardikihte kihi nime, andmevaldaja või märksõna järgi.",
+            "description": "Otsi kaardikihte kihi nime, andmevaldaja või märksõna järgi. Märksõna võib olla osaline, kuid vähemalt 4 tähemärgiline.",
             "inspire": "Teemade järgi",
-            "organization": "Andmete tarnijate järgi",
+            "organization": "Andmevaldaja järgi",
             "published": "Kasutajad",
             "didYouMean": "Kas mõtlesid:"
         },
@@ -32,7 +32,7 @@ Oskari.registerLocalization(
             "type-base": "Aluskaart",
             "type-wms": "Kaardikiht(WMS, WMTS)",
             "type-wfs": "Atribuutandmetega kaardikiht(WFS)",
-            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
+            "type-wfs-manual": "Värskenda WFS kaardikiht, vajutades nupule \"Objekti info\" või \"Värskenda\"."
         },
         "backendStatus": {
             "OK": {
@@ -64,23 +64,22 @@ Oskari.registerLocalization(
             "ok": "OK"
         },
         "types": {
-            "syn": "Synonym",
-            "lk": "Related concept",
-            "vk": "Coordinate concept",
-            "ak": "Subordinate concept",
-            "yk": "Superordinate concept"
+            "syn": "Sünonüüm",
+            "lk": "Seotud kontseptsioon",
+            "vk": "Koordinaatide kontseptsioon",
+            "ak": "Alamkontseptsioon",
+            "yk": "Ülemkontseptsioon"
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Uusim",
+                "stats": "Vektorkihid"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Näita ## uusimaid kaardikihte",
+                "stats": "Näita ainult vektorkihte",
+                "remove": "Eemalda filter"
             }
         }
     }
-}
-);
+});

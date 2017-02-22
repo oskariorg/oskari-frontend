@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "nn",
     "key": "FeatureData2",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Feature Data",
         "desc": "",
         "loading": "Lastar …",
         "showmore": "Vis",
@@ -12,9 +12,12 @@ Oskari.registerLocalization(
         "errorscale": "Data i dette kartlaget kan ikkje visast i denne målestokken. Ver grei og tilpass målestokken",
         "errordata": "Serverdata inneheld feil. Oppfrisk kartet ved å røre det.",
         "columnSelectorTooltip": "Vel synlege kolonnar.",
+        "featureDataPopup": "Statistiske verdiar",
         "selectionTools": {
             "title": "Vel førekomstar på kartet",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
+            "selectFromTop": "Frå det øvste laget",
+            "selectAll": "Frå alle lag",
             "link": {
                 "title": "Vel fleire førekomstar"
             },
@@ -89,7 +92,12 @@ Oskari.registerLocalization(
                 "type-wms": "Kartlag",
                 "type-wfs": "Dataprodukt"
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Antal",
+            "differenceMessage": "Forskjellen i uautoriserte verdiar er vist med verdi",
+            "noDataMessage": "Antal= Antal førekomstar utan uautoriserte verdiar",
+            "noDataCommonMessage": "Det er uautoriserte verdiar i dataa"
         }
     }
-}
-);
+});

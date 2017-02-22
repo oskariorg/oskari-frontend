@@ -908,7 +908,7 @@ Oskari.clazz.define(
          * @private @method  _getColors
          * Get current color theme class
          *
-         * @param {String}  selected theme (qual, seq, or div)
+         * @param {String}  selected theme (qual, seq, or div) type
          * @param {Integer} colorindex is index to the color set
          * @param {Integer} classind is class# in color set
          *

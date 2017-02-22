@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Omien aineistojen tuonti",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tool": {
             "tooltip": "Omien aineistojen tuonti"
         },
@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Omat aineistot"
         }
     }
-}
-);
+});

@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "Legenda della mappa",
         "desc": "",
         "noLegendsText": "Nessuna legenda disponibile",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": ""
     }
-}
-);
+});

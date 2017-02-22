@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Innskráðir notendur",
         "desc": "Ef þú skráir þig inn færðu meiri virkni."
     }
-}
-);
+});

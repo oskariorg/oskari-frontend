@@ -7,9 +7,7 @@ function() {
     allowedSiblings : [],
 
     groupedSiblings : false,
-    templates: {
-        publishedGridTemplate: '<div class="publishedgrid" ></div>'
-    },
+    templates: {},
     /**
      * Initialize tool
      * @params {} state data
@@ -19,6 +17,7 @@ function() {
     init: function (pdata) {
         var me = this;
 
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
             me.setEnabled(true);
         } else {
@@ -40,12 +39,7 @@ function() {
                 id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
                 title: 'grid',
                 config: {
-                    grid: true,
-                    areaSelection: false,
-                    search: false,
-                    extraFeatures: false,
-                    mouseEarLegend: false,
-                    showLegend: true
+                    grid: true
                 }
             };
          }
@@ -64,7 +58,7 @@ function() {
             layer;
         for (i = 0; i < selectedLayers.length; i += 1) {
             layer = selectedLayers[i];
-            if (layer.getLayerType() === 'stats') {
+            if (layer.isLayerOfType('stats')) {
                 statsLayer = layer;
                 break;
             }
@@ -88,28 +82,14 @@ function() {
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if(stats) {
-            stats.renderPublishedLegend({showLegend:true});
+        if(!stats) {
+            return;
         }
+        stats.showToggleButtons(enabled);
 
-        if(enabled === true) {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'detach', 'StatsGrid']);
-            stats.changePosition({
-                top: 0,
-                left: jQuery('.basic_publisher').width() + jQuery('#sidebar').width() + jQuery('#sidebar').position().left + jQuery('.basic_publisher').position().left
-            });
-        } else {
-            me.__sandbox.postRequestByName('userinterface.UpdateExtensionRequest',[me.__sandbox.findRegisteredModuleInstance('StatsGrid'), 'close', 'StatsGrid']);
-        }
-
-        if(stats) {
-            stats.renderToggleButtons(!enabled);
-        }
-
-
-
-        if (typeof me.__handlers.MapSizeChanged === 'function') {
-            me.__handlers.MapSizeChanged();
+        if(enabled) {
+            // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
+            stats.getFlyout().move(0, jQuery('.basic_publisher').width() + jQuery('.basic_publisher').position().left);
         }
     },
     /**
@@ -128,30 +108,28 @@ function() {
         var me = this,
             statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
         // just to make sure if user removes the statslayer while in publisher
-        // if there is no statslayer on map -> don't setup publishedgrid
+        // if there is no statslayer on map -> don't setup statsgrid
         // otherwise always return the state even if grid is not selected so
-        //  publishedgrid gets the information it needs to render map correctly
+        // statsgrid gets the information it needs to render map correctly
         var statslayerOnMap = this._getStatsLayer();
-        if(statslayerOnMap && statsGridState) {
-            // without view = true -> the sidepanel is not shown when the statsgrid bundle starts
-            statsGridState.view = me.state.enabled;
-            return {
-                configuration: {
-                    statsgrid: {
-                        state: statsGridState,
-                        conf : {
-                            grid: me.state.enabled,
-                            areaSelection: false,
-                            search: false,
-                            extraFeatures: false,
-                            mouseEarLegend: false,
-                            showLegend: true
-                        }
+        if(!statslayerOnMap || !statsGridState) {
+            return null;
+        }
+        return {
+            configuration: {
+                statsgrid: {
+                    state: statsGridState,
+                    conf : {
+                        grid: me.state.enabled
                     }
                 }
-            };
-        } else {
-            return null;
+            }
+        };
+    },
+    stop : function() {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if(stats) {
+            stats.showToggleButtons(false);
         }
     }
 }, {

@@ -1,5 +1,10 @@
 $lightColor: #ffffff;
 $darkColor: #3c3c3c;
+$buttonColor: #0091ff;
+$buttonTextColor: #ffffff;
+
+$inputWidth: 94%;
+$buttonWidth: 86%;
 
 
 /* ********************************************
@@ -12,10 +17,10 @@ $darkColor: #3c3c3c;
       }
   }
 
+
 /* ********************************************
  * These are for flyout version of statsgrid
  * ******************************************* */
-
 
 .statsgrid-grid-table-header {
     top:0;
@@ -34,18 +39,10 @@ $darkColor: #3c3c3c;
 
     .selection {
         .parameter {
-            .label {
-                display: none !important;
-                float:none !important;
-            }
             .select {
                 width: auto !important;
                 float:none !important;
             }
-            .clear {
-                display: none !important;
-            }
-
         }
     }
 
@@ -153,10 +150,22 @@ $darkColor: #3c3c3c;
     }
 }
 
+@keyframes statsgridcolumnselection {
+    from {background-color: #ffd400;}
+    to {background-color: #FDF8D9;}
+}
+
 div.oskari-flyoutcontent{
     &.statsgrid {
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
+
+        table.oskari-grid th.selected {
+          background-color: #FDF8D9;
+            animation-name: statsgridcolumnselection;
+            animation-duration: 0.5s;
+            animation-iteration-count: 3;
+        }
 
         label span {
             /* Indicator selection form */
@@ -230,9 +239,6 @@ div.oskari-flyoutcontent{
             }
         }
 
-        table.oskari-grid th.selected {
-          background-color: #FDF8D9;
-        }
 
         /* Chosen fixes */
         .chosen-container.chosen-drop-up .chosen-drop {
@@ -288,144 +294,161 @@ div.oskari-flyoutcontent{
                 clear: both;
             }
         }
-    }
-
-    thead {
-        th {
-            border: none;
-            border-bottom: 1px solid #E6E6E6;
-            border-left: 1px solid #E6E6E6;
-            border-right: 1px solid #E6E6E6;
-        }
-    }
-
-    .statsgrid-grouping-header {
-        text-align: left;
-        padding: 6px;
-        border-bottom: none !important;
-        border-top: 1px solid #E6E6E6;
-
-        &.region {
-
+        thead {
+            th {
+                border: none;
+                border-bottom: 1px solid #E6E6E6;
+                border-left: 1px solid #E6E6E6;
+                border-right: 1px solid #E6E6E6;
+            }
         }
 
-        &.sources {
-            color: #ffffff;
-            background-color: #000000;
+        .statsgrid-grouping-header {
+            text-align: left;
+            padding: 6px;
+            border-bottom: none !important;
+            border-top: 1px solid #E6E6E6;
 
-            span {
-                font-weight: normal;
+            &.region {
+
+            }
+
+            &.sources {
+                color: #ffffff;
+                background-color: #000000;
+
+                span {
+                    font-weight: normal;
+                }
             }
         }
     }
 
 }
+/* ********************************************
+ * Statsgrid legend
+ * ******************************************* */
 
-
-.statsgrid-legend-flyout, .statsgrid-legend-flyout-published {
-    .statsgrid-legend-container {
-        font-size: 12px;
-        .legend-noactive {
-            margin: 3px 10px 5px 10px;
-        }
-        .geostats-legend {
-            font-size: 12px;
-        }
-        .geostats-legend-title {
-            font-weight: normal;
-        }
-    }
+.statsgrid-legend-plugin {
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: auto;
+    text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right;
 }
 
-.statsgrid-legend-flyout-published {
-    top: 0;
-    right:0;
+.statsgrid-legend-container {
+    background-color: #FFFFFF;
+    width: 200px;
+    font-size: 12px;
 
-    div.oskari-flyoutheading {
-        display:none;
-    }
-
-    div.oskari-flyouttoolbar {
-        height:auto;
-    }
-    div.oskari-flyouttools {
-        display: none;
-    }
-
-    div.statsgrid-legend-container {
-        div.geostats-legend-title {
-            display: none;
-        }
-
-        div.geostats-legend {
-            padding-top: 0;
-            padding-bottom:0;
-        }
-    }
-
-    div.oskari-flyout-title {
+    >div.header {
         background-color: #fdf8d9;
         margin: 0;
         height:auto;
         padding: 6px;
         width: 94%;
+        font-weight: bold;
 
-        div.header {
+        div.title {
             font-size: 14px;
-            font-weight: bold;
         }
-
         div.link {
             cursor:pointer;
             color:#4292c5;
-            position:absolute;
-            top:6px;
-            right:8px;
+            float: right;
             text-decoration: underline;
         }
-
         div.sourcename {
-            font-weight: bold;
+            font-weight: normal;
         }
-        p {
-            font-size: 12px;
-        }
+    }
+
+    .legend-noactive {
+        padding: 3px 10px 5px 10px;
     }
 
     div.accordion {
-        div.accordion_panel {
-            border: none;
-            div.header {
-                background-color: #F3F3F3;
+        div.content {
+            padding: 0;
+            margin: 0;
+            margin-left: 8px;
+        }
 
-                div.headerText {
-                    font-size: 12px;
-                    line-height: 12px;
-                    padding: 4px 8px 4px 4px;
-                }
 
-                div.headerIcon {
-                    margin-left: 4px;
-                }
-            }
-
-            &.open {
-                div.header {
-                    background-color: #F3F3F3;
-                }
-            }
+        div.geostats-legend div {
+            margin: 2px 6px 2px 2px;
         }
     }
 
+    >.accordion .accordion_panel {
+        border: 0px;
+        overflow: visible;
+
+        .header .headerIcon {
+            margin: 0;
+            margin-left: 4px;
+        }
+
+        .header .headerText {
+            font-size: 12px;
+            padding: 0;
+            font-weight: normal;
+        }
+
+        .content .classifications {
+            .label {
+                font-weight: bold;
+            }
+
+            select {
+                width: 96%;
+                font-size: 12px;
+                padding: 1px 2px;
+            }
+
+            button.reverse-colors {
+                margin-top: 5px;
+                margin-left: 0;
+                width: 95%;
+                padding: 4px 5px;
+            }
+        }
+
+        .oskari-color-selection {
+            z-index: 10;
+        }
+    }
 }
 
+/* Mobile popup tuning */
+.divmanazerpopup.statsgrid-mobile-legend {
+    .popup-body {
+
+        >div.content {
+            margin: 0px;
+        }
+
+        div.accordion {
+            div.content {
+                padding: 0;
+                margin: 0;
+                margin-left: 8px;
+            }
+        }
+
+        div.geostats-legend div {
+            margin: 2px 6px 2px 2px;
+        }
+    }
+}
 
 /** Toggle buttons */
-.statsgrid-published-toggle-buttons {
+div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
     border: 1px solid rgba(0, 0, 0, 0.2);
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
+  float: right;
+  z-index: 100000;
+  margin: 10px;
 
     .map {
         background-color: $darkColor;

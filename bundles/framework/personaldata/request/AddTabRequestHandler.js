@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+ * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
  * @param {Oskari.mapframework.bundle.personaldata.StateHandlerBundleInstance} personaldata
  *          reference to personaldata

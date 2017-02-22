@@ -12,6 +12,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
+        this._defaults = {
+            classification: {
+                count: 5,
+                method: 'jenks',
+                name: 'Blues',
+                type:'seq',
+                mode: 'discontinuous',
+                reverseColors: false
+            }
+        };
+        this._timers = {};
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -33,6 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             });
             this.selectRegion();
             this.setRegionset();
+            this.classification = null;
         },
         /**
          * Returns id of the current regionset
@@ -49,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionsetChangedEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
             this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
         },
         /**
@@ -58,9 +70,62 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         selectRegion : function(region) {
             // notify only for now
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.RegionSelectedEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
             this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
         },
+
+        /**
+         * Sets the current classification and sends out event notifying about the change
+         * @param {String} indicatorHash indicator hash
+         * @param {Object} classification classification
+         * @param {Boolean} suppressEvent suppress event
+         */
+        setClassification : function(indicatorHash, classification, suppressEvent) {
+            var me = this;
+            if(typeof indicatorHash !== 'string' && typeof classification !== 'object') {
+                return;
+            }
+
+            var indicator = this.getIndicator(indicatorHash);
+            if(indicator) {
+                var previousClassification = indicator.classification;
+                indicator.classification = classification;
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+                if(!suppressEvent && eventBuilder) {
+                    this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
+                    me.setActiveIndicator(indicatorHash);
+                }
+            }
+
+        },
+        /**
+         * Gets getClassificationOpts
+         * @param  {String} indicatorHash indicator hash
+         */
+        getClassificationOpts : function(indicatorHash) {
+            var indicator = this.getIndicator(indicatorHash) || {};
+            return jQuery.extend({}, this._defaults.classification, indicator.classification || {});
+        },
+
+        /**
+         * Returns an wanted indicator.
+         * @param  {String} indicatorHash indicator hash
+         * @return {Object[]} wanted indicator or null if not found
+         */
+        getIndicator : function(indicatorHash) {
+            if(typeof indicatorHash !== 'string') {
+                return null;
+            }
+            for(var i = 0;i<this.indicators.length; i++) {
+                var ind = this.indicators[i];
+                if(ind.hash === indicatorHash) {
+                    return ind;
+                }
+            }
+            return null;
+        },
+
         /**
          * Returns an array of objects containing details (datasource, id, selections) of currently selected indicators.
          * @return {Object[]} currently selected indicators
@@ -69,7 +134,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             return this.indicators;
         },
         /**
-         * @method  @public getIndicatorIndex Gets indicator index startin number 1
+         * @method  @public getIndicatorIndex Gets indicator index startin number 0
          * @param  {String} indicatorHash indicator hash
          * @return {Integer} indicator index
          */
@@ -77,7 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             for(var i = 0;i<this.indicators.length; i++) {
                 var ind = this.indicators[i];
                 if(ind.hash === indicatorHash) {
-                    return i+1;
+                    return i;
                 }
             }
             return null;
@@ -88,23 +153,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         setActiveIndicator : function(indicatorHash) {
             var me = this;
-            var previous = this.activeIndicator;
 
-            // reset previous
-            me.activeIndicator = null;
-            this.indicators.forEach(function(ind) {
-                if(ind.hash === indicatorHash) {
-                    me.activeIndicator = ind;
+            clearTimeout(me._timers.setActiveIndicator);
+
+            // This must be on some way to discard set active indicator if calling repeatly.
+            // Because of published map editing, active indicator is changed always when adding indicator.
+            me._timers.setActiveIndicator = setTimeout(function(){
+                var previous = me.activeIndicator;
+
+                // reset previous
+                me.activeIndicator = null;
+                me.indicators.forEach(function(ind) {
+                    if(ind.hash === indicatorHash) {
+                        me.activeIndicator = ind;
+                    }
+                });
+                // get a default if requested was not found
+                if(!me.activeIndicator) {
+                    me.activeIndicator = me.getActiveIndicator();
                 }
-            });
-            // get a default if requested was not found
-            if(!this.activeIndicator) {
-                this.activeIndicator = this.getActiveIndicator();
-            }
-
-            // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.activeIndicator, previous));
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
+                me.sandbox.notifyAll(eventBuilder(me.activeIndicator, previous));
+            }, 100);
         },
         /**
          * Returns object describing the active indicator or null if there are no indicators selected.
@@ -113,7 +184,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getActiveIndicator : function() {
             if(this.activeIndicator) {
                 // return selected indicator
-                // TODO: maybe check that it still is in the indicators array?
                 return this.activeIndicator;
             }
             if(!this.indicators.length) {
@@ -129,23 +199,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} datasrc    datasource id
          * @param  {Number} indicator  indicator id
          * @param  {Object} selections object containing the parameters for the indicator
-         * @return {Object}            an object describing the added indicator (includes parameters as an object)
+         * @param {Object} classification indicator classification
+         *
+         * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
          */
-        addIndicator : function(datasrc, indicator, selections) {
+        addIndicator : function(datasrc, indicator, selections, classification) {
             var ind = {
                 datasource : Number(datasrc),
                 indicator : indicator,
                 selections : selections,
-                hash : this.getHash(datasrc, indicator, selections)
+                hash : this.getHash(datasrc, indicator, selections),
+                classification: classification
             };
+            var found = false;
+            this.indicators.forEach(function(existing) {
+                if(existing.hash === ind.hash) {
+                    found = true;
+                }
+            });
+            if(found) {
+                return false;
+            }
             this.indicators.push(ind);
 
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
 
-            // set the latest as active indicator
-            this.setActiveIndicator(ind.hash);
+
 
             return ind;
         },
@@ -170,6 +251,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     removedIndicator = ind;
                 }
             });
+            if(me.classification!==null && me.classification[hash]) {
+                me.classification[hash] = null;
+                delete me.classification[hash];
+            }
             this.indicators = newIndicators;
 
             if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
@@ -177,7 +262,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.setActiveIndicator();
             }
             // notify
-            var eventBuilder = this.sandbox.getEventBuilder('StatsGrid.IndicatorEvent');
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
             return removedIndicator;
         },

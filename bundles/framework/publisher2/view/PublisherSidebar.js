@@ -96,7 +96,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
-            var mapPreviewPanel = me._createMapPreviewPanel();
+            var publisherTools = me._createToolGroupings(accordion);
+
+            var mapPreviewPanel = me._createMapPreviewPanel(publisherTools.tools);
             me.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
@@ -104,14 +106,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
-            var panelObject = me._createToolPanels(accordion);
-            var toolPanels = panelObject.panels;
-            _.each(toolPanels, function(panel) {
+            var sandbox = this.instance.getSandbox();
+            // create panel for each tool group
+            _.each(publisherTools.groups, function(tools, group) {
+                var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                    group, tools, sandbox, me.loc, me.instance
+                );
+                panel.init(me.data);
                 me.panels.push(panel);
                 accordion.addPanel(panel.getPanel());
             });
 
-            var toolLayoutPanel = me._createToolLayoutPanel(panelObject.tools);
+            var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
 
@@ -187,12 +193,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @private @method _createMapSizePanel
          * Creates the Map Sizes panel of publisher
          */
-        _createMapPreviewPanel: function () {
+        _createMapPreviewPanel: function (publisherTools) {
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 mapModule = sandbox.findRegisteredModuleInstance("MainMapModule"),
                 form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
-                    sandbox, mapModule, me.loc, me.instance
+                    sandbox, mapModule, me.loc, me.instance, publisherTools
                 );
 
             // initialize form (restore data when editing)
@@ -271,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
 
         /**
-         * @private @method _createToolPanels
+         * @private @method _createToolGroupings
          * Finds classes annotated as 'Oskari.mapframework.publisher.Tool'.
          * Determines tool groups from tools and creates tool panels for each group. Returns an object containing a list of panels and their tools as well as a list of
          * all tools, even those that aren't displayed in the tools' panels.
@@ -279,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @return {Object} Containing {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels
          * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
          */
-        _createToolPanels: function () {
+        _createToolGroupings: function () {
             var me = this;
             var sandbox = this.instance.getSandbox();
             var mapmodule = sandbox.findRegisteredModuleInstance("MainMapModule");
@@ -302,17 +308,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     allTools.push(tool);
                 }
             });
-            // create panel for each tool group
-            var panels = [];
-            _.each(grouping, function(tools, group) {
-                var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, sandbox, me.loc, me.instance
-                );
-                panel.init(me.data);
-                panels.push(panel);
-            });
             return {
-                panels: panels,
+                groups : grouping,
                 tools: allTools
             };
         },
@@ -565,16 +562,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 plugin,
                 i;
 
-            jQuery('.mapplugin.manageClassificationPlugin').remove();
-
             // resume normal plugins
             for (i = 0; i < me.normalMapPlugins.length; i += 1) {
                 plugin = me.normalMapPlugins[i];
                 mapModule.registerPlugin(plugin);
                 plugin.startPlugin(me.instance.sandbox);
-                if(plugin.showClassificationOptions && plugin.isVisible && plugin.isVisible() === true){
-                    plugin.showClassificationOptions(true);
-                }
                 if(plugin.refresh) {
                     plugin.refresh();
                 }
@@ -611,6 +603,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 row.append(errors[i].error);
                 content.append(row);
             }
+            dialog.makeModal();
             dialog.show(this.loc.error.title, content, [okBtn]);
         },
         /**
@@ -648,5 +641,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          */
         destroy: function () {
             this.mainPanel.remove();
+            // Resets map position and size to cover the whole space. Maybe find another way to do this?
+            jQuery('#contentMap').width('');
+            jQuery('.oskariui-left')
+                .css({
+                    'width': '',
+                    'height': '',
+                    'float': ''
+                })
+                .empty();
+            jQuery('.oskariui-center').css({
+                'width': '100%',
+                'float': ''
+            });
         }
     });

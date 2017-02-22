@@ -61,7 +61,7 @@ Oskari.registerLocalization(
                 }
             },
             "publishedmaps": {
-                "title": "Uložené mapy",
+                "title": "Vložené mapy",
                 "show": "Zobraziť na mape",
                 "getHTML": "HTML code",
                 "edit": "Editovať",
@@ -89,13 +89,13 @@ Oskari.registerLocalization(
                     "cancel": "Zrušiť",
                     "error_noname": "Názov mapovej vrstvy sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
                     "deletetitle": "Vymazať uloženú mapu?",
-                    "deletemsg": "Práve vymazávate uloženú mapu. Potom už nebude možné ju vidieť na vašej webovej stránke. Chcete ju vymazať?",
+                    "deletemsg": "Práve vymazávate vloženú mapu. Potom už nebude možné ju vidieť na vašej webovej stránke. Chcete ju vymazať?",
                     "showErrorTitle": "Chyba",
-                    "showConfirmMissing": "Všetky mapové vrstvy nie sú k dispozícii. Chcete otvoriť uloženú mapu?",
+                    "showConfirmMissing": "Všetky mapové vrstvy nie sú k dispozícii. Chcete otvoriť vloženú mapu?",
                     "showConfirmNotLoaded": "Všetky mapové vrstvy sa nedali načítať."
                 },
                 "save": {
-                    "success": "Uložená mapa bola uložená.",
+                    "success": "Vložená mapa bola uložená.",
                     "error_noname": "Názov mapovej vrstvy sa vyžaduje. Prosím, zadajte názov a skúste znovu.",
                     "error_illegalchars": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z,å,ä,ö, A-Z,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-). Prosím, opravte názov a skúste znovu.",
                     "msg": {
@@ -110,11 +110,11 @@ Oskari.registerLocalization(
                 },
                 "error": {
                     "title": "Chyba",
-                    "generic": "Uložená mapa sa nedala uložiť.",
-                    "notsaved": "Uložená mapa sa nedala aktualizovať.",
-                    "notdeleted": "Uložená mapa sa nedala vymazať.",
-                    "makePublic": "Uložená mapa sa nedala zverejniť.",
-                    "makePrivate": "Uložená mapa sa nedala odzverejniť."
+                    "generic": "Vložená mapa sa nedala uložiť.",
+                    "notsaved": "Vložená mapa sa nedala aktualizovať.",
+                    "notdeleted": "Vložená mapa sa nedala vymazať.",
+                    "makePublic": "Vložená mapa sa nedala zverejniť.",
+                    "makePrivate": "Vložená mapa sa nedala odzverejniť."
                 }
             },
             "account": {
@@ -134,5 +134,4 @@ Oskari.registerLocalization(
             "no": "Nie"
         }
     }
-}
-);
+});

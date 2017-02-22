@@ -22,8 +22,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         this.locale = locale;
         this.container = null;
         this.state = null;
-        this.tabsContainer = null;
-        this.selectedTab = null;
         this.active = false;
         this.template = jQuery('<div class="userfeedback-values">' +
             '<div id="step-1">'+
@@ -67,7 +65,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         getUserRole: function() {
           var me = this;
           if (me.availableOskariRoles) {
-            var user = me.getSandbox().getUser();
+            var user = Oskari.user();
             var userRoles = _.pluck(user.getRoles(), 'name');
             for (var i = 0; i < me.availableOskariRoles.length; i++) {
               if (me.userHasRole(me.availableOskariRoles[i])) {
@@ -78,7 +76,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
           return "";
         },
         userHasRole: function(roleToCheck) {
-          var user = this.getSandbox().getUser();
+          var user = Oskari.user();
           var userRoles = _.pluck(user.getRoles(), 'name');
           return _.contains(userRoles, roleToCheck);
         },
@@ -97,7 +95,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
                 cancelBtn = contents.find("button.cancel"),
                 ratings = contents.find("div#raty-star"),
                 el = me.getEl();
-            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', this.locale['title']);
             ratings.raty({
                 starOn: starOnImg,
                 starOff: starOffImg,
@@ -176,41 +173,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         },
 
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
-         */
-        createUi: function () {
-            var me = this,
-                flyout = jQuery(this.container),
-                sandbox = this.instance.sandbox,
-                dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest'),
-                hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
-
-            flyout.empty();
-
-            // if previous panel is undefined -> just added first tab
-            // if selectedPanel is undefined -> just removed last tab
-            this.tabsContainer.addTabChangeListener(function (previousPanel, selectedPanel) {
-                var request;
-                // sendout dim request for unselected tab
-                if (previousPanel) {
-                    request = dimReqBuilder(previousPanel.layer.getId());
-                    sandbox.request(me.instance.getName(), request);
-                }
-                me.selectedTab = selectedPanel;
-                if (selectedPanel) {
-                    me.updateData(selectedPanel.layer);
-                    // sendout highlight request for selected tab
-                    if (me.active) {
-                        request = hlReqBuilder(selectedPanel.layer.getId());
-                        sandbox.request(me.instance.getName(), request);
-                    }
-                }
-            });
-            this.tabsContainer.insertTo(flyout);
-        },
-
-        /**
         * Update metadata feedback form.
         * @method updateFeedbackUI
         *
@@ -218,9 +180,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.Flyout',
         */
         updateFeedbackUI: function(metadata){
             var me = this,
-                el = me.getEl(),
-                sandbox = this.instance.sandbox,
-                user = sandbox.getUser();
+                el = me.getEl();
 
             me._metadata = metadata;
 

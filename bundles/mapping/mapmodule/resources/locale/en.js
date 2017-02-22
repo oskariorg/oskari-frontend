@@ -30,7 +30,7 @@ Oskari.registerLocalization(
                 "link": "Data source",
                 "popup": {
                     "title": "Data Sources",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Close"
@@ -110,5 +110,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

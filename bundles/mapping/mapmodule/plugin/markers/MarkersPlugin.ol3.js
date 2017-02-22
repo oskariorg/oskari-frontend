@@ -75,9 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 MapClickedEvent: function(event) {
                     me.__mapClick(event);
                 },
-                AfterHideMapMarkerEvent: function(event) {
-                    me.afterHideMapMarkerEvent(event);
-                },
                 'Toolbar.ToolbarLoadedEvent': function() {
                     me._registerTools();
                 },
@@ -265,19 +262,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         getMarkersLayer: function() {
             // call _createMapMarkerLayer if not created yet?
             return this.__layer;
-        },
-
-        /***********************************************************
-         * Handle HideMapMarkerEvent
-         *
-         * @param {Object}
-         *            event
-         */
-        afterHideMapMarkerEvent: function(event) {
-            var markerLayer = this.getMarkersLayer();
-            if (markerLayer) {
-                markerLayer.setVisible(false);
-            }
         },
 
         /**
@@ -675,22 +659,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 request,
                 tool,
-                sandbox = this.getSandbox(),
-                reqBuilder;
+                sandbox = this.getSandbox();
 
             // Is button available or already added the button?
             if (!me._showMarkerButton || me._buttonsAdded) {
                 return;
             }
 
-            reqBuilder = sandbox.getRequestBuilder(
-                'Toolbar.AddToolButtonRequest'
-            );
-
-            if (!reqBuilder) {
+            if (!sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 // Couldn't get the request, toolbar not loaded
                 return;
             }
+            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
 
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {

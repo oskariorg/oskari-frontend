@@ -20,14 +20,9 @@
     position: absolute;
     width: 94%;
     top: 0; }
-  .statsgrid-grid-table-header .selection .parameter .label {
-    display: none !important;
-    float: none !important; }
   .statsgrid-grid-table-header .selection .parameter .select {
     width: auto !important;
     float: none !important; }
-  .statsgrid-grid-table-header .selection .parameter .clear {
-    display: none !important; }
   .statsgrid-grid-table-header .title {
     font-weight: bold;
     font-size: 16px;
@@ -100,6 +95,11 @@
         background-repeat: no-repeat;
         background-position: right center; }
 
+@keyframes statsgridcolumnselection {
+  from {
+    background-color: #ffd400; }
+  to {
+    background-color: #FDF8D9; } }
 div.oskari-flyoutcontent.statsgrid {
   /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
   max-width: 700px;
@@ -141,7 +141,10 @@ div.oskari-flyoutcontent.statsgrid {
     div.oskari-flyoutcontent.statsgrid .statsgrid-ds-selections input.oskari-button {
       margin-left: 10px; }
   div.oskari-flyoutcontent.statsgrid table.oskari-grid th.selected {
-    background-color: #FDF8D9; }
+    background-color: #FDF8D9;
+    animation-name: statsgridcolumnselection;
+    animation-duration: 0.5s;
+    animation-iteration-count: 3; }
   div.oskari-flyoutcontent.statsgrid .chosen-container.chosen-drop-up .chosen-drop {
     border-bottom: 0;
     border-radius: 4px 4px 0 0;
@@ -177,7 +180,7 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
-div.oskari-flyoutcontent thead th {
+div.oskari-flyoutcontent.statsgrid thead th {
   border: none;
   border-bottom: 1px solid #E6E6E6;
   border-left: 1px solid #E6E6E6;
@@ -193,68 +196,85 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
     div.oskari-flyoutcontent .statsgrid-grouping-header.sources span {
       font-weight: normal; }
 
-.statsgrid-legend-flyout .statsgrid-legend-container, .statsgrid-legend-flyout-published .statsgrid-legend-container {
-  font-size: 12px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .legend-noactive, .statsgrid-legend-flyout-published .statsgrid-legend-container .legend-noactive {
-    margin: 3px 10px 5px 10px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend {
-    font-size: 12px; }
-  .statsgrid-legend-flyout .statsgrid-legend-container .geostats-legend-title, .statsgrid-legend-flyout-published .statsgrid-legend-container .geostats-legend-title {
-    font-weight: normal; }
+/* ********************************************
+ * Statsgrid legend
+ * ******************************************* */
+.statsgrid-legend-plugin {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right; }
 
-.statsgrid-legend-flyout-published {
-  top: 0;
-  right: 0; }
-  .statsgrid-legend-flyout-published div.oskari-flyoutheading {
-    display: none; }
-  .statsgrid-legend-flyout-published div.oskari-flyouttoolbar {
-    height: auto; }
-  .statsgrid-legend-flyout-published div.oskari-flyouttools {
-    display: none; }
-  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend-title {
-    display: none; }
-  .statsgrid-legend-flyout-published div.statsgrid-legend-container div.geostats-legend {
-    padding-top: 0;
-    padding-bottom: 0; }
-  .statsgrid-legend-flyout-published div.oskari-flyout-title {
+.statsgrid-legend-container {
+  background-color: #FFFFFF;
+  width: 200px;
+  font-size: 12px; }
+  .statsgrid-legend-container > div.header {
     background-color: #fdf8d9;
     margin: 0;
     height: auto;
     padding: 6px;
-    width: 94%; }
-    .statsgrid-legend-flyout-published div.oskari-flyout-title div.header {
-      font-size: 14px;
-      font-weight: bold; }
-    .statsgrid-legend-flyout-published div.oskari-flyout-title div.link {
+    width: 94%;
+    font-weight: bold; }
+    .statsgrid-legend-container > div.header div.title {
+      font-size: 14px; }
+    .statsgrid-legend-container > div.header div.link {
       cursor: pointer;
       color: #4292c5;
-      position: absolute;
-      top: 6px;
-      right: 8px;
+      float: right;
       text-decoration: underline; }
-    .statsgrid-legend-flyout-published div.oskari-flyout-title div.sourcename {
+    .statsgrid-legend-container > div.header div.sourcename {
+      font-weight: normal; }
+  .statsgrid-legend-container .legend-noactive {
+    padding: 3px 10px 5px 10px; }
+  .statsgrid-legend-container div.accordion div.content {
+    padding: 0;
+    margin: 0;
+    margin-left: 8px; }
+  .statsgrid-legend-container div.accordion div.geostats-legend div {
+    margin: 2px 6px 2px 2px; }
+  .statsgrid-legend-container > .accordion .accordion_panel {
+    border: 0px;
+    overflow: visible; }
+    .statsgrid-legend-container > .accordion .accordion_panel .header .headerIcon {
+      margin: 0;
+      margin-left: 4px; }
+    .statsgrid-legend-container > .accordion .accordion_panel .header .headerText {
+      font-size: 12px;
+      padding: 0;
+      font-weight: normal; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .label {
       font-weight: bold; }
-    .statsgrid-legend-flyout-published div.oskari-flyout-title p {
-      font-size: 12px; }
-  .statsgrid-legend-flyout-published div.accordion div.accordion_panel {
-    border: none; }
-    .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header {
-      background-color: #F3F3F3; }
-      .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header div.headerText {
-        font-size: 12px;
-        line-height: 12px;
-        padding: 4px 8px 4px 4px; }
-      .statsgrid-legend-flyout-published div.accordion div.accordion_panel div.header div.headerIcon {
-        margin-left: 4px; }
-    .statsgrid-legend-flyout-published div.accordion div.accordion_panel.open div.header {
-      background-color: #F3F3F3; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications select {
+      width: 96%;
+      font-size: 12px;
+      padding: 1px 2px; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications button.reverse-colors {
+      margin-top: 5px;
+      margin-left: 0;
+      width: 95%;
+      padding: 4px 5px; }
+    .statsgrid-legend-container > .accordion .accordion_panel .oskari-color-selection {
+      z-index: 10; }
+
+/* Mobile popup tuning */
+.divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
+  margin: 0px; }
+.divmanazerpopup.statsgrid-mobile-legend .popup-body div.accordion div.content {
+  padding: 0;
+  margin: 0;
+  margin-left: 8px; }
+.divmanazerpopup.statsgrid-mobile-legend .popup-body div.geostats-legend div {
+  margin: 2px 6px 2px 2px; }
 
 /** Toggle buttons */
-.statsgrid-published-toggle-buttons {
+div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons {
   border: 1px solid rgba(0, 0, 0, 0.2);
-  position: absolute;
-  right: 10px;
-  bottom: 10px; }
+  float: right;
+  z-index: 100000;
+  margin: 10px;
+   }
   .statsgrid-published-toggle-buttons .map {
     background-color: #3c3c3c;
     float: left;

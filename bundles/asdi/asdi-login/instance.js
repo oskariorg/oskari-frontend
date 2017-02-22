@@ -19,7 +19,7 @@ Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
          */
         afterStart: function() {
             var me = this;
-            if (Oskari.getSandbox().getUser().isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 // no need for login UI
                 return;
             }

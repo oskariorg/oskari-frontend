@@ -1,18 +1,23 @@
 /**
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
+(function(Oskari) {
+    var _log = Oskari.log('StatsGrid.StatisticsService');
+
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
 
     /**
      * @method create called automatically on construction
      * @static
      */
-    function (sandbox) {
+    function (sandbox, locale) {
         this.sandbox = sandbox;
+        this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
-        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
+        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+
         // pushed from instance
         this.datasources = [];
         // attach on, off, trigger functions
@@ -62,32 +67,61 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             this.datasources.push(ds);
         },
 
-        getSelectionsText: function(indicator, locale, callback) {
+        getUILabels: function(indicator, callback) {
             var me = this;
-            var selectionsTexts = [];
+            var locale = this.locale;
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
 
-            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind){
+            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function(err, ind) {
+                if(err) {
+                    callback({
+                        error : true,
+                        indicator : '',
+                        params : '',
+                        full : '',
+                        paramsAsObject : {}
+                    });
+                    return;
+                }
+                var uiLabels = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
-                    ind.selectors.forEach(function(selector, index) {
+                    ind.selectors.forEach(function(selector) {
                         selector.allowedValues.forEach(function(value) {
-                            if(val === (value.id || value)) {
-                                var name = value.name || value.id || value;
-                                var optName = (locale.selectionValues[selector.id] && locale.selectionValues[selector.id][name]) ? locale.selectionValues[selector.id][name] : name;
-
-                                selectionsTexts.push(optName);
+                            if(val !== (value.id || value)) {
+                                return;
                             }
-
+                            var name = value.name;
+                            if(!name) {
+                                name = value.id || value;
+                                // try finding localization for the param
+                                // FIXME: get rid of this -> have server give ui labels
+                                name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                            }
+                            uiLabels.push( {
+                                selector : selector.id,
+                                id : value.id || value,
+                                label : name
+                            });
                         });
                     });
-
                 }
-
-                var selectionsText = ' ( ' +  selectionsTexts.join(' / ') + ' )';
-                if(typeof callback === 'function') {
-                    callback(selectionsText);
-                }
+                var preferredFormatting = [];
+                uiLabels.forEach(function(param) {
+                    preferredFormatting.push(param.label);
+                });
+                var name = Oskari.getLocalized(ind.name);
+                var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
+                callback({
+                    indicator : name,
+                    params : selectorsFormatted,
+                    full : name + ' ' + selectorsFormatted,
+                    paramsAsObject : uiLabels
+                });
             });
         },
         /**
@@ -149,8 +183,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getRegions : function(regionset, callback) {
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
             if(!regionset || typeof callback !== 'function') {
                 // log error message
+                callback('Regionset missing');
                 return;
             }
             var me = this;
@@ -186,8 +225,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback function to call with error or results
          */
         getIndicatorList : function(ds, callback) {
+            if(typeof callback !== 'function') {
+                // log error message
+                return;
+            }
             if(!ds || typeof callback !== 'function') {
                 // log error message
+                callback('Datasource missing');
                 return;
             }
             var cacheKey = 'GetIndicatorList_' + ds;
@@ -201,6 +245,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
             }
 
             var me = this;
+            var updateIncompleteIndicatorList = function(previousList) {
+                _log.info('Indicator listing was not complete. Refreshing in 10 seconds');
+                setTimeout(function() {
+                    me.cache.remove(cacheKey);
+                    // try again after 10 seconds
+                    me.getIndicatorList(ds, function(err, newList) {
+                        if(newList.indicators.length === previousList.length) {
+                            // same list size??? somethings propably wrong
+                            _log.warn('Same indicator list as in previous try. There might be some problems with the service');
+                            return;
+                        }
+                        // send out event about new indicators
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        me.sandbox.notifyAll(eventBuilder(ds));
+                    });
+                }, 10000);
+            };
+
             // call GetIndicatorList with parameter datasource=ds
             // use first param as error indicator - null == no error
             jQuery.ajax({
@@ -211,7 +273,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
-                    me.cache.respondToQueue(cacheKey, null, pResp.indicators);
+                    me.cache.respondToQueue(cacheKey, null, pResp);
+                    if(!pResp.complete) {
+                        // wasn't complete dataset - remove from cache and poll for more
+                        updateIncompleteIndicatorList(pResp.indicators);
+                    }
+
                 },
                 error: function (jqXHR, textStatus) {
                     me.cache.respondToQueue(cacheKey, 'Error loading indicators');
@@ -225,8 +292,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorMetadata : function(ds, indicator, callback) {
-            if(!ds || !indicator || typeof callback !== 'function') {
+            if(typeof callback !== 'function') {
                 // log error message
+                return;
+            }
+            if(!ds || !indicator) {
+                // log error message
+                callback('Datasource or indicator missing');
                 return;
             }
             var me = this;
@@ -264,8 +336,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
          * @param  {Function} callback  function to call with error or results
          */
         getIndicatorData : function(ds, indicator, params, regionset, callback) {
-            if(!ds ||!indicator || !regionset || typeof callback !== 'function') {
+            if(typeof callback !== 'function') {
                 // log error message
+                return;
+            }
+            if(!ds ||!indicator || !regionset) {
+                // log error message
+                callback('Datasource, regionset or indicator missing');
                 return;
             }
             var me = this;
@@ -340,7 +417,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
         getCurrentDataset : function(callback) {
             var me = this;
             if(typeof callback !== 'function') {
-                // TODO: log error
                 return;
             }
             var setId = this.getStateService().getRegionset();
@@ -437,6 +513,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService',
                 });
             });
         }
+
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });
+}(Oskari));

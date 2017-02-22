@@ -1,12 +1,6 @@
 {
 	"startupSequence": [
 		{
-			"instanceProps": {},
-			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-default-theme",
-			"fi": "OpenLayers",
-			"sv": "?",
-			"en": "OpenLayers",
 			"bundlename": "openlayers-default-theme",
 			"metadata": {
 				"Import-Bundle": {
@@ -16,16 +10,9 @@
 					"openlayers-full-map": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Map",
-			"bundleinstancename": "mapfull",
-			"fi": "Map",
-			"sv": "?",
-			"en": "Map",
 			"bundlename": "mapfull",
 			"metadata": {
 				"Import-Bundle": {
@@ -50,75 +37,28 @@
 	                "maparcgis": {
 	                    "bundlePath": "../../../packages/arcgis/bundle/"
 	                },
-	                "service-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "mapmodule-plugin": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
 	                "mapfull": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
-	                "core-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
 	                "oskariui": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "domain": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "core-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "service-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
 	                "ui-components": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                }
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Oskari DIV Manazer",
-			"bundleinstancename": "divmanazer",
-			"fi": "Oskari DIV Manazer",
-			"sv": "?",
-			"en": "Oskari DIV Manazer",
 			"bundlename": "divmanazer",
 			"metadata": {
 				"Import-Bundle": {
 					"divmanazer": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},
@@ -632,6 +572,15 @@
 				}
 			  }
 			}
+        }, {
+            "bundlename": "system-message",
+            "metadata": {
+                "Import-Bundle": {
+                    "system-message": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
 	  }
 	]
 }

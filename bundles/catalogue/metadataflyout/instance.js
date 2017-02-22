@@ -15,6 +15,8 @@ Oskari.clazz.define(
         this.loader = null;
         this.layerPlugin = null;
         this.layer = null;
+        this.conf = this.conf || {};
+        this.state = this.state || {};
     }, {
         /**
          * @static
@@ -246,12 +248,6 @@ Oskari.clazz.define(
             AfterMapLayerRemoveEvent: function (event) {
                 /* this might react when layer removed */
                 /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
-            },
-            /**
-             * @method AfterMapLayerRemoveEvent
-             */
-            AfterMapMoveEvent: function (event) {
-                /* this might react when map moved */
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent

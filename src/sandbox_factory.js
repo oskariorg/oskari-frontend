@@ -9,21 +9,10 @@
         return name || defaultName;
     }
 
-    var wannabeCore = null;
     var sandboxStore = o.createStore({
         defaultValue : function(sandboxName) {
             // Notice that these are not part of the core.
-            // FIXME: move wannabe-core and sandbox files from being loaded mapfull with to be part of the core
-            var newCore = false;
-            if(!wannabeCore) {
-                wannabeCore = o.clazz.create('Oskari.mapframework.core.Core');
-                newCore = true;
-            }
-            var sb = o.clazz.create('Oskari.mapframework.sandbox.Sandbox', wannabeCore, getName(sandboxName));
-            wannabeCore._sandbox = sb;
-            if(newCore) {
-                wannabeCore.init();
-            }
+            var sb = o.clazz.create('Oskari.Sandbox', getName(sandboxName));
             return sb;
         }
     });

@@ -271,14 +271,18 @@ Oskari.registerLocalization(
             "refreshButton": "Oppfrisk filteret",
             "addFilter": "Legg til nytt filter",
             "removeFilter": "Slett filter",
+            "content": {
+                "title": "Geografisk filter"
+            },
             "bbox": {
-                "title": "Kartvindu-filter",
                 "on": "Kun den synlige forekomsten i kartvinduet",
                 "off": "Alle forekomster"
             },
             "clickedFeatures": {
-                "title": "Filter for valg av forekomster",
-                "label": "Kun valgte forekomster"
+                "clickedFeaturesLabel": "Kun valgte forekomster i kartet",
+                "filterByGeometryLabel": "Kun forekomster i følge valgt opsjon:",
+                "filterByGeometryIntersect": "Forekomster som krysser valgte forekomster",
+                "filterByGeometryContains": "Forekomster innenfor valgte forekomster"
             },
             "values": {
                 "title": "Filtrér forekomster basert på egenskaper",
@@ -289,6 +293,10 @@ Oskari.registerLocalization(
                     "operator": "Operator",
                     "attribute-value": "Verdi"
                 },
+                "info": {
+                    "bboxOff": "Uten geografisk filter er alle forekomster tatt med i analysen. Vennligst legg til et attributtfilter eller velg \"Kun valgte forekomster i kartet\" i det geografiske filteret.",
+                    "filterByGeometrySelected": "Du kan filtrere på attributter bare dersom \"Alle forekomster\" er valgt i det geografiske filteret over."
+                },
                 "equals": "er lik",
                 "like": "er omtrentlig lik",
                 "notEquals": "er ikke lik",
@@ -297,6 +305,14 @@ Oskari.registerLocalization(
                 "lessThan": "er mindre enn",
                 "greaterThanOrEqualTo": "er større enn eller lik",
                 "lessThanOrEqualTo": "er mindre enn eller lik"
+            },
+            "validation": {
+                "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
+                "attribute_missing": "Egenskapen mangler",
+                "operator_missing": "Operatoren mangler",
+                "value_missing": "Verdien mangler",
+                "boolean_operator_missing": "Logisk operator mangler",
+                "bbox_selected_with_no_properties": "Uten geografisk filter er alle forekomster tatt med i analysen. Vennligst legg til et attributtfilter eller velg \"Kun valgte forekomster i kartet\" i det geografiske filteret."
             },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Velg aggregert verdi",
@@ -307,15 +323,7 @@ Oskari.registerLocalization(
                 "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
                 "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
                 "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelp av analysefunksjonen, og deretter filtrere på verdier."
-            },
-            "validation": {
-                "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
-                "attribute_missing": "Egenskapen mangler",
-                "operator_missing": "Operatoren mangler",
-                "value_missing": "Verdien mangler",
-                "boolean_operator_missing": "Logisk operator mangler"
             }
         }
     }
-}
-);
+});

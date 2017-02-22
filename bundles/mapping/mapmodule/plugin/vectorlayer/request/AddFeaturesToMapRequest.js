@@ -37,6 +37,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          * @return {String} get geometry type
          */
         getOptions: function(){
+            if(typeof this._options.featureStyle.text.labelText === 'number'){
+               this._options.featureStyle.text.labelText = this._options.featureStyle.text.labelText.toString();
+            }
             return this._options;
         }
     }, {

@@ -7,8 +7,9 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Predvolený štýl",
         "own-style": "Vlastný štýl",
+        "none-style": "Nič",
         "refresh": "Obnoviť",
-        "refresh_title": "Obnov produktové údaje, ktoré sa nevykresľujú na mape automaticky.",
+        "refresh_title": "Obnovené produktové údaje sa nevykresľujú na mape automaticky.",
         "tile": {
             "title": "Spravovanie produktových údajov (WFS)"
         },
@@ -29,6 +30,11 @@ Oskari.registerLocalization(
             "title": "Vykreslenie objektových údajov",
             "info": "Niektoré produktové údaje sa nevykresľujú automaticky.<br/><br/>Prosím vyberte oblasť na mape a kliknite na tlačidlo Obnoviť.<br/><br/> Kliknite na Objektové údaje, aby ste videli  údaje o produktových údajoch."
         },
+        "refresh_alert": {
+            "title": "Varovanie viditeľnosti",
+            "all_not_in_scale": "Nie sú tam žiadne vrstvy, ktoré by sa dali obnoviť. Prosím prejdite na vhodnú úroveň mierky a skúste znovu.",
+            "all_invisible": "Nie sú tam žiadne viditeľné vrstvy, ktoré by sa dali obnoviť. Prosím otvorte vybrané vrstvy a nastavte niektoré aktuálne vrstvy ako viditeľné."
+        },
         "button": {
             "cancel": "Zrušiť",
             "show": "Zobraziť miesta",
@@ -43,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

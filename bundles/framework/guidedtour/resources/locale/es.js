@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Puede acercarse y alejarse en el mapa usando la barra de escala o los botones más y menos que hay junto ella. Consejo: También puede acercarse y alejarse usando los botones más y menos del teclado o acercarse haciendo doble click en el mapa. También es posible acercarse y alejarse con la rueda del ratón"
         }
     }
-}
-);
+});

@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "I miei datasets"
         }
     }
-}
-);
+});

@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Punktens stil",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "symbol": {
                     "label": "Ikon"
                 },
@@ -243,6 +243,7 @@ Oskari.registerLocalization(
                     "title": "Ytterligare inställningar",
                     "dataSource": "Datakälla",
                     "metadata": "Metadata länk",
+                    "layerName": "Kartlagrets namn",
                     "export_selection": "Exportera utvald objekter"
                 },
                 "columns": {
@@ -272,14 +273,10 @@ Oskari.registerLocalization(
             "addFilter": "Lägg till ett nytt filter",
             "removeFilter": "Ta bort filtret",
             "bbox": {
-                "title": "Kartvy filter",
                 "on": "Endast funktionen syns på kartvyn.",
                 "off": "Alla funktioner."
             },
-            "clickedFeatures": {
-                "title": "Filter på grund av objektval",
-                "label": "Endast de funktioner som valts på kartan."
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Filtrera funktionerna efter attributdata",
                 "placeholders": {
@@ -317,5 +314,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

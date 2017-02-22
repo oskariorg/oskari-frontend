@@ -113,7 +113,7 @@ function(instance) {
             this.instance.getLocalization('notLoggedIn'));
         this.tabsContainer.insertTo(flyout);
 
-        if(!sandbox.getUser().isLoggedIn()) {
+        if(!Oskari.user().isLoggedIn()) {
             return;
         }
 

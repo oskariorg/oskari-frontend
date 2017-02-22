@@ -103,9 +103,6 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         'AfterMapLayerRemoveEvent' : function(event) {
             this.afterMapLayerRemoveEvent(event);
         },
-        'FeaturesAvailableEvent' : function(event) {
-            this.handleFeaturesAvailableEvent(event);
-        },
         'FeatureSelector.FeatureHighlightEvent': function(event) {
             var type = event.getHighlightType(),
                 feature = event.getFeature(),
@@ -372,37 +369,6 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
 
         return this._map
                 .getLayersByName('layer_' + layer.getId());
-    },
-    /**
-     *
-     */
-    handleFeaturesAvailableEvent : function(event) {
-        var layer = event.getMapLayer();
-
-        var mimeType = event.getMimeType();
-        var features = event.getFeatures();
-//                      var projCode = event.getProjCode();
-        var op = event.getOp();
-
-        var mapLayer = this._map
-                .getLayersByName('layer_' + layer.getId())[0];
-        if (!mapLayer) {
-            return;
-        }
-
-        if (op && op == 'replace') {
-            mapLayer.removeFeatures(mapLayer.features);
-        }
-
-        var format = this._supportedFormats[mimeType];
-
-        if (!format) {
-            return;
-        }
-
-        var fc = format.read(features);
-
-        mapLayer.addFeatures(fc);
     },
 
     highlightFeature: function(layerName, feature) {

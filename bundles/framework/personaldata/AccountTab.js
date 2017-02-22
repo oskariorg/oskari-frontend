@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 fieldTemplate = jQuery('<tr class="dataField"><th class="label"></th><td class="value"></td></tr>'),
-                user = sandbox.getUser(),
+                user = Oskari.user(),
                 localization = this.loc,
                 accountData = [{
                     label: localization.firstName,

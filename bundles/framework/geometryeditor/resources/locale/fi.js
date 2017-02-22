@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Geometrian muokkaus",
         "desc": ""
     }
-}
-);
+});

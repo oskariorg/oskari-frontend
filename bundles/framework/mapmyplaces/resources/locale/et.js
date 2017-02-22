@@ -7,9 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Objekti info",
         "layer": {
-            "organization": "My Places",
-            "inspire": "My Map Layers"
+            "organization": "Minu objektid",
+            "inspire": "Minu kaardikihid"
         }
     }
-}
-);
+});

@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "okno karte,uporabniški priročnilk",
-            "contentPart": "telo"
+            "tags": "okno karte,uporabniški priročnilk"
         }
     }
-}
-);
+});

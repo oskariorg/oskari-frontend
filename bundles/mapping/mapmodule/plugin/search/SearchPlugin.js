@@ -403,7 +403,7 @@ Oskari.clazz.define(
                         me.getName(),
                         me.getSandbox().getRequestBuilder(
                             'MapMoveRequest'
-                        )(lon, lat, zoom, false)
+                        )(lon, lat, zoom)
                     );
                     me._setMarker(msg.locations[0]);
                     return;
@@ -524,7 +524,7 @@ Oskari.clazz.define(
                 this.getName(),
                 this.getSandbox().getRequestBuilder(
                     'MapMoveRequest'
-                )(result.lon, result.lat, zoom, false)
+                )(result.lon, result.lat, zoom)
             );
             this._setMarker(result);
         },
@@ -541,9 +541,7 @@ Oskari.clazz.define(
 
         /**
          * @private @method _hideSearch
-         * Hides the search result and sends out Oskari.mapframework.request.common.HideMapMarkerRequest
-         *
-         *
+         * Hides the search result and sends out MapModulePlugin.RemoveMarkersRequest
          */
         _hideSearch: function() {
             var me = this;

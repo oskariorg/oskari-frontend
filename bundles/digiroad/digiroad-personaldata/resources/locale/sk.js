@@ -29,8 +29,8 @@ Oskari.registerLocalization(
                     "restrictionType": "Tyyppi",
                     "createDate": "Created",
                     "updateDate": "Updated",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "notification": {
                     "delete": {
@@ -62,8 +62,8 @@ Oskari.registerLocalization(
                     "dynValue": "Dynamic value",
                     "createDate": "Created",
                     "updateDate": "Updated",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "notification": {
                     "delete": {
@@ -97,8 +97,8 @@ Oskari.registerLocalization(
                     "name": "Name",
                     "description": "Description",
                     "createDate": "Created",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "notification": {
                     "delete": {
@@ -121,8 +121,8 @@ Oskari.registerLocalization(
                 "grid": {
                     "name": "Name",
                     "publish": "Published",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Change the name of the map view",
@@ -169,8 +169,8 @@ Oskari.registerLocalization(
                     "name": "Name",
                     "domain": "Map settings",
                     "publish": "Status",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Change map name",
@@ -222,5 +222,4 @@ Oskari.registerLocalization(
             "no": "No"
         }
     }
-}
-);
+});

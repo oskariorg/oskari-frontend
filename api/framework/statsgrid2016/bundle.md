@@ -1,20 +1,18 @@
 # statsgrid2016
 
-Statistics data display. This will replace the statsgrid bundle spesification when the implementation has the comparable functionalities as the current one. The bundle depends on mapstats-bundle that provides support for statslayer layertype.
+Statistics data display. This will replace the statsgrid bundle specification when the implementation has the comparable functionalities as the current one. The bundle depends on mapstats-bundle that provides support for statslayer layertype.
 
 ## Description
 
 The bundle is used to display and manage statistics data from multiple datasources. It uses maplayers of type statslayer (support provided by mapstats bundle) as regionsets and configuration should provide available datasources. Common dataformat is used to read indicator listings, metadata and actual statistics data from the server. Regions in regionsets are based on the the statslayers and mapping to regions data for statistics data is handled by the server side implementation.
 
-By default displays a split panel next to the map that includes an indicator selector, regionset selector and a datagrid with the indicator data. Also manages the statistics data state that is used by mapstats to visualize the data on map.
+Indicator selector, regionset selector and a datagrid with the indicator data are shown in a flyout. Also manages the statistics data state that is used by mapstats to visualize the data on map.
 
 ## TODO
 
 * add region selection and highlighting in map
 * add region filtering
 * add tooltip to map regions with indicator data
-* add colorset selection
-* add classification UI
 
 ## Bundle configuration
 
@@ -29,15 +27,14 @@ By default displays a split panel next to the map that includes an indicator sel
           "name": "KHR",
           "type": "system"
         }],
-
-        "indicatorSelector": false,
-        "regionSelector": false,
-        "grid": true
+        "grid": true,
+        allowClassification : true
       }
 ```
 
 * `sources` is required and describes the available datasources. Each datasource have their own indicator listings etc so any reference to indicator must include reference to the datasource the indicator is located in.
-* `indicatorSelector`, `regionSelector` and `grid` are optional, by default all are true which means all of them are rendered
+* `grid` is optional and defaults to true. Toggles if the datatable should be shown
+* `allowClassification` is optional and defaults to true. Toggles if the user can change the classification for the data.
 
 ## Bundle state
 
@@ -49,7 +46,11 @@ By default displays a split panel next to the map that includes an indicator sel
          "selections": {
              "sex": "male",
              "year": "1991"
+         },
+         classification : {
+          ...
          }
+       }
      }, {
          "ds": 1,
          "id": 6,
@@ -64,10 +65,10 @@ By default displays a split panel next to the map that includes an indicator sel
  }
 ```
 
-* `indicators` lists any indicators the user has selected with the parameters (selections) that were used when the indicator was selected. DS refers to datasource and id to indicator id in that datasource. Selections vary between datasources and indicators.
+* `indicators` lists any indicators the user has selected with the parameters (selections) that were used when the indicator was selected. DS refers to datasource and id to indicator id in that datasource. Selections vary between datasources and indicators. Classification is the color options and other classification details for the indicator.
 * `regionset` is the id of the statslayer that is currently used as a regionset
 * `active` is a "serialized hash" that is used internally to refer to one indicator in the state.indicators list.
-* `view` is a boolean where true means that the statsgrid panel should be shown. With false the map will render the active indicator but the panel isn't shown.
+* `view` is a boolean where true means that the datagrid (flyout) should be shown when the bundle is started. With false the map will render the active indicator but the flyout is closed.
 
 ## Requests the bundle sends out
 
@@ -113,6 +114,10 @@ By default displays a split panel next to the map that includes an indicator sel
   <tr>
     <td>StatsGrid.ActiveIndicatorChangedEvent</td>
     <td>UI grid is updated based on the event. The corresponding column is highlighted.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ClassificationChangedEvent</td>
+    <td>Updates legend (and map with mapstats) when classification is changed.</td>
   </tr>
 </table>
 

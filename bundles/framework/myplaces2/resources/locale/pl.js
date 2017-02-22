@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "MyPlaces2",
     "value": {
@@ -14,10 +15,10 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Miejsca",
-            "nocategories": "NOT TRANSLATED",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
             "addCategory": "Dodaj warstwę mapy",
             "editCategory": "Edytuj warstwę mapy",
@@ -29,37 +30,37 @@ Oskari.registerLocalization({
                 "desc": "Opis",
                 "createDate": "Utworzony",
                 "updateDate": "Zaktualizowany",
-                "measurement": "NOT TRANSLATED",
+                "measurement": "",
                 "edit": " ",
                 "delete": " "
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
+                    "title": "",
+                    "confirm": "",
                     "btnDelete": "Usuń",
                     "btnCancel": "Anuluj",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m²"
             },
             "point": {
@@ -93,9 +94,9 @@ Oskari.registerLocalization({
             "ok": "OK",
             "cancel": "Anuluj",
             "close": "Anuluj",
-            "finish": "NOT TRANSLATED",
+            "finish": "",
             "save": "Zapisz",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Przesuń miejsca i usuń",
             "deleteCategory": "Usuń",
             "deleteCategoryAndPlaces": "Usuń kategorię i miejsca",
@@ -104,7 +105,7 @@ Oskari.registerLocalization({
         },
         "placeform": {
             "title": "Dane miejsca",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "placename": {
                 "placeholder": "Nazwij miejsce"
             },
@@ -115,24 +116,23 @@ Oskari.registerLocalization({
                 "placeholder": "Opisz miejsce"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Warstwa mapy",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "Nowa warstwa..."
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "tooltip": "Punkt"
                 }
@@ -163,10 +163,10 @@ Oskari.registerLocalization({
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "placename": "Nazwa",
                 "placedesc": "Opis",
-                "image": "NOT TRANSLATED"
+                "image": ""
             },
             "edit": {
                 "title": "Edytuj warstwę mapy",
@@ -174,31 +174,31 @@ Oskari.registerLocalization({
                 "cancel": "Wstecz"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
                 "label": "Rozmiar"
             },
             "color": {
                 "label": "Kolor",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
                 "label": "Podgląd"
@@ -209,24 +209,24 @@ Oskari.registerLocalization({
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
                 "label": "Kolor",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
                 "label": "Podgląd"
@@ -237,32 +237,32 @@ Oskari.registerLocalization({
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
                 "label": "Kolor linii",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
                 "label": "Podgląd"

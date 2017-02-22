@@ -28,7 +28,7 @@ function() {
     },
     /**
      * @method getSandbox
-     * @return {Oskari.mapframework.sandbox.Sandbox}
+     * @return {Oskari.Sandbox}
      */
     getSandbox : function() {
         return this.sandbox;
@@ -164,7 +164,7 @@ function() {
         this.buttons.start();
 
 
-        var user = sandbox.getUser();
+        var user = Oskari.user();
 
         if(!user.isLoggedIn() && conf.allowGuest !== true) {
             // guest users don't need anything else

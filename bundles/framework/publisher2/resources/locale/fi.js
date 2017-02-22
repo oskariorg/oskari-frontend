@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "FeedbackServiceTool": "Palautteen antaminen (Open311)",
-                "CrosshairTool":"Näytä kartan keskipiste",
+                "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
@@ -245,5 +245,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

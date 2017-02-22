@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.instance.sandbox;
@@ -210,7 +210,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     action: function () {
                         me.cleanupPopup();
                         // ask toolbar to select default tool
-                        var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                         me.instance.sandbox.request(me, toolbarRequest);
                     }
                 }, {
@@ -229,7 +229,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var options = {
                 hidePrevious: true
             };
-            var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, options);
+            var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, options);
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[name=placename]').focus();
@@ -241,11 +241,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          */
         deletePlaceForm: function () {
             var sandbox = this.instance.sandbox,
-                requestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
                 request;
 
-            if (requestB) {
-                request = requestB(this.popupId);
+            if (sandbox.hasHandler('InfoBox.HideInfoBoxRequest')) {
+                request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this.getName(), request);
             }
         },
@@ -296,6 +295,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 row.append(errors[i].error);
                 content.append(row);
             }
+            dialog.makeModal();
             dialog.show(loc.validation.title, content, [okBtn]);
         },
         /**
@@ -389,8 +389,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 if (blnSuccess) {
                     // add map layer to map (we could check if its already there but core will handle that)
                     var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID()),
-                        requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest'),
-                        updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                        requestBuilder = Oskari.requestBuilder('AddMapLayerRequest'),
+                        updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                         updateRequest,
                         request = requestBuilder(layerId, true);
                     sandbox.request(me, request);
@@ -410,7 +410,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         sandbox.request(me, updateRequest);
                     }
                     // Update myplaces extra layers
-                    var eventBuilder = sandbox.getEventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
+                    var eventBuilder = Oskari.eventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
                     if (eventBuilder) {
                         var event = eventBuilder(layerId, true);
                         sandbox.notifyAll(event);
@@ -440,20 +440,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          */
         cleanupPopup: function () {
             var sandbox = this.instance.sandbox,
-                hideRequestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
-                keyBoardRB = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest'),
                 hideRequest,
                 keyBoardRequest;
 
             this.instance.enableGfi(true);
 
-            if (hideRequestB) {
-                hideRequest = hideRequestB(this.popupId);
+            if (sandbox.hasHandler('InfoBox.HideInfoBoxRequest')) {
+                hideRequest = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this, hideRequest);
             }
 
-            if (keyBoardRB) {
-                keyBoardRequest = keyBoardRB();
+            if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
+                keyBoardRequest = Oskari.requestBuilder('EnableMapKeyboardMovementRequest')();
                 sandbox.request(this, keyBoardRequest);
             }
 

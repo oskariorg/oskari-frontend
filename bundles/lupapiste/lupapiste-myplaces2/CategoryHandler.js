@@ -36,10 +36,9 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
         start: function () {
             var me = this,
                 sandbox = me.instance.sandbox,
-                user = sandbox.getUser(),
                 p;
 
-            if (user.isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 sandbox.register(me);
                 for (p in me.eventHandlers) {
                     sandbox.registerForEventByName(me, p);
@@ -239,7 +238,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
          *
          */
         _processStartupLinkLayers: function (sandbox) {
-            var mapLayers = sandbox.getRequestParameter('mapLayers');
+            var mapLayers = Oskari.util.getRequestParam('mapLayers');
 
             if (mapLayers === null || mapLayers === "") {
                 // no linked layers

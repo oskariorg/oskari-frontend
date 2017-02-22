@@ -159,11 +159,8 @@ Oskari.clazz.define(
             var me = this,
                 flyout = jQuery(me.container),
                 sandbox = me.instance.sandbox,
-                dimReqBuilder = sandbox.getRequestBuilder(
-                    'DimMapLayerRequest'
-                ),
-                hlReqBuilder = sandbox.getRequestBuilder(
-                    'HighlightMapLayerRequest'
+                reqBuilder = Oskari.requestBuilder(
+                    'activate.map.layer'
                 );
 
             flyout.empty();
@@ -176,7 +173,7 @@ Oskari.clazz.define(
                     var request;
                     // sendout dim request for unselected tab
                     if (previousPanel) {
-                        request = dimReqBuilder(previousPanel.layer.getId());
+                        request = reqBuilder(previousPanel.layer.getId(), false);
                         sandbox.request(me.instance.getName(), request);
                     }
                     me.selectedTab = selectedPanel;
@@ -184,7 +181,7 @@ Oskari.clazz.define(
                         me.updateData(selectedPanel.layer);
                         // sendout highlight request for selected tab
                         if (me.active) {
-                            request = hlReqBuilder(selectedPanel.layer.getId());
+                            request = reqBuilder(selectedPanel.layer.getId(), true);
                             sandbox.request(me.instance.getName(), request);
                         }
                     }
@@ -665,7 +662,7 @@ Oskari.clazz.define(
                                     } else {
                                         //else just set center.
                                         setTimeout(function() {
-                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, false]);
+                                            me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y]);
                                         }, 1000);
                                     }
                                 }
@@ -901,23 +898,18 @@ Oskari.clazz.define(
                     gfiReqBuilder(!this.active)
                 );
             }
+            var activateReqBuilder = Oskari.requestBuilder('activate.map.layer');
 
             // disabled
             if (!this.active &&this.selectedTab) {
                 // dim possible highlighted layer
-                var dimReqBuilder = sandbox.getRequestBuilder(
-                    'DimMapLayerRequest'
-                );
-                request = dimReqBuilder(this.selectedTab.layer.getId());
+                request = activateReqBuilder(this.selectedTab.layer.getId(), false);
                 sandbox.request(this.instance.getName(), request);
             }
             // enabled
             else if (this.selectedTab) {
                 // highlight layer if any
-                var hlReqBuilder = sandbox.getRequestBuilder(
-                    'HighlightMapLayerRequest'
-                );
-                request = hlReqBuilder(this.selectedTab.layer.getId());
+                request = activateReqBuilder(this.selectedTab.layer.getId(), true);
                 sandbox.request(this.instance.getName(), request);
 
                 if(clearContent) {

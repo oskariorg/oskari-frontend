@@ -1,23 +1,53 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "nn",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Help",
+        "title": "Hjelp",
         "desc": "",
         "flyout": {
-            "title": "Oskari gebruikershandleiding",
-            "loadingtxt": "NOT TRANSLATED"
+            "title": "Brukarrettleiing",
+            "loadingtxt": "<p>Laster brukerveiledning...</p>"
         },
         "tile": {
-            "title": "Kaart gebruikershandleiding"
+            "title": "Brukarrettleiing"
         },
         "error": {
-            "title": "Fout!",
-            "generic": "Laden gebruikershandleiding is mislukt. Probeer het later opnieuw."
+            "title": "Feil!",
+            "generic": "Lasting av brukarrettleiing feila. Ver grei og prøv om att seinare."
         },
+        "tabs": [
+            {
+                "title": "Kartvindauge",
+                "tags": "kartvindauge, brukarrettleiing"
+            },
+            {
+                "title": "Kartverktøy",
+                "tags": "guide_tools"
+            },
+            {
+                "title": "Søk",
+                "tags": "guide_search"
+            },
+            {
+                "title": "Kartlag",
+                "tags": "guide_maplayers"
+            },
+            {
+                "title": "Kartutgåve",
+                "tags": "guide_publishing"
+            },
+            {
+                "title": "Tematiske kart",
+                "tags": "guide_thematic"
+            },
+            {
+                "title": "Analyse",
+                "tags": "guide_analysis"
+            }
+        ],
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "kartvindauge, brukarrettleiing"
         }
     }
 });

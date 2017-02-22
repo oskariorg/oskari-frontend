@@ -16,38 +16,70 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 1;
         me._name = 'FullScreenPlugin';
-        me._fullscreen = null;
+        me._el = null;
+        me.state = null;
+        me._sandbox = null;
     },
     {
-
         /**
-         * @private @method  _createControlElement
-         * Binds a click event to the toggle image and adds the div to the DOM.
+         * @method startPlugin
+         *
+         * Interface method for the plugin protocol. Should registers requesthandlers and
+         * eventlisteners.
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
          */
-        _createControlElement: function () {
-            // FIXME do this with classes...
+        startPlugin : function(sandbox) {
             var me = this,
                 fsimg = this.getMapModule().getImageUrl() +
                 '/mapping/mapmodule/resources/images/',
                 el = jQuery(
                     '<div class="fullscreenDiv">' +
-                    '<img class="fullscreenDivImg" src="' + fsimg + 'hide-navigation.png' + '"></img>' +
+                    '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
                     '</div>'
                 );
 
             el.find('.fullscreenDivImg').bind('click', function (event) {
                 event.preventDefault();
-                me.getSandbox().postRequestByName(
-                    'MapFull.MapWindowFullScreenRequest'
-                );
 
                 if (jQuery(this).attr('src').match(/hide-navigation/)) {
-                    jQuery(this).attr('src', fsimg + 'show-navigation.png');
+                    me._hideNavigation();
                 } else {
-                    jQuery(this).attr('src', fsimg + 'hide-navigation.png');
+                    me._showNavigation();
                 }
             });
-            return el;
+            me._el = el;
+            this.getMapModule().getMapEl().append(el);
+            me._sandbox = sandbox;
+
+            me._requestHandlers = me._createRequestHandlers();
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, me._requestHandlers[key]);
+            });
+
+            sandbox.registerAsStateful(me._clazz, me);
+        },
+        /**
+         * @method stopPlugin
+         *
+         * Interface method for the plugin protocol. Should unregisters requesthandlers and
+         * eventlisteners.
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        stopPlugin : function(sandbox) {
+            var me = this;
+            var sandbox = this._sandbox;
+            Object.keys(me._requestHandlers).forEach(function(key) {
+                sandbox.requestHandler(key, null);
+            });
+            sandbox.unregisterStateful(me._clazz);
+        },
+
+        _getImagePath: function(image) {
+            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/' + image;
         },
 
         /**
@@ -64,6 +96,45 @@ Oskari.clazz.define(
                         this
                     )
             };
+        },
+        setState: function(state){
+            var me = this;
+            me.state = state || {};
+
+            if(state.fullscreen) {
+                me._hideNavigation();
+            } else {
+                me._showNavigation();
+            }
+        },
+        getState: function() {
+            var me = this;
+            return me.state;
+        },
+        _showNavigation: function(){
+            var me = this;
+            if(!me._el) {
+                return;
+            }
+            me._el.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
+            me.state = {
+                fullscreen: false
+            };
+
+            me.getMapModule().getMapEl().parents('#contentMap').removeClass('oskari-map-window-fullscreen');
+            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+        },
+        _hideNavigation: function(){
+            var me = this;
+            if(!me._el) {
+                return;
+            }
+            me._el.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));
+            me.state = {
+                fullscreen: true
+            };
+            me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
+            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         }
 
     },

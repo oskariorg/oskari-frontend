@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "FeatureData2",
     "value": {
@@ -19,7 +20,7 @@ Oskari.registerLocalization({
             },
             "button": {
                 "cancel": "Ακύρωση.",
-                "empty": "NOT TRANSLATED",
+                "empty": "",
                 "show": "Εμφάνιση τοποθεσιών.",
                 "close": "Κλείσιμο.",
                 "edit": "Επεξεργασία."
@@ -41,7 +42,7 @@ Oskari.registerLocalization({
                     "tooltip": "Πρόσθεση κύκλου."
                 },
                 "select": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         }

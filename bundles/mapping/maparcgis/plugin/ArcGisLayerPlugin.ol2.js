@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @private @method _initImpl
          * Interface method for the module protocol.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         _initImpl: function () {

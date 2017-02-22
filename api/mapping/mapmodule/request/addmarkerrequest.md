@@ -58,7 +58,11 @@ Parameters for data-object:
   For example:
   2,
   'http://demo.paikkatietoikkuna.fi/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png' or
-  '<svg width="32" height="32"></svg>'</td><td> 2 </td>
+  '<svg width="32" height="32"></svg>'
+
+  *Note!* IE11 has an unresolved issue with linked SVG-files: https://connect.microsoft.com/IE/feedbackdetail/view/925655/svg-image-has-0x0-size-in-ie11
+  You can add the SVG as a string for the shape, but linking it from an URL results in an JS error on IE11.
+</td><td> 2 </td>
 </tr>
 <tr>
   <td> size </td><td> Number </td><td> size of the marker. If you want add a external icon witch is different size than 32 x 32 pixel then you need for ol2 tell here icon size (only supported square) </td><td> 1 </td>

@@ -10,5 +10,4 @@ Oskari.registerLocalization(
         },
         "resultsTitle": "Zoek resultaten"
     }
-}
-);
+});

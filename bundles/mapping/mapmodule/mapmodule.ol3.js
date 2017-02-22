@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
@@ -96,17 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = me._sandbox;
 
             map.on('moveend', function(evt) {
-                var map = evt.map;
-                var extent = map.getView().calculateExtent(map.getSize());
-                var center = map.getView().getCenter();
-
-                sandbox.getMap().setMoving(false);
-                sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
-
-                var lonlat = map.getView().getCenter();
-                me.updateDomain();
-                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
-                sandbox.notifyAll(sboxevt);
+                me.notifyMoveEnd();
             });
 
             map.on('singleclick', function (evt) {
@@ -277,6 +267,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 right: extent[2],
                 top: extent[3]
             };
+        },
+
+        /**
+         * @method  @public getProjectionUnits Get projection units. If projection is not defined then using map projection.
+         * @param {String} srs projection srs, if not defined used map srs
+         * @return {String} projection units. 'degrees' or 'm'
+         */
+        getProjectionUnits: function(srs){
+            var me = this;
+            var units = null;
+            srs = srs || me.getProjection();
+
+            try {
+                var proj = ol.proj.get(srs);
+                units = proj.getUnits(); // return 'degrees' or 'm'
+            } catch(err){
+                var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+                log.warn('Cannot get map units for "' + srs + '"-projection!');
+            }
+            return units;
         },
 
         /**

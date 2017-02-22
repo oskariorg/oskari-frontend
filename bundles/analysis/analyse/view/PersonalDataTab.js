@@ -66,9 +66,7 @@ Oskari.clazz.define(
                     // add analysis layer to map on name click
                     if (!me.popupOpen) {
                         var request = addMLrequestBuilder(
-                            layer.getId(),
-                            false,
-                            layer.isBaseLayer()
+                            layer.getId()
                         );
                         sandbox.request(me.instance, request);
                         me.handleBounds(layer);

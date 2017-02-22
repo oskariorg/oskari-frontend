@@ -65,7 +65,7 @@ The default search UI can be disable through config.
     <td> Provides flyout/tile functionality</td>
   </tr>
   <tr>
-    <td> [Backend API](/documentation/backend/searchchannels) </td>
+    <td> [Backend API](/documentation/backend/search) </td>
     <td> N/A </td>
     <td> Search is handled in backend</td>
   </tr>

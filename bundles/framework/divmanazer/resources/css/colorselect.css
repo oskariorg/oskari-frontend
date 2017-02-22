@@ -1,0 +1,42 @@
+.oskari-color-selection-main {
+  position: relative; }
+  .oskari-color-selection-main.disabled .oskari-selected-color {
+    border: 1px solid #dddddd; }
+  .oskari-color-selection-main.disabled .color-selection-arrow {
+    border: 1px solid #dddddd; }
+    .oskari-color-selection-main.disabled .color-selection-arrow .icon-arrow-down {
+      opacity: 0.6; }
+  .oskari-color-selection-main .oskari-selected-color {
+    border: 1px solid #aaaaaa;
+    padding: 4px;
+    height: 16px;
+    width: 80px;
+    cursor: pointer;
+    float: left; }
+    .oskari-color-selection-main .oskari-selected-color .oskari-color-option .oskari-color {
+      height: 16px;
+      width: 6px;
+      float: left; }
+  .oskari-color-selection-main .color-selection-arrow {
+    float: left;
+    padding-top: 6px;
+    width: 12px;
+    height: 18px;
+    border: 1px solid #aaaaaa;
+    border-left: none;
+    cursor: pointer; }
+  .oskari-color-selection-main .oskari-color-selection {
+    border: 1px solid #aaaaaa;
+    border-top: none;
+    max-height: 100px;
+    overflow: auto;
+    position: absolute; }
+    .oskari-color-selection-main .oskari-color-selection .oskari-color-option {
+      padding: 2px;
+      cursor: pointer; }
+      .oskari-color-selection-main .oskari-color-selection .oskari-color-option .oskari-color {
+        height: 16px;
+        width: 6px;
+        float: left; }
+
+/*# sourceMappingURL=colorselect.css.map */

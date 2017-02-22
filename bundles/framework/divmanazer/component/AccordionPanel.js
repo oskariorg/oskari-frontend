@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
         });
 
         this.html.find('div.content').hide();
+        Oskari.makeObservable(this);
     }, {
         /**
          * @method setVisible
@@ -78,6 +79,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             header.removeClass('icon-arrow-right');
             header.addClass('icon-arrow-down');
             this.html.find('div.content').show();
+            this.trigger('open');
         },
         /**
          * @method close
@@ -89,6 +91,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             header.removeClass('icon-arrow-down');
             header.addClass('icon-arrow-right');
             this.html.find('div.content').hide();
+            this.trigger('close');
         },
         /**
          * @method setTitle

@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Geografisk søk",
         "invalid_characters": "Søk inneholder ulovlige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall,  spørsmålstegn (?), stjerne (*) og bindestrek (-).",
         "searchDescription": "Søk ved hjelp av stedsnavn, adresse eller eiendomsident",
-        "searchButton": "Søk",
         "searchAssistance": "Skriv søkeord",
         "searchResultCount": "Ditt søk resulterte i",
         "searchResultCount2": "resultater",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Søkeresultater"
         }
     }
-}
-);
+});

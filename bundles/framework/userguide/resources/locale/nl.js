@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "kaart venster, gebruikershandleiding",
-            "contentPart": "body"
+            "tags": "kaart venster, gebruikershandleiding"
         }
     }
-}
-);
+});

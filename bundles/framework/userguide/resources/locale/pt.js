@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pt",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Guia do utilizador do Oskari",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Guia do utilizador da cartografia"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Falha no carregamento do guia do utilizador. Por favor tente mais tarde"
         },
         "help": {
-            "tags": "vista, guia do utilizador",
-            "contentPart": "corpo"
+            "tags": "vista, guia do utilizador"
         }
     }
 });

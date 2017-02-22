@@ -20,7 +20,11 @@ table.layer-rights-table tr.control {
   border-bottom: thin solid silver; }
   table.layer-rights-table tr.control td {
     width: 25%;
-    min-width: 80px; }
+    min-width: 108px; }
+    @media screen and (min-width: 1000px) and (max-width: 1600px) {
+      table.layer-rights-table tr.control td {
+        width: 25%;
+        min-width: 122px; } }
 
 table.layer-rights-table tbody {
   position: relative;

@@ -51,7 +51,7 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
   ],
   "globalMapAjaxUrl":"<url for ajax operations>",
   "user":{
-     <logged in users details for Oskari.mapframework.domain.User >
+     <logged in users details for Oskari.User >
   },
   "imageLocation":"<base url mapmodulen for images(optional, defaults to  "/Oskari/resources")>",
   "mapElement": "<DOM element id for OpenLayers map, defaults to 'mapdiv'>",
@@ -65,9 +65,9 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 
 * plugins is an array of map module plugins that will be registered and started on map when the bundle is started. If you specify no plugins, you wont see anything on the map. See different plugins documentation to see which ones you should have here.
 * layers is an array of map layer JSON definitions that will be populated to Oskari.mapframework.service.MapLayerService. It can have 0 or more layer definitions but it SHOULD have at least the ones referenced in state.selectedLayers. Otherwise selectedLayers aren't going to be added to map on startup.
-* globalMapAjaxUrl is set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getAjaxUrl()
+* globalMapAjaxUrl is set to Oskari.Sandbox and can be asked everywhere with sandbox.getAjaxUrl()
 * mapOptions is passed to mapmodule-plugin constructor
-* user is optional and should have information about the logged in user. It will be set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getUser(). The format of the data should in a form accepted by Oskari.mapframework.domain.User constructor.
+* user is optional and should have information about the logged in user. It can be asked everywhere with Oskari.user(). The format of the data should in a form accepted by Oskari.User constructor.
 * size is optional but if given will set the map elements size. If size isn't specified the map elements height will be set to window height and the bundle will listen to window resizing to adjust the map size.
 
 ## Bundle state

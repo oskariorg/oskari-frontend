@@ -32,7 +32,7 @@ Oskari.registerLocalization(
         "refresh_alert": {
             "title": "Näkyvyysvaroitus",
             "all_not_in_scale": "Zoomitasolla ei ole yhtään virkistettävää tasoa näkyvissä, muuta zoomitaso sopivaksi",
-            "all_invisible" : "Kartalla ei ole yhtään virkistettävää tasoa näkyvissä, laita tasot näkyviin valituista tasoista"
+            "all_invisible": "Kartalla ei ole yhtään virkistettävää tasoa näkyvissä, laita tasot näkyviin valituista tasoista"
         },
         "button": {
             "cancel": "Peruuta",
@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

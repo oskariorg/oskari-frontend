@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Change language",
         "change": "Change"
     }
-}
-);
+});

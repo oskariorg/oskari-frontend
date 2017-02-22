@@ -29,7 +29,7 @@ Oskari.clazz.define(
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -67,11 +67,10 @@ Oskari.clazz.define(
         showMessage: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-              dialog.makeModal();
-
             okBtn.setHandler(function () {
                 dialog.close(true);
             });
+            dialog.makeModal();
             dialog.show(title, message, [okBtn]);
         },
         /**
@@ -208,7 +207,7 @@ Oskari.clazz.define(
             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
             this.buttons.start();
 
-            var user = sandbox.getUser();
+            var user = Oskari.user();
             if (!user.isLoggedIn()) {
                 // guest users don't need anything else
                 return;

@@ -194,7 +194,7 @@ Oskari.registerLocalization(
                 ],
                 "attribute": "Select attribute",
                 "footer": "Authorised features are not included in the analysis.",
-                "aggregateAdditionalInfo":"Note! You have selected one or more attributes containing textual data. Only the feature count can be calculated for them. If the feature count is not selected, textual attribute data are not included in the analysis result."
+                "aggregateAdditionalInfo": "Note! You have selected one or more attributes containing textual data. Only the feature count can be calculated for them. If the feature count is not selected, textual attribute data are not included in the analysis result."
             },
             "buffer_size": {
                 "label": "Buffer size",
@@ -406,7 +406,7 @@ Oskari.registerLocalization(
                 "placeholder": "Type a map layer name."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Point",
                     "color": "Colour",
@@ -452,5 +452,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

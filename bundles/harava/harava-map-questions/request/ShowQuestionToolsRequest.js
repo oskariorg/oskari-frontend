@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest
  * Requests a show question tools
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest',

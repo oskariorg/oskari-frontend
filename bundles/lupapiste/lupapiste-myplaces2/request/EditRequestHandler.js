@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      * @param {Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance} instance
      *          reference to my places bundle instance
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var sandbox = core.getSandbox();
+            var sandbox = this.sandbox;
             if (request.getName() === 'LupaPisteMyPlaces.EditPlaceRequest') {
                 this._handleEditPlace(sandbox, request);
             } else if (request.getName() === 'LupaPisteMyPlaces.EditCategoryRequest') {

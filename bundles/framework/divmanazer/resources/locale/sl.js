@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "Dodaj nov filter",
             "removeFilter": "Briši filter",
             "bbox": {
-                "title": "Filter je ekransko okno",
                 "on": "Le izbrani pojavi, ki so vidni v oknu karte",
                 "off": "Vsi pojavi"
             },
-            "clickedFeatures": {
-                "title": "Filter za izbiro pojavov",
-                "label": "Le pojavi, ki so izbrani na karti"
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "Filtriraj pojave glede na atributne podatke",
                 "placeholders": {
@@ -317,5 +313,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

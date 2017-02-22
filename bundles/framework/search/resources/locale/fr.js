@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Recherche de lieu",
         "invalid_characters": "Les termes de la recherche contiennent des caractères non autorisés. Les caractères autorisés sont les lettres de a à z, ainsi que å, ä, ö, les chiffres, la touche effacement, les points d’interrogation ( ?), les astérisques (*) et les tirets.",
         "searchDescription": "Rechercher un lieu par nom de lieu, adresse ou « Identifiant d'unité immobilière (ou code REUI).",
-        "searchButton": "Rechercher",
         "searchAssistance": "Saisissez le terme à rechercher.",
         "searchResultCount": "Votre recherche donne",
         "searchResultCount2": "résultats.",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Résultats de la recherche"
         }
     }
-}
-);
+});

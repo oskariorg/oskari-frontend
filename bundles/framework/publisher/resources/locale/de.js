@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Zeige die Kartenebenen im Menü",
                 "info": "Wählen Sie Ihre Hintergrundkarten. Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
-                "tooltip": "Die Hintergrundkarte wird als unterste Ebene der Karte angezeigt. Wenn Sie mehrere Hintergrundkarten ausgewählt haben, ist nur eine Hintergrundkarte sichtbar, Sie können zwischen diesen wechseln.  Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen.",
-                "promote": "Luftbilder anzeigen?"
+                "tooltip": "Die Hintergrundkarte wird als unterste Ebene der Karte angezeigt. Wenn Sie mehrere Hintergrundkarten ausgewählt haben, ist nur eine Hintergrundkarte sichtbar, Sie können zwischen diesen wechseln.  Im Vorschaufenster können Sie eine Hintergrundkarte als Standard festlegen."
             },
             "preview": "Vorschau der Karte, die eingebunden werden soll.",
             "location": "Ort und Zoomstufe",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Sie müssen sich anmelden, bevor Sie etwas einbinden können.",
             "signup": "Anmelden",
-            "signupUrl": "/web/de/login",
-            "register": "Registrieren",
-            "registerUrl": "/web/de/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrieren"
         },
         "StartView": {
             "text": "Sie können die gerade von Ihnen erzeugte Kartenansicht auf einer Webseite einbinden.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Anzeigen",
             "hide": "Ausblenden",
             "hidden": "Diese Karte wurde vorübergehend ausgeblendet.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Die Kartenebene darf in einem eingebundenen Kartenfenster veröffentlicht werden.",
-                    "tooltip": "Die Kartenebene darf mit einer eventuellen Begrenzung der Nutzeranzahl pro Woche in einem eingebundenen Kartenfenster veröffentlicht werden."
-                }
-            }
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -234,5 +225,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

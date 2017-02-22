@@ -56,16 +56,7 @@ function() {
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
 
-		"scripts" : [{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-enhancement-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-key-listener-methods.js"
-		}],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

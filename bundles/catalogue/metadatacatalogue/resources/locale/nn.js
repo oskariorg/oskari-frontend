@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Søkjeområde",
         "delimitArea": "Avgrens søkjeområde på kartet",
         "deleteArea": "Slett søkeområde",
+        "startDraw": "",
         "dataset": "Datasett",
         "series": "Serie",
         "service": "Teneste",
@@ -33,6 +34,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Ressursspråk",
         "modifySearch": "Tilpass søkekriterium",
         "showSearch": "Vis alle søkjeresultat",
+        "showDatasets": "Vis berre datasett",
+        "showServices": "Vis berre tenester",
         "metadataCatalogueResults": "Søkeresultat",
         "show": "Vis kartlag",
         "hide": "Skjul kartlag",
@@ -45,20 +48,20 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Søkjeordet må innehalde minst eitt teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal,  backspaces, spørsmålsteikn (?), stjerne (*) og bindestrek (-).",
         "too_many_stars": "Søkjeordet inneheld for mange stjerner. Det kan innehalde opptil N stjerner.",
         "searching": "Søkjer…",
+        "updated": "Oppdateringsfrekvens",
         "grid": {
             "name": "Namn",
-            "removeBBOX": "Hide data coverage",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "Skjul dekningsområde for data",
+            "showBBOX": "Vis dekningsområde for data",
+            "info": "Vis metadata",
+            "remove": "Fjern frå søkjeresultat",
+            "rating": "Rating"
         },
-        "licenseText": "NOT TRANSLATED",
+        "licenseText": "Hent lisens",
         "identificationCode": {
-            "creation": "creation",
-            "publication": "publication",
-            "revision": "revision"
+            "creation": "etablering",
+            "publication": "publisering",
+            "revision": "revidering"
         }
     }
-}
-);
+});

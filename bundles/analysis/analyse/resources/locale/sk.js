@@ -347,7 +347,7 @@ Oskari.registerLocalization(
                 "placeholder": "Give the map layer a name"
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Point",
                     "color": "Colour",
@@ -393,5 +393,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

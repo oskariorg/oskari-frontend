@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * Returns reference to Oskari sandbox
          *
          *
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             }
 
             // Init user
-            sandbox.setUser(conf.user);
+            Oskari.user(conf.user);
             sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
 
             // create services & enhancements
@@ -279,15 +279,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             );
 
             // register request handlers
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapResizeEnabledRequest',
                 me.mapResizeEnabledRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapWindowFullScreenRequest',
                 me.mapWindowFullScreenRequestHandler
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'MapFull.MapSizeUpdateRequest',
                 me.mapSizeUpdateRequestHandler
             );
@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         _teardownState: function (module) {
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 // remove all current layers
-                rbRemove = this.getSandbox().getRequestBuilder(
+                rbRemove = Oskari.requestBuilder(
                         'RemoveMapLayerRequest'
                 ),
                 i;
@@ -366,11 +366,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // create initial services that are available in this application
             var services = [];
             var sb = this.getSandbox();
-            var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sb);
             var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
             var popupService = Oskari.clazz.create('Oskari.userinterface.component.PopupService', sb);
 
-            services.push(mapLayerService);
             services.push(searchService);
             services.push(popupService);
 
@@ -416,8 +414,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 i,
                 layer,
                 sandbox =  me.getSandbox(),
-                rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                rbVisible = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest'),
+                rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
 
@@ -436,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // setting state
             if (state.selectedLayers) {
-                rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
+                rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
 
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
@@ -503,6 +501,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
+            this.adjustMapSize();
         },
 
         /**
@@ -607,9 +606,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         toggleFullScreen: function () {
-            jQuery('#' + this.contentMapDivId).toggleClass(
-                'oskari-map-window-fullscreen'
-            );
+
             this.adjustMapSize();
         },
 

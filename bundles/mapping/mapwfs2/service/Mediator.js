@@ -165,12 +165,8 @@ Oskari.clazz.define(
             }
         },
         __getApikey : function() {
-            // prefer API key
-            if(this.plugin.getSandbox().getUser() && this.plugin.getSandbox().getUser().getAPIkey()) {
-                return this.plugin.getSandbox().getUser().getAPIkey();
-            }
-            // default to cookie...
-            return jQuery.cookie('JSESSIONID') || '';
+            // prefer API key - default to cookie or "no session"...
+            return Oskari.user().getAPIkey() || jQuery.cookie('JSESSIONID') || '';
         },
 
         /**
@@ -196,7 +192,7 @@ Oskari.clazz.define(
             this.session.route = jQuery.cookie('ROUTEID') || '';
 
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
-                bbox = this.plugin.getSandbox().getMap().getExtent(),
+                bbox = this.plugin.getSandbox().getMap().getBbox(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
                 mapScales = this.plugin.getMapModule().getScaleArray();
 

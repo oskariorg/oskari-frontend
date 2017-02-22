@@ -10,19 +10,19 @@ Oskari.registerLocalization(
             "generic": "Системна грешка| Моля, опитайте по - късно",
             "loadFailed": "Грешка при зареждането на картните слоеве| Презаредете страницата в браузъра Ви и изберете картни слоеве",
             "noResults": "Търсенето не върна резултати",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
         "loading": "Зареждане...",
         "filter": {
             "text": "Търсене на картни слоеве",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "По тема",
             "organization": "По доставчици на данни",
             "published": "Потребители",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Публикуван картен слой",
@@ -60,14 +60,14 @@ Oskari.registerLocalization(
             }
         },
         "buttons": {
-            "ok": "NOT TRANSLATED"
+            "ok": ""
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
@@ -81,5 +81,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

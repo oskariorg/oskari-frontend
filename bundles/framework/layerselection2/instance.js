@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance
  *
  * Main component and starting point for the "selected layers" functionality.
- * Lists all the layers available in Oskari.mapframework.sandbox.Sandbox.findAllSelectedMapLayers()
+ * Lists all the layers available in Oskari.Sandbox.findAllSelectedMapLayers()
  * and updates UI if maplayer related events (#eventHandlers) are received.
  *
  * See Oskari.mapframework.bundle.layerselection2.LayerSelectionBundle for bundle definition.
@@ -35,7 +35,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -222,23 +222,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                     this.plugins['Oskari.userinterface.Tile'].refresh();
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
                 }
-            },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             * Disable preview on close, otherwise enable preview
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this;
-                if (event.getExtension().getName() !== me.getName()) {
-                    // not me -> do nothing
-                    return;
-                }
-                var doOpen = event.getViewState() !== "close";
-
-                /* let's not redo everything we've already done */
-                /*if (doOpen) {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
-            }*/
             }
         },
 

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "Toolbar",
     "value": {
@@ -8,15 +9,12 @@ Oskari.registerLocalization({
                 "ok": "Ok",
                 "title": "Link do widoku mapy"
             },
-            "print": {
-                "tooltip": "Drukuj"
-            },
             "history": {
                 "reset": "Powrót do domyślnego widoku",
                 "back": "Cofnij",
                 "next": "Następny"
             },
-            "pan": "NOT TRANSLATED",
+            "pan": "",
             "zoom": "Przybliż",
             "measure": {
                 "line": "Pomiar odległości",

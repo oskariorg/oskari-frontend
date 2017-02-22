@@ -712,6 +712,23 @@ Oskari.clazz.define(
             } */
 
         },
+        /**
+         * Used when layer is added or modified. Just trigger an update.
+         * @param  {Oskari.mapframework.domain.AbstractLayer} layer  [description]
+         * @param  {Boolean} forced
+         * @param  {Object} params
+         */
+        updateLayerParams : function(layer, forced, params) {
+            var ol = this.layers[layer.getId()];
+            if(!ol) {
+                return;
+            }
+            params = params || {};
+            if(forced) {
+                params._ts = Date.now();
+            }
+            ol.mergeNewParams(params);
+        },
 
         /**
          * Adds a single attention text to MyPlaces layer to this map

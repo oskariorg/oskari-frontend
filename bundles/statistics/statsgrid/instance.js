@@ -149,7 +149,7 @@ Oskari.clazz.define(
                 return;
             }
             var locale = this.getLocalization();
-            if (this.sandbox.getUser().isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 var userIndicatorsTab = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                     this, locale.tab
@@ -213,9 +213,36 @@ Oskari.clazz.define(
         _enableTile: function () {
             var layerPresent = this._isLayerPresent(),
                 tile = this.plugins['Oskari.userinterface.Tile'];
-            if (layerPresent && tile) {
+            if (layerPresent && !tile.isEnabled()) {
                 tile.enable();
+                // add tool needs to be called AFTER tile.enable() or we go infinite
+                this.__addTool(this.getLayer());
             }
+        },
+        /**
+         * Adds the Feature data tool for layer
+         * @param  {String| Number} layerId layer to process
+         * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
+         */
+        __addTool : function(layerModel, suppressEvent) {
+            var me = this;
+            if(!layerModel || !layerModel.isLayerOfType('STATS')) {
+                return;
+            }
+
+            // add feature data tool for layer
+            var layerLoc = this.getLocalization('layertools') || {},
+                label = layerLoc.title || 'Thematic maps',
+                tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            tool.setName("table_icon");
+            tool.setTitle(label);
+            tool.setTooltip(layerLoc.tooltip || label);
+            tool.setCallback(function () {
+                me.sandbox.postRequestByName('StatsGrid.StatsGridRequest', [true, layerModel]);
+            });
+
+            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            service.addToolForLayer(layerModel, tool, suppressEvent);
         },
 
         isLayerVisible: function () {
@@ -224,19 +251,24 @@ Oskari.clazz.define(
             ret = layer !== null && layer !== undefined;
             return ret;
         },
-
-        _isLayerPresent: function () {
+        getLayer: function () {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             if (this.conf && this.conf.defaultLayerId) {
                 var layer = service.findMapLayer(this.conf.defaultLayerId);
-                return (layer !== null && layer !== undefined && layer.isLayerOfType('STATS'));
+                if (layer && layer.isLayerOfType('STATS')) {
+                    return layer;
+                }
             }
             var layers = service.getLayersOfType('STATS');
             if (layers && layers.length > 0) {
                 this.conf.defaultLayerId = layers[0].getId();
-                return true;
+                return layers[0];
             }
-            return false;
+            return null;
+        },
+
+        _isLayerPresent: function () {
+            return !!this.getLayer();
         },
 
         /**

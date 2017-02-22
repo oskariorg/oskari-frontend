@@ -26,6 +26,8 @@ Oskari.clazz.define(
             height: 480
         };
 
+        me.log = Oskari.log('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
+
     }, {
 
         /**
@@ -265,7 +267,7 @@ Oskari.clazz.define(
                 var fixSize = {
                     top: 0,
                     left: 0,
-                    height: 0
+                    height: 24
                 };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
@@ -273,7 +275,7 @@ Oskari.clazz.define(
                     var popupHeaderChildren = jQuery(this);
                     fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
                     fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
-                    fixSize.height += popupHeaderChildren.height();
+                    fixSize.height += popupHeaderChildren.height() - popupHeaderChildren.position().top;
                 });
 
                 var fixedHeight = fixSize.height;
@@ -338,15 +340,15 @@ Oskari.clazz.define(
             headerWrapper.append(closeButton);
 
             //add additional btns
-               jQuery.each( additionalTools, function( index, key ){
-                    var additionalButton = me._headerAdditionalButton.clone();
-                    additionalButton.attr({
-                        'id': key.name,
-                        'class': key.iconCls,
-                        'style': key.styles
-                    });
-                    headerWrapper.append(additionalButton);
+            jQuery.each( additionalTools, function( index, key ){
+                var additionalButton = me._headerAdditionalButton.clone();
+                additionalButton.attr({
+                    'id': key.name,
+                    'class': key.iconCls,
+                    'style': key.styles
                 });
+                headerWrapper.append(additionalButton);
+            });
 
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
@@ -387,7 +389,7 @@ Oskari.clazz.define(
 
                 contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
-                if (actions) {
+                if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === "link") {
@@ -416,6 +418,8 @@ Oskari.clazz.define(
                         }
                         group = currentGroup;
                     });
+                } else if(typeof actions === 'object') {
+                    me.log.warn('Popup actions must be an Array. Cannot add tools.');
                 }
 
                 contentDiv.append(contentWrapper);

@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest
  * Requests visibility change for maplayer with given id
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest',

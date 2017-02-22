@@ -12,6 +12,20 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Pojdi na tematske karte",
+                "title": "Tematske karte"
+            },
+            "diagram_icon": {
+                "tooltip": "Prikaži diagram",
+                "title": "Diagram"
+            },
+            "statistics": {
+                "tooltip": "Prehod na tematske karte",
+                "title": "Statistike"
+            }
+        },
         "tab": {
             "title": "Indikatorji",
             "description": "Lastni indikatorji",
@@ -191,5 +205,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Neznane regije",
         "loginToSaveIndicator": "Če želiš shraniti svoje indikatorje, se prijavi."
     }
-}
-);
+});

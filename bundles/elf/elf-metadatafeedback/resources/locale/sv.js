@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Användarsfeedback",
-            "subject": "Motiv",
-            "subjectPlaceholder": "Titel för din feedback",
             "ratingScore": "Beskattningpoäng",
             "ratingJustification": "Beskattningsförsvar"
         },
         "feedbackList": {
             "tabTitle": "Feedback",
             "average": "Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Målspesifikation",
-            "targetIdentification": "Målidentifikation",
-            "targetCode": "Målkod",
-            "targetCodeNotDefined": "Not defined.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Not defined.",
-            "natureOfTarget": "Nature of the target"
         },
         "userInformation": {
             "userInformation": "Användarinfo",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Feedback har lagrats."
         }
     }
-}
-);
+});

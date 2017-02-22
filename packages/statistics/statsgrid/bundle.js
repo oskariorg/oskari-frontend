@@ -48,17 +48,29 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParameters.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetSelector.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/ExtraFeatures.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/plugin/TogglePlugin.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
             },
             {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/event/IndicatorEvent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/DatasourceEvent.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/event/RegionsetChangedEvent.js"
@@ -70,8 +82,17 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/event/RegionSelectedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/ClassificationChangedEvent.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/StatsTableTool.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/plugin/ClassificationToolPlugin.js"
+            },{
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
             }, {

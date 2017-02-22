@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Ime mape",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Unesite opisno ime mapi. Naznačite jezik korisničkog okruženja"
             },
             "language": {
@@ -52,97 +52,97 @@ Oskari.registerLocalization(
                 "Portti2Zoombar": "Klizna traka za razmeru",
                 "ControlsPlugin": "Pomeranje uključeno",
                 "SearchPlugin": "Adresa i ime tražene lokacije",
-                "FeaturedataPlugin": "NOT TRANSLATED",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Upit za lokaciju",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Slojevi",
                 "defaultLayer": "Početni sloj",
                 "useAsDefaultLayer": "Upotrebi kao početni sloj"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Malo",
                 "medium": "Srednje",
                 "large": "Veliko",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Izabrana veličina",
                 "width": "širina",
                 "height": "visina",
@@ -154,7 +154,7 @@ Oskari.registerLocalization(
                 "ok": "Potvrdi",
                 "replace": "Zameni",
                 "cancel": "Odustani",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -165,8 +165,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Prikaz slojeva u meniju",
                 "info": "Izaberi osnovnu mapu. Možete da podesite početnu osnovnu mapu.",
-                "tooltip": "Osnovna mapa je prikazana kao sloj u pozadini. Samo jedan odabrani sloj može biti u pozadini. Možete podesiti početnu osnovnu mapu.",
-                "promote": "Prikaži avio slike?"
+                "tooltip": "Osnovna mapa je prikazana kao sloj u pozadini. Samo jedan odabrani sloj može biti u pozadini. Možete podesiti početnu osnovnu mapu."
             },
             "preview": "Prikaz ugrađene mape",
             "location": "Pozicioniranje i razmera",
@@ -180,16 +179,14 @@ Oskari.registerLocalization(
                 "name": "Ime je obavezna informacija",
                 "nohelp": "Nije dostupna pomoć",
                 "saveFailed": "Publikovanje mape je neuuspešno. Probajte ponovo.",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Ime web sajta sadrži nedozvoljene karaktere. Dozvoljeni karakteri su a-z kao i č,š,ć,ž,đ, brojevi, taster Backspace i crtice"
             }
         },
         "NotLoggedView": {
             "text": "Prijavite se za kreiranje ugradnih mapa",
             "signup": "Prijava",
-            "signupUrl": "NOT TRANSLATED",
-            "register": "Registracija",
-            "registerUrl": "NOT TRANSLATED"
+            "register": "Registracija"
         },
         "StartView": {
             "text": "Možete ugraditi prikaz mape koji ste napravili u vaš web sajt ili web sajt vašeg poslodavca.",
@@ -198,7 +195,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Izabrani slojevi ne mogu biti ugrađeni. Meni Izabrani slojevi ukazuje da li ili ne slojevi mape mogu biti ugrađeni",
             "layerlist_denied": "Ne može biti ugrađena",
             "denied_tooltip": "Provajder ovih podataka nema prava da publikuje ovaj materijal na drugom web sajtu. Proverite prava za publikovanje u meniju Izabrani slojevi pre ugradnje",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Nastavi",
                 "continueAndAccept": "Prihvati uslove korišćena i nastavi",
@@ -212,16 +209,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -232,5 +223,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance
      *          reference to my places bundle instance
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var sandbox = core.getSandbox();
+            var sandbox = this.sandbox;
             if (request.getName() === 'MyPlaces.EditPlaceRequest') {
                 this._handleEditPlace(sandbox, request);
             } else if (request.getName() === 'MyPlaces.DeletePlaceRequest') {

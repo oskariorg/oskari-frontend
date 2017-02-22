@@ -8,13 +8,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
  * @method create called automatically on construction
  * @static
  * @param {Boolean} success succesfully getted route
- * @param {JSON} requestParameters request parameters
+ * @param {JSON} requestParameters parameters used for calling the service
  * @param {JSON} plan parameters of route
+ * @param {JSON} rawParameters parameters passed by the caller
  */
-function(success, requestParameters, plan) {
+function(success, requestParameters, plan, rawParams) {
     this._success = success;
     this._requestParameters = requestParameters;
     this._plan = plan;
+    this._rawParams = rawParams;
 }, {
     /** @static @property __name event name */
     __name : "RouteResultEvent",
@@ -56,7 +58,8 @@ function(success, requestParameters, plan) {
         return {
             success: this._success,
             plan: this._plan,
-            requestParameters: this._requestParameters
+            requestParameters: this._requestParameters,
+            rawParams : this._rawParams
         };
     }
 }, {

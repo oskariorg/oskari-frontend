@@ -22,27 +22,10 @@
 		}
 	},
 	{
-		"instanceProps": {
-			
-		},
-		"title": "Map",
-		"bundleinstancename": "mapfull",
-		"fi": "mapfull",
-		"sv": "mapfull",
-		"en": "mapfull",
 		"bundlename": "mapfull",
 		"metadata": {
 			"Import-Bundle": {
 				"mapwmts": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"service-base": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"event-map-layer": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"request-map-layer": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
 				"mapmodule-plugin": {
@@ -51,13 +34,7 @@
 				"ui-components": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
-				"event-base": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
 				"mapfull": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"core-base": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
 				"oskariui": {
@@ -69,22 +46,7 @@
 				"mapuserlayers": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
-				"request-base": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
 				"mapstats": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"domain": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"core-map": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"request-map": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"sandbox-base": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
 				},
 				"mapmyplaces": {
@@ -92,18 +54,8 @@
 				},
 				"mapanalysis": {
 					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"service-map": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"sandbox-map": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
-				},
-				"event-map": {
-					"bundlePath": "/Oskari/packages/framework/bundle/"
 				}
-			},
-			"Require-Bundle-Instance": []
+			}
 		}
 	},
 	{

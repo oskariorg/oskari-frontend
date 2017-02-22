@@ -55,23 +55,7 @@ function() {
 
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-		"scripts" : [
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/rearrange-selected-map-layer-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/change-map-layer-opacity-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/change-map-layer-style-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/highlight-map-layer-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/dim-map-layer-request.js"
-		}],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

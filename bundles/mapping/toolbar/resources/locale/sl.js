@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "V redu",
                 "title": "Povezava na pogled karte"
             },
-            "print": {
-                "tooltip": "Natisni"
-            },
             "history": {
                 "reset": "Vrnitev na privzet pogled",
                 "back": "Nazaj na prejšnji pogled.",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "ro",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Ghid utilizator Oskari",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Ghid utilizator Hartă"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Încărcare ghid utilizator eşuată. Vă rugăm încercaţi mai târziu."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": ""
         }
     }
 });
