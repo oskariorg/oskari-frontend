@@ -542,7 +542,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
           //label
           if (style.text.labelText) {
-             olStyle.label = style.text.labelText;
+              if(typeof style.text.labelText === 'number'){
+                  olStyle.label = style.text.labelText.toString();
+              } else {
+                  olStyle.label = style.text.labelText;
+              }
           } else if (style.text.labelProperty) {
              olStyle.label = "${"+style.text.labelProperty+"}";
           }

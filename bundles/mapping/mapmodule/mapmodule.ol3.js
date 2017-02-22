@@ -694,7 +694,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.stroke = this.__getStrokeStyle(textStyleJSON);
             }
             if (textStyleJSON.labelText) {
-                text.text = textStyleJSON.labelText;
+                if(typeof textStyleJSON.labelText === 'number'){
+                    text.text = textStyleJSON.labelText.toString();
+                } else {
+                    text.text = textStyleJSON.labelText;
+                }
             }
             return new ol.style.Text(text);
         },
