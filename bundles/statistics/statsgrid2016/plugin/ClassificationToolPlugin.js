@@ -93,8 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin
             }
         },
         /**
-         * Creates UI for coordinate display and places it on the maps
-         * div where this plugin registered.
+         * Creates UI for classification UI.
          * @private @method _createControlElement
          *
          * @return {jQuery}

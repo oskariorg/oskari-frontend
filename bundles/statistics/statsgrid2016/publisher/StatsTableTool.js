@@ -39,12 +39,7 @@ function() {
                 id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
                 title: 'grid',
                 config: {
-                    grid: true,
-                    areaSelection: false,
-                    search: false,
-                    extraFeatures: false,
-                    mouseEarLegend: false,
-                    showLegend: true
+                    grid: true
                 }
             };
          }

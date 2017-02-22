@@ -22,10 +22,6 @@ Oskari.clazz.define(
 
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
 
-        this._publishedComponents = {
-            panelClassification: null
-        };
-
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
@@ -34,7 +30,7 @@ Oskari.clazz.define(
             var me = this;
 
             // create the StatisticsService for handling ajax calls and common functionality.
-            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here
+            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
@@ -92,8 +88,15 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             'UIChangeEvent' : function() {
-                // close/tear down tge ui when receiving the event
+                // close/tear down the ui when receiving the event
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                var flyout = this.getFlyout();
+                if(flyout) {
+                    var legend = this.getFlyout().getLegendFlyout();
+                    if(legend) {
+                        legend.hide();
+                    }
+                }
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
@@ -114,6 +117,8 @@ Oskari.clazz.define(
                     this.getFlyout().render(renderMode);
                     this._lastRenderMode = renderMode;
                 }
+
+                this.getFlyout().setGridHeaderHeight();
             },
             /**
              * @method MapLayerEvent
@@ -238,15 +243,22 @@ Oskari.clazz.define(
         },
         showToggleButtons: function(enabled, visible) {
             var me = this;
-            if(!enabled && this.togglePlugin){
-                this.togglePlugin.remove();
+            var sandbox = me.getSandbox();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if(!enabled) {
+                if(this.togglePlugin) {
+                    mapModule.unregisterPlugin(me.togglePlugin);
+                    mapModule.stopPlugin(me.togglePlugin);
+                }
                 return;
             }
             if(!this.togglePlugin) {
                 this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
             }
             me.getFlyout().move(0,0);
-            jQuery('body').append(this.togglePlugin.create(visible || me.visible));
+            mapModule.registerPlugin(me.togglePlugin);
+            mapModule.startPlugin(me.togglePlugin);
+            me.togglePlugin.showTable(visible || me.visible);
         },
         /**
          * @method  @public showLegendOnMap Render published  legend

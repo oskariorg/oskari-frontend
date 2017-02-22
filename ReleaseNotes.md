@@ -114,7 +114,7 @@ Now has a move(top, left)-function to relocate the flyout.
 
 #### Popup
 
-Fixed popup max-width so at this cannot be bigger than map width.
+Popup width is now automatically restricted to map width.
 
 #### ColorSelect
 

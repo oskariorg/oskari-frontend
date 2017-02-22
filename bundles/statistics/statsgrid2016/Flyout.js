@@ -98,7 +98,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             this.addContent(this.getEl(), isEmbedded);
         },
 
+        setGridHeaderHeight: function(){
+            var me = this;
+
+            if(me._grid) {
+                me._grid.setHeaderHeight();
+            }
+        },
+
         addContent : function (el, isEmbedded) {
+            var me = this;
             var sb = this.instance.getSandbox();
 
             var accordion = Oskari.clazz.create(
@@ -124,10 +133,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             grid.showIndicatorRemoval(!isEmbedded);
             grid.render(el);
 
-        },
-        onClose: function() {
-            var legend = this.getLegendFlyout();
-            legend.hide();
+            me._grid = grid;
+
         },
         closePanels: function() {
             var panels = this.__panels || [];

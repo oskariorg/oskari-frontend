@@ -26,7 +26,7 @@ Oskari.registerLocalization(
             "close": "Lopeta",
             "guidance": {
                 "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä.",
-                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä. Lopuksi kaksoisklikka alkupistettä."
+                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä. Lopuksi kaksoisklikkaa alkupistettä."
             }
         }
     }

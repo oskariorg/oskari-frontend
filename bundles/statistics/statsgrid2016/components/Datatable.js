@@ -15,6 +15,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     // Keep latest sorting on memory
     this._sortOrder = null;
+
+    this._timerHeaderHeight = null;
 }, {
     __templates : {
         main : _.template('<div class="stats-table">'+
@@ -69,6 +71,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             me.createModel(regions, function(model) {
                 me.updateModel(model, regions);
                 me.spinner.stop();
+                me.setHeaderHeight();
             });
         });
     },
@@ -122,6 +125,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 });
                 // container includes
                 tableHeader.find('.selection').append(regionSelect.oskariSelect);
+                tableHeader.find('.oskari-select').css('width', '100%');
             }
             // Else only show current regionset without info
             else {
@@ -411,6 +415,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
         el.append(main);
         this._handleRegionsetChanged();
+    },
+
+    setHeaderHeight: function(){
+        var me = this;
+        clearTimeout(me._timerHeaderHeight);
+        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+        if(statsTableEl.length > 0) {
+            statsTableEl.addClass('autoheight');
+            // timeout hack is needed by IE 11. Otherwise header elements with css like
+            //   position : absolute, bottom : 0
+            // will render in wrong location.
+            // This will force a repaint which will fix the locations.
+            me._timerHeaderHeight = setTimeout(function() {
+                statsTableEl.removeClass('autoheight');
+                statsTableEl.hide();
+                statsTableEl.show(0);
+            },1000);
+        }
     },
 
     /**
