@@ -122,7 +122,7 @@ Oskari.clazz.define(
             var container = me._messageContainer.clone();
             var field = me._messageField.clone();
             //Get reference to the div we use to show the messages
-            this.messageElement = $('#oskari-system-messages');
+            this.messageElement = jQuery('#oskari-system-messages');
             this.messageElement.append(container, field);
             if (!this.messageElement.length) {
                 Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
