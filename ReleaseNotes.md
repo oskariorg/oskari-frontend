@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.42.0
+
+### publisher2
+
+Medium map height changed from 525 to 600.
+
 ## 1.41.0
 
 ### OpenLayers 3 update
