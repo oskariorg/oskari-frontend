@@ -93,7 +93,7 @@ Oskari.registerLocalization(
             "methods" : {
                 "jenks": "Jenks intervall",
                 "quantile": "Kvantiler",
-                "equal": "Lika intervall",
+                "equal": "Lika intervall"
             },
             "manual": "Egna klasser",
             "manualPlaceholder": "Ange siffrorna, separerade med kommatecken.",

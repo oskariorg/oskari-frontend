@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.41.1
+
+### MapModulePlugin.AddFeaturesToMapRequest
+
+Request assumed that each feature has a label text provided in featureStyle. This assumption has been removed.
+
 ## 1.41.0
 
 ### OpenLayers 3 update
