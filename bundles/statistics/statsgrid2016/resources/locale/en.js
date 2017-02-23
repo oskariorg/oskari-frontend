@@ -93,7 +93,7 @@ Oskari.registerLocalization(
             "methods" : {
                 "jenks": "Natural breaks",
                 "quantile": "Quantiles",
-                "equal": "Equal intervals",
+                "equal": "Equal intervals"
             },
             "manual": "Manual classification",
             "manualPlaceholder": "Separate values by a comma",
