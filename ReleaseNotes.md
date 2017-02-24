@@ -16,6 +16,12 @@ Fixed datatable double rendering/drawing when more than one indicator is added. 
 
 Now naturalSort function sort empty ('') values always to latest.
 
+## 1.41.1
+
+### MapModulePlugin.AddFeaturesToMapRequest
+
+Request assumed that each feature has a label text provided in featureStyle. This assumption has been removed.
+
 ## 1.41.0
 
 ### OpenLayers 3 update
