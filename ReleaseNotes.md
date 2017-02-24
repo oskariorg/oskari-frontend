@@ -6,6 +6,16 @@
 
 Medium map height changed from 525 to 600.
 
+### statistics/statsgrid2016
+
+Fixed state service so at setRegionset not send region changed event if setted region is same than previous.
+
+Fixed datatable double rendering/drawing when more than one indicator is added. Now datatable drawed faster.
+
+### Oskari.util.naturalSort
+
+Now naturalSort function sort empty ('') values always to latest.
+
 ## 1.41.1
 
 ### MapModulePlugin.AddFeaturesToMapRequest
