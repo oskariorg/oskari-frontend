@@ -6,6 +6,10 @@
 
 Medium map height changed from 525 to 600.
 
+### Oskari.util.naturalSort
+
+Now naturalSort function sort empty ('') values always to latest.
+
 ## 1.41.0
 
 ### OpenLayers 3 update

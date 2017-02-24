@@ -1393,15 +1393,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
-
-                if(nameA === '' && nameB !== '') {
-                    return (!pDescending) ? -1 : 1;
-                }
-
-                if(nameB === '' && nameA !== '') {
-                    return (!pDescending) ? 1 : -1;
-                }
-
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         },

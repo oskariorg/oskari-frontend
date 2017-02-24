@@ -285,9 +285,24 @@ Oskari.util = (function () {
                 }
             }
         }
+        // if the function returns less than zero, sort a before b
+//if the function returns greater than zero, sort b before a
+//if the function returns zero, leave a and b unchanged with respect to each other
+
         if (descending) {
             retValue =  -1 * retValue;
         }
+
+        // Check null values so at they are always last values
+        if(valueA === '' && valueB !== '') {
+            retValue = 1;
+        } else if(valueB === '' && valueA !== '') {
+            retValue = -1;
+        }
+        else if (valueA === '' && valueB ==='') {
+            retValue = 0;
+        }
+
         return retValue;
     };
 
