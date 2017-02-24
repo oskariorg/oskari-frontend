@@ -48,11 +48,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _handleRegionsetChanged: function(setId) {
         var currentRegion = this.getCurrentRegionset();
-        // Region not changed, not need to handle then
-        /*if(currentRegion === setId) {
-            return;
-        }
-        */
         if(!setId) {
             setId = this.getCurrentRegionset();
         }
