@@ -18,10 +18,10 @@
                 "mapuserlayers" : {
                     "bundlePath" : "../../../packages/mapping/ol3/"
                 },
-                "oskariui" : {
+                "mapfull" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 },
-                "mapfull" : {
+                "oskariui" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
@@ -68,7 +68,6 @@
         }
     },{
         "bundlename" : "infobox",
-        "bundleinstancename" : "infobox",
         "metadata" : {
             "Import-Bundle" : {
                 "infobox" : {
@@ -78,7 +77,6 @@
         }
     }, {
         "bundlename" : "drawtools",
-        "bundleinstancename" : "drawtools",
         "metadata" : {
             "Import-Bundle" : {
                 "drawtools" : {
@@ -88,7 +86,6 @@
         }
     }, {
         "bundlename" : "rpc",
-        "bundleinstancename" : "rpc",
         "metadata" : {
             "Import-Bundle" : {
                 "rpc" : {
