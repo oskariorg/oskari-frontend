@@ -1,4 +1,5 @@
 /* Add this to startupsequence to get this bundle started
+Oskari.app.playBundle(
 {
   bundlename : 'system-message',
   metadata : {
@@ -8,7 +9,7 @@
   }
   }
   }
-}
+});
 */
 /*
 Searches dom for element with id="oskari-system-messages", that is used for displaying messages.
@@ -156,6 +157,9 @@ Oskari.clazz.define(
             var el = this.messageElement.find('.messagetext');
             el.show();
             el.text(message);
+            setTimeout(function(){
+              el.hide();
+            },3000);
             if(this.messages.length === 0){
               el.empty();
             }
