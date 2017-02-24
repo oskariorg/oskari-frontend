@@ -14,6 +14,17 @@ LogoPlugin now has a service which can be used to push information to the data p
 LogoPlugin no longer references statistics data on its own.
 Statsgrid bundles push the attribution data to the LogoPlugin via the new ´map.DataProviderInfoService´.
 
+### statistics/statsgrid2016
+
+Performance improvements:
+
+- StatsGrid.RegionsetChangedEvent is not triggered if setRegionset() is called with the current regionset id.
+- Datatable was rendered multiple times when an indicator was added. This has been fixed.
+
+### Oskari.util.naturalSort
+
+Now always sorts empty ('') values to last position.
+
 ## 1.41.1
 
 ### MapModulePlugin.AddFeaturesToMapRequest
