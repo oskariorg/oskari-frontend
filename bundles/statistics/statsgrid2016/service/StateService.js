@@ -60,9 +60,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
-            // notify
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+
+            // notify if regionset changed
+            if(previousSet !== this.regionset) {
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
+                this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+            }
         },
         /**
          * Selects the region. Only sends out an event for now, selected region is not tracked by the service.
