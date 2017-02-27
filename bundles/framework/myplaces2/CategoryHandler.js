@@ -329,6 +329,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             cancelBtn.setTitle(btnLoc.cancel);
             cancelBtn.setHandler(function () {
                 dialog.close();
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
