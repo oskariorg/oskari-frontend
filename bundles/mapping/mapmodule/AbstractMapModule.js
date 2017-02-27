@@ -101,6 +101,9 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
 
+        me.loading = 0;
+        me.loaded = 0;
+
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
         this.log = Oskari.log('AbstractMapModule');
@@ -861,6 +864,55 @@ Oskari.clazz.define(
                     layersPlugin.preselectLayers(layers);
                 }
             }
+        },
+        /**
+         * @method loadingState
+         * Gather info on layer loading status
+         * @param {Number} layerid, the id number of the abstract layer in loading
+         * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
+         */
+        loadingState: function( layerId, started ){
+          var done = false;
+          var me = this;
+          var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
+
+          if( !this.progBar ) {
+            this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
+            this.progBar.create();
+          }
+
+          if( this.loadtimer ) {
+            clearTimeout( this.loadtimer );
+          }
+
+          if( started ) {
+            ++this.loading;
+            var wasFirstTile = oskariLayer.loadingStarted();
+            if( wasFirstTile ) {
+                this.progBar.show();
+                oskariLayer.loadingError( 0 );
+            }
+          }
+          else {
+            ++this.loaded;
+            done = oskariLayer.loadingDone();
+            this.progBar.updateProgressBar( this.loading, this.loaded );
+            // console.log( this.loaded + " / " + this.loading );
+          }
+          if( done && oskariLayer.getLoadingState().errors ) {
+            var errors = oskariLayer.getLoadingState().errors;
+            this.notifyErrors( errors );
+          }
+
+          this.loadtimer = setTimeout( function() {
+            var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
+            var event = eventBuilder( done, 'maplayer' );
+            me._sandbox.notifyAll( event );
+          }, 50 );
+
+        },
+        notifyErrors: function( errors ) {
+              Oskari.log( this.getName() ).warn( "error: "+errors );
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
