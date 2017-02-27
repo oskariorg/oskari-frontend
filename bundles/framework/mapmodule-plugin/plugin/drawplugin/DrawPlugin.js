@@ -10,6 +10,7 @@ Oskari.clazz.define(
         me._name = 'DrawPlugin';
 
         me.drawControls = null;
+        me.currentDrawing = null
         me.drawLayer = null;
         me.editMode = false;
         me.currentDrawMode = null;
@@ -92,6 +93,7 @@ Oskari.clazz.define(
             // disable all draw controls
             this.toggleControl();
             // clear drawing
+            this.currentDrawing = null;
             if (this.drawLayer) {
                 this.drawLayer.destroyFeatures();
                 // no harm in activating straight away
@@ -272,7 +274,7 @@ Oskari.clazz.define(
                             me.finishedDrawing();
                         },
                         vertexmodified: function (event) {
-                            me._sendActiveGeometry(me.getDrawing());
+                            me._sendActiveGeometry(event.feature.geometry);
                         }
                     }
                 });
@@ -448,6 +450,7 @@ Oskari.clazz.define(
                     drawing = new OpenLayers.Geometry.MultiPolygon(components);
                     break;
             }
+            this.currentDrawing = drawing;
             return drawing;
         },
 
@@ -467,7 +470,7 @@ Oskari.clazz.define(
          * @return {OpenLayers.Geometry}
          */
         getActiveDrawing: function (geometry) {
-            var prevGeom = this.getDrawing(),
+            var prevGeom = this.currentDrawing,
                 composedGeom;
 
             if (prevGeom !== null && prevGeom !== undefined) {
