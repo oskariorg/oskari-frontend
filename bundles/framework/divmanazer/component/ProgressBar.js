@@ -15,7 +15,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     * @param {Object} goal, total number which to fill
     * @return {jQuery Element} a list with chosen applied
      */
-    create: function(){
+    create: function() {
       this._element = this._progressBar.clone();
       this._element.css({
          position: 'absolute',
@@ -31,8 +31,8 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
       content.append( this._element );
       return this._element;
     },
-    updateProgressBar( goal, current ){
-      if( goal === 0 ){
+    updateProgressBar: function( goal, current ) {
+      if( goal === 0 ) {
         return;
       }
       var width = ( current / goal * 100 ).toFixed( 1 ) + '%';
@@ -41,10 +41,10 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
           this.hide();
       }
     },
-    show(){
+    show: function() {
       this._element.css( { visibility: 'visible' } );
     },
-    hide(){
+    hide: function() {
       var me = this;
       setTimeout( function() {
         me._element.css( { visibility: 'hidden', width: 0 } );
