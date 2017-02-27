@@ -100,6 +100,31 @@ Oskari.clazz.define(
         },
 
         forceFinishDraw: function () {
+            var activeControls = this._getActiveDrawControls(),
+                drawControls = this.drawControls,
+                drawLayer = this.drawLayer;
+
+            for (i = 0; i < activeControls.length; i += 1) {
+                activeControl = activeControls[i];
+                switch (activeControl) {
+                    case 'point':
+                        if(drawLayer.features.length === 0){
+                            return;
+                        }
+                        break;
+                    case 'line':
+                        if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
+                            return;
+                        }
+                        break;
+                    case 'area':
+                        components = drawControls.area.handler.polygon.geometry.components;
+                        if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
+                            return;
+                        }
+                        break;
+                }
+            };
             try {
                 //needed when preparing unfinished objects but causes unwanted features into the layer:
                 //this.drawControls[this.currentDrawMode].finishSketch();
@@ -144,13 +169,13 @@ Oskari.clazz.define(
                         // No need to finish geometry if already finished
                         switch (activeControl) {
                             case 'line':
-                                if (drawControls.line.handler.line.geometry.components.length < 2) {
+                                if (drawControls.line.handler.line.geometry.components.length < 3) {
                                     continue;
                                 }
                                 break;
                             case 'area':
                                 components = drawControls.area.handler.polygon.geometry.components;
-                                if (components[components.length - 1].components.length < 3) {
+                                if (components[components.length - 1].components.length < 5) {
                                     continue;
                                 }
                                 break;
