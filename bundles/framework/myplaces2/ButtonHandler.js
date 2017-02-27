@@ -392,6 +392,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     var content = this.dialog.getJqueryContent();
                     content.find('div.measurementResult').html(resultText);
                 }
+            },
+            
+            'InfoBox.InfoBoxEvent': function(event){
+                console.log(event);
+                var popupId = this.instance.getMainView().getPopupId();
+                if (event.getId() == popupId){
+                    this.sendStopDrawRequest(true);
+                }
             }
         }
     }, {
