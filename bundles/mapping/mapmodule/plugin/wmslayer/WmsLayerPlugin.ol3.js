@@ -132,7 +132,7 @@ Oskari.clazz.define(
             this.setOLMapLayers(layer.getId(), olLayers);
 
         },
-        _registerLayerEvents(layer, oskariLayer){
+        _registerLayerEvents: function(layer, oskariLayer){
           var me = this;
           var source = layer.getSource();
 
