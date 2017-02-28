@@ -103,7 +103,6 @@ Oskari.clazz.define(
 
         me.loading = 0;
         me.loaded = 0;
-        me.status = false;
 
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -307,15 +306,7 @@ Oskari.clazz.define(
                     var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
                     me.toggleCrosshair(show);
                 }
-            },
-            'ProgressEvent': function (evt) {
-              if(evt._status === true){
-                this.status = true;
-              }
-              else {
-                this.status = false;
-              }
-           }
+            }
         },
 
 /* Impl specific - found in ol2 AND ol3 modules
@@ -874,8 +865,16 @@ Oskari.clazz.define(
                 }
             }
         },
-        isLayerLoaded: function(){
-          return this.status;
+        isLoading: function() {
+          var oskariLayers = this.getSandbox().getMap().getLayers();
+          var loading = false;
+          oskariLayers.forEach( function( layer ) {
+          if(loading) {
+            return;
+          }
+            loading = layer.getLoadingState().loading > 0;
+          });
+          return loading;
         },
         /**
          * @method loadingState
