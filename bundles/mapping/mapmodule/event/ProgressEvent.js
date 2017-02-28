@@ -24,7 +24,7 @@ function(status, id) {
     getId: function(){
       return this._id;
     },
-    isLoaded: function(){
+    getStatus: function(){
       return this._status;
     }
 }, {
