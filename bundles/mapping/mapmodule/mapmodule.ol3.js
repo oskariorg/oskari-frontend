@@ -158,8 +158,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
         getScreenshot : function() {
-          var proceed = this.isLayerLoaded();
-          if( proceed ){
+          var loading = this.isLoading();
+          if( !loading ){
               try {
                 var imageData = null;
                 this.getMap().once('postcompose', function(event) {
