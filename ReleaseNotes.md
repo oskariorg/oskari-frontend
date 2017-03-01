@@ -7,6 +7,10 @@
 - mapfull. Removed unneccessary adjustMapSize call.
 - mapmodule-plugin/MapMoveRequest. Fixed zoom changed check.
 
+### fullscreen
+
+Fixed JavaScript error when stopping plugin.
+
 ### Datasources UI in LogoPlugin
 
 Fixes an issue where data providers were not listed on the attribution listing.
