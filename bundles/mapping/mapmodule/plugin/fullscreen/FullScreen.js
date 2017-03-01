@@ -71,7 +71,7 @@ Oskari.clazz.define(
          */
         stopPlugin : function(sandbox) {
             var me = this;
-            var sandbox = this._sandbox;
+            sandbox = sandbox || me._sandbox;
             Object.keys(me._requestHandlers).forEach(function(key) {
                 sandbox.requestHandler(key, null);
             });
@@ -101,7 +101,7 @@ Oskari.clazz.define(
             var me = this;
             me.state = state || {};
 
-            if(state.fullscreen) {
+            if(me.state.fullscreen) {
                 me._hideNavigation();
             } else {
                 me._showNavigation();

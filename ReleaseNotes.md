@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### fullscreen
+
+Fixed JavaScript error when stopping plugin.
+
 ### publisher2
 
 Medium map height changed from 525 to 600.
