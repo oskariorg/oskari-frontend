@@ -21,10 +21,10 @@ function(status, id) {
     getName : function() {
         return this.__name;
     },
-    layerId: function(){
+    getId: function(){
       return this._id;
     },
-    isLoaded: function(){
+    getStatus: function(){
       return this._status;
     }
 }, {

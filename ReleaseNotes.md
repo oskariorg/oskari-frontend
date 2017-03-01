@@ -6,6 +6,10 @@
 
 Fixed JavaScript error when stopping plugin.
 
+### mapmodule
+
+New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
 ### publisher2
 
 Medium map height changed from 525 to 600.

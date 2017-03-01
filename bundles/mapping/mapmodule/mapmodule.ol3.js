@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMapEl().addClass('olMap');
             return map;
         },
-
         /**
          * @method createMap
          * Creates Openlayers 3 map implementation
@@ -159,7 +158,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
         getScreenshot : function() {
-            try {
+          var loading = this.isLoading();
+          if( !loading ){
+              try {
                 var imageData = null;
                 this.getMap().once('postcompose', function(event) {
                     var canvas = event.context.canvas;
@@ -171,7 +172,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
            } catch(err) {
                this.getSandbox().printWarn('Error producing a screenshot' + err);
            }
+         } else {
            return '';
+         }
         },
 
 /*<------------- / OL3 specific ----------------------------------- */

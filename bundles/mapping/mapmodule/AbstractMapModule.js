@@ -865,6 +865,17 @@ Oskari.clazz.define(
                 }
             }
         },
+        isLoading: function() {
+          var oskariLayers = this.getSandbox().getMap().getLayers();
+          var loading = false;
+          oskariLayers.forEach( function( layer ) {
+          if(loading) {
+            return;
+          }
+            loading = layer.getLoadingState().loading > 0;
+          });
+          return loading;
+        },
         /**
          * @method loadingState
          * Gather info on layer loading status
