@@ -3,6 +3,17 @@
 ## 1.42.0
 
 ### mapmodule
+getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
+
+Before:
+
+  var imageData = mapModule.getScreenshot();
+
+Now:
+
+  mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
+      //Do something with  imageData
+  })
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 

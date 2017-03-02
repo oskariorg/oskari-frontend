@@ -157,24 +157,38 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
-        getScreenshot : function() {
-          var loading = this.isLoading();
-          if( !loading ){
-              try {
-                var imageData = null;
-                this.getMap().once('postcompose', function(event) {
-                    var canvas = event.context.canvas;
-                    imageData = canvas.toDataURL('image/png');
-                });
+        getScreenshot : function( callback, numOfTries ) {
+          if( typeof callback != 'function' ) {
+            return;
+          }
+          if( typeof numOfTries === 'undefined' ) {
+            numOfTries = 5;
+          }
+          clearTimeout(this.screenshotTimer);
+          var me = this;
 
-                this.getMap().renderSync();
-                return imageData;
-           } catch(err) {
-               this.getSandbox().printWarn('Error producing a screenshot' + err);
-           }
-         } else {
-           return '';
-         }
+          if( this.isLoading() ) {
+            if( numOfTries < 0 ) {
+              callback("");
+              return;
+            }
+            this.screenshotTimer = setTimeout( function() {
+              me.getScreenshot( callback, numOfTries-- );
+            }, 1000 );
+            return;
+          }
+          try {
+            var imageData = null;
+            me.getMap().once('postcompose', function(event) {
+                var canvas = event.context.canvas;
+                imageData = canvas.toDataURL('image/png');
+            });
+            me.getMap().renderSync();
+            callback(imageData);
+          } catch( err ) {
+            me.getSandbox().printWarn('Error producing a screenshot' + err);
+            callback("");
+          }
         },
 
 /*<------------- / OL3 specific ----------------------------------- */
