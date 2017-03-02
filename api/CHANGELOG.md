@@ -9,6 +9,15 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.42
+
+#### [mod] [rpc] New rpc-client version
+
+This release has no functional changes.
+
+As part of Oskari becoming an OSGeo-project the repositories are relocated from under https://github.com/nls-oskari to https://github.com/oskariorg.
+ This update only updates references in package.json for jschannel fork (dependency) and the RPC-client.
+
 ## 1.41
 
 ### [mod] [rpc] RouteResultEvent
