@@ -115,6 +115,27 @@ Oskari.clazz.define(
                 },
                 'Publisher.ColourSchemeChangedEvent': function(evt){
                     this._handleColourSchemeChangedEvent(evt);
+                },
+                MouseHoverEvent: function(evt){
+                    if(evt.isPaused()) {
+                        if (!this.isEnabled()) {
+                            // disabled, do nothing
+                            return;
+                        }
+                        // remove old popup
+                        var reqBuilder = this.getSandbox().getRequestBuilder(
+                                'InfoBox.HideInfoBoxRequest'
+                            ),
+                            request;
+                        if(reqBuilder) {
+                            request = reqBuilder(this.infoboxId);
+                            this.getSandbox().request(this, request);
+                        }
+                        this.clickLocation = {
+                            lonlat: {lon: evt.getLon(), lat: evt.getLat()}
+                        };
+                        this.handleGetInfo(this.clickLocation.lonlat);
+                    }
                 }
             };
         },
