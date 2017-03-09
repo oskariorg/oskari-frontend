@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.41.2
+
+Fixed history tools:
+- mapfull. Removed unneccessary adjustMapSize call.
+- mapmodule-plugin/MapMoveRequest. Fixed zoom changed check.
+
 ## 1.41.1
 
 ### MapModulePlugin.AddFeaturesToMapRequest

@@ -491,27 +491,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         historyMovePrevious: function () {
             var sandbox = this.getSandbox();
             switch (this._historyPrevious.length) {
-            case 0:
-                /* hard reset */
-                /*this.resetState();*/
-                break;
-            case 1:
-                /* soft reset (retains the future) */
-                var nextHistory = this._historyNext;
-                this.resetState();
-                this._historyNext = nextHistory;
-                break;
-            default:
-                /* pops current state */
-                var cstate = this._historyPrevious.pop(); /* currentstate */
-                this._historyNext.push(cstate);
-                var state = this._historyPrevious[this._historyPrevious.length - 1],
-                    mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                    currentState = this._getMapState();
-                this._historyEnabled = false;
-                this._setMapState(mapmodule, state, currentState);
-                this._historyEnabled = true;
-                break;
+                case 0:
+                    /* hard reset */
+                    /*this.resetState();*/
+                    break;
+                case 1:
+                    /* soft reset (retains the future) */
+                    var nextHistory = this._historyNext;
+                    this.resetState();
+                    this._historyNext = nextHistory;
+                    break;
+                default:
+                    /* pops current state */
+                    var cstate = this._historyPrevious.pop(); /* currentstate */
+                    this._historyNext.push(cstate);
+                    var state = this._historyPrevious[this._historyPrevious.length - 1],
+                        mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                        currentState = this._getMapState();
+                    this._historyEnabled = false;
+                    this._setMapState(mapmodule, state, currentState);
+                    this._historyEnabled = true;
+                    break;
             }
         },
 
