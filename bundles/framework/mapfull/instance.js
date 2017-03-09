@@ -501,7 +501,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                 }
             }
-            this.adjustMapSize();
         },
 
         /**
