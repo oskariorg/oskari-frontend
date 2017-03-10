@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             ),
             projectionSelectOption: jQuery('<option></option>')
         };
-        this._ajaxXhr = null;
+        this._ajaxXhr = {};
     }, {
         /**
          * Generates the element for the projection transformation based on config
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         transformCoordinates: function(data, srs, targetSRS) {
             var me = this;
             me._coordinatesFromServer = false;
-             if(!data) {
+            if(!data) {
                 var map = this._sandbox.getMap();
                 data = {
                     'lonlat': {
@@ -150,6 +150,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         getTransformedCoordinatesFromServer: function (data, srs, targetSRS, successCb, errorCb) {
             var me = this;
+            if(!me._instance.isOpen()) {
+                return;
+            }
             if(!data) {
                 var map = me._sandbox.getMap();
                 data = {
@@ -176,10 +179,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 targetSRS = this._projectionSelect.val();
             }
             if(srs !== targetSRS) {
-                if(me._ajaxXhr) {
-                    me._ajaxXhr.abort();
+                if(me._ajaxXhr[srs + targetSRS]) {
+                    me._ajaxXhr[srs + targetSRS].abort();
                 }
-                me._ajaxXhr = jQuery.ajax({
+                me._ajaxXhr[srs + targetSRS] = jQuery.ajax({
                     url: me._sandbox.getAjaxUrl('Coordinates'),
                     data: {
                         lat: data.lonlat.lat,
