@@ -161,6 +161,9 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/logo/LogoPlugin.js"
                 }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/logo/DataProviderInfoService.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/css/logoplugin.css"
                 },

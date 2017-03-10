@@ -16,7 +16,7 @@ Oskari.clazz.define(
         this._index = 1;
         this._name = 'LogoPlugin';
     }, {
-
+        constLayerGroupId : 'layers',
         templates: {
             main :  jQuery(
                 '<div class="mapplugin logoplugin">' +
@@ -29,19 +29,37 @@ Oskari.clazz.define(
                 '  </div>' +
                 '</div>'
             ),
-            dataSourcesDialog: jQuery(
-                '<div class="data-sources-dialog">' +
-                '  <div class="layers">' +
-                '    <h4></h4>' +
-                '  </div>' +
-                '  <div class="indicators">' +
-                '    <h4></h4>' +
-                '  </div>' +
-                '</div>'
-            )
+            dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
+            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
+        },
+        getService : function() {
+            if(!this._service) {
+                this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
+                if(this._service) {
+                    var me = this;
+                    // init group for layers
+                    this._service.addGroup(me.constLayerGroupId, me._loc.layersHeader);
+                    var layers = me.getSandbox().findAllSelectedMapLayers();
+                    // add initial layers
+                    layers.forEach(function(layer) {
+                        me._service.addItemFromGroup(me.constLayerGroupId, {
+                            'id' : layer.getId(),
+                            'name' : layer.getName(),
+                            // AH-2182 Show source for user layers
+                            'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                        });
+                    });
+
+                    // if service was created, add a change listener
+                    this._service.on('change', function() {
+                        me.updateDialog();
+                    });
+                }
+            }
+            return this._service;
         },
         /**
          * @method _createEventHandlers
@@ -51,14 +69,35 @@ Oskari.clazz.define(
          * @return {Object.<string, Function>} EventHandlers
          */
         _createEventHandlers: function () {
+            //TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
             return {
+                'AfterMapLayerRemoveEvent' : function(event) {
+                    var service = this.getService();
+                    if(!service || !event.getMapLayer()) {
+                        return;
+                    }
+                    service.removeItemFromGroup(this.constLayerGroupId, event.getMapLayer().getId());
+                },
+                'AfterMapLayerAddEvent' : function(event) {
+                    var layer = event.getMapLayer();
+                    var service = this.getService();
+                    if(!service || !layer) {
+                        return;
+                    }
+                    service.addItemFromGroup(this.constLayerGroupId, {
+                        'id' : layer.getId(),
+                        'name' : layer.getName(),
+                        // AH-2182 Show source for user layers
+                        'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                    });
+                },
                 'StatsGrid.IndicatorsEvent': function (event) {
                     this._addIndicatorsToDataSourcesDialog(
                         event.getIndicators()
                     );
                 },
 
-                MapSizeChangedEvent: function (event) {
+                'MapSizeChangedEvent': function (event) {
                     if (this.dataSourcesDialog) {
                         var target = this.getElement().find('.data-sources');
                         if (target) {
@@ -85,11 +124,9 @@ Oskari.clazz.define(
                         'data-location'
                     )
                 );
-            } else {
-                if (me.dataSourcesDialog) {
-                    me.dataSourcesDialog.close(true);
-                    me.dataSourcesDialog = null;
-                }
+            } else if (me.dataSourcesDialog) {
+                me.dataSourcesDialog.close(true);
+                me.dataSourcesDialog = null;
             }
         },
 
@@ -243,7 +280,35 @@ Oskari.clazz.define(
                 me.getSandbox().request(me, request);
             }
         },
+        updateDialog : function() {
+            if(!this.dataSourcesDialog) {
+                return;
+            }
+            this.dataSourcesDialog.setContent(this.getDialogContent());
+            this.dataSourcesDialog.moveTo(this.getElement().find('div.data-sources'), 'top');
+        },
 
+        getDialogContent : function() {
+            var service = this.getService();
+            if(!service) {
+                return;
+            }
+            var me = this;
+            var content = this.templates.dataSourcesDialog.clone();
+            var groups = this._service.getNonEmptyGroups();
+            groups.forEach(function(group) {
+                var tpl = me.templates.dataSourceGroup.clone();
+                tpl.addClass(group.id);
+                tpl.find('h4').html(group.name);
+                group.items.forEach(function(item) {
+                    var itemTpl = jQuery('<div></div>');
+                    itemTpl.append(item.name + ' - ' + item.source);
+                    tpl.append(itemTpl);
+                });
+                content.append(tpl);
+            });
+            return content;
+        },
         /**
          * @method _openDataSourcesDialog
          * Opens a dialog to show data sources of the selected layers
@@ -255,48 +320,17 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _openDataSourcesDialog: function (target) {
-            var me = this,
-                popupTitle = me._loc.dataSources,
-                dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                closeButton = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                ),
-                content = me.templates.dataSourcesDialog.clone(),
-                layersCont = content.find('div.layers'),
-                layersHeaderLoc = me._loc.layersHeader,
-                layers = me.getSandbox().findAllSelectedMapLayers(),
-                layersLen = layers.length,
-                layer,
-                i;
+            var me = this;
+            var popupTitle = me._loc.dataSources;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me.dataSourcesDialog= dialog;
 
-            closeButton.setTitle('OK');
+            var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             closeButton.setHandler(function () {
                 me.dataSourcesDialog = null;
                 dialog.close(true);
             });
-
-            // List the layers if any
-            if (layersLen === 0) {
-                layersCont.remove();
-            } else {
-                layersCont.find('h4').html(layersHeaderLoc);
-
-                for (i = 0; i < layersLen; i += 1) {
-                    layer = layers[i];
-                    // AH-2182 Show source for user layers
-                    layersCont.append(
-                        '<div>' +
-                        layer.getName() + ' - ' +
-                        (layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()) +
-                        '</div>'
-                    );
-                }
-            }
-
-            me.dataSourcesDialog = dialog;
-
+            var content = this.getDialogContent();
             dialog.show(popupTitle, content, [closeButton]);
 
             target = target || me.getElement().find('div.data-sources');
@@ -314,38 +348,17 @@ Oskari.clazz.define(
             if (!this.dataSourcesDialog) {
                 return;
             }
-            var me = this,
-                dialog = me.dataSourcesDialog,
-                content = dialog.getJqueryContent(),
-                indicatorsCont = content.find('div.indicators'),
-                indicatorsHeaderLoc = me._loc.indicatorsHeader,
-                indicator,
-                i,
-                target;
-
-            indicators = indicators || {};
-
-            // List the indicators if any
-            if (jQuery.isEmptyObject(indicators)) {
-                indicatorsCont.remove();
-            } else {
-                indicatorsCont.find('h4').html(indicatorsHeaderLoc);
-
-                for (i in indicators) {
-                    if (indicators.hasOwnProperty(i)) {
-                        indicator = indicators[i];
-                        indicatorsCont.append(
-                            '<div>' +
-                            indicator.title + ' - ' +
-                            indicator.organization +
-                            '</div>'
-                        );
-                    }
-                }
-            }
-
-            target = target || me.getElement().find('div.data-sources');
-            dialog.moveTo(target, 'top');
+            var me = this;
+            this._service.removeGroup('indicators');
+            this._service.addGroup('indicators', me._loc.indicatorsHeader);
+            // add initial layers
+            Object.keys(indicators).forEach(function(id) {
+                me._service.addItemFromGroup('indicators', {
+                    'id' : id,
+                    'name' : indicators[id].title,
+                    'source' : indicators[id].organization
+                });
+            });
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
