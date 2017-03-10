@@ -886,6 +886,9 @@ Oskari.clazz.define(
           var done = false;
           var me = this;
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
+          if(!oskariLayer ) {
+            return;
+          }
 
           if( !this.progBar ) {
             this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
@@ -920,7 +923,6 @@ Oskari.clazz.define(
             var event = eventBuilder( done, 'maplayer' );
             me._sandbox.notifyAll( event );
           }, 50 );
-
         },
         notifyErrors: function( errors ) {
               Oskari.log( this.getName() ).warn( "error: "+errors );
