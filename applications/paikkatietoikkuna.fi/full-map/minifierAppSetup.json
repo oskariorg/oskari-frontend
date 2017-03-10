@@ -264,20 +264,13 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Featuredata",
-			"bundleinstancename": "featuredata2",
-			"fi": "Kohdetiedot",
-			"sv": "?",
-			"en": "?",
 			"bundlename": "featuredata2",
 			"metadata": {
 				"Import-Bundle": {
 					"featuredata2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},

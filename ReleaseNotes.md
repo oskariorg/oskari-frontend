@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### fullscreen
+
+Fixed JavaScript error when stopping plugin.
+
 ### mapmodule
 getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
 
