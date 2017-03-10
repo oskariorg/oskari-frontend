@@ -54,8 +54,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     request.term,
                     function (data) {
                         // onSuccess
-                        me.locations = data.locations;
-                        response(data && data.totalCount ? data.locations : []);
+                        var value = data && data.totalCount ? data.locations : [];
+                        me.locations = value;
+                        response(value);
                     },
                     function () {}
                 );
@@ -99,13 +100,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             if(!me.state.from.village){
               return;
             } else if(loc.name === me.state.from.name && loc.village === me.state.from.village){
-                var fromLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, 'EPSG:3067', 'EPSG:4326');
+                var fromLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
                 me.fromLonLat = fromLonLat;
             }
             if(!me.state.to){
             }
               else if(loc.name === me.state.to.name && loc.village === me.state.to.village){
-                var toLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, 'EPSG:3067', 'EPSG:4326');
+                var toLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
                 me.toLonLat = toLonLat;
               }
           })
@@ -261,12 +262,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          * Builds URL for matka.fi routing service
          * @private
          */
-        _matkaFiURLBuilder: function(fromLoc, toLoc, lonlat) {
+        _matkaFiURLBuilder: function(fromLoc, toLoc) {
           var me = this;
             var url = 'http://opas.matka.fi/reitti/';
             url += fromLoc.name;
             if (fromLoc.village) {
-                url += '%2C%20' + toLoc.village + '%3A%3A'+me.fromLonLat.lat+'%2C'+me.fromLonLat.lon;
+                url += '%2C%20' + fromLoc.village + '%3A%3A'+me.fromLonLat.lat+'%2C'+me.fromLonLat.lon;
             }
             url += '/' + toLoc.name;
             if (toLoc.village) {
