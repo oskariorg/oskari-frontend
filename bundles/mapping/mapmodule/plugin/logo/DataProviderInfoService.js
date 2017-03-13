@@ -7,9 +7,9 @@ service.on('change', function() {
     console.log('groups for ui', this._service.getNonEmptyGroups());
 });
 service.addGroup('map.layers', 'Map layers');
-service.addGroup('statsgrid.indicators', 'Statistics indicators', [{ 'id' : 'dummy id'}]);
+service.addGroup('statsgrid.indicators', 'Statistics indicators', [{ 'id' : 'dummy id', 'name' : 'indicator name', 'source' : 'Data provider for indicator'}]);
 service.removeItemFromGroup('statsgrid.indicators', 'dummy id');
-service.addItemFromGroup('map.layers', { 'id' : 'dummy id the second'});
+service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'indicator name', 'source' : 'Data provider for indicator'});
  */
 (function(Oskari) {
     var _log = Oskari.log('Oskari.map.DataProviderInfoService');
