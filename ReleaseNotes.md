@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### coordinatetool
+
+Fixed extra coordinate server transform calls.
+
 ### fullscreen
 
 Fixed JavaScript error when stopping plugin.

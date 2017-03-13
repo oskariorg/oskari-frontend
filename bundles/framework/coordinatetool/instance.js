@@ -105,6 +105,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             }
         },
         /**
+         * @method  @public isOpen
+         * @return {Boolean} is popup open
+         */
+        isOpen: function(){
+            var me = this;
+            return (me.plugin) ? me.plugin.isOpen() : false;
+        },
+        /**
          * Creates the coordinate tool service and registers it to the sandbox.
          *
          * @method createService
