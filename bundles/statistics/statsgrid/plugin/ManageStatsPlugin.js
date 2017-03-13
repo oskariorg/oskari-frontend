@@ -1346,6 +1346,45 @@ Oskari.clazz.define(
             var columnId = 'indicator' + indicatorId + year + gender;
             return columnId;
         },
+        /**
+         * Initialize group for indicators in DataProviderInfoService
+         */
+        initDatasourceInfo : function() {
+            if(this.___DataProviderInfoServiceInitDone) {
+                return;
+            }
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.addGroup('indicators', this._locale.dataProviderInfoTitle || 'Indicators');
+            this.___DataProviderInfoServiceInitDone = true;
+        },
+        /**
+         * Notify DataProviderInfoService that indicator was added
+         */
+        notifyIndicatorAdded : function(id, name, source) {
+            this.initDatasourceInfo();
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.addItemToGroup('indicators', {
+                'id' : id,
+                'name' : name,
+                'source' : source
+            });
+        },
+        /**
+         * Notify DataProviderInfoService that indicator was removed
+         */
+        notifyIndicatorRemoved : function(id) {
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.removeItemFromGroup('indicators', id);
+        },
 
         /**
          * Add indicator data to the grid.
@@ -1361,7 +1400,7 @@ Oskari.clazz.define(
             var me = this,
                 columnId = me._getIndicatorColumnId(indicatorId, gender, year),
                 columns = me.grid.getColumns(),
-                indicatorName = meta.title[Oskari.getLang()] || meta.title;
+                indicatorName = Oskari.getLocalized(meta.title);
 
             if (me.isIndicatorInGrid(columnId)) {
                 return false;
@@ -1446,6 +1485,7 @@ Oskari.clazz.define(
 
             me.updateDemographicsButtons(indicatorId, gender, year);
             me.grid.setSortColumn(me._state.currentColumn, true);
+            this.notifyIndicatorAdded(indicatorId, indicatorName, Oskari.getLocalized(meta.organization.title));
         },
 
         _updateIndicatorDataToGrid: function (columnId, data, columns) {
@@ -1634,8 +1674,8 @@ Oskari.clazz.define(
 
             this.updateDemographicsButtons(indicatorId, gender, year);
 
-
             this.sendStatsData(undefined);
+            this.notifyIndicatorRemoved(indicatorId);
             /*
             if (columnId === this._state.currentColumn) {
                 // hide the layer, as we just removed the "selected"

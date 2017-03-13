@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
                 "dataSources": "Tietolähteet",
-                "layersHeader": "Karttatasot",
-                "indicatorsHeader": "Indikaattorit"
+                "layersHeader": "Karttatasot"
             },
             "DataSourcePlugin": {
                 "link": "Tietolähde",

@@ -53,6 +53,11 @@ Oskari.clazz.define(
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
+            // setup DataProviderInfoService group if possible (LogoPlugin)
+            var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(dsiservice) {
+                dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
+            }
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -68,9 +73,51 @@ Oskari.clazz.define(
         getLayerService : function() {
             return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         },
+        /**
+         * This will trigger an update on the LogoPlugin/Datasources popup when available.
+         * @param  {Number} ds         datasource id
+         * @param  {String} id         indicator id
+         * @param  {Object} selections Year/other possible selections
+         * @param  {Boolean} wasRemoved true if the indicator was removed
+         */
+        notifyDataProviderInfo : function(ds, id, selections, wasRemoved) {
+                var me = this;
+                var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+                if(!service) {
+                    return;
+                }
+                var dsid = ds + '_' +id;
+                if(wasRemoved) {
+                    // the check if necessary if the same indicator is added more than once with different selections
+                    if(!this.statsService.getStateService().isSelected(ds, id)) {
+                        // if this was the last dataset for the datasource & indicator. Remove it.
+                        service.removeItemFromGroup('indicators', dsid);
+                    }
+                    return;
+                }
+                // indicator added - determine UI labels
+                this.statsService.getUILabels({
+                    datasource : ds,
+                    indicator : id,
+                    selections : selections
+                }, function(labels) {
+                    var data = {
+                        'id' : dsid,
+                        'name' : labels.indicator,
+                        'source' : labels.source
+                    };
+                    if(!service.addItemToGroup('indicators', data)) {
+                        // if adding failed, it might because group was not registered.
+                        service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
+                        // Try adding again
+                        service.addItemToGroup('indicators', data)
+                    }
+                });
+        },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
+                this.notifyDataProviderInfo(evt.getDatasource(),  evt.getIndicator(), evt.getSelections(), evt.isRemoved());
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);

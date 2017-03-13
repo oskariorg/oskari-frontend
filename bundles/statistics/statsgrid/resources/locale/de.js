@@ -12,6 +12,7 @@ Oskari.registerLocalization(
             "title": "",
             "message": ""
         },
+        "dataProviderInfoTitle": "Indikatoren",
         "layertools": {
             "table_icon": {
                 "tooltip": "Thematische Karten ansehen",

@@ -9,6 +9,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Thematic maps"
         },
+        "dataProviderInfoTitle": "Indicators",
         "layertools": {
             "table_icon": {
                 "tooltip": "Go to thematic maps",

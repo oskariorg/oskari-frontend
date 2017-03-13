@@ -9,6 +9,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Tematiska kartor"
         },
+        "dataProviderInfoTitle": "Indikatorer",
         "layertools": {
             "table_icon": {
                 "tooltip": "Gå till temakartor",
