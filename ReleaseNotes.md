@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.41.2
+
+### Datasources UI in LogoPlugin
+
+Fixes an issue where data providers were not listed on the attribution listing.
+LogoPlugin now has a service which can be used to push information to the data providers/attribution list.
+LogoPlugin no longer references statistics data on its own.
+Statsgrid bundles push the attribution data to the LogoPlugin via the new ´map.DataProviderInfoService´.
+
 ## 1.41.1
 
 ### MapModulePlugin.AddFeaturesToMapRequest
