@@ -35,10 +35,6 @@ Fixed the matka.fi routing option for the paikkatietoikkuna-specific bundle.
 
 Request assumed that each feature has a label text provided in featureStyle. This assumption has been removed.
 
-### Oskari.util.naturalSort
-
-Now naturalSort function sort empty ('') values always to latest.
-
 ## 1.41.0
 
 ### OpenLayers 3 update
