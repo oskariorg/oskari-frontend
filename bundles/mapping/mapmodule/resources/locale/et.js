@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Kasutustingimused",
                 "dataSources": "Andmeallikad",
-                "layersHeader": "Kaardikihid",
-                "indicatorsHeader": "Märksõnad"
+                "layersHeader": "Kaardikihid"
             },
             "DataSourcePlugin": {
                 "link": "Andmeallikas",

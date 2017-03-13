@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Pogoji uporabe",
                 "dataSources": "Viri podatkov",
-                "layersHeader": "Sloji karte",
-                "indicatorsHeader": "Indikatorji"
+                "layersHeader": "Sloji karte"
             },
             "DataSourcePlugin": {
                 "link": "Vir podatkov",
