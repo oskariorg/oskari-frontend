@@ -21,6 +21,8 @@ Performance improvements:
 - StatsGrid.RegionsetChangedEvent is not triggered if setRegionset() is called with the current regionset id.
 - Datatable was rendered multiple times when an indicator was added. This has been fixed.
 
+Fixed an issue with publisher preview in Internet explorer.
+
 ### Oskari.util.naturalSort
 
 Now always sorts empty ('') values to last position.

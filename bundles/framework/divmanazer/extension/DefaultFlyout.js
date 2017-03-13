@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
             var me = this;
             var sidelabels = me.container.parents('.oskari-flyout').find('.sidetool');
             sidelabels.each(function(index, sidelabel) {
-                sidelabel.remove();
+                jQuery(sidelabel).remove();
             });
         },
 
