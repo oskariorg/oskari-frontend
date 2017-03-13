@@ -45,7 +45,7 @@ Oskari.clazz.define(
                     var layers = me.getSandbox().findAllSelectedMapLayers();
                     // add initial layers
                     layers.forEach(function(layer) {
-                        me._service.addItemFromGroup(me.constLayerGroupId, {
+                        me._service.addItemToGroup(me.constLayerGroupId, {
                             'id' : layer.getId(),
                             'name' : layer.getName(),
                             // AH-2182 Show source for user layers
@@ -84,19 +84,13 @@ Oskari.clazz.define(
                     if(!service || !layer) {
                         return;
                     }
-                    service.addItemFromGroup(this.constLayerGroupId, {
+                    service.addItemToGroup(this.constLayerGroupId, {
                         'id' : layer.getId(),
                         'name' : layer.getName(),
                         // AH-2182 Show source for user layers
                         'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                     });
                 },
-                'StatsGrid.IndicatorsEvent': function (event) {
-                    this._addIndicatorsToDataSourcesDialog(
-                        event.getIndicators()
-                    );
-                },
-
                 'MapSizeChangedEvent': function (event) {
                     if (this.dataSourcesDialog) {
                         var target = this.getElement().find('.data-sources');
@@ -226,7 +220,6 @@ Oskari.clazz.define(
                 dataSources.click(function (e) {
                     if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);
-                        me._requestDataSources();
                     } else if (me.dataSourcesDialog) {
                         me.dataSourcesDialog.close(true);
                         me.dataSourcesDialog = null;
@@ -259,27 +252,6 @@ Oskari.clazz.define(
             this.changeCssClasses(classToAdd, testRegex, [div]);
         },
 
-        /**
-         * @private @method _requestDataSources
-         * Sends a request for indicators. If the statsgrid bundle is not
-         * available (and consequently there aren't any indicators) it opens the
-         * data sources dialog and just shows the data sources of the layers.
-         *
-         *
-         * @return {undefined}
-         */
-        _requestDataSources: function () {
-            var me = this,
-                reqBuilder = me.getSandbox().getRequestBuilder(
-                    'StatsGrid.IndicatorsRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder();
-                me.getSandbox().request(me, request);
-            }
-        },
         updateDialog : function() {
             if(!this.dataSourcesDialog) {
                 return;
@@ -353,7 +325,7 @@ Oskari.clazz.define(
             this._service.addGroup('indicators', me._loc.indicatorsHeader);
             // add initial layers
             Object.keys(indicators).forEach(function(id) {
-                me._service.addItemFromGroup('indicators', {
+                me._service.addItemToGroup('indicators', {
                     'id' : id,
                     'name' : indicators[id].title,
                     'source' : indicators[id].organization

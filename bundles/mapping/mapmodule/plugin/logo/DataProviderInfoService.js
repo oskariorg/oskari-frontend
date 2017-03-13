@@ -52,9 +52,20 @@ service.addItemFromGroup('map.layers', { 'id' : 'dummy id the second'});
                 name : name || id,
                 items : items || []
             };
-            this.groups.push(group);
-            this.trigger('change');
-            return group;
+            var me = this;
+            var list = this.groups;
+            var indexForGroup = this._getItemIndex('id', id, list);
+            if(indexForGroup === -1) {
+                list.push(group);
+                this.trigger('change');
+                return group;
+            }
+            if(items && typeof items.forEach === 'function') {
+                items.forEach(function(item) {
+                    me.addItemToGroup(id, item);
+                });
+            }
+            return list[indexForGroup];
         },
         removeGroup : function(id) {
             var list = this.groups;
@@ -107,7 +118,7 @@ service.addItemFromGroup('map.layers', { 'id' : 'dummy id the second'});
             this.trigger('change');
             return true;
         },
-        addItemFromGroup : function(groupId, item) {
+        addItemToGroup : function(groupId, item) {
             if(!groupId || !item) {
                 return false;
             }
