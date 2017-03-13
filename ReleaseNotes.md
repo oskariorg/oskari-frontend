@@ -25,6 +25,10 @@ Performance improvements:
 
 Now always sorts empty ('') values to last position.
 
+### paikkatietoikkuna/routesearch
+
+Fixed the matka.fi routing option for the paikkatietoikkuna-specific bundle.
+
 ## 1.41.1
 
 ### MapModulePlugin.AddFeaturesToMapRequest
