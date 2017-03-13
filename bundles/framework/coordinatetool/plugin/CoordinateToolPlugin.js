@@ -380,6 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 });
             }
 
+            me.getEmergencyCallInfo();
         },
         /**
          * @method  @private _checkPopupPosition Check popup position
@@ -623,6 +624,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             return el;
         },
+         /**
+         * @method  @public isOpen
+         * @return {Boolean} is popup open
+         */
+        isOpen: function(){
+            return this._toolOpen;
+        },
         teardownUI : function() {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
@@ -751,21 +759,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 } else {
                     me._updateCoordinateDisplay(null);
                 }
-
-
-                if (conf.showEmergencyCallMessage) {
-                    // already in degrees, don't fetch again
-                    if (me._allowDegrees() && me.getMapModule().getProjection() === 'EPSG:4326') {
-                        me._updateEmergencyCallMessage({
-                            'lonlat': {
-                                'lon': data.lonlat.lon,
-                                'lat': data.lonlat.lat
-                            }
-                        });
-                    } else {
-                        me.getEmergencyCallCoordinatesFromServer(data);
-                    }
-                }
             }
         },
         _clearDegreeValues: function() {
@@ -846,32 +839,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this;
 
             //get the transform from current data
-            var sourceProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
+            var sourceProjection = me.getMapModule().getProjection();
 
-            // If source projection is same than map projection, then we translate coordiantes to right 'EPSG:4326'
-            if (sourceProjection === me.getMapModule().getProjection()) {
+            // If coordinates are not  EPSG:4326 then
+            // need to get 'EPSG:4326' coordinates from service
+            if (sourceProjection !== 'EPSG:4326'){
                 me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, 'EPSG:4326',
-                    function(responseData) {
-                        me._updateEmergencyCallMessage(responseData);
-                    },
-                    function(error) {
-                        me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
-                });
-            }
-            // Else coordinates are not map projection or EPSG:4326 then
-            // need first get coordinates from map projection and then use response coordinates
-            // to get 'EPSG:4326' coordinates again from service
-            else if (sourceProjection !== 'EPSG:4326'){
-                me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, me.getMapModule().getProjection(),
-                    function(responseData) {
-
-                        me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(responseData, me.getMapModule().getProjection(), 'EPSG:4326',
-                            function(responseDataTo4326) {
-                                me._updateEmergencyCallMessage(responseDataTo4326);
-                            },
-                            function(error) {
-                                me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
-                        });
+                    function(responseDataTo4326) {
+                        me._updateEmergencyCallMessage(responseDataTo4326);
                     },
                     function(error) {
                         me._coordinateTransformationExtension._showMessage(me._locale.cannotTransformCoordinates.title, me._locale.cannotTransformCoordinates.message);
@@ -990,6 +965,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 }
             }
+
             me._updateLonLat(data);
             me._labelMetricOrDegrees();
 
@@ -1012,6 +988,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return this._element;//jQuery('.mapplugin.coordinatetool');
         },
 
+        getEmergencyCallInfo: function(data){
+            var me = this,
+                conf = me._config;
+
+            data = data || me._getMapXY();
+
+            // update emergency if configured
+            if (conf.showEmergencyCallMessage) {
+                // already in degrees, don't fetch again
+                if (me._allowDegrees() && me.getMapModule().getProjection() === 'EPSG:4326') {
+                    me._updateEmergencyCallMessage({
+                        'lonlat': {
+                            'lon': data.lonlat.lon,
+                            'lat': data.lonlat.lat
+                        }
+                    });
+                } else {
+                    me.getEmergencyCallCoordinatesFromServer(data);
+                }
+            }
+        },
         /**
          * Check at if spinner need to display.
          * @method @private _checkSpinnerVisibility
@@ -1066,6 +1063,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         if (event.isPaused() && me._showReverseGeocode){
                             me._updateReverseGeocode(_.clone(data));
                         }
+
+                        if(event.isPaused()) {
+                            me.getEmergencyCallInfo(_.clone(data));
+                        }
                     }
                 },
                 /**
@@ -1086,6 +1087,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if (me._showReverseGeocode){
                         me._updateReverseGeocode();
                     }
+
+                    me.getEmergencyCallInfo();
                 },
                 /**
                  * @method MapClickedEvent
@@ -1111,6 +1114,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     if (me._showReverseGeocode){
                         me._updateReverseGeocode(_.clone(data));
                     }
+
+                    me.getEmergencyCallInfo(_.clone(data));
                 },
                 /**
                  * @method RPCUIEvent
