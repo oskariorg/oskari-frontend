@@ -26,6 +26,7 @@ Performance improvements:
 - Datatable was rendered multiple times when an indicator was added. This has been fixed.
 
 Fixed an issue with publisher preview in Internet explorer.
+Fixed localization issue with layer tools shown in selected layers.
 
 ### Oskari.util.naturalSort
 

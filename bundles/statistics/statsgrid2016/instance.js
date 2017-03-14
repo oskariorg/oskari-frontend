@@ -208,7 +208,7 @@ Oskari.clazz.define(
             }
 
             // add feature data tool for layer
-            var layerLoc = this.getLocalization('layertools') || {},
+            var layerLoc = this.getLocalization('layertools').table_icon || {},
                 label = layerLoc.title || 'Thematic maps',
                 tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName("table_icon");
