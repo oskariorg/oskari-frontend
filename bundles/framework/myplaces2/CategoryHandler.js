@@ -303,7 +303,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 };
             form.setValues(values);
             var content = form.getForm();
-            content.find('input[name=categoryname]').val(category.name);
+            content.find('input[data-name=categoryname]').val(category.name);
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 buttons = [],

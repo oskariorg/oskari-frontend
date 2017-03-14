@@ -31,6 +31,10 @@ Fixed an issue with publisher preview in Internet explorer.
 
 Now always sorts empty ('') values to last position.
 
+### myplaces2
+
+The layer name was not populated correctly when editing a myplaces layer. This has been fixed.
+
 ### paikkatietoikkuna/routesearch
 
 Fixed the matka.fi routing option for the paikkatietoikkuna-specific bundle.
