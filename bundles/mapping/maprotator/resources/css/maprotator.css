@@ -1,15 +1,6 @@
-/*.maprotator {
-  position: relative;
-  overflow: auto;
-  width:45px;
-  height:45px;
-  background-color: rgba(0, 255, 150, 0.7);
-  border-radius: 50%;
-  pointer-events: none;
-}*/
 .compass {
   width:35px;
   height:35px;
-  background-image: url('../images/pohjoisnuoli_pallo_tumma.png');
+  background-image: url('../images/north_circle_dark.png');
   border-radius: 50%;
 }
