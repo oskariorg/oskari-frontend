@@ -1,11 +1,7 @@
-Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlugin',
-  function(instance, config, locale, mapmodule, sandbox) {
+Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
+  function() {
     var me = this;
-    me._config = config;
-    me._mapmodule = mapmodule;
-    me._sandbox = sandbox;
-    me._instance = instance;
-    me._clazz = 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlugin';
+    me._clazz = 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin';
     me._defaultLocation = 'top left';
     me._toolOpen = false;
     me._index = 600;
@@ -13,7 +9,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlu
     me._templates = {
       maprotatortool: jQuery('<div class="mapplugin maprotator compass"></div>')
     };
-    me._log = Oskari.log('Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlugin');
+    me._log = Oskari.log('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
   }, {
     /**
      * Creates UI for coordinate display and places it on the maps
@@ -26,7 +22,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlu
         var me = this,
             compass = me._templates.maprotatortool.clone(),
             degrees,
-            eventBuilder = Oskari.eventBuilder( 'MapRotationDegreesEvent' );
+            eventBuilder = Oskari.eventBuilder( 'map.rotated' );
 
         compass.on( "click", function(){
           me._map.getView().setRotation( 0 );
@@ -38,19 +34,19 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlu
 
         //HACK
         if( typeof ol == 'undefined' ) {
-
+          return;
         } else {
-          var DragRotate = new ol.interaction.DragRotate();
-          this._map.addInteraction(DragRotate);
+        var DragRotate = new ol.interaction.DragRotate();
+        this._map.addInteraction(DragRotate);
 
-          this._map.on( 'pointerdrag', function( event ) {
-             degrees = me._getRotation();
-             compass.css({ transform:'rotate('+degrees+'deg)' });
-             var event = eventBuilder( degrees );
-             me._sandbox.notifyAll( event );
-          });
-        }
-        return compass;
+        this._map.on( 'pointerdrag', function( event ) {
+           degrees = me._getRotation();
+           compass.css({ transform:'rotate('+degrees+'deg)' });
+           var event = eventBuilder( degrees );
+           me._sandbox.notifyAll( event );
+        });
+      }
+      return compass;
     },
     _createUI: function() {
       this._element = this._createControlElement();
@@ -59,8 +55,9 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlu
     setRotation: function(deg) {
       //degrees to radians
       var rot = deg / 57.3;
-      if( typeof deg === 'undefined'){
+      if( deg === ""){
         rot = 0;
+        deg = 0;
       }
       this._element.css({ transform:'rotate('+deg+'deg)' });
       this._map.getView().setRotation( rot );
@@ -84,7 +81,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlu
              */
             RPCUIEvent: function (event) {
                 var me = this;
-                if(event.getBundleId()==='coordinatetool') {
+                if(event.getBundleId()==='maprotator') {
                      me._toggleToolState();
                 }
             }

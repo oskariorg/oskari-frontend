@@ -5,7 +5,7 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.framework.bundle.maprotator.request.SetRotationRequest',
+Oskari.clazz.define('Oskari.mapping.maprotator.request.rotate.map',
 /**
  * @method create called automatically on construction
  * @static
@@ -14,7 +14,7 @@ function( degrees ) {
   this._degrees = degrees;
 }, {
   /** @static @property __name request name */
-  __name: 'SetRotationRequest',
+  __name: 'rotate.map',
   /**
    * @method getName
    * @return {String} request name

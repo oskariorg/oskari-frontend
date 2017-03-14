@@ -11,7 +11,7 @@ Oskari.app.playBundle(
   }
 });
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.maprotator.MapRotatorBundleInstance",
+Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
   function() {
     this._started = false;
     this.plugin = null;
@@ -45,6 +45,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maprotator.MapRotatorBundleInsta
     getSandbox: function () {
         return this.sandbox;
     },
+
+    handleRequest: function (core, request) {
+      this.plugin.setRotation(request.getDegrees());
+    },
     /**
      * @method start
      *
@@ -67,27 +71,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maprotator.MapRotatorBundleInsta
         sandbox.register(me);
     },
     createPlugin: function( enabled ) {
-      var config = {
-        asd:'asd'
-      };
-      var loc = 'en';
-      var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlugin', this, config, loc, this._mapmodule, this._sandbox);
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
       this.plugin = plugin;
-      this.createRequestHandlers();
-    },
-    createRequestHandlers: function () {
-      // create request handlers
-      this.showMessageRequestHandler = Oskari.clazz.create(
-          'Oskari.framework.bundle.maprotator.request.SetRotationRequestHandler',
-          this.plugin
-      );
-      // register request handlers
-      this._sandbox.requestHandler(
-          'SetRotationRequest',
-          this.showMessageRequestHandler
-      );
+      this._sandbox.requestHandler('rotate.map', this);
     }
   }, {
       /**

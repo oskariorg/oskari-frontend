@@ -23,7 +23,7 @@ function() {
   getTool: function() {
       var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
       return {
-          id: 'Oskari.mapframework.bundle.maprotator.plugin.MapRotatorPlugin',
+          id: 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
               instance: maprotator
