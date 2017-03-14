@@ -52,7 +52,7 @@ div.popupContent {
   position: relative;
   left: 0px;
   top: 0px;
-  max-height: 250px;
+  max-height: 250px !important;
   -webkit-border-radius: 0px 0px 6px 6px;
   -moz-border-radius: 0px 0px 6px 6px;
   -o-border-radius: 0px 0px 6px 6px;
