@@ -55,16 +55,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @param {String/String[]} featureId single or array of feature ids to hilight
          */
         _highlightFeature: function (layerId, featureId) {
-            if (featureId && layerId) {
-                // move map to location
-                var points = this.state.featurePoints;
-                if (points) {
-                    this._showPoints(points);
-                }
-
+            if (!featureId || !layerId) {
+                return;
+            }
+            // move map to location
+            var points = this.state.featurePoints;
+            if (points) {
+                this._showPoints(points);
+            }
+            var sb = this.sandbox;
+            // allow the map to settle before asking for highlight. We could also wait after map move events stop coming
+            // The whole feature should be rewritten using RPC and pushing the data on the map.
+            // Currently it uses Oskari and transport "creatively" and isn't all that stable
+            setTimeout(function() {
                 // request for highlight image, note that the map must be in correct
                 // location BEFORE this or we get a blank image
-                var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+                var builder = sb.getEventBuilder('WFSFeaturesSelectedEvent');
                 var featureIdList = [];
                 // check if the param is already an array
                 if (Object.prototype.toString.call(featureId) === '[object Array]') {
@@ -73,7 +79,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                     featureIdList.push(featureId);
                 }
                 // create dummy layer since the real one might not be available and we only need it for id
-                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService');
                 if (!mapLayerService || featureIdList.length === 0) {
                     // service not found - should never happen
                     // there are no highlighted features, should we tell the user about this?
@@ -87,9 +93,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 dummyLayer.setId(layerId);
                 dummyLayer.setOpacity(100);
                 var event = builder(featureIdList, dummyLayer, true);
-                this.sandbox.notifyAll(event);
-            }
-        },
+                sb.notifyAll(event);
+
+            }, 500);
+        }
         /**
          * @method _showPoints
          * @private
