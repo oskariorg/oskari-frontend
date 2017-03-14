@@ -3,16 +3,16 @@
  *
  * Event is sent when decides to
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.framework.event.MapRotationDegreesEvent',
+Oskari.clazz.define('Oskari.mapframework.framework.event.map.rotated',
 /**
  * @method create called automatically on construction
  * @static
  */
 function( degrees ) {
-    this._degrees = Math.round(degrees) + "°";
+    this._degrees = degrees;
 }, {
     /** @static @property __name event name */
-    __name : "MapRotationDegreesEvent",
+    __name : "map.rotated",
     /**
      * @method getName
      * @return {String} the name for the event

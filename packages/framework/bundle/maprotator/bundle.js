@@ -3,12 +3,12 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.framework.bundle.maprotator.MapRotatorBundle", function () {
+Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundle", function () {
 
 }, {
     "create": function () {
         var me = this;
-        var inst = Oskari.clazz.create("Oskari.mapframework.bundle.maprotator.MapRotatorBundleInstance");
+        var inst = Oskari.clazz.create("Oskari.mapping.maprotator.MapRotatorBundleInstance");
 
         return inst;
 
@@ -36,35 +36,32 @@ Oskari.clazz.define("Oskari.framework.bundle.maprotator.MapRotatorBundle", funct
        */
       {
           "type" : "text/javascript",
-          "src" : "../../../../bundles/framework/maprotator/instance.js"
+          "src" : "../../../../bundles/mapping/maprotator/instance.js"
       }, {
           "type" : "text/javascript",
-          "src" : "../../../../bundles/framework/maprotator/plugin/MapRotatorPlugin.js"
+          "src" : "../../../../bundles/mapping/maprotator/plugin/MapRotatorPlugin.js"
       }, {
           "type" : "text/javascript",
-          "src" : "../../../../bundles/framework/maprotator/publisher/MapRotator.js"
+          "src" : "../../../../bundles/mapping/maprotator/publisher/MapRotator.js"
       }, {
           "type" : "text/javascript",
-          "src" : "../../../../bundles/framework/maprotator/event/RotationDegreesEvent.js"
+          "src" : "../../../../bundles/mapping/maprotator/event/map.rotated.js"
       }, {
          "type" : "text/javascript",
-         "src" : "../../../../bundles/framework/maprotator/request/SetRotationRequest.js"
-       }, {
-          "type" : "text/javascript",
-          "src" : "../../../../bundles/framework/maprotator/request/SetRotationRequestHandler.js"
+         "src" : "../../../../bundles/mapping/maprotator/request/rotate.map.js"
       }, {
           "lang": "fi",
           "type": "text/javascript",
-          "src": "../../../../bundles/framework/maprotator/resources/css/maprotator.css"
+          "src": "../../../../bundles/mapping/maprotator/resources/css/maprotator.css"
       }],
       "locales" : [{
           "lang": "en",
           "type": "text/javascript",
-          "src": "../../../../bundles/framework/maprotator/resources/locale/en.js"
+          "src": "../../../../bundles/mapping/maprotator/resources/locale/en.js"
       },{
           "lang": "fi",
           "type": "text/javascript",
-          "src": "../../../../bundles/framework/maprotator/resources/locale/fi.js"
+          "src": "../../../../bundles/mapping/maprotator/resources/locale/fi.js"
       }]
   },
   "bundle": {
@@ -96,4 +93,4 @@ Oskari.clazz.define("Oskari.framework.bundle.maprotator.MapRotatorBundle", funct
   "dependencies" : ["jquery"]
 
 });
-Oskari.bundle_manager.installBundleClass("maprotator", "Oskari.framework.bundle.maprotator.MapRotatorBundle");
+Oskari.bundle_manager.installBundleClass("maprotator", "Oskari.mapping.maprotator.MapRotatorBundle");
