@@ -350,14 +350,14 @@
              * @param {String} requestName (this is NOT the request class name)
              * @param {Array} requestArgs (optional)
              */
-            postRequestByName: function (requestName, requestArgs) {
+            postRequestByName: function (requestName, requestArgs, syncDoNotUseWillBeRemoved) {
                 var me = this,
                     requestBuilder = Oskari.requestBuilder(requestName);
                 if (!requestBuilder || !this.hasHandler(requestName)) {
                     log.warn('Trying to post request', requestName, 'that is undefined or missing a handler. Skipping!');
                     return;
                 }
-                window.setTimeout(function () {
+                var handleReg = function () {
                     var request = requestBuilder.apply(me, requestArgs || []),
                         creatorComponent = me.postMasterComponent,
                         rv = null;
@@ -381,7 +381,12 @@
                         me._debugPopRequest();
                     }
 
-                }, 0);
+                };
+                if(syncDoNotUseWillBeRemoved) {
+                    handleReg();
+                } else {
+                    window.setTimeout(handleReg, 0);
+                }
 
             },
 

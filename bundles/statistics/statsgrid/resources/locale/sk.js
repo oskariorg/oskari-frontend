@@ -12,6 +12,7 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "dataProviderInfoTitle": "Indikátory",
         "layertools": {
             "table_icon": {
                 "tooltip": "Choď na tematické mapy",

@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Conditions d’utilisation",
                 "dataSources": "Sources des données",
-                "layersHeader": "Couches cartographiques",
-                "indicatorsHeader": "Indicateurs"
+                "layersHeader": "Couches cartographiques"
             },
             "DataSourcePlugin": {
                 "link": "Source des données",

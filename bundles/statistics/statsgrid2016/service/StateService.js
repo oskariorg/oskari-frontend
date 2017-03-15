@@ -60,9 +60,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         setRegionset : function(regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
-            // notify
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+
+            // notify if regionset changed
+            if(previousSet !== this.regionset) {
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
+                this.sandbox.notifyAll(eventBuilder(this.regionset, previousSet));
+            }
         },
         /**
          * Selects the region. Only sends out an event for now, selected region is not tracked by the service.
@@ -125,7 +128,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
             return null;
         },
-
+        /**
+         * Returns true if an indicator matching the datasource and id is still selected with any parameters.
+         * Can be used to check if we should show the dataprovider information for the indicator or not.
+         * @param  {Number}  ds datasource id
+         * @param  {String}  id Indicator id
+         * @return {Boolean} true if this indicator with any selections is still part of the selected indicators
+         */
+        isSelected : function(ds, id) {
+            for(var i = 0;i<this.indicators.length; i++) {
+                var ind = this.indicators[i];
+                if(ind.datasource === ds && ind.indicator === id) {
+                    return true;
+                }
+            }
+            return false;
+        },
         /**
          * Returns an array of objects containing details (datasource, id, selections) of currently selected indicators.
          * @return {Object[]} currently selected indicators

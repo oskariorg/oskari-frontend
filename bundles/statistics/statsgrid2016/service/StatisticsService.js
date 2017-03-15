@@ -118,6 +118,7 @@
                 var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
                 callback({
                     indicator : name,
+                    source : Oskari.getLocalized(ind.source),
                     params : selectorsFormatted,
                     full : name + ' ' + selectorsFormatted,
                     paramsAsObject : uiLabels

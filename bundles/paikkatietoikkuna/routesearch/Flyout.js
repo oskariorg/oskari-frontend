@@ -7,8 +7,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
     function () {
         this.fields = ['from', 'to'];
         this.state = {};
+        this.fromLonLat = {};
+        this.toLonLat = {};
+        this.locations = [];
         this.services = [];
         this._templates = {};
+        this._mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._templates.main =
             '<div>' +
             '</div>' +
@@ -39,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         _getSearchSuggestions: function (field, request, response) {
             var me = this,
                 fieldName = field.element[0].name;
-
             me.state[fieldName] = {
                 'name': request.term
             };
@@ -51,7 +54,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     request.term,
                     function (data) {
                         // onSuccess
-                        response(data && data.totalCount ? data.locations : []);
+                        var value = data && data.totalCount ? data.locations : [];
+                        me.locations = value;
+                        response(value);
                     },
                     function () {}
                 );
@@ -75,6 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 };
             me.state[fieldName] = item;
             field.val(item.name + ', ' + item.village);
+            me.bindLocation(me.locations);
             me._updateRoutingLinks();
         },
 
@@ -86,6 +92,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          */
         _reverseGeoCode: function (field, lonLat) {
             //not implemented
+        },
+        bindLocation: function(location){
+          var me = this;
+
+          location.forEach( function (loc) {
+            if(!me.state.from.village){
+              return;
+            } else if(loc.name === me.state.from.name && loc.village === me.state.from.village){
+                var fromLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
+                me.fromLonLat = fromLonLat;
+            }
+            if(!me.state.to){
+            }
+              else if(loc.name === me.state.to.name && loc.village === me.state.to.village){
+                var toLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
+                me.toLonLat = toLonLat;
+              }
+          })
         },
 
         /**
@@ -200,7 +224,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          */
         _initRoutingServices: function () {
             var me = this;
-
             me.services.push(
                 me._routingService(
                     'Matka.fi',
@@ -240,30 +263,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          * @private
          */
         _matkaFiURLBuilder: function(fromLoc, toLoc) {
-            var url = 'http://www.matka.fi/fi/?keya=';
+          var me = this;
+            var url = 'http://opas.matka.fi/reitti/';
             url += fromLoc.name;
             if (fromLoc.village) {
-                url += '%2C+' + fromLoc.village;
+                url += '%2C%20' + fromLoc.village + '%3A%3A'+me.fromLonLat.lat+'%2C'+me.fromLonLat.lon;
             }
-            url += '&keyb=' + toLoc.name;
+            url += '/' + toLoc.name;
             if (toLoc.village) {
-                url += '%2C+' + toLoc.village;
+                url += '%2C%20' + toLoc.village + '%3A%3A'+me.toLonLat.lat+'%2C'+me.toLonLat.lon;
             }
             /* Ugly ISO-8859-1 encode,
              * replace with a lib if need be.
              */
-            url = url.replace('Å', '%C5')
-                .replace('å', '%E5')
-                .replace('Ä', '%C4')
-                .replace('ä', '%E4')
-                .replace('Ö', '%D6')
-                .replace('ö', '%F6')
-                .replace('é', '%E9')
-                .replace('É', '%C9')
-                .replace('ü', '%FC')
-                .replace('Ü', '%DC')
-                .replace('\'', '%27')
-                .replace(',', '%2C');
+            // url = url.replace('Å', '%C5')
+            //     .replace('å', '%E5')
+            //     .replace('Ä', '%C4')
+            //     .replace('ä', '%E4')
+            //     .replace('Ö', '%D6')
+            //     .replace('ö', '%F6')
+            //     .replace('é', '%E9')
+            //     .replace('É', '%C9')
+            //     .replace('ü', '%FC')
+            //     .replace('Ü', '%DC')
+            //     .replace('\'', '%27')
+            //     .replace(',', '%2C');
 
             return url;
         },
@@ -400,6 +424,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
             for (i = 0; i < me.services.length; i++) {
                 routingService = me.services[i];
+                if(routingService.name==="Matka.fi"){
+                  routingService.fromLonLat = me.fromLonLat;
+                  routingService.toLonLat = me.toLonLat;
+                }
                 button = routingService.getButton.apply(
                     routingService,
                     locations

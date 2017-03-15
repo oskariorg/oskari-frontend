@@ -15,8 +15,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     // Keep latest sorting on memory
     this._sortOrder = null;
-
-    this._timerHeaderHeight = null;
 }, {
     __templates : {
         main : _.template('<div class="stats-table">'+
@@ -49,6 +47,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      * @param  {Integer} setId regionset id
      */
     _handleRegionsetChanged: function(setId) {
+        var currentRegion = this.getCurrentRegionset();
+        // Region not changed, not need to handle then
+        /*if(currentRegion === setId) {
+            return;
+        }
+        */
         if(!setId) {
             setId = this.getCurrentRegionset();
         }
@@ -230,94 +234,94 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             done();
             return;
         }
-        // figure out ui names for indicators
-        var count = 0;
-
         indicators.forEach(function(ind, id) {
-            count++;
-            me.service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-                count--;
+            me.grid.setColumnUIName(ind.hash, function(content) {
+                var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
+                tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
 
-                me.grid.setColumnUIName(ind.hash, function(content) {
-                    var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
-                    tableHeader.find('.title').html(gridLoc.source + ' ' + (id+1) + ':');
+                me.service.getUILabels(ind, function(labels) {
+                    tableHeader.find('.header').append(labels.full).attr('title', labels.full);
+                });
 
-                    me.service.getUILabels(ind, function(labels) {
-                        tableHeader.find('.header').append(labels.full).attr('title', labels.full);
-                    });
+                tableHeader.find('.icon').attr('title', gridLoc.removeSource);
 
-                    tableHeader.find('.icon').attr('title', gridLoc.removeSource);
+                // If not published then show close icon
+                if(me.indicatorRemovalEnabled) {
+                    tableHeader.find('.icon').bind('click', function(){
+                        log.info('Removing indicator ', + ind.hash);
 
-                    // If not published then show close icon
-                    if(me.indicatorRemovalEnabled) {
-                        tableHeader.find('.icon').bind('click', function(){
-                            log.info('Removing indicator ', + ind.hash);
-
-                            // Set default sort order
-                            if(me._sortOrder.item === ind.hash) {
-                                me._sortOrder = me._defaultSortOrder;
-                            }
-                            me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
-                        });
-                    }
-                    // Else remove close icon
-                    else {
-                        tableHeader.find('.icon').remove();
-                    }
-
-                    var sortBy = tableHeader.find('.sortby');
-                    sortBy.find('.orderTitle').html(gridLoc.orderBy);
-                    var order = sortBy.find('.order');
-
-                    sortBy.bind('click', function(evt){
-                        evt.stopPropagation();
-
-                        me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
-                        sortBy.find('.orderTitle').addClass('selected');
-
-                        var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
-
-                         // Check at if not selected previous then select item current order
-                        var notAllreadySelected = (me._sortOrder === null || me._sortOrder.item !== ind.hash) ? true : false;
-                        if(notAllreadySelected) {
-                            descending = !descending;
+                        // Set default sort order
+                        if(me._sortOrder.item === ind.hash) {
+                            me._sortOrder = me._defaultSortOrder;
                         }
-
-                        me.grid.sortBy(ind.hash, descending);
-                        sortBy.attr('data-descending', !descending);
-
-                        me._sortOrder = {
-                            item: ind.hash,
-                            descending: descending
-                        };
-
-                        order.removeClass('asc');
-                        order.removeClass('desc');
-
-                        if(descending) {
-                            sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
-                            order.addClass('desc');
-                        } else {
-                            sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
-                            order.addClass('asc');
-                        }
+                        me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections);
                     });
+                }
+                // Else remove close icon
+                else {
+                    tableHeader.find('.icon').remove();
+                }
 
+                var sortBy = tableHeader.find('.sortby');
+                sortBy.find('.orderTitle').html(gridLoc.orderBy);
+                var order = sortBy.find('.order');
+
+                sortBy.bind('click', function(evt){
+                    evt.stopPropagation();
+
+                    me.mainEl.find('.grid .sortby .orderTitle').removeClass('selected');
+                    sortBy.find('.orderTitle').addClass('selected');
+
+                    var descending = (sortBy.attr('data-descending') === 'true') ? true : false;
+
+                     // Check at if not selected previous then select item current order
+                    var notAllreadySelected = (me._sortOrder === null || me._sortOrder.item !== ind.hash) ? true : false;
+                    if(notAllreadySelected) {
+                        descending = !descending;
+                    }
+
+                    me.grid.sortBy(ind.hash, descending);
+                    sortBy.attr('data-descending', !descending);
+
+                    me._sortOrder = {
+                        item: ind.hash,
+                        descending: descending
+                    };
+
+                    order.removeClass('asc');
+                    order.removeClass('desc');
+
+                    if(descending) {
+                        sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
+                        order.addClass('desc');
+                    } else {
+                        sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
+                        order.addClass('asc');
+                    }
+                });
+
+                if(me._sortOrder.item === ind.hash) {
+                    var sortByTooltip = (me._sortOrder.descending === true) ? gridLoc.orderByDescending : gridLoc.orderByAscending;
+                    var sortCls = (me._sortOrder.descending === true) ? 'desc' : 'asc';
+                    sortBy.attr('data-descending', me._sortOrder.descending);
+                    sortBy.find('.orderTitle').addClass('selected');
+                    sortBy.find('.orderTitle').attr('title', sortByTooltip);
+                    order.addClass(sortCls);
+                }
+                else {
                     sortBy.attr('data-descending', false);
                     sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
                     order.addClass('desc');
+                }
 
-                    tableHeader.bind('click', function(){
-                        me.service.getStateService().setActiveIndicator(ind.hash);
-                    });
-
-                    content.append(tableHeader);
+                tableHeader.bind('click', function(){
+                    me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
-                if(count === 0) {
-                    done();
-                }
+                content.append(tableHeader);
             });
+
+            done();
         });
     },
 
@@ -419,19 +423,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     setHeaderHeight: function(){
         var me = this;
-        clearTimeout(me._timerHeaderHeight);
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
         if(statsTableEl.length > 0) {
             statsTableEl.addClass('autoheight');
-            // timeout hack is needed by IE 11. Otherwise header elements with css like
+            // hack is needed by IE 11. Otherwise header elements with css like
             //   position : absolute, bottom : 0
             // will render in wrong location.
             // This will force a repaint which will fix the locations.
-            me._timerHeaderHeight = setTimeout(function() {
-                statsTableEl.removeClass('autoheight');
-                statsTableEl.hide();
-                statsTableEl.show(0);
-            },1000);
+            statsTableEl.removeClass('autoheight');
+            statsTableEl.hide();
+            statsTableEl.show(0);
         }
     },
 
@@ -535,9 +536,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             return;
         }
         list.forEach(function(ind) {
-            count++;
             me.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, me.getCurrentRegionset(), function(err, indicatorData) {
-                count--;
+                count++;
                 for(var key in indicatorData) {
                     var region =  data[key];
                     if(!region) {
@@ -545,7 +545,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     }
                     region[ind.hash] = indicatorData[key];
                 }
-                if(count===0) {
+                if(count===list.length) {
                     done(data);
                 }
             });
