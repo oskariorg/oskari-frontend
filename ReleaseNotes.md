@@ -6,10 +6,6 @@
 
 Fixed extra coordinate server transform calls.
 
-### fullscreen
-
-Fixed JavaScript error when stopping plugin.
-
 ### mapmodule
 getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
 
@@ -29,15 +25,46 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 Medium map height changed from 525 to 600.
 
+## 1.41.2
+
+### Fixed history tools
+
+- mapfull. Removed unneccessary adjustMapSize call.
+- mapmodule-plugin/MapMoveRequest. Fixed zoom changed check.
+
+### fullscreen
+
+Fixed JavaScript error when stopping plugin.
+
+### Datasources UI in LogoPlugin
+
+Fixes an issue where data providers were not listed on the attribution listing.
+LogoPlugin now has a service which can be used to push information to the data providers/attribution list.
+LogoPlugin no longer references statistics data on its own.
+Statsgrid bundles push the attribution data to the LogoPlugin via the new ´map.DataProviderInfoService´.
+
 ### statistics/statsgrid2016
 
-Fixed state service so at setRegionset not send region changed event if setted region is same than previous.
+Performance improvements:
 
-Fixed datatable double rendering/drawing when more than one indicator is added. Now datatable drawed faster.
+- StatsGrid.RegionsetChangedEvent is not triggered if setRegionset() is called with the current regionset id.
+- Datatable was rendered multiple times when an indicator was added. This has been fixed.
+- Flyout content is no longer re-rendered each time the flyout moves.
+
+Fixed an issue with publisher preview in Internet explorer.
+Fixed localization issue with layer tools shown in selected layers.
 
 ### Oskari.util.naturalSort
 
-Now naturalSort function sort empty ('') values always to latest.
+Now always sorts empty ('') values to last position.
+
+### myplaces2
+
+The layer name was not populated correctly when editing a myplaces layer. This has been fixed.
+
+### paikkatietoikkuna/routesearch
+
+Fixed the matka.fi routing option for the paikkatietoikkuna-specific bundle.
 
 ## 1.41.1
 

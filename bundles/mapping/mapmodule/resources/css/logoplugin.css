@@ -31,9 +31,9 @@
 
 .data-sources-dialog {
   max-width: 400px; }
-  .data-sources-dialog .layers h4, .data-sources-dialog .data-sources-dialog .indicators h4 {
+  .data-sources-dialog h4.data-sources-heading {
     padding-bottom: 5px; }
-  .data-sources-dialog .indicators {
+  .data-sources-dialog .data-sources-group {
     margin-top: 10px; }
 
 /*# sourceMappingURL=logoplugin.css.map */

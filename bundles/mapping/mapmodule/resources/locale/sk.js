@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Podmienky používania",
                 "dataSources": "Zdroje údajov",
-                "layersHeader": "Mapové vrstvy",
-                "indicatorsHeader": "Indikátory"
+                "layersHeader": "Mapové vrstvy"
             },
             "DataSourcePlugin": {
                 "link": "Zdroj údajov",

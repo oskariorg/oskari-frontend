@@ -42,7 +42,6 @@ Oskari.clazz.define(
             var zoomChange = (zoom || zoom === 0);
 
             //if zoom is about to change -> Suppress the event
-            //centerMap: function (lonlat, zoom, suppressEnd) { !=true notify
             this.mapModule.centerMap(lonlat, null, !!zoomChange);
             if (zoomChange) {
                 if (zoom.left && zoom.top && zoom.bottom && zoom.right) {
@@ -53,8 +52,6 @@ Oskari.clazz.define(
                     this.mapModule.setZoomLevel(zoom, false);
                 }
             }
-
-            this.sandbox.printDebug('[MapMoveRequestHandler] map moved');
         }
     }, {
         /**

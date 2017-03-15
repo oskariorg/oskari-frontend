@@ -375,41 +375,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     return JSON.stringify(prevMarkers) !== JSON.stringify(nextMarkers);
                 }
             }
-            /*{
-                rule: 'plugins',
-                cmp: function (prevState, nextState) {
-                    var me = this,
-                        prevPlugins = prevState.plugins,
-                        nextPlugins = nextState.plugins,
-                        pluginKey,
-                        prevKeys = [],
-                        nextKeys = [],
-                        prevPluginState,
-                        nextPluginState;
-
-                    // Only one or other has plugins, return true
-                    if ( (prevPlugins && !nextPlugins) || (!prevPlugins && nextPlugins) ) {
-                        return true;
-                    }
-
-                    for (pluginKey in prevPlugins) {
-                        prevKeys.push(pluginKey);
-                        prevPluginState = prevPlugins[pluginKey];
-                        nextPluginState = nextPlugins[pluginKey];
-
-                        // See if the plugins have the same state
-                        if (JSON.stringify(prevPluginState) !== JSON.stringify(nextPluginState)) {
-                            return true;
-                        }
-                    }
-
-                    for (pluginKey in nextPlugins) {
-                        nextKeys.push(pluginKey);
-                    }
-
-                    // See if plugin count matches (prevPlugins loop already checks if the plugins themselves match)
-                    return prevKeys.length === nextKeys.length;
-                }*/
         ],
 
         _compareState: function (prevState, nextState, returnFirst) {
@@ -503,15 +468,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     me._historyNext = nextHistory;
                     break;
                 default:
-                    me._historyEnabled = false;
                     /* pops current state */
                     var cstate = this._historyPrevious.pop(); /* currentstate */
-                    me._historyNext.push(cstate);
+                    this._historyNext.push(cstate);
                     var state = this._historyPrevious[this._historyPrevious.length - 1],
                         mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                         currentState = this._getMapState();
-                    me._setMapState(mapmodule, state, currentState);
-                    me._historyEnabled = true;
+                    this._historyEnabled = false;
+                    this._setMapState(mapmodule, state, currentState);
+                    this._historyEnabled = true;
                     break;
             }
         },

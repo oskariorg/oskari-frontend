@@ -40,11 +40,11 @@
 
 .data-sources-dialog {
   max-width: 400px;
-  .layers h4, .data-sources-dialog .indicators h4 {
+  h4.data-sources-heading {
     padding-bottom: 5px;
   }
 
-  .indicators {
+  .data-sources-group {
     margin-top: 10px;
   }
 }

@@ -12,6 +12,7 @@ Oskari.registerLocalization(
             "title": "",
             "message": ""
         },
+        "dataProviderInfoTitle": "Märksõnad",
         "layertools": {
             "table_icon": {
                 "tooltip": "",
