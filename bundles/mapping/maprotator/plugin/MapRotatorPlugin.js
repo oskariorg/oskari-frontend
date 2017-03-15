@@ -6,6 +6,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     me._toolOpen = false;
     me._index = 600;
     me._currentRot = null;
+    me.previousDegrees = null;
     me._templates = {
       maprotatortool: jQuery('<div class="mapplugin maprotator compass"></div>')
     };
@@ -42,8 +43,12 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
         this._map.on( 'pointerdrag', function( event ) {
            degrees = me._getRotation();
            compass.css({ transform:'rotate('+degrees+'deg)' });
-           var event = eventBuilder( degrees );
-           me._sandbox.notifyAll( event );
+
+           if(degrees != me.previousDegrees) {
+             var event = eventBuilder( degrees );
+             me._sandbox.notifyAll( event );
+           }
+           me.previousDegrees = degrees;
         });
       }
       return compass;
