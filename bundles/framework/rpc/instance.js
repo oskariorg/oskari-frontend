@@ -130,10 +130,6 @@ Oskari.clazz.define(
             me._bindFunctions(channel);
             me._channel = channel;
         },
-        /**
-         * Initialize allowed requests/events/functions based on config
-         * @param  {Object} conf bundle configuration
-         */
         __init : function(conf) {
             var me = this;
             // sanitize conf to prevent unnecessary errors
@@ -155,11 +151,14 @@ Oskari.clazz.define(
 
                 // Special handling for getScreenshot() since it's not always present
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                // var img = null;
                 if(typeof mapModule.getScreenshot === 'function') {
                     // this is only available in Openlayers3 implementation of mapmodule
-                    funcs['getScreenshot'] = function() {
-                        return mapModule.getScreenshot();
-                    };
+                    funcs['getScreenshot'] = function(transaction) {
+                      mapModule.getScreenshot(function(image){
+                        transaction.complete(image);
+                      });
+                  }
                 }
 
                 for(var name in funcs) {
@@ -242,7 +241,7 @@ Oskari.clazz.define(
             getSupportedRequests : function() {
                 return this._allowedRequests;
             },
-            getInfo : function(clientVersion) {
+            getInfo : function(transaction, clientVersion) {
                 var sbMap = this.sandbox.getMap();
                 return {
                     version : Oskari.VERSION,
@@ -318,12 +317,12 @@ Oskari.clazz.define(
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomTo : function(newZoom) {
+            zoomTo : function(transaction, newZoom) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapModule.setZoomLevel(newZoom);
                 return mapModule.getMapZoom();
             },
-            getPixelMeasuresInScale : function(mmMeasures, scale) {
+            getPixelMeasuresInScale : function(transaction, mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
                     pixelMeasures = [],
@@ -353,14 +352,16 @@ Oskari.clazz.define(
             },
             resetState : function() {
                 this.sandbox.resetState();
+                return true;
             },
             getCurrentState : function() {
                 return this.sandbox.getCurrentState();
             },
-            useState : function(state) {
+            useState : function(transaction,state) {
                 this.sandbox.useState(state);
+                return true;
             },
-            getFeatures: function(includeFeatures) {
+            getFeatures: function(transaction,includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
@@ -378,14 +379,15 @@ Oskari.clazz.define(
                 });
                 return features;
             },
-            setCursorStyle: function(cursorStyle) {
+            setCursorStyle: function(transaction, cursorStyle) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return mapModule.setCursorStyle(cursorStyle);
             },
-            sendUIEvent: function(bundleId, payload) {
+            sendUIEvent: function(transaction, bundleId, payload) {
                 var me = this,
                     event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
+                return true;
             }
         },
 
@@ -409,7 +411,18 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    return me._availableFunctions[name].apply(me, params);
+                    params = params ||[];
+                    try {
+                      params.unshift(trans);
+                    } catch(err)  {
+                      console.log(err);
+                    }
+                    var value =  me._availableFunctions[name].apply(me, params);
+                    if(typeof value === 'undefined') {
+                      trans.delayReturn(true);
+                      return;
+                    }
+                    return value;
                 });
             }
 
