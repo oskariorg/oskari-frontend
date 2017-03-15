@@ -412,11 +412,8 @@ Oskari.clazz.define(
                         };
                     }
                     params = params ||[];
-                    try {
-                      params.unshift(trans);
-                    } catch(err)  {
-                      console.log(err);
-                    }
+                    params.unshift(trans);
+
                     var value =  me._availableFunctions[name].apply(me, params);
                     if(typeof value === 'undefined') {
                       trans.delayReturn(true);
