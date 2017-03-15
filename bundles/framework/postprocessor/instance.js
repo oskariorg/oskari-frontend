@@ -96,7 +96,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 sb.notifyAll(event);
 
             }, 500);
-        }
+        },
         /**
          * @method _showPoints
          * @private
