@@ -24,6 +24,7 @@ Performance improvements:
 
 - StatsGrid.RegionsetChangedEvent is not triggered if setRegionset() is called with the current regionset id.
 - Datatable was rendered multiple times when an indicator was added. This has been fixed.
+- Flyout content is no longer re-rendered each time the flyout moves.
 
 Fixed an issue with publisher preview in Internet explorer.
 Fixed localization issue with layer tools shown in selected layers.

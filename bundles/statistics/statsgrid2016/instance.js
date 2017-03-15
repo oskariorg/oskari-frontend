@@ -154,18 +154,19 @@ Oskari.clazz.define(
                     return;
                 }
                 var wasClosed = event.getViewState() === 'close';
+                // moving flyout around will trigger attach states on each move
+                var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
                 if(wasClosed){
                     return;
                 }
                 var renderMode = this.isEmbedded();
                 // rendermode changes if we are in geoportal and open the flyout in publisher
-                if(this._lastRenderMode !== renderMode) {
+                if(this._lastRenderMode !== renderMode && visibilityChanged) {
                     this.getFlyout().render(renderMode);
                     this._lastRenderMode = renderMode;
+                    this.getFlyout().setGridHeaderHeight();
                 }
-
-                this.getFlyout().setGridHeaderHeight();
             },
             /**
              * @method MapLayerEvent
