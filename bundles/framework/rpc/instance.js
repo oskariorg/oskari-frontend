@@ -130,76 +130,6 @@ Oskari.clazz.define(
             me._bindFunctions(channel);
             me._channel = channel;
         },
-        /**
--         * Initialize allowed requests/events/functions based on config
--         * @param  {Object} conf bundle configuration
--         */
-        __init : function(conf) {
-            var me = this;
-            // sanitize conf to prevent unnecessary errors
-            conf = conf || {};
-            var allowedEvents = conf.allowedEvents;
-            var allowedFunctions = conf.allowedfunctions;
-            var allowedRequests = conf.allowedRequests;
-
-            if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-                'RPCUIEvent'];
-            }
-
-            if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = [];
-                // allow all available functions by default
-                var funcs = this._availableFunctions;
-
-                // Special handling for getScreenshot() since it's not always present
-                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-                if(typeof mapModule.getScreenshot === 'function') {
-                    // this is only available in Openlayers3 implementation of mapmodule
-                    funcs['getScreenshot'] = function(transaction) {
-                      mapModule.getScreenshot(function(image){
-                        transaction.complete(image);
-                      });
-                  }
-                }
-
-                for(var name in funcs) {
-                    if(funcs.hasOwnProperty(name)) {
-                        allowedFunctions.push(name);
-                    }
-                }
-            }
-            if (allowedRequests === null || allowedRequests === undefined) {
-                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
-                    'InfoBox.HideInfoBoxRequest',
-                    'MapModulePlugin.AddMarkerRequest',
-                    'MapModulePlugin.AddFeaturesToMapRequest',
-                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
-                    'MapModulePlugin.GetFeatureInfoRequest',
-                    'MapModulePlugin.MapLayerVisibilityRequest',
-                    'MapModulePlugin.RemoveMarkersRequest',
-                    'MapModulePlugin.MarkerVisibilityRequest',
-                    'MapMoveRequest',
-                    'ShowProgressSpinnerRequest',
-                    'GetRouteRequest',
-                    'GetFeedbackServiceRequest',
-                    'GetFeedbackServiceDefinitionRequest',
-                    'GetFeedbackRequest',
-                    'PostFeedbackRequest',
-                    'SearchRequest',
-                    'ChangeMapLayerOpacityRequest',
-                    'MyLocationPlugin.GetUserLocationRequest',
-                    'DrawTools.StartDrawingRequest',
-                    'DrawTools.StopDrawingRequest',
-                    'MapModulePlugin.ZoomToFeaturesRequest',
-                    'MapModulePlugin.MapLayerUpdateRequest'];
-            }
-            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
-            // try to get event/request builder for each of these to see that they really are supported!!
-            me.__setupAvailableEvents(allowedEvents);
-            me.__setupAvailableRequests(allowedRequests);
-        },
         __setupAvailableEvents : function(allowedEvents) {
             var available = [];
             var sb = this.getSandbox();
@@ -521,9 +451,8 @@ Oskari.clazz.define(
         },
 
         /**
-         * @public @method init
-         *
-         *
+         * Initialize allowed requests/events/functions based on config
+         * @param  {Object} conf bundle configuration
          */
         init: function () {
           var me = this;
