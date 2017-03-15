@@ -50,7 +50,7 @@ Oskari.clazz.define(
             sandbox.register(this);
 
             // check configured requests/events
-            this.__init(conf);
+            this.init();
 
             if (!Channel) {
                 me.log.warn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
