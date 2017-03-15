@@ -1329,6 +1329,9 @@ Oskari.clazz.define(
          * sends message to /highlight*
          */
         getHighlightImage: function (layer, srs, bbox, zoom, featureIds) {
+            if(!featureIds || !featureIds.length) {
+                return;
+            }
             // helper function for visibleFields
             var me = this,
                 sandbox = me.getSandbox(),
