@@ -97,17 +97,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
           var me = this;
 
           location.forEach( function (loc) {
-            if(!me.state.from.village){
-              return;
-            } else if(loc.name === me.state.from.name && loc.village === me.state.from.village){
+            if(typeof me.state.from != 'undefined') {
+                if(loc.name === me.state.from.name && loc.village === me.state.from.village){
                 var fromLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
                 me.fromLonLat = fromLonLat;
-            }
-            if(!me.state.to){
-            }
-              else if(loc.name === me.state.to.name && loc.village === me.state.to.village){
+                }
+              }
+              if(typeof me.state.to != 'undefined') {
+                if(loc.name === me.state.to.name && loc.village === me.state.to.village){
                 var toLonLat = me._mapmodule.transformCoordinates({ lon: loc.lon, lat: loc.lat }, me._mapmodule.getProjection(), 'EPSG:4326');
                 me.toLonLat = toLonLat;
+                }
               }
           })
         },
