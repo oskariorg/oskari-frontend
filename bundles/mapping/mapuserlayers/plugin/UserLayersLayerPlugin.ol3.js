@@ -84,6 +84,7 @@ Oskari.clazz.define(
 
             var openlayer = new ol.layer.Image(model);
             map.addLayer(openlayer, !keepLayerOnTop);
+            me._registerLayerEvents(openlayer, layer);
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
@@ -95,6 +96,29 @@ Oskari.clazz.define(
 
             this.handleBounds(layer);
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+        var me = this;
+        var source = layer.getSource();
+
+        source.on('imageloadstart', function() {
+          me.getMapModule().loadingState( oskariLayer._id, true);
+        });
+
+        source.on('imageloadend', function() {
+          me.getMapModule().loadingState( oskariLayer._id, false);
+        });
+
+        source.on('imageloaderror', function() {
+          oskariLayer.loadingError();
+        });
+
+      },
 
         /**
          * Make use of the layer bounding box information to set appropriate map view
