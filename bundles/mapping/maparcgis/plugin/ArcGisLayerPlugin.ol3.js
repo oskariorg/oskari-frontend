@@ -120,6 +120,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             openlayer.opacity = layer.getOpacity() / 100;
 
             me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
+            me._registerLayerEvents(openlayer, layer);
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
@@ -127,7 +128,30 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 '#!#! CREATED ' + layerType + ' for ArcGisLayer ' +
                 layer.getId()
             );
-        }
+        },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+        var me = this;
+        var source = layer.getSource();
+
+        source.on('tileloadstart', function() {
+          me.getMapModule().loadingState( oskariLayer._id, true);
+        });
+
+        source.on('tileloadend', function() {
+          me.getMapModule().loadingState( oskariLayer._id, false);
+        });
+
+        source.on('tileloaderror', function() {
+          oskariLayer.loadingError();
+        });
+
+      }
     }, {
         "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**
