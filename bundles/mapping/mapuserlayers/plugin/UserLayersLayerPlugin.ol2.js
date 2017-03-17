@@ -117,7 +117,7 @@ Oskari.clazz.define(
           layer.events.register("tileerror", layer, function(){
             oskariLayer.loadingError();
          });
-         }
+       },
 
         /**
          * Make use of the layer bounding box information to set appropriate map view
