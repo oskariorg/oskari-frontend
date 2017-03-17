@@ -1436,7 +1436,31 @@ Oskari.clazz.define(
             openLayer.setOpacity(_layer.getOpacity() / 100);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me.layerByName(layerName, openLayer);
+            me._registerLayerEvents(openLayer, _layer);
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+          var me = this;
+          var source = layer.getSource();
+
+          source.on('tileloadstart', function() {
+            me.getMapModule().loadingState( oskariLayer._id, true);
+          });
+
+          source.on('tileloadend', function() {
+            me.getMapModule().loadingState( oskariLayer._id, false);
+          });
+
+          source.on('tileloaderror', function() {
+            oskariLayer.loadingError();
+          });
+
+      },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),

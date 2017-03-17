@@ -1242,6 +1242,7 @@ Oskari.clazz.define(
                 wfsMapImageLayer.opacity = layer.getOpacity() / 100;
                 map.addLayer(wfsMapImageLayer);
                 wfsMapImageLayer.setVisibility(true);
+
                 // also for draw
                 wfsMapImageLayer.redraw(true);
 
@@ -1485,7 +1486,39 @@ Oskari.clazz.define(
             }
 
             this.getMap().addLayer(openLayer);
+            me._registerLayerEvents(openLayer, _layer);
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+         _registerLayerEvents: function(layer, oskariLayer){
+           var me = this;
+
+           layer.events.register("loadstart", layer, function(){
+             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
+             me.getMapModule().loadingState( oskariLayer._id, true);
+
+           });
+
+          //  layer.events.register("tileloadstart", layer, function(){
+          //    me.getMapModule().loadingState( oskariLayer._id, true);
+          //  });
+
+          //  layer.events.register("tileloaded", layer, function(){
+          //    me.getMapModule().loadingState( oskariLayer._id, false);
+          //  });
+
+           layer.events.register("loadend", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, false);
+          });
+
+          layer.events.register("tileerror", layer, function(){
+            oskariLayer.loadingError();
+         });
+         },
 
         // from tilesgridplugin
 
