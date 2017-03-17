@@ -170,9 +170,38 @@ Oskari.clazz.define(
                     transitionEffect: null
                 }
             );
-
+            this._registerLayerEvents(openLayer, layer);
             me._addMapLayersToMap(layer, openLayer, keepLayerOnTop, true);
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+         _registerLayerEvents: function(layer, oskariLayer){
+           var me = this;
+
+           layer.events.register("loadstart", layer, function(){
+             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
+           });
+
+           layer.events.register("tileloadstart", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, true);
+           });
+
+           layer.events.register("tileloaded", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, false);
+           });
+
+           layer.events.register("loadend", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, false);
+          });
+
+          layer.events.register("tileerror", layer, function(){
+            oskariLayer.loadingError();
+         });
+       },
 
         /**
          * Adds  map layers (Wms layer / label text layer / group layer) to this map
