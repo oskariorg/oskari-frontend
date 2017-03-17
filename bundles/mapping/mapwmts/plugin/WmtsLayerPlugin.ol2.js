@@ -94,6 +94,34 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             });
         },
         /**
+         * Adds event listeners to ol-layers
+         * @param {OL2 || OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+         _registerLayerEvents: function(layer, oskariLayer){
+           var me = this;
+
+           layer.events.register("loadstart", layer, function(){
+             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
+           });
+
+           layer.events.register("tileloadstart", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, true);
+           });
+
+           layer.events.register("tileloaded", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, false);
+           });
+
+           layer.events.register("loadend", layer, function(){
+          });
+
+          layer.events.register("tileerror", layer, function(){
+            oskariLayer.loadingError();
+         });
+         },
+        /**
          *
          */
         preselectLayers: function (layers) {
@@ -115,7 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (!layer.isLayerOfType('WMTS')) {
                 return;
             }
-
             var me = this;
             var map = me.getMap();
             // Add placeholder for the layer
@@ -128,6 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
                     map.removeLayer(wmtsHolderLayer);
                     map.addLayer(wmtsLayer);
+                    me._registerLayerEvents(wmtsLayer, layer);
                     if (keepLayerOnTop) {
                         // use the placeholder layer index for valid layer order because of async add
                         map.setLayerIndex(wmtsLayer, holderLayerIndex);
