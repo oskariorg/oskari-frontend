@@ -83,8 +83,8 @@ Oskari.clazz.define(
             }
 
             var openlayer = new ol.layer.Image(model);
-            map.addLayer(openlayer, !keepLayerOnTop);
             me._registerLayerEvents(openlayer, layer);
+            map.addLayer(openlayer, !keepLayerOnTop);
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
