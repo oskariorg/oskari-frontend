@@ -101,9 +101,8 @@ Oskari.clazz.define(
                 );
 
             openLayer.opacity = layer.getOpacity() / 100;
-
-            this.getMapModule().addLayer(openLayer, !keepLayerOnTop);
             this._registerLayerEvents(openLayer, layer);
+            this.getMapModule().addLayer(openLayer, !keepLayerOnTop);
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openLayer);
