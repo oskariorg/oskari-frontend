@@ -154,8 +154,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     // Get the reserved current index for wmts layer
                     var holderLayerIndex = map.getLayerIndex(wmtsHolderLayer);
                     map.removeLayer(wmtsHolderLayer);
-                    map.addLayer(wmtsLayer);
                     me._registerLayerEvents(wmtsLayer, layer);
+                    map.addLayer(wmtsLayer);
                     if (keepLayerOnTop) {
                         // use the placeholder layer index for valid layer order because of async add
                         map.setLayerIndex(wmtsLayer, holderLayerIndex);
