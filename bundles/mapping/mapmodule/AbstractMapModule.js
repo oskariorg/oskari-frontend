@@ -882,11 +882,11 @@ Oskari.clazz.define(
          * @param {Number} layerid, the id number of the abstract layer in loading
          * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
          */
-        loadingState: function( layerId, started ){
+        loadingState: function( layerId, started ) {
           var done = false;
           var me = this;
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
-          if(!oskariLayer ) {
+          if( !oskariLayer ) {
             return;
           }
 
