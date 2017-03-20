@@ -1434,9 +1434,9 @@ Oskari.clazz.define(
             openLayer.setVisible(_layer.isVisible());
 
             openLayer.setOpacity(_layer.getOpacity() / 100);
+            me._registerLayerEvents(openLayer, _layer);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me.layerByName(layerName, openLayer);
-            me._registerLayerEvents(openLayer, _layer);
         },
         /**
          * Adds event listeners to ol-layers

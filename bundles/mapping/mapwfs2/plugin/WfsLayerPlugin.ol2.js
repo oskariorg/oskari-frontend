@@ -1485,8 +1485,8 @@ Oskari.clazz.define(
                 return value;
             }
 
+            this._registerLayerEvents(openLayer, _layer);
             this.getMap().addLayer(openLayer);
-            me._registerLayerEvents(openLayer, _layer);
         },
         /**
          * Adds event listeners to ol-layers
@@ -1499,20 +1499,17 @@ Oskari.clazz.define(
 
            layer.events.register("loadstart", layer, function(){
              Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
-             me.getMapModule().loadingState( oskariLayer._id, true);
-
            });
 
-          //  layer.events.register("tileloadstart", layer, function(){
-          //    me.getMapModule().loadingState( oskariLayer._id, true);
-          //  });
+           layer.events.register("tileloadstart", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, true);
+           });
 
-          //  layer.events.register("tileloaded", layer, function(){
-          //    me.getMapModule().loadingState( oskariLayer._id, false);
-          //  });
+           layer.events.register("tileloaded", layer, function(){
+             me.getMapModule().loadingState( oskariLayer._id, false);
+           });
 
            layer.events.register("loadend", layer, function(){
-             me.getMapModule().loadingState( oskariLayer._id, false);
           });
 
           layer.events.register("tileerror", layer, function(){
