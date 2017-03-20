@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         },
         /**
          * Adds event listeners to ol-layers
-         * @param {OL2 || OL3 layer} layer
+         * @param {OL3 layer} layer
          * @param {Oskari layerconfig} oskariLayer
          *
          */
@@ -101,11 +101,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         var source = layer.getSource();
 
         source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer._id, true);
+          me.getMapModule().loadingState( oskariLayer.getId(), true);
         });
 
         source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer._id, false);
+          me.getMapModule().loadingState( oskariLayer.getId(), false);
         });
 
         source.on('tileloaderror', function() {
