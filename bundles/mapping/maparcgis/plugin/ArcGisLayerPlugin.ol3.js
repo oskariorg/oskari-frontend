@@ -118,9 +118,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             layer.setQueryable(true);
             openlayer.opacity = layer.getOpacity() / 100;
-
-            me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
+            
             me._registerLayerEvents(openlayer, layer);
+            me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
