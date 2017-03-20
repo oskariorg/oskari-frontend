@@ -1449,11 +1449,11 @@ Oskari.clazz.define(
           var source = layer.getSource();
 
           source.on('tileloadstart', function() {
-            me.getMapModule().loadingState( oskariLayer._id, true);
+            me.getMapModule().loadingState( oskariLayer.getId(), true);
           });
 
           source.on('tileloadend', function() {
-            me.getMapModule().loadingState( oskariLayer._id, false);
+            me.getMapModule().loadingState( oskariLayer.getId(), false);
           });
 
           source.on('tileloaderror', function() {
