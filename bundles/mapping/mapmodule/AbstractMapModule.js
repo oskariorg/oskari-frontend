@@ -917,10 +917,6 @@ Oskari.clazz.define(
             var errors = oskariLayer.getLoadingState().errors;
             this.notifyErrors( errors );
           }
-          if( done ) {
-            this.loaded = 0;
-            this.loading = 0;
-          }
 
           this.loadtimer = setTimeout( function() {
             var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
