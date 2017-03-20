@@ -219,28 +219,24 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         },
         /**
          * Adds event listeners to ol-layers
-         * @param {OL2 || OL3 layer} layer
+         * @param {OL2 layer} layer
          * @param {Oskari layerconfig} oskariLayer
          *
          */
          _registerLayerEvents: function(layer, oskariLayer){
-           debugger;
            var me = this;
 
            layer.events.register("loadstart", layer, function(){
-             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer._id);
+             Oskari.log(me.getName()).info("Load Start for layer: "+oskariLayer.getId());
            });
 
            layer.events.register("tileloadstart", layer, function(){
-             me.getMapModule().loadingState( oskariLayer._id, true);
+             me.getMapModule().loadingState( oskariLayer.getId(), true);
            });
 
            layer.events.register("tileloaded", layer, function(){
-             me.getMapModule().loadingState( oskariLayer._id, false);
+             me.getMapModule().loadingState( oskariLayer.getId(), false);
            });
-
-           layer.events.register("loadend", layer, function(){
-          });
 
           layer.events.register("tileerror", layer, function(){
             oskariLayer.loadingError();

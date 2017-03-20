@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             layer.setQueryable(true);
             openlayer.opacity = layer.getOpacity() / 100;
-            
+
             me._registerLayerEvents(openlayer, layer);
             me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             // store reference to layers
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         },
         /**
          * Adds event listeners to ol-layers
-         * @param {OL2 || OL3 layer} layer
+         * @param {OL3 layer} layer
          * @param {Oskari layerconfig} oskariLayer
          *
          */
@@ -140,11 +140,11 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         var source = layer.getSource();
 
         source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer._id, true);
+          me.getMapModule().loadingState( oskariLayer.getId(), true);
         });
 
         source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer._id, false);
+          me.getMapModule().loadingState( oskariLayer.getId(), false);
         });
 
         source.on('tileloaderror', function() {
