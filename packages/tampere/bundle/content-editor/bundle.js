@@ -23,7 +23,18 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
         "scripts": [{
             "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/instance.js"
-        }, {
+        },
+        // Events
+        /*{
+            "type": "text/javascript",
+            "src": "../../../../bundles/tampere/content-editor/events/GetInfoResultEvent.js"
+        },*/
+        // View
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/tampere/content-editor/service/Mediator.js"
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/tampere/content-editor/view/SideContentEditor.js"
         }, {

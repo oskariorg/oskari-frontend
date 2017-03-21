@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.instance = instance;
         me.loc = localization;
         me.templates = {
-        		wrapper: '<div></div>',
+                wrapper: '<div></div>',
                 getinfoResultTable: '<table class="getinforesult_table"></table>',
                 tableRow: '<tr></tr>',
                 tableCell: '<td></td>',
@@ -73,6 +73,9 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.processGFIRequest = true;
         me.GFIFirstRequestProcessed = false;
         me.highlightFeaturesIds = [];
+        me.editMultipleFeaturesButton = null;
+        me.editMultipleFeatures = false;
+        me.templateFeatureMarkup = null;
     }, {
         __name: 'ContentEditor',
         /**
@@ -82,7 +85,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         getName: function () {
             return this.__name;
         },
-    	showMessage: function(title, content, buttons, isModal) {
+        showMessage: function(title, content, buttons, isModal) {
             this.closeDialog();
             this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this._dialog.show(title, content, buttons);
@@ -231,6 +234,75 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             me.setGeometryType(me.layerGeometries.geometry.id);
             me._addDrawTools();
         },
+        _editMultipleFeatures: function (fid) {
+            var me = this;
+            var geometry = me._findGeometryByFid(fid);
+            if (geometry != null) {
+                me.layerGeometries = geometry;
+            }
+            me.setGeometryType(me.layerGeometries.geometry.id);
+            jQuery.each(me.templateFeatureMarkup[0].rows || [], function(index, el) {
+                var $el = jQuery(el);
+                jQuery.each(el.cells ||[], function(i, cell) {
+                    var $cell = jQuery(cell);
+                    if(i > 0) {
+                        var $input = $cell.find("input");
+                        if($input.length > 0) {
+                            $input.addClass('template-feature');
+                            $input.val("");
+                            $input.attr("data-default", "");
+                            $input.off('blur.modifyMultipleFeatures');
+                        } else {
+                            $cell.text("");
+                        }
+                    } else if($cell.text() === "__fid") {
+                        $el.hide();
+                    }
+                });
+            });
+            var saveMultipleFeaturesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            saveMultipleFeaturesButton.setTitle(me.loc.buttons.save);
+            saveMultipleFeaturesButton.setHandler(function () {
+                var $thisInput = jQuery(this);
+                var yesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                yesButton.setTitle(me.loc.buttons.yes);
+                yesButton.setHandler(function () {
+                    var $templateInputs = jQuery("input.template-feature");
+                    jQuery.each($templateInputs || [], function(key, value){
+                        var $input = jQuery(value);
+                        if($input.val()) {
+                            var dataKey = $input.data("key");
+                            var newValue = $input.val();
+                            var elements = jQuery(".getinforesult_table td[data-key="+dataKey+"]");
+                                jQuery.each(elements || [], function(k, v){
+                                jQuery(v).text(newValue);
+                            });
+                        }
+                    });
+                    me.closeDialog();
+                    me._saveFeature();
+                });
+                var noButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                noButton.setTitle(me.loc.buttons.no);
+                noButton.setHandler(function () {
+                    me.closeDialog();
+                });
+                me.showMessage(me.loc.modifyMultipleFeaturesConfirmation.title, me.loc.modifyMultipleFeaturesConfirmation.text, [yesButton, noButton]);
+            });
+            var cancelMultipleFeaturesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelMultipleFeaturesButton.setTitle(me.loc.buttons.cancel);
+            cancelMultipleFeaturesButton.setHandler(function () {
+                jQuery(".content-editor-multiple").html("");
+                jQuery(".content-editor-multiple-buttons").html("");
+            });
+            var buttonsContainer = jQuery("<div/>").addClass("content-editor-multiple-buttons").addClass("content-editor-buttons");
+            saveMultipleFeaturesButton.insertTo(buttonsContainer);
+            cancelMultipleFeaturesButton.insertTo(buttonsContainer);
+            jQuery(".properties-container").prepend(buttonsContainer);
+            var editorContainer = jQuery("<div/>").addClass("content-editor-multiple");
+            editorContainer.html(me.templateFeatureMarkup);
+            jQuery(".properties-container").prepend(editorContainer);
+        },
         _showAddUnsavedInfoModal: function () {
             var me = this;
             var saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -289,12 +361,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             container.append(content);
             $(".icon-close").on('click', function(){
                 me.sendStopDrawRequest(true);
-            	me.instance.setEditorMode(false);
+                me.instance.setEditorMode(false);
             });
 
             content.find('div.header h3').append(me.loc.title);
 
             content.find('.content').append($("<div>" + me.loc.featureModifyInfo + "</div>"));
+            content.find('.content').append($("<div>" + me.loc.multipleFeatureModifyInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.toolInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.geometryModifyInfo + "</div>"));
             content.find('.content').append($("<div>" + me.loc.geometryDeleteInfo + "</div>"));
@@ -309,16 +382,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 }
             });
             var addFeatureButtonContainer = $("<div />");
-
+            //Modify multiple features.
+            me.editMultipleFeaturesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            me.editMultipleFeaturesButton.setTitle(me.loc.buttons.editMultipleFeatures);
+            me.editMultipleFeaturesButton.setEnabled(false);
+            me.editMultipleFeaturesButton.insertTo(addFeatureButtonContainer);
             addFeatureButton.insertTo(addFeatureButtonContainer);
             content.find('.content').append(addFeatureButtonContainer);
+
             me._addDrawTools(content);
 
             content.find('.content').append($("<div />").addClass("properties-container"));
 
             if (!me._checkLayerVisibility(me.layerId)) {
-            	me.isLayerVisible = false;
-            	me._setLayerVisibility(me.layerId, true);
+                me.isLayerVisible = false;
+                me._setLayerVisibility(me.layerId, true);
             }
             me._hideLayers();
             me._disableGFI();
@@ -392,34 +470,133 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     }
                 }
             }
-
-            //geometries.push({x:1,y:2});
         },
-        sendRequest: function (requestData, deleteFeature)
+        _fillMultipleLayerGeometries: function(geometries)
         {
+            var me = this;
+            jQuery.each(me.allClickedFeatures || [], function(key, value) {
+                if (value.geometry != null) {
+                    var layerGeometries = JSON.parse(new OpenLayers.Format.GeoJSON().write(value.geometry));
+                    if (layerGeometries != null) {
+                        if (layerGeometries.type == "Point") {
+                            geometries.type = "point";
+                            geometries.data.push({x: layerGeometries.coordinates[0], y: layerGeometries.coordinates[1]});
+                        } else if (layerGeometries.type == "MultiPoint") {
+                            geometries.type = "multipoint";
+                            for (var i = 0; i < layerGeometries.coordinates.length; i++) {
+                                geometries.data.push({x: layerGeometries.coordinates[i][0], y: layerGeometries.coordinates[i][1]});
+                            }
+                        } else if (layerGeometries.type == "MultiLineString") {
+                            geometries.type = "multilinestring";
+                            for (var i = 0; i < layerGeometries.coordinates.length; i++) {
+                                var tmpLineString = [];
+                                for (var j = 0; j < layerGeometries.coordinates[i].length; j++) {
+                                    tmpLineString.push({x: layerGeometries.coordinates[i][j][0], y: layerGeometries.coordinates[i][j][1]});
+                                }
+                                geometries.data.push(tmpLineString);
+                            }
+                        } else if (layerGeometries.type == "MultiPolygon") {
+                            geometries.type = "multipolygon";
+                            for (var i = 0; i < layerGeometries.coordinates.length; i++) {
+                                var tmpPolygon = [];
+                                for (var j = 0; j < layerGeometries.coordinates[i].length; j++) {
+                                    var tmpLineString = [];
+                                    for (var k = 0; k < layerGeometries.coordinates[i][j].length; k++) {
+                                        tmpLineString.push({x: layerGeometries.coordinates[i][j][k][0], y: layerGeometries.coordinates[i][j][k][1]});
+                                    }
+                                    tmpPolygon.push(tmpLineString);
+                                }
+                                geometries.data.push(tmpPolygon);
+                            }
+                        }
+                    }
+                }
+            });
+        },
+        /**
+         * Performs a deep clone of an object recursively.
+         * @todo This should be in tool functions or somewhere else?
+         * @param  object clonee The object to be cloned
+         * @return object Cloned object
+         */
+        _cloneObject: function(clonee) {
+            var me = this;
+            if (clonee === null || typeof clonee !== 'object') {
+                return clonee;
+            }
+            var cloned = clonee.constructor();
+            for (var key in clonee) {
+                cloned[key] = me._cloneObject(clonee[key]);
+            }
+            return cloned;
+        },
+        sendRequest: function (requestData, deleteFeature) {
+            var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
+            overlay.overlay('body');
+            overlay.followResizing(true);
+            var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+            spinner.insertTo('body');
+            spinner.start();
             var me = this,
                 okButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 url = null,
                 wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModule').getPluginInstances('WfsLayerPlugin');
 
             okButton.setTitle(me.loc.buttons.ok);
-            if (me.operationMode === "create") {
+            var multipleFeaturesData = [];
+            if (me.operationMode === "create" && !me.editMultipleFeatures) {
                 url = ajaxUrl + 'action_route=InsertFeature';
-            } else {
+            } else if(!me.editMultipleFeatures) {
                 url = ajaxUrl + 'action_route=SaveFeature';
+            } else if(me.editMultipleFeatures) {
+                var multipleGeometriesTemp = me._cloneObject(requestData.geometries);
+                url = ajaxUrl + 'action_route=SaveMultipleFeatures';
+                var elements = jQuery(".getinforesult_table").children("tbody");
+                var index = 0;
+                jQuery.each(elements || [], function(k1, v1) {
+                    //Skip first element since we have that already in requestData.
+                    if(index > 0) {
+                        //Copy requestData object for each of the selected features.
+                        var tempFeature = me._cloneObject(requestData);
+                        var tempFeatureFields = [];
+                        var tds = jQuery(v1).children("tr").children("td");
+                        //Go through all the tds to assign tempFeature the correct values.
+                        jQuery.each(tds || [], function(k2, v2) {
+                            var td = jQuery(v2);
+                            if(td.data().key) {
+                                var featureKey = td.data().key;
+                                if(featureKey === "__fid") {
+                                    tempFeature.featureId = td.text();
+                                } else {
+                                    var tempObj = {};
+                                    tempObj.key = featureKey;
+                                    tempObj.value = td.text();
+                                    tempFeatureFields.push(tempObj);
+                                }
+                            }
+                        });
+                        tempFeature.featureFields = tempFeatureFields;
+                        //The actual geometry is indexed one behind in the selected geometries list.
+                        tempFeature.geometries.data = [multipleGeometriesTemp.data[index-1]];
+                        multipleFeaturesData.push(tempFeature);
+                    }
+                    ++index;
+                });
             }
-
             var dialog = {};
             if (deleteFeature == true) {
                 dialog.header = me.loc.geometryDelete.header;
                 dialog.success = me.loc.geometryDelete.success;
                 dialog.error = me.loc.geometryDelete.error;
+            } else if(me.editMultipleFeatures) {
+                dialog.header = me.loc.multipleFeaturesUpdate.header;
+                dialog.success = me.loc.multipleFeaturesUpdate.success;
+                dialog.error = me.loc.multipleFeaturesUpdate.error;
             } else {
                 dialog.header = me.loc.featureUpdate.header;
                 dialog.success = me.loc.featureUpdate.success;
                 dialog.error = me.loc.featureUpdate.error;
             }
-
             jQuery.ajax({
                 type : 'POST',
                 dataType : 'json',
@@ -428,10 +605,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                data : {'featureData':JSON.stringify(requestData)},
+                data : {'featureData':(me.editMultipleFeatures) ? JSON.stringify(multipleFeaturesData) : JSON.stringify(requestData)},
                 url : url,
                 success : function(response) {
-                    if (me.operationMode === "create") {
+                    spinner.stop();
+                    overlay.close();
+                    me.editMultipleFeaturesButton.setEnabled(false);
+                    me.editMultipleFeatures = false;
+                    if (me.operationMode === "create" && !me.editMultipleFeatures) {
                         me.currentData.features[0][0] = response.fid;
                     }
 
@@ -456,6 +637,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.clickedGeometryNumber = null;
                 },
                 error: function (error) {
+                    spinner.stop();
+                    overlay.close();
+                    me.editMultipleFeaturesButton.setEnabled(false);
+                    me.editMultipleFeatures = false;
                     okButton.setHandler(function () {
                         me.closeDialog();
                     });
@@ -463,6 +648,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     me.sendStopDrawRequest(true);
                 }
             });
+            /**/
         },
         prepareRequest: function (geometries, deleteFeature) {
             var me = this;
@@ -473,17 +659,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 featureData.splice(0, 1);
                 requestData.featureFields = featureData;
             }
-
-
             requestData.featureId = (me.operationMode == "edit" && me._getFeatureData().length > 0 ? me._getFeatureData()[0].value : null);
             requestData.layerId = me.selectedLayerId;
             requestData.srsName = this.sandbox.getMap().getSrsName();
             requestData.geometries = {};
             requestData.geometries.data = [];
-            if (me.operationMode == "edit" || deleteFeature == true) {
+            if (!me.editMultipleFeatures && (me.operationMode == "edit" || deleteFeature == true)) {
                 me._fillLayerGeometries(requestData.geometries);
+            } else if(me.editMultipleFeatures) {
+                me._fillMultipleLayerGeometries(requestData.geometries);
             }
-
             if (geometries != null)
             {
                 if (geometries.id.indexOf("OpenLayers_Geometry_MultiPoint_") == 0) {
@@ -525,15 +710,15 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          *
          */
         destroy: function () {
-        	var me = this;
-        	me._showLayers();
+            var me = this;
+            me._showLayers();
 
-        	var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(true);
             me.sandbox.request(me.instance.getName(), request);
 
             if (!me.isLayerVisible) {
-            	me._setLayerVisibility(me.layerId, false);
+                me._setLayerVisibility(me.layerId, false);
             }
 
             this.mainPanel.remove();
@@ -550,54 +735,53 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 layer;
 
             for (i = 0; i < me.allLayers.length; i++) {
-            	if (me.allLayers[i].isVisible()) {
-            		me.allVisibleLayers.push(me.allLayers[i]);
-            	}
+                if (me.allLayers[i].isVisible()) {
+                    me.allVisibleLayers.push(me.allLayers[i]);
+                }
             }
 
             if (me.allVisibleLayers) {
                 for (i = 0; i < me.allVisibleLayers.length; i += 1) {
                     layer = me.allVisibleLayers[i];
                     if (me.layerId != layer.getId() && layer.isLayerOfType("WFS")) {
-                    	me._setLayerVisibility(layer.getId(), false);
+                        me._setLayerVisibility(layer.getId(), false);
                     }
                 }
             }
         },
         _showLayers: function () {
-        	var me = this;
-        	for (var i = 0; i < me.allVisibleLayers.length; i++) {
-        		me._setLayerVisibility(me.allVisibleLayers[i].getId(), true);
-        	}
+            var me = this;
+            for (var i = 0; i < me.allVisibleLayers.length; i++) {
+                me._setLayerVisibility(me.allVisibleLayers[i].getId(), true);
+            }
         },
         _disableGFI: function () {
-        	var me = this;
-        	var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            var me = this;
+            var gfiActivationRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(false);
             me.sandbox.request(me.instance.getName(), request);
         },
         _checkLayerVisibility: function (layerId) {
-        	var me = this;
-        	var layer = me._getLayerById(layerId);
-        	if (layer.isVisible()) {
-        		return true;
-        	}
-        	return false;
+            var me = this;
+            var layer = me._getLayerById(layerId);
+            if (layer.isVisible()) {
+                return true;
+            }
+            return false;
         },
         _setLayerVisibility: function (layerId, setVisible) {
-        	var me = this;
-
-        	var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-        	var request = visibilityRequestBuilder(layerId, setVisible);
+            var me = this;
+            var visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            var request = visibilityRequestBuilder(layerId, setVisible);
             me.sandbox.request(me.instance.getName(), request);
         },
         _getLayerById: function (layerId) {
-        	var me = this;
-        	for (var i = 0; i < me.allLayers.length; i++) {
-        		if (me.allLayers[i].getId() == layerId) {
-        			return me.allLayers[i];
-        		}
-        	}
+            var me = this;
+            for (var i = 0; i < me.allLayers.length; i++) {
+                if (me.allLayers[i].getId() == layerId) {
+                    return me.allLayers[i];
+                }
+            }
         },
         _handleInfoResult: function (data, mode, editableFeatureFid) {
             var me = this;
@@ -654,7 +838,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             this.selectedLayerId = data.layerId;
-        	this.currentData = data;
+            this.currentData = data;
 
             var content = [],
                 contentData = {},
@@ -667,6 +851,20 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             $(".properties-container").empty();
             if (fragments != null && fragments.length) {
+                if(fragments.length > 1) {
+                    me.editMultipleFeaturesButton.setEnabled(true);
+                    me.editMultipleFeaturesButton.setHandler(function () {
+                        me.editMultipleFeatures = true;
+                        jQuery.each(fragments || [], function(key, value) {
+                            if(key === 0) {
+                                me._editMultipleFeatures(value.fid);
+                            }
+                        });
+                    });
+                } else {
+                    me.editMultipleFeaturesButton.setEnabled(false);
+                }
+
                 contentData.html = this._renderFragments(fragments, editableFeatureFid);
                 contentData.layerId = fragments[0].layerId;
                 contentData.layerName = fragments[0].layerName;
@@ -675,6 +873,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 $(".properties-container").append(contentData.html);
                 me._setDatepickerLanguage();
                 $(".datepicker").datepicker({'dateFormat': "yy-mm-dd", 'changeMonth': true, 'changeYear': true, 'showButtonPanel': true}).attr('readonly', 'readonly');
+            } else {
+                me.editMultipleFeaturesButton.setEnabled(false);
             }
         },
         /**
@@ -716,7 +916,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     return _.last(pair) || _.first(pair);
                 })
                 .value();
-
             result = _.map(data.features, function (feature) {
                 var feat = _.chain(fields)
                     .zip(feature)
@@ -732,15 +931,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     .value();
 
                 markup = me._json2html(feat, ((editableFeatureFid != undefined && feat.__fid === editableFeatureFid) || me.operationMode == "create" ? false : true));
-                return {
+                var retObj = {
                     markup: markup,
                     layerId: data.layerId,
                     layerName: layer.getLayerName(),
                     type: type,
                     fid: feat.__fid
                 };
+                me.templateFeatureMarkup = me._json2html(feat, false);
+                return retObj;
             });
-
             return result;
         },
         /**
@@ -776,8 +976,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             for (key in node) {
                 if (node.hasOwnProperty(key)) {
                     value = node[key];
-
-
                     if (key === null || key === undefined) {
                         continue;
                     }
@@ -834,10 +1032,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     row.append(keyColumn);
 
                     valColumn = $(this.templates.tableCell);
-					if (key == "__fid" || readonly) {
-						valColumn.append(value);
-					} else {
+                    if (key == "__fid" || readonly) {
+                        valColumn.append(value);
+                        valColumn.attr('data-key', key);
+                    } else {
                         valInput = $(this.templates.tableInput);
+                        valInput.attr('data-key', key);
+                        valInput.attr('data-default', value);
                         switch (this.fieldsTypes[key])
                         {
                             case 'xsd:numeric':
@@ -890,13 +1091,38 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                                 valInput.prop('type', 'text');
                                 break;
                         }
+                        //If multiple features are modified at the same time, add also blur for modifying those values.
+                        if(me.editMultipleFeatures) {
+                            valInput.on('blur.modifyMultipleFeatures', function(event){
+                                var $thisInput = jQuery(this);
+                                var yesButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                yesButton.setTitle(me.loc.buttons.yes);
+                                yesButton.setHandler(function () {
+                                    var key = $thisInput.data("key");
+                                    var newValue = $thisInput.val();
+                                    var elements = jQuery(".getinforesult_table td[data-key="+key+"]");
+                                    jQuery.each(elements || [], function(key, value){
+                                        jQuery(value).text(newValue);
+                                    });
+                                    me.closeDialog();
+                                });
+                                var noButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                                noButton.setTitle(me.loc.buttons.no);
+                                noButton.setHandler(function () {
+                                    $thisInput.val($thisInput.attr("data-default"));
+                                    $thisInput.text($thisInput.attr("data-default"));
+                                    me.closeDialog();
+                                });
+                                me.showMessage(me.loc.modifyMultipleFeaturesConfirmation.title, me.loc.modifyMultipleFeaturesConfirmation.text, [yesButton, noButton]);
+                            });
+                        }
                         valInput.val(value);
                         valInput.on('change', function () {
                             me.featureDuringEdit = true;
                         });
                         valColumn.append(valInput);
-					}
-					row.append(valColumn);
+                    }
+                    row.append(valColumn);
                     html.append(row);
                 }
             }
@@ -928,6 +1154,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             me.sendStopDrawRequest(true);
             me._clearFeaturesList();
             me.featureDuringEdit = false;
+            me.editMultipleFeaturesButton.setEnabled(false);
+            me.editMultipleFeatures = false;
         },
         _storeFormData: function () {
             var me = this;
@@ -945,7 +1173,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _renderFragments: function (fragments, editableFeatureFid) {
             var me = this;
-
             return _.foldl(fragments, function (wrapper, fragment) {
                 var fragmentTitle = fragment.layerName,
                     fragmentMarkup = fragment.markup;

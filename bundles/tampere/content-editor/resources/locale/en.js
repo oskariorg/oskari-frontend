@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "ContentEditorView": {
             "title": "Content editor",
             "featureModifyInfo": "Choose feature from map to modify it.",
+            "multipleFeatureModifyInfo": "You can also choose multiple features from the map by pressing the ctrl-button on your keyboard.",
             "toolInfo": "Choose point, line or polygon tool to draw new geometries.",
             "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
             "geometryDeleteInfo": "With geometry delete tool you can remove one geometry from feature with multiple geometries.",
@@ -18,7 +19,9 @@ Oskari.registerLocalization(
                 "delete": "Delete",
                 "addFeature": "Add feature",
                 "editFeature": "Edit feature",
-                "deleteFeature": "Delete feature"
+                "deleteFeature": "Delete feature",
+                "yes": "Yes",
+                "no": "No"
             },
             "tools": {
               "point": "Add point geometry",
@@ -31,6 +34,11 @@ Oskari.registerLocalization(
                 "header": "Feature update",
                 "success": "Feature properties updated successfully",
                 "error": "Error occured during feature properties update"
+            },
+            "multipleFeaturesUpdate": {
+                "header": "Feature update",
+                "success": "Features properties updated successfully",
+                "error": "Error occured during features properties update"
             },
             "featureDelete": {
                 "header": "Feature delete",
@@ -61,6 +69,10 @@ Oskari.registerLocalization(
             "formValidationNumberError": {
                 "title": "Number validation error",
                 "text": "Please put correct number value"
+            },
+            "modifyMultipleFeaturesConfirmation": {
+                "title": "Confirm",
+                "text": "Are you sure you want to set the given value for all the selected features?"
             }
         }
     }
