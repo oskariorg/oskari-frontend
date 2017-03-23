@@ -128,7 +128,7 @@ Oskari.clazz.define(
             this.__latestTry = 0;
         },
         handleError : function(params) {
-            this.statusHandler.handleError(params.data);
+            this.statusHandler.handleError(params.data, this.plugin);
         },
         statusChange : function(params) {
             // handle init started

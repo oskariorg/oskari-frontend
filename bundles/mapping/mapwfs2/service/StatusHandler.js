@@ -17,6 +17,7 @@ Oskari.clazz.define(
     this.status = status;
     this._errorLayer = null;
     this._errorLayers = [];
+    this.timer;
     // TODO: For debugging, remove when stable
     Oskari.___getWFSStatus = function() {
       console.log(status);
@@ -100,9 +101,15 @@ Oskari.clazz.define(
       // {"layerId":"15","success":true,"message":"completed","reqId":3}
       if(data.message === 'started') {
         this.__log('Processing started for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
+        if(typeof this.timer === 'undefined'){
+          this.timer = setTimeout(function(){
+            Oskari.Log("WFS STATE HANDLER", "Wfs laoding for 4 seconds");
+          }, 4000);
+        }
         return;
       }
       else if(data.message === 'completed') {
+        clearTimeout(this.timer);
         if(data.success) {
           this.__log('Processing finished for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
         }
@@ -112,7 +119,7 @@ Oskari.clazz.define(
         this.__handleCompleted(data);
       }
     },
-    handleError : function(error) {
+    handleError : function(error, mapmodule) {
       this.__log('Error on layer ' +  error.layerId + ':' + error.message);
       var status = this.getLayerStatus(error.layerId);
       status.error.push(error.message);
@@ -129,7 +136,8 @@ Oskari.clazz.define(
           }
         }
       }
-      if( error.type === 'normal' && !error.success || error.level === 'warning' ) {
+      if( error.type === 'normal' && !error.success) {
+        console.log(error);
         if(requestBuilder){
           var request = requestBuilder(layer._name+": could not load layer", 'error');
           Oskari.getSandbox().request('system-message', request);
@@ -149,12 +157,33 @@ Oskari.clazz.define(
         this._errorLayer = error;
         this._errorLayers.push({errorlayer:this._errorLayer});
       }
+      if(error.key === 'layer_scale_out_of_range'){
+        this.updateScale(layer, error.minscale, error.maxscale, mapmodule);
+      }
 
       var sb = this.sandbox;
       var loadEvent = sb.getEventBuilder('WFSStatusChangedEvent')(error.layerId);
       loadEvent.setStatus(loadEvent.status.error);
       loadEvent.setRequestType(loadEvent.type.image);
       sb.notifyAll(loadEvent);
+    },
+    updateScale: function(layer, minscale, maxscale, plugin){
+      var me = this;
+      layer.setMinScale(minscale);
+      layer.setMaxScale(maxscale);
+      var ol = plugin.getOLMapLayers(layer)
+      olLayer[0].minScale = minscale;
+      olLayer[0].maxScale = maxscale;
+
+      this._dialog = Oskari.clazz.create(
+        'Oskari.userinterface.component.Popup'
+      );
+      var btn = this._dialog.createCloseButton('OK');
+
+      btn.setHandler(function() {
+          me._dialog.close();
+      });
+      this._dialog.show("Scale updated", "Layer not available on current zoom", [btn]);
     }
 
   });
