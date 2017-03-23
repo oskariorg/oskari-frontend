@@ -200,17 +200,17 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 params);
 
 
-                openLayer.isBaseLayer = false;
-                me._layer[layer.getId()] = openLayer;
+            openLayer.isBaseLayer = false;
+            me._layer[layer.getId()] = openLayer;
 
-                openLayer.opacity = layer.getOpacity() / 100;
-                openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
+            openLayer.opacity = layer.getOpacity() / 100;
+            openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
 
-                me.getMap().addLayer(openLayer, !keepLayerOnTop);
-                me._registerLayerEvents(openLayer, layer);
+            me._registerLayerEvents(openLayer, layer);
+            me.getMap().addLayer(openLayer, !keepLayerOnTop);
 
-                // Set queryable
-                layer.setQueryable(true);
+            // Set queryable
+            layer.setQueryable(true);
 
             me.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.ArcGis93Rest for ArcGisLayer ' +
