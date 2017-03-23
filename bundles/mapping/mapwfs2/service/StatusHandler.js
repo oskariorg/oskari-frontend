@@ -171,7 +171,7 @@ Oskari.clazz.define(
       var me = this;
       layer.setMinScale(minscale);
       layer.setMaxScale(maxscale);
-      var ol = plugin.getOLMapLayers(layer)
+      var olLayer = plugin.getOLMapLayers(layer)
       olLayer[0].minScale = minscale;
       olLayer[0].maxScale = maxscale;
 
