@@ -119,7 +119,7 @@ Oskari.clazz.define(
         this.__handleCompleted(data);
       }
     },
-    handleError : function(error, mapmodule) {
+    handleError : function(error, plugin) {
       this.__log('Error on layer ' +  error.layerId + ':' + error.message);
       var status = this.getLayerStatus(error.layerId);
       status.error.push(error.message);
@@ -158,7 +158,7 @@ Oskari.clazz.define(
         this._errorLayers.push({errorlayer:this._errorLayer});
       }
       if(error.key === 'layer_scale_out_of_range'){
-        this.updateScale(layer, error.minscale, error.maxscale, mapmodule);
+        this.updateScale(layer, error.minscale, error.maxscale, plugin);
       }
 
       var sb = this.sandbox;
