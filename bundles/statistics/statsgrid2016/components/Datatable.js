@@ -88,7 +88,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             },
             {
                 cls:'statsgrid-grouping-header sources',
-                text: gridLoc.title + ' <span>('+indicators.length+')</span>'
+                text: gridLoc.title + ' <span>('+indicators.length+')</span>',
+                maxCols: 3
             }
         ]);
     },

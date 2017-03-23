@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTableHeader = jQuery(
             '<th><a href="JavaScript:void(0);"></a></th>'
         );
-        this.templateTableGroupingHeader = jQuery('<th class="grouping"></th>');
+        this.templateTableGroupingHeader = jQuery('<th class="grouping"><div class="paging previous"></div><div class="title"></div><div class="paging next"></div></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
@@ -201,6 +201,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setColumnValueRenderer: function (fieldName, renderer) {
             this.valueRenderer[fieldName] = renderer;
         },
+        /**
+         * @method  @public getVisibleFields Get visible fields
+         * @return {String[]} field names array
+         */
         getVisibleFields: function () {
             return this.fieldNames;
         },
@@ -561,7 +565,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         groupHeader.addClass(h.cls);
                     }
                     if(typeof h.text === 'string'){
-                        groupHeader.html(h.text);
+                        groupHeader.find('.title').html(h.text);
                     }
 
                     if(typeof h.colspan === 'number') {
@@ -575,6 +579,101 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     if(i === me._groupingHeaders.length-1 && cols < fullFieldNames.length && !h.colspan) {
                         var lastColspan = (fullFieldNames.length - cols) + 1;
                         groupHeader.attr('colspan', lastColspan);
+                    }
+
+                    // Check pagings
+                    // FIXME: remove out of _renderHeader -function
+                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
+                    if(h.maxCols && groupCols > h.maxCols){
+                        var next = groupHeader.find('.paging.next');
+                        var previous = groupHeader.find('.paging.previous');
+                        if(me._groupingHeaders.length > 1 && i === 0) {
+                            next.addClass('hidden');
+                        } else if(me._groupingHeaders.length > 1 && i > 0) {
+                            previous.addClass('hidden');
+                        }
+
+                        var remainder = groupCols % h.maxCols;
+                        var maxPage = groupCols - h.maxCols + 1;
+                        groupHeader.attr('data-group-cols', groupCols);
+                        groupHeader.attr('data-max-cols', h.maxCols);
+                        groupHeader.attr('data-max-page', maxPage);
+                        groupHeader.attr('data-page', maxPage);
+                        groupHeader.attr('data-start-col', cols);
+
+                        // Check buttons visibility
+                        var checkPagingButtonsVisiblity = function(){
+                            var page = Number(groupHeader.attr('data-page'));
+                            next.removeClass('hidden');
+                            previous.removeClass('hidden');
+                            if(page===1) {
+                                previous.addClass('hidden');
+                            } else if(page === Number(groupHeader.attr('data-max-page'))){
+                                next.addClass('hidden');
+                            }
+                        };
+
+                        // Paging
+                        var doPagingForContent = function() {
+                            var page = Number(groupHeader.attr('data-page'));
+                            var maxCols = Number(groupHeader.attr('data-max-cols'));
+                            var groupCols = Number(groupHeader.attr('data-group-cols'));
+                            var groupStartCol = Number(groupHeader.attr('data-start-col'));
+                            var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
+                            var c;
+                            fullContent.show();
+
+                            var unVisibleCols = [];
+                            for(c = 0; c < groupCols; c++) {
+                                if(c < page - 1 || c >= page + maxCols - 1) {
+                                    unVisibleCols.push(c + groupStartCol);
+                                }
+                            }
+
+                            // Hide cols for paging
+                            for(c=0;c<unVisibleCols.length;c++) {
+                                var colIndex = unVisibleCols[c];
+                                var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                                currentColEl.hide();
+                            }
+                        };
+
+                        checkPagingButtonsVisiblity();
+                        doPagingForContent();
+
+
+                        // Bind events
+
+
+                        next.bind('click', function(evt) {
+                            evt.stopPropagation();
+                            var page = Number(groupHeader.attr('data-page')) + 1;
+                            if(page > groupHeader.attr('data-max-page')) {
+                                page = groupHeader.attr('data-max-page');
+                            }
+                            groupHeader.attr('data-page', page);
+                            checkPagingButtonsVisiblity();
+                            doPagingForContent();
+                        });
+
+                        previous.bind('click', function(evt) {
+                            evt.stopPropagation();
+                            var page = Number(groupHeader.attr('data-page')) - 1;
+                            if(page < 1) {
+                                page = 1;
+                            }
+                            groupHeader.attr('data-page', page);
+                            checkPagingButtonsVisiblity();
+                            doPagingForContent();
+                        });
+
+
+
+                        // Check cols visibility
+                        //jQuery('.stats-table .oskari-grid tr th:nth-child(2):not(.grouping),td:nth-child(2):not(.grouping)').hide()
+                    } else {
+                        groupHeader.find('.paging.next').remove();
+                        groupHeader.find('.paging.previous').remove();
                     }
                     row.append(groupHeader);
                 }
