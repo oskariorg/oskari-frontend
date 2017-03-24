@@ -1,5 +1,6 @@
 $pagingArrowBorderSize: 8px;
-$pagingArrowActiveColor: #ffd400;
+$pagingArrowActiveColor: #f0f0f0;
+$pagingArrowHoverColor: #ffd400;
 $pagingArrowDeactiveColor: transparent;
 
 
@@ -169,10 +170,16 @@ table.oskari-grid {
         &.previous {
           float:left;
           border-right:$pagingArrowBorderSize solid $pagingArrowActiveColor;
+          &:hover {
+            border-right-color: $pagingArrowHoverColor;
+          }
         }
         &.next {
           float:right;
           border-left:$pagingArrowBorderSize solid $pagingArrowActiveColor;
+          &:hover {
+            border-left-color: $pagingArrowHoverColor;
+          }
         }
 
         &.hidden {

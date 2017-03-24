@@ -408,6 +408,127 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setGroupingHeader: function(headers) {
             this._groupingHeaders = headers;
         },
+        _checkPaging: function(table){
+            var me = this;
+            if(me._groupingHeaders) {
+                // Check buttons visibility
+                var checkPagingButtonsVisiblity = function(groupHeader){
+                    var page = Number(groupHeader.attr('data-page'));
+                    var next = groupHeader.find('.paging.next');
+                    var previous = groupHeader.find('.paging.previous');
+                    next.removeClass('hidden');
+                    previous.removeClass('hidden');
+                    if(page===1) {
+                        previous.addClass('hidden');
+                    } else if(page === Number(groupHeader.attr('data-max-page'))){
+                        next.addClass('hidden');
+                    }
+                };
+
+                // Paging
+                var doPagingForContent = function(groupHeader, headerIndex) {
+                    var page = Number(groupHeader.attr('data-page'));
+                    var maxCols = Number(groupHeader.attr('data-max-cols'));
+                    var groupCols = Number(groupHeader.attr('data-group-cols'));
+                    var groupStartCol = Number(groupHeader.attr('data-start-col'));
+                    var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
+                    var next = groupHeader.find('.paging.next');
+                    var previous = groupHeader.find('.paging.previous');
+                    var c;
+                    fullContent.show();
+
+                    var unVisibleCols = [];
+                    var visibleCols = [];
+                    for(c = 0; c < groupCols; c++) {
+                        if(c < page - 1 || c >= page + maxCols - 1) {
+                            unVisibleCols.push(c + groupStartCol);
+                        } else {
+                            visibleCols.push(c);
+                        }
+                    }
+
+                    // Hide cols for paging
+                    for(c=0;c<unVisibleCols.length;c++) {
+                        var colIndex = unVisibleCols[c];
+                        var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                        currentColEl.hide();
+                    }
+
+                    pagingHandler(groupHeader, headerIndex, {
+                        visible: {
+                            start: visibleCols[0] + 1,
+                            end: visibleCols[visibleCols.length-1] + 1
+                        },
+                        count: groupCols
+                    });
+                };
+
+                var pagingHandler = function(groupHeader, headerIndex, data) {
+                    var header = me._groupingHeaders[headerIndex];
+                    if(typeof header.pagingHandler === 'function') {
+                        header.pagingHandler(groupHeader.find('.title'), data);
+                    } else if(!header.text) {
+                        groupHeader.find('.title').html(data.visible.start + ' - ' + data.visible.end + ' / ' + data.count);
+                    }
+                };
+
+                table.find('th.grouping').each(function(){
+                    var groupHeader = jQuery(this);
+                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
+                    var maxCols = groupHeader.attr('data-max-cols');
+                    var next = groupHeader.find('.paging.next');
+                    var previous = groupHeader.find('.paging.previous');
+                    var headerIndex = Number(groupHeader.attr('data-header-index'));
+                    if(maxCols && groupCols > maxCols){
+                        if(me._groupingHeaders.length > 1 && i === 0) {
+                            next.addClass('hidden');
+                        } else if(me._groupingHeaders.length > 1 && i > 0) {
+                            previous.addClass('hidden');
+                        }
+
+                        var remainder = groupCols % maxCols;
+                        var maxPage = groupCols - maxCols + 1;
+                        groupHeader.attr('data-group-cols', groupCols);
+                        groupHeader.attr('data-max-page', maxPage);
+                        groupHeader.attr('data-page', maxPage);
+
+                        // Bind events
+                        // Paging handlers
+                        var prevHandler = function(evt) {
+                            evt.stopPropagation();
+                            var page = Number(groupHeader.attr('data-page')) - 1;
+                            if(page < 1) {
+                                page = 1;
+                            }
+                            groupHeader.attr('data-page', page);
+                            checkPagingButtonsVisiblity(groupHeader);
+                            doPagingForContent(groupHeader, headerIndex);
+                        };
+
+                        var nextHandler = function(evt) {
+                            evt.stopPropagation();
+                            var page = Number(groupHeader.attr('data-page')) + 1;
+                            if(page > groupHeader.attr('data-max-page')) {
+                                page = groupHeader.attr('data-max-page');
+                            }
+                            groupHeader.attr('data-page', page);
+                            checkPagingButtonsVisiblity(groupHeader);
+                            doPagingForContent(groupHeader, headerIndex);
+                        };
+                        next.unbind('click');
+                        next.bind('click', nextHandler);
+                        previous.unbind('click');
+                        previous.bind('click', prevHandler);
+
+                        checkPagingButtonsVisiblity(groupHeader);
+                        doPagingForContent(groupHeader, headerIndex);
+                    } else {
+                        next.remove();
+                        previous.remove();
+                    }
+                });
+            }
+        },
         /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
@@ -581,100 +702,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         groupHeader.attr('colspan', lastColspan);
                     }
 
-                    // Check pagings
-                    // FIXME: remove out of _renderHeader -function
-                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
-                    if(h.maxCols && groupCols > h.maxCols){
-                        var next = groupHeader.find('.paging.next');
-                        var previous = groupHeader.find('.paging.previous');
-                        if(me._groupingHeaders.length > 1 && i === 0) {
-                            next.addClass('hidden');
-                        } else if(me._groupingHeaders.length > 1 && i > 0) {
-                            previous.addClass('hidden');
-                        }
-
-                        var remainder = groupCols % h.maxCols;
-                        var maxPage = groupCols - h.maxCols + 1;
-                        groupHeader.attr('data-group-cols', groupCols);
+                    if(h.maxCols) {
                         groupHeader.attr('data-max-cols', h.maxCols);
-                        groupHeader.attr('data-max-page', maxPage);
-                        groupHeader.attr('data-page', maxPage);
                         groupHeader.attr('data-start-col', cols);
-
-                        // Check buttons visibility
-                        var checkPagingButtonsVisiblity = function(){
-                            var page = Number(groupHeader.attr('data-page'));
-                            next.removeClass('hidden');
-                            previous.removeClass('hidden');
-                            if(page===1) {
-                                previous.addClass('hidden');
-                            } else if(page === Number(groupHeader.attr('data-max-page'))){
-                                next.addClass('hidden');
-                            }
-                        };
-
-                        // Paging
-                        var doPagingForContent = function() {
-                            var page = Number(groupHeader.attr('data-page'));
-                            var maxCols = Number(groupHeader.attr('data-max-cols'));
-                            var groupCols = Number(groupHeader.attr('data-group-cols'));
-                            var groupStartCol = Number(groupHeader.attr('data-start-col'));
-                            var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
-                            var c;
-                            fullContent.show();
-
-                            var unVisibleCols = [];
-                            for(c = 0; c < groupCols; c++) {
-                                if(c < page - 1 || c >= page + maxCols - 1) {
-                                    unVisibleCols.push(c + groupStartCol);
-                                }
-                            }
-
-                            // Hide cols for paging
-                            for(c=0;c<unVisibleCols.length;c++) {
-                                var colIndex = unVisibleCols[c];
-                                var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
-                                currentColEl.hide();
-                            }
-                        };
-
-                        checkPagingButtonsVisiblity();
-                        doPagingForContent();
-
-
-                        // Bind events
-
-
-                        next.bind('click', function(evt) {
-                            evt.stopPropagation();
-                            var page = Number(groupHeader.attr('data-page')) + 1;
-                            if(page > groupHeader.attr('data-max-page')) {
-                                page = groupHeader.attr('data-max-page');
-                            }
-                            groupHeader.attr('data-page', page);
-                            checkPagingButtonsVisiblity();
-                            doPagingForContent();
-                        });
-
-                        previous.bind('click', function(evt) {
-                            evt.stopPropagation();
-                            var page = Number(groupHeader.attr('data-page')) - 1;
-                            if(page < 1) {
-                                page = 1;
-                            }
-                            groupHeader.attr('data-page', page);
-                            checkPagingButtonsVisiblity();
-                            doPagingForContent();
-                        });
-
-
-
-                        // Check cols visibility
-                        //jQuery('.stats-table .oskari-grid tr th:nth-child(2):not(.grouping),td:nth-child(2):not(.grouping)').hide()
-                    } else {
-                        groupHeader.find('.paging.next').remove();
-                        groupHeader.find('.paging.previous').remove();
+                        groupHeader.attr('data-header-index', i);
                     }
+
                     row.append(groupHeader);
                 }
                 tableHeader.prepend(row);
@@ -841,6 +874,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }, function () {
                 jQuery(this).parents('tr').bind('click', rowClicked);
             });
+
+            me._checkPaging(table);
         },
         /**
          * @private @method _renderColumnSelector
@@ -1033,6 +1068,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 me._sortBy(me.lastSort.attr, me.lastSort.descending);
             }
             me._renderBody(table, fieldNames);
+
 
             if (me.showColumnSelector) {
                 me._renderColumnSelector(table, fieldNames);

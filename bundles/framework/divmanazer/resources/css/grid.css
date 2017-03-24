@@ -111,10 +111,14 @@ table.oskari-grid th.grouping div.paging {
   border-bottom: 8px solid transparent; }
   table.oskari-grid th.grouping div.paging.previous {
     float: left;
-    border-right: 8px solid #ffd400; }
+    border-right: 8px solid #f0f0f0; }
+    table.oskari-grid th.grouping div.paging.previous:hover {
+      border-right-color: #ffd400; }
   table.oskari-grid th.grouping div.paging.next {
     float: right;
-    border-left: 8px solid #ffd400; }
+    border-left: 8px solid #f0f0f0; }
+    table.oskari-grid th.grouping div.paging.next:hover {
+      border-left-color: #ffd400; }
   table.oskari-grid th.grouping div.paging.hidden {
     border-right-color: transparent;
     border-left-color: transparent; }
