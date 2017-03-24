@@ -13,12 +13,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     me._log = Oskari.log('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
   }, {
     isSupported: function(){
-      if( typeof ol === 'undefined' ) {
-        return false;
-      }
-      else {
-        return true;
-      }
+      return typeof ol === 'undefined';
     },
     /**
      * Creates UI for coordinate display and places it on the maps
@@ -36,7 +31,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
         if(!this.isSupported()){
           return compass;
         }
-        
+
         compass.on( "click", function(){
           me._map.getView().setRotation( 0 );
           jQuery(this).css({ transform:'rotate(0deg)' });

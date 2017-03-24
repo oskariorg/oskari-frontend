@@ -86,7 +86,7 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
     stop: function() {
       this.plugin.teardownUI(true);
       this.plugin = null;
-      // this._mapmodule.unregisterPlugin(this.plugin);
+      this._sandbox.requestHandler('rotate.map', null);
       this.sandbox = null;
       this.started = false;
     }
