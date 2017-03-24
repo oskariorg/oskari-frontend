@@ -14,6 +14,7 @@ function() {
   noUI: null,
   projectionTrasformationIsCheckedInModifyMode: false,
   noUiIsCheckedInModifyMode: false,
+  started: false,
   /**
   * Get tool object.
   * @method getTool
@@ -45,7 +46,7 @@ function() {
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
-      me.setEnabled(true);
+        me.setEnabled(true);
 
   },
   /**
@@ -60,16 +61,14 @@ function() {
           tool = me.getTool(),
           request;
 
-      me.state.enabled = enabled;
-
-      var rotator = Oskari.getSandbox().findRegisteredModuleInstance('maprotator');
-      if(!rotator) {
-          return;
+      if(me.started){
+        tool.config.instance.stop();
+        me.started = false;
       }
-      if(enabled) {
-        rotator.createPlugin(true);
-          // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
-
+      me.state.enabled = enabled;
+      if(tool.config.instance.plugin === null && enabled) {
+        tool.config.instance.createPlugin(true, true);
+        me.started = true;
       }
   },
   /**
