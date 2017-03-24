@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.41.3
+
+### coordinatetool
+
+Fixed error when adding marker other than 'EPSG:3067' or 'EPSG:4258' projection.
+
+Also removed marker label text hard coded coordinate decimal rounding when projection is not 'EPSG:4258' or 'LATLON:kkj'. Now label text is rounded to projection defined decimals or default decimals.
+
 ## 1.41.2
 
 ### Fixed history tools
