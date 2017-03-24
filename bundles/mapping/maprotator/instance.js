@@ -5,7 +5,7 @@ Oskari.app.playBundle(
   metadata : {
   "Import-Bundle" : {
   "maprotator" : {
-  bundlePath : '/Oskari/packages/framework/bundle/'
+  bundlePath : '/Oskari/packages/mapping/ol3/'
   }
   }
   }
@@ -70,12 +70,25 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
 
         sandbox.register(me);
     },
-    createPlugin: function( enabled ) {
+    createPlugin: function( enabled, publisher ) {
+      if(typeof publisher === 'undefined'){
+        publisher = false;
+      }
       var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
+      if(!plugin.isSupported() && !publisher){
+        return;
+      }
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
       this.plugin = plugin;
       this._sandbox.requestHandler('rotate.map', this);
+    },
+    stop: function() {
+      this.plugin.teardownUI(true);
+      this.plugin = null;
+      // this._mapmodule.unregisterPlugin(this.plugin);
+      this.sandbox = null;
+      this.started = false;
     }
   }, {
       /**
