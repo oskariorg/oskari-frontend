@@ -1,5 +1,24 @@
 # Release Notes
 
+## 1.41.3
+
+### coordinatetool
+
+Fixed error when adding marker other than 'EPSG:3067' or 'EPSG:4258' projection.
+
+Also removed marker label text hard coded coordinate decimal rounding when projection is not 'EPSG:4258' or 'LATLON:kkj'. Now label text is rounded to projection defined decimals or default decimals. The mapmodule fix also affects marker label and it's now placed next to the marker and not on top of it on the geoportal views.
+
+### mapmodule (Openlayers 2/geoportal)
+
+textAlign for styles now work with labelAlign or textAlign on Openlayers 2 mapmodule. Previously only supported labelAlign. Openlayers 3 only supports textAlign.
+textAlign is the documented API and labelAlign will be removed in the future:
+
+    {
+        text : {
+            textAlign: 'left'
+        }
+    }
+
 ## 1.41.2
 
 ### Fixed history tools
