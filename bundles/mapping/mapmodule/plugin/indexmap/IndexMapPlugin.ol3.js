@@ -68,6 +68,14 @@ Oskari.clazz.define(
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
                     if (layer) {
+                        if(typeof layer.createIndexMapLayer === 'function') {
+                            // this is used for statslayer to create a copied layer as indexmap
+                            // as using it directly results in weird behavior:
+                            // - the normal map not refreshing on move after indexmap is opened
+                            // - in some cases indexmap + normal map going to an infinite update-loop when zooming out
+                            layer = layer.createIndexMapLayer();
+                        }
+
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
