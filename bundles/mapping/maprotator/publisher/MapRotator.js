@@ -22,17 +22,24 @@ function() {
   * @returns {Object} tool description
   */
   getTool: function() {
-      var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
       return {
           id: 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
-              instance: maprotator
+              instance: this.getMapRotatorInstance()
           }
       };
   },
+  isDisplayed: function() {
+    // shouldn't be shown if bundle is not started
+    // otherwise results in js errors
+    return !!this.getMapRotatorInstance();
+  },
+  getMapRotatorInstance : function() {
+    return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
+  },
   getPlugin: function(){
-    var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
+    var maprotator = this.getMapRotatorInstance() || {};
     return maprotator.plugin;
   },
   //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
