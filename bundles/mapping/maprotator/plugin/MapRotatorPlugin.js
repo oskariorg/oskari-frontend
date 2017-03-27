@@ -13,7 +13,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     me._log = Oskari.log('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
   }, {
     isSupported: function(){
-      return typeof ol === 'undefined';
+      return typeof ol !== 'undefined';
     },
     /**
      * Creates UI for coordinate display and places it on the maps
