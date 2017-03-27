@@ -530,8 +530,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                   olStyle.labelOutlineWidth = style.text.stroke.width;
               }
           }
-          if(style.text.labelAlign) {
-             olStyle.labelAlign = style.text.labelAlign;
+          // TODO: remove support for labelAlign as ol3 uses textAlign and we only want to support one
+          if(style.text.labelAlign || style.text.textAlign) {
+             olStyle.labelAlign = style.text.labelAlign || style.text.textAlign;
           }
           if(style.text.offsetX) {
              olStyle.labelXOffset = style.text.offsetX;
