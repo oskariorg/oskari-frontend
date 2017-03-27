@@ -72,6 +72,9 @@ Oskari.clazz.define(
         stopPlugin : function(sandbox) {
             var me = this;
             sandbox = sandbox || me._sandbox;
+            if(me._el) {
+                me._el.remove();
+            }
             Object.keys(me._requestHandlers).forEach(function(key) {
                 sandbox.requestHandler(key, null);
             });
