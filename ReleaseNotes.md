@@ -2,6 +2,13 @@
 
 ## 1.42.0
 
+### statslayer/index map interoperability
+
+Fixed an issue where opening index map with statslayer as base resulted in:
+
+- the normal map not refreshing on move after indexmap is opened
+- in some cases indexmap + normal map going to an infinite update-loop when zooming out
+
 ### coordinatetool
 
 Fixed extra coordinate server transform calls.
