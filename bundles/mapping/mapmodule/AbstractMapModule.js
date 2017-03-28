@@ -882,7 +882,10 @@ Oskari.clazz.define(
          * @param {Number} layerid, the id number of the abstract layer in loading
          * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
          */
-        loadingState: function( layerId, started ) {
+        loadingState: function( layerId, started, errors ) {
+          if(typeof errors === 'undefined') {
+            errors = false;
+          }
           var done = false;
           var me = this;
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
@@ -908,14 +911,27 @@ Oskari.clazz.define(
             }
           }
           else {
-            ++this.loaded;
-            done = oskariLayer.loadingDone();
-            this.progBar.updateProgressBar( this.loading, this.loaded );
-            // console.log( this.loaded + " / " + this.loading );
+            if(!errors) {
+              ++this.loaded;
+              done = oskariLayer.loadingDone();
+              this.progBar.updateProgressBar( this.loading, this.loaded );
+              // console.log( this.loaded + " / " + this.loading );
+            } else {
+                this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
+                oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
+                var errors = oskariLayer.getLoadingState().errors;
+                oskariLayer.stopLoading();
+                setTimeout(function(){
+                  me.progBar.hide();
+                },2000);
+                this.progBar.updateProgressBar( this.loading, errors );
+                this.loading = 0;
+                this.loaded = 0;
+                this.notifyErrors( errors );
+            }
           }
-          if( done && oskariLayer.getLoadingState().errors ) {
-            var errors = oskariLayer.getLoadingState().errors;
-            this.notifyErrors( errors );
+          if( done && !oskariLayer.getLoadingState().errors ) {
+            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
           }
 
           this.loadtimer = setTimeout( function() {
