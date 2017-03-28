@@ -442,6 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _addMarker: function(data, messageData){
             var me = this,
+                loc = me._locale,
                 reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest'),
                 inputData = me._getInputsData(),
                 lat = parseFloat(inputData.lonlat.lat),
@@ -453,13 +454,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 };
 
-            //change data to map projection and use it to place marker
-            data = me._coordinateTransformationExtension.transformCoordinates(inputLonLatData, me._previousProjection, me.getMapModule().getProjection());
+            // Check at data is given. If data is given then use for it.
+            // If not then use input data's and try change data to map projection and use it to place marker
+            try {
+                data = data || me._coordinateTransformationExtension.transformCoordinates(inputLonLatData, me._previousProjection, me.getMapModule().getProjection());
+            } catch(err) {
+                // Cannot transform coordinates in _coordinateTransformationExtension.transformCoordinates -function
+                me._showMessage(loc.cannotTransformCoordinates.title, loc.cannotTransformCoordinates.message);
+                return;
+            }
 
-            //display coordinates with desimals on marker label only if EPSG:4258 or LATLON:kkj projections choosen
-            if(me._projectionSelect && me._projectionSelect.val() !== 'EPSG:4258' && me._projectionSelect.val() !== 'LATLON:kkj') {
-                lat = lat.toFixed(0);
-                lon = lon.toFixed(0);
+            // Check projection show format
+            if(me._projectionSelect) {
+                lat = lat.toFixed(me._getProjectionDecimals());
+                lon = lon.toFixed(me._getProjectionDecimals());
             }
             if(reqBuilder) {
                 var msgLon = (messageData && messageData.lon) ? messageData.lon : lon;

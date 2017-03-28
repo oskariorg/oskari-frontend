@@ -31,11 +31,19 @@ grid.setGroupingHeader([
     }
 ]);
 
+### statslayer/index map interoperability
+
+Fixed an issue where opening index map with statslayer as base resulted in:
+
+- the normal map not refreshing on move after indexmap is opened
+- in some cases indexmap + normal map going to an infinite update-loop when zooming out
+
 ### coordinatetool
 
 Fixed extra coordinate server transform calls.
 
 ### mapmodule
+
 getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
 
 Before:
@@ -53,6 +61,25 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 ### publisher2
 
 Medium map height changed from 525 to 600.
+
+## 1.41.3
+
+### coordinatetool
+
+Fixed error when adding marker other than 'EPSG:3067' or 'EPSG:4258' projection.
+
+Also removed marker label text hard coded coordinate decimal rounding when projection is not 'EPSG:4258' or 'LATLON:kkj'. Now label text is rounded to projection defined decimals or default decimals. The mapmodule fix also affects marker label and it's now placed next to the marker and not on top of it on the geoportal views.
+
+### mapmodule (Openlayers 2/geoportal)
+
+textAlign for styles now work with labelAlign or textAlign on Openlayers 2 mapmodule. Previously only supported labelAlign. Openlayers 3 only supports textAlign.
+textAlign is the documented API and labelAlign will be removed in the future:
+
+    {
+        text : {
+            textAlign: 'left'
+        }
+    }
 
 ## 1.41.2
 

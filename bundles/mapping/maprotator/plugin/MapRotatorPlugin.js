@@ -12,6 +12,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     };
     me._log = Oskari.log('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
   }, {
+    isSupported: function(){
+      return typeof ol === 'undefined';
+    },
     /**
      * Creates UI for coordinate display and places it on the maps
      * div where this plugin registered.
@@ -25,18 +28,17 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
             degrees,
             eventBuilder = Oskari.eventBuilder( 'map.rotated' );
 
+        if(!this.isSupported()){
+          return compass;
+        }
+
         compass.on( "click", function(){
           me._map.getView().setRotation( 0 );
-          $(this).css({ transform:'rotate(0deg)' });
+          jQuery(this).css({ transform:'rotate(0deg)' });
         });
-
         // me._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
         compass.attr('title', "me._locale.tooltip.tool");
 
-        //HACK
-        if( typeof ol == 'undefined' ) {
-          return;
-        } else {
         var DragRotate = new ol.interaction.DragRotate();
         this._map.addInteraction(DragRotate);
 
@@ -50,7 +52,6 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
            }
            me.previousDegrees = degrees;
         });
-      }
       return compass;
     },
     _createUI: function() {
@@ -99,18 +100,19 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
     redrawUI: function(mapInMobileMode, forced) {
+      if(this.getElement()){
+        this.teardownUI(true);
+      }
         var me = this;
         var sandbox = me.getSandbox();
-        // this.teardownUI();
         this._createUI();
         this.addToPluginContainer(me.getElement());
-
     },
     teardownUI : function(stopping) {
     //detach old element from screen
-    var me = this;
-    this.removeFromPluginContainer(me._element, !stopping);
-    me.getElement().detach();
+      var me = this;
+      me.getElement().detach();
+      this.removeFromPluginContainer(me._element, !stopping);
     },
     /**
      * Get jQuery element.

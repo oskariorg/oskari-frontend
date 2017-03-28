@@ -14,6 +14,7 @@ function() {
   noUI: null,
   projectionTrasformationIsCheckedInModifyMode: false,
   noUiIsCheckedInModifyMode: false,
+  started: false,
   /**
   * Get tool object.
   * @method getTool
@@ -21,17 +22,24 @@ function() {
   * @returns {Object} tool description
   */
   getTool: function() {
-      var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
       return {
           id: 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
-              instance: maprotator
+              instance: this.getMapRotatorInstance()
           }
       };
   },
+  isDisplayed: function() {
+    // shouldn't be shown if bundle is not started
+    // otherwise results in js errors
+    return !!this.getMapRotatorInstance();
+  },
+  getMapRotatorInstance : function() {
+    return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
+  },
   getPlugin: function(){
-    var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
+    var maprotator = this.getMapRotatorInstance() || {};
     return maprotator.plugin;
   },
   //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
@@ -45,7 +53,7 @@ function() {
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
-      me.setEnabled(true);
+        me.setEnabled(true);
 
   },
   /**
@@ -60,16 +68,14 @@ function() {
           tool = me.getTool(),
           request;
 
-      me.state.enabled = enabled;
-
-      var rotator = Oskari.getSandbox().findRegisteredModuleInstance('maprotator');
-      if(!rotator) {
-          return;
+      if(me.started){
+        tool.config.instance.stop();
+        me.started = false;
       }
-      if(enabled) {
-        rotator.createPlugin(true);
-          // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
-
+      me.state.enabled = enabled;
+      if(tool.config.instance.plugin === null && enabled) {
+        tool.config.instance.createPlugin(true, true);
+        me.started = true;
       }
   },
   /**
