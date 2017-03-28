@@ -457,17 +457,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         _changePage: function(groupHeader){
             var me = this;
-            if(me._groupingHeaders) {
+            if(me._groupingHeaders && groupHeader.attr('data-group-cols')) {
                 var page = Number(groupHeader.attr('data-page'));
                 var maxCols = Number(groupHeader.attr('data-max-cols'));
                 var groupCols = Number(groupHeader.attr('data-group-cols'));
                 var groupStartCol = Number(groupHeader.attr('data-start-col'));
                 var table = groupHeader.parents('table');
-                var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
                 var next = groupHeader.find('.paging.next');
                 var previous = groupHeader.find('.paging.previous');
                 var c;
-                fullContent.show(0);
+
+                // hide grouping cols
+                for(var i=groupStartCol;i<groupCols+groupStartCol;i++){
+                    var content = table.find('tr th:not(.grouping):nth-child('+i+') ,td:not(.grouping):nth-child('+i+')');
+                    content.hide();
+                }
 
                 var pagingHandler = function(groupHeader, data) {
                     var headerIndex = Number(groupHeader.attr('data-header-index'));
@@ -499,22 +503,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var unVisibleCols = [];
                 var visibleCols = [];
                 for(c = 0; c < groupCols; c++) {
+                    var colIndex = c + groupStartCol;
                     if(c < page - 1 || c >= page + maxCols - 1) {
-                        unVisibleCols.push(c + groupStartCol);
+                        unVisibleCols.push(colIndex);
+                        // Hide cols for paging
+                        //var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                        //currentColEl.hide();
                     } else {
                         visibleCols.push(c);
+                        var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                        currentColEl.show();
                     }
                 }
 
                 if(!!unVisibleCols.length) {
-                    // Hide cols for paging
-                    for(c=0;c<unVisibleCols.length;c++) {
-                        var colIndex = unVisibleCols[c];
-                        var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
-                        currentColEl.hide();
-                    }
-
-
                     pagingHandler(groupHeader, {
                         visible: {
                             start: visibleCols[0] + 1,
@@ -585,7 +587,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         next.bind('click', nextHandler);
                         previous.unbind('click');
                         previous.bind('click', prevHandler);
-
                         me._changePage(groupHeader);
                     } else {
                         next.remove();
@@ -941,7 +942,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             me._checkPaging(table);
-            me._selectActivePage();
         },
         /**
          * @private @method _renderColumnSelector
@@ -1134,7 +1134,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 me._sortBy(me.lastSort.attr, me.lastSort.descending);
             }
             me._renderBody(table, fieldNames);
-
 
             if (me.showColumnSelector) {
                 me._renderColumnSelector(table, fieldNames);

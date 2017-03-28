@@ -64,24 +64,6 @@ jQuery(document).ready(function() {
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function (appSetup) {
-            // HACKS
-var startUpSequences = appSetup.startupSequence;
-
-// MAPFULL
-var mapfullSeq = jQuery.grep(startUpSequences, function(bundle) { return bundle.bundlename === 'mapfull'; });
-if(mapfullSeq.length>0) {
-    var mapfull = mapfullSeq[0].metadata['Import-Bundle'];
-    mapfull.mapstats.bundlePath = "/Oskari/packages/mapping/ol2/";
-}
-
-// STATSGRID
-var statsgridSeq = jQuery.grep(startUpSequences, function(bundle) { return bundle.bundlename === 'statsgrid'; });
-if(statsgridSeq.length>0) {
-    var statsgrid = statsgridSeq[0].metadata['Import-Bundle'];
-    statsgrid.statsgrid.bundlePath = "/Oskari/packages/statistics/";
-}
-
-// HACK ENDS
             var app = Oskari.app;
             if (!appSetup.startupSequence) {
                 jQuery('#mapdiv').append('Unable to start');

@@ -2,9 +2,34 @@
 
 ## 1.42.0
 
-### statgrid2016
+### statistics/statsgrid2016
 
-Fixed  rendering grid multiple times.
+Fixed rendering grid multiple times.
+
+Now content are paged if cols is more than three.
+
+#### grid
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text',
+        maxCols: 3,
+        pagingHandler: function(element, data){
+            console.log(data.visible.start + '-' + data.visible.end +'/' + data.count+')');
+        }
+    }
+]);
 
 ### coordinatetool
 
