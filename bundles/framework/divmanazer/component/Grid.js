@@ -408,11 +408,82 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setGroupingHeader: function(headers) {
             this._groupingHeaders = headers;
         },
-        _checkPaging: function(table){
+
+        /**
+         * @method  @private _selectActivePage Select active to visible page
+         */
+        _selectActivePage: function(){
+            var me = this;
+            // Safety checks
+            if(!this.table || !me._groupingHeaders) {
+                return;
+            }
+            var selected = this.table.find('th.selected');
+            if(!selected.is(':visible')) {
+                var colIndex = this.table.find('tr th:not(.grouping)').index(selected);
+                var cols = 0;
+
+                // Resolve wanted page to visible
+                selected.parent().parent().find('tr.grouping th').each(function(){
+                    var groupHeader = jQuery(this);
+                    if(!groupHeader.attr('colspan')){
+                        cols++;
+                    } else {
+                        cols += Number(groupHeader.attr('colspan'));
+                    }
+                    var maxCols = Number(groupHeader.attr('data-max-cols'));
+                    var groupStartCol = Number(groupHeader.attr('data-start-col'));
+
+                    // Founded matching group header
+                    if(colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
+                        var groupColIndex = colIndex -  groupStartCol + 2;
+                        var wantedPage = 1;
+                        for(var i=0;i<groupColIndex;i++) {
+                            if(i + maxCols < groupColIndex) {
+                                wantedPage++;
+                            }
+                        }
+
+                        groupHeader.attr('data-page',wantedPage);
+                        me._changePage(groupHeader);
+                    }
+                });
+            }
+        },
+
+        /**
+         * @method  @private _changePage  Change page
+         * @param  {Object} groupHeader group header
+         */
+        _changePage: function(groupHeader){
             var me = this;
             if(me._groupingHeaders) {
+                var page = Number(groupHeader.attr('data-page'));
+                var maxCols = Number(groupHeader.attr('data-max-cols'));
+                var groupCols = Number(groupHeader.attr('data-group-cols'));
+                var groupStartCol = Number(groupHeader.attr('data-start-col'));
+                var table = groupHeader.parents('table');
+                var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
+                var next = groupHeader.find('.paging.next');
+                var previous = groupHeader.find('.paging.previous');
+                var c;
+                fullContent.show(0);
+
+                var pagingHandler = function(groupHeader, data) {
+                    var headerIndex = Number(groupHeader.attr('data-header-index'));
+                    var header = me._groupingHeaders[headerIndex];
+                    // If header has paging handler then do it
+                    if(typeof header.pagingHandler === 'function') {
+                        header.pagingHandler(groupHeader.find('.title'), data);
+                    }
+                    // otherwise show default text, for example: "2-4/5"
+                    else if(!header.text) {
+                        groupHeader.find('.title').html(data.visible.start + '-' + data.visible.end + '/' + data.count);
+                    }
+                };
+
                 // Check buttons visibility
-                var checkPagingButtonsVisiblity = function(groupHeader){
+                var checkPagingButtonsVisiblity = function(){
                     var page = Number(groupHeader.attr('data-page'));
                     var next = groupHeader.find('.paging.next');
                     var previous = groupHeader.find('.paging.previous');
@@ -425,28 +496,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 };
 
-                // Paging
-                var doPagingForContent = function(groupHeader, headerIndex) {
-                    var page = Number(groupHeader.attr('data-page'));
-                    var maxCols = Number(groupHeader.attr('data-max-cols'));
-                    var groupCols = Number(groupHeader.attr('data-group-cols'));
-                    var groupStartCol = Number(groupHeader.attr('data-start-col'));
-                    var fullContent = table.find('tr th:not(.grouping),td:not(.grouping)');
-                    var next = groupHeader.find('.paging.next');
-                    var previous = groupHeader.find('.paging.previous');
-                    var c;
-                    fullContent.show();
-
-                    var unVisibleCols = [];
-                    var visibleCols = [];
-                    for(c = 0; c < groupCols; c++) {
-                        if(c < page - 1 || c >= page + maxCols - 1) {
-                            unVisibleCols.push(c + groupStartCol);
-                        } else {
-                            visibleCols.push(c);
-                        }
+                var unVisibleCols = [];
+                var visibleCols = [];
+                for(c = 0; c < groupCols; c++) {
+                    if(c < page - 1 || c >= page + maxCols - 1) {
+                        unVisibleCols.push(c + groupStartCol);
+                    } else {
+                        visibleCols.push(c);
                     }
+                }
 
+                if(!!unVisibleCols.length) {
                     // Hide cols for paging
                     for(c=0;c<unVisibleCols.length;c++) {
                         var colIndex = unVisibleCols[c];
@@ -454,74 +514,79 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         currentColEl.hide();
                     }
 
-                    pagingHandler(groupHeader, headerIndex, {
+
+                    pagingHandler(groupHeader, {
                         visible: {
                             start: visibleCols[0] + 1,
                             end: visibleCols[visibleCols.length-1] + 1
                         },
                         count: groupCols
                     });
-                };
 
-                var pagingHandler = function(groupHeader, headerIndex, data) {
-                    var header = me._groupingHeaders[headerIndex];
-                    if(typeof header.pagingHandler === 'function') {
-                        header.pagingHandler(groupHeader.find('.title'), data);
-                    } else if(!header.text) {
-                        groupHeader.find('.title').html(data.visible.start + ' - ' + data.visible.end + ' / ' + data.count);
+                    checkPagingButtonsVisiblity();
+                }
+
+                // IE fix
+                table.addClass('autoheight');
+                table.removeClass('autoheight');
+                table.hide();
+                table.show(0);
+            }
+        },
+        /**
+         * @method  @private_checkPaging Check table paging
+         * @param  {Object} table jQuery table dom
+         */
+        _checkPaging: function(table){
+            var me = this;
+            if(me._groupingHeaders) {
+                // Paging handlers
+                var prevHandler = function(evt) {
+                    evt.stopPropagation();
+                    var groupHeader = jQuery(this).parents('th.grouping');
+                    var page = Number(groupHeader.attr('data-page')) - 1;
+                    if(page < 1) {
+                        page = 1;
                     }
+                    groupHeader.attr('data-page', page);
+                    me._changePage(groupHeader);
                 };
 
+                var nextHandler = function(evt) {
+                    evt.stopPropagation();
+                    var groupHeader = jQuery(this).parents('th.grouping');
+                    var page = Number(groupHeader.attr('data-page')) + 1;
+                    if(page > groupHeader.attr('data-max-page')) {
+                        page = groupHeader.attr('data-max-page');
+                    }
+                    groupHeader.attr('data-page', page);
+                    me._changePage(groupHeader);
+                };
                 table.find('th.grouping').each(function(){
                     var groupHeader = jQuery(this);
                     var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
                     var maxCols = groupHeader.attr('data-max-cols');
                     var next = groupHeader.find('.paging.next');
                     var previous = groupHeader.find('.paging.previous');
-                    var headerIndex = Number(groupHeader.attr('data-header-index'));
-                    if(maxCols && groupCols > maxCols){
+                    if(!!maxCols && groupCols > maxCols){
                         if(me._groupingHeaders.length > 1 && i === 0) {
                             next.addClass('hidden');
                         } else if(me._groupingHeaders.length > 1 && i > 0) {
                             previous.addClass('hidden');
                         }
 
-                        var remainder = groupCols % maxCols;
                         var maxPage = groupCols - maxCols + 1;
                         groupHeader.attr('data-group-cols', groupCols);
                         groupHeader.attr('data-max-page', maxPage);
                         groupHeader.attr('data-page', maxPage);
 
                         // Bind events
-                        // Paging handlers
-                        var prevHandler = function(evt) {
-                            evt.stopPropagation();
-                            var page = Number(groupHeader.attr('data-page')) - 1;
-                            if(page < 1) {
-                                page = 1;
-                            }
-                            groupHeader.attr('data-page', page);
-                            checkPagingButtonsVisiblity(groupHeader);
-                            doPagingForContent(groupHeader, headerIndex);
-                        };
-
-                        var nextHandler = function(evt) {
-                            evt.stopPropagation();
-                            var page = Number(groupHeader.attr('data-page')) + 1;
-                            if(page > groupHeader.attr('data-max-page')) {
-                                page = groupHeader.attr('data-max-page');
-                            }
-                            groupHeader.attr('data-page', page);
-                            checkPagingButtonsVisiblity(groupHeader);
-                            doPagingForContent(groupHeader, headerIndex);
-                        };
                         next.unbind('click');
                         next.bind('click', nextHandler);
                         previous.unbind('click');
                         previous.bind('click', prevHandler);
 
-                        checkPagingButtonsVisiblity(groupHeader);
-                        doPagingForContent(groupHeader, headerIndex);
+                        me._changePage(groupHeader);
                     } else {
                         next.remove();
                         previous.remove();
@@ -876,6 +941,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             me._checkPaging(table);
+            me._selectActivePage();
         },
         /**
          * @private @method _renderColumnSelector
@@ -1401,8 +1467,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // remove selection from headers
             this.table.find('th').removeClass('selected');
             // add selection to the one specified
-            this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
+            var selected = this.table.find('th.' + this.__getHeaderClass(value));
+            selected.addClass('selected');
+
+            this._selectActivePage();
         },
+
         /**
          * @method getTable
          * Returns the grid table.

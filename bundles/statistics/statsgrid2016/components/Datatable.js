@@ -81,7 +81,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      * @param {Object} gridLoc    locale
      */
     _setGridGroupingHeaders: function(indicators,gridLoc){
-        this.grid.setGroupingHeader([
+        var me = this;
+        me.grid.setGroupingHeader([
             {
                 cls: 'statsgrid-grouping-header region',
                 text: gridLoc.areaSelection.title
@@ -89,11 +90,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             {
                 cls:'statsgrid-grouping-header sources',
                 text: gridLoc.title + ' <span>('+indicators.length+')</span>',
-                maxCols: 3,
+                maxCols: 2,
                 pagingHandler: function(element, data){
                     element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
-                    element.parent().find('.paging.next').attr('title', 'Seuraava');
-                    element.parent().find('.paging.previous').attr('title', 'Edellinen');
+                    me.setHeaderHeight();
                 }
             }
         ]);

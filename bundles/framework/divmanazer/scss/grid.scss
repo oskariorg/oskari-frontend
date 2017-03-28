@@ -185,6 +185,10 @@ table.oskari-grid {
         &.hidden {
           border-right-color: $pagingArrowDeactiveColor;
           border-left-color: $pagingArrowDeactiveColor;
+          &:hover{
+            border-right-color: $pagingArrowDeactiveColor;
+            border-left-color: $pagingArrowDeactiveColor;
+          }
         }
       }
 
