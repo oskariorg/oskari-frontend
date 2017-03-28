@@ -101,7 +101,7 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
 
-        me.loading = 0;
+        me.pending = 0;
         me.loaded = 0;
 
         //possible custom css cursor set via rpc
@@ -903,7 +903,7 @@ Oskari.clazz.define(
           }
 
           if( started ) {
-            ++this.loading;
+            ++this.pending;
             var wasFirstTile = oskariLayer.loadingStarted();
             if( wasFirstTile ) {
                 this.progBar.show();
@@ -914,18 +914,17 @@ Oskari.clazz.define(
             if(!errors) {
               ++this.loaded;
               done = oskariLayer.loadingDone();
-              this.progBar.updateProgressBar( this.loading, this.loaded );
-              // console.log( this.loaded + " / " + this.loading );
+              this.progBar.updateProgressBar( this.pending, this.loaded );
             } else {
                 this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                 oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
                 var errors = oskariLayer.getLoadingState().errors;
-                oskariLayer.stopLoading();
+                oskariLayer.loadingDone(0);
                 setTimeout(function(){
                   me.progBar.hide();
                 },2000);
-                this.progBar.updateProgressBar( this.loading, errors );
-                this.loading = 0;
+                // this.progBar.updateProgressBar( this.loading, errors );
+                this.pending = 0;
                 this.loaded = 0;
                 this.notifyErrors( errors );
             }
