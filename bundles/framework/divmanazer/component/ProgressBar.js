@@ -44,10 +44,14 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     show: function() {
       this._element.css( { visibility: 'visible' } );
     },
+    setColor: function(color) {
+      this._element.css( { background: color } );
+    },
     hide: function() {
       var me = this;
       setTimeout( function() {
         me._element.css( { visibility: 'hidden', width: 0 } );
+        me._element.css( { background: 'rgba( 0, 40, 190, 0.4 )' } );
       }, 400 );
     }
 
