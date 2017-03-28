@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             {
                 cls:'statsgrid-grouping-header sources',
                 text: gridLoc.title + ' <span>('+indicators.length+')</span>',
-                maxCols: 2,
+                maxCols: 3,
                 pagingHandler: function(element, data){
                     element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
                     me.setHeaderHeight();
@@ -321,8 +321,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
                 content.append(tableHeader);
             });
-
-            done();
+            if(indicators.length - 1 === id) {
+                done();
+            }
         });
     },
 

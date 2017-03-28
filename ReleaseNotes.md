@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### statgrid2016
+
+Fixed  rendering grid multiple times.
+
 ### coordinatetool
 
 Fixed extra coordinate server transform calls.
@@ -17,7 +21,7 @@ Now:
 
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
-  })
+  });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
