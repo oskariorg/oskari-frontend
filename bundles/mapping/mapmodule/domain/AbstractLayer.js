@@ -445,14 +445,6 @@ Oskari.clazz.define(
           return this.loading === 1;
         },
         /**
-         * Called upon error in loading
-         * @method stopLoading
-         */
-        stopLoading: function() {
-          this.loading = 0;
-          return;
-        },
-        /**
          * Called when openlayers 2/3 tileloadend event fires
          * @method loadingDone
          * @param {Number} {optional} remaining
