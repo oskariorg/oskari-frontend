@@ -137,7 +137,6 @@ Oskari.clazz.define(
         }
       }
       if( error.type === 'normal' && !error.success) {
-        console.log(error);
         if(requestBuilder){
           var request = requestBuilder(layer._name+": could not load layer", 'error');
           Oskari.getSandbox().request('system-message', request);
