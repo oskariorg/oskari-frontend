@@ -204,6 +204,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._popupContent = popupContent;
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
+
+            /* Stop event propagations, so at arrows can be used editing fields */
+            me._lonInput.keyup(function(event) {
+                event.stopPropagation();
+            });
+            me._latInput.keyup(function(event) {
+                event.stopPropagation();
+            });
+
             me._latLabel = popupContent.find('.lat-label');
             me._lonLabel = popupContent.find('.lon-label');
             var showLatLon = me._labelMetricOrDegrees();
