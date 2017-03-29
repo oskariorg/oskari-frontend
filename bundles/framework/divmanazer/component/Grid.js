@@ -69,6 +69,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         /** Grouping headers */
         this._groupingHeaders = null;
 
+        /* Current page. Used to keep track current page when sorting cols */
+        this._currentPage = {};
+
         Oskari.makeObservable(this);
     }, {
         /**
@@ -457,8 +460,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         _changePage: function(groupHeader){
             var me = this;
+
             if(me._groupingHeaders && groupHeader.attr('data-group-cols')) {
                 var page = Number(groupHeader.attr('data-page'));
+                var groupIndex = groupHeader.attr('data-header-index');
+                me._currentPage[groupIndex] = page;
                 var maxCols = Number(groupHeader.attr('data-max-cols'));
                 var groupCols = Number(groupHeader.attr('data-group-cols'));
                 var groupStartCol = Number(groupHeader.attr('data-start-col'));
@@ -582,11 +588,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         groupHeader.attr('data-max-page', maxPage);
                         groupHeader.attr('data-page', maxPage);
 
+                        var groupIndex = groupHeader.attr('data-header-index');
+
                         // Bind events
                         next.unbind('click');
                         next.bind('click', nextHandler);
                         previous.unbind('click');
                         previous.bind('click', prevHandler);
+
+                        if(me._currentPage[groupIndex]) {
+                            groupHeader.attr('data-page', me._currentPage[groupIndex]);
+                            // release current page information
+                            delete me._currentPage[groupIndex];
+                        }
+
                         me._changePage(groupHeader);
                     } else {
                         next.remove();
