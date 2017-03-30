@@ -103,7 +103,7 @@ Oskari.clazz.define(
         this.__log('Processing started for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
         if(typeof this.timer === 'undefined'){
           this.timer = setTimeout(function(){
-            Oskari.Log("WFS STATE HANDLER", "Wfs laoding for 4 seconds");
+            this.__log('Processing layer ' + data.layerId + ' takes longer than excpected');
           }, 4000);
         }
         return;
