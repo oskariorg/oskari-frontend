@@ -101,9 +101,6 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
 
-        me.pending = 0;
-        me.loaded = 0;
-
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
         this.log = Oskari.log('AbstractMapModule');
