@@ -916,7 +916,7 @@ Oskari.clazz.define(
               var pendingTiles = 0;
               layers.forEach( function( layer ) {
                 tilesLoaded += layer.loaded;
-                pendingTiles += layer.pending;
+                pendingTiles += layer.tilesToLoad;
               });
               done = oskariLayer.loadingDone();
               this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
