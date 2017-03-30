@@ -6,7 +6,7 @@
 
 Fixed rendering grid multiple times.
 
-Now content are paged if cols is more than three.
+Indicators in datatable are now paged if more than three indicators have been selected.
 
 #### grid
 
@@ -30,6 +30,17 @@ grid.setGroupingHeader([
         }
     }
 ]);
+```
+
+### coordinatetool
+
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
+
+Fixed extra coordinate server transform calls.
+
+### Oskari.util
+
+Changed coordinate regex patterns to allow also negative minutes/seconds.
 
 ### statslayer/index map interoperability
 
@@ -37,10 +48,6 @@ Fixed an issue where opening index map with statslayer as base resulted in:
 
 - the normal map not refreshing on move after indexmap is opened
 - in some cases indexmap + normal map going to an infinite update-loop when zooming out
-
-### coordinatetool
-
-Fixed extra coordinate server transform calls.
 
 ### mapmodule
 
@@ -60,7 +67,7 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 ### publisher2
 
-Medium map height changed from 525 to 600.
+Medium map height changed from 525 to 600 pixels.
 
 ## 1.41.3
 
