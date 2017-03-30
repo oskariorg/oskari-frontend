@@ -506,23 +506,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 };
 
-                var unVisibleCols = [];
                 var visibleCols = [];
+
+                // Get visiblee cols and shows them
                 for(c = 0; c < groupCols; c++) {
                     var colIndex = c + groupStartCol;
-                    if(c < page - 1 || c >= page + maxCols - 1) {
-                        unVisibleCols.push(colIndex);
-                        // Hide cols for paging
-                        //var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
-                        //currentColEl.hide();
-                    } else {
+
+                    if (c >= page - 1 && c < page + maxCols - 1){
                         visibleCols.push(c);
                         var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
                         currentColEl.show();
                     }
                 }
 
-                if(!!unVisibleCols.length) {
+                if(visibleCols.length < groupCols) {
                     pagingHandler(groupHeader, {
                         visible: {
                             start: visibleCols[0] + 1,
@@ -1632,9 +1629,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.table.find('tbody').empty();
             me._renderBody(this.table, fieldNames);
             me.trigger('sort', {
-                        column : scopedValue,
-                        ascending : !descending
-                    });
+                column : scopedValue,
+                ascending : !descending
+            });
         },
 
         /**
