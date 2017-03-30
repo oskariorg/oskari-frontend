@@ -888,6 +888,7 @@ Oskari.clazz.define(
           }
           var done = false;
           var me = this;
+          var layers = this.getSandbox().findAllSelectedMapLayers();
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
           if( !oskariLayer ) {
             return;
@@ -903,29 +904,32 @@ Oskari.clazz.define(
           }
 
           if( started ) {
-            ++this.pending;
             var wasFirstTile = oskariLayer.loadingStarted();
             if( wasFirstTile ) {
                 this.progBar.show();
-                oskariLayer.loadingError( 0 );
+                oskariLayer.resetLoadingState();
             }
           }
           else {
             if(!errors) {
-              ++this.loaded;
+              var tilesLoaded = 0;
+              var pendingTiles = 0;
+              layers.forEach( function( layer ) {
+                tilesLoaded += layer.loaded;
+                pendingTiles += layer.pending;
+              });
               done = oskariLayer.loadingDone();
-              this.progBar.updateProgressBar( this.pending, this.loaded );
+              this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
             } else {
                 this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                 oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
                 var errors = oskariLayer.getLoadingState().errors;
                 oskariLayer.loadingDone(0);
+
                 setTimeout(function(){
                   me.progBar.hide();
                 },2000);
-                // this.progBar.updateProgressBar( this.loading, errors );
-                this.pending = 0;
-                this.loaded = 0;
+
                 this.notifyErrors( errors );
             }
           }
