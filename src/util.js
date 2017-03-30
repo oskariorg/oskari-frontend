@@ -285,9 +285,6 @@ Oskari.util = (function () {
                 }
             }
         }
-        // if the function returns less than zero, sort a before b
-//if the function returns greater than zero, sort b before a
-//if the function returns zero, leave a and b unchanged with respect to each other
 
         if (descending) {
             retValue =  -1 * retValue;
@@ -395,12 +392,12 @@ Oskari.util = (function () {
 
         var patterns = {
             'DDMMSS.s':     '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
-                            '(\\d+)' + coordChars.CHAR_MIN + '\\s*' +               // MM
-                            '(\\d+(?:\\.\\d+)?)' + coordChars.CHAR_SEC,             // SS.s
+                            '(-?\\d+)' + coordChars.CHAR_MIN + '\\s*' +               // MM
+                            '(-?\\d+(?:\\.\\d+)?)' + coordChars.CHAR_SEC,             // SS.s
             'DDMM.mmm 1':   '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
-                            '(\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_MIN + ']\\s*',  // MM.mmm
+                            '(-?\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_MIN + ']\\s*',  // MM.mmm
             'DDMM.mmm 2':   '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' +          // DD
-                            '(\\d+(?:\\.\\d+)?)\\s*',                               // MM.mmm
+                            '(-?\\d+(?:\\.\\d+)?)\\s*',                               // MM.mmm
             'DD.ddddd':     '(\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_DEG + 'd]\\s*' // DD.ddd
         };
 

@@ -2,6 +2,14 @@
 
 ## 1.42.0
 
+### coordinatetool
+
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
+
+### Oskari.util
+
+Changed coordinate regex patterns to allow also negative minutes/seconds.
+
 ### statslayer/index map interoperability
 
 Fixed an issue where opening index map with statslayer as base resulted in:
