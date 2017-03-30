@@ -2,9 +2,41 @@
 
 ## 1.42.0
 
+### statistics/statsgrid2016
+
+Fixed rendering grid multiple times.
+
+Indicators in datatable are now paged if more than three indicators have been selected.
+
+#### grid
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text',
+        maxCols: 3,
+        pagingHandler: function(element, data){
+            console.log(data.visible.start + '-' + data.visible.end +'/' + data.count+')');
+        }
+    }
+]);
+```
+
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
+
+Fixed extra coordinate server transform calls.
 
 ### Oskari.util
 
@@ -16,10 +48,6 @@ Fixed an issue where opening index map with statslayer as base resulted in:
 
 - the normal map not refreshing on move after indexmap is opened
 - in some cases indexmap + normal map going to an infinite update-loop when zooming out
-
-### coordinatetool
-
-Fixed extra coordinate server transform calls.
 
 ### mapmodule
 
@@ -33,13 +61,13 @@ Now:
 
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
-  })
+  });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
 ### publisher2
 
-Medium map height changed from 525 to 600.
+Medium map height changed from 525 to 600 pixels.
 
 ## 1.41.3
 

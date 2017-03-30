@@ -81,14 +81,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      * @param {Object} gridLoc    locale
      */
     _setGridGroupingHeaders: function(indicators,gridLoc){
-        this.grid.setGroupingHeader([
+        var me = this;
+        me.grid.setGroupingHeader([
             {
                 cls: 'statsgrid-grouping-header region',
                 text: gridLoc.areaSelection.title
             },
             {
                 cls:'statsgrid-grouping-header sources',
-                text: gridLoc.title + ' <span>('+indicators.length+')</span>'
+                text: gridLoc.title + ' <span>('+indicators.length+')</span>',
+                maxCols: 3,
+                pagingHandler: function(element, data){
+                    element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
+                    me.setHeaderHeight();
+                }
             }
         ]);
     },
@@ -315,8 +321,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
                 content.append(tableHeader);
             });
-
-            done();
+            if(indicators.length - 1 === id) {
+                done();
+            }
         });
     },
 
