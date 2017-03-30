@@ -4,7 +4,7 @@
 
 ### coordinatetool
 
-Lon and lat inputs not now handle map movements when pressing arrow keys.
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
 
 ### Oskari.util
 
