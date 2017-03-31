@@ -53,8 +53,6 @@ function() {
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
-        me.setEnabled(true);
-
   },
   /**
   * Set enabled.
@@ -67,7 +65,6 @@ function() {
       var me = this,
           tool = me.getTool(),
           request;
-
       if(me.started){
         tool.config.instance.stop();
         me.started = false;
