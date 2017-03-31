@@ -904,7 +904,9 @@ Oskari.clazz.define(
             var wasFirstTile = oskariLayer.loadingStarted();
             if( wasFirstTile ) {
                 this.progBar.show();
-                oskariLayer.resetLoadingState();
+                layers.forEach( function( layer ) {
+                  oskariLayer.resetLoadingState();
+                });
             }
           }
           else {
