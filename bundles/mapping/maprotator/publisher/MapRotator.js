@@ -50,21 +50,27 @@ function() {
    */
   init: function(data) {
       var me = this;
-      var tool = me.getTool();
-      var request;
+
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
       me.setEnabled(true);
 
-      if(me.started){
-        tool.config.instance.plugin.stop();
-        me.started = false;
-      }
-      if(!tool.config.instance._started) {
-        tool.config.instance.createPlugin(true, true);
-        me.started = true;
-      }
+  },
+  setEnabled: function( enabled ) {
+    var me = this;
+    var tool = me.getTool();
+    var request;
+
+    if( me.started ) {
+      this.getMapRotatorInstance().plugin.stop();
+      me.started = false;
+    }
+    me.state.enabled = enabled;
+    if( enabled ) {
+      this.getMapRotatorInstance().createPlugin( true, true );
+      me.started = true;
+    }
   },
   /**
   * Get values.

@@ -32,7 +32,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           return compass;
         }
 
-        compass.on( "click", function(){
+        compass.on( "click", function() {
           me._map.getView().setRotation( 0 );
           jQuery(this).css({ transform:'rotate(0deg)' });
         });
@@ -46,7 +46,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
            degrees = me._getRotation();
            compass.css({ transform:'rotate('+degrees+'deg)' });
 
-           if(degrees != me.previousDegrees) {
+           if( degrees != me.previousDegrees ) {
              var event = eventBuilder( degrees );
              me._sandbox.notifyAll( event );
            }
@@ -56,9 +56,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     },
     _createUI: function() {
       this._element = this._createControlElement();
-      this.addToPluginContainer(this._element);
+      this.addToPluginContainer( this._element );
     },
-    setRotation: function(deg) {
+    setRotation: function( deg ) {
       //degrees to radians
       var rot = deg / 57.3;
       if( deg === ""){
