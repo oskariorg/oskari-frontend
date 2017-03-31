@@ -38,7 +38,7 @@ function() {
   getMapRotatorInstance : function() {
     return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
   },
-  getPlugin: function(){
+  getPlugin: function() {
     var maprotator = this.getMapRotatorInstance() || {};
     return maprotator.plugin;
   },
@@ -50,27 +50,18 @@ function() {
    */
   init: function(data) {
       var me = this;
+      var tool = me.getTool();
+      var request;
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
-  },
-  /**
-  * Set enabled.
-  * @method setEnabled
-  * @public
-  *
-  * @param {Boolean} enabled is tool enabled or not
-  */
-  setEnabled : function(enabled) {
-      var me = this,
-          tool = me.getTool(),
-          request;
+      me.setEnabled(true);
+
       if(me.started){
-        tool.config.instance.stop();
+        tool.config.instance.plugin.stop();
         me.started = false;
       }
-      me.state.enabled = enabled;
-      if(tool.config.instance.plugin === null && enabled) {
+      if(!tool.config.instance._started) {
         tool.config.instance.createPlugin(true, true);
         me.started = true;
       }
