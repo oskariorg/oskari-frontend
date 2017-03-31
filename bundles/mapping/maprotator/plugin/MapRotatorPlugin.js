@@ -114,6 +114,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
       me.getElement().detach();
       this.removeFromPluginContainer(me._element, !stopping);
     },
+    stop: function(){
+      this.teardownUI(true);
+    },
     /**
      * Get jQuery element.
      * @method @public getElement
