@@ -1395,8 +1395,18 @@ Oskari.clazz.define(
           layer.setMinScale(minscale);
           layer.setMaxScale(maxscale);
           var olLayer = this.getOLMapLayers(layer)
-          olLayer[0].minScale = minscale;
-          olLayer[0].maxScale = maxscale;
+          olLayer[0].minResolution = minscale;
+          olLayer[0].maxResolution = maxscale;
+
+          this._dialog = Oskari.clazz.create(
+            'Oskari.userinterface.component.Popup'
+          );
+         var btn = this._dialog.createCloseButton('OK');
+
+         btn.setHandler(function() {
+             me._dialog.close();
+         });
+         this._dialog.show("Scale updated", "Layer not available on current zoom", [btn]);
         },
         /**
          * @method _addMapLayerToMap

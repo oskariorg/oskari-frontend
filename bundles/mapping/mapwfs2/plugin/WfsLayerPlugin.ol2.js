@@ -1942,6 +1942,16 @@ Oskari.clazz.define(
           var olLayer = this.getOLMapLayers(layer)
           olLayer[0].minScale = minscale;
           olLayer[0].maxScale = maxscale;
+          
+          this._dialog = Oskari.clazz.create(
+            'Oskari.userinterface.component.Popup'
+          );
+         var btn = this._dialog.createCloseButton('OK');
+
+         btn.setHandler(function() {
+             me._dialog.close();
+         });
+         this._dialog.show("Scale updated", "Layer not available on current zoom", [btn]);
         },
         /*
         * add WMS layer as linked layer, if configured for wfs rendering
