@@ -1395,8 +1395,9 @@ Oskari.clazz.define(
           layer.setMinScale(minscale);
           layer.setMaxScale(maxscale);
           var olLayer = this.getOLMapLayers(layer)
-          olLayer[0].minResolution = minscale;
-          olLayer[0].maxResolution = maxscale;
+          var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
+          olLayer[0].setMinResolution(layerResolutions[0]);
+          olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);
 
           this._dialog = Oskari.clazz.create(
             'Oskari.userinterface.component.Popup'
@@ -1406,7 +1407,7 @@ Oskari.clazz.define(
          btn.setHandler(function() {
              me._dialog.close();
          });
-         this._dialog.show("Scale updated", "Layer not available on current zoom", [btn]);
+         this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
         },
         /**
          * @method _addMapLayerToMap
