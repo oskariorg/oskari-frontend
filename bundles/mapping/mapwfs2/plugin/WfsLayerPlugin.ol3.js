@@ -1390,6 +1390,14 @@ Oskari.clazz.define(
         hasUI: function() {
             return false;
         },
+        updateScale: function(layer, minscale, maxscale) {
+          var me = this;
+          layer.setMinScale(minscale);
+          layer.setMaxScale(maxscale);
+          var olLayer = this.getOLMapLayers(layer)
+          olLayer[0].minScale = minscale;
+          olLayer[0].maxScale = maxscale;
+        },
         /**
          * @method _addMapLayerToMap
          *
