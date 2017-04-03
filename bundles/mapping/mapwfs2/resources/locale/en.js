@@ -47,6 +47,10 @@ Oskari.registerLocalization(
                 "cancel": "Cancel",
                 "save": "Save"
             }
+        },
+        "scale_dialog": {
+          "title": "Scale updated",
+          "msg":"Layer not available on current zoom level"
         }
     }
 });
