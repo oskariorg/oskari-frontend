@@ -97,13 +97,14 @@ Oskari.clazz.define(
       this.__log('WFS complete', data);
     },
     handleChannelStatus : function(data) {
+      var me = this;
       // {"layerId":"5","message":"started","reqId":9}
       // {"layerId":"15","success":true,"message":"completed","reqId":3}
       if(data.message === 'started') {
         this.__log('Processing started for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
         if(typeof this.timer === 'undefined'){
           this.timer = setTimeout(function(){
-            this.__log('Processing layer ' + data.layerId + ' takes longer than excpected');
+            me.__log('Processing layer ' + data.layerId + ' takes longer than excpected');
           }, 4000);
         }
         return;
@@ -157,7 +158,7 @@ Oskari.clazz.define(
         this._errorLayers.push({errorlayer:this._errorLayer});
       }
       if(error.key === 'layer_scale_out_of_range'){
-        this.updateScale(layer, error.minscale, error.maxscale, plugin);
+        plugin.updateScale(layer, error.minscale, error.maxscale);
       }
 
       var sb = this.sandbox;
@@ -166,23 +167,4 @@ Oskari.clazz.define(
       loadEvent.setRequestType(loadEvent.type.image);
       sb.notifyAll(loadEvent);
     },
-    updateScale: function(layer, minscale, maxscale, plugin){
-      var me = this;
-      layer.setMinScale(minscale);
-      layer.setMaxScale(maxscale);
-      var olLayer = plugin.getOLMapLayers(layer)
-      olLayer[0].minScale = minscale;
-      olLayer[0].maxScale = maxscale;
-
-      this._dialog = Oskari.clazz.create(
-        'Oskari.userinterface.component.Popup'
-      );
-      var btn = this._dialog.createCloseButton('OK');
-
-      btn.setHandler(function() {
-          me._dialog.close();
-      });
-      this._dialog.show("Scale updated", "Layer not available on current zoom", [btn]);
-    }
-
   });
