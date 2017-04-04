@@ -23,7 +23,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Du har inte rättigheter att använda WFS skikt {layer}.",
             "wfs_configuring_layer_failed": "Konfigureringen av WFS-lager ({layer}) misslyckades.",
             "wfs_request_failed": "Begäran till WFS-lager ({layer}) misslyckades.",
-            "features_parsing_failed": "Hanteringen av features i WFS-lager ({layer}) misslyckades."
+            "features_parsing_failed": "Hanteringen av features i WFS-lager ({layer}) misslyckades.",
+            "layer_load_fail": "Hämtning av WFS-lager misslyckades"
         },
         "information": {
             "title": "WFS-data rendering",

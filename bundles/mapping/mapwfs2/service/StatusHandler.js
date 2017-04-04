@@ -139,10 +139,10 @@ Oskari.clazz.define(
       }
       if( error.type === 'normal' && !error.success) {
         if(requestBuilder){
-          var request = requestBuilder(layer._name+": could not load layer", 'error');
+          var request = requestBuilder(plugin._loc.error.layer_load_fail+": "+layer._name, 'error');
           Oskari.getSandbox().request('system-message', request);
         } else {
-          Oskari.log(this.getName(), "no system-message started");
+          Oskari.log(this.getName()).info("no system-message started");
         }
         this._errorLayer = error;
         this._errorLayers.push({errorlayer:this._errorLayer});
@@ -152,7 +152,7 @@ Oskari.clazz.define(
           var request = requestBuilder(layer._name+" "+error.message, 'warning');
           Oskari.getSandbox().request('system-message', request);
         } else {
-          Oskari.log(this.getName(), "no system-message started");
+          Oskari.log(this.getName()).info("no system-message started");
         }
         this._errorLayer = error;
         this._errorLayers.push({errorlayer:this._errorLayer});

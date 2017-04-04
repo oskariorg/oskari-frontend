@@ -23,7 +23,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Sinulla ei ole riittäviä oikeuksia vektoritasoon {layer}.",
             "wfs_configuring_layer_failed": "Vektoritason {layer} asetusten muuttaminen epäonnistui.",
             "wfs_request_failed": "Vektoritasolle {layer} tehty kysely epäonnistui.",
-            "features_parsing_failed": "Vektoritason {layer} kohdetietojen kysely epäonnistui."
+            "features_parsing_failed": "Vektoritason {layer} kohdetietojen kysely epäonnistui.",
+            "layer_load_fail": "Vektoritason haku epäonnistui"
         },
         "information": {
             "title": "Kohdetietojen esittäminen",
