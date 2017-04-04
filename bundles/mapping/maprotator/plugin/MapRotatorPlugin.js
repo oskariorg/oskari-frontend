@@ -1,6 +1,7 @@
 Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
-  function() {
+  function(config) {
     var me = this;
+    me._config = config || {};
     me._clazz = 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin';
     me._defaultLocation = 'top left';
     me._toolOpen = false;
@@ -32,7 +33,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           return compass;
         }
 
-        compass.on( "click", function() {
+        compass.on( "click", function(){
           me._map.getView().setRotation( 0 );
           jQuery(this).css({ transform:'rotate(0deg)' });
         });
@@ -46,19 +47,22 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
            degrees = me._getRotation();
            compass.css({ transform:'rotate('+degrees+'deg)' });
 
-           if( degrees != me.previousDegrees ) {
+           if(degrees != me.previousDegrees) {
              var event = eventBuilder( degrees );
              me._sandbox.notifyAll( event );
            }
            me.previousDegrees = degrees;
         });
+        if(me._config.noUI) {
+            return null;
+        }
       return compass;
     },
     _createUI: function() {
       this._element = this._createControlElement();
-      this.addToPluginContainer( this._element );
+      this.addToPluginContainer(this._element);
     },
-    setRotation: function( deg ) {
+    setRotation: function(deg) {
       //degrees to radians
       var rot = deg / 57.3;
       if( deg === ""){
@@ -99,23 +103,18 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      * @param  {Boolean} mapInMobileMode is map in mobile mode
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
-    redrawUI: function(mapInMobileMode, forced) {
+    redrawUI: function( forced ) {
       if(this.getElement()){
         this.teardownUI(true);
       }
         var me = this;
         var sandbox = me.getSandbox();
         this._createUI();
-        this.addToPluginContainer(me.getElement());
     },
     teardownUI : function(stopping) {
     //detach old element from screen
-      var me = this;
-      me.getElement().detach();
-      this.removeFromPluginContainer(me._element, !stopping);
-    },
-    stop: function(){
-      this.teardownUI(true);
+      this.getElement().detach();
+      this.removeFromPluginContainer(this.getElement());
     },
     /**
      * Get jQuery element.
@@ -123,6 +122,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      */
     getElement: function(){
         return this._element;
+    },
+    stopPlugin: function() {
+      this.teardownUI(true);
     }
   }, {
       'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
