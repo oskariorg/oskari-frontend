@@ -92,16 +92,7 @@ function() {
       var me = this;
       if(me.state.enabled) {
         var pluginConfig = this.getPlugin().getConfig();
-          if(me.toolConfig){
-            for(var configName in me.toolConfig) {
 
-            // Not save noUI if is not checked
-            if(configName === 'noUI' && !me.noUI) {
-                pluginConfig[configName] = null;
-                delete pluginConfig[configName];
-            }
-          }
-          }
           if(me.noUI) {
               pluginConfig.noUI = me.noUI;
           }
