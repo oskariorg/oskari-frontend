@@ -426,15 +426,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     setHeaderHeight: function(){
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+
+        // IE fix
         if(statsTableEl.length > 0) {
-            statsTableEl.addClass('autoheight');
+            var latestCell = statsTableEl.find('tbody tr').last();
+            latestCell.addClass('autoheight');
             // hack is needed by IE 11. Otherwise header elements with css like
             //   position : absolute, bottom : 0
             // will render in wrong location.
             // This will force a repaint which will fix the locations.
-            statsTableEl.removeClass('autoheight');
-            statsTableEl.hide();
-            statsTableEl.show(0);
+            latestCell.removeClass('autoheight');
+            latestCell.hide();
+            latestCell.show(0);
         }
     },
 

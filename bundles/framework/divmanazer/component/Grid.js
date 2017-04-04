@@ -531,11 +531,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     checkPagingButtonsVisiblity();
                 }
 
-                // IE fix
-                table.addClass('autoheight');
-                table.removeClass('autoheight');
-                table.hide();
-                table.show(0);
+
             }
         },
         /**
