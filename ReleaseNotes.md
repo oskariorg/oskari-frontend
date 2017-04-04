@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### mapwfs2
+
+Added load events for the wfs-layers based on the StatusHandler.
+
 ### coordinatetool
 
 Fixed extra coordinate server transform calls.
