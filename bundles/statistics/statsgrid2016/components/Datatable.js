@@ -337,6 +337,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
         log.info('Indicator added ', src, indId, selections);
+        var state = this.service.getStateService();
+        var hash = this.service.getStateService().getHash(datasrc, indId, selections);
+
+        state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
     },
     /**
