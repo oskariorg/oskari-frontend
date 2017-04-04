@@ -2,6 +2,20 @@
 
 ## 1.42.0
 
+### maprotator
+New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
+To rotate the map press SHIFT + ALT + Drag with mouse.
+
+Sends the map.rotated event when the map is rotating, from which you can get how many degrees the map has rotated.
+
+Can also be used with request:
+```javascript
+  var requestBuilder = Oskari.requestBuilder('rotate.map');
+  var request = requestBuilder(180);
+  Oskari.getSandbox().request('maprotator', request);
+```
+in the requestbuilder put the degrees you want to rotate.
+
 ### statistics/statsgrid2016
 
 Fixed rendering grid multiple times.
