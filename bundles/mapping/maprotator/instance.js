@@ -72,23 +72,27 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
         sandbox.requestHandler('rotate.map', this);
     },
     createPlugin: function( enabled, publisher ) {
-      if( typeof publisher === 'undefined' ) {
+      if(typeof publisher === 'undefined'){
         publisher = false;
       }
-      var plugin = Oskari.clazz.create( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin' );
-      if( !plugin.isSupported() && !publisher ){
+      var conf = this.conf || {};
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
+      if(!plugin.isSupported() && !publisher){
         return;
       }
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
       this.plugin = plugin;
     },
+    stopPlugin: function() {
+      this._mapmodule.unregisterPlugin(this.plugin);
+      this._mapmodule.stopPlugin(this.plugin);
+      this.plugin = null;
+    },
     stop: function() {
+      this.stopPlugin();
+      this.plugin.stopPlugin();
       this.getSandbox().requestHandler('rotate.map', null);
-      if(this.plugin){
-        this.plugin.stop();
-        this.plugin = null;
-      }
       this.sandbox = null;
       this.started = false;
     }
