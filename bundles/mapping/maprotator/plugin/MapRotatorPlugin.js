@@ -103,7 +103,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      * @param  {Boolean} mapInMobileMode is map in mobile mode
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
-    redrawUI: function( forced ) {
+    redrawUI: function() {
       if(this.getElement()){
         this.teardownUI(true);
       }
