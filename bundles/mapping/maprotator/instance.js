@@ -63,30 +63,35 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundleInstance",
           return;
         }
         me._started = true;
-        me._sandbox = Oskari.getSandbox('sandbox');
-        me.setSandbox(me._sandbox);
-        me._mapmodule = me._sandbox.findRegisteredModuleInstance('MainMapModule');
+        sandbox = sandbox || Oskari.getSandbox();
+        me.setSandbox(sandbox);
+        me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         me.createPlugin(true);
 
         sandbox.register(me);
+        sandbox.requestHandler('rotate.map', this);
     },
     createPlugin: function( enabled, publisher ) {
       if(typeof publisher === 'undefined'){
         publisher = false;
       }
-      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
+      var conf = this.conf || {};
+      var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
       if(!plugin.isSupported() && !publisher){
         return;
       }
       this._mapmodule.registerPlugin(plugin);
       this._mapmodule.startPlugin(plugin);
       this.plugin = plugin;
-      this._sandbox.requestHandler('rotate.map', this);
+    },
+    stopPlugin: function() {
+      this._mapmodule.unregisterPlugin(this.plugin);
+      this._mapmodule.stopPlugin(this.plugin);
+      this.plugin = null;
     },
     stop: function() {
-      this.plugin.teardownUI(true);
-      this.plugin = null;
-      this._sandbox.requestHandler('rotate.map', null);
+      this.stopPlugin();
+      this.getSandbox().requestHandler('rotate.map', null);
       this.sandbox = null;
       this.started = false;
     }
