@@ -928,7 +928,8 @@ Oskari.clazz.define(
                 setTimeout(function(){
                   me.progBar.hide();
                 },2000);
-
+                tilesLoaded = 0;
+                pendingTiles = 0;
                 this.notifyErrors( errors );
             }
           }
