@@ -13,6 +13,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         descending: false
     };
 
+    this._maxCols = 3;
+
     // Keep latest sorting on memory
     this._sortOrder = null;
 }, {
@@ -90,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             {
                 cls:'statsgrid-grouping-header sources',
                 text: gridLoc.title + ' <span>('+indicators.length+')</span>',
-                maxCols: 3,
+                maxCols: me._maxCols,
                 pagingHandler: function(element, data){
                     element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
                     me.setHeaderHeight();
@@ -195,7 +197,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
             }
 
-            content.css('width', '180px');
+            content.css('width', '30%');
         });
 
 
@@ -319,6 +321,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
+                // calculate cell width
+                var visibleCells = (indicators.length > me._maxCols) ? me._maxCols : indicators.length;
+                var cellWidth = 70 / visibleCells;
+                content.css('width', cellWidth + '%');
                 content.append(tableHeader);
             });
             if(indicators.length - 1 === id) {
