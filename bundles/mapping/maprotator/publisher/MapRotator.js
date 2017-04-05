@@ -53,7 +53,10 @@ function() {
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
-        me.setEnabled(true);
+
+      me.setEnabled(true);
+      var conf = data.configuration[me.bundleName].conf || {};
+      me.noUiIsCheckedInModifyMode = !!conf.noUI;
 
   },
   /**
@@ -68,14 +71,14 @@ function() {
           tool = me.getTool(),
           request;
 
-      if(me.started){
-        tool.config.instance.stop();
-        me.started = false;
-      }
       me.state.enabled = enabled;
       if(tool.config.instance.plugin === null && enabled) {
         tool.config.instance.createPlugin(true, true);
         me.started = true;
+      }
+      if(!enabled && me.started){
+        this.getMapRotatorInstance().stopPlugin();
+        me.started = false;
       }
   },
   /**
@@ -87,16 +90,21 @@ function() {
   */
   getValues: function () {
       var me = this;
-
       if(me.state.enabled) {
-          return {
-              configuration: {
-                  maprotator: {
+        var pluginConfig = this.getPlugin().getConfig();
 
-                  }
-              }
+          if(me.noUI) {
+              pluginConfig.noUI = me.noUI;
+          }
+          var json = {
+              configuration: {}
           };
-      } else {
+          json.configuration[me.bundleName] = {
+              conf: pluginConfig,
+              state: {}
+          };
+          return json;
+        } else {
           return null;
       }
   },
@@ -122,9 +130,13 @@ function() {
             me.getPlugin().teardownUI();
         } else {
             me.noUI = null;
-            me.getPlugin().redrawUI(Oskari.util.isMobile());
+            me.getPlugin().redrawUI();
         }
     });
+    if(me.noUiIsCheckedInModifyMode) {
+        input.setChecked(true);
+        me.noUI = true;
+    }
     var inputEl = input.getElement();
     template.append(inputEl);
 

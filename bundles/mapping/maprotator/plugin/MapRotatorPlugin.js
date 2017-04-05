@@ -1,6 +1,7 @@
 Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
-  function() {
+  function(config) {
     var me = this;
+    me._config = config || {};
     me._clazz = 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin';
     me._defaultLocation = 'top left';
     me._toolOpen = false;
@@ -13,7 +14,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     me._log = Oskari.log('Oskari.mapping.maprotator.plugin.MapRotatorPlugin');
   }, {
     isSupported: function(){
-      return typeof ol === 'undefined';
+      return typeof ol !== 'undefined';
     },
     /**
      * Creates UI for coordinate display and places it on the maps
@@ -52,6 +53,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
            }
            me.previousDegrees = degrees;
         });
+        if(me._config.noUI) {
+            return null;
+        }
       return compass;
     },
     _createUI: function() {
@@ -99,20 +103,18 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      * @param  {Boolean} mapInMobileMode is map in mobile mode
      * @param {Boolean} forced application has started and ui should be rendered with assets that are available
      */
-    redrawUI: function(mapInMobileMode, forced) {
+    redrawUI: function() {
       if(this.getElement()){
         this.teardownUI(true);
       }
         var me = this;
         var sandbox = me.getSandbox();
         this._createUI();
-        this.addToPluginContainer(me.getElement());
     },
     teardownUI : function(stopping) {
     //detach old element from screen
-      var me = this;
-      me.getElement().detach();
-      this.removeFromPluginContainer(me._element, !stopping);
+      this.getElement().detach();
+      this.removeFromPluginContainer(this.getElement());
     },
     /**
      * Get jQuery element.
@@ -120,6 +122,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
      */
     getElement: function(){
         return this._element;
+    },
+    stopPlugin: function() {
+      this.teardownUI(true);
     }
   }, {
       'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
