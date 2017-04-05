@@ -439,14 +439,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
                     // Founded matching group header
                     if(colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
-                        var groupColIndex = colIndex -  groupStartCol + 2;
-                        var wantedPage = 1;
-                        for(var i=0;i<groupColIndex;i++) {
-                            if(i + maxCols < groupColIndex) {
-                                wantedPage++;
-                            }
+                        // resolve wanted page
+                        var wantedPage = (colIndex - (colIndex % maxCols)) / maxCols;
+                        if(colIndex % maxCols > 0) {
+                            wantedPage += 1;
                         }
-
                         groupHeader.attr('data-page',wantedPage);
                         me._changePage(groupHeader);
                     }
@@ -466,6 +463,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var groupIndex = groupHeader.attr('data-header-index');
                 me._currentPage[groupIndex] = page;
                 var maxCols = Number(groupHeader.attr('data-max-cols'));
+                var maxPages = Number(groupHeader.attr('data-max-page'));
                 var groupCols = Number(groupHeader.attr('data-group-cols'));
                 var groupStartCol = Number(groupHeader.attr('data-start-col'));
                 var table = groupHeader.parents('table');
@@ -506,18 +504,29 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 };
 
-                var visibleCols = [];
+                var visibleCols = Array.apply(null, {length: groupCols}).map(Number.call, Number);
 
-                // Get visiblee cols and shows them
-                for(c = 0; c < groupCols; c++) {
-                    var colIndex = c + groupStartCol;
-
-                    if (c >= page - 1 && c < page + maxCols - 1){
-                        visibleCols.push(c);
-                        var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
-                        currentColEl.show();
-                    }
+                // Get visible cols and shows them
+                // If page is first then show only first cols
+                if(page === 1) {
+                    visibleCols = visibleCols.slice(0, maxCols);
                 }
+                // else page is latest
+                else if (page === maxPages) {
+                    visibleCols = visibleCols.slice(Math.max(groupCols - maxCols, 1));
+                }
+                // else page is between first and latest
+                else {
+                    visibleCols = visibleCols.slice((page-1) * maxCols, page * maxCols);
+                }
+
+                // Show page cols
+                visibleCols.forEach(function(element){
+                    var colIndex = element + groupStartCol;
+                    var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                    currentColEl.show();
+                });
+
 
                 if(visibleCols.length < groupCols) {
                     pagingHandler(groupHeader, {
@@ -525,7 +534,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             start: visibleCols[0] + 1,
                             end: visibleCols[visibleCols.length-1] + 1
                         },
-                        count: groupCols
+                        count: groupCols,
+                        page: page,
+                        maxPages: maxPages
                     });
 
                     checkPagingButtonsVisiblity();
@@ -576,7 +587,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             previous.addClass('hidden');
                         }
 
-                        var maxPage = groupCols - maxCols + 1;
+                        var maxPage = (groupCols - (groupCols % maxCols)) / maxCols;
+                        if(groupCols % maxCols > 0) {
+                            maxPage += 1;
+                        }
                         groupHeader.attr('data-group-cols', groupCols);
                         groupHeader.attr('data-max-page', maxPage);
                         groupHeader.attr('data-page', maxPage);
