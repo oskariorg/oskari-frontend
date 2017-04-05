@@ -1405,6 +1405,7 @@ Oskari.clazz.define(
             if (me.isIndicatorInGrid(columnId)) {
                 return false;
             }
+            meta.organization = meta.organization || { title : ''};
 
             var headerButtons = [{
                 cssClass: 'icon-close-dark statsgrid-remove-indicator',

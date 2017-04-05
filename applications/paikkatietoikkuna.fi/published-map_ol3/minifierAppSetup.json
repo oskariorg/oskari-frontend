@@ -146,6 +146,15 @@
         }
     },
     {
+        "bundlename": "maprotator",
+        "metadata": {
+            "Import-Bundle": {
+                "maprotator": {
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
             "title": "PostProcessor",
             "fi": "PostProcessor",
             "sv": "PostProcessor",
