@@ -14,6 +14,7 @@ function() {
   noUI: null,
   projectionTrasformationIsCheckedInModifyMode: false,
   noUiIsCheckedInModifyMode: false,
+  started: false,
   /**
   * Get tool object.
   * @method getTool
@@ -21,17 +22,24 @@ function() {
   * @returns {Object} tool description
   */
   getTool: function() {
-      var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
       return {
           id: 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           title: 'MapRotator',
           config: {
-              instance: maprotator
+              instance: this.getMapRotatorInstance()
           }
       };
   },
+  isDisplayed: function() {
+    // shouldn't be shown if bundle is not started
+    // otherwise results in js errors
+    return !!this.getMapRotatorInstance();
+  },
+  getMapRotatorInstance : function() {
+    return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
+  },
   getPlugin: function(){
-    var maprotator = this.__sandbox.findRegisteredModuleInstance('maprotator') || null;
+    var maprotator = this.getMapRotatorInstance() || {};
     return maprotator.plugin;
   },
   //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
@@ -45,7 +53,10 @@ function() {
       if ( !data || !data.configuration[me.bundleName] ) {
           return;
       }
+
       me.setEnabled(true);
+      var conf = data.configuration[me.bundleName].conf || {};
+      me.noUiIsCheckedInModifyMode = !!conf.noUI;
 
   },
   /**
@@ -61,15 +72,13 @@ function() {
           request;
 
       me.state.enabled = enabled;
-
-      var rotator = Oskari.getSandbox().findRegisteredModuleInstance('maprotator');
-      if(!rotator) {
-          return;
+      if(tool.config.instance.plugin === null && enabled) {
+        tool.config.instance.createPlugin(true, true);
+        me.started = true;
       }
-      if(enabled) {
-        rotator.createPlugin(true);
-          // reset flyout location to the edge of the publish sidebar for the preview (this doesn't open the flyout)
-
+      if(!enabled && me.started){
+        this.getMapRotatorInstance().stopPlugin();
+        me.started = false;
       }
   },
   /**
@@ -81,16 +90,21 @@ function() {
   */
   getValues: function () {
       var me = this;
-
       if(me.state.enabled) {
-          return {
-              configuration: {
-                  maprotator: {
+        var pluginConfig = this.getPlugin().getConfig();
 
-                  }
-              }
+          if(me.noUI) {
+              pluginConfig.noUI = me.noUI;
+          }
+          var json = {
+              configuration: {}
           };
-      } else {
+          json.configuration[me.bundleName] = {
+              conf: pluginConfig,
+              state: {}
+          };
+          return json;
+        } else {
           return null;
       }
   },
@@ -116,9 +130,13 @@ function() {
             me.getPlugin().teardownUI();
         } else {
             me.noUI = null;
-            me.getPlugin().redrawUI(Oskari.util.isMobile());
+            me.getPlugin().redrawUI();
         }
     });
+    if(me.noUiIsCheckedInModifyMode) {
+        input.setChecked(true);
+        me.noUI = true;
+    }
     var inputEl = input.getElement();
     template.append(inputEl);
 

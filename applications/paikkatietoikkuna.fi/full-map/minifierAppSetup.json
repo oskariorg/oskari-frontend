@@ -540,7 +540,16 @@
                 }
             }
         },
-	  {
+    {
+        "bundlename": "maprotator",
+        "metadata": {
+            "Import-Bundle": {
+                "maprotator": {
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
 		"title": "Tampere",
 		"fi": "Tampere",
 		"sv": "Tampere",

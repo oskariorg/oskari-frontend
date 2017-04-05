@@ -6,11 +6,68 @@
 
 Added load events for the wfs-layers based on the StatusHandler.
 
+### maprotator
+New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
+To rotate the map press SHIFT + ALT + Drag with mouse.
+
+Sends the map.rotated event when the map is rotating, from which you can get how many degrees the map has rotated.
+
+Can also be used with request:
+```javascript
+  var requestBuilder = Oskari.requestBuilder('rotate.map');
+  var request = requestBuilder(180);
+  Oskari.getSandbox().request('maprotator', request);
+```
+in the requestbuilder put the degrees you want to rotate.
+
+### statistics/statsgrid2016
+
+Fixed rendering grid multiple times.
+
+Indicators in datatable are now paged if more than three indicators have been selected.
+
+#### grid
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text',
+        maxCols: 3,
+        pagingHandler: function(element, data){
+            console.log(data.visible.start + '-' + data.visible.end +'/' + data.count+')');
+        }
+    }
+]);
+```
 ### coordinatetool
+
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
 
 Fixed extra coordinate server transform calls.
 
+### Oskari.util
+
+Changed coordinate regex patterns to allow also negative minutes/seconds.
+
+### statslayer/index map interoperability
+
+Fixed an issue where opening index map with statslayer as base resulted in:
+
+- the normal map not refreshing on move after indexmap is opened
+- in some cases indexmap + normal map going to an infinite update-loop when zooming out
+
 ### mapmodule
+
 getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
 
 Before:
@@ -21,13 +78,32 @@ Now:
 
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
-  })
+  });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
 ### publisher2
 
-Medium map height changed from 525 to 600.
+Medium map height changed from 525 to 600 pixels.
+
+## 1.41.3
+
+### coordinatetool
+
+Fixed error when adding marker other than 'EPSG:3067' or 'EPSG:4258' projection.
+
+Also removed marker label text hard coded coordinate decimal rounding when projection is not 'EPSG:4258' or 'LATLON:kkj'. Now label text is rounded to projection defined decimals or default decimals. The mapmodule fix also affects marker label and it's now placed next to the marker and not on top of it on the geoportal views.
+
+### mapmodule (Openlayers 2/geoportal)
+
+textAlign for styles now work with labelAlign or textAlign on Openlayers 2 mapmodule. Previously only supported labelAlign. Openlayers 3 only supports textAlign.
+textAlign is the documented API and labelAlign will be removed in the future:
+
+    {
+        text : {
+            textAlign: 'left'
+        }
+    }
 
 ## 1.41.2
 
