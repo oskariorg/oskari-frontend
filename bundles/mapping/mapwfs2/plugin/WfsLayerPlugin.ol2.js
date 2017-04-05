@@ -692,6 +692,8 @@ Oskari.clazz.define(
         mapLayerRemoveHandler: function (event) {
             var me = this,
                 layer = event.getMapLayer();
+            //remove loading tiles attached to this layer
+            layer.loadingDone(0);
 
             if (layer.hasFeatureData()) {
                 me._isWFSOpen -= 1;
