@@ -561,7 +561,6 @@ Oskari.clazz.define(
             }
 
             for (i = 0; i < layers.length; i += 1) {
-
                 // Clean layer data cache if not in scale
                 if ( layers[i].hasFeatureData()  && !me.OLlayerVisibility(layers[i]) ) {
                     me.getOLMapLayer(layers[i], me.__typeNormal).removeBackBuffer();
@@ -591,7 +590,7 @@ Oskari.clazz.define(
                     grid,
                     tiles
                 );
-                me.getMapModule().loadingState(layers[i]._id, false);
+
                 me._tilesLayer.redraw();
             }
 
