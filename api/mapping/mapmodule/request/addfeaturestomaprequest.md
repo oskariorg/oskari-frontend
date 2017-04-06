@@ -5,6 +5,7 @@ Allows user to add features to map.
 ## Use cases
 
 - add features to map
+- update features from map, for example highlight
 
 ## Description
 
@@ -48,6 +49,11 @@ var geojsonObject = {
         }
       ]
 };
+```
+
+Geometry can also feature properties object. This will identify feature what you want to update. This is usefull for example highlight feature.
+```javascript
+var updateFeature = {'test_property':2};
 ```
 
 Options object
@@ -298,12 +304,10 @@ var params = [updatedFeatureAttributes, {
     layerId: 'MY_VECTOR_LAYER'
 }];
 
-
 channel.postRequest(
     'MapModulePlugin.AddFeaturesToMapRequest',
     params
 );
-
 ```
 
 ## Related api
