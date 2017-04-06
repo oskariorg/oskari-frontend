@@ -6,6 +6,8 @@
 
 Fixed ol3 error when label is not String.
 
+Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
 ### maprotator
 New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
 To rotate the map press SHIFT + ALT + Drag with mouse.

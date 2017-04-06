@@ -45,6 +45,7 @@ Oskari.clazz.define(
         this._layers = {};
         this._features = {};
         this._layerStyles = {};
+        this._featureStyles = {};
     }, {
         /**
          * @method register
@@ -301,21 +302,6 @@ Oskari.clazz.define(
                 vectorSource,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
-            if (!format || !geometry) {
-                return;
-            }
-
-            if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
-                return;
-            }
-
-            if(geometryType !== 'GeoJSON' && typeof geometry === 'object') {
-                for(var key in geometry) {
-                    me._updateFeature(options, key, geometry[key]);
-                }
-                return;
-            }
-
             options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
@@ -326,6 +312,21 @@ Oskari.clazz.define(
             }
             if (!me._features[options.layerId]) {
                 me._features[options.layerId] = [];
+            }
+
+            if(!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
+                for(var key in geometry) {
+                    me._updateFeature(options, key, geometry[key]);
+                }
+                return;
+            }
+
+            if (!format || !geometry) {
+                return;
+            }
+
+            if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
+                return;
             }
 
             var features = format.readFeatures(geometry);
@@ -492,7 +493,7 @@ Oskari.clazz.define(
             var feature = featuresMatchingQuery[0];
             if(feature) {
                 if(options.featureStyle) {
-                   this.setupFeatureStyle(options, feature);
+                   this.setupFeatureStyle(options, feature, true);
                 }
                 var formatter = this._supportedFormats.GeoJSON;
                 var addEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpAdd();
@@ -639,12 +640,16 @@ Oskari.clazz.define(
                 }
             }
         },
-        setupFeatureStyle: function(options, feature) {
-            var style = this.getStyle(options, feature);
+        setupFeatureStyle: function(options, feature, update) {
+            var me = this;
+            var style = this.getStyle(options, feature, update);
             //set up property-based labeling
+            if(update && typeof feature.getId === 'function') {
+                options.featureStyle = me._featureStyles[feature.getId()] || options.featureStyle;
+            }
             if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
                 var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
-                 // For ol3 label must be a string so force to it
+                // For ol3 label must be a string so force to it
                 label = label + '';
                 style.getText().setText(label);
             }
@@ -674,14 +679,26 @@ Oskari.clazz.define(
          *         }
          *     }
          * }
+         * @param {Object} feature ol3 feature
+         * @param {Boolean} update update feature style
          */
-        getStyle: function(options, feature) {
+        getStyle: function(options, feature, update) {
             var me = this,
                 optionalStyle = null;
+
             var styles = options.featureStyle || me._layerStyles[options.layerId] || {};
 
             // overriding default style with feature/layer style
             var styleDef = jQuery.extend({}, this._defaultStyle, styles);
+
+            if(update && typeof feature.getId === 'function' && me._featureStyles[feature.getId()] && options.featureStyle) {
+                styleDef = jQuery.extend({}, me._featureStyles[feature.getId()], styles);
+            }
+
+            if(options.featureStyle) {
+                me._featureStyles[feature.getId()] = styleDef;
+            }
+
             // Optional styles based on property values
             if (feature && options.optionalStyles) {
                 optionalStyle = me.getOptionalStyle(options.optionalStyles, styleDef, feature);
