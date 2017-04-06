@@ -590,7 +590,7 @@ Oskari.clazz.define(
                     grid,
                     tiles
                 );
-
+                me.getMapModule().loadingState(layers[i]._id, false);
                 me._tilesLayer.redraw();
             }
 
