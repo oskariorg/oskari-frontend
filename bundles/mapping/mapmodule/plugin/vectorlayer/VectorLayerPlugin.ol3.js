@@ -644,6 +644,8 @@ Oskari.clazz.define(
             //set up property-based labeling
             if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
                 var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
+                 // For ol3 label must be a string so force to it
+                label = label + '';
                 style.getText().setText(label);
             }
             feature.setStyle(style);
