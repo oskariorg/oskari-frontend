@@ -63,7 +63,7 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "MapRotator":"Rotate map",
+                "MapRotator":"Enable map rotation",
                 "CrosshairTool": "Show map focal point",
                 "FeedbackServiceTool": "Feedback (Open311) service",
                 "toolbarToolNames": {

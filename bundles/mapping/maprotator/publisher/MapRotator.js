@@ -118,7 +118,8 @@ function() {
     //CREATE CHECKBOX
     var me = this,
         template = jQuery(me.templates.toolOptions).clone(),
-        labelNoUI = "Hide UI";
+        loc = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()),
+        labelNoUI = loc.display.publisher.noUI;
     var input = Oskari.clazz.create(
         'Oskari.userinterface.component.CheckboxInput'
     );

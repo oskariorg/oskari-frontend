@@ -7,7 +7,10 @@ Oskari.registerLocalization(
         "display":{
           "tooltip": {
             "tool":"Pyöritä karttaa"
-          }
+          },
+          "publisher": {
+                "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
+            }
         }
     }
 }
