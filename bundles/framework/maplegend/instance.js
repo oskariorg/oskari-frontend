@@ -18,6 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
+        this.publisherplugin = null;
         this.localization = null;
     }, {
         /**
@@ -29,7 +30,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -71,7 +72,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method start
          * implements BundleInstance protocol start method
          */
-        "start": function () {
+        start: function () {
             var me = this;
 
             if (me.started) {
@@ -109,14 +110,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        update: function () {
 
         },
         /**
@@ -179,7 +180,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {
@@ -191,6 +192,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
+
+            if(this.publisherplugin){
+              this.stopPlugin();
+            }
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
@@ -245,6 +250,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
+        },
+        createPlugin: function() {
+          var conf = this.conf || {};
+
+          var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
+
+          this._mapmodule.registerPlugin(plugin);
+          this._mapmodule.startPlugin(plugin);
+          this.publisherplugin = plugin
+        },
+        stopPlugin: function() {
+          this._mapmodule.unregisterPlugin(this.publisherplugin);
+          this._mapmodule.stopPlugin(this.publisherplugin);
+          this.publisherplugin = null;
         },
 
         /**
