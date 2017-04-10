@@ -64,7 +64,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "FeedbackServiceTool": "Palautteen antaminen (Open311)",
-                "MapRotator": "Pyöritä karttaa",
+                "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
                     "history_back": "Siirtyminen edelliseen näkymään",
