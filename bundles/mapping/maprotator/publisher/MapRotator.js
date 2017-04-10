@@ -116,7 +116,7 @@ function() {
     //CREATE CHECKBOX
     var me = this,
         template = jQuery(me.templates.toolOptions).clone(),
-        loc = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()),
+        loc = Oskari.getLocalization('maprotator', Oskari.getLang()),
         labelNoUI = loc.display.publisher.noUI;
     var input = Oskari.clazz.create(
         'Oskari.userinterface.component.CheckboxInput'
@@ -132,11 +132,10 @@ function() {
             me.getPlugin().redrawUI();
         }
     });
-        input.setChecked(me.noUi);
-    }
+    input.setChecked(me.noUi);
+
     var inputEl = input.getElement();
     template.append(inputEl);
-
     return template;
 
   }
