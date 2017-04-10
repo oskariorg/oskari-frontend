@@ -14,8 +14,7 @@ function() {
   noUI: null,
   projectionTrasformationIsCheckedInModifyMode: false,
   noUiIsCheckedInModifyMode: false,
-  started: false,
-  /**
+/**
   * Get tool object.
   * @method getTool
   *
@@ -74,11 +73,13 @@ function() {
       me.state.enabled = enabled;
       if(tool.config.instance.plugin === null && enabled) {
         tool.config.instance.createPlugin(true, true);
-        me.started = true;
+        me.__started = true;
       }
-      if(!enabled && me.started){
-        this.getMapRotatorInstance().stopPlugin();
-        me.started = false;
+      if(!enabled && me.__started){
+        if(me.getMapRotatorInstance().plugin && !me.noUI){
+            me.getMapRotatorInstance().stopPlugin();
+        }
+        me.__started = false;
       }
   },
   /**
@@ -130,7 +131,7 @@ function() {
             me.noUI = true;
             me.getPlugin().teardownUI();
         } else {
-            me.noUI = null;
+            me.noUI = false;
             me.getPlugin().redrawUI();
         }
     });
