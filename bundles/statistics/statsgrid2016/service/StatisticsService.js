@@ -209,7 +209,8 @@
                 type: "GET",
                 dataType: 'json',
                 data : {
-                    regionset : regionset
+                    regionset : regionset,
+                    srs : this.sandbox.getMap().getSrsName()
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {

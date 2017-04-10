@@ -2,11 +2,16 @@
 
 ## 1.42.0
 
+
 #### VectorLayerPlugin ol3
 
 Fixed ol3 error when label is not String.
 
 Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
+### mapwfs2
+
+Added load events for the wfs-layers based on the StatusHandler.
 
 ### maprotator
 New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
@@ -51,7 +56,6 @@ grid.setGroupingHeader([
     }
 ]);
 ```
-
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.

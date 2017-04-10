@@ -136,6 +136,8 @@ Oskari.clazz.define(
         me._created = null;
 
         me.loading = 0;
+        me.loaded = 0;
+        me.tilesToLoad = 0;
         me.errors = 0;
 
     }, {
@@ -441,6 +443,7 @@ Oskari.clazz.define(
           } else {
             this.loading = remaining;
           }
+          this.tilesToLoad = this.loading;
 
           return this.loading === 1;
         },
@@ -450,14 +453,14 @@ Oskari.clazz.define(
          * @param {Number} {optional} remaining
          * @return {Number} number of not yet loaded
          */
-        loadingDone: function(remaining){
+        loadingDone: function(remaining) {
 
           if(typeof remaining === 'undefined'){
             this.loading -=1;
           } else {
             this.loading = remaining;
           }
-
+          this.loaded += 1;
           return this.loading === 0;
         },
         /**
@@ -465,7 +468,7 @@ Oskari.clazz.define(
          * @method loadingError
          * Increments the amount of errors for the layers
          */
-        loadingError: function(errors){
+        loadingError: function(errors) {
 
           if(typeof errors === 'undefined'){
             this.errors += 1;
@@ -482,9 +485,15 @@ Oskari.clazz.define(
         getLoadingState: function() {
           var state = {
             'loading': this.loading,
+            'loaded': this.loaded,
             'errors': this.errors
           };
           return state;
+        },
+        resetLoadingState: function(){
+          this.loaded = 0;
+          this.errors = 0;
+          this.tilesToLoad = 0;
         },
         /**
          * @method addSubLayer
