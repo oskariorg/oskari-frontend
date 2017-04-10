@@ -10,10 +10,7 @@ function() {
   templates: {
       'toolOptions': '<div class="tool-options"></div>'
   },
-  supportedProjections: null,
-  noUI: null,
-  projectionTrasformationIsCheckedInModifyMode: false,
-  noUiIsCheckedInModifyMode: false,
+  noUI: false,
 /**
   * Get tool object.
   * @method getTool
@@ -55,7 +52,7 @@ function() {
 
       me.setEnabled(true);
       var conf = data.configuration[me.bundleName].conf || {};
-      me.noUiIsCheckedInModifyMode = !!conf.noUI;
+      me.noUI = !!conf.noUI;
 
   },
   /**
@@ -135,9 +132,7 @@ function() {
             me.getPlugin().redrawUI();
         }
     });
-    if(me.noUiIsCheckedInModifyMode) {
-        input.setChecked(true);
-        me.noUI = true;
+        input.setChecked(me.noUi);
     }
     var inputEl = input.getElement();
     template.append(inputEl);
