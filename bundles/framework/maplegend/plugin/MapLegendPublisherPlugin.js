@@ -27,6 +27,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
             me._isVisible = false;
             return;
           }
+          this._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
           me._isVisible = true;
           
         })
