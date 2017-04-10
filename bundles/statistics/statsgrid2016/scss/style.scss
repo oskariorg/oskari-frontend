@@ -54,7 +54,7 @@ $buttonWidth: 86%;
 
     .selection {
         margin-bottom: 6px;
-        width: 94%;
+        width: 98%;
     }
 
     .sortby {
@@ -160,11 +160,17 @@ div.oskari-flyoutcontent{
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
         max-width: 700px;
 
-        table.oskari-grid th.selected {
-          background-color: #FDF8D9;
-            animation-name: statsgridcolumnselection;
-            animation-duration: 0.5s;
-            animation-iteration-count: 3;
+        table.oskari-grid {
+            th.selected {
+                background-color: #FDF8D9;
+                animation-name: statsgridcolumnselection;
+                animation-duration: 0.5s;
+                animation-iteration-count: 3;
+            }
+
+            td {
+                text-align: left;
+            }
         }
 
         label span {
