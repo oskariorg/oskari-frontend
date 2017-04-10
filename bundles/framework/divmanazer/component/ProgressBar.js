@@ -35,9 +35,9 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
       if( goal === 0 ) {
         return;
       }
-      var width = ( current / goal * 100 ).toFixed( 1 ) + '%';
-      this._element.css( { width: width } );
-      if( width === '100.0%' ) {
+      var width = ( current / goal * 100 ).toFixed( 1 );
+      this._element.css( { width: width+'%' } );
+      if( width >= 100.0 ) {
           this.hide();
       }
     },

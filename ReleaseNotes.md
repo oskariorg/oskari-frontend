@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### mapwfs2
+
+Added load events for the wfs-layers based on the StatusHandler.
+
 ### maprotator
 New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
 To rotate the map press SHIFT + ALT + Drag with mouse.
@@ -45,7 +49,6 @@ grid.setGroupingHeader([
     }
 ]);
 ```
-
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
