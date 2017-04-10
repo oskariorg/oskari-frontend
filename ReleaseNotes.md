@@ -2,6 +2,13 @@
 
 ## 1.42.0
 
+
+#### VectorLayerPlugin ol3
+
+Fixed ol3 error when label is not String.
+
+Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
 ### mapwfs2
 
 Added load events for the wfs-layers based on the StatusHandler.
