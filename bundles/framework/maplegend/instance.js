@@ -20,6 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.plugins = {};
         this.publisherplugin = null;
         this.localization = null;
+        this._mapmodule = null;
     }, {
         /**
          * @static
@@ -87,6 +88,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 p;
 
             me.sandbox = sandbox;
+            me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -254,7 +256,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         createPlugin: function() {
           var conf = this.conf || {};
 
-          var plugin = Oskari.clazz.create('Oskari.mapping.maprotator.plugin.MapRotatorPlugin', conf);
+          var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin', conf, this.plugins);
 
           this._mapmodule.registerPlugin(plugin);
           this._mapmodule.startPlugin(plugin);
