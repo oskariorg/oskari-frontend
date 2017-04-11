@@ -36,8 +36,31 @@ function() {
           return;
       }
       me.setEnabled(true);
-      this.getInstance().createPlugin();
   },
+  /**
+* Set enabled.
+* @method setEnabled
+* @public
+*
+* @param {Boolean} enabled is tool enabled or not
+*/
+setEnabled : function(enabled) {
+    var me = this,
+        tool = me.getTool(),
+        request;
+
+    me.state.enabled = enabled;
+    if(tool.config.instance.publisherplugin === null && enabled) {
+      me.getInstance().createPlugin();
+      me.__started = true;
+    }
+    if(!enabled && me.__started){
+      if(me.getInstance().publisherplugin){
+          me.getInstance().stopPlugin();
+      }
+      me.__started = false;
+    }
+},
   /**
   * Get values.
   * @method getValues
