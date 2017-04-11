@@ -132,7 +132,7 @@ Oskari.clazz.define(
         __featureClicked: function(features, olLayer) {
             var sandbox = this.getSandbox();
             var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             var me = this;
             _.forEach(features, function(feature) {
                 var geojson = formatter.write([feature]);
@@ -229,7 +229,7 @@ Oskari.clazz.define(
             }
             // Removes all features from all layers
             else {
-                for (var layerId in me._layers) {
+                for (layerId in me._layers) {
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
@@ -261,7 +261,7 @@ Oskari.clazz.define(
             }
 
             // notify other components of removal
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
@@ -331,7 +331,7 @@ Oskari.clazz.define(
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
-            };
+            }
             if (!options.attributes) {
                 options.attributes = {};
             }
@@ -379,7 +379,7 @@ Oskari.clazz.define(
             //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
             for (i = 0; i < features.length; i++) {
                 featureInstance = features[i];
-                styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options));
+                styleMap.styles["default"] = new OpenLayers.Style(me.getStyle(options, features[i]));
                 featureInstance.style = styleMap.createSymbolizer(featureInstance, "default");
             }
 
@@ -438,7 +438,7 @@ Oskari.clazz.define(
                     50);
             }
             // notify other components that features have been added
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
             _.forEach(features, function(feature) {
@@ -515,13 +515,44 @@ Oskari.clazz.define(
          *     }
          * }
          */
-        getStyle: function(options) {
-            var me = this;
-            var styles = options.featureStyle || me._layerStyles[options.layerId];
+        getStyle: function(options, feature) {
+            var me = this,
+                optionalStyle = null;
+
+            var styles = options.featureStyle || me._layerStyles[options.layerId] || {};
 
             // overriding default style with feature/layer style
             var styleDef = jQuery.extend({}, this._defaultStyle, styles);
-            return me.getMapModule().getStyle(styleDef);
+
+            if(feature && options.optionalStyles) {
+                optionalStyle = me.getOptionalStyle(options.optionalStyles, styleDef, feature);
+            }
+            return optionalStyle ? optionalStyle : me.getMapModule().getStyle(styleDef);
+        },
+        /**
+         * @method getOptionalStyle
+         * Returns a style, if style property value matches to any of feature property values
+         * @param {Object} optional style
+         * @param {Object} default style
+         * @param {Object} feature properties
+         * @return
+         * */
+        getOptionalStyle: function(optionalStyles, defStyle, feature) {
+            var me = this;
+            for (var i in optionalStyles) {
+                if (optionalStyles[i].hasOwnProperty('property') && feature.data) {
+                    // check feature property  values and take style, if there is match case
+                    var property = optionalStyles[i].property;
+                    if (property.hasOwnProperty('key') && property.hasOwnProperty('value') && feature.data.hasOwnProperty(property.key)) {
+                        if (property.value === feature.data[property.key]) {
+                            // overriding default style with feature style
+                            var styleOpt = jQuery.extend({}, defStyle, optionalStyles[i]);
+                            return me.getMapModule().getStyle(styleOpt);
+                        }
+                    }
+                }
+            }
+
         },
         /**
          * @method _createRequestHandlers

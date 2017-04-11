@@ -2,11 +2,14 @@
 
 ## 1.42.0
 
-#### VectorLayerPlugin ol3
+#### VectorLayerPlugin
 
-Fixed ol3 error when label is not String.
+ol3:
+- Fixed ol3 error when label is not String.
+- Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 
-Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+ol2:
+- Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
 
 ### mapwfs2
 
@@ -90,6 +93,8 @@ Now:
   });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
+ol2 mapmodule now support fill.color -property when getting style.
 
 ### publisher2
 
