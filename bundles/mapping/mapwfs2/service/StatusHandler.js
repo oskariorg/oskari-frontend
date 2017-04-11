@@ -166,5 +166,5 @@ Oskari.clazz.define(
       loadEvent.setStatus(loadEvent.status.error);
       loadEvent.setRequestType(loadEvent.type.image);
       sb.notifyAll(loadEvent);
-    },
+    }
   });
