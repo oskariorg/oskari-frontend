@@ -150,7 +150,7 @@ Oskari.clazz.define(
             }
             var sandbox = this.getSandbox();
             var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             _.forEach(features, function(obj) {
                 var geojson = formatter.writeFeaturesObject([obj.feature]);
                 clickEvent.addFeature(obj.feature.getId(), geojson, obj.layerId);
@@ -225,7 +225,7 @@ Oskari.clazz.define(
             }
             // Removes all features from all layers
             else {
-                for (var layerId in me._layers) {
+                for (layerId in me._layers) {
                     if (me._layers.hasOwnProperty(layerId)) {
                         olLayer = me._layers[layerId];
                         this._map.removeLayer(olLayer);
@@ -249,7 +249,7 @@ Oskari.clazz.define(
             });
 
             // notify other components of removal
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
@@ -320,7 +320,7 @@ Oskari.clazz.define(
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
                 options.layerId = 'VECTOR';
-            };
+            }
             if (!options.attributes) {
                 options.attributes = {};
             }
@@ -442,7 +442,7 @@ Oskari.clazz.define(
             }
 
             // notify other components that features have been added
-            var formatter = this._supportedFormats['GeoJSON'];
+            var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
             var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
             var errorEvent = sandbox.getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
@@ -494,7 +494,7 @@ Oskari.clazz.define(
                 if(options.featureStyle) {
                    this.setupFeatureStyle(options, feature);
                 }
-                var formatter = this._supportedFormats['GeoJSON'];
+                var formatter = this._supportedFormats.GeoJSON;
                 var addEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpAdd();
                 var errorEvent = this.getSandbox().getEventBuilder('FeatureEvent')().setOpError('feature has no geometry');
                 var highlighted = feature.get('highlighted');
@@ -619,7 +619,7 @@ Oskari.clazz.define(
         rearrangeFeatures: function() {
             var me = this,
                 layers = me.layers;
-            for (key in layers) {
+            for (var key in layers) {
                 if (layers[key].features.length > 0) {
                     var layer = layers[key];
                     var features = layer.features;
@@ -699,7 +699,7 @@ Oskari.clazz.define(
             for (var i in optionalStyles) {
                 if (optionalStyles[i].hasOwnProperty('property') && feature.getProperties()) {
                     // check feature property  values and take style, if there is match case
-                    var property = optionalStyles[i]['property'];
+                    var property = optionalStyles[i].property;
                     if (property.hasOwnProperty('key') && property.hasOwnProperty('value') && feature.getProperties().hasOwnProperty(property.key)) {
                         if (property.value === feature.getProperties()[property.key]) {
                             // overriding default style with feature style
@@ -768,7 +768,7 @@ Oskari.clazz.define(
             var me = this,
                 featureEvent = me._sandbox.getEventBuilder('FeatureEvent')().setOpZoom();
             if (!_.isEmpty(features)) {
-                var formatter = me._supportedFormats['GeoJSON'];
+                var formatter = me._supportedFormats.GeoJSON;
                 _.each(features, function(feature) {
                     var geojson = formatter.writeFeaturesObject([feature]);
                     featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
@@ -853,7 +853,7 @@ Oskari.clazz.define(
         getLayerFeatures: function(id) {
             var me = this;
             var features = me._layers[id].getSource().getFeatures();
-            var formatter = me._supportedFormats['GeoJSON'];
+            var formatter = me._supportedFormats.GeoJSON;
 
             var geojson = formatter.writeFeaturesObject(features);
             return geojson;

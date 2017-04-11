@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+#### VectorLayerPlugin ol2
+
+Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+
 ### maprotator
 New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
 To rotate the map press SHIFT + ALT + Drag with mouse.
@@ -78,6 +82,8 @@ Now:
   });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
+ol2 mapmodule now support fill.color -property when getting style.
 
 ### publisher2
 
