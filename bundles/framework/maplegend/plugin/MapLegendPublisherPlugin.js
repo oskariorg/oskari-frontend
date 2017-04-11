@@ -1,7 +1,8 @@
 Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin',
-  function(config) {
+  function(config, plugins) {
     var me = this;
     me._config = config || {};
+    me._plugins = plugins;
     me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin';
     me._defaultLocation = 'top right';
     me._templates = {
@@ -9,6 +10,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     };
     me._element = null;
     me._isVisible = false;
+    me._loc = Oskari.getLocalization('maplegend', Oskari.getLang());
   }, {
   /**
    * Creates UI for coordinate display and places it on the maps
@@ -19,20 +21,69 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
    */
   _createControlElement: function () {
     var me = this,
-        legend = me._templates.maplegend.clone();
+        popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+        legend = me._templates.maplegend.clone(),
+        loc = Oskari.getLocalization('maplegend', Oskari.getLang());
 
         //on click show flyout(?) with legend image only
         legend.on("click", function(){
           if(me.isOpen()) {
             me._isVisible = false;
+            popup.close(true);
             return;
           }
-          this._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+          popup.show(loc.title);
+          popup.moveTo(legend, 'left', true);
+          popup.makeDraggable();
+          popup.createCloseIcon();
+          // var legend = me._plugins['Oskari.userinterface.Flyout']._populateLayerList(popup);
           me._isVisible = true;
-          
+          me.getLayerLegend(popup);
+
         })
 
     return legend;
+  },
+  getLayerLegend: function(element) {
+    var layers = this.getSandbox().findAllSelectedMapLayers().slice(0),
+        n,
+        layer,
+        groupAttr,
+        layerContainer,
+        accordionPanel,
+        layerNames = [];
+
+    var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+    layers.forEach(function(layer){
+      layerNames.push(layer.getName());
+    });
+    var options = {
+        placeholder_text : 'layers',
+        allow_single_deselect : true,
+        disable_search_threshold: 10,
+        width: '100%'
+    };
+    var dropdown = select.create(layerNames, options);
+    dropdown.css({width:'100%'});
+    jQuery(element.dialog).append(dropdown);
+    select.adjustChosen();
+
+    var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    accordion.insertTo(jQuery(element.dialog));
+    // for (n = layers.length - 1; n >= 0; n -= 1) {
+    //     layer = layers[n];
+    //     groupAttr = layer.getName();
+    //     layerContainer =  this._plugins['Oskari.userinterface.Flyout']._createLayerContainer(layer);
+    //
+    //   if(layerContainer !== null) {
+    //       accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+    //       accordionPanel.open();
+    //       accordionPanel.setTitle(layer.getName());
+    //       accordionPanel.getContainer().append(layerContainer);
+    //       accordion.addPanel(accordionPanel);
+    //   }
+    // }
+
   },
    _createUI: function() {
       this._element = this._createControlElement();
