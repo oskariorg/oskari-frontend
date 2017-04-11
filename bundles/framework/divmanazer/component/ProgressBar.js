@@ -15,7 +15,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     * @param {Object} goal, total number which to fill
     * @return {jQuery Element} a list with chosen applied
      */
-    create: function() {
+    create: function(target) {
       this._element = this._progressBar.clone();
       this._element.css({
          position: 'absolute',
@@ -27,7 +27,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
          transition: 'width 250ms',
          zIndex:25000
       });
-      var content =  $( "#mapdiv" );
+      var content = target;
       content.append( this._element );
       return this._element;
     },
@@ -40,6 +40,9 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
       if( width >= 100.0 ) {
           this.hide();
       }
+    },
+    setColor: function(color){
+      this._element.css( { background: color } );
     },
     show: function() {
       this._element.css( { visibility: 'visible' } );
