@@ -9,6 +9,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     this._progressBar = jQuery( '<div class="oskari-progressbar"></div>' );
     this._element = null;
   },{
+    defaultColor : 'rgba( 0, 40, 190, 0.4 )',
     /**@method create
     *  creates a progressbar with data specified
     * @param {Object} progress, how much into our goal
@@ -22,7 +23,7 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
          top: 0,
          left: 0,
          height: '0.5%',
-         background: 'rgba( 0, 40, 190, 0.4 )',
+         background: this.defaultColor,
          width: 0,
          transition: 'width 250ms',
          zIndex:25000
@@ -50,9 +51,8 @@ Oskari.clazz.define( 'Oskari.userinterface.component.ProgressBar',
     hide: function() {
       var me = this;
       setTimeout( function() {
-        me._element.css( { visibility: 'hidden', width: 0 } );
+        me._element.css( { visibility: 'hidden', width: 0, background: me.defaultColor } );
       }, 400 );
     }
 
-    }
-);
+});
