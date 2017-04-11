@@ -893,7 +893,7 @@ Oskari.clazz.define(
 
           if( !this.progBar ) {
             this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
-            this.progBar.create();
+            this.progBar.create(jQuery('#' + this.getMapElementId()));
           }
 
           if( this.loadtimer ) {
