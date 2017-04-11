@@ -101,9 +101,6 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
 
-        me.loading = 0;
-        me.loaded = 0;
-
         //possible custom css cursor set via rpc
         this._cursorStyle = '';
         this.log = Oskari.log('AbstractMapModule');
@@ -882,9 +879,13 @@ Oskari.clazz.define(
          * @param {Number} layerid, the id number of the abstract layer in loading
          * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
          */
-        loadingState: function( layerId, started ) {
+        loadingState: function( layerId, started, errors ) {
+          if(typeof errors === 'undefined') {
+            errors = false;
+          }
           var done = false;
           var me = this;
+          var layers = this.getSandbox().findAllSelectedMapLayers();
           var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
           if( !oskariLayer ) {
             return;
@@ -892,7 +893,7 @@ Oskari.clazz.define(
 
           if( !this.progBar ) {
             this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
-            this.progBar.create();
+            this.progBar.create(jQuery('#' + this.getMapElementId()));
           }
 
           if( this.loadtimer ) {
@@ -900,22 +901,40 @@ Oskari.clazz.define(
           }
 
           if( started ) {
-            ++this.loading;
             var wasFirstTile = oskariLayer.loadingStarted();
             if( wasFirstTile ) {
                 this.progBar.show();
-                oskariLayer.loadingError( 0 );
+                layers.forEach( function( layer ) {
+                  oskariLayer.resetLoadingState();
+                });
             }
           }
           else {
-            ++this.loaded;
-            done = oskariLayer.loadingDone();
-            this.progBar.updateProgressBar( this.loading, this.loaded );
-            // console.log( this.loaded + " / " + this.loading );
+            if(!errors) {
+              var tilesLoaded = 0;
+              var pendingTiles = 0;
+              layers.forEach( function( layer ) {
+                tilesLoaded += layer.loaded;
+                pendingTiles += layer.tilesToLoad;
+              });
+              done = oskariLayer.loadingDone();
+              this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
+            } else {
+                this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
+                oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
+                var errors = oskariLayer.getLoadingState().errors;
+                oskariLayer.loadingDone(0);
+
+                setTimeout(function(){
+                  me.progBar.hide();
+                },2000);
+                tilesLoaded = 0;
+                pendingTiles = 0;
+                this.notifyErrors( errors );
+            }
           }
-          if( done && oskariLayer.getLoadingState().errors ) {
-            var errors = oskariLayer.getLoadingState().errors;
-            this.notifyErrors( errors );
+          if( done && !oskariLayer.getLoadingState().errors ) {
+            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
           }
 
           this.loadtimer = setTimeout( function() {
