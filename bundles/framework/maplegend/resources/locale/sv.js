@@ -7,6 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "noLegendsText": "Inga kartförklaringar tillgängliga",
         "invalidLegendUrl": "kartförklaringen är inte tillgängliga",
-        "tooltip":"Vis förklaringar"
+        "tooltip":"Vis förklaringar",
+        "infotext":"Välj kartlager, vars förklaringar visas:",
+        "newtab": "Öppna i ny flik"
     }
 });

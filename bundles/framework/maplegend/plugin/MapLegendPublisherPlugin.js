@@ -7,11 +7,13 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     me._defaultLocation = 'top right';
     me._templates = {
       maplegend: jQuery( '<div class="mapplugin maplegend questionmark"></div>' ),
-      legendContainer: jQuery( '<div class="legendSelector"></div>' )
+      legendContainer: jQuery( '<div class="legendSelector"></div>' ),
+      legendInfo: jQuery('<div class="legendInfo"></div>'),
+      legendDivider: jQuery('<div class="maplegend-divider"></div>')
     };
     me._element = null;
     me._isVisible = false;
-    me._loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() );
+    me._loc;
     me._popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
   }, {
   /**
@@ -23,8 +25,10 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
    */
   _createControlElement: function () {
     var me = this,
-        legend = me._templates.maplegend.clone(),
-        loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() );
+        loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() ),
+        legend = me._templates.maplegend.clone();
+
+        me._loc = loc;
 
         legend.on( "click", function () {
           if( me.isOpen() ) {
@@ -32,7 +36,8 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
             me._popup.close( true );
             return;
           }
-          me._popup.show( loc.title );
+          me._popup.show( me._loc.title );
+          me._popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
           me._popup.moveTo( legend, 'left', true );
           me._popup.makeDraggable();
           me._popup.createCloseIcon();
@@ -52,11 +57,16 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
         accordionPanel,
         layerNames = [],
         legendContainer = this._templates.legendContainer.clone(),
+        legendInfo = this._templates.legendInfo.clone(),
+        legendDivider = this._templates.legendDivider.clone(),
         me = this;
 
 
+    legendInfo.text(me._loc.infotext);
+    legendContainer.append(legendInfo);
+    legendContainer.append(legendDivider);
+
     var select = Oskari.clazz.create( 'Oskari.userinterface.component.SelectList' );
-    var selected;
     layers.forEach( function ( layer ) {
       var layerObject = {
         id: layer.getId(),
@@ -85,16 +95,23 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
       }
       layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers( e.target.value );
 
-      groupAttr = layer.getName();
-      layerContainer =  me._plugins[ 'Oskari.userinterface.Flyout' ]._createLayerContainer( layer );
+      if( !layer ) {
+        return;
+      }
+      var legendImg = jQuery( '<img></img>' );
+      var legendLink = jQuery( '<a target="_blank" ></a></br></br>' );
+      legendImg.attr('src', layer.getLegendImage());
+      legendLink.attr('href', layer.getLegendImage());
+      legendLink.text(me._loc.newtab);
 
-      if(layerContainer !== null) {
+      groupAttr = layer.getName();
+
           accordionPanel = Oskari.clazz.create( 'Oskari.userinterface.component.AccordionPanel' );
           accordionPanel.open();
-          accordionPanel.setTitle(layer.getName());
-          accordionPanel.getContainer().append( layerContainer );
+          accordionPanel.getContainer().append( legendLink );
+          accordionPanel.getContainer().append( legendImg );
+          accordionPanel.getHeader().remove();
           accordion.addPanel( accordionPanel );
-      }
 
     });
       jQuery( this._popup.dialog ).append( legendContainer );
