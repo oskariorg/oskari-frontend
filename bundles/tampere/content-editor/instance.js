@@ -359,8 +359,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             this.sandbox.postRequestByName(rn, [extension, 'close']);
         },
         showContentEditor: function (layerId) {
-        	this._closeExtension("LayerSelection");
-        	this.setEditorMode(true, layerId);
+            this._closeExtension("LayerSelection");
+            this.setEditorMode(true, layerId);
         }
     }, {
         /**

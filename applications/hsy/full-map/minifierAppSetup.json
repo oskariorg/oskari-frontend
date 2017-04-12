@@ -609,6 +609,21 @@
             }
         },
         {
+            "title": "Water pipe tool",
+            "fi": "Water pipe tool",
+            "sv": "",
+            "en": "",
+            "bundlename": "water-pipe-tool",
+            "bundleinstancename": "water-pipe-tool",
+            "metadata": {
+                "Import-Bundle": {
+                    "water-pipe-tool": {
+                        "bundlePath": "../../../packages/hsy/bundle/"
+                    }
+                }
+            }
+        },
+        {
             "title": "Tampere",
             "fi": "Tampere",
             "sv": "Tampere",

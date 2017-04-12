@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         me.instance = instance;
         me.loc = localization;
         me.templates = {
-        		wrapper: '<div></div>',
+                wrapper: '<div></div>',
                 getinfoResultTable: '<table class="getinforesult_table"></table>',
                 tableRow: '<tr></tr>',
                 tableCell: '<td></td>',
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
         getName: function () {
             return this.__name;
         },
-    	showMessage: function(title, content, buttons, isModal) {
+        showMessage: function(title, content, buttons, isModal) {
             this.closeDialog();
             this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this._dialog.show(title, content, buttons);
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             container.append(content);
             $(".icon-close").on('click', function(){
                 me.sendStopDrawRequest(true);
-            	me.instance.setEditorMode(false);
+                me.instance.setEditorMode(false);
             });
 
             content.find('div.header h3').append(me.loc.title);
@@ -395,8 +395,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append($("<div />").addClass("properties-container"));
 
             if (!me._checkLayerVisibility(me.layerId)) {
-            	me.isLayerVisible = false;
-            	me._setLayerVisibility(me.layerId, true);
+                me.isLayerVisible = false;
+                me._setLayerVisibility(me.layerId, true);
             }
             me._hideLayers();
             me._disableGFI();
