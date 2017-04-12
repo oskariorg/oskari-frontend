@@ -177,11 +177,13 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
+
 div.oskari-flyoutcontent thead th {
   border: none;
   border-bottom: 1px solid #E6E6E6;
   border-left: 1px solid #E6E6E6;
   border-right: 1px solid #E6E6E6; }
+
 div.oskari-flyoutcontent .statsgrid-grouping-header {
   text-align: left;
   padding: 6px;
@@ -277,5 +279,3 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
       background-image: url("../images/table_light.png"); }
   .statsgrid-published-toggle-buttons .clear {
     clear: both; }
-
-/*# sourceMappingURL=style.css.map */

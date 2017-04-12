@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.event.GetInfoResultEve
  * @static
  */
 function(data, content) {
-    debugger;
     this._data = data;
 }, {
     /** @static @property __name event name */

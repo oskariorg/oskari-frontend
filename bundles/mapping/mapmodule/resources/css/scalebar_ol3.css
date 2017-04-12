@@ -10,17 +10,17 @@ div.mapplugin.scalebar {
   border-left: 1px solid black;
   border-right: 1px solid black;
   /*
-      border-left: 2px solid #000000;
-      border-bottom: 2px solid #000000;
-      border-right: 2px solid #000000;
-  */
+    border-left: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
+*/
   /*
-      div.ol-scale-line {
-          div.ol-scale-line-inner {
-              padding: 2px;
-          }
-      }
-  */ }
+    div.ol-scale-line {
+        div.ol-scale-line-inner {
+            padding: 2px;
+        }
+    }
+*/ }
   div.mapplugin.scalebar div {
     background-color: rgba(255, 255, 255, 0.2);
     direction: ltr;
@@ -41,5 +41,3 @@ div.mapplugin.scalebar {
 
 .right div.mapplugin.scalebar {
   direction: rtl; }
-
-/*# sourceMappingURL=scalebar_ol3.css.map */

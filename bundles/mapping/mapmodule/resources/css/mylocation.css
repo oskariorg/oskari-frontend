@@ -63,5 +63,3 @@ div.mapplugin.mylocationplugin {
     background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(0.8, #DBDBDB)); }
     div.mapplugin.mylocationplugin.toolstyle-3d-light div.icon {
       background-image: url("../images/mobile-my-location-light.png"); }
-
-/*# sourceMappingURL=mylocation.css.map */
