@@ -124,6 +124,9 @@ function() {
 
     input.setTitle( labelNoUI );
     input.setHandler( function( checked ) {
+        if(!me.getPlugin()){
+            return;
+        }
         if( checked === 'on' ){
             me.noUI = true;
             me.getPlugin().teardownUI();
