@@ -16,7 +16,8 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
+            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
+            vectorViewer: false
         };
         this.visible = false;
 
@@ -25,6 +26,8 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+
+        this.regionsetViewer = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -57,6 +60,10 @@ Oskari.clazz.define(
             var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
             if(dsiservice) {
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
+            }
+
+            if(this.conf && this.conf.vectorViewer) {
+                this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox);
             }
         },
         isEmbedded: function() {
@@ -110,7 +117,7 @@ Oskari.clazz.define(
                         // if adding failed, it might because group was not registered.
                         service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
                         // Try adding again
-                        service.addItemToGroup('indicators', data)
+                        service.addItemToGroup('indicators', data);
                     }
                 });
         },
