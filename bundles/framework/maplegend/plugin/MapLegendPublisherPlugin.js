@@ -68,6 +68,9 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
 
     var select = Oskari.clazz.create( 'Oskari.userinterface.component.SelectList' );
     layers.forEach( function ( layer ) {
+      if(!layer.getLegendImage()){
+        return;
+      }
       var layerObject = {
         id: layer.getId(),
         title: layer.getName()
@@ -83,7 +86,6 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     var dropdown = select.create( layerNames, options );
     dropdown.css( { width : '100%' } );
     select.adjustChosen();
-    select.selectFirstValue();
     legendContainer.append( dropdown );
 
     var accordion = Oskari.clazz.create( 'Oskari.userinterface.component.Accordion' );
