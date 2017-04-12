@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "De voorwaarden voor het gebruik en de beschikbaarheid van de dataset zijn gedocumenteerd in de metadata beschrijving."
         }
     }
-}
-);
+});

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrunnskart",
             "type-wms": "Kartlag (WMS, WMTS)",
-            "type-wfs": "Dataprodukt (WFS)"
+            "type-wfs": "Dataprodukt (WFS)",
+            "type-wfs-manual": "Oppdater eigenskapsdata ved å klikke på 'Objekteigenskapar' eller 'Oppdater'-knappen i kartvindauget."
         },
         "backendStatus": {
             "OK": {
@@ -48,15 +49,15 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan vere midlertidig utilgjengeleg dei nærmaste dagane",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "backendstatus-vedlikehald"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unknown"
+                "iconClass": "backendstatus-ukjent"
             },
             "UNSTABLE": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unstable"
+                "iconClass": "backendstatus-ustabil"
             }
         },
         "buttons": {
@@ -64,22 +65,21 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Synonym",
-            "lk": "Related concept",
-            "vk": "Coordinate concept",
-            "ak": "Subordinate concept",
+            "lk": "Relatert konsept",
+            "vk": "Koordinert konsept",
+            "ak": "Underordna konsept",
             "yk": "Superordinate concept"
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Nyaste",
+                "stats": "Vektorlag"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Vis ## nyaste kartlag",
+                "stats": "Vis berre vektorlag",
+                "remove": "Ta bort filter"
             }
         }
     }
-}
-);
+});

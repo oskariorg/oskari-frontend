@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "Publisher",
     "value": {
@@ -26,7 +27,7 @@ Oskari.registerLocalization({
             },
             "name": {
                 "label": "Nazwa mapy",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Podaj opisową nazwę mapy. Proszę zwrócić uwagę na język interfejsu użytkownika."
             },
             "language": {
@@ -52,95 +53,95 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "\"przesuń\" włączone",
                 "SearchPlugin": "Adres i wyszukiwanie nazwy miejsca",
                 "GetInfoPlugin": "Zapytanie o dane miejsca",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
                     "title": "Select colour scheme",
                     "close": "Zamknij",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Warstwy mapy",
                 "defaultLayer": "(Domyślna warstwa)",
                 "useAsDefaultLayer": "Zastosuj jako domyślną warstwę"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Mały",
                 "medium": "Średni",
                 "large": "Duży",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Rozmiar niestandardowy",
                 "width": "szerokość",
                 "height": "wysokość",
@@ -152,7 +153,7 @@ Oskari.registerLocalization({
                 "ok": "OK",
                 "replace": "Zamień",
                 "cancel": "Anuluj",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -163,8 +164,7 @@ Oskari.registerLocalization({
             "layerselection": {
                 "label": "Pokaż warstwy mapy w menu",
                 "info": "Wybierz mapy źródłowe. Możesz ustawić domyślną źródłową mapę w oknie podglądu mapy.",
-                "tooltip": "Źródłowa mapa jest pokazana jako dolna warstwa mapy. Kiedy wybierzesz warstwy mapy, któe mają być używane jako dolne tylko jedna warstwa jest widoczna i możesz przełączać pomiędzy nimi. Możesz ustawić domyślną źródłową mapę w podglądzie mapy.",
-                "promote": "Pokaż zdjęcia lotnicze?"
+                "tooltip": "Źródłowa mapa jest pokazana jako dolna warstwa mapy. Kiedy wybierzesz warstwy mapy, któe mają być używane jako dolne tylko jedna warstwa jest widoczna i możesz przełączać pomiędzy nimi. Możesz ustawić domyślną źródłową mapę w podglądzie mapy."
             },
             "preview": "Podgląd mapy, która ma być wbudowana.",
             "location": "Poziom lokalizacji i powiększenia",
@@ -178,16 +178,14 @@ Oskari.registerLocalization({
                 "name": "Nazwa wymaga informacji",
                 "nohelp": "Brak dostępnej pomocy",
                 "saveFailed": "Publikowanie mapy nie powiodło się. Spróbuj ponownie później.",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Nazwa strony zawiera niedozwolone znaki. Dozwolone znaki to litery a-z oraz å,ä i ö, liczby, klawisze Cofnij i myślniki."
             }
         },
         "NotLoggedView": {
             "text": "Aby skorzystać z funkcji wbudowanie musisz się zalogować.",
             "signup": "Zaloguj się",
-            "signupUrl": "/web/pl/login",
-            "register": "Rejestr",
-            "registerUrl": "/web/pl/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Rejestr"
         },
         "StartView": {
             "text": "Możesz wbudować widok mapy, który utworzyłeś na własnej stronie lub stronie pracodawcy.",
@@ -196,7 +194,7 @@ Oskari.registerLocalization({
             "layerlist_empty": "Warstwy mapy, które wybrałeś nie mogą zostać wbudowane. Menu wybrane warstwy mapy pokazuje czy warstwa mapy może być wbudowana.",
             "layerlist_denied": "Nie może być wbudowane",
             "denied_tooltip": "Dostawcy tych danych mapy nie zezwolili aby publikować te materiały na innych stronach internetowych. Przed wbudowaniem sprawdz prawa do publikacji w menu Wybrane warstwy mapy.",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Kontynuuj",
                 "continueAndAccept": "Zaakceptuj regulamin i kontynuuj",
@@ -213,13 +211,7 @@ Oskari.registerLocalization({
             "show": "Pokaż",
             "hide": "Ukryj",
             "hidden": "Mapa została czasowo uktyra.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publikacja dozwolona",
-                    "tooltip": "Warstwa mapy może zostać opublikowana jako wbudowane okno a ilość użytkowników na tydzień może być ograniczona."
-                }
-            }
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {

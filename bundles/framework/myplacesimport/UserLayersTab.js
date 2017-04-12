@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
 
                 link.append(name).bind('click', function () {
                     // add myplacesimport layer to map on name click
-                    var request = addMLrequestBuilder(data.id, false, data.isBase);
+                    var request = addMLrequestBuilder(data.id);
                     sandbox.request(me.instance, request);
                     return false;
                 });

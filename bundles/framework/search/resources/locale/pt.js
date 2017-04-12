@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pt",
     "key": "Search",
     "value": {
         "title": "Pesquisar lugar",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Pesquisar lugar por nome, endereço ou identificação predial",
-        "searchButton": "Pesquisar",
         "searchResultCount": "Resultado da pesquisa",
         "searchResultCount2": "resultados",
         "searchResultDescriptionMoreResults": "Restringir a pesquisa para diminuir o número de resultados",

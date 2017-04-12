@@ -97,12 +97,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
          */
         createUi: function () {
             var me = this,
-                flyout = jQuery(this.container),
-                sandbox = me.instance.getSandbox();
+                flyout = jQuery(this.container);
             flyout.empty();
 
             // check if the user is logged in
-            if (!sandbox.getUser().isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
                     this.instance,
                     this.instance.getLocalization('NotLoggedView'));

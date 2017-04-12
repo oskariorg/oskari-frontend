@@ -41,7 +41,6 @@ Oskari.clazz.define(
          */
         _startPluginImpl: function () {
             var me = this;
-
             me._createMapInteractions();
         },
 
@@ -117,23 +116,36 @@ Oskari.clazz.define(
          *
          */
         _createMapInteractions: function () {
-             var me = this,
+            var me = this,
             conf = me.getConfig();
+            var mouseInteractionRemove = [];
+            var kbInteractionRemove = [];
+
 
             //TODO: add Esc button handler
 
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
-                me.getMap().removeInteraction(ol.interaction.KeyboardPan);
-                me.getMap().removeInteraction(ol.interaction.KeyboardZoom);
+              me.getMap().getInteractions().forEach(function(interaction){
+                if (interaction instanceof ol.interaction.KeyboardPan ||interaction instanceof ol.interaction.KeyboardZoom ){
+                  kbInteractionRemove.push(interaction);
+                }
+              });
+              kbInteractionRemove.forEach(function(interaction){
+                me.getMap().removeInteraction(interaction);
+              })
             }
 
             // mouse control
             if (conf.mouseControls === false) {
-                me.getMap().removeInteraction(ol.interaction.DragPan);
-                me.getMap().removeInteraction(ol.interaction.MouseWheelZoom);
-                me.getMap().removeInteraction(ol.interaction.DoubleClickZoom);
-                me.getMap().removeInteraction(ol.interaction.DragZoom);
+              me.getMap().getInteractions().forEach(function(interaction){
+                if (interaction instanceof ol.interaction.DragPan ||interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom ){
+                  mouseInteractionRemove.push(interaction);
+                }
+              });
+              mouseInteractionRemove.forEach(function(interaction){
+                me.getMap().removeInteraction(interaction);
+              })
             }
         }
     }, {

@@ -18,29 +18,29 @@ Oskari.registerLocalization(
             "object-data": "Údaje o objekte",
             "rights": {
                 "notavailable": "Zverejnenie je zakázané",
-                "guest": "Prosím prihláste sa, ak chcete zverejniť mapovú vrstvu do uloženej mapy.",
+                "guest": "Prosím prihláste sa, ak chcete zverejniť mapovú vrstvu do vloženej mapy.",
                 "loggedin": "Zverejnenie je povolené",
                 "official": "Zverejnenie iba pre úrady",
-                "need-login": "Prosím prihláste sa, aby ste mohli zverejniť uložené mapy.",
+                "need-login": "Prosím prihláste sa, aby ste mohli zverejniť vložené mapy.",
                 "can_be_published_by_provider": {
                     "label": "Zverejnenie povolené pre poskytovateľov údajov",
-                    "tooltip": "Mapová vrstva je zverejniteľná v uložených mapách iba pre poskytovateľov údajov. Ak ste poskytovateľom údajov, kontaktujte prosím zákaznícke centrum."
+                    "tooltip": "Mapová vrstva je zverejniteľná vo vložených mapách iba pre poskytovateľov údajov. Ak ste poskytovateľom údajov, kontaktujte prosím zákaznícke centrum."
                 },
                 "can_be_published": {
                     "label": "Zverejnenie je povolené",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape. Limit využitia nie je obmedzený."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Limit využitia nie je obmedzený."
                 },
                 "can_be_published_map_user": {
                     "label": "Zverejnenie je povolené",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape. Týždenný limit využitia môže byť obmedzený."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Týždenný limit využitia môže byť obmedzený."
                 },
                 "no_publication_permission": {
                     "label": "Zverejnenie je zakázané",
-                    "tooltip": "Mapová vrstva nemôže byť zverejnená v uloženej mape. Poskytovateľ údajov nedal povolenie na zverejnenie."
+                    "tooltip": "Mapová vrstva nemôže byť zverejnená vo vloženej mape. Poskytovateľ údajov nedal povolenie na zverejnenie."
                 },
                 "can_be_published_by_authority": {
                     "label": "Zverejnenie je povolené iba pre úrady.",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape iba pre úrady. Pokiaľ ste z úradu, kontaktujte prosím zákaznícke centrum."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape iba pre úrady. Pokiaľ ste z úradu, kontaktujte prosím zákaznícke centrum."
                 }
             },
             "tooltip": {
@@ -106,5 +106,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

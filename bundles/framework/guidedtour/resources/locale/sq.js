@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Ju mund të zmadhoni dhe zvogëloni pamjen në hartë duke përdorur shkallët e shiritit lëvizës, apo tastin plus dhe minus afër shiritit lëvizës. Këshillë: Ju gjithashtu mund të zmadhoni duke përdorur çelsat plus dhe minus në tastierën tuaj, apo të zmadhoni duke klikuar dy herë në hartë. Gjithashtu është i mundshëm zmadhimi me rrotën rrotulluese të miut (mausit) tuaj."
         }
     }
-}
-);
+});

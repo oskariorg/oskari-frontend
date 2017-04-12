@@ -688,7 +688,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     tool.publisherPluginContainer.append(options);
 
                     // show for admin users
-                    if (me._sandbox.getUser().hasRole(me.instance.conf.drawRoleIds)) {
+                    if (Oskari.user().hasRole(me.instance.conf.drawRoleIds)) {
                         // create option for adding drawing tools
                         options = jQuery(me.templates.toolOptions).clone();
                         tool.publisherPluginContainer.append(options);
@@ -919,7 +919,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             // TODO I18N
             addSelectLayerButton.setTitle(this.loc.layers.addselect);
             addSelectLayerButton.setHandler(function (event) {
-                var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer, false);
+                var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
                 me._sandbox.request(me.instance, request);
                 // this intentionally refers to the current DOM element
                 this.blur();

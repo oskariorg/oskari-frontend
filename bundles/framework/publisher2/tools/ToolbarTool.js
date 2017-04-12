@@ -333,38 +333,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         _checkAdminDrawControls: function(){
             var me = this;
             // show drawing controls for admin users
-                //TODO: PublishedMyPlaces is not supported with ol3!
-                /*
-                if (sandbox.getUser().hasRole(me.__instance.conf.drawRoleIds)) {
-                    //if there is not yet config for publishedmyplaces, create one to be used further
-                    if (!me.publishedmyplaces2Config) {
-                        me.publishedmyplaces2Config = _.cloneDeep(me.defaultStateConfigs['publishedmyplaces2Config']);
-                    }
-
-                    var isChecked = me._hasSelectedDrawTool();
-                    var selectTool = jQuery(me.templates.toolOption).clone();
-                    selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.__loc.toolbarToolNames.drawTools);
-                    selectTool.find('input').attr('id', 'tool-opt-drawing');
-
-                    var toolElement = selectTool.find('input');
-
-                    selectTool.find('input').attr('checked', isChecked);
-
-                    selectTool.find('input').change(function () {
-                        // Note! "this" refers to the checkbox element that has been changed
-                        me._toggleDrawTools(this, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                    });
-
-
-                    // execute toolElement change function when checked
-                    if (isChecked) {
-                        me._toggleDrawTools(toolElement, 'drawTools', 'myplaces', me.publishedmyplaces2Config, _toggleToolOption);
-                    }
-
-                    options.append(selectTool);
-
-                }
-                */
+            //TODO: PublishedMyPlaces is not supported with ol3!
         },
         /**
          *  Manages drawlayer options in checked and unchecked cases
@@ -545,7 +514,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addSelectLayerButton.setTitle(this.__loc.layers.addselect);
             addSelectLayerButton.setHandler(function () {
-                var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer, false);
+                var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
                 me.__sandbox.request(me.__instance, request);
                 // this intentionally refers to the current DOM element
                 this.blur();

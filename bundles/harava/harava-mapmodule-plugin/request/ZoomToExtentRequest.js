@@ -2,7 +2,7 @@
  * @class Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequest
  * Requests a zoom to extent
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequest',

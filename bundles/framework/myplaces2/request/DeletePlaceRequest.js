@@ -1,7 +1,7 @@
 /**
  * Requests a saved "my place" to be deleted
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  *
  * @class Oskari.mapframework.bundle.myplaces2.request.DeletePlaceRequest

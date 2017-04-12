@@ -335,9 +335,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __showMessage: function (title, message) {
             var me = this,
                 loc = this._locale,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                btn = dialog.createCloseButton(this.locale.file.fileOverSizeError.close);
 
-            dialog.show(title, message);
+            dialog.makeModal();
+            dialog.show(title, message, [btn]);
             dialog.fadeout(5000);
         },
         /**

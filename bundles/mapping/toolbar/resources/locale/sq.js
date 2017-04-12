@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok (prano)",
                 "title": "Linku për pamje të hartës"
             },
-            "print": {
-                "tooltip": "Shtyp"
-            },
             "history": {
                 "reset": "Kthehu në shikimin automatik/të parazgjedhur",
                 "back": "Kthehu prapa",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

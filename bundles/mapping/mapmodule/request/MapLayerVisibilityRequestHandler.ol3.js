@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      * @param {Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin} layersPlugin
      *          reference to layersplugin

@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "Mapové okno, používateľská príručka",
-            "contentPart": "teleso"
+            "tags": "Mapové okno, používateľská príručka"
         }
     }
-}
-);
+});

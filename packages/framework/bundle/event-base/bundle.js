@@ -57,22 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.event.base.Bundle",
         "protocol": ["Oskari.bundle.Bundle"],
         "source": {
 
-            "scripts": [
-
-                /*
-
-         ../../../../sources/framework/event/common/
-
-         */
-
-                /*
-                 * base
-                 */
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../sources/framework/event/event.js"
-                }
-            ],
+            "scripts": [],
             "resources": []
         },
         "bundle": {

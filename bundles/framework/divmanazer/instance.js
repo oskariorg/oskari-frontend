@@ -117,15 +117,15 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 me
             );
 
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'userinterface.AddExtensionRequest',
                 me.requestHandlers.add
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'userinterface.RemoveExtensionRequest',
                 me.requestHandlers.remove
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'userinterface.UpdateExtensionRequest',
                 me.requestHandlers.update
             );
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 'Oskari.userinterface.bundle.ui.request.ModalDialogRequestHandler',
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'userinterface.ModalDialogRequest',
                 me.requestHandlers.modal
             );
@@ -158,9 +158,9 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
          * removes request handlers
          */
         stop: function () {
-            this.sandbox.removeRequestHandler(
+            this.sandbox.requestHandler(
                 'userinterface.UpdateExtensionRequest',
-                this.requestHandlers.update
+                null
             );
 
             this.sandbox.removeRequestHandler(
@@ -1298,7 +1298,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
          */
         _toggleMapWindowFullScreen: function () {
             var me = this,
-                reqBuilder = me.sandbox.getRequestBuilder(
+                reqBuilder = Oskari.requestBuilder(
                     'MapFull.MapWindowFullScreenRequest'
                 );
 

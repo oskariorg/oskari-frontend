@@ -102,11 +102,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var reqHandler = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
                     this);
-            sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', reqHandler);
+            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
-            if(sandbox.getUser().isLoggedIn()) {
-                request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
+            if(Oskari.user().isLoggedIn()) {
+                request = Oskari.requestBuilder('AddLayerListFilterRequest')(
                     loc.layerFilter.buttons.publishable,
                     loc.layerFilter.tooltips.publishable,
                     function(layer){
@@ -141,7 +141,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this,
                 map = jQuery('#contentMap');
             // trigger an event letting other bundles know we require the whole UI
-            var eventBuilder = this.sandbox.getEventBuilder('UIChangeEvent');
+            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
@@ -167,17 +167,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 //call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);
-
-
-                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render.
-                //and that causes trouble.
-//                me.publisher.initPanels();
             } else {
-                me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
 
                 //change the mapmodule toolstyle back to normal
                 var mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                // TODO: reset to what it was when publisher was started instead of removing it (mapmodule.getToolStyle())
                 mapModule.changeToolStyle(null);
 
                 if (me.publisher) {
@@ -201,14 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
-
-                var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-                if(stats && typeof stats.renderPublishedLegend === 'function') {
-                    stats.renderPublishedLegend({showLegend:false});
-                }
-                if(stats && typeof stats.renderToggleButtons === 'function') {
-                    stats.renderToggleButtons(true);
-                }
             }
         },
         /**
@@ -247,27 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
             return deniedLayers;
-        },
-
-        /**
-         * @method _destroyGrid
-         * Destroys Grid
-         * @private
-         */
-        _destroyGrid: function () {
-            jQuery('#contentMap').width('');
-            jQuery('.oskariui-left')
-                .css({
-                    'width': '',
-                    'height': '',
-                    'float': ''
-                })
-                .removeClass('published-grid-left')
-                .empty();
-            jQuery('.oskariui-center').css({
-                'width': '100%',
-                'float': ''
-            }).removeClass('published-grid-center');
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

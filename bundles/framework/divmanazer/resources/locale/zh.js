@@ -1,10 +1,11 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "zh",
     "key": "DivManazer",
     "value": {
         "LanguageSelect": {
             "title": "语言",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "languages": {
                 "af": "南非荷兰文",
                 "ak": "阿肯文",

@@ -88,9 +88,6 @@ Markers on map are saved in state:
     <td> MapClickedEvent </td><td> When marker tool is activated, adds the marker to the spot indicated by the event.</td>
   </tr>
   <tr>
-    <td> AfterHideMapMarkerEvent </td><td> Hides the marker layer.</td>
-  </tr>
-  <tr>
     <td> Toolbar.ToolbarLoadedEvent </td><td> Registers the toolbar button if toolbar wasn't available on startup.</td>
   </tr>
   <tr>

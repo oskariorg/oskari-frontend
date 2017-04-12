@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Udskriv kortvisning",
         "flyouttitle": "Udskriv kortvisning",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "",
         "BasicView": {
             "title": "Udskriv kortvisning",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "",
+                    "sv": "",
+                    "en": ""
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "size": {
                 "label": "Størrelse",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Foretag udskrift",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Annullér"
             },
             "location": {
@@ -118,8 +118,8 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "NOT TRANSLATED",
@@ -157,11 +157,11 @@ Oskari.registerLocalization(
             "help": "Hjælp",
             "error": {
                 "title": "Fejl",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Ingen hjælp tilgængelig",
                 "saveFailed": "Kortudskrift mislykket│Prøv igen senere",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

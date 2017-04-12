@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Location Search",
         "invalid_characters": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
         "searchDescription": "Vyhľadať podľa názvu miesta, adresy alebo identifikátora jednotiek nehnuteľností",
-        "searchButton": "Vyhľadať",
         "searchAssistance": "Write the search term.",
         "searchResultCount": "Vyhľadávanie vrátilo",
         "searchResultCount2": "výsledky",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Vyhľadať Výsledky"
         }
     }
-}
-);
+});

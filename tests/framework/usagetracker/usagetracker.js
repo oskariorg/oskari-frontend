@@ -93,7 +93,7 @@ describe('Test Suite for UsageTracker', function() {
 				done();
 			});
 
-			var event = sandbox.getEventBuilder('AfterMapMoveEvent')(517280, 6873538, 9, false, 5669.2944);
+			var event = sandbox.getEventBuilder('AfterMapMoveEvent')(517280, 6873538, 9, 5669.2944);
 	        sandbox.notifyAll(event);
 		});
 

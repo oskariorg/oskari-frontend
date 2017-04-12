@@ -535,7 +535,7 @@ Oskari.clazz.define(
                 sandbox = me.getSandbox(),
                 map = sandbox.getMap(),
                 srs = map.getSrsName(),
-                bbox = me.ol2ExtentOl3Transform(map.getExtent()),
+                bbox = me.ol2ExtentOl3Transform(map.getBbox()),
                 zoom = map.getZoom(),
                 scale = map.getScale(),
                 layers = this._getLayers();
@@ -654,7 +654,9 @@ Oskari.clazz.define(
         mapLayerRemoveHandler: function (event) {
             var me = this,
                 layer = event.getMapLayer();
-
+            //remove loading tiles attached to this layer
+            layer.loadingDone(0);
+            
             if (layer.hasFeatureData()) {
                 me._isWFSOpen -= 1;
                 me.getConnection().updateLazyDisconnect(me.isWFSOpen());
@@ -709,7 +711,7 @@ Oskari.clazz.define(
             // if no connection or the layer is not registered, get highlight with URl
             if (connection.isLazy() && (!connection.isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layerId))) {
                 srs = map.getSrsName();
-                bbox = map.getExtent();
+                bbox = map.getBbox();
                 zoom = map.getZoom();
 
                 this.getHighlightImage(
@@ -848,7 +850,7 @@ Oskari.clazz.define(
 
             // update tiles
             srs = map.getSrsName();
-            bbox = map.getExtent();
+            bbox = map.getBbox();
             zoom = map.getZoom();
 
             grid = me.getGrid();
@@ -909,7 +911,7 @@ Oskari.clazz.define(
 
             var map = me.getSandbox().getMap();
             var srs = map.getSrsName();
-            var bbox = map.getExtent();
+            var bbox = map.getBbox();
             var zoom = map.getZoom();
             var layers = me.getSandbox().findAllSelectedMapLayers();
 
@@ -1111,7 +1113,7 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox(),
                 resolution = me.getMap().getView().getResolution(),
-                mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getExtent()),
+                mapExtent = me.ol2ExtentOl3Transform(sandbox.getMap().getBbox()),
                 z = me.getMapModule().getMapZoom(),
                 tileGrid = this._tileGrid,
                 grid = {
@@ -1329,6 +1331,9 @@ Oskari.clazz.define(
          * sends message to /highlight*
          */
         getHighlightImage: function (layer, srs, bbox, zoom, featureIds) {
+            if(!featureIds || !featureIds.length) {
+                return;
+            }
             // helper function for visibleFields
             var me = this,
                 sandbox = me.getSandbox(),
@@ -1387,6 +1392,25 @@ Oskari.clazz.define(
         hasUI: function() {
             return false;
         },
+        updateScale: function(layer, minscale, maxscale) {
+          var me = this;
+          layer.setMinScale(minscale);
+          layer.setMaxScale(maxscale);
+          var olLayer = this.getOLMapLayers(layer)
+          var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
+          olLayer[0].setMinResolution(layerResolutions[0]);
+          olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);
+
+          this._dialog = Oskari.clazz.create(
+            'Oskari.userinterface.component.Popup'
+          );
+         var btn = this._dialog.createCloseButton('OK');
+
+         btn.setHandler(function() {
+             me._dialog.close();
+         });
+         this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
+        },
         /**
          * @method _addMapLayerToMap
          *
@@ -1431,9 +1455,33 @@ Oskari.clazz.define(
             openLayer.setVisible(_layer.isVisible());
 
             openLayer.setOpacity(_layer.getOpacity() / 100);
+            me._registerLayerEvents(openLayer, _layer);
             me.getMapModule().addLayer(openLayer, _layer, layerName);
             me.layerByName(layerName, openLayer);
         },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+          var me = this;
+          var source = layer.getSource();
+
+          source.on('tileloadstart', function() {
+            me.getMapModule().loadingState( oskariLayer.getId(), true);
+          });
+
+          source.on('tileloadend', function() {
+            me.getMapModule().loadingState( oskariLayer.getId(), false);
+          });
+
+          source.on('tileloaderror', function() {
+            oskariLayer.loadingError();
+          });
+
+      },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
                 map = me.getMap(),

@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Jeux de données personnels"
         }
     }
-}
-);
+});

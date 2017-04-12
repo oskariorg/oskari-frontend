@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         /**
          * @method _initImpl
          * Implements Module protocol init method. Creates the OpenLayers Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @return {OpenLayers.Map}
          */
         _initImpl: function (sandbox, options, map) {
@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             this.getMapEl().addClass('olMap');
             return map;
         },
-
         /**
          * @method createMap
          * Creates Openlayers 3 map implementation
@@ -96,17 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var sandbox = me._sandbox;
 
             map.on('moveend', function(evt) {
-                var map = evt.map;
-                var extent = map.getView().calculateExtent(map.getSize());
-                var center = map.getView().getCenter();
-
-                sandbox.getMap().setMoving(false);
-                sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
-
-                var lonlat = map.getView().getCenter();
-                me.updateDomain();
-                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
-                sandbox.notifyAll(sboxevt);
+                me.notifyMoveEnd();
             });
 
             map.on('singleclick', function (evt) {
@@ -168,20 +157,38 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
          * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
          */
-        getScreenshot : function() {
-            try {
-                var imageData = null;
-                this.getMap().once('postcompose', function(event) {
-                    var canvas = event.context.canvas;
-                    imageData = canvas.toDataURL('image/png');
-                });
+        getScreenshot : function( callback, numOfTries ) {
+          if( typeof callback != 'function' ) {
+            return;
+          }
+          if( typeof numOfTries === 'undefined' ) {
+            numOfTries = 5;
+          }
+          clearTimeout(this.screenshotTimer);
+          var me = this;
 
-                this.getMap().renderSync();
-                return imageData;
-           } catch(err) {
-               this.getSandbox().printWarn('Error producing a screenshot' + err);
-           }
-           return '';
+          if( this.isLoading() ) {
+            if( numOfTries < 0 ) {
+              callback("");
+              return;
+            }
+            this.screenshotTimer = setTimeout( function() {
+              me.getScreenshot( callback, numOfTries-- );
+            }, 1000 );
+            return;
+          }
+          try {
+            var imageData = null;
+            me.getMap().once('postcompose', function(event) {
+                var canvas = event.context.canvas;
+                imageData = canvas.toDataURL('image/png');
+            });
+            me.getMap().renderSync();
+            callback(imageData);
+          } catch( err ) {
+            me.getSandbox().printWarn('Error producing a screenshot' + err);
+            callback("");
+          }
         },
 
 /*<------------- / OL3 specific ----------------------------------- */
@@ -277,6 +284,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 right: extent[2],
                 top: extent[3]
             };
+        },
+
+        /**
+         * @method  @public getProjectionUnits Get projection units. If projection is not defined then using map projection.
+         * @param {String} srs projection srs, if not defined used map srs
+         * @return {String} projection units. 'degrees' or 'm'
+         */
+        getProjectionUnits: function(srs){
+            var me = this;
+            var units = null;
+            srs = srs || me.getProjection();
+
+            try {
+                var proj = ol.proj.get(srs);
+                units = proj.getUnits(); // return 'degrees' or 'm'
+            } catch(err){
+                var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+                log.warn('Cannot get map units for "' + srs + '"-projection!');
+            }
+            return units;
         },
 
         /**
@@ -684,7 +711,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 text.stroke = this.__getStrokeStyle(textStyleJSON);
             }
             if (textStyleJSON.labelText) {
-                text.text = textStyleJSON.labelText;
+                if(typeof textStyleJSON.labelText === 'number'){
+                    text.text = textStyleJSON.labelText.toString();
+                } else {
+                    text.text = textStyleJSON.labelText;
+                }
             }
             return new ol.style.Text(text);
         },

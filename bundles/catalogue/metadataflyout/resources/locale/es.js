@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "Los términos de uso y la disponibilidad del conjunto de datos están documentados en la descripción de metadatos"
         }
     }
-}
-);
+});

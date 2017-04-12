@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Ricerca posizione",
         "invalid_characters": "Il testo cercato contiene caratteri non validi. I caratteri consentiti sono sono le lettere dalla a alla z, come anche å, ä, ö, numeri, barra inversa, punti interrogativi, asterischi (*) e trattini (-).",
         "searchDescription": "Cerca posizione dal nome del luogo, indirizzo o unità immobiliare identificativa",
-        "searchButton": "Ricerca",
         "searchAssistance": "Scrivi il testo da cercare",
         "searchResultCount": "I risultati della tua ricerca sono",
         "searchResultCount2": "Risultati",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Risultati della ricerca"
         }
     }
-}
-);
+});

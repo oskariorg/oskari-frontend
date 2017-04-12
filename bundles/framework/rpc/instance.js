@@ -49,9 +49,6 @@ Oskari.clazz.define(
             me.sandbox = sandbox;
             sandbox.register(this);
 
-            // check configured requests/events
-            this.__init(conf);
-
             if (!Channel) {
                 me.log.warn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
                 return;
@@ -106,7 +103,7 @@ Oskari.clazz.define(
             );
 
             // Makes it possible to post requests
-            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom, marker, srsName]]})
+            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom]]})
             channel.bind(
                 'postRequest',
                 function (trans, params) {
@@ -132,71 +129,74 @@ Oskari.clazz.define(
         },
         /**
          * Initialize allowed requests/events/functions based on config
+         * Triggered by sandbox.register(this)
          * @param  {Object} conf bundle configuration
          */
-        __init : function(conf) {
-            var me = this;
-            // sanitize conf to prevent unnecessary errors
-            conf = conf || {};
-            var allowedEvents = conf.allowedEvents;
-            var allowedFunctions = conf.allowedfunctions;
-            var allowedRequests = conf.allowedRequests;
+        init: function () {
+          var me = this;
+          // sanitize conf to prevent unnecessary errors
+          var conf = this.conf || {};
+          var allowedEvents = conf.allowedEvents;
+          var allowedFunctions = conf.allowedfunctions;
+          var allowedRequests = conf.allowedRequests;
 
-            if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-                'RPCUIEvent'];
-            }
+          if (allowedEvents === null || allowedEvents === undefined) {
+              allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
+              'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+              'RPCUIEvent'];
+          }
 
-            if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = [];
-                // allow all available functions by default
-                var funcs = this._availableFunctions;
+          if (allowedFunctions === null || allowedFunctions === undefined) {
+              allowedFunctions = [];
+              // allow all available functions by default
+              var funcs = this._availableFunctions;
 
-                // Special handling for getScreenshot() since it's not always present
-                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-                if(typeof mapModule.getScreenshot === 'function') {
-                    // this is only available in Openlayers3 implementation of mapmodule
-                    funcs['getScreenshot'] = function() {
-                        return mapModule.getScreenshot();
-                    };
+              // Special handling for getScreenshot() since it's not always present
+              var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+              if(typeof mapModule.getScreenshot === 'function') {
+                  // this is only available in Openlayers3 implementation of mapmodule
+                  funcs['getScreenshot'] = function(transaction) {
+                    mapModule.getScreenshot(function(image){
+                      transaction.complete(image);
+                    });
                 }
+              }
 
-                for(var name in funcs) {
-                    if(funcs.hasOwnProperty(name)) {
-                        allowedFunctions.push(name);
-                    }
-                }
-            }
-            if (allowedRequests === null || allowedRequests === undefined) {
-                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
-                    'InfoBox.HideInfoBoxRequest',
-                    'MapModulePlugin.AddMarkerRequest',
-                    'MapModulePlugin.AddFeaturesToMapRequest',
-                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
-                    'MapModulePlugin.GetFeatureInfoRequest',
-                    'MapModulePlugin.MapLayerVisibilityRequest',
-                    'MapModulePlugin.RemoveMarkersRequest',
-                    'MapModulePlugin.MarkerVisibilityRequest',
-                    'MapMoveRequest',
-                    'ShowProgressSpinnerRequest',
-                    'GetRouteRequest',
-                    'GetFeedbackServiceRequest',
-                    'GetFeedbackServiceDefinitionRequest',
-                    'GetFeedbackRequest',
-                    'PostFeedbackRequest',
-                    'SearchRequest',
-                    'ChangeMapLayerOpacityRequest',
-                    'MyLocationPlugin.GetUserLocationRequest',
-                    'DrawTools.StartDrawingRequest',
-                    'DrawTools.StopDrawingRequest',
-                    'MapModulePlugin.ZoomToFeaturesRequest',
-                    'MapModulePlugin.MapLayerUpdateRequest'];
-            }
-            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
-            // try to get event/request builder for each of these to see that they really are supported!!
-            me.__setupAvailableEvents(allowedEvents);
-            me.__setupAvailableRequests(allowedRequests);
+              for(var name in funcs) {
+                  if(funcs.hasOwnProperty(name)) {
+                      allowedFunctions.push(name);
+                  }
+              }
+          }
+          if (allowedRequests === null || allowedRequests === undefined) {
+              allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                  'InfoBox.HideInfoBoxRequest',
+                  'MapModulePlugin.AddMarkerRequest',
+                  'MapModulePlugin.AddFeaturesToMapRequest',
+                  'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                  'MapModulePlugin.GetFeatureInfoRequest',
+                  'MapModulePlugin.MapLayerVisibilityRequest',
+                  'MapModulePlugin.RemoveMarkersRequest',
+                  'MapModulePlugin.MarkerVisibilityRequest',
+                  'MapMoveRequest',
+                  'ShowProgressSpinnerRequest',
+                  'GetRouteRequest',
+                  'GetFeedbackServiceRequest',
+                  'GetFeedbackServiceDefinitionRequest',
+                  'GetFeedbackRequest',
+                  'PostFeedbackRequest',
+                  'SearchRequest',
+                  'ChangeMapLayerOpacityRequest',
+                  'MyLocationPlugin.GetUserLocationRequest',
+                  'DrawTools.StartDrawingRequest',
+                  'DrawTools.StopDrawingRequest',
+                  'MapModulePlugin.ZoomToFeaturesRequest',
+                  'MapModulePlugin.MapLayerUpdateRequest'];
+          }
+          me._allowedFunctions = this.__arrayToObject(allowedFunctions);
+          // try to get event/request builder for each of these to see that they really are supported!!
+          me.__setupAvailableEvents(allowedEvents);
+          me.__setupAvailableRequests(allowedRequests);
         },
         __setupAvailableEvents : function(allowedEvents) {
             var available = [];
@@ -242,7 +242,7 @@ Oskari.clazz.define(
             getSupportedRequests : function() {
                 return this._allowedRequests;
             },
-            getInfo : function(clientVersion) {
+            getInfo : function(transaction, clientVersion) {
                 var sbMap = this.sandbox.getMap();
                 return {
                     version : Oskari.VERSION,
@@ -318,12 +318,12 @@ Oskari.clazz.define(
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomTo : function(newZoom) {
+            zoomTo : function(transaction, newZoom) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapModule.setZoomLevel(newZoom);
                 return mapModule.getMapZoom();
             },
-            getPixelMeasuresInScale : function(mmMeasures, scale) {
+            getPixelMeasuresInScale : function(transaction, mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
                     pixelMeasures = [],
@@ -353,14 +353,16 @@ Oskari.clazz.define(
             },
             resetState : function() {
                 this.sandbox.resetState();
+                return true;
             },
             getCurrentState : function() {
                 return this.sandbox.getCurrentState();
             },
-            useState : function(state) {
+            useState : function(transaction,state) {
                 this.sandbox.useState(state);
+                return true;
             },
-            getFeatures: function(includeFeatures) {
+            getFeatures: function(transaction,includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
@@ -378,14 +380,15 @@ Oskari.clazz.define(
                 });
                 return features;
             },
-            setCursorStyle: function(cursorStyle) {
+            setCursorStyle: function(transaction, cursorStyle) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return mapModule.setCursorStyle(cursorStyle);
             },
-            sendUIEvent: function(bundleId, payload) {
+            sendUIEvent: function(transaction, bundleId, payload) {
                 var me = this,
                     event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
+                return true;
             }
         },
 
@@ -409,7 +412,15 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    return me._availableFunctions[name].apply(me, params);
+                    params = params || [];
+                    params.unshift(trans);
+
+                    var value =  me._availableFunctions[name].apply(me, params);
+                    if(typeof value === 'undefined') {
+                      trans.delayReturn(true);
+                      return;
+                    }
+                    return value;
                 });
             }
 
@@ -505,16 +516,6 @@ Oskari.clazz.define(
             }
             sandbox.unregister(this);
             this.sandbox = null;
-        },
-
-        /**
-         * @public @method init
-         *
-         *
-         */
-        init: function () {
-            'use strict';
-            return null;
         },
 
         /**

@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Térkép neve.",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Adjon a térképnek egy informatív nevet. Kérjük vegye figyelembe a felhasználói felület nyelvét."
             },
             "language": {
@@ -52,97 +52,97 @@ Oskari.registerLocalization(
                 "Portti2Zoombar": "Méretarány görgetősáv",
                 "ControlsPlugin": "Térkép eltolása",
                 "SearchPlugin": "Cím és helynév keresése",
-                "FeaturedataPlugin": "NOT TRANSLATED",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Helyadatok lekérdezési eszköze",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Térkép-tétegek",
                 "defaultLayer": "Alapértelmezett réteg",
                 "useAsDefaultLayer": "Legyen alapértelmezett réteg"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Kis",
                 "medium": "Közepes",
                 "large": "Nagy",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Megadott méret",
                 "width": "szélesség",
                 "height": "magasság",
@@ -154,7 +154,7 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "replace": "Csere",
                 "cancel": "Mégsem",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -165,8 +165,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Térképrétegek megjelenítése a menüben.",
                 "info": "Háttértérképek kiválasztása. Kiválaszthatja az alapértelmezett háttértérképet a térkép előnézet ablakban.",
-                "tooltip": "A háttértérkép az alsó rétegben jelenik meg. Ha kiválasztott térképréteg az alsó szinten van, akkor csak egy szint látható egy időben, a rétegek nézete változtatható. A térkép előnézetben megadhatja az alapértelmezett háttértérképet.",
-                "promote": "Mutassuk a légi felvételeket?"
+                "tooltip": "A háttértérkép az alsó rétegben jelenik meg. Ha kiválasztott térképréteg az alsó szinten van, akkor csak egy szint látható egy időben, a rétegek nézete változtatható. A térkép előnézetben megadhatja az alapértelmezett háttértérképet."
             },
             "preview": "A beágyazott térkép előnézete",
             "location": "Hely és nagyítási szint",
@@ -180,16 +179,14 @@ Oskari.registerLocalization(
                 "name": "A névh megadása szükséges",
                 "nohelp": "Nincs elérhető segítség.",
                 "saveFailed": "A térkép közzététele sikertelen. Kérjük próbálja meg később.",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "A weboldal neve nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek."
             }
         },
         "NotLoggedView": {
             "text": "Be kell jelentkeznie, mielőtt használja a beágyazás funkciót.",
             "signup": "Belépés",
-            "signupUrl": "NOT TRANSLATED",
-            "register": "Regisztráció",
-            "registerUrl": "NOT TRANSLATED"
+            "register": "Regisztráció"
         },
         "StartView": {
             "text": "Az imént létrehozott térképet beágyazhatja saját weboldalán.",
@@ -198,7 +195,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "A kiválasztott térképrétegek nem ágyazhatók be. A \"Kiválasztott térképrétegek\" menü megmutatja, hogy egy térkép beágyazható vagy sem.",
             "layerlist_denied": "Nem lehet beágyazni",
             "denied_tooltip": "Az adatszolgáltató nem engedélyezte, hogy ezeket az adatokat más weboldalakon közzétegye. Ellenőrizze a felhasználási jogot a \"Kiválasztott térképrétegek\" menüben a beágyazás előtt.",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Folytatás",
                 "continueAndAccept": "Elfogadom a használati feltételeket és folytatom",
@@ -212,16 +209,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -232,5 +223,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

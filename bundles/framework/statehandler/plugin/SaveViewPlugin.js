@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
          * Interface method for the plugin protocol.
          * Binds window.onbeforeunload to saving the state.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         startPlugin: function (sandbox) {
@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
          *
          * Interface method for the plugin protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         stopPlugin: function (sandbox) {

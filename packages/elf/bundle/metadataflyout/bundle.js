@@ -53,9 +53,6 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/request/AddTabRequestHandler.js"
             }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/catalogue/metadataflyout/plugin/MetadataLayerPlugin.js"
-            }, {
                 "type": "text/css",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/css/style.css"
             }],

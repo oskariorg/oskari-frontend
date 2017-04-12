@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Potvrdi",
                 "title": "Link ka prikazu mape"
             },
-            "print": {
-                "tooltip": "Štampa"
-            },
             "history": {
                 "reset": "Povratak na početni prikaz",
                 "back": "Nazad",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

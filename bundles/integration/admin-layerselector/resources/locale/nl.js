@@ -189,5 +189,4 @@ Oskari.registerLocalization(
         "delete": "Verwijder",
         "ok": "OK"
     }
-}
-);
+});

@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.publisher2.request.PublishMapEditorRequest
  * Request publisher to open given view in publish mode
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequest',

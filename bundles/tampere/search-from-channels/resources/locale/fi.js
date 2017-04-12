@@ -9,8 +9,8 @@ Oskari.registerLocalization(
         "assistance": "Kirjoita hakusana tähän.",
         "showMore": "Lisää hakuehtoja",
         "showLess": "Piilota laajennettu haku",
-        "advanced_topic" : "Hakukanavat",
-        "channeloptionservice_alert_title" : "Hakukanavavat nouto",
+        "advanced_topic": "Hakukanavat",
+        "channeloptionservice_alert_title": "Hakukanavavat nouto",
         "channeloptionservice_not_found_anything_text": "Hakukanavoiden noutaminen epäonnistui.",
         "no_channels_found": "Hakukanavia ei löytynyt",
         "searchResults_header": "Hakutulokset",
@@ -32,7 +32,7 @@ Oskari.registerLocalization(
         "no_selected_rows_alert_title": "Näytä valitut kartalla",
         "no_selected_rows_have_to_select": "Valitse haluamasi kohteet hakutuloksista (valintalaatikko)",
         "back-to-search": "Takaisin hakuun",
-         "grid": {
+        "grid": {
             "name": "Nimi",
             "village": "Kunta",
             "type": "Hakukanava"
@@ -42,5 +42,4 @@ Oskari.registerLocalization(
             "title": "Paikkahaun tulokset"
         }
     }
-}
-);
+});

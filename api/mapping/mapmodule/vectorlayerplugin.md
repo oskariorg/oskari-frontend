@@ -69,9 +69,6 @@ This plugin doesn't sends any requests.
     <td> AfterMapLayerRemoveEvent </td><td> Remove OpenLayer's layer from map. </td>
   </tr>
   <tr>
-    <td> FeaturesAvailableEvent </td><td> Add features to layer. </td>
-  </tr>
-  <tr>
     <td> AfterChangeMapLayerOpacityEvent </td><td> Update OpenLayer's layer opacity. </td>
   </tr>
   

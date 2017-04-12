@@ -115,9 +115,43 @@ Oskari.clazz.define(
         };
     }, {
         /**
+         * Moved from core, to be removed
+         */
+        handleMapLinkParams: function(stateService) {
+            this.log.debug('Checking if map is started with link...');
+            var coord = Oskari.util.getRequestParam('coord', null);
+            var zoomLevel = Oskari.util.getRequestParam('zoomLevel', null);
+
+            if (coord === null || zoomLevel === null) {
+                // not a link
+                return;
+            }
+
+            var splittedCoord;
+
+            // Coordinates can be separated either with new "_" or old "%20"
+            if (coord.indexOf('_') >= 0) {
+                splittedCoord = coord.split('_');
+            } else if (coord.indexOf('%20') >= 0) {
+                splittedCoord = coord.split('%20');
+            } else {
+                // coordinate format not recognized
+                return;
+            }
+
+            var longitude = splittedCoord[0],
+                latitude = splittedCoord[1];
+            if (longitude === null || latitude === null) {
+                this.log.debug('Could not parse link location. Skipping.');
+                return;
+            }
+            this.log.debug('This is startup by link, moving map...');
+            stateService.moveTo(longitude, latitude, zoomLevel);
+        },
+        /**
          * @method init
          * Implements Module protocol init method. Creates the Map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @return {Map}
          */
         init: function (sandbox) {
@@ -127,6 +161,17 @@ Oskari.clazz.define(
             );
 
             me._sandbox = sandbox;
+
+            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(!mapLayerService) {
+                // create maplayer service to sandbox if it doesn't exist yet
+                mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
+                sandbox.registerService(mapLayerService);
+            }
+
+            var stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
+            sandbox.registerService(stateService);
+            this.handleMapLinkParams(stateService);
 
             if (me._options) {
                 if (me._options.resolutions) {
@@ -162,7 +207,7 @@ Oskari.clazz.define(
          * Starts the plugins registered on the map and adds
          * selected layers on the map if layers were selected before
          * mapmodule was registered to listen to these events.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          */
         start: function (sandbox) {
             var me = this;
@@ -186,6 +231,7 @@ Oskari.clazz.define(
                     sandbox.registerForEventByName(this, p);
                 }
             }
+            var layerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             //register request handlers
             this.requestHandlers = {
@@ -193,14 +239,21 @@ Oskari.clazz.define(
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
-                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this)
+                registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), layerService)
             };
 
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
-            sandbox.addRequestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
-            sandbox.addRequestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
+            sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
+            sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
+            sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
+            sandbox.requestHandler('activate.map.layer', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('RemoveMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('RearrangeSelectedMapLayerRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerOpacityRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('ChangeMapLayerStyleRequest', this.requestHandlers.mapLayerHandler);
 
             this.started = this._startImpl();
             var size = this.getSize();
@@ -209,12 +262,11 @@ Oskari.clazz.define(
             me._adjustMobileMapSize();
             this.updateCurrentState();
         },
-
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          * Stops the plugins registered on the map.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          */
         stop: function (sandbox) {
 
@@ -267,6 +319,8 @@ Oskari.clazz.define(
         getMapZoom: Oskari.AbstractFunc('getMapZoom'),
         getSize: Oskari.AbstractFunc('getSize'),
         getCurrentExtent: Oskari.AbstractFunc('getCurrentExtent'),
+        getProjectionUnits: Oskari.AbstractFunc('getProjectionUnits'),
+
         /**
          * @method centerMap
          * Moves the map to the given position and zoomlevel.
@@ -312,7 +366,7 @@ Oskari.clazz.define(
         /**
          * @method _initImpl
          * Init for implementation specific functionality.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * @param {Map} map
          * @return {Map}
          */
@@ -345,6 +399,24 @@ Oskari.clazz.define(
 
 
 /* ---------------- SHARED FUNCTIONS --------------- */
+
+        /**
+         * getProjectionDecimals get projection decimals
+         *
+         * @param {String} srs projection srs, if not defined used map srs
+         *
+         * @return {Integer} projetion decimals (decimal count spefied by units)
+         */
+        getProjectionDecimals: function(srs){
+            var me = this;
+            var units = me.getProjectionUnits(srs);
+            if(units === 'm') {
+                return 0;
+            } else if(units === 'degrees') {
+                return 6;
+            }
+            return 6;
+        },
         /**
          * Returns the id where map is rendered.
          * @return {String} DOMElement id like 'mapdiv'
@@ -469,7 +541,7 @@ Oskari.clazz.define(
         getUserLocation : function(callback, options) {
             var me = this;
             var sandbox = me.getSandbox();
-            var evtBuilder =  sandbox.getEventBuilder('UserLocationEvent');
+            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
             // normalize opts with defaults
             var opts = options || {};
             if(!opts.hasOwnProperty('maximumAge')) {
@@ -736,7 +808,6 @@ Oskari.clazz.define(
             mapVO.setWidth(size.width);
             mapVO.setHeight(size.height);
 
-            mapVO.setExtent(this.getCurrentExtent());
             mapVO.setBbox(this.getCurrentExtent());
             mapVO.setMaxExtent(this.getMaxExtent());
         },
@@ -757,7 +828,7 @@ Oskari.clazz.define(
                 heightNew = mapVO.getHeight();
             // send as an event forward
             if(width !== widthNew || height !== heightNew) {
-              var evt = sandbox.getEventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
+              var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
               sandbox.notifyAll(evt);
             }
         },
@@ -790,6 +861,90 @@ Oskari.clazz.define(
                     layersPlugin.preselectLayers(layers);
                 }
             }
+        },
+        isLoading: function() {
+          var oskariLayers = this.getSandbox().getMap().getLayers();
+          var loading = false;
+          oskariLayers.forEach( function( layer ) {
+          if(loading) {
+            return;
+          }
+            loading = layer.getLoadingState().loading > 0;
+          });
+          return loading;
+        },
+        /**
+         * @method loadingState
+         * Gather info on layer loading status
+         * @param {Number} layerid, the id number of the abstract layer in loading
+         * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
+         */
+        loadingState: function( layerId, started, errors ) {
+          if(typeof errors === 'undefined') {
+            errors = false;
+          }
+          var done = false;
+          var me = this;
+          var layers = this.getSandbox().findAllSelectedMapLayers();
+          var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
+          if( !oskariLayer ) {
+            return;
+          }
+
+          if( !this.progBar ) {
+            this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
+            this.progBar.create(jQuery('#' + this.getMapElementId()));
+          }
+
+          if( this.loadtimer ) {
+            clearTimeout( this.loadtimer );
+          }
+
+          if( started ) {
+            var wasFirstTile = oskariLayer.loadingStarted();
+            if( wasFirstTile ) {
+                this.progBar.show();
+                layers.forEach( function( layer ) {
+                  oskariLayer.resetLoadingState();
+                });
+            }
+          }
+          else {
+            if(!errors) {
+              var tilesLoaded = 0;
+              var pendingTiles = 0;
+              layers.forEach( function( layer ) {
+                tilesLoaded += layer.loaded;
+                pendingTiles += layer.tilesToLoad;
+              });
+              done = oskariLayer.loadingDone();
+              this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
+            } else {
+                this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
+                oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
+                var errors = oskariLayer.getLoadingState().errors;
+                oskariLayer.loadingDone(0);
+
+                setTimeout(function(){
+                  me.progBar.hide();
+                },2000);
+                tilesLoaded = 0;
+                pendingTiles = 0;
+                this.notifyErrors( errors );
+            }
+          }
+          if( done && !oskariLayer.getLoadingState().errors ) {
+            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
+          }
+
+          this.loadtimer = setTimeout( function() {
+            var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
+            var event = eventBuilder( done, 'maplayer' );
+            me._sandbox.notifyAll( event );
+          }, 50 );
+        },
+        notifyErrors: function( errors ) {
+              Oskari.log( this.getName() ).warn( "error: "+errors );
         },
         /**
          * Returns state for mapmodule including plugins that have getState() function
@@ -849,7 +1004,7 @@ Oskari.clazz.define(
             this.getSandbox().getMap().setMoving(true);
             var centerX = this.getMapCenter().lon,
                 centerY = this.getMapCenter().lat,
-                evt = this.getSandbox().getEventBuilder('MapMoveStartEvent')(centerX, centerY);
+                evt = Oskari.eventBuilder('MapMoveStartEvent')(centerX, centerY);
             this.getSandbox().notifyAll(evt);
         },
         /**
@@ -867,7 +1022,7 @@ Oskari.clazz.define(
 
             var lonlat = this.getMapCenter();
             this.updateDomain();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), false, this.getMapScale(), creator);
+            var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 /* --------------- /MAP STATE ------------------------ */
@@ -897,30 +1052,30 @@ Oskari.clazz.define(
         _createMobileToolbar: function () {
             var me = this,
                 request,
-                sandbox = me.getSandbox(),
-                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+                sandbox = me.getSandbox();
 
-            if (me._mobileToolbarId && builder) {
-                me._mobileToolbar = true;
-                me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
-                me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
-                // add toolbar when toolbarId and target container is configured
-                // We assume the first container is intended for the toolbar
-                request = builder(
-                        me._mobileToolbarId,
-                        'add',
-                        {
-                            show: true,
-                            toolbarContainer: me._toolbarContent,
-                            colours: {
-                                hover: this.getThemeColours().hoverColour,
-                                background: this.getThemeColours().backgroundColour
-                            },
-                            disableHover: true
-                        }
-                );
-                sandbox.request(me.getName(), request);
+            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest')) {
+                return;
             }
+            me._mobileToolbar = true;
+            me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
+            me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
+            // add toolbar when toolbarId and target container is configured
+            // We assume the first container is intended for the toolbar
+            request = Oskari.requestBuilder('Toolbar.ToolbarRequest')(
+                    me._mobileToolbarId,
+                    'add',
+                    {
+                        show: true,
+                        toolbarContainer: me._toolbarContent,
+                        colours: {
+                            hover: this.getThemeColours().hoverColour,
+                            background: this.getThemeColours().backgroundColour
+                        },
+                        disableHover: true
+                    }
+            );
+            sandbox.request(me.getName(), request);
         },
 
         setMobileMode: function (isInMobileMode) {
@@ -1358,7 +1513,7 @@ Oskari.clazz.define(
         /**
          * @method getSandbox
          * Returns reference to Oskari sandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this._sandbox;
@@ -2102,8 +2257,8 @@ Oskari.clazz.define(
         afterMapLayerAddEvent: function (event) {
             var map = this.getMap(),
                 layer = event.getMapLayer(),
-                keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap(),
+                keepLayersOrder = true,
+                isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),
                 layerFunctions = [];
 

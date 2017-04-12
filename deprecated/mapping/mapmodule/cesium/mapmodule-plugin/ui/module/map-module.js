@@ -361,7 +361,7 @@ define([
          this._updateDomainImpl();
          var scale = this.getMapScale();
          var zoom = this._map.getZoom();
-         var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], zoom, false, scale);
+         var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], zoom, scale);
          sandbox.notifyAll(evt);
          */
             var sandbox = this._sandbox;

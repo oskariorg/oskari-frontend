@@ -7,7 +7,7 @@
  * request since it could be used to show any message/this is actually not
  * measure tool specific.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 

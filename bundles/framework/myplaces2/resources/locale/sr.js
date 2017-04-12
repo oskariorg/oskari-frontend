@@ -14,89 +14,89 @@ Oskari.registerLocalization(
             "loginShort": "Prijavite se za korišćenje"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "",
+            "editCategory": "",
+            "deleteCategory": "",
+            "edit": "",
+            "delete": "",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "",
+                "desc": "",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
+                "edit": "",
+                "delete": ""
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "",
+                    "confirm": "",
+                    "btnDelete": "",
+                    "btnCancel": "",
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodavanje tačke",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Možete sačuvati ili nacrtati više tačaka u istom crtežu",
                 "edit": "Pomeranje tačke klikom i prevlačenjem",
                 "save": "Sačuvajte lokaciju"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodavanje linije",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Možete sačuvati ili nacrtati više linija u isti crtež",
                 "edit": "Menjanje linije klikom i prevlačenjem tačke",
                 "save": "Sačuvaj oblik",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodavanje površine",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Možete sačuvati ili nacrtati u istom crtežu.",
                 "edit": "Menjanje oblika poligona klikom i pomeranjem tačke",
                 "save": "Sačuvaj oblik",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             }
         },
         "buttons": {
             "ok": "Potvrdi",
             "cancel": "Odustani",
-            "close": "NOT TRANSLATED",
+            "close": "",
             "finish": "Završi crtanje",
             "save": "Sačuvaj",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Pomeri lokaciju i obriši",
             "deleteCategory": "Briši",
             "deleteCategoryAndPlaces": "Briši kategoriju i lokacije",
@@ -116,26 +116,25 @@ Oskari.registerLocalization(
                 "placeholder": "Opiši lokaciju"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Sloj",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "",
+                "placename": "",
+                "placedesc": "",
+                "image": ""
             },
             "edit": {
                 "title": "Izmena sloja",
@@ -175,102 +174,102 @@ Oskari.registerLocalization(
                 "cancel": "Nazad"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "notification": {
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Opis sloja sadrži nedozvoljene karaktere. Dozvoljeni karakteri su a-z kao i č,š,ć,ž,đ, brojevi, taster Backspace i crtice",
             "dotSize": "Veličina tačke ne odgovara ograničenju (1-50)",
             "dotColor": "Pogrešna boja tačke",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Veličina linije ne ogdovara ograničenju (1-50)",
             "lineColor": "Pogrešna boja linije",
             "areaLineSize": "Debljina konturne linije površine ne odgovara ograničenju (1-50)",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Pogrešna boja površine."
         }
     }
-}
-);
+});

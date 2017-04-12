@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Sjálfgefinn stíll",
         "own-style": "Eigin stíll",
+        "none-style": "Enginn",
         "refresh": "Uppfæra",
         "refresh_title": "Uppfæra gögn sem flytjast ekki sjálfkrafa á kortið.",
         "tile": {
@@ -29,6 +30,11 @@ Oskari.registerLocalization(
             "title": "Afhending fitjugagna",
             "info": "Sum gögn eru ekki afhent sjálfkrafa. <br/><br/> Vinsamlega veldu svæði á kortinu og smelltu á Uppfæra hnappinn. <br/><br/> Smelltu á Fitjugögn til að sjá fitjurnar á gögnunum."
         },
+        "refresh_alert": {
+            "title": "Sýnileika viðvörun",
+            "all_not_in_scale": "Það eru engin lög til að endurnýja, vinsamlegast færðu þig á viðeigandi þysjunarstig og reyndu aftur",
+            "all_invisible": "Það eru engin sýnileg lög til að endurnýja, vinsamlegast opnaðu valin lög og gerðu nokkur lög sýnileg"
+        },
         "button": {
             "cancel": "Hætta við",
             "show": "Sýna staði",
@@ -43,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

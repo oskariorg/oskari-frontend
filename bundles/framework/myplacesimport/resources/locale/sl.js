@@ -76,5 +76,4 @@ Oskari.registerLocalization(
             "inspire": "Lasten nabor podatkov"
         }
     }
-}
-);
+});

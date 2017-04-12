@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Իմ տվյալներ",
         "desc": "Իմ տվյալներ",
-        "notLoggedIn": "NOT TRANSLATED",
+        "notLoggedIn": "",
         "notLoggedInText": "NOT TRANSLATED.",
         "tabs": {
             "myviews": {
@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Անվանում",
                     "description": "Նկարագրություն",
                     "publish": "Հրապարակված",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Փոփոխել դիտման տեղեկատվությունը",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Ներմուծված քարտեզներ",
                 "show": "Ցուցադրել քարտեզի վրա",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Խմբագրել",
                 "publish": "Հրապարակել քարտեզը",
                 "unpublish": "Չհրապարակել քարտեզը",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Անվանում",
                     "domain": "Քարտեզի կարգավորումներ",
                     "publish": "Կարգավիճակ",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "",
+                    "html": "",
+                    "edit": "",
+                    "delete": ""
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Փոխել քարտեզի անվանումը",
@@ -123,7 +123,7 @@ Oskari.registerLocalization(
                 "changeInfo": "Փոխեք հաշվի տեղեկատվությունը",
                 "changePassword": "Փոխեք գաղտնաբառը",
                 "removeAccount": "Ջնջեք հաշիվը",
-                "changeInfoUrl": "NOT TRANSLATED"
+                "changeInfoUrl": ""
             }
         },
         "button": {
@@ -131,5 +131,4 @@ Oskari.registerLocalization(
             "no": "Ոչ"
         }
     }
-}
-);
+});

@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Prikaz mape za štampu",
         "flyouttitle": "Prikaz mape za štampu",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "",
         "BasicView": {
             "title": "Prikaz mape za štampu",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "",
+                    "sv": "",
+                    "en": ""
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "size": {
                 "label": "Veličina",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Prihvati podešavanja štampe",
                 "ok": "Potvrdi",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Odustani"
             },
             "location": {
@@ -118,8 +118,8 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "NOT TRANSLATED",
@@ -157,11 +157,11 @@ Oskari.registerLocalization(
             "help": "Pomoć",
             "error": {
                 "title": "Greška",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Pomoć nije dostupna",
                 "saveFailed": "Greška. Probajte kasnije",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

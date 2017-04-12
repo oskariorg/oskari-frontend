@@ -211,7 +211,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
-                    sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
+                    sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                 } else {
                     sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 }

@@ -25,36 +25,23 @@ function(toolbar) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        var sandbox = core.getSandbox(),
-            requestName = request.getName();
+        var requestName = request.getName();
         if(requestName === 'Toolbar.AddToolButtonRequest') {
-            this._handleAdd(sandbox, request);
+            this._toolbar.addToolButton(
+                request.getId(), request.getGroup(), request.getConfig());
         }
         else if(requestName === 'Toolbar.RemoveToolButtonRequest') {
-            this._handleRemove(sandbox, request);
+            this._toolbar.removeToolButton(
+                request.getId(), request.getGroup(), request.getToolbarId());
         }
         else if(requestName === 'Toolbar.ToolButtonStateRequest') {
-            this._handleState(sandbox, request);
+            this._toolbar.changeToolButtonState(
+                request.getId(), request.getGroup(), request.getState());
         }
         else if(requestName === 'Toolbar.SelectToolButtonRequest') {
-            this._handleClick(sandbox, request);
+            this._toolbar._clickButton(
+                request.getId(), request.getGroup());
         }
-    },
-    _handleAdd : function(sandbox, request) {
-        this._toolbar.addToolButton(
-            request.getId(), request.getGroup(), request.getConfig());
-    },
-    _handleRemove : function(sandbox, request) {
-        this._toolbar.removeToolButton(
-            request.getId(), request.getGroup(), request.getToolbarId());
-    },
-    _handleState : function(sandbox, request) {
-        this._toolbar.changeToolButtonState(
-            request.getId(), request.getGroup(), request.getState());
-    },
-    _handleClick : function(sandbox, request) {
-        this._toolbar._clickButton(
-            request.getId(), request.getGroup());
     }
 }, {
     /**

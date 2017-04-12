@@ -10,19 +10,19 @@ Oskari.registerLocalization(
             "generic": "Rendszerhiba! Kérjük próbálja újra később.",
             "loadFailed": "Nem sikerült betölteni a térképrétegeket.Töltse le újra az oldalt a böngészőben és válassza ki a térképrétegeket.",
             "noResults": "A keresés nem járt eredménnyel.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
         "loading": "Betöltés…",
         "filter": {
             "text": "Térképrétegek keresése",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Téma szerint",
             "organization": "Adatszolgáltatók szerint",
             "published": "Felhasználók",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Közzétett térképréteg",
@@ -60,14 +60,14 @@ Oskari.registerLocalization(
             }
         },
         "buttons": {
-            "ok": "NOT TRANSLATED"
+            "ok": ""
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
@@ -81,5 +81,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

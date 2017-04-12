@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "MapMyPlaces",
     "value": {
-        "title": "MojeMiestaNaMape",
+        "title": "ZmapujMojeMiesta",
         "desc": "",
         "object-data": "Údaje o objektoch",
         "layer": {
@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "Moje mapové vrstvy"
         }
     }
-}
-);
+});

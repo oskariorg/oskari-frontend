@@ -76,6 +76,16 @@ For selected locales:
 
 	npm run excel2oskari
 
+### Clean localization files
+
+1) Run command in /Oskari/tools:
+
+	npm run clean-l10n
+
+Removes all NOT TRANSLATED values from the localization files. This makes minified code to use the values from english localization.
+
+*WARNING! If a localization file has more than one Oskari.registerLocalization() call the tool WILL BREAK the file. It will only include the latest one.*
+
 ## Building a version of Openlayers 3
 
 Run command:

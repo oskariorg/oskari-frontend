@@ -92,6 +92,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/divmanazer/component/ProgressBar.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
         }, {
             "type" : "text/javascript",

@@ -11,18 +11,18 @@ Oskari.registerLocalization(
             "loadFailed": "Erro no carregamento de camadas| Recarregue a página e selecione camadas",
             "noResults": "A pesquisa é vazia",
             "noResultsForKeyword": "A pesquisa é vazia.",
-            "minChars": "NOT TRANSLATED"
+            "minChars": ""
         },
         "loading": "A carregar...",
         "filter": {
             "text": "Pesquisa por camadas",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Por tema",
             "organization": "Por fornecedores",
             "published": "Utilizadores",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Camada publicada",
@@ -63,11 +63,11 @@ Oskari.registerLocalization(
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
@@ -81,5 +81,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

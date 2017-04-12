@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sr",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "OSKARI uputstvo za korisnike",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Uputstvo za korisnike"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Učitavanje uputstva za korisnike je neuspeštno. Molimo, pokušajte ponovo."
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": ""
         }
     }
 });

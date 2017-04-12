@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Valori Statistici",
         "selectionTools": {
             "title": "Seleziona elementi sulla mappa",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Dal layer superiore",
             "selectAll": "Da tutti i layers",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Ci sono valori di elementi senza autorizzazione nei dati"
         }
     }
-}
-);
+});

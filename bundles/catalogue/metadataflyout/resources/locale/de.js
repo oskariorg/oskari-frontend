@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "abstract": "Basisinformationen",
             "inspire": "INSPIRE Metadaten",
             "jhs": "ISO 19115 Metadaten",
-            "quality": "NOT TRANSLATED",
+            "quality": "",
             "xml": "ISO 19139 XML Datei",
             "map": "Räumlicher Ausdehnung",
             "pdf": "Ausdruck",
@@ -178,264 +178,263 @@ Oskari.registerLocalization(
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
                         "label": "Copyright",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "patent": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "patentPending": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "trademark": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "license": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "intellectualPropertyRights": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "restricted": {
                         "label": "Eingeschränkt",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "otherRestrictions": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     }
                 },
                 "gmd:MD_ScopeCode": {
                     "attribute": {
                         "label": "Attribut",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "attributeType": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "collectionHardware": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "collectionSession": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "dataset": {
                         "label": "Datensatz",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "series": {
                         "label": "Serie",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "nonGeographicDataset": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "dimensionGroup": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "feature": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "featureType": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "propertyType": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "fieldSession": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "software": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "service": {
                         "label": "Service",
-                        "description": "NOT TRANSLATED"
+                        "description": ""
                     },
                     "model": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "tile": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     }
                 },
                 "gmd:MD_SpatialRepresentationTypeCode": {
                     "vector": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "grid": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "textTable": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "tin": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "stereoModel": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "video": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     }
                 },
                 "gmd:MD_TopicCategoryCode": {
                     "farming": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "biota": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "boundaries": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "climatologyMeteorologyAtmosphere": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "economy": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "elevation": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "environment": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "geoscientificInformation": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "health": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "imageryBaseMapsEarthCover": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "intelligenceMilitary": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "inlandWaters": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "location": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "oceans": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "planningCadastre": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "society": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "structure": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "transportation": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     },
                     "utilitiesCommunication": {
-                        "label": "NOT TRANSLATED",
-                        "description": "NOT TRANSLATED"
+                        "label": "",
+                        "description": ""
                     }
                 }
             },
             "qualityContent": {
-                "qualityPassTrue": "NOT TRANSLATED",
-                "qualityPassFalse": "NOT TRANSLATED"
+                "qualityPassTrue": "",
+                "qualityPassFalse": ""
             },
             "heading": {
-                "abstractTextData": "NOT TRANSLATED",
-                "abstractTextService": "NOT TRANSLATED",
-                "accessConstraint": "NOT TRANSLATED",
-                "citationDate": "NOT TRANSLATED",
-                "classification": "NOT TRANSLATED",
-                "descriptiveKeyword": "NOT TRANSLATED",
-                "distributionFormat": "NOT TRANSLATED",
-                "fileIdentifier": "NOT TRANSLATED",
-                "legalConstraint": "NOT TRANSLATED",
-                "lineageStatement": "NOT TRANSLATED",
-                "metadataCharacterSet": "NOT TRANSLATED",
-                "metadataDateStamp": "NOT TRANSLATED",
+                "abstractTextData": "",
+                "abstractTextService": "",
+                "accessConstraint": "",
+                "citationDate": "",
+                "classification": "",
+                "descriptiveKeyword": "",
+                "distributionFormat": "",
+                "fileIdentifier": "",
+                "legalConstraint": "",
+                "lineageStatement": "",
+                "metadataCharacterSet": "",
+                "metadataDateStamp": "",
                 "metadataLanguage": "Sprache Metadaten",
-                "metadataOrganisation": "NOT TRANSLATED",
-                "metadataStandardName": "NOT TRANSLATED",
-                "metadataStandardVersion": "NOT TRANSLATED",
-                "onlineResource": "NOT TRANSLATED",
-                "operatesOn": "NOT TRANSLATED",
-                "otherConstraint": "NOT TRANSLATED",
-                "reportConformance": "NOT TRANSLATED",
+                "metadataOrganisation": "",
+                "metadataStandardName": "",
+                "metadataStandardVersion": "",
+                "onlineResource": "",
+                "operatesOn": "",
+                "otherConstraint": "",
+                "reportConformance": "",
                 "responsibleParty": "Verantwortliche Stelle",
-                "resourceIdentifier": "NOT TRANSLATED",
+                "resourceIdentifier": "",
                 "resourceLanguage": "Sprache Quelle",
                 "scopeCode": "Typ der Quelle",
                 "serviceType": "Typ des Service",
-                "spatialRepresentationType": "NOT TRANSLATED",
-                "spatialResolution": "NOT TRANSLATED",
-                "temporalExtent": "NOT TRANSLATED",
-                "topicCategory": "NOT TRANSLATED",
-                "useLimitation": "NOT TRANSLATED",
-                "absoluteExternalPositionalAccuracy": "NOT TRANSLATED",
-                "accuracyOfTimeMeasurement": "NOT TRANSLATED",
-                "completenessCommission": "NOT TRANSLATED",
-                "completenessOmission": "NOT TRANSLATED",
-                "conceptualConsistency": "NOT TRANSLATED",
-                "domainConsistency": "NOT TRANSLATED",
-                "formatConsistency": "NOT TRANSLATED",
-                "griddedDataPositionalAccuracy": "NOT TRANSLATED",
-                "nonQuantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "quantitativeAttributeAccuracy": "NOT TRANSLATED",
-                "relativeInternalPositionalAccuracy": "NOT TRANSLATED",
-                "temporalConsistency": "NOT TRANSLATED",
-                "temporalValidity": "NOT TRANSLATED",
-                "thematicClassificationCorrectness": "NOT TRANSLATED",
-                "topologicalConsistency": "NOT TRANSLATED"
+                "spatialRepresentationType": "",
+                "spatialResolution": "",
+                "temporalExtent": "",
+                "topicCategory": "",
+                "useLimitation": "",
+                "absoluteExternalPositionalAccuracy": "",
+                "accuracyOfTimeMeasurement": "",
+                "completenessCommission": "",
+                "completenessOmission": "",
+                "conceptualConsistency": "",
+                "domainConsistency": "",
+                "formatConsistency": "",
+                "griddedDataPositionalAccuracy": "",
+                "nonQuantitativeAttributeAccuracy": "",
+                "quantitativeAttributeAccuracy": "",
+                "relativeInternalPositionalAccuracy": "",
+                "temporalConsistency": "",
+                "temporalValidity": "",
+                "thematicClassificationCorrectness": "",
+                "topologicalConsistency": ""
             }
         },
         "tile": {
             "title": "Metadaten",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         }
     }
-}
-);
+});

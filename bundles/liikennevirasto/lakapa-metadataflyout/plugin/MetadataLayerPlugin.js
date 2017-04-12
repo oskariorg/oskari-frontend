@@ -76,9 +76,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             'AfterMapLayerRemoveEvent': function (event) {
                 this.afterMapLayerRemoveEvent(event);
             },
-            'FeaturesAvailableEvent': function (event) {
-                this.handleFeaturesAvailableEvent(event);
-            },
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this.afterChangeMapLayerOpacityEvent(event);
             }
@@ -239,47 +236,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
             return this._map.getLayersByName('layer_' + layer.getId());
-        },
-        /**
-         *
-         */
-        handleFeaturesAvailableEvent: function (event) {
-            var layer = event.getMapLayer();
-            if (layer === null || layer === undefined) {
-                return;
-            }
-
-            var ownedLayer = this.getMapLayer();
-            if (layer.getId() + '' !== ownedLayer.getId() + '') {
-                return;
-            }
-
-            var mimeType = event.getMimeType();
-            var features = event.getFeatures();
-
-            var op = event.getOp();
-
-            var format = this._supportedFormats[mimeType];
-
-            if (!format) {
-                return;
-            }
-
-            var fc = format.read(features);
-
-            this._features = fc;
-
-            var mapLayer = this._map
-                .getLayersByName('layer_' + layer.getId())[0];
-            if (!mapLayer) {
-                return;
-            }
-
-            if (op && op === 'replace') {
-                mapLayer.removeFeatures(mapLayer.features);
-            }
-
-            mapLayer.addFeatures(fc);
         }
     }, {
         'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]

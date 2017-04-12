@@ -120,26 +120,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 	 * @static
 	 *
 	 */
-	eventHandlers : {
-		'AfterMapLayerAddEvent' : function(event) {
-			/* this might react when layer added */
-			/* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
-		},
-		/**
-		 * @method AfterMapLayerRemoveEvent
-		 */
-		'AfterMapLayerRemoveEvent' : function(event) {
-			/* this might react when layer removed */
-			/* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
-		},
-		/**
-		 * @method AfterMapLayerRemoveEvent
-		 */
-		'AfterMapMoveEvent' : function(event) {
-			/* this might react when map moved */
-
-		}
-	},
+	eventHandlers : {},
 
 	/**
 	 * @method stop

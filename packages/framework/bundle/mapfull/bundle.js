@@ -61,9 +61,6 @@ function() {
             "src" : "../../../../bundles/framework/mapfull/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapfull/enhancement/start-map-with-link-enhancement.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequest.js"
         }, {
             "type" : "text/javascript",

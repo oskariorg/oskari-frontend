@@ -1,10 +1,10 @@
 div.mapplugin.search {
   div.close {
-    float: right; 
+    float: right;
   }
 
   input:disabled {
-    opacity: 1; 
+    opacity: 1;
   }
 
   input[type=text] {
@@ -17,7 +17,7 @@ div.mapplugin.search {
     -moz-background-clip: padding-box;
     background-clip: padding-box;
     border-right: 0;
-    width: 140px; 
+    width: 140px;
   }
 
   input[type=button] {
@@ -29,7 +29,7 @@ div.mapplugin.search {
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box;
-    width: 60px; 
+    width: 60px;
   }
 
   div.results {
@@ -39,19 +39,19 @@ div.mapplugin.search {
     max-height: 320px;
     width: auto;
     overflow: auto;
-    margin-top: 5px;  
+    margin-top: 5px;
 
     div.header {
-      background: #DDDDDD; 
+      background: #DDDDDD;
     }
 
     div.content table {
       width: 100%;
       text-align: center;
-      border-spacing: 2px; 
-    
+      border-spacing: 2px;
+
       tr {
-        cursor: pointer; 
+        cursor: pointer;
       }
     }
   }
@@ -66,30 +66,30 @@ table.search-results {
       text-align: left;
       padding: 2px;
       padding-left: 4px;
-      padding-right: 12px; 
+      padding-right: 12px;
   }
 
   tr.odd {
-      background-color: #F3F3F3; 
+      background-color: #F3F3F3;
   }
 }
 
 div.published-search-div {
-  float: left; 
+  float: left;
 
   div.search-area-div {
     max-width:318px;
     display: block;
-    float: right;   
+    float: right;
 
     div.search-left, div.search-middle, div.search-right {
       display: inline-block;
       float: left;
-      height: 38px; 
+      height: 38px;
     }
 
     div.search-right {
-      cursor: pointer; 
+      cursor: pointer;
     }
 
     input.search-input {
@@ -99,7 +99,7 @@ div.published-search-div {
       background-image: none;
       float: left;
       padding: 5px;
-      outline: none; 
+      outline: none;
     }
   }
 
@@ -114,7 +114,7 @@ div.published-search-div {
     right: 0px;
     display: block;
     background-color: #FFFFFF;
-    border: 1px solid black; 
+    border: 1px solid black;
 
     table.search-results {
       float: left;
@@ -128,27 +128,27 @@ div.published-search-div {
         display: block;
         width: 100%;
         max-height: 250px;
-        min-height: 30px; 
+        min-height: 30px;
       }
 
       thead {
-        float: left; 
-        
+        float: left;
+
         tr {
-          display: block; 
-       
+          display: block;
+
           th {
             padding: 5px;
             background-color: #efefef;
-            width: 110px; 
+            width: 110px;
           }
 
           th + th {
-            width: 70px; 
+            width: 70px;
           }
 
           th + th + th {
-            width: 106px; 
+            width: 106px;
           }
         }
       }
@@ -163,7 +163,7 @@ div.published-search-div {
     border-radius: 15px;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
+    background-clip: padding-box;
 
     div.published-search-results {
       table.search-results {
@@ -188,7 +188,7 @@ div.published-search-div {
               border-radius: 0 15px 0 0;
               -webkit-background-clip: padding-box;
               -moz-background-clip: padding-box;
-              background-clip: padding-box; 
+              background-clip: padding-box;
             }
           }
         }
@@ -204,8 +204,8 @@ div.published-search-div {
     border-radius: 0;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
-  
+    background-clip: padding-box;
+
     div.published-search-results {
       table.search-results {
         thead {
@@ -218,7 +218,7 @@ div.published-search-div {
               border-radius: 0;
               -webkit-background-clip: padding-box;
               -moz-background-clip: padding-box;
-              background-clip: padding-box; 
+              background-clip: padding-box;
             }
           }
         }
@@ -234,8 +234,8 @@ div.published-search-div {
     border-radius: 3px;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
-    background-clip: padding-box; 
-  
+    background-clip: padding-box;
+
     div.published-search-results {
       table.search-results {
         thead {
@@ -248,7 +248,7 @@ div.published-search-div {
               border-radius: 3px 0 0 0;
               -webkit-background-clip: padding-box;
               -moz-background-clip: padding-box;
-              background-clip: padding-box; 
+              background-clip: padding-box;
             }
 
             th:last-child, th:last-child {
@@ -259,7 +259,7 @@ div.published-search-div {
               border-radius: 0 3px 0 0;
               -webkit-background-clip: padding-box;
               -moz-background-clip: padding-box;
-              background-clip: padding-box; 
+              background-clip: padding-box;
             }
           }
         }
@@ -270,32 +270,32 @@ div.published-search-div {
           padding: 2px 0 2px 5px;
           text-overflow: ellipsis;
           max-width: 115px;
-          width: 115px; 
+          width: 115px;
         }
 
         tbody td + td {
           max-width: 75px;
-          width: 75px; 
+          width: 75px;
         }
 
         tbody td + td + td {
           max-width: 95px;
-          width: 95px; 
+          width: 95px;
         }
       }
     }
-  } 
+  }
 
   div.search-middle div.close-results {
     margin-right: 5px;
     display: inline-block;
     float: right;
-    cursor: pointer; 
+    cursor: pointer;
   }
 }
 
 .right div.published-search-div {
-  float: right; 
+  float: right;
 }
 
 .search-textarea-and-button .search-editmode-overlay {
@@ -303,11 +303,11 @@ div.published-search-div {
   height: 100%;
   position: absolute;
   top: 0;
-  left: 0; 
+  left: 0;
 }
 
 .mappluginsContent.ui-sortable div.mapplugin.search {
-  right: 0px; 
+  right: 0px;
 }
 
 
@@ -321,7 +321,7 @@ div.published-search-div {
 }
 
 .divmanazerpopup.searchresult {
-  margin-left: -30px!important;
+  margin-left: 0;
 }
 
 

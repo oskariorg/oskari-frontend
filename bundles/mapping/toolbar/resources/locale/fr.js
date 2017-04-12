@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Faire un lien vers la vue cartographique."
             },
-            "print": {
-                "tooltip": "Imprimer la vue cartographique."
-            },
             "history": {
                 "reset": "Revenir à la vue cartographique par défaut",
                 "back": "Revenir à la vue cartographique précédente.",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
@@ -42,7 +42,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;

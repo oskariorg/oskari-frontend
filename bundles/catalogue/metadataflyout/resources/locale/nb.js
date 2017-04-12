@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "Bruksvilkår og tilgjengelighet til datasett er dokumentert i metadatabeskrivelsen."
         }
     }
-}
-);
+});

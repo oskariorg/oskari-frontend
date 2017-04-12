@@ -160,17 +160,22 @@ function () {
             }
 
             var me = this,
-                roundToDecimals = 0,
+                sandbox = this.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                roundToDecimals = mapModule.getProjectionDecimals(),
                 conf = me.conf,
                 lonlat;
 
-            if(conf && conf.roundToDecimals) {
-                roundToDecimals = conf.roundToDecimals;
+            var hasRoundDecimalsConf = (conf && conf.decimals) ? true : false;
+            if(hasRoundDecimalsConf && !conf.decimals[mapModule.getProjection()]) {
+                roundToDecimals = conf.decimals;
+            } else if(hasRoundDecimalsConf && conf.decimals[mapModule.getProjection()]){
+                roundToDecimals = conf.decimals[mapModule.getProjection()];
             }
 
             lonlat = event.getLonLat();
-            lonlat.lon = lonlat.lon.toFixed(roundToDecimals)
-            lonlat.lat = lonlat.lat.toFixed(roundToDecimals)
+            lonlat.lon = lonlat.lon.toFixed(roundToDecimals);
+            lonlat.lat = lonlat.lat.toFixed(roundToDecimals);
 
             if (this.countMapClicked === null) {
                 this.countMapClicked += 1;
@@ -261,7 +266,7 @@ function () {
                 content.find('div.transit-time div.itinerary__content').html(me._formatTime(itinerary.transitTime));
 
                 content.find('div.walk-distance div.itinerary__title').html(loc.routeInstructions.walkDistance + ':');
-                content.find('div.walk-distance div.itinerary__content').html(me._formatLenght(itinerary.walkDistance));
+                content.find('div.walk-distance div.itinerary__content').html(me._formatLength(itinerary.walkDistance));
 
                 var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 btn.setTitle(loc.routeInstructions.showRoute);
@@ -322,17 +327,18 @@ function () {
     },
 
     /**
-     * [_formatLenght description]
+     * [_formatLength description]
      * @param  {Float} length length in meters
      * @return {String} string format presentation of length
      */
-    _formatLenght: function (length) {
+    _formatLength: function (length) {
+        var newLength = '';
         if (length > 1000) {
             var kilometers = this._decimalAdjust('round', length/1000, -1);
-            var newLength = kilometers + " km";
+            newLength = kilometers + " km";
         } else {
             var meters = this._decimalAdjust('round', length, 1);
-            var newLength = meters + " m";
+            newLength = meters + " m";
         }
         return newLength;
     },
@@ -366,11 +372,11 @@ function () {
 
     /**
      * @method  @private _formatTime format time to string
-     * @param  {Float} seconds second to conver
+     * @param  {Float} secs second to conver
      * @return {string} formetted time
      */
-    _formatTime: function (seconds) {
-        var secs = Math.round(seconds);
+    _formatTime: function (secs) {
+        secs = Math.round(secs);
         var hours = Math.floor(secs / (60 * 60));
 
         var divisor_for_minutes = secs % (60 * 60);
@@ -378,15 +384,16 @@ function () {
 
         var divisor_for_seconds = divisor_for_minutes % 60;
         var seconds = Math.ceil(divisor_for_seconds);
+        var duration = '';
 
         if (hours === 0) {
             if (minutes === 0) {
-                var duration = seconds + " s";
+                duration = seconds + " s";
             } else {
-                var duration = minutes + " min";
+                duration = minutes + " min";
             }
         } else {
-            var duration = hours + " h " + minutes + " min";
+            duration = hours + " h " + minutes + " min";
         }
         return duration;
     }

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hy",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Oskari օգտագործողի ուղեցույց",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Քարտեզի օգտագործողի ուղեցույց"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Օգտագործողի ուղեցույցի ներբեռնման ձախողում.կրկին փորձել"
         },
         "help": {
-            "tags": "NOT TRANSLATED",
-            "contentPart": "NOT TRANSLATED"
+            "tags": ""
         }
     }
 });

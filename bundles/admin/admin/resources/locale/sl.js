@@ -11,23 +11,22 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Prijava",
             "defaultviews": {
-                "title": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "headerName": "NOT TRANSLATED",
-                "globalViewTitle": "NOT TRANSLATED",
-                "setButton": "NOT TRANSLATED",
-                "forceButton": "NOT TRANSLATED",
+                "title": "",
+                "desc": "",
+                "headerName": "",
+                "globalViewTitle": "",
+                "setButton": "",
+                "forceButton": "",
                 "notifications": {
-                    "errorTitle": "NOT TRANSLATED",
-                    "warningTitle": "NOT TRANSLATED",
-                    "successTitle": "NOT TRANSLATED",
-                    "errorLoadingFailed": "NOT TRANSLATED",
-                    "errorUpdating": "NOT TRANSLATED",
-                    "listTitle": "NOT TRANSLATED",
-                    "viewUpdated": "NOT TRANSLATED"
+                    "errorTitle": "",
+                    "warningTitle": "",
+                    "successTitle": "",
+                    "errorLoadingFailed": "",
+                    "errorUpdating": "",
+                    "listTitle": "",
+                    "viewUpdated": ""
                 }
             }
         }
     }
-}
-);
+});

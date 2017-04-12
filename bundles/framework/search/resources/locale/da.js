@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "da",
     "key": "Search",
     "value": {
         "title": "Søg efter placering",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Søg efter navn, adresse eller matrikelnummer",
-        "searchButton": "Søg",
         "searchResultCount": "Søgningen gav følgende",
         "searchResultCount2": "resultater",
         "searchResultDescriptionMoreResults": "Uddyb søgning for at reducere antallet af resultater",

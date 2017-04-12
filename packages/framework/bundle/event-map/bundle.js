@@ -56,40 +56,7 @@ function() {
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
 
-		"scripts" : [
-		/*
-		 * map base (includes layer basics, map basics )
-		 */
-
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/features-available-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-layer-add-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-layer-remove-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-move-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-map-move-start-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-show-map-layer-info-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-hide-map-marker-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/mouse-hover-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"
-		}
-        ],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

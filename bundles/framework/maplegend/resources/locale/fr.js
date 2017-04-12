@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "Légendes de carte",
         "desc": "",
         "noLegendsText": "Pas de légendes de cartes disponibles",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": ""
     }
-}
-);
+});

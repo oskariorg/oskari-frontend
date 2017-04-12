@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "LayerSelector",
     "value": {
@@ -9,19 +10,19 @@ Oskari.registerLocalization({
             "generic": "Błąd systemu Proszę spróbować później.",
             "loadFailed": "Błąd wczytywania warstw mapy. Odśwież stronę w wyszukiwarce i wybierz warstwy mapy.",
             "noResults": "Brak rezultatóws.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
-        "loading": "NOT TRANSLATED",
+        "loading": "",
         "filter": {
             "text": "Wyszukiwanie warstw mapy",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "poprzez temat",
             "organization": "poprzez dostawców danych",
             "published": "Użytkownicy",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Opublikowane warstwy mapy",
@@ -62,11 +63,11 @@ Oskari.registerLocalization({
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {

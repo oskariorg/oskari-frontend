@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "cs",
     "key": "Search",
     "value": {
@@ -6,7 +7,6 @@ Oskari.registerLocalization({
         "desc": "",
         "invalid_characters": "Search term contains illegal characters.",
         "searchDescription": "vyhledávání podle jména místa, adresy nebo identifikátoru budovy.",
-        "searchButton": "Vyhledat",
         "searchResultCount": "Vyhledávání vrátilo ",
         "searchResultCount2": " výsledky.",
         "searchResultDescriptionMoreResults": "Specifikujte podrobněji dotaz, abyste snížili počet výsledků.",

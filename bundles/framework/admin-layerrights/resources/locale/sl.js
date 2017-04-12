@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "Shrani",
         "selectRole": "Vloga"
     }
-}
-);
+});

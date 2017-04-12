@@ -4,7 +4,7 @@ Notifies that route has been got successfully from the service. Includes informa
 
 ## Description
 
-Used to notify if getRouteRequest was successfull and the route has been got from the service. 
+Used to notify the result for GetRouteRequest.
 
 ## Parameters
 
@@ -15,20 +15,22 @@ Used to notify if getRouteRequest was successfull and the route has been got fro
   <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
 </tr>
 <tr>
-  <td>success</td><td> Boolean</td><td>Successfully got route</td><td> </td>
+  <td>success</td><td> Boolean</td><td>True if we got a route. With false value the other fields might be empty.</td><td> </td>
 </tr>
 <tr>
-  <td>requestParameters</td><td> JSON</td><td>Parameters that were used to get route.</td><td> </td>
+  <td>requestParameters</td><td> JSON</td><td>Parameters that were used to get route from the routing service (parsed parameters).</td><td> </td>
 </tr>
 <tr>
   <td>plan</td><td> JSON</td><td>Route instructions.</td><td> </td>
+</tr>
+<tr>
+  <td>rawParams</td><td> JSON</td><td>Parameters that were used when requesting the route (passed in GetRouteRequest).</td><td> </td>
 </tr>
 </table>
 
 ## RPC
 
 Event occurs after a route search has been completed.
-
 
 <pre class="event-code-block">
 <code>
@@ -48,6 +50,15 @@ Event occurs after a route search has been completed.
       "lat": 6674169.006001084
     },
     "date": "03-15-2016"
+  },
+  "rawParams" : {
+      "fromlat": "6675341",
+      "fromlon": "385414",
+      "srs": "EPSG:3067",
+      "tolat": 6674169,
+      "tolon": 384964,
+      "showIntermediateStops": "true",
+      "mode": "TRANSIT,WALK"
   },
   "plan": {
     "to": {
@@ -328,7 +339,7 @@ Event occurs after a route search has been completed.
         "transitLeg": true,
         "agencyUrl": "http://www.hsl.fi/",
         "pathway": false,
-        "routeLongName": "Itäkeskus(M)-Pasila-Meilahden klinikat",
+        "routeLongName": "Itï¿½keskus(M)-Pasila-Meilahden klinikat",
         "tripId": "HSL:1058B_20160307_Ti_1_1439",
         "intermediateStops": [{
           "vertexType": "TRANSIT",
@@ -348,7 +359,7 @@ Event occurs after a route search has been completed.
           "lon": 385121.927988764,
           "stopId": "HSL:1171135",
           "stopIndex": 21,
-          "name": "Eläintarha",
+          "name": "Elï¿½intarha",
           "departure": 1458047400000,
           "arrival": 1458047400000,
           "stopCode": "2074",
@@ -829,7 +840,7 @@ Event occurs after a route search has been completed.
           "lon": 385121.927988764,
           "stopId": "HSL:1171135",
           "stopIndex": 4,
-          "name": "Eläintarha",
+          "name": "Elï¿½intarha",
           "departure": 1458047700000,
           "arrival": 1458047700000,
           "stopCode": "2074",
@@ -1290,7 +1301,7 @@ Event occurs after a route search has been completed.
         "transitLeg": true,
         "agencyUrl": "http://www.hsl.fi/",
         "pathway": false,
-        "routeLongName": "Itäkeskus(M) - Pasila - Munkkivuori",
+        "routeLongName": "Itï¿½keskus(M) - Pasila - Munkkivuori",
         "tripId": "HSL:1058_20160307_Ti_1_1444",
         "intermediateStops": [{
           "vertexType": "TRANSIT",
@@ -1310,7 +1321,7 @@ Event occurs after a route search has been completed.
           "lon": 385121.927988764,
           "stopId": "HSL:1171135",
           "stopIndex": 21,
-          "name": "Eläintarha",
+          "name": "Elï¿½intarha",
           "departure": 1458047776000,
           "arrival": 1458047776000,
           "stopCode": "2074",
@@ -1554,7 +1565,7 @@ getRoute: function (params) {
             var success = response.success,
                 requestParameters = response.requestParameters,
                 plan = response.plan;
-            var evt = me.sandbox.getEventBuilder('RouteResultEvent')(success, requestParameters, plan);
+            var evt = me.sandbox.getEventBuilder('RouteResultEvent')(success, requestParameters, plan, params);
             me.sandbox.notifyAll(evt);
         }
     });

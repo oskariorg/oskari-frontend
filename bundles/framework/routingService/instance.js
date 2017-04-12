@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
  */
 function () {
     this.sandbox = null;
-    this.started = false;
     this._defaultStyles = {
         "marker": {
             "offsetX": 16,
@@ -143,13 +142,14 @@ function () {
         this.sandbox = sandbox;
         sandbox.register(this);
 
-        sandbox.addRequestHandler('GetRouteRequest', this.requestHandlers.getRouteHandler);
+        sandbox.requestHandler('GetRouteRequest', this.requestHandlers.getRouteHandler);
 
-        var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RegisterStyleRequest');
-        if(reqBuilder) {
-            var request = reqBuilder('routing', me._defaultStyles);
-            sandbox.request(this, request);
+        if(!sandbox.hasHandler('MapModulePlugin.RegisterStyleRequest')) {
+            return;
         }
+        var request = Oskari.requestBuilder(
+            'MapModulePlugin.RegisterStyleRequest')('routing', me._defaultStyles);
+        sandbox.request(this, request);
     },
 
         /**
@@ -189,7 +189,7 @@ function () {
      */
     getRoute: function (params) {
         var me = this;
-            getRouteUrl = this.sandbox.getAjaxUrl() + 'action_route=Routing';
+            getRouteUrl = this.sandbox.getAjaxUrl('Routing');
 
         jQuery.ajax({
             data: params,
@@ -201,19 +201,19 @@ function () {
               }
              },
             url : getRouteUrl,
-            error : this.routeError,
+            error : function() {
+                // send an event about failure (for RPC etc)
+                var evt = Oskari.eventBuilder('RouteResultEvent')(false, undefined, undefined, params);
+                me.sandbox.notifyAll(evt);
+            },
             success : function (response) {
                 var success = response.success,
                     requestParameters = response.requestParameters,
                     plan = response.plan;
 
-                var evt = me.sandbox.getEventBuilder('RouteResultEvent')(success, requestParameters, plan);
+                var evt = Oskari.eventBuilder('RouteResultEvent')(success, requestParameters, plan, params);
                 me.sandbox.notifyAll(evt);
             }
         });
-    },
-
-    routeError: function (response) {
-        // TODO: send an event about failure (for RPC etc)
     }
 });

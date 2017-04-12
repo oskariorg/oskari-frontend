@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "Omat analyysit"
         }
     }
-}
-);
+});

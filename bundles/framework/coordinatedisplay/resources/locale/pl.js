@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "coordinatedisplay",
     "value": {
@@ -13,6 +14,5 @@ Oskari.registerLocalization({
                 "E": "E: "
             }
         }
-
     }
 });

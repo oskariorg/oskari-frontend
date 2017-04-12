@@ -64,7 +64,14 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "Lisens tjeneste URL: {serviceurl}",
             "licenceConcluded": {
                 "message": "Lisens fullført, se nedenfor for lisensdetaljene."
-            }
+            },
+            "licenseDurations": {
+                "D": "dager",
+                "W": "uker",
+                "M": "måneder",
+                "Y": "år"
+            },
+            "registerLinkText": "Register"
         },
         "buttons": {
             "close": "Lukk",
@@ -77,5 +84,4 @@ Oskari.registerLocalization(
             "yes": "Ja"
         }
     }
-}
-);
+});

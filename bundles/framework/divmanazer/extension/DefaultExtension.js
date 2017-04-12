@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * @method getSandbox
          * Convenience method to call from Tile and Flyout
          *
-         * @return {Oskari.mapframework.sandbox.Sandbox} Sandbox
+         * @return {Oskari.Sandbox} Sandbox
          */
         getSandbox: function () {
             return this.sandbox;
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * Override this in extending bundle to hook in your own startup
          * functionality.
          *
-         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox Sandbox
+         * @param  {Oskari.Sandbox} sandbox Sandbox
          *
          */
         afterStart: function (sandbox) {},

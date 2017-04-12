@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Fel",
                 "message": "Licensinfo kunde inte hämtas."
             },
-            "failedGetLicenseInformation": {
-                "title": "Fel",
-                "message": "Licensserver kunde inte anslutas."
-            },
             "cannotGetLicensePrice": {
                 "title": "Fel",
                 "message": "Licenspris kunde inte hämtas."
@@ -59,13 +55,6 @@ Oskari.registerLocalization(
                 "summary": "Läsa licensvillkor och godkänn dem genom att klicka \"Beställ licens\". Om du vill bearbeta beställningen, klicka \"Tillbaka\". Om du vill avbryta beställningen, klicka \"Stäng\".",
                 "orderDetails": "Du kan se licensinfo ovanför. Om du vill stänga fönster, klicka \"Stäng\". Om du vill avbryta beställningen, klicka \"Aktivera av beställning\"."
             },
-            "concludeSuccessTitle": "Licens har beställt.",
-            "conclude": {
-                "title": "Licensinfo",
-                "productid": "Produkt",
-                "licenseid": "Licens",
-                "validto": "Giltig till"
-            },
             "deactivateConfirm": {
                 "title": "Licens avaktivering",
                 "message": "Vill du aktivera av beställningen?"
@@ -88,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Ja"
         }
     }
-}
-);
+});

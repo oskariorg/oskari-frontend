@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "bg",
     "key": "Search",
     "value": {
         "title": "Търсене по местоположение",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Търсене по име на място, адрес или идентификатор на недвижим имот.",
-        "searchButton": "Търсене",
         "searchResultCount": "Връщане на търсенето",
         "searchResultCount2": "резултати",
         "searchResultDescriptionMoreResults": "Задайте повече критерии в търсенето, за да намалите броя на резултатите",

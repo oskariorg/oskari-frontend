@@ -56,13 +56,7 @@ function() {
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
 
-		"scripts" : [
-		/* base */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/request.js"
-		}
-                ],
+		"scripts" : [],
 		"resources" : []
 	},
 	"bundle" : {

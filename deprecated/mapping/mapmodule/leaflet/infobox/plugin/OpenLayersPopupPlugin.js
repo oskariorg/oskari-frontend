@@ -192,7 +192,7 @@ function() {
     },
     /**
      * @method startPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      * mapmodule.Plugin protocol method.
      * Sets sandbox and registers self to sandbox
      */
@@ -210,7 +210,7 @@ function() {
     },
     /**
      * @method stopPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      * mapmodule.Plugin protocol method.
      * Unregisters self from sandbox
      */
@@ -226,14 +226,14 @@ function() {
     },
     /**
      * @method start
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      * Module protocol method - does nothing atm
      */
     start : function(sandbox) {
     },
     /**
      * @method stop
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      * Module protocol method - does nothing atm
      */
     stop : function(sandbox) {

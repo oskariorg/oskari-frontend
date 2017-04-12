@@ -7,11 +7,10 @@ Oskari.registerLocalization(
         "desc": "ASDI Login",
         "flyout": {
             "title": "Kirjaudu",
-            "username":"Username",
-            "password":"Password",
-            "login":"Kirjaudu",
-            "cancel":"Peruuta"
+            "username": "Username",
+            "password": "Password",
+            "login": "Kirjaudu",
+            "cancel": "Peruuta"
         }
     }
-}
-);
+});

@@ -25,12 +25,6 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      *
      */
     "eventHandlers" : {
-        "MapLayerVisibilityChangedEvent" : function() {
-
-        },
-        "AfterMapMoveEvent" : function() {
-
-        }
     },
 
     /**

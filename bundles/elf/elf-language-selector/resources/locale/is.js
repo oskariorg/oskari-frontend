@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Skipta um tungumál",
         "change": "Breyta"
     }
-}
-);
+});

@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "Pogoji uporabe in dostopnost zbirke podatkov so opredeljeni v metapodatkovnem opisu."
         }
     }
-}
-);
+});

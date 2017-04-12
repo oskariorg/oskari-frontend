@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Stadsøk",
         "invalid_characters": "Søket inneheld ulovlege teikn. Tillatne teikn er bokstavane a-z samt å, ä og ö, tala,  spørsmålsteikn (?), stjerne (*) og bindestrek (-).",
         "searchDescription": "Søk ved hjelp av stadnamn, adresse eller eigedomsinformasjon",
-        "searchButton": "Søk",
         "searchAssistance": "Skriv søkjeord",
         "searchResultCount": "Søket ditt resulterte i",
         "searchResultCount2": "resultat",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Søkjeresultat"
         }
     }
-}
-);
+});

@@ -25,20 +25,23 @@ function() {
     */
     getValues: function () {
         var me = this;
+        var config = null;
 
-        if(me.state.enabled) {
-            return {
-                configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                        }
+        if(!me.state.enabled) {
+          config = {
+            keyboardControls: false,
+            mouseControls: false
+          }
+        }
+        return {
+            configuration: {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id, config: config }]
                     }
                 }
-            };
-        } else {
-            return null;
-        }
+            }
+        };
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mittaa etäisyys",
                 "tooltip": "Piirrä viivan taitepisteet ja mittaa niiden yhteenlaskettu etäisyys.",
-                "add": "NOT TRANSLATED",
-                "next": "NOT TRANSLATED",
+                "add": "",
+                "next": "",
                 "edit": "Klikkaa viivan alkupistettä ja taitepisteitä. Kaksoisklikkaa viivan päätepistettä. Voit siirtää pisteitä raahaamalla niitä hiirellä. Jos piirrät useamman viivan, viivojen pituudet lasketaan yhteen.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mittaa pinta-ala",
                 "tooltip": "Piirrä alue ja mittaa sen pinta-ala.",
-                "add": "NOT TRANSLATED",
-                "next": "NOT TRANSLATED",
+                "add": "",
+                "next": "",
                 "edit": "Piirrä alueen reunaviiva klikkaamalla kulmia. Kaksoisklikkaa lopuksi viimeistä kulmaa. Voit siirtää pisteitä raahaamalla niitä hiirellä. Jos piirrät useamman alueen, niiden pinta-alat lasketaan yhteen.",
                 "noResult": "0 m²"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Täyttöväri on virheellinen. Väriarvojen on oltava välillä 0-255."
         }
     }
-}
-);
+});

@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "Kortalögin mín"
         }
     }
-}
-);
+});

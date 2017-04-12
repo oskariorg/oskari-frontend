@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Uppfyllingarliturinn er ekki leyfður. Litagildið þarf að vera á milli 0 og 255."
         }
     }
-}
-);
+});

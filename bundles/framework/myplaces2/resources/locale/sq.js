@@ -14,89 +14,89 @@ Oskari.registerLocalization(
             "loginShort": "Kyçuni për përdorim"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "",
+            "editCategory": "",
+            "deleteCategory": "",
+            "edit": "",
+            "delete": "",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "",
+                "desc": "",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
+                "edit": "",
+                "delete": ""
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "",
+                    "confirm": "",
+                    "btnDelete": "",
+                    "btnCancel": "",
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Shto pikë",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ju mund të ruani apo të tërhiqni më shumë pika në vizatimin e njejtë",
                 "edit": "Lëviz pikët duke klikuar dhe tërhequr",
                 "save": "Ruajeni lokacionin"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Shto linjën",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ju mund të ruani apo të vizatoni më shumë linja në vizatimin e njejtë",
                 "edit": "Edito linjën duke klikuar dhe tëhequr pikat thyerse të tij",
                 "save": "Ruaj formën",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Shto sipërfaqe (fushë)",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Ju mund të ruani apo të vizatoni më shumë poligone në vizatimin e njejtë.",
                 "edit": "Edito formën e sipërfaqes duke klikuar apo tërhequr pikat thyerse në skaj të vijës së tyre",
                 "save": "Ruaj formën",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             }
         },
         "buttons": {
             "ok": "OK (prano)",
             "cancel": "Anulo",
-            "close": "NOT TRANSLATED",
+            "close": "",
             "finish": "Përfundo vizatimin",
             "save": "Ruaj",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Lëviz vendet dhe fshijë",
             "deleteCategory": "Fshijë",
             "deleteCategoryAndPlaces": "Fshijë kategoritë dhe vendet",
@@ -116,26 +116,25 @@ Oskari.registerLocalization(
                 "placeholder": "Përshkruaj vendin"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Shtresa e hartës",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "",
+                "placename": "",
+                "placedesc": "",
+                "image": ""
             },
             "edit": {
                 "title": "Ndrysho shtresën e hartës",
@@ -175,102 +174,102 @@ Oskari.registerLocalization(
                 "cancel": "Kthehu prapa"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "notification": {
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "Shtresa përmban përshkrim të karaktereve/shkronjave të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse.",
             "dotSize": "Madhësia e pikës nuk përputhet me limitin e madhësisë (1-5)",
             "dotColor": "Ngjyrë e gabuar e pikës",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Madhësia e vijës nuk përputhet me limitin e madhësisë (1-50)",
             "lineColor": "Ngjyrë e gabuar e vijës",
             "areaLineSize": "Madhësia e skajit të sipërfaqes nuk përputhet me limitin (0-50)",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Mbushje/plotësim i gabuar me ngjyrë"
         }
     }
-}
-);
+});

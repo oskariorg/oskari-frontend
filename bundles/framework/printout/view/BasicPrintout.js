@@ -29,7 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         me.loc = localization;
         me.backendConfiguration = backendConfiguration;
         me.legendInProcess = false;
-        me.isParcelMode = false;
 
         /* templates */
         me.template = {};
@@ -664,9 +663,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (tableData) {
                 me.mainPanel.find('input[name=tabledata]').val(tableData);
             }
-            if (!me.isParcelMode) {
-                window.open('about:blank', 'map_popup_111', wopParm);
-            }
+
+            window.open('about:blank', 'map_popup_111', wopParm);
+
             me.mainPanel.find('#oskari_print_formID').submit();
         },
 
@@ -733,34 +732,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 me.instance.getSandbox().printDebug('PRINT URL ' + url);
                 me.openURLinWindow(url, selections);
             }
-        },
-
-        /**
-         * @public @method  modifyUIConfig4Parcel
-         * Modify default UI config.
-         *
-         * @param {Object} printParams, parameters for printing pdf via print service
-         *
-         */
-        modifyUIConfig4Parcel: function (printParams) {
-            var me = this,
-                container = me.mainPanel;
-
-            me.isParcelMode = true;
-            container.find('div.header h3').empty();
-            container.find('div.header h3').append(me.loc.title + ' (3/3)');
-
-            // Print title
-            container.find('.printout_title_field').attr('value', printParams.pageTitle);
-
-            if (me.sizePanel) {
-                me.sizePanel.close();
-            }
-            container.find('div.accordion_panel').first().next().hide();
-
-            //Add back step button
-            me.backBtn.show();
-
         },
 
         /**

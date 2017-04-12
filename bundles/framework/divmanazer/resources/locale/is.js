@@ -271,14 +271,18 @@ Oskari.registerLocalization(
             "refreshButton": "Endurnýja síu",
             "addFilter": "Bæta við nýrri síu",
             "removeFilter": "Eyða síu",
+            "content": {
+                "title": "Landfræðileg sía"
+            },
             "bbox": {
-                "title": "Kortasjársía",
                 "on": "Aðeins fitjan sem er sýnileg í kortasjá.",
                 "off": "Allar fitjur."
             },
             "clickedFeatures": {
-                "title": "Fitjuvalssía.",
-                "label": "Aðeins fitjur sem eru valdar á kortinu."
+                "clickedFeaturesLabel": "Aðeins fitjur sem eru sýnilegar á kortinu",
+                "filterByGeometryLabel": "Aðeins fitjur sem uppfylla þann valkost sem valinn er:",
+                "filterByGeometryIntersect": "Fitjur sem skara valdar fitjur",
+                "filterByGeometryContains": "Fitjur innan valinna fitja"
             },
             "values": {
                 "title": "Sía fitjur eftir eigindum gagna",
@@ -289,6 +293,10 @@ Oskari.registerLocalization(
                     "operator": "Virkir",
                     "attribute-value": "Gildi"
                 },
+                "info": {
+                    "bboxOff": "Án landfræðilegrar síu yrðu allar fitjurnar taldar með í greiningunni. Vinsamlegast bættu við síueigindum eða veldu \"Einungis fitjur sem sjást á kortinu\" í landfræðilegu síunni.",
+                    "filterByGeometrySelected": "Þú getur einungis síað eigindin ef \"Allar fitjur\" er valið í landfræðilegu síunni að ofan."
+                },
                 "equals": "er jafnt og",
                 "like": "er eins og",
                 "notEquals": "er ekki jafnt og",
@@ -297,6 +305,14 @@ Oskari.registerLocalization(
                 "lessThan": "er minni en",
                 "greaterThanOrEqualTo": "er stærri en eða jafn stór og",
                 "lessThanOrEqualTo": "er minni en eða jafn stór og"
+            },
+            "validation": {
+                "title": "Ekki var hægt að uppfæra síu vegna eftirfarandi mistaka:",
+                "attribute_missing": "Eigindi vantar.",
+                "operator_missing": "Virkjann vantar.",
+                "value_missing": "Gildi vantar.",
+                "boolean_operator_missing": "Rökvirkjann vantar.",
+                "bbox_selected_with_no_properties": "Án landfræðilegrar síu yrðu allar fitjurnar taldar með í greiningunni. Vinsamlegast bættu við síueigindum eða veldu \"Einungis fitjur sem sjást á kortinu\" í landfræðilegu síunni."
             },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Veldu heildargildi",
@@ -307,15 +323,7 @@ Oskari.registerLocalization(
                 "getAggregateAnalysisFailed": "Ekki var hægt að finna heildargögnin.",
                 "noAggregateAnalysisPopupTitle": "Ekki var hægt að finna heildargreininguna.",
                 "noAggregateAnalysisPopupContent": "Þú hefur ekki gert heildargreiningu. Þú getur búið til þín eigin heildargögn í greiningartólinu og notað síðan gildi þegar þú síar."
-            },
-            "validation": {
-                "title": "Ekki var hægt að uppfæra síu vegna eftirfarandi mistaka:",
-                "attribute_missing": "Eigindi vantar.",
-                "operator_missing": "Virkjann vantar.",
-                "value_missing": "Gildi vantar.",
-                "boolean_operator_missing": "Rökvirkjann vantar."
             }
         }
     }
-}
-);
+});

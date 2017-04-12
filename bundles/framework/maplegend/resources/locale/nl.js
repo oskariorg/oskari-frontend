@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "Legenda's",
         "desc": "",
         "noLegendsText": "Geen kaart legenda beschikbaar",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": ""
     }
-}
-);
+});

@@ -117,9 +117,9 @@ Oskari.registerLocalization(
             "addSldStyle": "Välj sld stil",
             "importStyle": "Ny SLD stil",
             "addNewStyle": "Sätta ny SLD stil",
-            "sldStyleName":"Stil namn",
-            "sldFileContentDesc":"Kopiera/sätta SLD fil innehåll (xml) till tekst block",
-            "sldFileContent":"SLD fil innehåll",
+            "sldStyleName": "Stil namn",
+            "sldFileContentDesc": "Kopiera/sätta SLD fil innehåll (xml) till tekst block",
+            "sldFileContent": "SLD fil innehåll",
             "styleDesc": "Förvald stil",
             "sldStylesFetchError": "Cou SLD styles",
             "minScale": "Minimi&shy;skala",
@@ -135,7 +135,7 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
             "legendUrl": "Välja kartförklaring URL",
             "legendUrlDesc": "Välja standardval kartförklaring",
-            "noServiceLegendUrl":"Legend URL is not in wms service legends",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Tilläggande text för GFI-dialog",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Ta bort",
         "ok": "OK"
     }
-}
-);
+});

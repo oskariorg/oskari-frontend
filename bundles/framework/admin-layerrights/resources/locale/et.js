@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "admin-layerrights",
     "value": {
         "title": "Kaardikihi õigused",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tile": {
             "title": "Kaardikihi õigused"
         },
@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "Salvesta",
         "selectRole": "Roll"
     }
-}
-);
+});

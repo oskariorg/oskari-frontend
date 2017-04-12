@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyFeedbackTab',
         _showPlace: function (geometry, categoryId) {
             // center map on selected place
             var center = geometry.getCentroid();
-            var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
+            var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds());
             this.instance.sandbox.request(this.instance, mapmoveRequest);
 
             // add the myplaces layer to map

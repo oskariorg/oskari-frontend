@@ -6,7 +6,7 @@
  * Available shapes: dot, line, circle as polygon, box, polygon.
  * Dot and line can have a buffer.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',

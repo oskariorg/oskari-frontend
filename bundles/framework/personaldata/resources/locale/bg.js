@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Име",
                     "description": "Описание",
                     "publish": "Публикуван",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Информация за редакциите на изгледите",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Прикачени карти",
                 "show": "Показване на картата",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Редактиране",
                 "publish": "Публикуване на картата",
                 "unpublish": "Непубликуване на картата",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Име",
                     "domain": "Настройки на картата",
                     "publish": "Статус",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "",
+                    "html": "",
+                    "edit": "",
+                    "delete": ""
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Промяна името на картата",
@@ -123,7 +123,7 @@ Oskari.registerLocalization(
                 "changeInfo": "Промяна информацията за акаунта Ви",
                 "changePassword": "Промяна на паролата Ви",
                 "removeAccount": "Изтриване на акаунта Ви",
-                "changeInfoUrl": "NOT TRANSLATED"
+                "changeInfoUrl": ""
             }
         },
         "button": {
@@ -131,5 +131,4 @@ Oskari.registerLocalization(
             "no": "Не"
         }
     }
-}
-);
+});

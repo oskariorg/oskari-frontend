@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
      * @method create called automatically on construction
      * @static
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to sandbox
+     * @param {Oskari.Sandbox} sandbox reference to sandbox
      * @param {Oskari.mapframework.mapmodule.VectorLayerPlugin} vectorLayerPlugin reference to vectorlayer plugin
      */
 	function (sandbox, vectorLayerPlugin) {

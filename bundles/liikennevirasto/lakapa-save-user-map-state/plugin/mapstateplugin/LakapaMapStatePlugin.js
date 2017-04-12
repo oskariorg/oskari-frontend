@@ -66,7 +66,7 @@ function(locale, mapModule) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     init : function(sandbox) {
@@ -93,7 +93,7 @@ function(locale, mapModule) {
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
@@ -118,7 +118,7 @@ function(locale, mapModule) {
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stopPlugin : function(sandbox) {
@@ -139,7 +139,7 @@ function(locale, mapModule) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     start : function(sandbox) {
@@ -149,7 +149,7 @@ function(locale, mapModule) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stop : function(sandbox) {

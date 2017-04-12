@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "LayerSelector",
     "value": {
@@ -9,19 +10,19 @@ Oskari.registerLocalization({
             "generic": "Σφάλμα συστήματος. Παρακαλώ δοκιμάστε αργότερα.",
             "loadFailed": "Σφάλμα κατά την φόρτωση των επιπέδων χάρτη. Ανανεώστε την ιστοσελίδα και επιλέξτε επίπεδα χάρτη.",
             "noResults": "Η αναζήτηση δεν απέφερε αποτελέσματα.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
-        "loading": "NOT TRANSLATED",
+        "loading": "",
         "filter": {
             "text": "Αναζήτηση επιπέδων χάρτη",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Κατά αντικείμενο/θέμα",
             "organization": "Κατά παρόχους δεδομένων",
             "published": "Χρήστες",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Δημοσιευμένο επίπεδο χάρτη",
@@ -62,11 +63,11 @@ Oskari.registerLocalization({
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {

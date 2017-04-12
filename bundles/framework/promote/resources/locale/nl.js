@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Aangemelde gebruikers",
         "desc": "Als je inlogt, krijg je meer functionaliteiten."
     }
-}
-);
+});

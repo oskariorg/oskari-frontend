@@ -133,7 +133,7 @@ Oskari.registerLocalization(
             "gfiStyle": "Style GFI (XSLT)",
             "gfiStyleDesc": "Définir un style pour GetFeatureInformation (GFI) en tant que transformation XSLT.",
             "manualRefresh": "Rafraîchissement manuel",
-            "resolveDepth": "NOT TRANSLATED",
+            "resolveDepth": "",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID est un identifiant technique de matrice de tuiles. Il est récupéré automatiquement depuis la réponse de GetCapabilities.",
             "matrixSet": "JSON pour la couche WMTS",
@@ -190,5 +190,4 @@ Oskari.registerLocalization(
         "delete": "Supprimer",
         "ok": "OK"
     }
-}
-);
+});

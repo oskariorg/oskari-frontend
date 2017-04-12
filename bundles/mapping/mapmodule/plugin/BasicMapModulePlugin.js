@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Sets sandbox and registers self to sandbox. Constructs the plugin UI
          * and displays it.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         _startPluginImpl: function (sandbox) {
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * mapmodule.Plugin protocol method.
          * Unregisters self from sandbox and removes plugins UI from screen.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         _stopPluginImpl: function (sandbox) {
@@ -371,12 +371,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
             var themeColors = this.getMapModule().getThemeColours();
-            var addToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            if(buttons && !addToolButtonBuilder) {
+            if(buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 return true;
             }
+            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
-            if (addToolButtonBuilder) {
+            if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
                 for (var tool in buttons) {
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
@@ -396,10 +396,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var removeToolButtonBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-            if(buttons && !removeToolButtonBuilder) {
+            if(buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
                 return true;
             }
+            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
             var toolbar = this.getMapModule().getMobileToolbar();
             for (var tool in buttons) {
                 var buttonConf = buttons[tool];

@@ -1,6 +1,6 @@
 /**
  * Definition for bundle. See source for details.
- * 
+ *
  * @class Oskari.elf.license.Bundle
  */
 Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
@@ -107,7 +107,11 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
                 "lang" : "fr",
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/elf/elf-license/resources/locale/fr.js"
-            }
+              }, {
+                  "lang" : "nn",
+                  "type" : "text/javascript",
+                  "src" : "../../../../bundles/elf/elf-license/resources/locale/nn.js"
+              }
         ]
     },
     "bundle" : {
@@ -147,5 +151,5 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("elf-license", 
+Oskari.bundle_manager.installBundleClass("elf-license",
     "Oskari.elf.license.Bundle");

@@ -5,33 +5,29 @@ Oskari.registerLocalization(
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Link",
+                "tooltip": "Vytvoriť prepojenie k zobrazeniu mapy.",
                 "ok": "Ok",
-                "title": "Link k zobrazeniu mapy"
-            },
-            "print": {
-                "tooltip": "Tlač"
+                "title": "Prepojenie k zobrazeniu mapy"
             },
             "history": {
-                "reset": "Návrat k predvolenému zobrazeniu",
-                "back": "Späť",
-                "next": "Ďalej"
+                "reset": "Prejdi k predvolenému zobrazeniu",
+                "back": "Prejdi k predchádzajúcemu zobrazeniu",
+                "next": "Prejdi k nasledujúcemu zobrazeniu"
             },
-            "pan": "Posunutie zobrazenia mapy",
-            "zoom": "Priblížiť",
+            "pan": "Posunutie zobrazenia mapy ťahaním kurzora myši",
+            "zoom": "Priblížiť mapové zobrazenie.",
             "measure": {
-                "line": "Merať vzdialenosti",
-                "area": "Merať plochy"
+                "line": "Merať líniu na mape.",
+                "area": "Merať plochu na mape."
             }
         },
         "measure": {
-            "title": "Meranie",
+            "title": "Výsledky merania",
             "close": "Zrušiť",
             "guidance": {
-                "measureline": "Merať líniu na mape. Dvojklik na skončenie merania.",
-                "measurearea": "Merať plochu na mape. Dvojklik na skončenie merania."
+                "measureline": "Nakresli merateľnú líniu kliknutím na jej lomové body. Nakoniec dvojklik na koncovom bode.",
+                "measurearea": "Nakresli merateľnú plochu kliknutím na jej rohové body. Nakoniec dvojklik na koncovom bode."
             }
         }
     }
-}
-);
+});

@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "valores estadísticos",
         "selectionTools": {
             "title": "Selecciona los fenómenos en el mapa",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "desde la capa superior",
             "selectAll": "seleccionar de todas las capas",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Existen valores de objetos no autorizados en los datos"
         }
     }
-}
-);
+});

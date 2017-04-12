@@ -53,7 +53,7 @@ function() {
      * Interface method for the plugin protocol. Should registers requesthandlers and
      * eventlisteners.
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
@@ -65,7 +65,7 @@ function() {
      * Interface method for the plugin protocol. Should unregisters requesthandlers and
      * eventlisteners.
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stopPlugin : function(sandbox) {

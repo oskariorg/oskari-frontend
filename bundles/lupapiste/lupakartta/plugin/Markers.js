@@ -76,11 +76,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
      */
     stop: function (sandbox) {},
 
-    eventHandlers: {
-        'AfterHideMapMarkerEvent': function (event) {
-            this.afterHideMapMarkerEvent(event);
-        }
-    },
+    eventHandlers: {},
 
     onEvent: function (event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
@@ -103,6 +99,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
      *            event
      */
     afterHideMapMarkerEvent: function (event) {
+        // FIXME: AfterHideMapMarkerEvent is no longer available. Need to do this in another way
         var markerLayer = this._map.getLayersByName("LupapisteMarkers");
         if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
             markerLayer[0].setVisibility(false);

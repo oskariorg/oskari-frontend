@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Kartes nosaukums",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Piešķiriet savai kartei aprakstošu nosaukumu. Lūdzu ņemiet vērā lietotāja saskarnes valodu"
             },
             "language": {
@@ -53,95 +53,95 @@ Oskari.registerLocalization(
                 "ControlsPlugin": "Panoramēt",
                 "SearchPlugin": "Adreses un vietvārda meklēšana",
                 "GetInfoPlugin": "Atrašanās vietas vaicāšanas rīks",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Kartes slāņi",
                 "defaultLayer": "(Noklusējuma slānis)",
                 "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Mazs",
                 "medium": "Vidējs",
                 "large": "Liels",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Pielāgots izmērs",
                 "width": "Platums",
                 "height": "Augstums",
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
                 "ok": "Labi",
                 "replace": "Aizstāt",
                 "cancel": "Atcelt",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -164,8 +164,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Rādīt izvēlnē kartes slāņus",
                 "info": "Izvēlēties fona kartes. Iestatīt noklusējuma fona karti kartes priekšskatījuma logā",
-                "tooltip": "Fona karte ir redzama kā kartes apakšējais slānis. Izvēloties kartes līmeņus izmantot kā apakšējo kārtu, vienlaikus ir redzams tikai viens slānis, un jūs varat pārslēgties starp tām. Var iestatīt noklusējuma fona karti kartes priekšskatījums",
-                "promote": "Vai rādīt aerofoto ainas?"
+                "tooltip": "Fona karte ir redzama kā kartes apakšējais slānis. Izvēloties kartes līmeņus izmantot kā apakšējo kārtu, vienlaikus ir redzams tikai viens slānis, un jūs varat pārslēgties starp tām. Var iestatīt noklusējuma fona karti kartes priekšskatījums"
             },
             "preview": "Iegultās kartes priekšskatījums",
             "location": "Atrašanās vietas un tālummaiņas līmenis",
@@ -179,16 +178,14 @@ Oskari.registerLocalization(
                 "name": "Vārds ir obligāta informācija",
                 "nohelp": "Palīdzība nav pieejama",
                 "saveFailed": "Kartes publicēšana neizdevās. Mēģiniet vēlreiz",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Tīmekļa vietnes nosaukumā ir neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes"
             }
         },
         "NotLoggedView": {
             "text": "Lai lietotu iegulšanas funkciju vispirms ir jāpieteicas",
             "signup": "Pieteikties",
-            "signupUrl": "/web/lv/login",
-            "register": "Reģistrēt",
-            "registerUrl": "/web/lv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Reģistrēt"
         },
         "StartView": {
             "text": "Jūs varat iegult karti tikko izveidotajā skatā jūsu vai Jūsu darba devēja tīmekļa vietnē",
@@ -197,7 +194,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Nav iespējams iegult izvēlētos kartes slāņus. Izvēlne \"Izvēlētie kartes slāņi\" ir parādīts vai kartes slāni var iegult",
             "layerlist_denied": "Iegult nav iespējams",
             "denied_tooltip": "Šīs kartes datu sniedzējs nav piešķīris atļauju publicēt šos materiālus citās tīmekļa vietnēs. Pārbaudiet publicēšanas tiesības izvēlnē \"Izvēlētie kartes slāņi pirms iegulšanas\"",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Turpināt",
                 "continueAndAccept": "Piekrist Lietošanas noteikumiem un turpināt",
@@ -211,16 +208,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -231,5 +222,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

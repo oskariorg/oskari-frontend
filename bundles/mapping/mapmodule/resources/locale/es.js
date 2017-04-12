@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Términos de uso",
                 "dataSources": "Fuente de datos",
-                "layersHeader": "Capas de mapa",
-                "indicatorsHeader": "Indicadores"
+                "layersHeader": "Capas de mapa"
             },
             "DataSourcePlugin": {
                 "link": "Fuente de datos",
@@ -108,5 +107,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

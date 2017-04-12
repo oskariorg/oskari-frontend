@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Ligação à vista da carta"
             },
-            "print": {
-                "tooltip": "Imprimir"
-            },
             "history": {
                 "reset": "Voltar à vista padrão",
                 "back": "Voltar",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

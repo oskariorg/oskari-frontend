@@ -77,7 +77,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          */
         init: function () {
             var loc = this.instance.getLocalization('tools'),
-                user = this.instance.sandbox.getUser();
+                user = Oskari.user();
             // different tooltip for guests - "Please log in to use"
             var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort,
                 tool,
@@ -144,7 +144,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 // as replacements - this way measurement can be saved as myplaces
                 // TODO: this is not the way to do this: instead allow request to be used for
                 // saving a place and make the basic measurement tools use it when available
-                if (sandbox.getUser().isLoggedIn() && addAdditionalMeasureTools) {
+                if (Oskari.user().isLoggedIn() && addAdditionalMeasureTools) {
                     var loc = me.instance.getLocalization();
                     if (tool === 'line') {
                         addMeasureTool(tool);
@@ -155,7 +155,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 }
             }
 
-            var user = this.instance.sandbox.getUser();
+            var user = Oskari.user();
             if (!user.isLoggedIn()) {
                 // disable toolbar buttons for guests
                 this.disableButtons();

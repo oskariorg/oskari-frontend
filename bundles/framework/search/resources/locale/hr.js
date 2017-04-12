@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "Search",
     "value": {
         "title": "Pretraživanje lokacije",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Pretraživanje po nazivu mjesta, adresi ili oznaci nekretnine..",
-        "searchButton": "Pretraživanje",
         "searchResultCount": "Pretraživanje je dalo ",
         "searchResultCount2": " rezultati.",
         "searchResultDescriptionMoreResults": "Definiraj pretragu kako bi se smanjio broj rezultata.",

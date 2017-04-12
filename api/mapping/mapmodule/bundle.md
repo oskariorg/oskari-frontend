@@ -26,7 +26,7 @@ Some configuration is needed for URLs:
 }
 ```
 
-Configuration is not handled like normal bundles. 
+Configuration is not handled like normal bundles.
 
 Configuration can be given when constructing the mapmodule through constructor call. Usually its passed through the mapfull bundle configuration:
 
@@ -51,6 +51,32 @@ Configuration can be given when constructing the mapmodule through constructor c
 ## Bundle state
 
 No statehandling has been implemented.
+
+## Bundle functions
+
+### getProjectionDecimals
+
+Function returns wanted projection decimals. If wanted projection is not defined, then using map projection. Decimals concluded from projection units. Now 'degrees' units returns 6 and 'm' units returns 0.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapProjectionDecimals = mapmodule.getProjectionDecimals();
+console.log('Map projection decimals = '+mapProjectionDecimals);
+var WGS84Decimals = mapmodule.getProjectionDecimals('EPSG:4326');
+console.log('WGS84 projection decimals = '+WGS84Decimals);
+```
+
+### getProjectionUnits
+
+Function returns wanted projection units. If wanted projection is not defined, then using map projection.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapUnits = mapModule.getProjectionUnits();
+console.log('Map projection units = ' + mapUnits);
+var WGS84Units = mapModule.getProjectionUnits('EPSG:4326');
+console.log('WGS84 projection units = ' + WGS84Units);
+```
 
 ## Requests the bundle handles
 

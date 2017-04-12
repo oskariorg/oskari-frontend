@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Muuda keelt",
         "change": "Muuda"
     }
-}
-);
+});

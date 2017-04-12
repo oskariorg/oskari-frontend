@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "userinterface.UserGuide",
     "value": {
@@ -6,7 +7,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Oskari vodič za upotrebu",
-            "loadingtxt": "NOT TRANSLATED"
+            "loadingtxt": ""
         },
         "tile": {
             "title": "Vodič za upotrebu karte"
@@ -16,8 +17,7 @@ Oskari.registerLocalization({
             "generic": "Greška u učitavanju vodiča za upotrebu. Pokušajte kasnije."
         },
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
 });

@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
         },
         /**
          * @method startPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          * @throws "Implement your own"
          */
@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
         },
         /**
          * @method stopPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          * @throws "Implement your own"
          */

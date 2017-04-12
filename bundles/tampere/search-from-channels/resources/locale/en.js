@@ -9,8 +9,8 @@ Oskari.registerLocalization(
         "assistance": "Write the search termel",
         "showMore": "Show search options",
         "showLess": "Hide search options",
-        "advanced_topic" : "Search channels",
-        "channeloptionservice_alert_title" : "Search channels error",
+        "advanced_topic": "Search channels",
+        "channeloptionservice_alert_title": "Search channels error",
         "channeloptionservice_not_found_anything_text": "Cannot get search channels",
         "no_channels_found": "Any search channels not found",
         "searchResults_header": "Search results",
@@ -29,10 +29,10 @@ Oskari.registerLocalization(
         "invalid_characters": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
         "show-all-on-map": "Show all on map",
         "show-selected-on-map": "Show selected on map",
-         "no_selected_rows_alert_title": "Show selected on map error",
+        "no_selected_rows_alert_title": "Show selected on map error",
         "no_selected_rows_have_to_select": "No selected rows. Select search results and try again.",
         "back-to-search": "Back to search",
-         "grid": {
+        "grid": {
             "name": "Place name",
             "village": "Municipality",
             "type": "Search channel"
@@ -42,5 +42,4 @@ Oskari.registerLocalization(
             "title": "Place Search Results"
         }
     }
-}
-);
+});

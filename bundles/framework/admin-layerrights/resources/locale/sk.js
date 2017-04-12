@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "admin-layerrights",
     "value": {
         "title": "Právne vrstvy",
-        "desc": "NOT TRANSLATED",
+        "desc": "Nepreložené",
         "tile": {
             "title": "Právne mapové vrstvy"
         },
@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             "rightToPublish": "Publikovať",
             "rightToView": "Zobraziť",
             "rightToDownload": "Stiahnuť",
-            "rightToPublishView": "Zobraziť v uloženej mape",
+            "rightToPublishView": "Zobraziť vo vloženej mape",
             "success": {
                 "title": "Právne vrstvy uložené",
                 "message": "Právne mapové vrsty boli aktualizované."
@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "Uložiť",
         "selectRole": "Úloha"
     }
-}
-);
+});

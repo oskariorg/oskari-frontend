@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Mapové vrstvy",
-            "tooltip": "."
+            "tooltip": "Nepreložené"
         },
         "view": {
             "title": "",
@@ -44,6 +44,7 @@ Oskari.registerLocalization(
         },
         "admin": {
             "capabilitiesLabel": "Spôsobilosť",
+            "capabilitiesRemarks": "(*)  Aktuálna mapová CRS nie je podporovaná v capabilities služby",
             "confirmResourceKeyChange": "Zmenili ste jedinečný názov alebo adresu rozhrania pre túto mapovú vrstvu. Z bezpečnostných dôvodov budú odobrané používateľské práva pre túto mapovú vrstvu a musíte ich nastaviť znovu. Chcete pokračovať?",
             "confirmDeleteLayerGroup": "Skupina mapových vrstiev bude odstránená. Chcete pokračovať?",
             "confirmDeleteLayer": "Mapová vrstva bude odstránená. Chcete pokračovať?",
@@ -113,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Definovať nepriehľadnosť, ktorá sa používa v predvolenom nastavení. V prípade, že je nepriehľadnosť 100%, vrstva zakrýva všetky ostatné vrstvy, ktoré sú pod ňou. V prípade, že nepriehľadnosť je 0%, vrstva je úplne transparentná. Užívatelia môžu kontrolovať nepriehľadnosť v menu \"Vybrané vrstvy\".",
             "style": "Predvolený štýl",
             "styleDesc": "Možnosti štýlu sa získajú automaticky z odpovede GetCapabilities. Vyberte predvolený štýl zo zoznamu. Ak existuje niekoľko možností, používatelia môžu vybrať motív v menu \"Vybrané vrstvy\".",
+            "importStyle": "Nový sld štýl",
+            "addNewStyle": "Pridať nový SLD štýl",
+            "sldStyleName": "Názov štýlu",
+            "sldFileContentDesc": "Zkopírujte/vložte obsah SLD súboru do textu",
+            "sldFileContent": "Obsah SLD súboru",
+            "sldStylesFetchError": "Nepodarilo sa získať SLD štýly",
+            "addSldStyleDesc": "Vybrať štýly pre aktuálnu vrstvu",
+            "addSldStyle": "Výber SLD štýlu",
             "minScale": "Minimálna mierka",
             "minScaleDesc": "Minimálna mierka sa získa automaticky z odpovede GetCapabilities. Mapová vrstva sa zobrazí iba ak mierka je nad týmto limitom. Mierky sú definované ako mierkové menovatele. Ak sa limity mierky nezadefinujú, mapové vrstvy sa zobrazia vo všetkých mierkových úrovniach.",
             "minScalePlaceholder": "Minimálna mierka je vo formáte 5669294 (1:5669294)",
@@ -133,12 +142,13 @@ Oskari.registerLocalization(
             "gfiStyle": "Štýl GFI (XSLT)",
             "gfiStyleDesc": "Definovať štýl pre Získanie informácií o objekte (GFI) ako XSLT transformáciu.",
             "manualRefresh": "Manuálne obnovenie",
+            "resolveDepth": "Hĺbka rozhodnutia",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID je technický dlaždicový matrix identifikátor. Získa sa automaticky z odpovede GetCapabilities.",
             "matrixSet": "JSON pre vrstvu WMTS",
             "matrixSetDesc": "Údajová vrstva vo formáte JSON sa získa automaticky z odpovede GetCapabilities.",
             "realtime": "Vrstva v reálnom čase",
-            "refreshRate": "Označte začiarkavacie políčko, ak sa mapová vrstva aktualizuje v reálnom čase. Obnovovacia frekvencia je definovaná v sekundách.",
+            "refreshRate": "Ak sa mapová vrstva aktualizuje v reálnom čase, označte začiarkavacie políčko. Obnovovacia frekvencia je definovaná v sekundách.",
             "jobTypeDesc": "Vyhľadávač WFS",
             "jobTypeDefault": "predvolené",
             "jobTypes": {
@@ -189,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Odstrániť",
         "ok": "OK"
     }
-}
-);
+});

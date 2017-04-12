@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Punktstil",
-                "tooltip": "",
+                "tooltip": "Definer ein punktstil",
                 "symbol": {
                     "label": "Ikon"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Linestil",
-                "tooltip": "",
+                "tooltip": "Definer ein linestil",
                 "style": {
                     "label": "Linestil"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Arealstil",
-                "tooltip": "",
+                "tooltip": "Definer ein arealstil",
                 "linestyle": {
                     "label": "Linestil"
                 },
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Tilleggsinstillingar",
                     "dataSource": "Datakjelde",
-                    "metadata": "Metadatalenke"
+                    "metadata": "Metadatalenke",
+                    "export_selection": "Eksporter kun valde førekomstar"
                 },
                 "columns": {
                     "title": "Kolonner",
@@ -270,14 +271,18 @@ Oskari.registerLocalization(
             "refreshButton": "Oppfrisk filteret",
             "addFilter": "Legg til nytt filter",
             "removeFilter": "Slett filter",
+            "content": {
+                "title": "Geografisk filter"
+            },
             "bbox": {
-                "title": "Kartvindauge-filter",
                 "on": "Berre den synlege førekomsten i kartvindauget",
                 "off": "Alle førekomstar"
             },
             "clickedFeatures": {
-                "title": "Filter for val av førekomstar",
-                "label": "Kun valgde førekomstar"
+                "clickedFeaturesLabel": "Kun valde førekomstar i kartet",
+                "filterByGeometryLabel": "Kun førekomstar ifølgje valg opsjon:",
+                "filterByGeometryIntersect": "Førekomstar som kryssar valde førekomstar",
+                "filterByGeometryContains": "Førekomstar innanfor valde førekomstar"
             },
             "values": {
                 "title": "Filtrér førekomstar basert på eigenskapar",
@@ -288,6 +293,10 @@ Oskari.registerLocalization(
                     "operator": "Operator",
                     "attribute-value": "Verdi"
                 },
+                "info": {
+                    "bboxOff": "Utan geografisk filter er alle førekomstar tatt med i analysen. Ver grei og legg til eit attributtfilter eller vel \"Kun valde førekomstar i kartet\" i det geografiske filteret.",
+                    "filterByGeometrySelected": "Du kan filtrere på attributtar berre dersom \"Alle førekomstar\" er vald i det geografiske filteret over."
+                },
                 "equals": "er lik",
                 "like": "er omtrentleg lik",
                 "notEquals": "er ikkje lik",
@@ -297,6 +306,14 @@ Oskari.registerLocalization(
                 "greaterThanOrEqualTo": "er større enn eller lik",
                 "lessThanOrEqualTo": "er mindre enn eller lik"
             },
+            "validation": {
+                "title": "Filteret kunne ikkje oppfriskast på grunn av føljande feil:",
+                "attribute_missing": "Eigenskapen manglar",
+                "operator_missing": "Operatoren manglar",
+                "value_missing": "Verdien manglar",
+                "boolean_operator_missing": "Logisk operator manglar",
+                "bbox_selected_with_no_properties": "Utan geografisk filter er alle førekomstar tatt med i analysen. Ver grei og legg til eit attributtfilter eller vel \"Kun valde førekomstar i kartet\" i det geografiske filteret."
+            },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Vel aggregert verdi",
                 "aggregateValueSelectTitle": "Bruk aggregert verdi i filteret",
@@ -304,17 +321,9 @@ Oskari.registerLocalization(
                 "selectIndicator": "Vel indikator",
                 "selectReadyButton": "Klar",
                 "getAggregateAnalysisFailed": "Aggregerte data ikkje funne",
-                "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
+                "noAggregateAnalysisPopupTitle": "Statistiske verdiar ikkje funne",
                 "noAggregateAnalysisPopupContent": "Du har ikkje gjort noka aggregert analyse. Du kan setje saman dine eigne aggregerte data ved hjelp av analysefunksjonen, og så filtrere på verdiar."
-            },
-            "validation": {
-                "title": "Filteret kunne ikkje oppfriskast på grunn av føljande feil:",
-                "attribute_missing": "Eigenskapen manglar",
-                "operator_missing": "Operatoren manglar",
-                "value_missing": "Verdien manglar",
-                "boolean_operator_missing": "Logisk operator manglar"
             }
         }
     }
-}
-);
+});

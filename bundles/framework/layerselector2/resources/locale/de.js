@@ -32,7 +32,7 @@ Oskari.registerLocalization(
             "type-base": "Hintergrundkarte",
             "type-wms": "Kartenebene (WMS, WMTS)",
             "type-wfs": "Datenprodukt (WFS)",
-            "type-wfs-manual": "NOT TRANSLATED"
+            "type-wfs-manual": ""
         },
         "backendStatus": {
             "OK": {
@@ -82,5 +82,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

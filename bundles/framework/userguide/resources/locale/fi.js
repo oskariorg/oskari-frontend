@@ -24,9 +24,7 @@ Oskari.registerLocalization(
             {"title": "Latauskori", "tags": "ohje_latauskori"}
         ],
         "help": {
-            "tags": "karttaikkuna,pikaohje",
-            "contentPart": "body"
+            "tags": "karttaikkuna,pikaohje"
         }
     }
-}
-);
+});

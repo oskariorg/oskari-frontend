@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Karttatasot",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -116,9 +116,9 @@ Oskari.registerLocalization(
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta. Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
             "importStyle": "Uusi SLD tyyli",
             "addNewStyle": "Lisää uuden SLD tyylin sisältö",
-            "sldStyleName":"Tyylin nimi",
-            "sldFileContentDesc":"Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
-            "sldFileContent":"SLD:n sisältö",
+            "sldStyleName": "Tyylin nimi",
+            "sldFileContentDesc": "Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
+            "sldFileContent": "SLD:n sisältö",
             "sldStylesFetchError": "SLD stilen kunde inte hämtas",
             "addSldStyleDesc": "Valitse listalta, mitä tyylejä käytetään ko tasolle",
             "addSldStyle": "Sld tyylivalinta",
@@ -135,7 +135,7 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
             "legendUrl": "Tuo oletuskarttaselite tyyliltä",
             "legendUrlDesc": "Valitse oletuskarttaselite tarvittaessa tason selitteistä",
-            "noServiceLegendUrl":"Ei tuoda tyylien selitteistä",
+            "noServiceLegendUrl": "Ei tuoda tyylien selitteistä",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
             "gfiResponseType": "GFI-vastaustyyppi",
             "gfiResponseTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Poista",
         "ok": "OK"
     }
-}
-);
+});

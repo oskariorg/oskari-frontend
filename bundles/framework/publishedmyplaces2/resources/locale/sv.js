@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punktens stil",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "symbol": {
                 "label": "Ikon"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Områdets ifyllnadsfärg är ogiltig. Färgvärdena måste vara mellan 0 och 255."
         }
     }
-}
-);
+});

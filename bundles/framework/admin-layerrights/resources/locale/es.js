@@ -4,7 +4,7 @@ Oskari.registerLocalization(
     "key": "admin-layerrights",
     "value": {
         "title": "derechos de las capas",
-        "desc": "NOT TRANSLATED",
+        "desc": "",
         "tile": {
             "title": "derechos de las capas del mapa"
         },
@@ -31,5 +31,4 @@ Oskari.registerLocalization(
         "save": "salvar",
         "selectRole": "Role"
     }
-}
-);
+});

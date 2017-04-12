@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Pode ampliar e reduzir a vista usando a barra respetiva ou os sinais de + e -. Pista: Pode usar também os sinais de + e – no teclado e ampliar com duplo-clique na vista. É ainda possível usar a roda central do rato"
         }
     }
-}
-);
+});

@@ -47,18 +47,17 @@ Oskari.registerLocalization(
         "searching": "Lade…",
         "grid": {
             "name": "Name",
-            "removeBBOX": "NOT TRANSLATED",
-            "showBBOX": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED",
-            "remove": "NOT TRANSLATED",
-            "rating": "NOT TRANSLATED"
+            "removeBBOX": "",
+            "showBBOX": "",
+            "info": "",
+            "remove": "",
+            "rating": ""
         },
-        "licenseText": "NOT TRANSLATED",
+        "licenseText": "",
         "identificationCode": {
             "creation": "erstellung",
             "publication": "publikation",
             "revision": "überarbeitung"
         }
     }
-}
-);
+});

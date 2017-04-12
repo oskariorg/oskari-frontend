@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Navn",
                     "description": "Beskrivelse",
                     "publish": "Udgivet",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Rediger view'ets information",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Indlejrede kort",
                 "show": "Vis på kortet",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Rediger",
                 "publish": "Udgiv kort",
                 "unpublish": "Annuller udgivning af kort",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Navn",
                     "domain": "Kortindstillinger",
                     "publish": "Status",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "",
+                    "html": "",
+                    "edit": "",
+                    "delete": ""
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Skift kortnavn",
@@ -131,5 +131,4 @@ Oskari.registerLocalization(
             "no": "Nej"
         }
     }
-}
-);
+});

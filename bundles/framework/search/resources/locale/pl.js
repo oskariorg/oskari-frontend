@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "Search",
     "value": {
         "title": "Wyszukaj Lokalizację",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Wyszukaj przez nazwę, adres, identyfikator nieruchomości.",
-        "searchButton": "Wyszukaj",
         "searchResultCount": "Rezultat wyszukiwania ",
         "searchResultCount2": " wyniki.",
         "searchResultDescriptionMoreResults": "Zdefiniuj wyszukiwanie w celu zmniejszenia liczby wyników.",

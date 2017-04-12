@@ -4,22 +4,11 @@
  * A set of methods to support loosely coupled classes and instances for the mapframework
  */
 Oskari = (function () {
-    var isDebug = false;
     var _markers = [];
 
     return {
-        VERSION : "1.40.0",
+        VERSION : "1.42.0",
 
-        /**
-         * @public @method Oskari.setDebugMode
-         * @param {boolean} d Debug mode on/off
-         */
-        setDebugMode: function (d) {
-            isDebug = !!d;
-        },
-        isDebug : function() {
-            return isDebug;
-        },
         /**
          * @public @static @method Oskari.setMarkers
          * @param {Array} markers markers

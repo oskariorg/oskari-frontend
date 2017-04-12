@@ -7,5 +7,4 @@ Oskari.registerLocalization(
         "desc": "Zeige Legendenansicht",
         "noLegendsText": "No map legends available"
     }
-}
-);
+});

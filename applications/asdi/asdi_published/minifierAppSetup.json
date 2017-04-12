@@ -18,49 +18,10 @@
                 "mapuserlayers" : {
                     "bundlePath" : "../../../packages/mapping/ol3/"
                 },
-                "core-base" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "core-map" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "sandbox-base" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "sandbox-map" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "event-base" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "event-map" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "event-map-layer" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "request-base" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "request-map" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "request-map-layer" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "service-base" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "service-map" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "domain" : {
+                "mapfull" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 },
                 "oskariui" : {
-                    "bundlePath" : "../../../packages/framework/bundle/"
-                },
-                "mapfull" : {
                     "bundlePath" : "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
@@ -107,7 +68,6 @@
         }
     },{
         "bundlename" : "infobox",
-        "bundleinstancename" : "infobox",
         "metadata" : {
             "Import-Bundle" : {
                 "infobox" : {
@@ -117,7 +77,6 @@
         }
     }, {
         "bundlename" : "drawtools",
-        "bundleinstancename" : "drawtools",
         "metadata" : {
             "Import-Bundle" : {
                 "drawtools" : {
@@ -127,7 +86,6 @@
         }
     }, {
         "bundlename" : "rpc",
-        "bundleinstancename" : "rpc",
         "metadata" : {
             "Import-Bundle" : {
                 "rpc" : {

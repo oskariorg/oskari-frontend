@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.ToggleFullScreenControlRequest
  * Requests Fullscreen toggle functionality to be activated or disabled
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define(

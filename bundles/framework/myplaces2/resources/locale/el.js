@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "MyPlaces2",
     "value": {
@@ -14,10 +15,10 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Τοποθεσίες",
-            "nocategories": "NOT TRANSLATED",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
             "addCategory": "Πρόσθεση επιπέδου χάρτη",
             "editCategory": "Επεξεργασία επιπέδου χάρτη",
@@ -27,39 +28,39 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Όνομα",
                 "desc": "Περιγραφή",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
                 "edit": " ",
                 "delete": " "
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
+                    "title": "",
+                    "confirm": "",
                     "btnDelete": "Διαγραφή",
                     "btnCancel": "Ακύρωση",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m²"
             },
             "point": {
@@ -95,7 +96,7 @@ Oskari.registerLocalization({
             "close": "Ακύρωση",
             "finish": "Τέλος σχεδίου",
             "save": "Αποθήκευση",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Μετακίνηση τοποθεσίας και διαγραφή",
             "deleteCategory": "Διαγραφή",
             "deleteCategoryAndPlaces": "Διαγραφή κατηγορίας και τοποθεσιών",
@@ -115,24 +116,23 @@ Oskari.registerLocalization({
                 "placeholder": "Περιγράψτε την τοποθεσία"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Επίπεδο χάρτη",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "Νέο επίπεδο"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "tooltip": "Σημείο"
                 }
@@ -163,10 +163,10 @@ Oskari.registerLocalization({
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "placename": "Όνομα",
                 "placedesc": "Περιγραφή",
-                "image": "NOT TRANSLATED"
+                "image": ""
             },
             "edit": {
                 "title": "Επεξεργασία επιπέδου χάρτη",
@@ -174,34 +174,34 @@ Oskari.registerLocalization({
                 "cancel": "Πίσω"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
                 "label": "Μέγεθος"
             },
             "color": {
                 "label": "Χρώμα",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Αποθήκευση",
@@ -209,27 +209,27 @@ Oskari.registerLocalization({
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
                 "label": "Χρώμα",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Αποθήκευση",
@@ -237,35 +237,35 @@ Oskari.registerLocalization({
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
                 "label": "Χρώμα γραμμής",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Αποθήκευση",
@@ -314,7 +314,7 @@ Oskari.registerLocalization({
             "categoryNameIllegal": "Η περιγραφή του επιπέδου περιλαμβάνει μη αποδεκτούς χαρακτήρες. Οι αποδεκτοί χαρακτήρες είναι τα γράμματα α-ω (a-z) , αριθμοί, backspace και παρενθέσεις.",
             "dotSize": "Το μέγεθος σημείου (dot) είναι εκτός ορίων (1-5).",
             "dotColor": "Λάθος χρώμα σημείου(dot).",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Το μέγεθος γραμμής είναι εκτός ορίων (1-50).",
             "lineColor": "Λάθος χρώμα γραμμής.",
             "areaLineSize": "Το μέγεθος του ορίου της επιφάνειας είναι εκτός ορίων (0-50).",

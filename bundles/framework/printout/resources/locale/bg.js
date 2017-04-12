@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Принтиране изгледа на картата",
         "flyouttitle": "Принтиране изгледа на картата",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "",
         "BasicView": {
             "title": "Принтиране изгледа на картата",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "",
+                    "sv": "",
+                    "en": ""
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "size": {
                 "label": "Размер",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Принтиране",
                 "ok": "ОК",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Отказ / Отмяна"
             },
             "location": {
@@ -118,8 +118,8 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "NOT TRANSLATED",
@@ -157,11 +157,11 @@ Oskari.registerLocalization(
             "help": "Помощ",
             "error": {
                 "title": "Грешка",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Помощта не е на разположение",
                 "saveFailed": "Принтирането на картата е неуспешно| Опитайте по - късно",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

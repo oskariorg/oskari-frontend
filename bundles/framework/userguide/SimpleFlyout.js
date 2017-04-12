@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.SimpleFlyout',
          */
 
         createUi: function () {
-            this.setContent(this.getLocalization('help').loadingtxt);
+            this.setContent(this.getLocalization('flyout').loadingtxt);
         },
 
         /**

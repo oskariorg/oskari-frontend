@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Crea un collegamento per la vista"
             },
-            "print": {
-                "tooltip": "Stampa la vista"
-            },
             "history": {
                 "reset": "Ritorna alla vista di default",
                 "back": "Ritorna alla vista precedente",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

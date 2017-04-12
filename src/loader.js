@@ -240,11 +240,12 @@
                 }
                 log.debug('Starting bundle ' + bundleId);
                 try {
-                    instance.start();
+                    instance.start(Oskari.getSandbox());
                     Oskari.trigger('bundle.start', { id : bundleId });
                 } catch(err) {
                     Oskari.trigger('bundle.err', { id : bundleId, error : err });
-                    throw new Error('Couldn\'t start bundle with id ' + bundleId + '. Error was: ' + err);
+                    log.error('Couldn\'t start bundle with id ' + bundleId + '. Error was: ',err);
+                    throw err;
                 }
             },
             processBundleJS : function(bundles, callback) {

@@ -5,5 +5,4 @@ Oskari.registerLocalization(
     "value": {
         "intersectionNotAllowed": "Området får inte forma en ögla. Rita ett giltigt område för att se mätningsresultatet."
     }
-}
-);
+});

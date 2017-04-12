@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
         }
     }
-}
-);
+});

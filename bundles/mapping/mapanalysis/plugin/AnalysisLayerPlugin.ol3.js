@@ -96,7 +96,7 @@ Oskari.clazz.define(
                     opacity: layer.getOpacity() / 100
                 });
 
-
+            this._registerLayerEvents(openLayer, layer);
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
 
             // store reference to layers
@@ -106,7 +106,30 @@ Oskari.clazz.define(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for AnalysisLayer ' +
                 layer.getId()
             );
-        }
+        },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+        var me = this;
+        var source = layer.getSource();
+
+        source.on('imageloadstart', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), true);
+        });
+
+        source.on('imageloadend', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), false);
+        });
+
+        source.on('imageloaderror', function() {
+          oskariLayer.loadingError();
+        });
+
+      }
     }, {
         "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**

@@ -272,14 +272,10 @@ Oskari.registerLocalization(
             "addFilter": "añadir un nuevo filtro",
             "removeFilter": "borrar el filtro",
             "bbox": {
-                "title": "ventana del mapa del filtro",
                 "on": "solo los objetos visibles en la ventana del mapa",
                 "off": "todos los objetos"
             },
-            "clickedFeatures": {
-                "title": "selección de objetos del filtro",
-                "label": "solo los objetos seleccionados en el mapa"
-            },
+            "clickedFeatures": {},
             "values": {
                 "title": "filtrar los objetos por dato del atributo",
                 "placeholders": {
@@ -317,5 +313,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

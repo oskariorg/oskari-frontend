@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hy",
     "key": "Search",
     "value": {
         "title": "Տեղանքի որոնում",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Որոնում տեղանքի անվամբ, հասցեով կամ անշարժ գույքի միավորի նույնականացման տվյալներով",
-        "searchButton": "Որոնում",
         "searchResultCount": "Որոնման արդյունքներ",
         "searchResultCount2": "Արդյունքներ",
         "searchResultDescriptionMoreResults": "Մասնավորեցնել որոնումը արդյունքների քանակը նվազեցնելու համար",

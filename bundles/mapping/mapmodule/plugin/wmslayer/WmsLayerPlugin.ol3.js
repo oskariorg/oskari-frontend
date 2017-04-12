@@ -111,6 +111,8 @@ Oskari.clazz.define(
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
+
+                    this._registerLayerEvents(layerImpl, _layer);
                 }
                 // Set min max Resolutions
                 if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
@@ -128,6 +130,24 @@ Oskari.clazz.define(
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
+
+        },
+        _registerLayerEvents: function(layer, oskariLayer){
+          var me = this;
+          var source = layer.getSource();
+
+          source.on('tileloadstart', function() {
+            me.getMapModule().loadingState( oskariLayer._id, true);
+          });
+
+          source.on('tileloadend', function() {
+            me.getMapModule().loadingState( oskariLayer._id, false);
+          });
+
+          source.on('tileloaderror', function() {
+            oskariLayer.loadingError();
+          });
+
         },
         /**
          *

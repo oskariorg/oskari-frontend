@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "cs",
     "key": "Publisher",
     "value": {
@@ -34,10 +35,7 @@ Oskari.registerLocalization({
                 "options": {
                     "fi": "finština",
                     "sv": "švédština",
-                    "en": "angličtina",
-                    "de": "němčina",
-                    "es": "španělština",
-                    "cs": "čeština"
+                    "en": "angličtina"
                 },
                 "tooltip": "Vyberte jazyk prostředí a dat mapy."
             },
@@ -58,22 +56,22 @@ Oskari.registerLocalization({
                 "GetInfoPlugin": "Dotazovací nástroj pro zeměpisná jména"
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": ""
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Mapové vrstvy",
                 "defaultLayer": "(Defaultní vrstva)",
                 "useAsDefaultLayer": "Použij jako defalutní vrstvu"
@@ -82,7 +80,7 @@ Oskari.registerLocalization({
                 "small": "Malá",
                 "medium": "Střední",
                 "large": "Velká",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Vlastní velikost",
                 "width": "šířka",
                 "height": "výška",
@@ -105,8 +103,7 @@ Oskari.registerLocalization({
             "layerselection": {
                 "label": "Zobraz mapové vrstvy v menu",
                 "info": "Vyberte mapy pozadí. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
-                "tooltip": "Mapa pozadí je zobrazena jako spodní vrstva mapy. Když vyberete mapové vrstvy jako spodní vrstvu, bude vždy viditelná jen jedna vrstva. Mezi mapami pozadí lze přepínat. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy.",
-                "promote": "Zobrazit letecké snímky?"
+                "tooltip": "Mapa pozadí je zobrazena jako spodní vrstva mapy. Když vyberete mapové vrstvy jako spodní vrstvu, bude vždy viditelná jen jedna vrstva. Mezi mapami pozadí lze přepínat. Defaultní mapu pozadí můžete nastavit v okně náhledu mapy."
             },
             "preview": "Náhled vkládané mapy.",
             "location": "Poloha a úroveň přiblížení",
@@ -127,9 +124,7 @@ Oskari.registerLocalization({
         "NotLoggedView": {
             "text": "Před použitím funkce pro vkládání je třeba se přihlásit.",
             "signup": "Přihlášení",
-            "signupUrl": "/web/cs/login",
-            "register": "Registrace",
-            "registerUrl": "/web/cs/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrace"
         },
         "StartView": {
             "text": "Zobrazení mapy, které jste právě vytvořili na svém webu nebo webu vašeho zaměstnavatele, můžete vložit.",
@@ -154,13 +149,7 @@ Oskari.registerLocalization({
             "show": "Zobrazit",
             "hide": "Skrýt",
             "hidden": "Mapa byla dočasně skryta.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publikace povolena",
-                    "tooltip": "Mapová vrstva může být publikována ve vloženém mapovém okně a počet uživatelů za týden může být omezen."
-                }
-            }
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {

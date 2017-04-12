@@ -10,19 +10,19 @@ Oskari.registerLocalization(
             "generic": "Gabim i sistemit! Ju lutem provoni më vonë",
             "loadFailed": "Gabim në ngrakimin e shtresave të hartësI Ringarko faqen në shfletuesin tuaj dhe zgjedh shtresat e hartës",
             "noResults": "Kërkimi u përfundua pa rezultate",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
         "loading": "Ngarkim...",
         "filter": {
             "text": "Kërko në shtresat e hartës",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Sipas temës (subjektit)",
             "organization": "Sipas ofruesve të të dhënave",
             "published": "Përdoruesit",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Shtresa e hartës së publikuar",
@@ -60,14 +60,14 @@ Oskari.registerLocalization(
             }
         },
         "buttons": {
-            "ok": "NOT TRANSLATED"
+            "ok": ""
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
@@ -81,5 +81,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

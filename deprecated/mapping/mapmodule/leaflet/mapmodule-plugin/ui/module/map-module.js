@@ -118,7 +118,7 @@ define(["bundles/framework/mapmodule-plugin/ui/module/map-module"], function(Map
                 console.log("MOVEEND", e, extent, center, zoom, lonlat);
 
                 me._updateDomainImpl();
-                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getZoom(), false, me.getMapScale());
+                var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getZoom(), me.getMapScale());
                 sandbox.notifyAll(sboxevt);
 
             });
@@ -407,7 +407,7 @@ define(["bundles/framework/mapmodule-plugin/ui/module/map-module"], function(Map
          this._updateDomainImpl();
          var scale = this.getMapScale();
          var zoom = this._map.getZoom();
-         var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], zoom, false, scale);
+         var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], zoom, scale);
          sandbox.notifyAll(evt);
          */
             var sandbox = this._sandbox;

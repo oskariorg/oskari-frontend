@@ -9,8 +9,8 @@ Oskari.registerLocalization(
             "style": "Stiil",
             "show": "Näita",
             "hide": "Peida",
-            "hidden": "Kaart on ajutiselt peidetud.",
-            "out-of-scale": "Selle kaardilehe andmeid ei saa valitud mõõtkavas näidata.",
+            "hidden": "Kaardikiht on ajutiselt peidetud.",
+            "out-of-scale": "Selle kaardikihi andmeid ei saa valitud mõõtkavas näidata.",
             "move-to-scale": "Liigu sobivasse mõõtkavasse.",
             "out-of-content-area": "Kaardikiht ei sisalda antud asukohas andmeid.",
             "move-to-content-area": "Liigu teise asukohta.",
@@ -18,13 +18,13 @@ Oskari.registerLocalization(
             "object-data": "Objekti andmed",
             "rights": {
                 "notavailable": "Avalikustamine keelatud",
-                "guest": "Selle kaardikihi avalikustamiseks logige sisse.",
+                "guest": "Kaardikihi avalikustamiseks lõimkaardil logige sisse.",
                 "loggedin": "Avalikustamine lubatud.",
                 "official": "Avalikustamine lubatud ametkondlikuks kasutuseks.",
                 "need-login": "Logige sisse, et avalikustada lõimkaarti.",
                 "can_be_published_by_provider": {
-                    "label": "Avalikustamine lubatud andmete tarnijale.",
-                    "tooltip": "Selle kaardikihi avalikustamiseks on vaja andmete tarnija nõusolekut. Kui olete andmete tarnija, siis pöörduge toe pakkuja poole ja küsige nõusolekut."
+                    "label": "Avalikustamine lubatud andmete valdajale.",
+                    "tooltip": "Selle kaardikihi avalikustamiseks lõimkaardil on vajalik andmevaldaja nõusolekut. Kui olete andmevaldaja, siis pöörduge toe pakkuja poole ja küsige nõusolekut."
                 },
                 "can_be_published": {
                     "label": "Avaldamine lubatud.",
@@ -36,11 +36,11 @@ Oskari.registerLocalization(
                 },
                 "no_publication_permission": {
                     "label": "Avalikustamine keelatud.",
-                    "tooltip": "Andmete tarnija ei ole andnud õigust seda kaardikihti lõinkaardil kasutada."
+                    "tooltip": "Andmete valdaja ei ole andnud õigust seda kaardikihti lõimkaardil kasutada."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Avalikustamine lubatud.",
-                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil vaid ametkondadele. Kontakteeru tarnijaga."
+                    "label": "Avalikustamine lubatud ametkondlikuks kasutuseks.",
+                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil vaid ametkondlikuks kasutuseks.Kontakteeru andmevaldajaga."
                 }
             },
             "tooltip": {
@@ -49,11 +49,11 @@ Oskari.registerLocalization(
                 "type-wfs": "Andmetoode"
             },
             "refresh_load": {
-                "tooltip": "Värskenda kaardikihti, andmed ei uuene automaatselt."
+                "tooltip": "Värskenda kaardikihti, andmed ei uuene kaardil automaatselt."
             },
             "filter": {
                 "title": "Filter",
-                "description": "Filter values on map layer:",
+                "description": "Filtreeri kaardikihi andmed:",
                 "cancelButton": "Tühista",
                 "clearButton": "Tühista filter",
                 "refreshButton": "Värskenda filter",
@@ -61,50 +61,49 @@ Oskari.registerLocalization(
                 "removeFilter": "Eemalda filter",
                 "bbox": {
                     "title": "Filter",
-                    "on": "Only features visible on the map",
+                    "on": "Ainult objektid kaardil nähtavad",
                     "off": "Kõik objektid"
                 },
                 "clickedFeatures": {
                     "title": "Objekti filter",
-                    "label": "Only features selected on the map"
+                    "label": "Ainult objektid kaardil nähtavad"
                 },
                 "values": {
                     "title": "Andmefilter",
                     "placeholders": {
-                        "case-sensitive": "Filter on tõusutundlik(eristab suur-ja väiketähti)",
-                        "attribute": "Attribute",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Value"
+                        "case-sensitive": "Filter on tõstutundlik(eristab suur-ja väiketähti)",
+                        "attribute": "Atribuut",
+                        "boolean": "Loogiline operaator",
+                        "operator": "Operaator",
+                        "attribute-value": "Väärtus"
                     },
-                    "equals": "is equal to",
-                    "like": "is like",
-                    "notEquals": "is not equal to",
-                    "notLike": "is not like",
-                    "greaterThan": "is greater than",
-                    "lessThan": "is smaller than",
-                    "greaterThanOrEqualTo": "is greater than or equal to",
-                    "lessThanOrEqualTo": "is smaller than or equal to"
+                    "equals": "on võrdne",
+                    "like": "on sarnane",
+                    "notEquals": "ei ole võrdne",
+                    "notLike": "ei ole sarnane",
+                    "greaterThan": "on suurem kui",
+                    "lessThan": "on väiksem kui",
+                    "greaterThanOrEqualTo": "on suurem/võrdne",
+                    "lessThanOrEqualTo": "on väiksem/võrdne"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Use statistical values",
-                    "aggregateValueSelectTitle": "Select Statistical Values",
-                    "selectAggregateAnalyse": "Select analysis layer",
-                    "selectIndicator": "Select property",
-                    "selectReadyButton": "Close",
-                    "getAggregateAnalysisFailed": "The statistical values could not be fetched.",
-                    "noAggregateAnalysisPopupTitle": "Statistical Values Not Found",
-                    "noAggregateAnalysisPopupContent": "The statistical values are not computed for this map layer. You can compute them in the Analysis function."
+                    "addAggregateFilter": "Kasuta statistilisi parameetreid",
+                    "aggregateValueSelectTitle": "Määra statistilised parameetrid",
+                    "selectAggregateAnalyse": "Määra analüüsikiht",
+                    "selectIndicator": "Määra objekt",
+                    "selectReadyButton": "Sulge",
+                    "getAggregateAnalysisFailed": "Statistikat ei kuvata",
+                    "noAggregateAnalysisPopupTitle": "Statistikat ei leitud",
+                    "noAggregateAnalysisPopupContent": "Antud kihile ei ole stetistikat arvutatud. Saate seda teha kasutades analüüsi funktsiooni."
                 },
                 "validation": {
-                    "title": "Features could not be filtered. The following errors occurred:",
-                    "attribute_missing": "The attribute is missing.",
-                    "operator_missing": "The operator is missing.",
-                    "value_missing": "The value is missing.",
-                    "boolean_operator_missing": "The logical operator is missing."
+                    "title": "Obkete ei saa filtreerida. Esinesid alljärgnevad probleemid:",
+                    "attribute_missing": "Atribuut puudub.",
+                    "operator_missing": "Operaator puudub",
+                    "value_missing": "Väärtus puudub",
+                    "boolean_operator_missing": "Loogiline operaator puudub."
                 }
             }
         }
     }
-}
-);
+});

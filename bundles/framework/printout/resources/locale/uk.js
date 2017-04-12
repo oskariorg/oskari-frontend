@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Друкувати вигляд карти",
         "flyouttitle": "Друкувати вигляд карти",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "",
         "BasicView": {
             "title": "Друкувати вигляд карти",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "",
+                    "sv": "",
+                    "en": ""
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "size": {
                 "label": "Розмір",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Друк",
                 "ok": "ОК",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Скасувати"
             },
             "location": {
@@ -118,8 +118,8 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "NOT TRANSLATED",
@@ -157,11 +157,11 @@ Oskari.registerLocalization(
             "help": "Довідка",
             "error": {
                 "title": "Помилка",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Немає доступних довідок",
                 "saveFailed": "Друк карти не виконано| Спробуйте пізніше",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

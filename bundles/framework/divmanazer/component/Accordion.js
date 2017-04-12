@@ -19,6 +19,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
     }, {
 
         /**
+         * @method getPanels
+         * Returns current panels array
+         * @return {Oskari.userinterface.component.AccordionPanel[]} panels
+         */
+        getPanels: function () {
+            return this.panels || [];
+        },
+        /**
          * @method addPanel
          * Adds panel to this accordion
          * @param {Oskari.userinterface.component.AccordionPanel} panel

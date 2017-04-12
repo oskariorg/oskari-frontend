@@ -44,7 +44,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @method init
     * @public
     */
-    init: function(pdata){
+    init: function(pdata) {
         var me = this,
             data = pdata;
 
@@ -55,6 +55,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 }
             });
         }
+    },
+    /**
+     * If the tool requires space for the UI next to the map return the required height/width
+     * @return {Object} object with keys height and width used for map size calculation
+     */
+    getAdditionalSize : function() {
+        return {
+            height: 0,
+            width : 0
+        };
     },
     /**
     * Get tool object.

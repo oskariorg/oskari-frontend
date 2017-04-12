@@ -80,10 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 return;
             }
 
-            var helpContentPart = 'help.contentPart';
-            if (me.getLocalization('help') &&
-                me.getLocalization('help').contentPart) {
-                helpContentPart = me.getLocalization('help').contentPart;
+            var helpContentPart = 'body';
+            if (me.getLocalization('help')) {
+                helpContentPart = me.getLocalization('help').contentPart || helpContentPart;
             }
 
 

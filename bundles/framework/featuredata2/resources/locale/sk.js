@@ -9,13 +9,13 @@ Oskari.registerLocalization(
         "showmore": "Zobraziť",
         "nodata": "Objektové údaje nie sú dostupné pre vybrané mapové vrstvy.",
         "featureNameAll": "Typ údajov",
-        "errorscale": "Objektové údaje nie sú dostupné pri tejto mierke. Prosím, použite bežec  a zvoľte inú mierku.",
+        "errorscale": "Objektové údaje nie sú dostupné pri tejto mierke. Prosím, použite bežec mierky  a zvoľte inú mierku.",
         "errordata": "Objektové údaje sú neplatné. Prosím, aktualizujte údaje miernym pohybom mapy.",
         "columnSelectorTooltip": "Vybrať viditeľné stĺpce",
         "featureDataPopup": "Štatistické hodnoty",
         "selectionTools": {
             "title": "Vybrať objekty",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "Od najvyššej vrstvy",
             "selectAll": "Od všetkých vrstiev",
             "link": {
@@ -62,29 +62,29 @@ Oskari.registerLocalization(
             "object-data": "Údaje o objektoch",
             "rights": {
                 "notavailable": "Zverejnenie je zakázané",
-                "guest": "Na zverejnenie mapovej vrstvy v uloženej mape sa prosím prihláste.",
+                "guest": "Na zverejnenie mapovej vrstvy vo vloženej mape sa prosím prihláste.",
                 "loggedin": "Zverejnenie je povolené",
                 "official": "Zverejnenie iba pre úrady",
-                "need-login": "Na zverejnenie uloženej mapy sa musíte prihlásiť.",
+                "need-login": "Na zverejnenie vloženej mapy sa musíte prihlásiť.",
                 "can_be_published_by_provider": {
                     "label": "Zverejnenie je povolené pre poskytovateľov údajov",
-                    "tooltip": "Iba poskytovatelia údajov môžu zverejniť mapovú vrstvu do uloženej mapy. Pokiaľ ste poskytovateľ údajov, kontaktujte prosím podporný servis."
+                    "tooltip": "Iba poskytovatelia údajov môžu zverejniť mapovú vrstvu do vloženej mapy. Pokiaľ ste poskytovateľ údajov, kontaktujte prosím podporný servis."
                 },
                 "can_be_published": {
                     "label": "Zverejnenie je povolené",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape. Limit využitia nie je obmedzený."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Limit využitia nie je obmedzený."
                 },
                 "can_be_published_map_user": {
                     "label": "Zverejnenie je povolené",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape. Limit využitia môže byť obmedzený."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Limit využitia môže byť obmedzený."
                 },
                 "no_publication_permission": {
                     "label": "Zverejnenie je zakázané",
-                    "tooltip": "Mapová vrstva nemôže byť zverejnená v uloženej mape. Poskytovateľ údajov nedal povolenie na zverejnenie."
+                    "tooltip": "Mapová vrstva nemôže byť zverejnená vo vloženej mape. Poskytovateľ údajov nedal povolenie na zverejnenie."
                 },
                 "can_be_published_by_authority": {
                     "label": "Zverejnenie je povolené iba pre úrady.",
-                    "tooltip": "Mapová vrstva môže byť zverejnená v uloženej mape iba pre úrady. Pokiaľ ste z úradu, kontaktujte prosím podporný servis."
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape iba pre úrady. Pokiaľ ste z úradu, kontaktujte prosím podporný servis."
                 }
             },
             "tooltip": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Údaje obsahujú hodnoty nepovolených objektov"
         }
     }
-}
-);
+});

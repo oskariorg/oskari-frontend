@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.statehandler.request.SetStateRequest
  * Requests state to be set
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SetStateRequest',

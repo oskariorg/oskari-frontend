@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Lagring av tilbakemelding var vellykket."
         }
     }
-}
-);
+});

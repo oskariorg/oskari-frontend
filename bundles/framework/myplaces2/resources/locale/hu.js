@@ -14,89 +14,89 @@ Oskari.registerLocalization(
             "loginShort": "Használathoz jelentkezzen be"
         },
         "tab": {
-            "title": "NOT TRANSLATED",
-            "nocategories": "NOT TRANSLATED",
+            "title": "",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
-            "addCategory": "NOT TRANSLATED",
-            "editCategory": "NOT TRANSLATED",
-            "deleteCategory": "NOT TRANSLATED",
-            "edit": "NOT TRANSLATED",
-            "delete": "NOT TRANSLATED",
+            "addCategory": "",
+            "editCategory": "",
+            "deleteCategory": "",
+            "edit": "",
+            "delete": "",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "name": "",
+                "desc": "",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
+                "edit": "",
+                "delete": ""
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
-                    "btnDelete": "NOT TRANSLATED",
-                    "btnCancel": "NOT TRANSLATED",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "title": "",
+                    "confirm": "",
+                    "btnDelete": "",
+                    "btnCancel": "",
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
-                "noResult": "NOT TRANSLATED"
+                "edit": "",
+                "noResult": ""
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Pont hozzáadása",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Mentheti vagy hozzáadhat még több pontot ugyanahhoz a rajzhoz.",
                 "edit": "Pontok mozgatása kattintással és húzással",
                 "save": "A hely mentése"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Vonal hozzáadása",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Mentheti vagy hozzáadhat még több vonalat ugyanahhoz a rajzhoz.",
                 "edit": "A vonal szerkesztése töréspontjainak kattintásával és húzásával.",
                 "save": "Alakzat mentése",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Terület hozzáadása",
-                "add": "NOT TRANSLATED",
+                "add": "",
                 "next": "Mentheti vagy hozzáadhat még több poligont ugyanahhoz a rajzhoz.",
                 "edit": "Az alakzat területének szerkesztése az élvonalak törésponjainak kattintásával és húzásával.",
                 "save": "Alakzat mentése",
-                "noResult": "NOT TRANSLATED"
+                "noResult": ""
             }
         },
         "buttons": {
             "ok": "OK",
             "cancel": "Mégse",
-            "close": "NOT TRANSLATED",
+            "close": "",
             "finish": "Rajzolás befejezése",
             "save": "Mentés",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Helyek mozgatása és törlése",
             "deleteCategory": "Törlés",
             "deleteCategoryAndPlaces": "Osztály és helyek törlése",
@@ -116,26 +116,25 @@ Oskari.registerLocalization(
                 "placeholder": "Adja meg a hely leírását."
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Térképréteg",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
-                "placename": "NOT TRANSLATED",
-                "placedesc": "NOT TRANSLATED",
-                "image": "NOT TRANSLATED"
+                "label": "",
+                "placename": "",
+                "placedesc": "",
+                "image": ""
             },
             "edit": {
                 "title": "Térképréteg szerkesztése",
@@ -175,102 +174,102 @@ Oskari.registerLocalization(
                 "cancel": "Vissza"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
-                "save": "NOT TRANSLATED",
-                "cancel": "NOT TRANSLATED"
+                "save": "",
+                "cancel": ""
             }
         },
         "notification": {
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "A rétegleírás nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek.",
             "dotSize": "A pont mérete nem felel meg a méret korlátoknak (1-50).",
             "dotColor": "Rossz pontszín.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "A vonal mérete nem felel meg a méretkorlátoknak (1-50).",
             "lineColor": "Rossz vonalszín.",
             "areaLineSize": "A területt mérete nem felel meg a méretkorlátoknak (0-50).",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Rossz kitöltőszín."
         }
     }
-}
-);
+});

@@ -7,7 +7,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
      * @method create called automatically on construction
      * @static
      */
-    function () {
+    function (colorService) {
+        this._colorService = colorService;
     }, {
         __name: "StatsGrid.ClassificationService",
         __qname: "Oskari.statistics.statsgrid.ClassificationService",
@@ -31,6 +32,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             // values recognized by the code (and geostats)
             mode : ['distinct', 'discontinuous']
         },
+        getAvailableMethods: function() {
+            return limits.method.slice(0);
+        },
+        getAvailableModes: function() {
+            return limits.mode.slice(0);
+        },
+        getAvailableOptions : function(data) {
+            var validOpts = {};
+            var list = this._getDataAsList(data);
+            validOpts.maxCount = list.length -1;
+            return validOpts;
+        },
         /**
          * Classifies given dataset.
          * Returns an object like :
@@ -44,7 +57,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          *         mean : <mean value in data>
          *     },
          *     getGroups : <function to return keys in data grouped by value ranges, takes an optional param index to get just one group>,
-         *     getIndex : <function to return a group index for data - TODO: is this needed since we have getGroups?>,
+         *     getIndex : <function to return a group index for data
          *     createLegend : <function to create html-legend for ranges, takes colorset and optional title as params>
          * }
          * Options can include:
@@ -64,11 +77,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             var opts = this._validateOptions(options);
             var list = this._getDataAsList(indicatorData);
-            if(list.length < 2) {
+            if(list.length < 3) {
                 return;
             }
-            if(opts.count > list.length) {
-                opts.count = list.length;
+            if(opts.count >= list.length) {
+                opts.count = list.length -1;
             }
 
             if (this._hasNonNumericValues(list)) {
@@ -77,6 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             var stats = new geostats(list);
+            stats.silent = true;
             stats.setPrecision(opts.precision);
 
             var a = stats.getClassQuantile(opts.count);
@@ -87,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 response.bounds = stats.getJenks(opts.count);
             } else if (opts.method === 'quantile') {
                 // Kvantiilit
-                response.bounds = stats.getQuantile(classes);
+                response.bounds = stats.getQuantile(opts.count);
             } else if (opts.method === 'equal') {
                 // Tasavälit
                 response.bounds = stats.getEqInterval(opts.count);
@@ -139,10 +153,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             response.getIndex = function(value) {
                 return stats.getRangeNum(value);
             };
-            // TODO: do we need createLegend?
+            // createLegend
             response.createLegend = function(colors, title) {
                 stats.setColors(colors);
-                return stats.getHtmlLegend(null, title || '', true, null, opts.mode);
+                var legendHTML = stats.getHtmlLegend(null, title || '', true, null, opts.mode);
+                return legendHTML;
             };
             return response;
         },
@@ -154,17 +169,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         _validateOptions : function(options) {
             var opts = options || {};
             opts.count = opts.count || this.limits.count.def;
+            opts.type = opts.type || 'seq';
 
             // precision is an integer between 0-20. Will be computed automatically by geostats if no value is set
             //opts.precision = opts.precision || 1;
-
-            if(opts.count < this.limits.count.min) {
+            var range = this._colorService.getRange(opts.type);
+            if(opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups
-                throw new Error('Requires atleast ' + this.limits.count.min + ' partitions. Count was ' + opts.count);
+                throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
             }
-            if(opts.count > this.limits.count.max) {
-                // we only have 11 colors in colorsets
-                throw new Error('Max count is ' + this.limits.count.max + '. Count was ' + opts.count);
+            if(opts.count > range.max) {
+                opts.count = range.max;
             }
             // maybe validate max count?
             opts.method = opts.method || this.limits.method[0];

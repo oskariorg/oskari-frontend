@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Môžete zväčšiť alebo zmenšiť mapu použitím posuvníka mierky alebo prostredníctvom plusovej a mínusovej ikony umiestnených vedľa posuvníka. Náš tip:  takisto môžete zväčšiť/zmenšiť mapu použitím plusovej/mínusovej klávesy, alebo priblížiť dvojklikom do mapy. Na priblíženie/vzdialenie je možné použiť aj koliesko myši"
         }
     }
-}
-);
+});

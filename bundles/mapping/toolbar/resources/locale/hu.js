@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Térképnézet link"
             },
-            "print": {
-                "tooltip": "Nyomtatás"
-            },
             "history": {
                 "reset": "Vissza az alapértelmezett nézethez",
                 "back": "Vissza",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

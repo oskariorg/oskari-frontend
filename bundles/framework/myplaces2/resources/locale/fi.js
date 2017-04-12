@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Täyttöväri on virheellinen. Väriarvojen on oltava välillä 0-255."
         }
     }
-}
-);
+});

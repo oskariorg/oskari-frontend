@@ -163,6 +163,7 @@ body {
 }
 
 .oskari-flyoutcontent {
+	position:relative;
 	margin: 0;
 	padding: 20px 20px 20px 25px;
 	border: 0;
@@ -266,7 +267,7 @@ body {
   left: 100%;
   width:16px;
   height:100px;
-  bottom: 0;
+  top: 0;
   float:right;
   background-color: #333438;
 
@@ -285,6 +286,7 @@ body {
   transform: rotate(270deg);
   transform-origin: center;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 

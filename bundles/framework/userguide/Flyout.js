@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
                     newtab = me.userGuideTabs[i];
                     tab = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                     tab.setTitle(newtab.title);
-                    tab.setContent(me.getLocalization('help').loadingtxt);
+                    tab.setContent(me.getLocalization('flyout').loadingtxt);
                     tab.tagsTxt = newtab.tags;
 
                     me.tabContainer.addPanel(tab);

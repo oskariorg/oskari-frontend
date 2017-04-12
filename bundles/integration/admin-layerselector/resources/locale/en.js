@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Map Layers",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -116,9 +116,9 @@ Oskari.registerLocalization(
             "styleDesc": "The style options are fetched automatically from the GetCapabilities response. Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
             "importStyle": "New sld style",
             "addNewStyle": "Add new SLD style",
-            "sldStyleName":"Style name",
-            "sldFileContentDesc":"Copy/paste SLD file content (xml) to text area",
-            "sldFileContent":"SLD file content",
+            "sldStyleName": "Style name",
+            "sldFileContentDesc": "Copy/paste SLD file content (xml) to text area",
+            "sldFileContent": "SLD file content",
             "sldStylesFetchError": "Couldn't get SLD styles",
             "addSldStyleDesc": "Select styles for the current layer",
             "addSldStyle": "Sld style selection",
@@ -135,7 +135,7 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Give the URL address of the map legend.",
             "legendUrl": "Legend URL selection",
             "legendUrlDesc": "Select default legend via legend url selection",
-            "noServiceLegendUrl":"Legend URL is not in wms service legends",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Additional GFI info",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
@@ -199,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});

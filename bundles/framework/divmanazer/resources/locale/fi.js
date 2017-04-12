@@ -243,6 +243,7 @@ Oskari.registerLocalization(
                     "title": "Lisäasetukset",
                     "dataSource": "Tietolähde",
                     "metadata": "Linkki metatietoihin",
+                    "layerName": "Karttatason nimi",
                     "export_selection": "Tuo vain valitut kohteet"
                 },
                 "columns": {
@@ -326,5 +327,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

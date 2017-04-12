@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         me._layer = me.instance.sandbox.findMapLayerFromAllAvailable(me.instance.conf.defaultLayerId);
                         if (me._layer) {
                             // add layer to selection if it's available
-                            me.instance.sandbox.postRequestByName('AddMapLayerRequest', [me._layer.getId(), false, me._layer.isBaseLayer()]);
+                            me.instance.sandbox.postRequestByName('AddMapLayerRequest', [me._layer.getId()]);
                         }
                     }
                     if (me._layer) {

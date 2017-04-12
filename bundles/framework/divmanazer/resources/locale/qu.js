@@ -1,10 +1,11 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "qu",
     "key": "DivManazer",
     "value": {
         "LanguageSelect": {
             "title": "Simi",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "languages": {
                 "af": "Afrikaans Simi",
                 "am": "Amarico Simi",

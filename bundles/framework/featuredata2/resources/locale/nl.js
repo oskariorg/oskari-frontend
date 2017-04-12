@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Statistical values",
         "selectionTools": {
             "title": "Selecteer kenmerken op de kaart",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "From topmost layer",
             "selectAll": "Selecteer van alle lagen",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
-}
-);
+});

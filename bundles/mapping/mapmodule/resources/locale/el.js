@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "MapModule",
     "value": {
@@ -23,7 +24,7 @@ Oskari.registerLocalization({
                 "terms": "Όροι χρήσης",
                 "dataSources": "Πηγές δεδομένων",
                 "layersHeader": "Επίπεδα χάρτη",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": ""
             },
             "DataSourcePlugin": {
                 "link": "Πηγή δεδομένων",
@@ -42,7 +43,7 @@ Oskari.registerLocalization({
             "SearchPlugin": {
                 "placeholder": "Αναζήτηση τοποθεσιών",
                 "search": "Αναζήτηση",
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "close": "Κλείσιμο αποτελεσμάτων αναζήτησης",
                 "noresults": "Δεν βρέθηκαν αποτελέσματα",
                 "toomanyresults": "Βρέθηκαν πάνω από 100 αποτελέσματα. Παρακαλούμε ξανακαθορίστε την αναζήτησή σας λεπτομερέστερα.",
@@ -52,26 +53,26 @@ Oskari.registerLocalization({
             },
             "GetInfoPlugin": {
                 "title": "Επίπεδα χάρτη",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
+                "layer": "",
+                "places": "",
                 "description": "Περιγραφή",
-                "link": "NOT TRANSLATED",
+                "link": "",
                 "name": "Όνομα"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "",
                 "history": {
-                    "reset": "NOT TRANSLATED",
+                    "reset": "",
                     "back": "Πίσω",
                     "next": "Επόμενο"
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "",
+                    "area": ""
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }

@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTableHeader = jQuery(
             '<th><a href="JavaScript:void(0);"></a></th>'
         );
-        this.templateTableGroupingHeader = jQuery('<th class="grouping"></th>');
+        this.templateTableGroupingHeader = jQuery('<th class="grouping"><div class="paging previous"></div><div class="title"></div><div class="paging next"></div></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
@@ -68,6 +68,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
         /** Grouping headers */
         this._groupingHeaders = null;
+
+        /* Current page. Used to keep track current page when sorting cols */
+        this._currentPage = {};
 
         Oskari.makeObservable(this);
     }, {
@@ -201,6 +204,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setColumnValueRenderer: function (fieldName, renderer) {
             this.valueRenderer[fieldName] = renderer;
         },
+        /**
+         * @method  @public getVisibleFields Get visible fields
+         * @return {String[]} field names array
+         */
         getVisibleFields: function () {
             return this.fieldNames;
         },
@@ -404,6 +411,212 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setGroupingHeader: function(headers) {
             this._groupingHeaders = headers;
         },
+
+        /**
+         * @method  @private _selectActivePage Select active to visible page
+         */
+        _selectActivePage: function(){
+            var me = this;
+            // Safety checks
+            if(!this.table || !me._groupingHeaders) {
+                return;
+            }
+            var selected = this.table.find('th.selected');
+            if(!selected.is(':visible')) {
+                var colIndex = this.table.find('tr th:not(.grouping)').index(selected);
+                var cols = 0;
+
+                // Resolve wanted page to visible
+                selected.parent().parent().find('tr.grouping th').each(function(){
+                    var groupHeader = jQuery(this);
+                    if(!groupHeader.attr('colspan')){
+                        cols++;
+                    } else {
+                        cols += Number(groupHeader.attr('colspan'));
+                    }
+                    var maxCols = Number(groupHeader.attr('data-max-cols'));
+                    var groupStartCol = Number(groupHeader.attr('data-start-col'));
+
+                    // Founded matching group header
+                    if(colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
+                        // resolve wanted page
+                        var wantedPage = (colIndex - (colIndex % maxCols)) / maxCols;
+                        if(colIndex % maxCols > 0) {
+                            wantedPage += 1;
+                        }
+                        groupHeader.attr('data-page',wantedPage);
+                        me._changePage(groupHeader);
+                    }
+                });
+            }
+        },
+
+        /**
+         * @method  @private _changePage  Change page
+         * @param  {Object} groupHeader group header
+         */
+        _changePage: function(groupHeader){
+            var me = this;
+
+            if(me._groupingHeaders && groupHeader.attr('data-group-cols')) {
+                var page = Number(groupHeader.attr('data-page'));
+                var groupIndex = groupHeader.attr('data-header-index');
+                me._currentPage[groupIndex] = page;
+                var maxCols = Number(groupHeader.attr('data-max-cols'));
+                var maxPages = Number(groupHeader.attr('data-max-page'));
+                var groupCols = Number(groupHeader.attr('data-group-cols'));
+                var groupStartCol = Number(groupHeader.attr('data-start-col'));
+                var table = groupHeader.parents('table');
+                var next = groupHeader.find('.paging.next');
+                var previous = groupHeader.find('.paging.previous');
+                var c;
+
+                // hide grouping cols
+                for(var i=groupStartCol;i<groupCols+groupStartCol;i++){
+                    var content = table.find('tr th:not(.grouping):nth-child('+i+') ,td:not(.grouping):nth-child('+i+')');
+                    content.hide();
+                }
+
+                var pagingHandler = function(groupHeader, data) {
+                    var headerIndex = Number(groupHeader.attr('data-header-index'));
+                    var header = me._groupingHeaders[headerIndex];
+                    // If header has paging handler then do it
+                    if(typeof header.pagingHandler === 'function') {
+                        header.pagingHandler(groupHeader.find('.title'), data);
+                    }
+                    // otherwise show default text, for example: "2-4/5"
+                    else if(!header.text) {
+                        groupHeader.find('.title').html(data.visible.start + '-' + data.visible.end + '/' + data.count);
+                    }
+                };
+
+                // Check buttons visibility
+                var checkPagingButtonsVisiblity = function(){
+                    var page = Number(groupHeader.attr('data-page'));
+                    var next = groupHeader.find('.paging.next');
+                    var previous = groupHeader.find('.paging.previous');
+                    next.removeClass('hidden');
+                    previous.removeClass('hidden');
+                    if(page===1) {
+                        previous.addClass('hidden');
+                    } else if(page === Number(groupHeader.attr('data-max-page'))){
+                        next.addClass('hidden');
+                    }
+                };
+
+                var visibleCols = Array.apply(null, {length: groupCols}).map(Number.call, Number);
+
+                // Get visible cols and shows them
+                // If page is first then show only first cols
+                if(page === 1) {
+                    visibleCols = visibleCols.slice(0, maxCols);
+                }
+                // else page is latest
+                else if (page === maxPages) {
+                    visibleCols = visibleCols.slice(Math.max(groupCols - maxCols, 1));
+                }
+                // else page is between first and latest
+                else {
+                    visibleCols = visibleCols.slice((page-1) * maxCols, page * maxCols);
+                }
+
+                // Show page cols
+                visibleCols.forEach(function(element){
+                    var colIndex = element + groupStartCol;
+                    var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
+                    currentColEl.show();
+                });
+
+
+                if(visibleCols.length < groupCols) {
+                    pagingHandler(groupHeader, {
+                        visible: {
+                            start: visibleCols[0] + 1,
+                            end: visibleCols[visibleCols.length-1] + 1
+                        },
+                        count: groupCols,
+                        page: page,
+                        maxPages: maxPages
+                    });
+
+                    checkPagingButtonsVisiblity();
+                }
+
+
+            }
+        },
+        /**
+         * @method  @private_checkPaging Check table paging
+         * @param  {Object} table jQuery table dom
+         */
+        _checkPaging: function(table){
+            var me = this;
+            if(me._groupingHeaders) {
+                // Paging handlers
+                var prevHandler = function(evt) {
+                    evt.stopPropagation();
+                    var groupHeader = jQuery(this).parents('th.grouping');
+                    var page = Number(groupHeader.attr('data-page')) - 1;
+                    if(page < 1) {
+                        page = 1;
+                    }
+                    groupHeader.attr('data-page', page);
+                    me._changePage(groupHeader);
+                };
+
+                var nextHandler = function(evt) {
+                    evt.stopPropagation();
+                    var groupHeader = jQuery(this).parents('th.grouping');
+                    var page = Number(groupHeader.attr('data-page')) + 1;
+                    if(page > groupHeader.attr('data-max-page')) {
+                        page = groupHeader.attr('data-max-page');
+                    }
+                    groupHeader.attr('data-page', page);
+                    me._changePage(groupHeader);
+                };
+                table.find('th.grouping').each(function(){
+                    var groupHeader = jQuery(this);
+                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
+                    var maxCols = groupHeader.attr('data-max-cols');
+                    var next = groupHeader.find('.paging.next');
+                    var previous = groupHeader.find('.paging.previous');
+                    if(!!maxCols && groupCols > maxCols){
+                        if(me._groupingHeaders.length > 1 && i === 0) {
+                            next.addClass('hidden');
+                        } else if(me._groupingHeaders.length > 1 && i > 0) {
+                            previous.addClass('hidden');
+                        }
+
+                        var maxPage = (groupCols - (groupCols % maxCols)) / maxCols;
+                        if(groupCols % maxCols > 0) {
+                            maxPage += 1;
+                        }
+                        groupHeader.attr('data-group-cols', groupCols);
+                        groupHeader.attr('data-max-page', maxPage);
+                        groupHeader.attr('data-page', maxPage);
+
+                        var groupIndex = groupHeader.attr('data-header-index');
+
+                        // Bind events
+                        next.unbind('click');
+                        next.bind('click', nextHandler);
+                        previous.unbind('click');
+                        previous.bind('click', prevHandler);
+
+                        if(me._currentPage[groupIndex]) {
+                            groupHeader.attr('data-page', me._currentPage[groupIndex]);
+                            // release current page information
+                            delete me._currentPage[groupIndex];
+                        }
+
+                        me._changePage(groupHeader);
+                    } else {
+                        next.remove();
+                        previous.remove();
+                    }
+                });
+            }
+        },
         /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
@@ -561,7 +774,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         groupHeader.addClass(h.cls);
                     }
                     if(typeof h.text === 'string'){
-                        groupHeader.html(h.text);
+                        groupHeader.find('.title').html(h.text);
                     }
 
                     if(typeof h.colspan === 'number') {
@@ -576,6 +789,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         var lastColspan = (fullFieldNames.length - cols) + 1;
                         groupHeader.attr('colspan', lastColspan);
                     }
+
+                    if(h.maxCols) {
+                        groupHeader.attr('data-max-cols', h.maxCols);
+                        groupHeader.attr('data-start-col', cols);
+                        groupHeader.attr('data-header-index', i);
+                    }
+
                     row.append(groupHeader);
                 }
                 tableHeader.prepend(row);
@@ -742,6 +962,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }, function () {
                 jQuery(this).parents('tr').bind('click', rowClicked);
             });
+
+            me._checkPaging(table);
         },
         /**
          * @private @method _renderColumnSelector
@@ -966,7 +1188,31 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 exportButton.setHandler(function () {
                     var values = exportForm.getValues({});
                     values.data = me._getTableData(values.columns !== 'all', values.export_selection);
-                    exportForm.getElement().elements.layerName.value = me._getLayerName();
+
+                    // data at the end of the file
+                    var additionalInfo = [];
+                    if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
+                        additionalInfo.push({
+                            type : 'datasource',
+                            name : me._loc['export'].additional.dataSource,
+                            value : exportForm.getElement().elements.dataSource.value
+                        });
+                    }
+                    additionalInfo.push({
+                        type : 'layerName',
+                        name : me._loc['export'].additional.layerName,
+                        value : me._getLayerName()
+                    });
+                    if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
+                        additionalInfo.push({
+                            type : 'metadata',
+                            name : me._loc['export'].additional.metadata,
+                            value : exportForm.getElement().elements.metadata.value
+                        });
+                    }
+
+                    exportForm.getElement().elements.filename.value = me._getLayerName();
+                    exportForm.getElement().elements.additionalData.value = JSON.stringify(additionalInfo);
                     exportForm.getElement().elements.data.value = JSON.stringify(values.data);
                     exportForm.submit();
                     me.exportPopup.close(true);
@@ -1028,14 +1274,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 delimiter = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup'),
                 additional = Oskari.clazz.create('Oskari.userinterface.component.Fieldset'),
                 input,
-                layerName,
+                filename,
                 me = this,
                 loc = me._loc['export'];
 
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');
             form.setAction(
-                Oskari.getSandbox().getAjaxUrl() + 'action_route=ExportTableFile'
+                Oskari.getSandbox().getAjaxUrl('ExportTableFile')
             );
             form.setMethod('POST');
 
@@ -1104,7 +1350,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             input.setName('dataSource');
             input.setTitle(loc.additional.dataSource);  // Doesn't go to backend in form submit
-            input.setValue(loc.additional.dataSource + ':' + this.getDataSource());
+            input.setValue(this.getDataSource());
             input.setEnabled(!!this.getDataSource());
             input.setChecked(!!this.getDataSource());
             additional.addComponent(input);
@@ -1114,7 +1360,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
             input.setName('metadata');
             input.setTitle(loc.additional.metadata);
-            input.setValue(loc.additional.metadata + ':' + this.getMetadataLink());
+            input.setValue(this.getMetadataLink());
             input.setEnabled(!!this.getMetadataLink());
             input.setChecked(!!this.getMetadataLink());
             additional.addComponent(input);
@@ -1132,15 +1378,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             input.name = 'data';
             input.type = 'hidden';
 
-            layerName = document.createElement('input');
-            layerName.name = 'layerName';
-            layerName.type = 'hidden';
+            filename = document.createElement('input');
+            filename.name = 'filename';
+            filename.type = 'hidden';
 
             form.addComponent(format);
             form.addComponent(columns);
             form.addComponent(delimiter);
             form.addComponent(additional);
-            form.getElement().appendChild(layerName);
+            form.getElement().appendChild(filename);
+
+            var additionalDataJSON = document.createElement('input');
+            additionalDataJSON.name = 'additionalData';
+            additionalDataJSON.type = 'hidden';
+            form.getElement().appendChild(additionalDataJSON);
+
             form.getElement().appendChild(input);
 
             return form;
@@ -1227,12 +1479,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} value id for the column to be selected
          */
         selectColumn: function (value) {
+            // set selectedColumn in either case so render will use it immediately
+            this.__selectedColumn = value;
+
+            if(!this.table) {
+                return;
+            }
             // remove selection from headers
             this.table.find('th').removeClass('selected');
             // add selection to the one specified
-            this.table.find('th.' + this.__getHeaderClass(value)).addClass('selected');
-            this.__selectedColumn = value;
+            var selected = this.table.find('th.' + this.__getHeaderClass(value));
+            selected.addClass('selected');
+
+            this._selectActivePage();
         },
+
         /**
          * @method getTable
          * Returns the grid table.
@@ -1337,6 +1598,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortBy: function (pAttribute, pDescending) {
+            if(!this.model) {
+                return;
+            }
             var me = this,
                 dataArray = me.model.getData();
             if (dataArray.length === 0) {
@@ -1360,6 +1624,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         sortBy: function(scopedValue, descending) {
+            if(!this.model) {
+                return;
+            }
             var me = this;
             // sort the results
             me._sortBy(scopedValue, descending);
@@ -1372,9 +1639,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.table.find('tbody').empty();
             me._renderBody(this.table, fieldNames);
             me.trigger('sort', {
-                        column : scopedValue,
-                        ascending : !descending
-                    });
+                column : scopedValue,
+                ascending : !descending
+            });
         },
 
         /**
@@ -1394,7 +1661,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (typeof nameA === 'undefined' && split.length > 1) {
                 nameA = a[split[0]][split[1]];
             }
-            if (!nameA) {
+            if (!nameA && typeof nameA !== 'number') {
                 nameA = '';
             } else if (nameA.toLowerCase) {
                 nameA = nameA.toLowerCase();

@@ -2,7 +2,7 @@
  * @class Oskari.lupapiste.bundle.myplaces2.request.DeleteCategoryRequest
  * Requests a "my place" maplayer/category to be deleted
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.DeleteCategoryRequest',

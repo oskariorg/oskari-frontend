@@ -1,5 +1,413 @@
 # Release Notes
 
+## 1.42.0
+
+
+#### VectorLayerPlugin ol3
+
+Fixed ol3 error when label is not String.
+
+Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
+### mapwfs2
+
+Added load events for the wfs-layers based on the StatusHandler.
+
+### maprotator
+New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
+To rotate the map press SHIFT + ALT + Drag with mouse.
+
+Sends the map.rotated event when the map is rotating, from which you can get how many degrees the map has rotated.
+
+Can also be used with request:
+```javascript
+  var requestBuilder = Oskari.requestBuilder('rotate.map');
+  var request = requestBuilder(180);
+  Oskari.getSandbox().request('maprotator', request);
+```
+in the requestbuilder put the degrees you want to rotate.
+
+### statistics/statsgrid2016
+
+Fixed rendering grid multiple times.
+
+Indicators in datatable are now paged if more than three indicators have been selected.
+
+#### grid
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text',
+        maxCols: 3,
+        pagingHandler: function(element, data){
+            console.log(data.visible.start + '-' + data.visible.end +'/' + data.count+')');
+        }
+    }
+]);
+```
+### coordinatetool
+
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
+
+Fixed extra coordinate server transform calls.
+
+### Oskari.util
+
+Changed coordinate regex patterns to allow also negative minutes/seconds.
+
+### statslayer/index map interoperability
+
+Fixed an issue where opening index map with statslayer as base resulted in:
+
+- the normal map not refreshing on move after indexmap is opened
+- in some cases indexmap + normal map going to an infinite update-loop when zooming out
+
+### mapmodule
+
+getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
+
+Before:
+
+  var imageData = mapModule.getScreenshot();
+
+Now:
+
+  mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
+      //Do something with  imageData
+  });
+
+New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
+### publisher2
+
+Medium map height changed from 525 to 600 pixels.
+
+## 1.41.3
+
+### coordinatetool
+
+Fixed error when adding marker other than 'EPSG:3067' or 'EPSG:4258' projection.
+
+Also removed marker label text hard coded coordinate decimal rounding when projection is not 'EPSG:4258' or 'LATLON:kkj'. Now label text is rounded to projection defined decimals or default decimals. The mapmodule fix also affects marker label and it's now placed next to the marker and not on top of it on the geoportal views.
+
+### mapmodule (Openlayers 2/geoportal)
+
+textAlign for styles now work with labelAlign or textAlign on Openlayers 2 mapmodule. Previously only supported labelAlign. Openlayers 3 only supports textAlign.
+textAlign is the documented API and labelAlign will be removed in the future:
+
+    {
+        text : {
+            textAlign: 'left'
+        }
+    }
+
+## 1.41.2
+
+### Fixed history tools
+
+- mapfull. Removed unneccessary adjustMapSize call.
+- mapmodule-plugin/MapMoveRequest. Fixed zoom changed check.
+
+### fullscreen
+
+Fixed JavaScript error when stopping plugin.
+
+### Datasources UI in LogoPlugin
+
+Fixes an issue where data providers were not listed on the attribution listing.
+LogoPlugin now has a service which can be used to push information to the data providers/attribution list.
+LogoPlugin no longer references statistics data on its own.
+Statsgrid bundles push the attribution data to the LogoPlugin via the new ´map.DataProviderInfoService´.
+
+### statistics/statsgrid2016
+
+Performance improvements:
+
+- StatsGrid.RegionsetChangedEvent is not triggered if setRegionset() is called with the current regionset id.
+- Datatable was rendered multiple times when an indicator was added. This has been fixed.
+- Flyout content is no longer re-rendered each time the flyout moves.
+
+Fixed an issue with publisher preview in Internet explorer.
+Fixed localization issue with layer tools shown in selected layers.
+
+### Oskari.util.naturalSort
+
+Now always sorts empty ('') values to last position.
+
+### myplaces2
+
+The layer name was not populated correctly when editing a myplaces layer. This has been fixed.
+
+### paikkatietoikkuna/routesearch
+
+Fixed the matka.fi routing option for the paikkatietoikkuna-specific bundle.
+
+## 1.41.1
+
+### MapModulePlugin.AddFeaturesToMapRequest
+
+Request assumed that each feature has a label text provided in featureStyle. This assumption has been removed.
+
+## 1.41.0
+
+### OpenLayers 3 update
+
+Updated OpenLayers from 3.18.2 to 3.20.1.
+
+### Oskari 2.0 preparations
+
+- Oskari.mapframework.sandbox.Sandbox has been renamed Oskari.Sandbox. This shouldn't affect any application as the main access point to get a reference is still Oskari.getSandbox().
+- Oskari.mapframework.domain.User has been renamed Oskari.User. This shouldn't affect any application as the main access point to get a reference has been Oskari.getSandbox().getUser().
+- Oskari.getSandbox().getUser() and Oskari.getSandbox().setUser() has been deprecated. Oskari.user() should be used with param to set user, without param for getting the user.
+- Sandbox is now built-in to bundles/bundle.js instead of loaded separately as part of application.
+- Moved domain/Map from core to mapmodule as 'map.state' service.
+- Removed setExtent() and deprecated getExtent() from 'map.state' service. Use setBbox() and getBbox() instead as they operate the same variables.
+- Moved getRequestParameter() from core and sandbox to Oskari.util.getRequestParam()
+- Removed core.getSandbox(). Use Oskari.getSandbox() instead.
+- Removed core.registerService() and core.getService() since they are always called through sandbox. The registry is now in sandbox.
+- Added convenience methods to Oskari.util.isNumberBetween() to detect if a number is in range and Oskari.util.arrayMove() to re-order items inside an array.
+- Selected layers are now tracked in sandbox.getMap() object instead of core:
+
+```javascript
+    core.getAllSelectedLayers() -> map.getLayers()
+    core.isLayerAlreadySelected(id) -> map.isLayerSelected(id)
+    core.findMapLayerFromSelectedMapLayers(id) -> map.getSelectedLayer(id)
+```
+- Activated or "highlighted" layers are now tracked in sandbox.getMap() object instead of core:
+
+```javascript
+    core.getAllHighlightedMapLayers() -> map.getActivatedLayers()
+    core.isMapLayerAlreadyHighlighted(id) -> map.isLayerActivated(id)
+    core._handleHighlightMapLayerRequest() -> map.activateLayer(id)
+    core._removeHighLightedMapLayer() -> map.deactivateLayer(optionalId)
+    core.allowMultipleHighlightLayers() -> map.allowMultipleActivatedLayers()
+```
+
+- Removed methods from core: _getQNameForRequest(), _getQNameForEvent(), findMapLayerFromAllAvailable() as they were not intended for external use.
+- Removed request/event handling methods from core and sandbox: getObjectName(), getObjectCreator(), setObjectCreator() and copyObjectCreatorToFrom() as they were not intended for external use.
+- Refactored core methods to Oskari global. Sandbox remains as it was, but calls these instead:
+
+```javascript
+    core.getRequestBuilder() -> Oskari.requestBuilder()
+    core.getEventBuilder() -> Oskari.eventBuilder()
+```
+
+Note! sandbox.getRequestBuilder() was commonly used to check if the request is being handled:
+
+```javascript
+    var reqBuilder = sandbox.getRequestBuilder([regName]);
+    if (reqBuilder) { ... }
+```
+
+Oskari.requestHandler doesn't check this. You should use sandbox.hasHandler([reqName]) instead.
+
+```javascript
+    if (sandbox.hasHandler([regName])) {
+        var reqBuilder = Oskari.requestBuilder([regName]);
+        ...
+    }
+```
+
+Sandbox.getRequestBuilder() still works like before, but is deprecated and will be removed in a future release.
+
+- Refactored sandbox methods (debug state can be asked by sandbox.debug()):
+```javascript
+    sandbox.disableDebug() -> sandbox.debug(false)
+    sandbox.enableDebug() -> sandbox.debug(true)
+```
+
+#### Service refactoring
+- MapLayerService moved from under sources to mapmodule.
+
+#### Request/Event refactoring
+- Moved files from under sources to mapmodule: MapMoveRequest, AfterMapMoveEvent, MapMoveStartEvent, MouseHoverEvent, AddMapLayerRequest, RemoveMapLayerRequest, RearrangeSelectedMapLayerRequest, AfterMapLayerAddEvent, AfterChangeMapLayerOpacityEvent, AfterRearrangeSelectedMapLayerEvent, AfterMapLayerRemoveEvent, AfterChangeMapLayerStyleEvent, MapLayerEvent, ChangeMapLayerOpacityRequest, ChangeMapLayerStyleRequest, AfterChangeMapLayerOpacityEvent, AfterChangeMapLayerStyleEvent
+- ShowMapLayerInfoRequest moved from under sources to backendstatus as it is bundle specific request
+- AfterShowMapLayerInfoEvent removed as backendstatus was the only user and it can react to request without the event.
+- Removed FeaturesAvailableEvent as it's deprecated. Use MapModulePlugin.AddFeaturesToMapRequest instead.
+- Removed deprecated CtrlKeyDownRequest and CtrlKeyUpRequest. These should be events if anything.
+- Removed all other parameters from AddMapLayerRequest other than layer ID. Layer order is no longer affected by the boolean parameters when adding layers to map.
+- DimMapLayerRequest and HighlightMapLayerRequest have been merged to a new request "activate.map.layer" that now has a boolean indicating activation/deactivation.
+- AfterDimMapLayerEvent and AfterHighlightMapLayerEvent have been merged to a new event "map.layer.activation" that now has a boolean indicating activation/deactivation.
+
+#### Marker handling changes
+- AfterHideMapMarkerEvent was removed as it's no longer used and is misleading as it was used to notify markerlayer being hidden.
+- HideMapMarkerRequest was removed as it's no longer used and is misleading. Use MapModulePlugin.MarkerVisibilityRequest instead.
+- setMarkerVisible() and isMarkerVisible() in sandbox.getMap() has been removed as they are deprecated and misleading.
+- marker flag in MapMoveRequest and AfterMapMoveEvent is no longer handled in any way (both had the flag, but it hasn't been handled in some time now. Value in event was always false)
+
+### fullscreen
+
+Map fullscreen mode now resetting when pressing reset view tools.
+
+### statistics/statsgrid2016
+
+Users can now edit indicator classification on geoportal views.
+Publisher can define if classification can be changed on published map.
+Grid component is no longer shown initially on startup.
+Indicator listing from server can be partial and callback value for service.getIndicatorList() have been changed from array to object with the indicator array as "indicators" key:
+
+```javascript
+    {
+        complete : false,
+        indicators : [...]
+    }
+```
+
+### divmanazer
+
+#### DefaultFlyout
+
+Improvements for sidetools buttons positions. Now sidetools are added to top and inside of flyout.
+Now has a move(top, left)-function to relocate the flyout.
+
+#### Popup
+
+Popup width is now automatically restricted to map width.
+
+#### ColorSelect
+
+``New component`` to show a color selection.
+```javascript
+var colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
+
+colorSelect.setColorValues([
+    'ff0000',
+    '00ff00',
+    '0000ff',
+    ['ff0000', '00ff00', '0000ff'],
+    ['1b9e77','d95f02','7570b3','e7298a','66a61e','e6ab02'],
+    ['ffffb2','fed976','feb24c','fd8d3c','f03b20','bd0026']
+]);
+```
+
+Sets handler for color selection. Handler gives the selected color index.
+```javascript
+colorSelect.setHandler(function(selected){
+    console.log('Selected index: ' + selected);
+});
+```
+
+Change color select visualization.
+```javascript
+colorSelect.setUIColors({
+    hover: 'FF0000', // menu hover background color
+    selected: '00FF00', // selected background color
+    menu: '0000FF' // menu background color
+});
+```
+
+Select wanted color index.
+```javascript
+colorSelect.setValue(0);
+```
+
+Inserts the button to given element.
+
+```javascript
+var myUI = jQuery('div.mybundle.colorselect');
+colorSelect.insertTo(myUI);
+```
+
+Removes the color select.
+
+```javascript
+colorSelect.destroy();
+```
+
+
+### core
+
+Fixed Oskari.util.coordinateDegreesToMetric() and Oskari.util.coordinateMetricToDegrees() degree coordinates detection.
+
+### routingUI
+
+Now coordinates are rounded by current map projection definitions. Round rules are defined by current map units.
+
+Special projection rounding conf added. Now the bundle configuration can contain projection specified rounding rules. For example:
+```javascript
+{
+    "EPSG:4326" {
+        "roundToDecimals": 4
+    }
+}
+```
+
+### infobox
+
+Fixed action handling. Now action not handled if action property is not Array.
+
+Fixed popup title height calculation when popup title is large text. Now title height calculation observe also popup additional tools.
+
+### selected-featuredata
+
+Fixed deprecated Oskari.app.getBundleInstanceByName() function usages.
+
+Fixed popup keepPrevious handling.
+
+Fixed result click handler for InfoBox.ShowInfoBoxRequest changes.
+
+### coordinatetool
+
+Fixed error handling when cannot transform coordinates to different projection in front. Now all input values are cleaned.
+
+Improvements for inputs:
+- allow use dot or comma for lon/lat fields
+
+Improvements for showing coordinates:
+- if conf not include round rules, then coordinate decimals is concluded for selected projection units.
+- if conf not include format options, then degrees format is showed unit when selected projection is degrees unit.
+
+No longer shows "Add Marker" button if markers are not supported in the Oskari instance.
+
+### mapmodule ol2/ol3
+
+Now transformCoordinates function checks srs and targer srs. If these projection definations missings throw error.
+
+New ``getProjectionDecimals`` -function, this function returns wanted projection decimals. If wanted projection is not defined, then using map projection. Decimals concluded from projection units. Now 'degrees' units returns 6 and 'm' units returns 0.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapProjectionDecimals = mapmodule.getProjectionDecimals();
+console.log('Map projection decimals = '+mapProjectionDecimals);
+var WGS84Decimals = mapmodule.getProjectionDecimals('EPSG:4326');
+console.log('WGS84 projection decimals = '+WGS84Decimals);
+```
+
+New ``getProjectionUnits`` -function, this function returns wanted projection units. If wanted projection is not defined, then using map projection.
+For example:
+```javascript
+var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+var mapUnits = mapModule.getProjectionUnits();
+console.log('Map projection units = ' + mapUnits);
+var WGS84Units = mapModule.getProjectionUnits('EPSG:4326');
+console.log('WGS84 projection units = ' + WGS84Units);
+```
+
+### myplaces2
+
+Renamed name-attributes on forms to data-name since atleast Chrome removes the name-attribute if there is another element with the same name.
+
+### system-message
+
+New bundle for displaying status messages for the user.
+
+### publisher2
+
+Tools now have getAdditionalSize() which returns { width : 0, height : 0} by default. Tools can now tell if the map should be resized to make room for a tool.
+
+Statsgrid specific code has been removed from publisher. The grid-component now uses getAdditionalSize() to request space for itself.
+
 ## 1.40.0
 
 ## myplaces2
@@ -50,7 +458,7 @@ Fixed wfs layer index calculation.
 
 ### divmanazer
 
-### Popup
+#### Popup
 
 Some popups were made modal so you have to close the current popup before launching a new popup in the same position.
 

@@ -6,22 +6,22 @@ Oskari.registerLocalization(
         "title": "Imprimare vedere hartă",
         "flyouttitle": "Imprimare vedere hartă",
         "desc": "",
-        "btnTooltip": "NOT TRANSLATED",
+        "btnTooltip": "",
         "BasicView": {
             "title": "Imprimare vedere hartă",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "options": {
-                    "fi": "NOT TRANSLATED",
-                    "sv": "NOT TRANSLATED",
-                    "en": "NOT TRANSLATED"
+                    "fi": "",
+                    "sv": "",
+                    "en": ""
                 },
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "size": {
                 "label": "Dimensiune",
@@ -62,7 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Imprimare",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Anulare"
             },
             "location": {
@@ -118,8 +118,8 @@ Oskari.registerLocalization(
                 ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "label": "",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "NOT TRANSLATED",
@@ -157,11 +157,11 @@ Oskari.registerLocalization(
             "help": "Ajutor",
             "error": {
                 "title": "Eroare",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Nu există asistenă disponibilă",
                 "saveFailed": "Imprimare hartă nereuşită | Încercaţi mai târziu",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {
@@ -176,5 +176,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

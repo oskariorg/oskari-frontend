@@ -130,7 +130,7 @@ function(instance, title) {
         this.layerGroups = [];
 
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        var userUuid = sandbox.getUser().getUuid();
+        var userUuid = Oskari.user().getUuid();
         var group = null;
         for (var n = 0; n < jsonResponse.length; ++n) {
             var groupJSON = jsonResponse[n];

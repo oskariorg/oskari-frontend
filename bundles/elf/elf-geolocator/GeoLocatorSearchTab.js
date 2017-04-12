@@ -380,8 +380,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             var values = {},
                 container = this.getContent(),
                 termErrors = this.searchInput.validate(),
-                lon = this.sandbox.getMap().getX() / 2,
-                lat = this.sandbox.getMap().getY() / 2;
+                lon = this.sandbox.getMap().getX(),
+                lat = this.sandbox.getMap().getY();
 
             if (termErrors && termErrors.length) {
                 values.errors = termErrors;

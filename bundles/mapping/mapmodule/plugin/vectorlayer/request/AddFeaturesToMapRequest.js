@@ -29,14 +29,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddFeaturesToM
          * @method getGeometry
          * @return {String/Object} geometry
          */
-        getGeometry: function(){
+        getGeometry: function() {
             return this._geometry;
         },
         /**
          * @method getOptions
          * @return {String} get geometry type
          */
-        getOptions: function(){
+        getOptions: function() {
             return this._options;
         }
     }, {

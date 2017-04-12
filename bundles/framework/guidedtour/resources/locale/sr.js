@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Možete uvećati i umanjiti prikaz na mapi upotrebom klizne trake za razmeru ili upotrebom plus i minus dugmeta. Savet: možete takođe menjati razmeru prikaza upotrebom plus i minusa dugmeta tastature ili uvećati prikaz duplim klikom na mapu. Takođe je moguće promeniti prikaz točkićem miša."
         }
     }
-}
-);
+});

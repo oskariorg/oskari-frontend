@@ -543,7 +543,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.Flyout',
          */
         moveMapRequest: function(x, y){
             var me = this;
-            var mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(x, y, null, false);
+            var mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(x, y);
             me.sandbox.request(me.instance, mapmoveRequest);
         },
         /**

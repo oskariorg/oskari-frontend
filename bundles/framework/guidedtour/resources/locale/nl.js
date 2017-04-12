@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "U kunt de kaart vergroten en verkleinen met behulp van de schaalschuifbalk of de + / - knoppen naast de schuifbalk. Tip: U kunt ook vergroten en verkleinen met behulp van de + / - toetsen op het toetsenbord of door te dubbelklikken op de kaart. Het is ook mogelijk om te vergroten en verkleinen met te scrollen met de muis."
         }
     }
-}
-);
+});

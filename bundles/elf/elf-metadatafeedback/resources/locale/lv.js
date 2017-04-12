@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "User feedback",
-            "subject": "Subject",
-            "subjectPlaceholder": "Title for your feedback item",
             "ratingScore": "Rating score",
             "ratingJustification": "Rating justification"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specification",
-            "targetIdentification": "Target identification",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "Not defined.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Not defined.",
-            "natureOfTarget": "Nature of the target"
+            "tabTitle": "Feedback",
+            "average": "Average rating"
         },
         "userInformation": {
             "userInformation": "User information",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Saving the feedback was succesful."
         }
     }
-}
-);
+});

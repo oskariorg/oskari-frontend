@@ -66,10 +66,10 @@ Oskari.registerLocalization(
                 "message": "La licence a été conclue. Vérifiez les informations sur la licence ci-dessous :"
             },
             "licenseDurations": {
-                "D": "NOT TRANSLATED",
-                "W": "NOT TRANSLATED",
-                "M": "NOT TRANSLATED",
-                "Y": "NOT TRANSLATED"
+                "D": "",
+                "W": "",
+                "M": "",
+                "Y": ""
             }
         },
         "buttons": {
@@ -83,5 +83,4 @@ Oskari.registerLocalization(
             "yes": "Oui"
         }
     }
-}
-);
+});

@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
 
             this.tabsContainer.insertTo(flyout);
 
-            if (!sandbox.getUser().isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 return;
             }
 
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
         addTab: function (item) {
             var sandbox = this.instance.getSandbox(),
                 panel;
-            if (!sandbox.getUser().isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 return;
             }
             panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');

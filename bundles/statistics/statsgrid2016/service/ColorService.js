@@ -43,6 +43,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             }
         },
         /**
+         * [getColorsForClassification description]
+         * @param  {Object} classification object with count as number, type as string, name as string and optional reverseColors boolean
+         * @param  {Boolean} includeHash    Boolean true to prefix hex with #. UI needs with #, server api without it
+         * @return {Object[]} array of colors to use for legend and map
+         */
+        getColorsForClassification : function(classification, includeHash) {
+            var set = this.getColorset(classification.count, classification.type, classification.name);
+
+            var colors = [];
+            set.forEach(function(color) {
+                if(includeHash) {
+                    color = '#' + color;
+                }
+                colors.push(color);
+            });
+            if(classification.reverseColors) {
+                colors.reverse();
+            }
+            return colors;
+        },
+        /**
          * Tries to return an array of colors where length equals count parameter.
          * If such set is not available, returns null if array with requested count is not available
          * @param  {Number} count number of colors requested
@@ -85,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 // found requested item, check if it has the colorset for requested count
                 return result;
             }
-            // TODO: get first to match type?
+            // get first to match type?
             log.warn('Requested set not found, using type matching');
             if(typeMatch) {
                 result = getArray(typeMatch);
@@ -101,7 +122,66 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 return result;
             }
             // no matches, just use the first one
-            return getArray(this.colorsets[0]);
+            result = getArray(this.colorsets[0]);
+            return result;
+        },
+        getAvailableTypes: function() {
+            return limits.type.slice(0);
+        },
+        /**
+         * Returns the min/max amount of colors for a type
+         * @param  {String} type Colorset type
+         * @return {Object} with keys min and max { min : 2, max : 9 }
+         */
+        getRange: function(type) {
+            var value = {
+                min : 2,
+                max : 2
+            };
+            this.colorsets.forEach(function(item) {
+                if(item.type !== type) {
+                    return;
+                }
+                var lastColorArray = item.colors[item.colors.length -1].split(',');
+                if(value.max < lastColorArray.length) {
+                    value.max = lastColorArray.length;
+                }
+            });
+            return value;
+        },
+        /**
+         * Options to show in classification UI for selected type and count
+         * @param  {String} type  Colorset type. Defaults to this.limits.defaultType
+         * @param  {Number} count amount of colors (throws an error if out of range)
+         * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
+         */
+        getOptionsForType: function(type, count, reverse) {
+            var me = this,
+                i,
+                set;
+            var colors = [];
+            type = type || this.limits.defaultType;
+            var range = this.getRange(type);
+            if(typeof count !== 'number' || range.min > count || range.max < count) {
+                throw new Error('Invalid color count provided: ' + count +
+                    '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
+            }
+
+            this.colorsets.forEach(function(set) {
+                if(set.type !== type) {
+                    return;
+                }
+                var colorset = me.getColorset(count, type, set.name);
+                colors.push({
+                    id : set.name,
+                    value : colorset
+                });
+                if(reverse) {
+                    colorset.reverse();
+                }
+            });
+
+            return colors;
         },
 
         colorsets : [{

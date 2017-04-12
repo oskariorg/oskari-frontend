@@ -50,7 +50,7 @@ Oskari.clazz.define(
          * @public @method getSandbox
          *
          *
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;

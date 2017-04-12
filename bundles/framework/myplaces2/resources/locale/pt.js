@@ -15,10 +15,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Lugares",
-            "nocategories": "NOT TRANSLATED",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
             "addCategory": "Adicionar camada",
             "editCategory": "Editar camada",
@@ -28,39 +28,39 @@ Oskari.registerLocalization(
             "grid": {
                 "name": "Nome",
                 "desc": "Descrição",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
                 "edit": " ",
                 "delete": " "
             },
             "notification": {
                 "delete": {
                     "title": "Delete place",
-                    "confirm": "NOT TRANSLATED",
+                    "confirm": "",
                     "btnDelete": "Apagar",
                     "btnCancel": "Cancelar",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m²"
             },
             "point": {
@@ -96,7 +96,7 @@ Oskari.registerLocalization(
             "close": "Cancelar",
             "finish": "Acabar desenho",
             "save": "Guardar",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Mover lugares e apagar",
             "deleteCategory": "Apagar",
             "deleteCategoryAndPlaces": "Apagar categorias e lugares",
@@ -116,24 +116,23 @@ Oskari.registerLocalization(
                 "placeholder": "Descrever o lugar"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Camada",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
-                "placeholder": "NOT TRANSLATED",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "Nova camada..."
+                "placeholder": "",
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "tooltip": "Ponto"
                 }
@@ -164,10 +163,10 @@ Oskari.registerLocalization(
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "placename": "Nome",
                 "placedesc": "Descrição",
-                "image": "NOT TRANSLATED"
+                "image": ""
             },
             "edit": {
                 "title": "Editar camada",
@@ -175,34 +174,34 @@ Oskari.registerLocalization(
                 "cancel": "Voltar"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
                 "label": "Dimensão"
             },
             "color": {
                 "label": "Cor",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Guardar",
@@ -210,27 +209,27 @@ Oskari.registerLocalization(
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
                 "label": "Cor",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Guardar",
@@ -238,35 +237,35 @@ Oskari.registerLocalization(
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
                 "label": "Cor de linha",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Guardar",
@@ -315,7 +314,7 @@ Oskari.registerLocalization(
             "categoryNameIllegal": "A descrição da camada contém carateres não permitidos. Os carateres permitidos são as letras a-z bem como as vogais com acentos, números, backspaces e hífens",
             "dotSize": "A dimensão do ponto (.) não se enquadra nos limites (1-5).",
             "dotColor": "Cor de ponto errada",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "A dimensão da linha não se enquadra nos limites (1-50).",
             "lineColor": "Cor de linha errada|",
             "areaLineSize": "A dimensão dos lados da área não se enquadra nos limites (0-50).",
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Cor de enchimento errada"
         }
     }
-}
-);
+});

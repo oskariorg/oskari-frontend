@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Lähentämällä voit tarkentaa karttanäkymää. Loitontamalla saat näkyviin suuremman alueen. Nämä onnistuvat usealla eri tavalla. <br/> <br/> Valitse mittakaava mittakaavasäätimestä. Voit myös käyttää (+)- ja (-)-painikkeita mittakaavasäätimen päissä. <br/> <br/>  Käytä näppäimistön (+)- ja (-)-painikkeita. <br/> <br/>  Kaksoisklikkaa karttanäkymää tai käytä suurennuslasi-työkalua lähentääksesi karttaa."
         }
     }
-}
-);
+});

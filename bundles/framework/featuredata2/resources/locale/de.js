@@ -12,18 +12,18 @@ Oskari.registerLocalization(
         "errorscale": "Die Daten können in dieser Maßstabsebene nicht angezeigt werden. Bitte wechseln Sie die Maßstabsebene.",
         "errordata": "Die vom Server bereitgestellten Daten weisen Fehler auf. Bitte die Karte leicht verschieben, um sie zu aktualisieren.",
         "columnSelectorTooltip": "Zeige sichtbare Tabellenspalten.",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "",
         "selectionTools": {
             "title": "Wählen Sie ein Objekt auf der Karte",
             "instructions": " ",
-            "selectFromTop": "NOT TRANSLATED",
-            "selectAll": "NOT TRANSLATED",
+            "selectFromTop": "",
+            "selectAll": "",
             "link": {
                 "title": "Mehr auswählen"
             },
             "button": {
                 "cancel": "Abbrechen",
-                "empty": "NOT TRANSLATED",
+                "empty": "",
                 "show": "Orte anzeigen",
                 "close": "Schließen",
                 "edit": "Bearbeiten"
@@ -94,10 +94,9 @@ Oskari.registerLocalization(
             }
         },
         "gridFooter": {
-            "aggregateColumnField": "NOT TRANSLATED",
-            "noDataMessage": "NOT TRANSLATED",
-            "noDataCommonMessage": "NOT TRANSLATED"
+            "aggregateColumnField": "",
+            "noDataMessage": "",
+            "noDataCommonMessage": ""
         }
     }
-}
-);
+});

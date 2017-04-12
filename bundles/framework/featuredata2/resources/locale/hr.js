@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "FeatureData2",
     "value": {
@@ -19,7 +20,7 @@ Oskari.registerLocalization({
             },
             "button": {
                 "cancel": "Poništi",
-                "empty": "NOT TRANSLATED",
+                "empty": "",
                 "show": "Prikaži mjesta",
                 "close": "Zatvori",
                 "edit": "Uredi"
@@ -41,7 +42,7 @@ Oskari.registerLocalization({
                     "tooltip": "Dodavanje kruga"
                 },
                 "select": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         }

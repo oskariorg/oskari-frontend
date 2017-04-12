@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Aineisto sisältää tietosuojattuja ominaisuustietoja, jotka eivät sisälly tunnuslukujen laskentaan"
         }
     }
-}
-);
+});

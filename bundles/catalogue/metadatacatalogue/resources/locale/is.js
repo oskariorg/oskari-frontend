@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Leitarsvæði",
         "delimitArea": "Takmarka leitarsvæði á korti",
         "deleteArea": "Eyða leitarsvæði",
+        "startDraw": "",
         "dataset": "Gagnasett",
         "series": "Röð",
         "service": "Þjónusta",
@@ -33,6 +34,8 @@ Oskari.registerLocalization(
         "ResourceLanguage": "Hjálpartungumál",
         "modifySearch": "Breyta leitarmöguleikum",
         "showSearch": "Sýna allar leitarniðurstöður",
+        "showDatasets": "Sýna einungis gagnasett",
+        "showServices": "Sýna einungis þjónustur",
         "metadataCatalogueResults": "Leitarniðurstöður",
         "show": "Sýna þetta kortalag á kortinu.",
         "hide": "Fela þetta kortalag.",
@@ -45,6 +48,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Leitarorðið verður að innihalda a.m.k. einn staf. Leyfðir stafir eru bókstafir frá a-z, einnig å, ä og ö, tölustafir, undirstrik og bandstrik.",
         "too_many_stars": "Leitarorðið inniheldur of margar stjörnur (*). Það mega í mesta lagi vera N* stafir.",
         "searching": "Leita...",
+        "updated": "uppfæra tíðni",
         "grid": {
             "name": "Nafn",
             "removeBBOX": "Fela svæði",
@@ -55,10 +59,9 @@ Oskari.registerLocalization(
         },
         "licenseText": "Fá leyfi",
         "identificationCode": {
-            "creation": "creation",
-            "publication": "publication",
-            "revision": "revision"
+            "creation": "sköpun",
+            "publication": "útgáfa",
+            "revision": "endurskoðun"
         }
     }
-}
-);
+});

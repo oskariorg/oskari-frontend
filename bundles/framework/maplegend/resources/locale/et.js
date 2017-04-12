@@ -3,10 +3,9 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "maplegend",
     "value": {
-        "title": "Legendid",
+        "title": "Kaardilegendid",
         "desc": "",
         "noLegendsText": "Nähtaval kaardil legend puudub",
-        "invalidLegendUrl": "NOT TRANSLATED"
+        "invalidLegendUrl": "Kaardilegendi ei ole"
     }
-}
-);
+});

@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "nn",
     "key": "MapMyPlaces",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "MapMyPlaces",
         "desc": "",
         "object-data": "Objektdata",
         "layer": {
@@ -11,5 +11,4 @@ Oskari.registerLocalization(
             "inspire": "Mine kartlag"
         }
     }
-}
-);
+});

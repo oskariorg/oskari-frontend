@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest
  * Requests a saved "my place" to be opened for editing
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.EditPlaceRequest',

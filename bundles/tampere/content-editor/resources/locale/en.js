@@ -24,11 +24,11 @@ Oskari.registerLocalization(
                 "no": "No"
             },
             "tools": {
-              "point": "Add point geometry",
-              "line": "Add line geometry",
-              "area": "Add area geometry",
-              "geometryEdit": "Edit selected geometry",
-              "remove": "Remove one geometry"
+                "point": "Add point geometry",
+                "line": "Add line geometry",
+                "area": "Add area geometry",
+                "geometryEdit": "Edit selected geometry",
+                "remove": "Remove one geometry"
             },
             "featureUpdate": {
                 "header": "Feature update",

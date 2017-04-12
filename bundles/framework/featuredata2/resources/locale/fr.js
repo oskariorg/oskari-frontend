@@ -15,7 +15,7 @@ Oskari.registerLocalization(
         "featureDataPopup": "Valeurs statistiques",
         "selectionTools": {
             "title": "Sélectionnez des entités sur la carte.",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
             "selectFromTop": "A partir de la couche supérieure.",
             "selectAll": "Dans toutes les couches",
             "link": {
@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "Il y a des valeurs d'objets ou caractéristiques non-autorisées dans les données."
         }
     }
-}
-);
+});

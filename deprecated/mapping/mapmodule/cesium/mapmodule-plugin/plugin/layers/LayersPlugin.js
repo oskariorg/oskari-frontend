@@ -9,7 +9,7 @@ define(["src/mapping/mapmodule/plugin/layers/LayersPlugin"], function (LayersPlu
      * Interface method for the plugin protocol. Registers requesthandlers and
      * eventlisteners.
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      * 			reference to application sandbox
      */
     startPlugin : function(sandbox) {

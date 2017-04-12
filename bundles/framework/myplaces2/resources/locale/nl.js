@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Verkeerde invulkleur."
         }
     }
-}
-);
+});

@@ -15,22 +15,22 @@ Oskari.registerLocalization(
             "regionTitle": "Region eingrenzen",
             "regionPlaceholder": "Sortieren nach Gemeinde oder administrativer Einheit",
             "additionalsTitle": "Suchoptionen",
-            "normalTitle": "NOT TRANSLATED",
-            "normalDesc": "NOT TRANSLATED",
-            "restrictedTitle": "NOT TRANSLATED",
-            "restrictedDesc": "NOT TRANSLATED",
+            "normalTitle": "",
+            "normalDesc": "",
+            "restrictedTitle": "",
+            "restrictedDesc": "",
             "fuzzyTitle": "Zufallssuche",
             "fuzzyDesc": "Ähnliche Suchbegriffe",
             "exonymTitle": "Suche nach Exonymen",
             "exonymDesc": "Ausländische Ortsnamen/-bezeichnungen",
             "searchButton": "Suche",
             "resultsTitle": "Suchergebnisse",
-            "fuzzyResultsTitle": "NOT TRANSLATED",
-            "filterResultsTitle": "NOT TRANSLATED",
-            "countryFilter": "NOT TRANSLATED",
+            "fuzzyResultsTitle": "",
+            "filterResultsTitle": "",
+            "countryFilter": "",
             "backButton": "Zurück",
-            "geolocButton": "NOT TRANSLATED",
-            "geolocDesc": "NOT TRANSLATED",
+            "geolocButton": "",
+            "geolocDesc": "",
             "noResults": "Keine Suchergebnisse",
             "showMore": "Ergebnisse anzeigen",
             "showLess": "Ergebnisse ausblenden",
@@ -46,5 +46,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

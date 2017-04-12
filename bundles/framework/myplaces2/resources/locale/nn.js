@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Dette kartlaget er privat. Klikk her for å publisere.",
                 "publicTooltip": "Dette kartlaget er offentleg. Klikk her for å avslutte publisering."
             },
+            "addCategoryFormButton": "Nytt kartlag",
             "addCategory": "Legg til kartlaget",
             "editCategory": "Tilpass kartlaget",
             "deleteCategory": "Slett kartlaget",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mål avstand",
                 "tooltip": "Mål avstand",
-                "add": "",
-                "next": "",
+                "add": "Legg til line",
+                "next": "Neste",
                 "edit": "Du kan tilpasse lina ved å klikke og dra i knekkpunkt",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mål areal",
                 "tooltip": "Mål areal",
-                "add": "",
-                "next": "",
+                "add": "Legg til areal",
+                "next": "Neste",
                 "edit": "Du kan tilpasse området ved å klikke og dra i knekkpunkt på avgrensingslina",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Lenkje til biletet",
-                "previewLabel": "Førehandsvis bilete",
-                "add": "Nytt kartlag"
+                "previewLabel": "Førehandsvis bilete"
             },
             "rendering": {
                 "label": "Stad utforming",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punktstil",
-            "tooltip": "",
+            "tooltip": "Definer ein punktstil",
             "symbol": {
                 "label": "Ikon"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Linestil",
-            "tooltip": "",
+            "tooltip": "Definer ein linestil",
             "style": {
                 "label": "Utforming"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Områdestil",
-            "tooltip": "",
+            "tooltip": "Definer ein arealstil",
             "linestyle": {
                 "label": "Kantline stil"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Fyllfarge er ugyldig. Verdiane må vere mellom 0 og 256"
         }
     }
-}
-);
+});

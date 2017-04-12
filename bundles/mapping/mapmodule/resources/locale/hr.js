@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "MapModule",
     "value": {
@@ -23,7 +24,7 @@ Oskari.registerLocalization({
                 "terms": "Uvjeti korištenja",
                 "dataSources": "Izvori podataka",
                 "layersHeader": "Slojevi karte",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": ""
             },
             "DataSourcePlugin": {
                 "link": "Izvor podataka",
@@ -52,26 +53,26 @@ Oskari.registerLocalization({
             },
             "GetInfoPlugin": {
                 "title": "Slojevi karte",
-                "layer": "NOT TRANSLATED",
-                "places": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "link": "NOT TRANSLATED",
+                "layer": "",
+                "places": "",
+                "description": "",
+                "link": "",
                 "name": "Ime"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "",
                 "history": {
-                    "reset": "NOT TRANSLATED",
-                    "back": "NOT TRANSLATED",
-                    "next": "NOT TRANSLATED"
+                    "reset": "",
+                    "back": "",
+                    "next": ""
                 },
                 "measure": {
-                    "line": "NOT TRANSLATED",
-                    "area": "NOT TRANSLATED"
+                    "line": "",
+                    "area": ""
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }

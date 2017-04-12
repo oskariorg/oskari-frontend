@@ -271,14 +271,18 @@ Oskari.registerLocalization(
             "refreshButton": "Obnoviť filter",
             "addFilter": "Pridať filter",
             "removeFilter": "Odstrániť filter",
+            "content": {
+                "title": "Geografický filter"
+            },
             "bbox": {
-                "title": "Mapový filter",
                 "on": "Iba objekty viditeľné na mape",
                 "off": "Všetky objkety"
             },
             "clickedFeatures": {
-                "title": "Filter výberu objektov",
-                "label": "Iba objekty vybrané na mape"
+                "clickedFeaturesLabel": "Iba objekty vybraté na mape",
+                "filterByGeometryLabel": "Iba objekty, ktoré spĺňajú zvolenú možnosť:",
+                "filterByGeometryIntersect": "Objekty pretínajúce zvolené objekty",
+                "filterByGeometryContains": "Objekty vo vnútry zvolených objektov"
             },
             "values": {
                 "title": "Filter výberu vlastností",
@@ -290,8 +294,8 @@ Oskari.registerLocalization(
                     "attribute-value": "Hodnota"
                 },
                 "info": {
-                    "bboxOff": "",
-                    "filterByGeometrySelected": ""
+                    "bboxOff": "Bez geografického filtra sú všetky objekty zahrnuté do analýzy. Prosím, pridajte filter vlastností alebo zvoľte \"Iba objekty viditeľné na mape\" v geografickom filtri.",
+                    "filterByGeometrySelected": "Môžete filtrovať podľa vlastností iba ak sú zvolené \"Všetky objekty\" v horeuvedenom geografickom filtri."
                 },
                 "equals": "je rovná",
                 "like": "je ako",
@@ -302,6 +306,14 @@ Oskari.registerLocalization(
                 "greaterThanOrEqualTo": "je väčšia než alebo rovná",
                 "lessThanOrEqualTo": "je menšia než alebo rovná"
             },
+            "validation": {
+                "title": "Objekty sa nedali filtrovať. Vyskytli sa nasledovné chyby:",
+                "attribute_missing": "Chýba vlastnosť.",
+                "operator_missing": "Chýba operátor.",
+                "value_missing": "Chýba hodnota.",
+                "boolean_operator_missing": "Chýba logický operátor.",
+                "bbox_selected_with_no_properties": "Bez geografického filtra sú všetky objekty zahrnuté do analýzy. Prosím, pridajte filter vlastností alebo zvoľte \"Iba objekty viditeľné na mape\" v geografickom filtri."
+            },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Použiť štatistické hodnoty",
                 "aggregateValueSelectTitle": "Vybrať štatistické hodnoty",
@@ -311,16 +323,7 @@ Oskari.registerLocalization(
                 "getAggregateAnalysisFailed": "Štatistické hodnoty sa nedali vyvolať.",
                 "noAggregateAnalysisPopupTitle": "Štatistické hodnoty nenájdené",
                 "noAggregateAnalysisPopupContent": "Štatistické hodnoty sa nedajú vypočítať pre túto mapovú vrstvu. Môžete ich vypočítať pomocou funkcie Analýza"
-            },
-            "validation": {
-                "title": "Objekty sa nedali filtrovať. Vyskytli sa nasledovné chyby:",
-                "attribute_missing": "Chýba vlastnosť.",
-                "operator_missing": "Chýba operátor.",
-                "value_missing": "Chýba hodnota.",
-                "boolean_operator_missing": "Chýba logický operátor.",
-                "bbox_selected_with_no_properties": ""
             }
         }
     }
-}
-);
+});

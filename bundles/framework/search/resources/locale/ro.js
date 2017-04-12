@@ -1,12 +1,12 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "ro",
     "key": "Search",
     "value": {
         "title": "Căutare locaţie",
         "desc": "",
-        "invalid_characters": "NOT TRANSLATED",
+        "invalid_characters": "",
         "searchDescription": "Căutare după nume, adresă sau identificator al imobilului",
-        "searchButton": "Căutare",
         "searchResultCount": "Căutarea a returnat",
         "searchResultCount2": "rezultate",
         "searchResultDescriptionMoreResults": "Definire căutare pentru a micşora numărul de rezultate",

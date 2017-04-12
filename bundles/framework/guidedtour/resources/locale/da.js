@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Du kan zoome ind og ud på kortet ved at bruge skalering-scrollbaren eller plus- og minustasterne på scrollbaren. Du kan også zoome ved hjælp af plus- og minustasterne, ved at dobbeltklikke på kortet eller ved hjælp af dit musehjul."
         }
     }
-}
-);
+});

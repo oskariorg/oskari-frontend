@@ -17,8 +17,8 @@ Oskari.registerLocalization(
             "pan": "Lohista kaarti",
             "zoom": "Suumi sisse",
             "measure": {
-                "line": "Mõõda vahemaa",
-                "area": "Mõõda pind"
+                "line": "Mõõda vahemaad.",
+                "area": "Mõõda pindala kaardil."
             }
         },
         "measure": {
@@ -30,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

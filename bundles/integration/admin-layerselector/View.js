@@ -25,12 +25,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      *
      */
     'eventHandlers': {
-        MapLayerVisibilityChangedEvent: function (event) {
-
-        },
-        AfterMapMoveEvent: function (event) {
-
-        },
         MapLayerEvent: function (event) {
             if(event.getOperation() === 'update' ||
                 event.getOperation() === 'add') {

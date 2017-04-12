@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "Printout",
     "value": {
@@ -9,9 +10,9 @@ Oskari.registerLocalization({
         "BasicView": {
             "title": "Εκτύπωση χάρτη",
             "name": {
-                "label": "NOT TRANSLATED",
-                "placeholder": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED"
+                "label": "",
+                "placeholder": "",
+                "tooltip": ""
             },
             "language": {
                 "label": "Γλώσσα",
@@ -25,24 +26,29 @@ Oskari.registerLocalization({
             "size": {
                 "label": "Μέγεθος",
                 "tooltip": "Επιλέξτε διάταξη εκτύπωσης (print layout). Η προεπισκόπηση χάρτη ανανεώνεται ανάλογα.",
-                "options": [{
-                    "id": "A4",
-                    "label": "Α4 πορτρετο",
-                    "classForPreview": "preview-portrait",
-                    "selected": true
-                }, {
-                    "id": "A4_Landscape",
-                    "label": "A4 landscape",
-                    "classForPreview": "preview-landscape"
-                }, {
-                    "id": "A3",
-                    "label": "A3 πορτρέτο",
-                    "classForPreview": "preview-portrait"
-                }, {
-                    "id": "A3_Landscape",
-                    "label": "A3 landscape",
-                    "classForPreview": "preview-landscape"
-                }]
+                "options": [
+                    {
+                        "id": "A4",
+                        "label": "Α4 πορτρετο",
+                        "classForPreview": "preview-portrait",
+                        "selected": true
+                    },
+                    {
+                        "id": "A4_Landscape",
+                        "label": "A4 landscape",
+                        "classForPreview": "preview-landscape"
+                    },
+                    {
+                        "id": "A3",
+                        "label": "A3 πορτρέτο",
+                        "classForPreview": "preview-portrait"
+                    },
+                    {
+                        "id": "A3_Landscape",
+                        "label": "A3 landscape",
+                        "classForPreview": "preview-landscape"
+                    }
+                ]
             },
             "preview": {
                 "label": "Προεπισκόπιση",
@@ -52,13 +58,11 @@ Oskari.registerLocalization({
                     "extent": "Η προεπισκόπιση μπορεί να χρησιμοποιηθεί για να καθορίσετε το πλαίσια του χάρτη για εκτύπωση",
                     "restriction": "Δεν εμφανίζονται όλα τα επίπεδα χάρτη στην προεπισκόπιση"
                 }
-
             },
-
             "buttons": {
                 "save": "Λήψη εκτύπωσης",
                 "ok": "OK",
-                "back" : "NOT TRANSLATED",
+                "back": "",
                 "cancel": "Ακύρωση"
             },
             "location": {
@@ -73,83 +77,91 @@ Oskari.registerLocalization({
             "format": {
                 "label": "Format",
                 "tooltip": "Επιλέξτε το format του αρχείου",
-                "options": [{
-                    "id": "png",
-                    "format": "image/png",
-                    "label": "PNG image"
-                }, {
-                    "id": "pdf",
-                    "format": "application/pdf",
-                    "selected": true,
-                    "label": "Έγγραφο PDF"
-                }]
+                "options": [
+                    {
+                        "id": "png",
+                        "format": "image/png",
+                        "label": "PNG image"
+                    },
+                    {
+                        "id": "pdf",
+                        "format": "application/pdf",
+                        "selected": true,
+                        "label": "Έγγραφο PDF"
+                    }
+                ]
             },
             "mapTitle": {
                 "label": "Πρόσθεση τίτλου",
                 "tooltip": "προσθέστε τίτλο του χάρτη"
             },
             "content": {
-                "options": [{
-                    "id": "pageLogo",
-                    "label": "Προσθέστε τιο λογότυπο του OSKARI",
-                    "tooltip": "Μπορείτε να αποκρύψετε το λογότυπο αν χρειαστεί",
-                    "checked": "checked"
-                }, {
-                    "id": "pageScale",
-                    "label": "Προσθέστε κλίμακα στον χάρτη",
-                    "tooltip": "Προσθέστε κλίμακα στον χάρτη",
-                    "checked": "checked"
-                }, {
-                    "id": "pageDate",
-                    "label": "Προσθέστε ημερομηνία",
-                    "tooltip": "Μπορείτε να προσθέσετε ημερομηνία στην εκτύπωση",
-                    "checked": "checked"
-                }]
+                "options": [
+                    {
+                        "id": "pageLogo",
+                        "label": "Προσθέστε τιο λογότυπο του OSKARI",
+                        "tooltip": "Μπορείτε να αποκρύψετε το λογότυπο αν χρειαστεί",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageScale",
+                        "label": "Προσθέστε κλίμακα στον χάρτη",
+                        "tooltip": "Προσθέστε κλίμακα στον χάρτη",
+                        "checked": "checked"
+                    },
+                    {
+                        "id": "pageDate",
+                        "label": "Προσθέστε ημερομηνία",
+                        "tooltip": "Μπορείτε να προσθέσετε ημερομηνία στην εκτύπωση",
+                        "checked": "checked"
+                    }
+                ]
             },
             "legend": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "options": [{
-                    "id": "oskari_legend_NO",
-                    "loca": "NO",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED",
-                    "selected": true
-
-                }, {
-                    "id": "oskari_legend_LL",
-                    "loca": "LL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_LU",
-                    "loca": "LU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RU",
-                    "loca": "RU",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }, {
-                    "id": "oskari_legend_RL",
-                    "loca": "RL",
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-
-                }]
+                "label": "",
+                "tooltip": "",
+                "options": [
+                    {
+                        "id": "oskari_legend_NO",
+                        "loca": "NO",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_legend_LL",
+                        "loca": "LL",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_LU",
+                        "loca": "LU",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_RU",
+                        "loca": "RU",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    },
+                    {
+                        "id": "oskari_legend_RL",
+                        "loca": "RL",
+                        "label": "NOT TRANSLATED",
+                        "tooltip": "NOT TRANSLATED"
+                    }
+                ]
             },
             "help": "Βοήθεια",
             "error": {
                 "title": "Σφάλμα",
-                "size": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
+                "size": "",
+                "name": "",
                 "nohelp": "Δεν διατίθεται βοήθεια",
                 "saveFailed": "Η εκτύπωση του χάρτη απέτυχε. Δοκιμάστε πάλι αργότερα.",
-                "nameIllegalCharacters": "NOT TRANSLATED"
+                "nameIllegalCharacters": ""
             }
         },
         "StartView": {

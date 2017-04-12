@@ -36,10 +36,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         start: function () {
             var me = this,
                 sandbox = this.instance.sandbox,
-                user = sandbox.getUser(),
                 p;
 
-            if (user.isLoggedIn()) {
+            if (Oskari.user().isLoggedIn()) {
                 sandbox.register(me);
                 for (p in me.eventHandlers) {
                     if (me.eventHandlers.hasOwnProperty(p)) {
@@ -239,9 +238,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          *
          */
         _processStartupLinkLayers: function (sandbox) {
-            var mapLayers = sandbox.getRequestParameter('mapLayers');
+            var mapLayers = Oskari.util.getRequestParam('mapLayers');
 
-            if (mapLayers === null || mapLayers === '') {
+            if (!mapLayers) {
                 // no linked layers
                 return;
             }
@@ -304,7 +303,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 };
             form.setValues(values);
             var content = form.getForm();
-            content.find('input[name=categoryname]').val(category.name);
+            content.find('input[data-name=categoryname]').val(category.name);
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 buttons = [],
@@ -333,9 +332,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
+            dialog.makeModal();
             dialog.show(catLoc.title, content, buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
-            dialog.makeModal();
             //bind listeners etc. for category form
             form.start();
 
@@ -357,6 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 row.append(errors[i].error);
                 content.append(row);
             }
+            dialog.makeModal();
             dialog.show(loc.validation.title, content, [okBtn]);
 
         },

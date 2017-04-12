@@ -23,7 +23,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Sinulla ei ole riittäviä oikeuksia vektoritasoon {layer}.",
             "wfs_configuring_layer_failed": "Vektoritason {layer} asetusten muuttaminen epäonnistui.",
             "wfs_request_failed": "Vektoritasolle {layer} tehty kysely epäonnistui.",
-            "features_parsing_failed": "Vektoritason {layer} kohdetietojen kysely epäonnistui."
+            "features_parsing_failed": "Vektoritason {layer} kohdetietojen kysely epäonnistui.",
+            "layer_load_fail": "Vektoritason haku epäonnistui"
         },
         "information": {
             "title": "Kohdetietojen esittäminen",
@@ -32,7 +33,7 @@ Oskari.registerLocalization(
         "refresh_alert": {
             "title": "Näkyvyysvaroitus",
             "all_not_in_scale": "Zoomitasolla ei ole yhtään virkistettävää tasoa näkyvissä, muuta zoomitaso sopivaksi",
-            "all_invisible" : "Kartalla ei ole yhtään virkistettävää tasoa näkyvissä, laita tasot näkyviin valituista tasoista"
+            "all_invisible": "Kartalla ei ole yhtään virkistettävää tasoa näkyvissä, laita tasot näkyviin valituista tasoista"
         },
         "button": {
             "cancel": "Peruuta",
@@ -46,7 +47,10 @@ Oskari.registerLocalization(
                 "cancel": "Peruuta",
                 "save": "Tallenna"
             }
+        },
+        "scale_dialog": {
+          "title": "Skaala päivitetty",
+          "msg":"Karttataso ei ole käytettävissä nykyisellä tarkennustasolla."
         }
     }
-}
-);
+});

@@ -5,5 +5,4 @@ Oskari.registerLocalization(
     "value": {
         "default-style": "Estilo por defecto"
     }
-}
-);
+});

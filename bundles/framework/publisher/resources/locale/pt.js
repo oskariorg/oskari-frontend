@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Nome da carta",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Atribua à carta um nome descritivo. Por favor tenha em atenção a língua do interface do utilizador"
             },
             "language": {
@@ -53,95 +53,95 @@ Oskari.registerLocalization(
                 "ControlsPlugin": "Pan ligado",
                 "SearchPlugin": "Pesquisa de endereço e nome de lugar",
                 "GetInfoPlugin": "Ferramenta de interrogação para lugares",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Camadas",
                 "defaultLayer": "(Camada padrão)",
                 "useAsDefaultLayer": "Use como camada padrão"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Pequeno",
                 "medium": "Médio",
                 "large": "Grande",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Dimensão à medida",
                 "width": "largura",
                 "height": "altura",
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "replace": "Substituir",
                 "cancel": "Cancelar",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -164,8 +164,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Mostrar camadas no menu",
                 "info": "Selecionar cartografia de fundo. Pode definir a carta de fundo na janela de pré-visualização",
-                "tooltip": "A carta de fundo corresponde à camada mais baixa da carta. Quando uma camada é escolhida como mais baixa, só se pode visualizar uma camada de cada vez. Pode definir a camada de fundo na pré-visualização",
-                "promote": "Ver fotografia aérea?"
+                "tooltip": "A carta de fundo corresponde à camada mais baixa da carta. Quando uma camada é escolhida como mais baixa, só se pode visualizar uma camada de cada vez. Pode definir a camada de fundo na pré-visualização"
             },
             "preview": "Pré-visualização da carta a embutir",
             "location": "Localização e nível de ampliação",
@@ -179,16 +178,14 @@ Oskari.registerLocalization(
                 "name": "Nome é informação obrigatória",
                 "nohelp": "Ajuda indisponível",
                 "saveFailed": "Falha na publicação da carta. Tente mais tarde",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "O sítio web contém carateres não permitidos. Carateres permitidos são letras a-z bem como vogais com acentos, números, tecla backspace e hífens"
             }
         },
         "NotLoggedView": {
             "text": "Deve ligar-se antes de utilizar a função de embutir mapa",
             "signup": "ligar",
-            "signupUrl": "/web/pt/login",
-            "register": "Registo",
-            "registerUrl": "/web/pt/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registo"
         },
         "StartView": {
             "text": "Pode embutir a vista que acabou de criar no seu sítio web ou da sua entidade",
@@ -197,7 +194,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "As camadas selecionadas não podem ser embutidas. O menu Camadas selecionadas mostra se se pode ou não embutir a camada",
             "layerlist_denied": "Não se pode embutir",
             "denied_tooltip": "Os fornecedores da carta não autorizam a sua publicação em outros sítios web. Ver direitos de publicação no menu Camadas selecionadas antes de embutir",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Continuar",
                 "continueAndAccept": "Aceitar os termos de utilização e continuar",
@@ -211,16 +208,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -231,5 +222,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

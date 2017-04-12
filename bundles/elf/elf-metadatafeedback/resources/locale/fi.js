@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Käyttäjäpalaute",
-            "subject": "Otsikko",
-            "subjectPlaceholder": "Kirjoita palautteelle kuvaava otsikko.",
             "ratingScore": "Arvio",
             "ratingJustification": "Perustelut arviolle"
         },
         "feedbackList": {
             "tabTitle": "Palaute",
             "average": "Keskiarvo"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Kohteen määrittely",
-            "targetIdentification": "Kohteen tunnistamistiedot",
-            "targetCode": "Kohteen koodi",
-            "targetCodeNotDefined": "Koodia ei ole määritelty.",
-            "targetCodespace": "Kohteen koodiavaruus",
-            "primaryTargetCodeSpaceNotDefined": "Koodiavaruutta ei ole määritelty.",
-            "natureOfTarget": "Kohteen tyyppi"
         },
         "userInformation": {
             "userInformation": "Käyttäjätiedot",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Palautteen tallennus onnistui."
         }
     }
-}
-);
+});

@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Link zur Kartenansicht."
             },
-            "print": {
-                "tooltip": "Kartenansicht drucken."
-            },
             "history": {
                 "reset": "Zurück zur Standardansicht",
                 "back": "Zurück zur vorherigen Ansicht.",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

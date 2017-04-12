@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "OK",
                 "title": "Քարտեզի դիտման հղում"
             },
-            "print": {
-                "tooltip": "Տպել"
-            },
             "history": {
                 "reset": "Վերադառնալ բազային պատկերին",
                 "back": "Հետ",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "Guia de usuario para la ventana de mapa",
-            "contentPart": "cuerpo"
+            "tags": "Guia de usuario para la ventana de mapa"
         }
     }
-}
-);
+});

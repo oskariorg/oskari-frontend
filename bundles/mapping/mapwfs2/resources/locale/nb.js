@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Standardstil",
         "own-style": "Egen stil",
+        "none-style": "Ingen",
         "refresh": "Oppdater",
         "refresh_title": "Oppdater dataprodukter som ikke gjengis automatisk på kartet",
         "tile": {
@@ -29,6 +30,11 @@ Oskari.registerLocalization(
             "title": "Visning av objektdata",
             "info": "Noen dataprodukter gjengis ikke automatisk. <br/><br/> Vennligst velg et område på kartet og klikk på Oppdater-knappen. <br/><br/> Klikk Objektegenskaper for å se egenskaper på dataproduktet."
         },
+        "refresh_alert": {
+            "title": "Advarsel synlighet",
+            "all_not_in_scale": "Ingen lag tilgjengelige, vennligst velg passende målestokk og prøv igjen",
+            "all_invisible": "Ingen lag er synlige, vennligst åpne valgte lag og slå på synlighet"
+        },
         "button": {
             "cancel": "Avbryt",
             "show": "Vis steder",
@@ -43,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

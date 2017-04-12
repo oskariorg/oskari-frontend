@@ -9,6 +9,21 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Teemakartat"
         },
+        "dataProviderInfoTitle": "Indikaattorit",
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Siirry teemakarttoihin",
+                "title": "Teemakartat"
+            },
+            "diagram_icon": {
+                "tooltip": "Näytä tiedot diagrammissa",
+                "title": "Diagrammi"
+            },
+            "statistics": {
+                "tooltip": "siirry teemakarttoihin",
+                "title": "Tilastot"
+            }
+        },
         "panels": {
             "newSearch": {
                 "title": "AINEISTOHAKU",
@@ -18,8 +33,8 @@ Oskari.registerLocalization(
                 "selectIndicatorPlaceholder": "Valitse aineisto",
                 "noResults": "Yhtään hakutulosta ei löytynyt, haulla",
                 "refineSearchLabel": "Tarkenna tarkasteltavan aineiston sisältöä",
-                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut",
-                "refineSearchTooltip2": "Aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip1": "Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.",
+                "refineSearchTooltip2": "",
                 "addButtonTitle": "Hae aineiston tiedot",
                 "defaultPlaceholder": "Valitse arvo",
                 "selectionValues": {
@@ -41,7 +56,6 @@ Oskari.registerLocalization(
             "extraFeatures": {
                 "title": "LISÄEHDOT JA -OMINAISUUDET",
                 "showMapLayers": "Näytä karttatasot"
-
             }
         },
         "statsgrid": {
@@ -60,7 +74,8 @@ Oskari.registerLocalization(
         "legend": {
             "title": "Luokittelu",
             "noActive": "Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.",
-            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia."
+            "noEnough": "Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.",
+            "cannotCreateLegend": "Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla."
         },
         "parameters": {
             "sex": "Sukupuoli",
@@ -71,7 +86,40 @@ Oskari.registerLocalization(
         "published": {
             "showMap": "Näytä kartta",
             "showTable": "Näytä taulukko"
+        },
+        "classify": {
+            "classify": "Luokittelu",
+            "classifymethod": "Luokittelutapa",
+            "classes": "Luokkajako",
+            "methods" : {
+                "jenks": "Luonnolliset välit",
+                "quantile": "Kvantiilit",
+                "equal": "Tasavälit"
+            },
+            "manual": "Luokittelu käsin",
+            "manualPlaceholder": "Erota luvut pilkuilla.",
+            "manualRangeError": "Luokkarajat ovat virheellisiä. Luokkarajojen on oltava välillä {min} - {max}. Erota luvut toisistaan pilkulla. Käytä desimaalierottimena pistettä. Korjaa luokkarajat ja yritä uudelleen.",
+            "nanError": "Antamasi arvo ei ole luku. Korjaa arvo ja yritä uudelleen. Käytä desimaalierottimena pistettä.",
+            "infoTitle": "Luokittelu käsin",
+            "info": "Anna luokkarajat pilkulla erotettuina lukuina. Käytä desimaalierottimena pistettä. Esimerkiksi syöttämällä \"0, 10.5, 24, 30.2, 57, 73.1\" saat viisi luokkaa, joiden arvot ovat välillä \"0-10,5\", \"10,5-24\", \"24-30,2\", \"30,2-57\" ja \"57-73,1\". Indikaattorin arvoja, jotka ovat pienempiä kuin alin luokkaraja (esimerkissä 0) tai suurempia kuin ylin luokkaraja (73,1), ei näytetä kartalla. Luokkarajojen on oltava indikaattorin pienimmän ja suurimman arvon välillä.",
+            "mode": "Luokkarajat",
+            "modes": {
+                "distinct": "Jatkuva",
+                "discontinuous": "Epäjatkuva"
+            },
+            "editClassifyTitle": "Muokkaa luokittelua",
+            "classifyFieldsTitle": "Luokitteluarvot"
+        },
+        "colorset": {
+            "button": "Värit",
+            "flipButton": "Käännä värit",
+            "themeselection": "Valitse luokkien värit",
+            "setselection": "Jakauma",
+            "seq": "Kvantitatiivinen",
+            "qual": "Kvalitatiivinen",
+            "div": "Jakautuva",
+            "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
+            "cancel": "Peruuta"
         }
-
     }
 });

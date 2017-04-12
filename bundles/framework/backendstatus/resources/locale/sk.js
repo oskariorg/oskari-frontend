@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "BackendStatus",
     "value": {
-        "title": "KoncovýStav",
+        "title": "Koncový Stav",
         "desc": "",
         "feedback": {
             "missing_backendstatus_status": {
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -78,5 +78,4 @@ Oskari.registerLocalization(
             "tooltip": "Metatieto on tietoa tiedosta, tässä tapauksessa joko paikkatietoaineistosta, -aineistosarjasta tai -palvelusta. Metatiedoista selviää mm. kyseisen tietoresurssin käyttöehdot ja saatavuus."
         }
     }
-}
-);
+});

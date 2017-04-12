@@ -9,7 +9,7 @@ Oskari.clazz.define(
      * @method create called automatically on construction
      * @static
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox}
+     * @param {Oskari.Sandbox}
      *            sandbox reference to sandbox
      * @param {Oskari.mapframework.ui.module.common.MapModule}
      *            mapModule reference to mapmodule
@@ -42,7 +42,7 @@ Oskari.clazz.define(
             var zoomChange = (zoom || zoom === 0);
 
             //if zoom is about to change -> Suppress the event
-            this.mapModule.centerMap(lonlat, null, zoomChange);
+            this.mapModule.centerMap(lonlat, null, !!zoomChange);
             if (zoomChange) {
                 if (zoom.left && zoom.top && zoom.bottom && zoom.right) {
                     this.mapModule.zoomToExtent(zoom, false, false);
@@ -52,8 +52,6 @@ Oskari.clazz.define(
                     this.mapModule.setZoomLevel(zoom, false);
                 }
             }
-
-            this.sandbox.printDebug('[MapMoveRequestHandler] map moved');
         }
     }, {
         /**

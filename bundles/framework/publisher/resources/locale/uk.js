@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Назва карти",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Додайте описову назву. Будь ласка, зазначте мову інтерфейсу користувача"
             },
             "language": {
@@ -53,95 +53,95 @@ Oskari.registerLocalization(
                 "ControlsPlugin": "Увімкнути панорамування",
                 "SearchPlugin": "Пошук адрес та назв",
                 "GetInfoPlugin": "Інструмент створення запитів",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Шари карти",
                 "defaultLayer": "(Типовий шар)",
                 "useAsDefaultLayer": "Використовувати як типовий"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Малий",
                 "medium": "Середній",
                 "large": "Великий",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Особливий",
                 "width": "ширина",
                 "height": "висота",
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
                 "ok": "ОК",
                 "replace": "Замінити",
                 "cancel": "Скасувати",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -164,8 +164,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Показувати шари в меню карти",
                 "info": "Оберіть фонову карту. Ви можете обрати типову фонову карту у вікні попереднього перегляду карти",
-                "tooltip": "Фонова карта показується як найнижчий шар карти. Якщо виберете декілька шарів як фонові, то лише один з них буде видимий і ви зможете переключатись між ними. Типовий фоновий шар ви можете встановити у вікні попереднього перегляду карти.",
-                "promote": "Показувати аерофотознімки?"
+                "tooltip": "Фонова карта показується як найнижчий шар карти. Якщо виберете декілька шарів як фонові, то лише один з них буде видимий і ви зможете переключатись між ними. Типовий фоновий шар ви можете встановити у вікні попереднього перегляду карти."
             },
             "preview": "Попередній перегляд вбудованої карти",
             "location": "Місцеположення та масштаб",
@@ -179,16 +178,14 @@ Oskari.registerLocalization(
                 "name": "Необхідна назва",
                 "nohelp": "Немає довідки",
                 "saveFailed": "Не вдалося опублікувати карту. Спробуйте пізніше",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Назва вебсайту містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс."
             }
         },
         "NotLoggedView": {
             "text": "Ви повинні увійти в систему для створення вбудованих карт",
             "signup": "Увійти в систему",
-            "signupUrl": "/web/uk/login",
-            "register": "Зареєструватись",
-            "registerUrl": "/web/uk/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Зареєструватись"
         },
         "StartView": {
             "text": "Ви можете вбудувати щойно створену карту у власний вебсайт",
@@ -197,7 +194,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Обрані шари не можна вбудувати| Меню \"Обрані шари карти\" показує, які шари можна вбудувати",
             "layerlist_denied": "Не можна вбудувати",
             "denied_tooltip": "Постачальники цих даних не надали дозволу для їх публікування на інших вебсайтах. Спочатку перевірте права на опублікування в меню \"Обрані шари карти\"",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Продовжити",
                 "continueAndAccept": "Прийняти умови використання і продовжити",
@@ -211,16 +208,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -231,5 +222,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

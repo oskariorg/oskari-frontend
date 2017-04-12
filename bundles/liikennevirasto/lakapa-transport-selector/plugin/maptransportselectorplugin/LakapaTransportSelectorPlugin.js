@@ -135,7 +135,7 @@ function(locale, conf) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     init : function(sandbox) {
@@ -488,7 +488,7 @@ function(locale, conf) {
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
@@ -941,7 +941,7 @@ function(locale, conf) {
 		        			me.selectedCropping!='lastreqular' &&
 		        			me.selectedCropping!='mapextent'
 		        				){
-		        		me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedCropping, true, false, false]);
+		        		me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedCropping, true]);
 		        	} else {
 		        		me._activateCropSelectedArea();
 		        	}
@@ -966,7 +966,7 @@ function(locale, conf) {
             var transportActiveLayers = activeLayers[me.selectedTransport];
 
             jQuery.each(transportActiveLayers, function(index, layerName){
-                me._sandbox.postRequestByName('AddMapLayerRequest', [layerName, true, false, false]);
+                me._sandbox.postRequestByName('AddMapLayerRequest', [layerName, true]);
             });
         },500);
 
@@ -1009,7 +1009,6 @@ function(locale, conf) {
   	  	} else {
   	  	   me._addLayers();
   	  	   me._createCroppingSelection();
-  	  	   me._saveLastSelectedTransport();
   	  	}
     },
     /**
@@ -1036,7 +1035,7 @@ function(locale, conf) {
      *
      * Interface method for the plugin protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stopPlugin : function(sandbox) {
@@ -1061,7 +1060,7 @@ function(locale, conf) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     start : function(sandbox) {
@@ -1071,7 +1070,7 @@ function(locale, conf) {
      *
      * Interface method for the module protocol
      *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
     stop : function(sandbox) {
@@ -1218,7 +1217,7 @@ function(locale, conf) {
      */
     _saveLastSelectedRegion: function(geometryString){
     	var me = this;
-    	if(!me._sandbox.getUser().isLoggedIn()){
+    	if(!Oskari.user().isLoggedIn()){
     		return;
     	}
     	var dte = new Date();
@@ -1268,64 +1267,6 @@ function(locale, conf) {
             url : ajaxUrl + 'action_route=SaveSelectedRegion'
         });
 
-    },
-    /**
-     * @method _saveLastSelectedTransport
-     * @private
-     * Save last selected transport
-     */
-    _saveLastSelectedTransport: function(){
-    	var me = this;
-
-    	return;
-
-    	/*
-    	if(!me._sandbox.getUser().isLoggedIn()){
-    		return;
-    	}
-    	var dte = new Date();
-        var dteMs = dte.getTime();
-
-        if( me._pendingAjaxQuery2.busy && me._pendingAjaxQuery2.timestamp &&
-            	dteMs - me._pendingAjaxQuery2.timestamp < 500 ) {
-            	me._sandbox.printDebug("[LakapaTransportSelectorPlugin] Save last selected transport NOT SENT (time difference < 500ms)");
-            	return;
-        }
-
-        me._cancelAjaxRequest2();
-        me._startAjaxRequest2(dteMs);
-
-        var ajaxUrl = me._sandbox.getAjaxUrl();
-
-        jQuery.ajax({
-            beforeSend : function(x) {
-            	me._pendingAjaxQuery2.jqhr = x;
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json;charset=UTF-8");
-                }
-            },
-            success : function(resp) {
-            	me._finishAjaxRequest2();
-            },
-            error : function() {
-            	me._finishAjaxRequest2();
-                me._notifyAjaxFailure2();
-            },
-            always: function() {
-            	me._finishAjaxRequest2();
-            },
-            complete: function() {
-            	me._finishAjaxRequest2();
-            },
-            data : {
-                selectedTransport : me.selectedTransport,
-                lang: Oskari.getLang()
-            },
-            type : 'POST',
-            dataType : 'json',
-            url : ajaxUrl + 'action_route=SaveSelectedTransport'
-        });
-    	*/
     },
     /**
      * Unselect cropping tool

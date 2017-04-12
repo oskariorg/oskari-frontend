@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Fyllfarge er ugyldig. Verdiane må vere mellom 0 og 256"
         }
     }
-}
-);
+});

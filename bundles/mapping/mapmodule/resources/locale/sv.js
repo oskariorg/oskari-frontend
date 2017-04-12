@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",
-                "layersHeader": "Kartlager",
-                "indicatorsHeader": "Indikatorer"
+                "layersHeader": "Kartlager"
             },
             "DataSourcePlugin": {
                 "link": "Datakälla",
@@ -110,5 +109,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

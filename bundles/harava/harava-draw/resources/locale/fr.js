@@ -17,5 +17,4 @@ Oskari.registerLocalization(
             "confirmDelete": "Delete selected geometry?"
         }
     }
-}
-);
+});

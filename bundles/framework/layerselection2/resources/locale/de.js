@@ -49,7 +49,7 @@ Oskari.registerLocalization(
                 "type-wfs": "Datenprodukt"
             },
             "refresh_load": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             },
             "filter": {
                 "title": "Filter",
@@ -106,5 +106,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

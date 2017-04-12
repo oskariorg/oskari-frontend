@@ -1,10 +1,11 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "eo",
     "key": "DivManazer",
     "value": {
         "LanguageSelect": {
             "title": "Lingvo",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "languages": {
                 "af": "afrikansa",
                 "ak": "akana",

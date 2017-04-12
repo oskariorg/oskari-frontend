@@ -77,14 +77,6 @@ Oskari.clazz.define(
                     'statslayer',
                     'Oskari.mapframework.bundle.mapstats.domain.StatsLayer'
                 );
-                layerModelBuilder = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder',
-                    this.getSandbox()
-                );
-                mapLayerService.registerLayerModelBuilder(
-                    'statslayer',
-                    layerModelBuilder
-                );
             }
         },
 
@@ -97,8 +89,7 @@ Oskari.clazz.define(
         _startPluginImpl: function () {
             if (!this.ajaxUrl) {
                 this.ajaxUrl =
-                    this.getSandbox().getAjaxUrl() +
-                    'action_route=GetStatsTile';
+                    this.getSandbox().getAjaxUrl('GetStatsTile');
             }
         },
 

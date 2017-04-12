@@ -64,7 +64,8 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "FeedbackServiceTool": "Palautteen antaminen (Open311)",
-                "CrosshairTool":"Näytä kartan keskipiste",
+                "MapRotator": "Salli kartan pyörittäminen",
+                "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
@@ -206,7 +207,7 @@ Oskari.registerLocalization(
             "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "Tervetuloa karttajulkaisuun. Toiminnon vaulla voit julkaista upotetun kartan omalla verkkosivulla.",
+            "text": "Tervetuloa karttajulkaisuun. Toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla.",
             "touLink": "Näytä karttajulkaisun käyttöehdot",
             "layerlist_title": "Avoinna olevat karttatasot, jotka ovat julkaistavissa",
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
@@ -245,5 +246,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

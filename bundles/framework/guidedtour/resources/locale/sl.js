@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Karto lahko približaš in oddaljiš z uporabo drsnika merila ali s plus in minus tipko ob drsniku. Nasvet: Približuješ in oddaljiš lahko tudi s plus in minus tipko na tipkovnici, z dvojnim klikom na karto ali z vrtljivim kolescem na miški. Približaš se lahko tudi z dvojnim klikom na karto."
         }
     }
-}
-);
+});

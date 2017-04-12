@@ -41,7 +41,7 @@ Oskari.registerLocalization(
                     "en": "English"
                 },
                 "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
-                "languageChangedDisclaimer":"Note! The language selection is not visible on the preview."
+                "languageChangedDisclaimer": "Note! The language selection is not visible on the preview."
             },
             "size": {
                 "label": "Map Size",
@@ -63,7 +63,8 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "CrosshairTool":"Show map focal point",
+                "MapRotator":"Enable map rotation",
+                "CrosshairTool": "Show map focal point",
                 "FeedbackServiceTool": "Feedback (Open311) service",
                 "toolbarToolNames": {
                     "history_back": "Move to previous view",
@@ -245,5 +246,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -12,6 +12,21 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "Patiopoc"
         },
+        "dataProviderInfoTitle": "Indicatoren",
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Ga naar de thema kaarten",
+                "title": "Thema kaarten"
+            },
+            "diagram_icon": {
+                "tooltip": "Toon diagram",
+                "title": "Diagram"
+            },
+            "statistics": {
+                "tooltip": "ga naar de thematische kaarten",
+                "title": "Statistieken"
+            }
+        },
         "tab": {
             "title": "Indicatoren",
             "description": "Eigen indicatoren",
@@ -191,5 +206,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Onbekende regio's",
         "loginToSaveIndicator": "Voor het opslaan van uw eigen indicator moet je inloggen."
     }
-}
-);
+});

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "pl",
     "key": "MapModule",
     "value": {
@@ -23,7 +24,7 @@ Oskari.registerLocalization({
                 "terms": "Zasady korzystania",
                 "dataSources": "Źródła danych",
                 "layersHeader": "Warstwy map",
-                "indicatorsHeader": "NOT TRANSLATED"
+                "indicatorsHeader": ""
             },
             "DataSourcePlugin": {
                 "link": "Źródło danych",
@@ -52,14 +53,14 @@ Oskari.registerLocalization({
             },
             "GetInfoPlugin": {
                 "title": "Warstwy map",
-                "layer": "NOT TRANSLATED",
+                "layer": "",
                 "places": "Miejsca",
                 "description": "Opis",
-                "link": "NOT TRANSLATED",
+                "link": "",
                 "name": "Nazwa"
             },
             "PublisherToolbarPlugin": {
-                "test": "NOT TRANSLATED",
+                "test": "",
                 "history": {
                     "reset": "Powrót do domyślnego widoku",
                     "back": "Cofnij",
@@ -71,7 +72,7 @@ Oskari.registerLocalization({
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "NOT TRANSLATED"
+                "tooltip": ""
             }
         }
     }

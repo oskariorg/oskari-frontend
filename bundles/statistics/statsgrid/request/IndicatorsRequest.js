@@ -1,7 +1,7 @@
 /**
  * Request to get open indicators.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  *
  * @class Oskari.statistics.bundle.statsgrid.request.IndicatorsRequest

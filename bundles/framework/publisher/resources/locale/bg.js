@@ -27,7 +27,7 @@ Oskari.registerLocalization(
             },
             "name": {
                 "label": "Името на картата",
-                "placeholder": "NOT TRANSLATED",
+                "placeholder": "",
                 "tooltip": "Задайте описателно име на Вашата карта. Моля, обърнете внимание на езика на потребителския интерфейс"
             },
             "language": {
@@ -52,97 +52,97 @@ Oskari.registerLocalization(
                 "Portti2Zoombar": "Лента за промяна на мащаба",
                 "ControlsPlugin": "Преместването включено",
                 "SearchPlugin": "Търсене на адреса и името на мястото",
-                "FeaturedataPlugin": "NOT TRANSLATED",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Инструмент за запитване относно даннните на мястото",
-                "PublisherToolbarPlugin": "NOT TRANSLATED",
-                "selectDrawLayer": "NOT TRANSLATED"
+                "PublisherToolbarPlugin": "",
+                "selectDrawLayer": ""
             },
             "toolbarToolNames": {
-                "history_back": "NOT TRANSLATED",
-                "history_forward": "NOT TRANSLATED",
-                "measureline": "NOT TRANSLATED",
-                "measurearea": "NOT TRANSLATED",
-                "point": "NOT TRANSLATED",
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "history_back": "",
+                "history_forward": "",
+                "measureline": "",
+                "measurearea": "",
+                "point": "",
+                "line": "",
+                "area": ""
             },
             "toollayout": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "lefthanded": "NOT TRANSLATED",
-                "righthanded": "NOT TRANSLATED",
-                "userlayout": "NOT TRANSLATED",
-                "usereditmode": "NOT TRANSLATED",
-                "usereditmodeoff": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "lefthanded": "",
+                "righthanded": "",
+                "userlayout": "",
+                "usereditmode": "",
+                "usereditmodeoff": ""
             },
             "data": {
-                "label": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
-                "grid": "NOT TRANSLATED",
-                "allowClassification": "NOT TRANSLATED"
+                "label": "",
+                "tooltip": "",
+                "grid": "",
+                "allowClassification": ""
             },
             "layout": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "fields": {
                     "colours": {
-                        "label": "NOT TRANSLATED",
-                        "placeholder": "NOT TRANSLATED",
-                        "buttonLabel": "NOT TRANSLATED",
-                        "light_grey": "NOT TRANSLATED",
-                        "dark_grey": "NOT TRANSLATED",
-                        "blue": "NOT TRANSLATED",
-                        "red": "NOT TRANSLATED",
-                        "green": "NOT TRANSLATED",
-                        "yellow": "NOT TRANSLATED",
-                        "custom": "NOT TRANSLATED",
+                        "label": "",
+                        "placeholder": "",
+                        "buttonLabel": "",
+                        "light_grey": "",
+                        "dark_grey": "",
+                        "blue": "",
+                        "red": "",
+                        "green": "",
+                        "yellow": "",
+                        "custom": "",
                         "customLabels": {
-                            "bgLabel": "NOT TRANSLATED",
-                            "titleLabel": "NOT TRANSLATED",
-                            "headerLabel": "NOT TRANSLATED",
-                            "iconLabel": "NOT TRANSLATED",
-                            "iconCloseLabel": "NOT TRANSLATED",
-                            "iconCloseWhiteLabel": "NOT TRANSLATED"
+                            "bgLabel": "",
+                            "titleLabel": "",
+                            "headerLabel": "",
+                            "iconLabel": "",
+                            "iconCloseLabel": "",
+                            "iconCloseWhiteLabel": ""
                         }
                     },
                     "fonts": {
-                        "label": "NOT TRANSLATED"
+                        "label": ""
                     },
                     "toolStyles": {
-                        "label": "NOT TRANSLATED",
-                        "default": "NOT TRANSLATED",
-                        "rounded-dark": "NOT TRANSLATED",
-                        "rounded-light": "NOT TRANSLATED",
-                        "sharp-dark": "NOT TRANSLATED",
-                        "sharp-light": "NOT TRANSLATED",
-                        "3d-dark": "NOT TRANSLATED",
-                        "3d-light": "NOT TRANSLATED"
+                        "label": "",
+                        "default": "",
+                        "rounded-dark": "",
+                        "rounded-light": "",
+                        "sharp-dark": "",
+                        "sharp-light": "",
+                        "3d-dark": "",
+                        "3d-light": ""
                     }
                 },
                 "popup": {
-                    "title": "NOT TRANSLATED",
-                    "close": "NOT TRANSLATED",
+                    "title": "",
+                    "close": "",
                     "gfiDialog": {
-                        "title": "NOT TRANSLATED",
-                        "featureName": "NOT TRANSLATED",
-                        "featureDesc": "NOT TRANSLATED"
+                        "title": "",
+                        "featureName": "",
+                        "featureDesc": ""
                     }
                 }
             },
             "layers": {
-                "add": "NOT TRANSLATED",
-                "addselect": "NOT TRANSLATED",
+                "add": "",
+                "addselect": "",
                 "label": "Картни слоеве",
                 "defaultLayer": "( Слой по подразбиране )",
                 "useAsDefaultLayer": "Използване като слой по подразбиране"
             },
             "myplaces": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "sizes": {
                 "small": "Малък",
                 "medium": "Среден",
                 "large": "Голям",
-                "fill": "NOT TRANSLATED",
+                "fill": "",
                 "custom": "Обичаен размер",
                 "width": "ширина",
                 "height": "височина",
@@ -154,7 +154,7 @@ Oskari.registerLocalization(
                 "ok": "ОК",
                 "replace": "Заместване",
                 "cancel": "Отказ / Отмяна",
-                "add": "NOT TRANSLATED"
+                "add": ""
             },
             "confirm": {
                 "replace": {
@@ -165,8 +165,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Показване на картните слоеве в менюто",
                 "info": "Избор на карта - фон. Може да изберете карта - фон по подразбиране от прегледа на картата в прозореца",
-                "tooltip": "Картата - фон е показана, като долния слой на картата. Когато избирате картни слоеве да бъдат използвани като долен слой, само един слой е видим и може да превлючвате между тях. Може да зададете по подразбиране карта - фон в прегледа на картата.",
-                "promote": "Показване на въздушни снимки?"
+                "tooltip": "Картата - фон е показана, като долния слой на картата. Когато избирате картни слоеве да бъдат използвани като долен слой, само един слой е видим и може да превлючвате между тях. Може да зададете по подразбиране карта - фон в прегледа на картата."
             },
             "preview": "Преглед на картата, която ще бъде прикачвана",
             "location": "Местоположение и мащаб",
@@ -180,16 +179,14 @@ Oskari.registerLocalization(
                 "name": "Името е информация, която e задължителна",
                 "nohelp": "Помощта не е на разположение",
                 "saveFailed": "Публикуването на картата не е успешно. Опитайте по-късно",
-                "nameIllegalCharacters": "NOT TRANSLATED",
+                "nameIllegalCharacters": "",
                 "domainIllegalCharacters": "Името на уебсайта съдържа неразрешени знаци. Разрешените знаци са букви от a - z, като...., цифри, празни полета и тирета"
             }
         },
         "NotLoggedView": {
             "text": "Трябва да влезете преди да използвате функцията за прикачване",
             "signup": "Вход",
-            "signupUrl": "NOT TRANSLATED",
-            "register": "Регистриране",
-            "registerUrl": "NOT TRANSLATED"
+            "register": "Регистриране"
         },
         "StartView": {
             "text": "Може да прикачите изгледа на картата, който току - що създадохте, на вашия собствен сайт или на този на Вашия работодател",
@@ -198,7 +195,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Картните слоеве, които сте избрали, не могат да бъдат прикачени / Менюто Избрани картни слоеве показва може ли или не картният слой да бъде прикачен",
             "layerlist_denied": "Не може да бъде прикачено",
             "denied_tooltip": "Лицата, предоставящи тези картни данни, нямат разрешение да публикуват тези материали на други сайтове. Проверете правата за публикуване в менюто Селектирани картни слоеве преди прикачването.",
-            "myPlacesDisclaimer": "NOT TRANSLATED",
+            "myPlacesDisclaimer": "",
             "buttons": {
                 "continue": "Продължаване",
                 "continueAndAccept": "Приемане Условията на ползване и продължаване",
@@ -212,16 +209,10 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
-                }
-            }
+            "show": "",
+            "hide": "",
+            "hidden": "",
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -232,5 +223,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -3,14 +3,12 @@
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultExtension class.
- *
  */
 Oskari.clazz.define(
     'Oskari.statistics.statsgrid.StatsGridBundleInstance',
     /**
      * @static constructor function
      */
-
     function () {
         // these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
         this.defaultConf = {
@@ -22,98 +20,104 @@ Oskari.clazz.define(
         };
         this.visible = false;
 
-        this._templates= {
-            publishedToggleButtons: jQuery('<div class="statsgrid-published-toggle-buttons"><div class="map"></div><div class="table active"></div>')
-        };
-
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
+
+        this._lastRenderMode = null;
+
+        this.togglePlugin = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
 
             // create the StatisticsService for handling ajax calls and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox);
+            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
+            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
             statsService.addDatasource(conf.sources);
-
+            // disable tile if we don't have anything to show or enable if we do
             this.getTile().setEnabled(this.hasData());
-            if(this.state) {
-                this.setState(this.state);
-            }
+            // setup initial state
+            this.setState();
 
-            var tile = this.getTile();
-            var cel = tile.container;
-
-            if (!cel.hasClass('statsgrid')) {
-                cel.addClass('statsgrid');
+            if(this.isEmbedded()) {
+                // Start in an embedded map mode
+                // Embedded map might not have the grid. If enabled show toggle buttons so user can access it
+                me.showToggleButtons(conf.grid !== false, this.state.view);
+                // Always show legend on map when embedded
+                me.showLegendOnMap(true);
+                // Classification can be disabled for embedded map
+                me.enableClassification(conf.allowClassification !== false);
             }
-
-            if(conf.showLegend === true) {
-                me.renderPublishedLegend(conf);
-            }
-            if(me.hasPublished() && conf.grid) {
-                me.renderToggleButtons();
-                me.changePosition({top:0,left:0});
-            }
-        },
-        changePosition: function(position){
-            var me = this;
-            position = position || {};
-
-            var flyout =  me.getFlyout().getEl().parent().parent();
-
-            if(typeof position.top === 'number' || typeof position.top === 'string'){
-                flyout.css('top', position.top);
-            }
-            if(typeof position.left === 'number' || typeof position.left === 'string'){
-                flyout.css('left', position.left);
+            // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
+            this.__setupLayerTools();
+            // setup DataProviderInfoService group if possible (LogoPlugin)
+            var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(dsiservice) {
+                dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
         },
-        renderToggleButtons: function(remove){
-            var me = this;
-            if(remove){
-                jQuery('.statsgrid-published-toggle-buttons').remove();
-                return;
-            }
-            var toggleButtons = me._templates.publishedToggleButtons.clone();
-            var map = toggleButtons.find('.map');
-            var table = toggleButtons.find('.table');
-            table.addClass('active');
+        isEmbedded: function() {
+            return jQuery('#contentMap').hasClass('published');
+        },
+        hasData: function () {
+            return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
+        },
 
-            map.attr('title', me.getLocalization().published.showMap);
-            table.attr('title', me.getLocalization().published.showTable);
-
-            map.bind('click', function(){
-                if(!map.hasClass('active')) {
-                    table.removeClass('active');
-                    map.addClass('active');
-                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'close', 'StatsGrid']);
+        /**
+         * Fetches reference to the map layer service
+         * @return {Oskari.mapframework.service.MapLayerService}
+         */
+        getLayerService : function() {
+            return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        },
+        /**
+         * This will trigger an update on the LogoPlugin/Datasources popup when available.
+         * @param  {Number} ds         datasource id
+         * @param  {String} id         indicator id
+         * @param  {Object} selections Year/other possible selections
+         * @param  {Boolean} wasRemoved true if the indicator was removed
+         */
+        notifyDataProviderInfo : function(ds, id, selections, wasRemoved) {
+                var me = this;
+                var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+                if(!service) {
+                    return;
                 }
-            });
-
-            table.bind('click', function(){
-                if(!table.hasClass('active')) {
-                    map.removeClass('active');
-                    table.addClass('active');
-                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest',[me, 'detach', 'StatsGrid']);
+                var dsid = ds + '_' +id;
+                if(wasRemoved) {
+                    // the check if necessary if the same indicator is added more than once with different selections
+                    if(!this.statsService.getStateService().isSelected(ds, id)) {
+                        // if this was the last dataset for the datasource & indicator. Remove it.
+                        service.removeItemFromGroup('indicators', dsid);
+                    }
+                    return;
                 }
-            });
-
-            jQuery('body').append(toggleButtons);
-        },
-        hasPublished: function(){
-            var map = jQuery('#contentMap');
-            if(map.hasClass('mapPublishMode') ||  map.hasClass('published')) {
-                return true;
-            }
-            return false;
+                // indicator added - determine UI labels
+                this.statsService.getUILabels({
+                    datasource : ds,
+                    indicator : id,
+                    selections : selections
+                }, function(labels) {
+                    var data = {
+                        'id' : dsid,
+                        'name' : labels.indicator,
+                        'source' : labels.source
+                    };
+                    if(!service.addItemToGroup('indicators', data)) {
+                        // if adding failed, it might because group was not registered.
+                        service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
+                        // Try adding again
+                        service.addItemToGroup('indicators', data)
+                    }
+                });
         },
         eventHandlers: {
             'StatsGrid.IndicatorEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
+                this.notifyDataProviderInfo(evt.getDatasource(),  evt.getIndicator(), evt.getSelections(), evt.isRemoved());
             },
             'StatsGrid.RegionsetChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -124,10 +128,22 @@ Oskari.clazz.define(
             'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.ClassificationChangedEvent': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.DatasourceEvent': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent' : function() {
-                // close/tear down tge ui when receiving the event
-                var sandbox = this.getSandbox();
-                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                // close/tear down the ui when receiving the event
+                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                var flyout = this.getFlyout();
+                if(flyout) {
+                    var legend = this.getFlyout().getLegendFlyout();
+                    if(legend) {
+                        legend.hide();
+                    }
+                }
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
@@ -135,49 +151,21 @@ Oskari.clazz.define(
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
                     // not me/no data -> do nothing
-                    this.visible = false;
                     return;
                 }
-                var me = this;
-                var isShown = event.getViewState() !== 'close';
-                this.visible = isShown;
-                var conf = this.getConfiguration();
-                if(isShown) {
-                    var defaultConf = {
-                        search: true,
-                        extraFeatures: true,
-                        areaSelection: true,
-                        mouseEarLegend: true,
-                        showLegend: true
-                    };
-                    var map = jQuery('#contentMap');
-                    if(map.hasClass('mapPublishMode')) {
-                        conf.search = false;
-                        conf.extraFeatures = false;
-                        conf.areaSelection = false;
-                        conf.mouseEarLegend = false;
-                        conf.showLegend = true;
-                    } else if(!map.hasClass('published')) {
-                        conf.search = true;
-                        conf.extraFeatures = true;
-                        conf.areaSelection = true;
-                        conf.mouseEarLegend = true;
-                        conf.showLegend = false;
-                    }
-
-                    conf = jQuery.extend({}, defaultConf, this.getConfiguration());
-
-                    if(conf.grid !== false) {
-                        this.getFlyout().lazyRender(conf);
-                    }
-
+                var wasClosed = event.getViewState() === 'close';
+                // moving flyout around will trigger attach states on each move
+                var visibilityChanged = this.visible === wasClosed;
+                this.visible = !wasClosed;
+                if(wasClosed){
+                    return;
                 }
-                else if(event.getViewState() === 'close'){
-                    this.getFlyout().handleClose();
-                }
-
-                if(conf.showLegend === true) {
-                    me.renderPublishedLegend(conf);
+                var renderMode = this.isEmbedded();
+                // rendermode changes if we are in geoportal and open the flyout in publisher
+                if(this._lastRenderMode !== renderMode && visibilityChanged) {
+                    this.getFlyout().render(renderMode);
+                    this._lastRenderMode = renderMode;
+                    this.getFlyout().setGridHeaderHeight();
                 }
             },
             /**
@@ -188,171 +176,65 @@ Oskari.clazz.define(
             MapLayerEvent: function (event) {
                 // Enable tile when stats layer is available
                 this.getTile().setEnabled(this.hasData());
+                // setup tools for new layers
+                if(event.getOperation() !== 'add')  {
+                    // only handle add layer
+                    return;
+                }
+                if(event.getLayerId()) {
+                    this.__addTool(event.getLayerId());
+                }
+                else {
+                    // ajax call for all layers
+                    this.__setupLayerTools();
+                }
+
             }
-        },
-        hasData: function () {
-            return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
         },
 
         /**
-         * @method  @public renderPublishedLegend Render published  legend
+         * Adds the Feature data tool for layer
+         * @param  {String| Number} layerId layer to process
+         * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        renderPublishedLegend: function(config){
+        __addTool : function(layerModel, suppressEvent) {
             var me = this;
-            var sb = me.getSandbox();
-            var locale = this.getLocalization();
-
-            jQuery('.statsgrid-legend-flyout-published').show();
-
-            if(config.showLegend === false) {
-                jQuery('.statsgrid-legend-flyout-published').hide();
+            var service = this.getLayerService();
+            if(typeof layerModel !== 'object') {
+                // detect layerId and replace with the corresponding layerModel
+                layerModel = service.findMapLayer(layerModel);
+            }
+            if(!layerModel || !layerModel.isLayerOfType('STATS')) {
                 return;
             }
 
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-
-            var state = service.getStateService();
-            var ind = state.getActiveIndicator();
-            if(!ind) {
-                return;
-            }
-
-            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-                if(err) {
-                    me.log.warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                    return;
-                }
-                var classify = service.getClassificationService().getClassification(data);
-                if(!classify) {
-                    me.log.warn('Error getting indicator classification', data);
-                    return;
-                }
-
-                var flyout = me.getFlyout();
-
-                // format regions to groups for url
-                var regiongroups = classify.getGroups();
-                var classes = [];
-                regiongroups.forEach(function(group) {
-                    // make each group a string separated with comma
-                    classes.push(group.join());
-                });
-
-                var colorsWithoutHash = service.getColorService().getColorset(regiongroups.length);
-                var colors = [];
-                colorsWithoutHash.forEach(function(color) {
-                    colors.push('#' + color);
-                });
-
-                var state = service.getStateService();
-
-                service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err) {
-                    if(err) {
-                        me.log.warn('Error getting indicator metadata', ind.datasource, ind.indicator);
-                        return;
-                    }
-                    flyout.getLegendFlyout(
-                    {
-                        callbacks: {
-                            show: function() {
-                                var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-                                var container = jQuery('<div class="accordion-published"></div>');
-
-                                var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                                panel.setTitle(locale.legend.title);
-                                panel.setContent(me.__sideTools.legend.comp.getClassification());
-                                panel.setVisible(true);
-                                panel.open();
-
-                                accordion.addPanel(panel);
-                                accordion.insertTo(container);
-
-                                me.__sideTools.legend.flyout.setContent(container);
-                            },
-                            after: function(){
-                                me.__sideTools.legend.flyout.show();
-                            }
-                        },
-                        locale: {
-                            title: ''
-                        },
-                        cls: 'statsgrid-legend-flyout-published'
-                    }, me);
-
-                    service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
-                        var ind = event.getCurrent();
-                        if(ind) {
-                            me.updatePublishedFlyoutTitle(ind, config);
-                        }
-                    });
-
-                    me.updatePublishedFlyoutTitle(state.getActiveIndicator(), config);
-                });
+            // add feature data tool for layer
+            var layerLoc = this.getLocalization('layertools').table_icon || {},
+                label = layerLoc.title || 'Thematic maps',
+                tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            tool.setName("table_icon");
+            tool.setTitle(label);
+            tool.setTooltip(layerLoc.tooltip || label);
+            tool.setCallback(function () {
+                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
             });
+
+            service.addToolForLayer(layerModel, tool, suppressEvent);
         },
         /**
-         * @method  @public updatePublishedFlyoutTitle update published map legend
-         * @param  {Object} ind indicator
-         * @param {Object} config config
+         * Adds tools for all layers
          */
-        updatePublishedFlyoutTitle: function (ind, config){
+        __setupLayerTools : function() {
             var me = this;
-            var sb = me.getSandbox();
-            var service = sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            if(!service) {
-                // not available yet
-                return;
-            }
-            var state = service.getStateService();
-
-            service.getIndicatorMetadata(ind.datasource, ind.indicator, function(err, indicator) {
-
-                var getSourceLink = function(currentHash){
-                    var indicators = state.getIndicators();
-                    var currentIndex = state.getIndicatorIndex(currentHash);
-                    var nextIndicatorIndex = 1;
-                    if(currentIndex === indicators.length) {
-                        nextIndicatorIndex = 1;
-                    } else {
-                        nextIndicatorIndex=currentIndex + 1;
-                    }
-
-                    return {
-                        index: nextIndicatorIndex,
-                        handler: function(){
-                            var curIndex = nextIndicatorIndex-1;
-                            var i = indicators[curIndex];
-                            state.setActiveIndicator(i.hash);
-                        }
-                    };
-                };
-
-                var link = getSourceLink(ind.hash);
-                var selectionsText = '';
-
-                if(config.grid !== true || config.showLegend !== false) {
-                    var linkButton = '';
-                    if(state.indicators.length>1) {
-                        linkButton = '<div class="link">' + me.getLocalization().statsgrid.source + ' ' + link.index + ' >></div>';
-                    }
-                    selectionsText = service.getSelectionsText(ind, me.getLocalization().panels.newSearch, function(text){
-                        me.__sideTools.legend.flyout.setTitle('<div class="header">' + me.getLocalization().statsgrid.source + ' ' + state.getIndicatorIndex(ind.hash) + '</div>' +
-                            linkButton +
-                            '<div class="sourcename">' + Oskari.getLocalized(indicator.name) + text + '</div>');
-                    });
-                }
-
-                me.__sideTools.legend.flyout.getTitle().find('.link').unbind('click');
-                me.__sideTools.legend.flyout.getTitle().find('.link').bind('click', function(){
-                    link.handler();
-                });
-
+            // add tools for feature data layers
+            var service = this.getLayerService();
+            var layers = service.getAllLayers();
+            _.each(layers, function(layer) {
+                me.__addTool(layer, true);
             });
-
+            // update all layers at once since we suppressed individual events
+            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            me.sandbox.notifyAll(event);
         },
 
         /**
@@ -363,86 +245,30 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            state = state || {};
+            state = state || this.state || {};
             var service = this.statsService.getStateService();
             service.reset();
             if(state.regionset) {
                 service.setRegionset(state.regionset);
             }
+
             if(state.indicators) {
                 state.indicators.forEach(function(ind) {
-                    service.addIndicator(ind.ds, ind.id, ind.selections);
+                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.classification);
                 });
             }
+
             if(state.active) {
                 service.setActiveIndicator(state.active);
             }
+
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
-        /**
-         * addChosenHacks Add chosen hacks to element
-         * FIXME: remove this when oskari components have own working selection
-         * @param {Jquery.element} element
-         */
-        addChosenHacks: function(element, makeOverEl){
-            // Fixes chosen selection to visible when rendering chosen small height elements
-            element.on('chosen:showing_dropdown', function () {
-
-                jQuery(this).parents('div').each(function() {
-                    var el = jQuery(this);
-                    if(!el.hasClass('oskari-flyoutcontentcontainer')) {
-                        el.css('overflow', 'visible');
-                    }
-                });
-            });
-
-            // Fixes chosen selection go upper when chosen element is near by window bottom
-            element.on('chosen:showing_dropdown', function(event) {
-                var chosen_container = jQuery(event.target).next('.chosen-container');
-                var dropdown = chosen_container.find('.chosen-drop');
-                var dropdown_top = dropdown.offset().top - $(window).scrollTop();
-                var dropdown_height = dropdown.height();
-                var viewport_height = jQuery(window).height();
-
-                if ( dropdown_top + dropdown_height > viewport_height ) {
-                    chosen_container.addClass('chosen-drop-up');
-                }
-            });
-            element.on('chosen:hiding_dropdown', function(event) {
-                jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
-            });
-
-
-            if(makeOverEl) {
-                element.on('chosen:showing_dropdown', function(event) {
-                    var chosen_container = jQuery(event.target).next('.chosen-container');
-                    var offset = chosen_container.offset();
-                    var dropdown = chosen_container.find('.chosen-drop');
-                    dropdown.css('position', 'fixed');
-                    dropdown.css('width', '300px');
-                    dropdown.css('top', (offset.top + chosen_container.height()) + 'px');
-                    dropdown.css('left', offset.left + 'px');
-                });
-
-                element.on('chosen:hiding_dropdown', function(event) {
-                    var chosen_container = jQuery(event.target).next('.chosen-container');
-                    var offset = chosen_container.offset();
-                    var dropdown = chosen_container.find('.chosen-drop');
-                    dropdown.css('position', '');
-                    dropdown.css('width', '');
-                    dropdown.css('top', '');
-                    dropdown.css('left', '');
-                });
-            }
-
-        },
-
         getState: function () {
             var me = this;
-
             var service = this.statsService.getStateService();
             var state = {
                 indicators : [],
@@ -451,9 +277,10 @@ Oskari.clazz.define(
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({
-                    ds : ind.datasource,
-                    id : ind.indicator,
-                    selections : ind.selections
+                    ds: ind.datasource,
+                    id: ind.indicator,
+                    selections: ind.selections,
+                    classification: service.getClassificationOpts(ind.hash)
                 });
             });
             var active = service.getActiveIndicator();
@@ -461,6 +288,66 @@ Oskari.clazz.define(
                 state.active = active.hash;
             }
             return state;
+        },
+        showToggleButtons: function(enabled, visible) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if(!enabled) {
+                if(this.togglePlugin) {
+                    mapModule.unregisterPlugin(me.togglePlugin);
+                    mapModule.stopPlugin(me.togglePlugin);
+                }
+                return;
+            }
+            if(!this.togglePlugin) {
+                this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
+            }
+            me.getFlyout().move(0,0);
+            mapModule.registerPlugin(me.togglePlugin);
+            mapModule.startPlugin(me.togglePlugin);
+            me.togglePlugin.showTable(visible || me.visible);
+        },
+        /**
+         * @method  @public showLegendOnMap Render published  legend
+         */
+        showLegendOnMap: function(enabled){
+            var me = this;
+
+            var config = me.getConfiguration();
+            var sandbox = me.getSandbox();
+            var locale = this.getLocalization();
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if(!enabled) {
+                if(me.plugin) {
+                    mapModule.unregisterPlugin(me.plugin);
+                    mapModule.stopPlugin(me.plugin);
+                    me.plugin = null;
+                }
+                return;
+            }
+
+            if(!me.plugin) {
+                me.plugin = Oskari.clazz.create('Oskari.statistics.statsgrid.plugin.ClassificationToolPlugin', me, config, locale, mapModule, sandbox);
+            }
+            mapModule.registerPlugin(me.plugin);
+            mapModule.startPlugin(me.plugin);
+            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            if (Oskari.util.isMobile() && this.plugin.hasUI()) {
+                mapModule.redrawPluginUIs(true);
+            }
+            return;
+        },
+
+        /**
+         * @method  @public enableClassification change published map classification visibility.
+         * @param  {Boolean} visible visible or not
+         */
+        enableClassification: function(enabled) {
+            if(!this.plugin) {
+                return;
+            }
+            this.plugin.enableClassification(enabled);
         }
 
     }, {

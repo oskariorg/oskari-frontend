@@ -29,8 +29,8 @@ Oskari.registerLocalization(
                     },
                     "tooltips": {
                         "point": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "line": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "area": "Lisää väliaikainen piste käytettäväksi analyysin pohjana."
+                        "line": "Lisää väliaikainen viiva käytettäväksi analyysin pohjana.",
+                        "area": "Lisää väliaikainen alue käytettäväksi analyysin pohjana."
                     },
                     "modes": {
                         "area": "Väliaikainen alue",
@@ -194,7 +194,7 @@ Oskari.registerLocalization(
                 ],
                 "attribute": "Valitse ominaisuustieto",
                 "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa.",
-                "aggregateAdditionalInfo":"Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
+                "aggregateAdditionalInfo": "Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",
@@ -306,14 +306,15 @@ Oskari.registerLocalization(
                     {
                         "id": "stddev",
                         "label": "Keskihajonta"
-                    }]
+                    }
+                ]
             },
             "params": {
                 "label": "Mukaan otettavat ominaisuustiedot",
                 "aggreLabel": "Ominaisuustiedot joille tunnusluvut lasketaan",
                 "aggreLabelTooltip": "Valitse enintään 10 ominaisuustietoa, joille lasketaan tunnusluvut.",
                 "labelTooltip": "Valitse enintään 10 ominaisuustietoa, jotka otetaan mukaan lopputulokseen.",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "oskari_analyse_all",
@@ -405,7 +406,7 @@ Oskari.registerLocalization(
                 "placeholder": "Anna karttatasolle nimi."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Piste",
                     "color": "Väri",
@@ -451,5 +452,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

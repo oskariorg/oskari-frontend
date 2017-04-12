@@ -23,9 +23,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "map window,user guide",
-            "contentPart": "body"
+            "tags": "map window,user guide"
         }
     }
-}
-);
+});

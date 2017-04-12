@@ -289,7 +289,7 @@ function(instance) {
         };
 
         grid.onBeforeEditCell.subscribe(function(e, args) {
-            if(!sandbox.getUser().isLoggedIn()) {
+            if(!Oskari.user().isLoggedIn()) {
                 return false;
             }
         });

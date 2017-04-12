@@ -23,7 +23,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Du har inte rättigheter att använda WFS skikt {layer}.",
             "wfs_configuring_layer_failed": "Konfigureringen av WFS-lager ({layer}) misslyckades.",
             "wfs_request_failed": "Begäran till WFS-lager ({layer}) misslyckades.",
-            "features_parsing_failed": "Hanteringen av features i WFS-lager ({layer}) misslyckades."
+            "features_parsing_failed": "Hanteringen av features i WFS-lager ({layer}) misslyckades.",
+            "layer_load_fail": "Hämtning av WFS-lager misslyckades"
         },
         "information": {
             "title": "WFS-data rendering",
@@ -32,7 +33,7 @@ Oskari.registerLocalization(
         "refresh_alert": {
             "title": "Visibility warning",
             "all_not_in_scale": "There are no layers to refresh, please move to a suitable zoom level and try again",
-            "all_invisible" : "There are no visible layers to refresh, please open selected layers and set visible some of current layers"
+            "all_invisible": "There are no visible layers to refresh, please open selected layers and set visible some of current layers"
         },
         "button": {
             "cancel": "Avbryt",
@@ -46,7 +47,10 @@ Oskari.registerLocalization(
                 "cancel": "Avbryt",
                 "save": "Spara"
             }
+        },
+        "scale_dialog": {
+          "title": "Skaala uppdaterad",
+          "msg":"Detta kartlager kan inte visas på den valda skalnivån."
         }
     }
-}
-);
+});

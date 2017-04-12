@@ -9,6 +9,31 @@ This bundle provides UI for routing. In this bundle user can select start and en
 
 ![screenshot](routingui.png)
 
+## Bundle configuration
+
+No configuration is required, but there is few possible configurations:
+
+- Setting `decimals` for wanted decimals rounding for input box lon/lat values. For examples:
+```javascript
+// Set all projections rounding rule
+{
+  "decimals": 6
+}
+
+// Set projection specified rounding rules
+{
+  "decimals" {
+      "EPSG:4326": 5,
+      "EPSG:3067": 0
+  }
+}
+
+// Use default rounding rules, use empty decimals configuration. Then rounding decimal are map projection unit specified
+{
+}
+
+```
+
 ## Requests the bundle sends out
 
 <table class="table">
@@ -43,7 +68,7 @@ This bundle provides UI for routing. In this bundle user can select start and en
   </tr>
   <tr>
     <td>`RouteResultEvent`</td><td>Updates the route plans to the UI.</td>
-  </tr>  
+  </tr>
 </table>
 
 ## Dependencies

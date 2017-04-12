@@ -100,5 +100,4 @@ Oskari.registerLocalization(
             "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
-}
-);
+});

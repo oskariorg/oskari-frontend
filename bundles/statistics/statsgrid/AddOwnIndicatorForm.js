@@ -255,7 +255,7 @@ Oskari.clazz.define(
                 indicatorData = me._gatherData();
 
             if (indicatorData  && service) {
-                if (this.sandbox && this.sandbox.getUser().isLoggedIn()) {
+                if (this.sandbox && Oskari.user().isLoggedIn()) {
                     service.saveUserIndicator(indicatorData, function (indicator) {
                         me._handleCancel(e, me);
                         if (indicator.id !== null && indicator.id !== undefined) {

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "MyPlaces2",
     "value": {
@@ -14,10 +15,10 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Mjesta",
-            "nocategories": "NOT TRANSLATED",
+            "nocategories": "",
             "publishCategory": {
-                "privateTooltip": "NOT TRANSLATED",
-                "publicTooltip": "NOT TRANSLATED"
+                "privateTooltip": "",
+                "publicTooltip": ""
             },
             "addCategory": "Dodaj sloj karte",
             "editCategory": "Uredi sloj karte",
@@ -27,43 +28,43 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Ime",
                 "desc": "Opis",
-                "createDate": "NOT TRANSLATED",
-                "updateDate": "NOT TRANSLATED",
-                "measurement": "NOT TRANSLATED",
+                "createDate": "",
+                "updateDate": "",
+                "measurement": "",
                 "edit": " ",
                 "delete": " "
             },
             "notification": {
                 "delete": {
-                    "title": "NOT TRANSLATED",
-                    "confirm": "NOT TRANSLATED",
+                    "title": "",
+                    "confirm": "",
                     "btnDelete": "Izbriši",
                     "btnCancel": "Odustani",
-                    "success": "NOT TRANSLATED",
-                    "error": "NOT TRANSLATED",
-                    "cancel": "NOT TRANSLATED"
+                    "success": "",
+                    "error": "",
+                    "cancel": ""
                 }
             }
         },
         "tools": {
             "measureline": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m"
             },
             "measurearea": {
-                "title": "NOT TRANSLATED",
-                "tooltip": "NOT TRANSLATED",
+                "title": "",
+                "tooltip": "",
                 "add": "",
                 "next": "",
-                "edit": "NOT TRANSLATED",
+                "edit": "",
                 "noResult": "0 m²"
             },
             "point": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodaj točku",
                 "add": "Dodaj točku klikom na kartu.",
                 "next": "Možete spremiti ili nacrtati više točaka na istom crtežu.",
@@ -71,7 +72,7 @@ Oskari.registerLocalization({
                 "save": "Spremi lokaciju"
             },
             "line": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodaj liniju",
                 "add": "Dodaj lomnu točku na liniju klikom na kartu. Prekini crtanje dvostrukim klikom ili klikom na 'Završetak crtanja'.",
                 "next": "Možete spremiti ili nacrtati više linija na istom crtežu.",
@@ -80,7 +81,7 @@ Oskari.registerLocalization({
                 "noResult": "0 m"
             },
             "area": {
-                "title": "NOT TRANSLATED",
+                "title": "",
                 "tooltip": "Dodaj područje",
                 "add": "Dodaj lomne točke na poligon klikom na kartu. Prekini crtanje dvostrukim klikom ili klikom na 'Završetak crtanja'. Za kreiranje rupa u poligonima, drži pritisnutu tipku Alt.",
                 "next": "Možete spremiti ili nacrtati više poligona na istom crtežu.",
@@ -95,7 +96,7 @@ Oskari.registerLocalization({
             "close": "Poništi",
             "finish": "Spremi crtež",
             "save": "Spremi",
-            "saveAsMyPlace": "NOT TRANSLATED",
+            "saveAsMyPlace": "",
             "movePlaces": "Pomakni mjesta i izbriši",
             "deleteCategory": "Izbriši",
             "deleteCategoryAndPlaces": "Izbriši kategoriju i mjesta",
@@ -115,24 +116,23 @@ Oskari.registerLocalization({
                 "placeholder": "Opiši mjesto"
             },
             "placeAttention": {
-                "placeholder": "NOT TRANSLATED"
+                "placeholder": ""
             },
             "measurement": {
-                "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED"
+                "line": "",
+                "area": ""
             },
             "category": {
                 "label": "Sloj karte",
-                "newLayer": "NOT TRANSLATED",
-                "choose": "NOT TRANSLATED"
+                "newLayer": "",
+                "choose": ""
             },
             "imagelink": {
                 "placeholder": "NOT TRANSLATEDL",
-                "previewLabel": "NOT TRANSLATED",
-                "add": "NOT TRANSLATED"
+                "previewLabel": ""
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "tooltip": "Točka"
                 }
@@ -163,10 +163,10 @@ Oskari.registerLocalization({
                 }
             },
             "visibleFields": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "placename": "Ime",
                 "placedesc": "Opis",
-                "image": "NOT TRANSLATED"
+                "image": ""
             },
             "edit": {
                 "title": "Uredi sloj karte",
@@ -174,34 +174,34 @@ Oskari.registerLocalization({
                 "cancel": "Natrag"
             },
             "rendering": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "area": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 },
                 "line": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": ""
                 }
             }
         },
         "pointform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "symbol": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "size": {
                 "label": "Veličina"
             },
             "color": {
                 "label": "Boja",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Spremi",
@@ -209,27 +209,27 @@ Oskari.registerLocalization({
             }
         },
         "lineform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "style": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "cap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "corner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "width": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "color": {
                 "label": "Boja",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Spremi",
@@ -237,35 +237,35 @@ Oskari.registerLocalization({
             }
         },
         "areaform": {
-            "title": "NOT TRANSLATED",
+            "title": "",
             "tooltip": "",
             "linestyle": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecap": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecorner": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linewidth": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "linecolor": {
                 "label": "Boja linije",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "labelOr": "",
+                "labelCustom": ""
             },
             "color": {
-                "label": "NOT TRANSLATED",
-                "labelOr": "NOT TRANSLATED",
-                "labelCustom": "NOT TRANSLATED"
+                "label": "",
+                "labelOr": "",
+                "labelCustom": ""
             },
             "fill": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "preview": {
-                "label": "NOT TRANSLATED"
+                "label": ""
             },
             "buttons": {
                 "save": "Spremi",
@@ -314,7 +314,7 @@ Oskari.registerLocalization({
             "categoryNameIllegal": "Opis sloja sadrži nedopuštene znakove. Dopušteni znakovi su slova od a do z,  å, ä i ö, brojevi, tipka Backspace i crtice",
             "dotSize": "Veličina točke ne odgovara ograničenju veličine (1-5).",
             "dotColor": "Pogrešna boja točke.",
-            "dotShape": "NOT TRANSLATED",
+            "dotShape": "",
             "lineSize": "Veličina linije ne odgovara ograničenju veličine (1-50).",
             "lineColor": "Pogrešna boja linije.",
             "areaLineSize": "Veličina ruba površine ne odgovara ograničenju veličine (0-50).",

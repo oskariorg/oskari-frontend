@@ -123,9 +123,7 @@ function setupOskari(appSetup, appConf, done) {
     var app = Oskari.app,
         started = false,
         core = Oskari.clazz.create('Oskari.mapframework.core.Core');
-    //          sandbox = core.getSandbox();
-    //          sandbox.enableDebug();
-    core.init([], []);
+    core.init();
 
     // Setup Oskari App with provided appSetup
     app.setApplicationSetup(appSetup);

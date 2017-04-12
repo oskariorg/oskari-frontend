@@ -42,12 +42,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          */
         lazyRender: function () {
             var me = this,
-                flyout = jQuery(this.container),
-                sandbox = me.instance.getSandbox();
+                flyout = jQuery(this.container);
             flyout.empty();
 
             // check if the user is logged in
-            if (!sandbox.getUser().isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedIn',
                     this.instance,
                     this.instance.getLocalization('NotLoggedView'));

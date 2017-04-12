@@ -69,12 +69,11 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
          */
         init: function () {
             var loc = this.instance.getLocalization('tools');
-            var user = this.instance.sandbox.getUser();
             // different tooltip for guests - "Please log in to use"
             var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort;
             for (var tool in this.buttons) {
                 var tooltip = loc[tool].tooltip;
-                if (!user.isLoggedIn()) {
+                if (!Oskari.user().isLoggedIn()) {
                     tooltip = tooltip + guestPostfix;
                 }
                 this.buttons[tool].tooltip = tooltip;
@@ -100,8 +99,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
                 sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
             }
 
-            var user = this.instance.sandbox.getUser();
-            if (!user.isLoggedIn()) {
+            if (!Oskari.user().isLoggedIn()) {
                 // disable toolbar buttons for guests
                 this.disableButtons();
             }

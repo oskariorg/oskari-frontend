@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService',
  * @static
  * @param {String} url
  * @param {String} uuid current users uuid
- * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
+ * @param {Oskari.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
  *
  */

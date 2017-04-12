@@ -13,5 +13,4 @@ Oskari.registerLocalization(
             "scoreText": "Score"
         }
     }
-}
-);
+});

@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 widthMinus: '22px',
                 widthCenter: '22px',
                 heightPlus: '38px',
-                heightMinus: '39px',
+                heightMinus: '28px',
                 heightCenter: 12,
                 heightCursor: '18px',
                 widthCursor: '17px'
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 widthMinus: '22px',
                 widthCenter: '22px',
                 heightPlus: '38px',
-                heightMinus: '39px',
+                heightMinus: '29px',
                 heightCenter: 12,
                 heightCursor: '18px',
                 widthCursor: '17px'

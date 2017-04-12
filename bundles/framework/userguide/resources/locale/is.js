@@ -47,9 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "kortagluggi, notkunarleiðbeiningar",
-            "contentPart": "yfirbygging"
+            "tags": "kortagluggi, notkunarleiðbeiningar"
         }
     }
-}
-);
+});

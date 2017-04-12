@@ -437,5 +437,4 @@ Oskari.registerLocalization(
             "tooltip": "Notkunarskilmálar og framboð á gagnasettinu eru skráð í lýsingu lýsigagna."
         }
     }
-}
-);
+});

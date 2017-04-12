@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Näytä kartalla karttatasovalikko",
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                "tooltip": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa.",
-                "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
+                "tooltip": "Taustakarttataso näkyy karttanäkymässä alimmaisena. Jos valitset useampia karttatasoja taustakarttatasoksi, kartalla näkyy kerralla vain yksi taustakarttataso. Käyttäjä voi halutessaan vaihtaa taustakarttatasoa. Oletusvalinnan voit tehdä esikatselukartassa."
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Tervetuloa julkaisemaan upotettuja karttoja verkkosivuillasi. Kirjaudu sisään tai rekisteröidy ensin.",
             "signup": "Kirjaudu sisään",
-            "signupUrl": "/web/fi/login",
-            "register": "Rekisteröidy",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Rekisteröidy"
         },
         "StartView": {
             "text": "Tervetuloa julkaisemaan upotettuja karttoja verkkosivuillasi.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Näytä",
             "hide": "Piilota",
             "hidden": "Karttataso on piilotettu tilapäisesti.",
-            "selectAsBaselayer": "Taustakarttataso",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Julkaistavissa",
-                    "tooltip": "Karttataso on julkaistavissa upotetussa kartassa. Viikoittainen käyttömäärä voi olla rajoitettu."
-                }
-            }
+            "selectAsBaselayer": "Taustakarttataso"
         },
         "layerFilter": {
             "buttons": {
@@ -234,5 +225,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

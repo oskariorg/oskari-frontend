@@ -2,7 +2,7 @@
  * @class Oskari.liikennevirasto.bundle.transport.selector.ToggleTransportSelectorRequest
  * Requests a enable/disable transport selector tools
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ToggleTransportSelectorRequest',

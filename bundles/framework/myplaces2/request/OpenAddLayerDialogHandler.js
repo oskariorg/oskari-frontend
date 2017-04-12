@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+ * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
  * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance
  *          reference to my places bundle instance

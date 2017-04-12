@@ -7,8 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Standarddarstellung",
         "own-style": "Eigene Darstellung",
-        "refresh": "NOT TRANSLATED",
-        "refresh_title": "NOT TRANSLATED",
+        "refresh": "",
+        "refresh_title": "",
         "tile": {
             "title": "MapWfs2"
         },
@@ -26,8 +26,8 @@ Oskari.registerLocalization(
             "features_parsing_failed": "Feature parsing des WFS layer {layer} fehlgeschlagen."
         },
         "information": {
-            "title": "NOT TRANSLATED",
-            "info": "NOT TRANSLATED"
+            "title": "",
+            "info": ""
         },
         "button": {
             "cancel": "Abbrechen",
@@ -43,5 +43,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

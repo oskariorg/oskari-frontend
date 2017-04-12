@@ -24,9 +24,6 @@ Event is used to notify that map has been moved or zoomed.
   <td> \* zoom </td><td> Number </td><td> map zoomlevel (0-12) </td><td> </td>
 </tr>
 <tr>
-  <td> \* marker </td><td> Boolean </td><td> this should be removed, always sent as false </td><td> </td>
-</tr>
-<tr>
   <td> \* scale </td><td> Number </td><td> map scale </td><td> </td>
 </tr>
 <tr>
@@ -44,7 +41,6 @@ Event occurs after a map has been moved or zoomed.
   "centerX": 411650.70779123,
   "centerY": 6751897.3481153,
   "zoom": 4,
-  "marker": false,
   "scale": 362834
 }
 </code>
@@ -78,7 +74,6 @@ Returns all the parameters of the event as an object:
     centerX: me._centerX,
     centerY: me._centerY,
     zoom: me._zoom,
-    marker: me._marker,
     scale: me._scale
 };
 </code>
@@ -100,7 +95,7 @@ map.on('moveend', function(evt) {
 
     var lonlat = map.getView().getCenter();
     me.updateDomain();
-    var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
+    var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), me.getMapScale());
     sandbox.notifyAll(sboxevt);
 });
 </code>

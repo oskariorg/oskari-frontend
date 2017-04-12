@@ -134,5 +134,4 @@ Oskari.registerLocalization(
             "no": "Non"
         }
     }
-}
-);
+});

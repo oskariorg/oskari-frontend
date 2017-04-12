@@ -1,10 +1,11 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "vi",
     "key": "DivManazer",
     "value": {
         "LanguageSelect": {
             "title": "Ngôn ngữ",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "languages": {
                 "af": "Tiếng Nam Phi",
                 "ak": "Tiếng Akan",

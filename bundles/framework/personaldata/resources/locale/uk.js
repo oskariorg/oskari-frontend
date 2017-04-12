@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Назва",
                     "description": "Опис",
                     "publish": "Опубліковано",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Редагувати інформацію про вигляд карти",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Вбудовані карти",
                 "show": "Показати на карті",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Редагувати",
                 "publish": "Опублікувати карту",
                 "unpublish": "Скасувати публікацію карти",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Назва",
                     "domain": "Налаштування карти",
                     "publish": "Статус",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "",
+                    "html": "",
+                    "edit": "",
+                    "delete": ""
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Змінити назву карти",
@@ -131,5 +131,4 @@ Oskari.registerLocalization(
             "no": "Ні"
         }
     }
-}
-);
+});

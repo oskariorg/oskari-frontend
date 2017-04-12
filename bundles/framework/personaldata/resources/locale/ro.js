@@ -18,8 +18,8 @@ Oskari.registerLocalization(
                     "name": "Nume",
                     "description": "Descriere",
                     "publish": "Publicare",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "",
+                    "delete": ""
                 },
                 "popup": {
                     "edit": "Editare informaţii vedere de hartă",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "publishedmaps": {
                 "title": "Hărţi înglobate",
                 "show": "Afişare pe hartă",
-                "getHTML": "NOT TRANSLATED",
+                "getHTML": "",
                 "edit": "Editare",
                 "publish": "Publicare hartă",
                 "unpublish": "De-publicare hartă",
@@ -69,13 +69,13 @@ Oskari.registerLocalization(
                     "name": "Nume",
                     "domain": "Setări hartă",
                     "publish": "Status",
-                    "show": "NOT TRANSLATED",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "show": "",
+                    "html": "",
+                    "edit": "",
+                    "delete": ""
                 },
                 "published": {
-                    "desc": "NOT TRANSLATED"
+                    "desc": ""
                 },
                 "popup": {
                     "edit": "Schimbare nume hartă",
@@ -123,7 +123,7 @@ Oskari.registerLocalization(
                 "changeInfo": "Schimbare informaţii cont",
                 "changePassword": "Schimbare parolă",
                 "removeAccount": "Ştergere cont",
-                "changeInfoUrl": "NOT TRANSLATED"
+                "changeInfoUrl": ""
             }
         },
         "button": {
@@ -131,5 +131,4 @@ Oskari.registerLocalization(
             "no": "Nu"
         }
     }
-}
-);
+});

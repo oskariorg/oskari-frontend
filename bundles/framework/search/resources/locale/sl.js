@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Iskanje lokacije",
         "invalid_characters": "Iskalni izraz vsebuje nedovoljene znake. Dovoljeni so velike in male črke od a do z, kot tudi znaki å, ä in ö, številke, vračalke, vprašaji, zvezdice in pomišljaji.",
         "searchDescription": "Išči po imenu kraja, naslovu ali po identifikatorju nepremičnine.",
-        "searchButton": "Išči",
         "searchAssistance": "Vpiši iskani izraz.",
         "searchResultCount": "Rezultati iskanja",
         "searchResultCount2": "rezultati.",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Rezultati iskanja"
         }
     }
-}
-);
+});

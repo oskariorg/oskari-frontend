@@ -262,17 +262,6 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance",
         },
 
         eventHandlers: {
-            /**
-             * @method MapClickedEvent
-             * @param {Oskari.mapframework.mapmodule-plugin.event.MapClickedEvent} event
-             */
-            /*'MapClickedEvent' : function(event) {
-         jQuery("#eventMessages").html("MapClickedEvent<br/>" + jQuery("#eventMessages").html());
-         },
-         'AfterMapMoveEvent' : function(event) {
-         jQuery("#eventMessages").html("AfterMapMoveEvent<br/>" + jQuery("#eventMessages").html());
-         },*/
-
             'LupaPisteMyPlaces.FinishedDrawingEvent': function (event) {
 
                 if (this.getJemma('currentdrawmode').indexOf('inforequest_') == 0) {

@@ -2,7 +2,7 @@
  * @class Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest
  * Requests to add search result action on the metadata catalogue search results.
  *
- * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest',

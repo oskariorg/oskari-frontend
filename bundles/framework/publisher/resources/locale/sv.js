@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Visa kartlagren i menyn",
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
-                "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
-                "promote": "Vill du också visa flygbilder?"
+                "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn."
             },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan skapa inbäddade kartor efter att du har loggat in på tjänsten.",
             "signup": "Logga in",
-            "signupUrl": "/web/sv/login",
-            "register": "Registrera dig",
-            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrera dig"
         },
         "StartView": {
             "text": "Du kan inbädda den kartvy som du har definierat här på din egen webbplats.",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Visa",
             "hide": "Göm",
             "hidden": "Kartlagret är tillfälligt gömt.",
-            "selectAsBaselayer": "NOT TRANSLATED",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Kartlagret kan publiceras i en inbäddad karta.",
-                    "tooltip": "Kartlagret kan publiceras i en inbäddad karta. Antalet användare per vecka kan vara begränsat."
-                }
-            }
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -234,5 +225,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

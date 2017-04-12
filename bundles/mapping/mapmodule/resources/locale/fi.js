@@ -23,14 +23,13 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
                 "dataSources": "Tietolähteet",
-                "layersHeader": "Karttatasot",
-                "indicatorsHeader": "Indikaattorit"
+                "layersHeader": "Karttatasot"
             },
             "DataSourcePlugin": {
                 "link": "Tietolähde",
                 "popup": {
                     "title": "Tietolähteet",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Sulje"
@@ -80,7 +79,7 @@ Oskari.registerLocalization(
                 },
                 "form": {
                     "title": "Karttamerkinnän esitystapa",
-                    "tooltip": "NOT TRANSLATED",
+                    "tooltip": "",
                     "symbol": {
                         "label": "Symboli"
                     },
@@ -110,5 +109,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

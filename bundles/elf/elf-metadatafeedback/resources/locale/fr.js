@@ -48,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Votre avis a bien été enregistré."
         }
     }
-}
-);
+});

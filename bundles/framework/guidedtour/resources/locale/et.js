@@ -67,5 +67,4 @@ Oskari.registerLocalization(
             "message": "Kaardil saab sisse-välja suumida kasutades mõõtkava kerimisriba või pluss- või miinusnuppu kerimisriba kõrval. Soovitus: suumida saab ka klaviatuuril asuvate miinus- ja plussnuppude abil või sisse suumida topeltklõpsuga kaardil. Suumida saab ka hiire kerimisrattaga."
         }
     }
-}
-);
+});

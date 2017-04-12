@@ -1,0 +1,64 @@
+$borderColor: #aaaaaa;
+$disabledBorderColor: #dddddd;
+
+.oskari-color-selection-main {
+    position: relative;
+
+    &.disabled {
+        .oskari-selected-color {
+            border: 1px solid $disabledBorderColor;
+        }
+        .color-selection-arrow {
+            border: 1px solid $disabledBorderColor;
+            .icon-arrow-down {
+                opacity: 0.6;
+            }
+        }
+    }
+
+    .oskari-selected-color {
+        border: 1px solid $borderColor;
+        padding: 4px;
+        height: 16px;
+        width: 80px;
+        cursor: pointer;
+        float: left;
+
+        .oskari-color-option {
+            .oskari-color {
+                height: 16px;
+                width: 6px;
+                float:left;
+            }
+        }
+    }
+
+    .color-selection-arrow {
+        float: left;
+        padding-top: 6px;
+        width: 12px;
+        height: 18px;
+        border: 1px solid $borderColor;
+        border-left: none;
+        cursor: pointer;
+    }
+
+    .oskari-color-selection {
+        border: 1px solid $borderColor;
+        border-top: none;
+        max-height: 100px;
+        overflow: auto;
+        position: absolute;
+
+        .oskari-color-option {
+            padding: 2px;
+            cursor: pointer;
+
+            .oskari-color {
+                height: 16px;
+                width: 6px;
+                float: left;
+            }
+        }
+    }
+}

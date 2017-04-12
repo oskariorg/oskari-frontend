@@ -23,11 +23,11 @@ Oskari.registerLocalization(
             },
             "cannotDeactivateLicense": {
                 "title": "Viga",
-                "message": "Litsentsi ei saa dekativeerida"
+                "message": "Litsentsi ei saa deaktiveerida"
             },
             "checkFields": {
                 "title": "Viga",
-                "message": "Allärgnev nõutud info puudub:"
+                "message": "Alljärgnev nõutud info puudub:"
             }
         },
         "success": {
@@ -38,21 +38,21 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Litsentsi info",
-            "licenseModelDescriptionsTitle": "NOT TRANSLATED",
+            "licenseModelDescriptionsTitle": "ELF'i tooted on ajutiselt litsenseeritud kvaliteedi hindamise- ja arenduseesmärkidel ja piiratud mahus:",
             "licenseModelDescriptions": {
-                "evaluation": "NOT TRANSLATED",
-                "developer": "NOT TRANSLATED"
+                "evaluation": "Testlitsents - Juurdepääs ELF toodetele on kvaliteedi hindamise ja sobivuse määramiseks, isiklikus kasutuses.",
+                "developer": "Arendaja litsents - Juurdepääs ELF toodetele isiklike arendusvajaduste tarvis."
             },
-            "licenseModelsTitle": "Litsentsid",
-            "noRightToAnyLicenseModels": "Sul ei ole õigusi vaatamaks litsentse",
-            "loginShort": "Logi sisse et vaadata litsentse",
+            "licenseModelsTitle": "Litsentsimudelid",
+            "noRightToAnyLicenseModels": "Sul ei ole õigusilitsentsimudelite vaatamiseks.",
+            "loginShort": "Logi sisse et näha litsentsimudeleid",
             "licenseSummaryTitle": "Litsentsi andmed",
             "priceTitle": "Hind",
             "priceUnitEuro": "€",
             "help": {
                 "info": "Vali litsents sellele klikkides",
-                "details": "Täida litsentsi andmestik. Kohustuslikud väljad on tähistaud tärniga(*). Vajuta \"Järgmine\" et näha kokkuvõtet ja hinda. Vajuta \"Eelmine\", et valiida teine litsents. Vajuta \"Sulge\", et lõpetada tellimine.",
-                "summary": "Loe litsentsitingimusi ja aktsepteeri need vajutades \"Sõlmi leping\". Vajuta \"Eelmine\" muutmaks litsentsi andmeid. Vajuta \"Sulge\", et katsekstada lepingu sõlmimine.",
+                "details": "Täida litsentsi andmestik. Kohustuslikud väljad on tähistatud tärniga(*). Vajuta \"Järgmine\" et näha kokkuvõtet ja hinda. Vajuta \"Eelmine\", et valiida teine litsents. Vajuta \"Sulge\", et lõpetada tellimine.",
+                "summary": "Loe litsentsitingimusi ja aktsepteeri need vajutades \"Sõlmi leping\". Vajuta \"Eelmine\" muutmaks litsentsi andmeid. Vajuta \"Sulge\", et katkestada lepingu sõlmimine.",
                 "orderDetails": "Loe litsentsi infot ülalpool. Vajuta \"Deaktiveeri litsents\", selle lõpetamiseks. Vajuta \"Sulge\" akna sulgemiseks."
             },
             "deactivateConfirm": {
@@ -64,7 +64,14 @@ Oskari.registerLocalization(
             "licenseServiceUrl": "Litsentsi teenuse URL: {serviceurl}",
             "licenceConcluded": {
                 "message": "Litsentsileping on sõlmitud. Vaata lepinguinfot allpool:"
-            }
+            },
+            "licenseDurations": {
+                "D": "päevad",
+                "W": "nädalad",
+                "M": "kuud",
+                "Y": "aastad"
+            },
+            "registerLinkText": "Register"
         },
         "buttons": {
             "close": "Sulge",
@@ -77,5 +84,4 @@ Oskari.registerLocalization(
             "yes": "Jah"
         }
     }
-}
-);
+});

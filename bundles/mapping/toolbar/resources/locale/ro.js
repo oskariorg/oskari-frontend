@@ -9,9 +9,6 @@ Oskari.registerLocalization(
                 "ok": "Ok",
                 "title": "Link către vizualizare hartă"
             },
-            "print": {
-                "tooltip": "Imprimare"
-            },
             "history": {
                 "reset": "Revenire la vederea implicită",
                 "back": "Înapoi",
@@ -33,5 +30,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

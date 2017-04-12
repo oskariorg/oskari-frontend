@@ -76,6 +76,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this._isVisible = true;
 
+            var map = Oskari.getSandbox().getMap();
+            if(map && contentDiv.width() > map.getWidth()) {
+                this.dialog.css('max-width', map.getWidth() + 'px');
+            }
+
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
@@ -308,6 +313,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if(parent.width() < (me.dialog.width() + left)) {
                 left = parent.width() - me.dialog.width();
             }
+            // Check at if popup is outside screen from bottom
+            if(windowHeight < (me.dialog.outerHeight() + top)) {
+              //set the popup top-position to be the original top position - amount which is outside of screen
+                top = top - ((me.dialog.outerHeight() + top) - windowHeight);
+            }
 
             //move dialog to correct location
             me.dialog.css({
@@ -492,7 +502,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         /**
          * @method adaptToMapSize
          * Makes dialog to adapt to mobile size screens and keeps it on the screen when screen size is changed
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox for registering events
+         * @param {Oskari.Sandbox} sandbox for registering events
          * @param {String} popupName any identifier for the popup. This is needed for listening events
          */
         adaptToMapSize: function (sandbox, popupName) {
@@ -546,12 +556,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 popup = me.dialog;
 
             // if dialog ends up offscreen, move it back to the screen
-            if (parseInt(popup[0].style['left']) > (size.width - popup.width())) {
+            if (parseInt(popup[0].style.left) > (size.width - popup.width())) {
                 popup.css({
                     'left': (size.width - popup.width() - 10) + 'px'
                 });
             }
-            if (parseInt(popup[0].style['top']) > (size.width - popup.height())) {
+            if (parseInt(popup[0].style.top) > (size.width - popup.height())) {
                 popup.css({
                     'top': (size.width - popup.height() - 10) + 'px'
                 });

@@ -5,43 +5,48 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Default style",
-        "own-style": "Own style",
-        "refresh": "Refresh",
+        "default-style": "Stiil vaikimisi",
+        "own-style": "Oma kujundus",
+        "none-style": "Tühi",
+        "refresh": "Värskenda",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
-            "title": "MapWfs2"
+            "title": ""
         },
         "flyout": {
-            "title": "MapWfs2",
-            "message": "MapWfs2"
+            "title": "",
+            "message": ""
         },
         "error": {
-            "title": "Error",
-            "connection_not_available": "Connection to the WFS background service is unavailable.",
-            "connection_broken": "Connection to the WFS background service broke down.",
-            "wfs_no_permissions": "You do not have the permission to use WFS layer {layer}.",
-            "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
-            "wfs_request_failed": "Request to WFS layer {layer} failed.",
-            "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
+            "title": "Viga!",
+            "connection_not_available": "Andmestik ei ole kättesaadav. WFS teenusega ei saa ühendust.",
+            "connection_broken": "Andmestik ei ole kättesaadav. Ühendus WFS teenusega katkes.",
+            "wfs_no_permissions": "Teil ei ole õigusi antud andmestiku kasutamiseks{layer}.",
+            "wfs_configuring_layer_failed": "Andmekihi {layer} konfigureerimine ebaõnnestus.",
+            "wfs_request_failed": "Päring vastu andmekihti {layer} emaõnnestus.",
+            "features_parsing_failed": "Andmekihti {layer} kohta infot ei leitud"
         },
         "information": {
-            "title": "Feature Data Rendering",
-            "info": "Some of data products are not rendered automatically. <br/><br/> Pleace select an area on the map and click the Refresh button. <br/><br/> Click Feature data to see feature data on the data product."
+            "title": "Andmeid loetakse.",
+            "info": "Kaardil on andmekihte, mida ei avata automaatselt. <br/><br/> Suurenda või liigu alale, kus andmekihi objektid on esindatud. <br/><br/> Atribuutinfo päringuks vajutage nupule \"Infopäring\" ja andmete värksendamiseks \"Värksenda\" nupule."
+        },
+        "refresh_alert": {
+            "title": "Nähtavusulatuse hoiatus",
+            "all_not_in_scale": "Puuduva andmekihid, mida värskendada, muuda kuvaulatust(mõõtkava) ja proovi uuesti.",
+            "all_invisible": "Puuduvad nähtavad andmekihid, mida värskendada. Ava selekteeritud kihid ja muuda need nähtavaks."
         },
         "button": {
-            "cancel": "Cancel",
-            "show": "Show places",
-            "close": "Close",
-            "edit": "Edit"
+            "cancel": "Tühista",
+            "show": "Näita kohti",
+            "close": "Sulge",
+            "edit": "Muuda"
         },
         "popup": {
-            "title": "Own style",
+            "title": "Oma kujundus",
             "button": {
-                "cancel": "Cancel",
-                "save": "Save"
+                "cancel": "Tühista",
+                "save": "Salvesta"
             }
         }
     }
-}
-);
+});

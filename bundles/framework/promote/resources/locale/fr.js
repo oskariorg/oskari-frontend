@@ -6,5 +6,4 @@ Oskari.registerLocalization(
         "title": "Utilisateurs connectés",
         "desc": "Si vous vous connectez, vous bénéficiez de davantage de fonctionnalités."
     }
-}
-);
+});

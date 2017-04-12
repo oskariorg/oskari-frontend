@@ -3,10 +3,13 @@ Oskari.registerLocalization(
     "lang": "nn",
     "key": "MapWfs2",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "MapWfs2",
         "desc": "",
         "default-style": "Standardstil",
         "own-style": "Eigen stil",
+        "none-style": "Ingen",
+        "refresh": "Oppfrisk",
+        "refresh_title": "Oppfrisk dataprodukt som ikkje blir gjengitt automatisk på kartet",
         "tile": {
             "title": "MapWfs2"
         },
@@ -23,6 +26,15 @@ Oskari.registerLocalization(
             "wfs_request_failed": "Spørjing til WFS lag {layer} feila.",
             "features_parsing_failed": "Lesing av objekt frå WFS-lag {layer}) feila"
         },
+        "information": {
+            "title": "Visining av objektdata",
+            "info": "Nokre dataprodukt blir ikkje gjengitt automatisk. <br/><br/> Ver grei og vel eit område på kartet og klikk på Oppfrisk-knappen. <br/><br/> Klikk Objekteigenskapar for å sjå eigenskapar på dataproduktet."
+        },
+        "refresh_alert": {
+            "title": "Advarsel synlegheit",
+            "all_not_in_scale": "Ingen lag tilgjengelege, ver grei og vel passande målestokk og prøv om att",
+            "all_invisible": "Ingen lag er synlege, ver grei og opne valgde lag og slå på synligheit"
+        },
         "button": {
             "cancel": "Avbryt",
             "show": "Vis stader",
@@ -37,5 +49,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

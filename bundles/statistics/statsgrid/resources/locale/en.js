@@ -12,6 +12,21 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "dataProviderInfoTitle": "Indicators",
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Go to thematic maps",
+                "title": "Thematic maps"
+            },
+            "diagram_icon": {
+                "tooltip": "Show diagram",
+                "title": "Diagram"
+            },
+            "statistics": {
+                "tooltip": "going to the thematic maps",
+                "title": "Statistics"
+            }
+        },
         "tab": {
             "title": "Indicators",
             "description": "Own indicators",
@@ -191,5 +206,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Unknown regions",
         "loginToSaveIndicator": "If you want to save the indicator, please log in."
     }
-}
-);
+});

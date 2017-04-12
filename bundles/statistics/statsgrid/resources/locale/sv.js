@@ -12,6 +12,21 @@ Oskari.registerLocalization(
             "title": "Patio",
             "message": "patiopoc"
         },
+        "dataProviderInfoTitle": "Indikatorer",
+        "layertools": {
+            "table_icon": {
+                "tooltip": "Gå till temakartor",
+                "title": "Temakartor"
+            },
+            "diagram_icon": {
+                "tooltip": "Visa diagram",
+                "title": "Diagram"
+            },
+            "statistics": {
+                "tooltip": "går till temakartor",
+                "title": "Statistik"
+            }
+        },
         "tab": {
             "title": "Indikatorer",
             "description": "Egna indikatorer",
@@ -191,5 +206,4 @@ Oskari.registerLocalization(
         "parsedDataUnrecognized": "Okända regioner",
         "loginToSaveIndicator": "För att spara din egen indikator måste du logga in."
     }
-}
-);
+});

@@ -51,6 +51,8 @@ Oskari.clazz.define(
         this.drawCoverage = false;
         // Search result actions array.
         this.searchResultActions = [];
+        this.conf = this.conf || {};
+        this.state = this.state || {};
     }, {
         /**
          * @static
@@ -155,7 +157,7 @@ Oskari.clazz.define(
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
@@ -163,7 +165,7 @@ Oskari.clazz.define(
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
@@ -1204,14 +1206,6 @@ Oskari.clazz.define(
                 // Hide layer
                 if (jQuery(this).html() === hideText) {
                     // Set previously selected layer only invisible
-                    /* if (layerSelected) {
-                     request = visibilityRequestBuilder(layer.getId(), false);
-                     // Unselect previously unselected layer
-                     } else {
-                     builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
-                     request = builder(layer.getId());
-                     }*/
-
                     builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
                     layerSelected = false;
 
@@ -1221,7 +1215,7 @@ Oskari.clazz.define(
                 } else {
                     // Select previously unselected layer
                     if (!layerSelected) {
-                        me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                     }
                     // Set layer visible
                     request = visibilityRequestBuilder(layer.getId(), true);

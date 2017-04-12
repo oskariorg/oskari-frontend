@@ -9,6 +9,7 @@ div.olMap {
 
     /*x marking the center of the map*/
     .oskari-crosshair {
+        pointer-events: none;
         right: 50%;
         bottom: 50%;
         width: 0px;
@@ -53,7 +54,7 @@ div.mapplugins {
     .mappluginsContainer {
         margin: 0;
         padding: 0;
-        
+
         .mappluginsContent {
 
             &.ui-droppable {
@@ -161,7 +162,7 @@ div.mapplugins {
         &.right {
 
             .mapplugin {
-                
+
                 &.layerselection {
                     margin-left: 0;
                 }
@@ -169,7 +170,7 @@ div.mapplugins {
                 &.search {
                     text-align: right;
                 }
-    
+
                 &.featuredataplugin,
                 &.layerselection,
                 &.search,
@@ -178,7 +179,7 @@ div.mapplugins {
                     float: right;
                     margin: 0 0 0 $pluginMargin;
                 }
-                
+
             }
 
         }
@@ -186,7 +187,7 @@ div.mapplugins {
         &.left {
 
             .mapplugin {
-                
+
                 &.layerselection {
                     margin-right: 0;
                 }
@@ -203,7 +204,7 @@ div.mapplugins {
                     float: left;
                     margin: 0 $pluginMargin 0 0;
                 }
-                
+
             }
 
         }
@@ -233,7 +234,7 @@ div.mapplugins {
                     display: inline-block;
                     vertical-align: top;
                     margin: 0 $pluginMargin / 2;
-    
+
                     &.layerselection,
                     &.search {
                         float: right;
@@ -248,11 +249,11 @@ div.mapplugins {
         &.right {
 
             .mapplugin {
-                
+
                 &.logoplugin {
                     clear: both;
                 }
-                
+
             }
 
         }
@@ -260,13 +261,13 @@ div.mapplugins {
         &.left {
 
             .mapplugin {
-                
+
                 &.logoplugin {
                     clear: both;
                 }
-                
+
             }
-            
+
         }
 
     }

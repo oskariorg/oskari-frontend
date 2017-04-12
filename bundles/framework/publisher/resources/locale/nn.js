@@ -167,8 +167,7 @@ Oskari.registerLocalization(
             "layerselection": {
                 "label": "Vis kartlag i menyen",
                 "info": "Vel kartlag som bakgrunn.Du kan velje standard bakgrunnslag i vindauget for førehandsvising",
-                "tooltip": "Bakgrunnen er vist i det nedste kartlaget. Berre eitt kartlag kan bli vist om gongen.  Brukaren kan skifte bakgrunn dersom det er vald fleire lag. Det førehandsinnstilte kartlaget kan veljast i førehandsvisinga.",
-                "promote": "Vil du også vise satellitt/flyfoto?"
+                "tooltip": "Bakgrunnen er vist i det nedste kartlaget. Berre eitt kartlag kan bli vist om gongen.  Brukaren kan skifte bakgrunn dersom det er vald fleire lag. Det førehandsinnstilte kartlaget kan veljast i førehandsvisinga."
             },
             "preview": "Førehandsvising av 'embedded' kart",
             "location": "Posisjon og zoomnivå",
@@ -189,9 +188,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Du kan opprette 'embeddede' kart etter at du har logga inn",
             "signup": "Logg inn",
-            "signupUrl": "NOT TRANSLATED",
-            "register": "Registrer",
-            "registerUrl": "NOT TRANSLATED"
+            "register": "Registrer"
         },
         "StartView": {
             "text": "Du kan lage kartet og 'embedde' det inn på di eiga nettside",
@@ -217,13 +214,7 @@ Oskari.registerLocalization(
             "show": "Vis",
             "hide": "Skjul",
             "hidden": "Kartlaget er midlertidig skjult",
-            "selectAsBaselayer": "",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Kartlaget kan publiserast i eit 'embedded' kart",
-                    "tooltip": "Kartlaget kan publiserast i eit 'embedded' kart. Talet på brukarar per uke kan vere avgrensa"
-                }
-            }
+            "selectAsBaselayer": ""
         },
         "layerFilter": {
             "buttons": {
@@ -234,5 +225,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

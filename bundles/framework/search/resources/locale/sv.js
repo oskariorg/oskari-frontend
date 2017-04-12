@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Ortnamnssökning",
         "invalid_characters": "Sökbegrepp innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg, frågetecken, stjärnor (*) och bindestreck (?) (-).",
         "searchDescription": "Sök ortnamn, adress eller fastighetsbeteckning.",
-        "searchButton": "Sök",
         "searchAssistance": "Skriv sökordet.",
         "searchResultCount": "Din sökning gav",
         "searchResultCount2": "resultat.",
@@ -32,5 +31,4 @@ Oskari.registerLocalization(
             "title": "Sökresultat"
         }
     }
-}
-);
+});
