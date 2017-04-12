@@ -4,12 +4,14 @@ div.pzbDiv div.pzbDiv-plus {
   cursor: zoom-in;
   width: 18px;
   height: 46px; }
+
 div.pzbDiv div.pzbDiv-minus {
   background-image: url("../images/zoombar_minus.png");
   cursor: pointer;
   cursor: zoom-out;
   width: 18px;
   height: 18px; }
+
 div.pzbDiv div.ui-slider-vertical {
   cursor: pointer; }
   div.pzbDiv div.ui-slider-vertical .ui-slider-handle {

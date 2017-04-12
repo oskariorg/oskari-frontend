@@ -13,6 +13,12 @@
     top: 0;
     bottom: 0; }
 
+.oskariui-left {
+  float: left; }
+
+.oskariui-center {
+  float: left; }
+
 .statsgrid_100 {
   height: 100%; }
 

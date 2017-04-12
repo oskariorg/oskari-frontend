@@ -52,7 +52,7 @@ div.popupContent {
   position: relative;
   left: 0px;
   top: 0px;
-  max-height: 250px !important;
+  max-height: 250px;
   -webkit-border-radius: 0px 0px 6px 6px;
   -moz-border-radius: 0px 0px 6px 6px;
   -o-border-radius: 0px 0px 6px 6px;
@@ -118,5 +118,3 @@ div.divmanazerpopup.mobile-infobox {
   margin-top: -6px !important;
   margin-left: -4px !important;
   overflow: auto; }
-
-/*# sourceMappingURL=infobox_ol2.css.map */
