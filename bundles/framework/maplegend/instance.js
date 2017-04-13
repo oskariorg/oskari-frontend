@@ -97,12 +97,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 }
             }
 
+            if(this.isEmbedded()){
+                this.createPlugin();
+            } else {
             //Let's extend UI
             var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             // draw ui
             me.createUi();
+            }
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
@@ -244,6 +248,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          */
         getDescription: function () {
             return this.getLocalization('desc');
+        },
+        isEmbedded: function() {
+            return jQuery('#contentMap').hasClass('published');
         },
         /**
          * @method createUi
