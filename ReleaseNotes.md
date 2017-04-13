@@ -56,7 +56,7 @@ grid.setGroupingHeader([
 ]);
 ```
 
-Fixed double scrollbar when grid has column selector.
+Fixed double scrollbar when grid has column selector (like properties) and few rows in the table.
 
 ### coordinatetool
 
