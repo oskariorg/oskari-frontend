@@ -195,7 +195,9 @@ Oskari.clazz.define(
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
-
+            },
+            FeatureEvent: function(evt) {
+                this.statsService.notifyOskariEvent(evt);
             }
         },
 

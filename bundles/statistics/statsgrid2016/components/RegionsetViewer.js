@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     this._bindToEvents();
 }, {
 /****** PUBLIC METHODS ******/
-    render: function(){
+    render: function(highlightRegion){
         var me = this;
         var sandbox = me.sb;
         var service = me.service;
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         },
                         stroke: {
                             color: '#000000',
-                            width: 1
+                            width: (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1
                         }
                     });
                 });
@@ -104,6 +104,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
      */
     _bindToEvents : function() {
         var me = this;
+        var sandbox = me.sb;
 
         me.service.on('StatsGrid.IndicatorEvent', function(event) {
             // if indicator is removed/added
@@ -120,9 +121,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             me.render();
         });
 
+        me.service.on('StatsGrid.RegionSelectedEvent', function(event){
+            me.render(event.getRegion());
+        });
+
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
             // Classification changed, need update map
             me.render();
+        });
+
+        me.service.on('FeatureEvent', function(event){
+            if(event.getParams().operation === 'click' && event.hasFeatures()) {
+                // resolve region
+                var features = event.getParams().features[0];
+                var region = features.geojson.features[0].properties.id;
+
+                // notify only for now
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                sandbox.notifyAll(eventBuilder(null, region));
+            }
         });
     }
 

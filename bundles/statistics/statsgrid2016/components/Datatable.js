@@ -378,10 +378,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         });
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
-            if(me.getCurrentRegionset() !== event.getRegionset()) {
-                // shouldn't be the case ever
-                me._handleRegionsetChanged(event.getRegionset());
-            }
+
             me.grid.select(event.getRegion());
         });
 
