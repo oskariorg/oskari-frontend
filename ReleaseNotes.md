@@ -2,7 +2,6 @@
 
 ## 1.42.0
 
-
 #### VectorLayerPlugin ol3
 
 Fixed ol3 error when label is not String.
@@ -56,6 +55,9 @@ grid.setGroupingHeader([
     }
 ]);
 ```
+
+Fixed double scrollbar when grid has column selector.
+
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
