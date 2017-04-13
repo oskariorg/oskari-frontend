@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     'crs': {
                         'type': 'name',
                         'properties': {
-                          'name': 'EPSG:3067'
+                          'name': sandbox.getMap().getSrsName()
                         }
                       },
                       'features': features
