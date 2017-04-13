@@ -146,13 +146,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @static
          */
         eventHandlers: {
+
             /**
              * @method AfterMapLayerRemoveEvent
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerRemoveEvent': function () {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
+                var plugin = this.getMapStatePlugin();
+                plugin.refresh();
             },
             /**
              * @method AfterMapLayerAddEvent
@@ -160,16 +162,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerAddEvent': function () {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
-            },
+               var plugin = this.getMapStatePlugin();
+                plugin.refresh();          
+             },
             /**
              * @method AfterChangeMapLayerStyleEvent
              */
             'AfterChangeMapLayerStyleEvent': function () {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
-            },
+               var plugin = this.getMapStatePlugin();
+                plugin.refresh();           
+             },
             'AfterRearrangeSelectedMapLayerEvent': function () {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
+               var plugin = this.getMapStatePlugin();
+                plugin.refresh();        
             },
             /**
              * @method MapLayerEvent
@@ -251,6 +256,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
+        },
+        getMapStatePlugin: function(){
+            var plugin = this.isEmbedded() ? this.publisherplugin : this.plugins['Oskari.userinterface.Flyout'];
+            return plugin;
         },
         /**
          * @method createUi
