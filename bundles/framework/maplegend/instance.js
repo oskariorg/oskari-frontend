@@ -153,8 +153,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerRemoveEvent': function () {
-                var plugin = this.getMapStatePlugin();
-                plugin.refresh();
+                this.refreshUI();
             },
             /**
              * @method AfterMapLayerAddEvent
@@ -162,19 +161,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerAddEvent': function () {
-               var plugin = this.getMapStatePlugin();
-                plugin.refresh();          
+               this.refreshUI();
              },
             /**
              * @method AfterChangeMapLayerStyleEvent
              */
             'AfterChangeMapLayerStyleEvent': function () {
-               var plugin = this.getMapStatePlugin();
-                plugin.refresh();           
+               this.refreshUI();
              },
             'AfterRearrangeSelectedMapLayerEvent': function () {
-               var plugin = this.getMapStatePlugin();
-                plugin.refresh();        
+               this.refreshUI();
             },
             /**
              * @method MapLayerEvent
@@ -257,9 +253,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
         },
-        getMapStatePlugin: function(){
+        refreshUI: function() {
             var plugin = this.isEmbedded() ? this.publisherplugin : this.plugins['Oskari.userinterface.Flyout'];
-            return plugin;
+            plugin.refresh();
         },
         /**
          * @method createUi
