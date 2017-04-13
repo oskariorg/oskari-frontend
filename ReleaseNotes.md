@@ -59,6 +59,9 @@ grid.setGroupingHeader([
     }
 ]);
 ```
+
+Fixed double scrollbar when grid has column selector (like properties) and few rows in the table.
+
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
