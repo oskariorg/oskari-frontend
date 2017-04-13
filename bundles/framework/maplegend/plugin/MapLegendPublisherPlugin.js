@@ -14,41 +14,38 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     me._element = null;
     me._isVisible = false;
     me._loc;
-    me._popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
   }, {
-  /**
-   * Creates UI for coordinate display and places it on the maps
-   * div where this plugin registered.
-   * @private @method _createControlElement
-   *
-   * @return {jQuery}
-   */
+
   _createControlElement: function () {
     var me = this,
         loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() ),
-        legend = me._templates.maplegend.clone();
+        legend = me._templates.maplegend.clone(),
+        popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
 
         me._loc = loc;
 
         legend.on( "click", function () {
           if( me.isOpen() ) {
             me._isVisible = false;
-            me._popup.close( true );
+            popup.dialog.children().empty();
+            popup.close( true );
             return;
           }
-          me._popup.show( me._loc.title );
-          me._popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
-          me._popup.moveTo( legend, 'left', true );
-          me._popup.makeDraggable();
-          me._popup.createCloseIcon();
+          popup.show( me._loc.title );
+          popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
+          popup.moveTo( legend, 'left', true );
+          popup.makeDraggable();
+          popup.createCloseIcon();
           me._isVisible = true;
-          me.getLayerLegend();
-
-        })
+          var legendContainer = me.getLayerLegend();
+          jQuery(popup.dialog).append(legendContainer);
+          legendContainer.find('div.oskari-select').trigger('change');
+        });
 
     return legend;
   },
   getLayerLegend: function() {
+
     var layers = this.getSandbox().findAllSelectedMapLayers().slice(0),
         n,
         layer,
@@ -79,13 +76,14 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     });
     var options = {
         placeholder_text : 'layers',
-        allow_single_deselect : true,
+        allow_single_deselect : false,
         disable_search_threshold: 10,
         width: '100%'
     };
     var dropdown = select.create( layerNames, options );
-    dropdown.css( { width : '100%' } );
+    dropdown.css( { width : '96%' } );
     select.adjustChosen();
+    select.selectFirstValue();
     legendContainer.append( dropdown );
 
     var accordion = Oskari.clazz.create( 'Oskari.userinterface.component.Accordion' );
@@ -95,7 +93,8 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
       if( accordionPanel ){
         accordion.removePanel( accordionPanel );
       }
-      layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers( e.target.value );
+      var id = e.target.value  ? e.target.value : jQuery(e.target).find(':selected').val();
+      layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers( id );
 
       if( !layer ) {
         return;
@@ -116,7 +115,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
           accordion.addPanel( accordionPanel );
 
     });
-      jQuery( this._popup.dialog ).append( legendContainer );
+    return legendContainer;
   },
    _createUI: function() {
       this._element = this._createControlElement();
@@ -126,35 +125,29 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     return this._isVisible;
   },
 
-    /**
-     * Handle plugin UI and change it when desktop / mobile mode
-     * @method  @public redrawUI
-     * @param  {Boolean} mapInMobileMode is map in mobile mode
-     * @param {Boolean} forced application has started and ui should be rendered with assets that are available
-     */
-    redrawUI: function() {
-      if( this.getElement() ) {
-        this.teardownUI( true );
-      }
-        var me = this;
-        var sandbox = me.getSandbox();
-        this._createUI();
-    },
-    teardownUI : function( stopping ) {
-    //detach old element from screen
-      this.getElement().detach();
-      this.removeFromPluginContainer( this.getElement() );
-    },
-    /**
-     * Get jQuery element.
-     * @method @public getElement
-     */
-    getElement: function(){
-        return this._element;
-    },
-    stopPlugin: function() {
+  redrawUI: function() {
+    if( this.getElement() ) {
       this.teardownUI( true );
     }
+      var me = this;
+      var sandbox = me.getSandbox();
+      this._createUI();
+  },
+  teardownUI : function( stopping ) {
+  //detach old element from screen
+    this.getElement().detach();
+    this.removeFromPluginContainer( this.getElement() );
+  },
+  /**
+   * Get jQuery element.
+   * @method @public getElement
+   */
+  getElement: function(){
+      return this._element;
+  },
+  stopPlugin: function() {
+    this.teardownUI( true );
+  }
 }, {
     'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
     /**
