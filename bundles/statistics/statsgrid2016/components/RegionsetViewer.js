@@ -16,6 +16,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
 
+        if(!ind) {
+            // remove layer
+            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+            return;
+        }
+
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
             if(err) {
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
@@ -37,20 +43,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
             regiongroups.forEach(function(regiongroup, index){
                 regiongroup.forEach(function(region){
+                    var color = Oskari.util.hexToRgb(colors[index]);
+                    // feature opacity
+                    color.a = 0.8;
                     optionalStyles.push({
                         property: {
                             value: region,
                             key: 'id'
                         },
                         fill: {
-                            color: '#' + colors[index]
+                            color: 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
                         },
                         stroke: {
                             color: '#000000',
                             width: 1
-                        },
-                        image: {
-                            opacity: 1
                         }
                     });
                 });
