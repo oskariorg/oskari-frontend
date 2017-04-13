@@ -26,6 +26,10 @@ function() {
    getInstance : function() {
      return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
    },
+   getPlugin: function(){
+    var maplegend = this.getInstance() || {};
+    return maplegend.publisherplugin;
+   },
   /**
    * Initialise tool
    * @method init
@@ -69,7 +73,21 @@ setEnabled : function(enabled) {
   * @returns {Object} tool value object
   */
   getValues: function () {
+      var me = this;
+      if(me.state.enabled) {
+        var pluginConfig = this.getPlugin().getConfig();
 
+          var json = {
+              configuration: {}
+          };
+          json.configuration[me.bundleName] = {
+              conf: pluginConfig,
+              state: {}
+          };
+          return json;
+        } else {
+          return null;
+      }
   }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
