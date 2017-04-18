@@ -6,6 +6,8 @@
 
 Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
 
+``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+
 #### VectorLayerPlugin ol2
 
 Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.

@@ -135,7 +135,7 @@ Oskari.clazz.define(
             var formatter = this._supportedFormats.GeoJSON;
             var me = this;
             _.forEach(features, function(feature) {
-                var geojson = formatter.write([feature]);
+                var geojson = JSON.parse(formatter.write([feature]));
                 clickEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
             });
             sandbox.notifyAll(clickEvent);
@@ -271,7 +271,7 @@ Oskari.clazz.define(
 
                 // remove from "cache"
                 me._removeFromCache(this._getLayerId(olLayer.name), feature);
-                var geojson = formatter.write([feature]);
+                var geojson = JSON.parse(formatter.write([feature]));
                 removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
             }
             sandbox.notifyAll(removeEvent);
@@ -358,6 +358,7 @@ Oskari.clazz.define(
                     opacity = layer.getOpacity() / 100;
                 }
                 olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
+
                 olLayer.events.register('click', this, function(e) {
                     // clicking on map, check if feature is hit
                     if (e.target && e.target._featureId) {
@@ -442,7 +443,7 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox();
             var addEvent = sandbox.getEventBuilder('FeatureEvent')().setOpAdd();
             _.forEach(features, function(feature) {
-                var geojson = formatter.write([feature]);
+                var geojson = JSON.parse(formatter.write([feature]));
                 addEvent.addFeature(feature.id, geojson, options.layerId);
             });
             sandbox.notifyAll(addEvent);
