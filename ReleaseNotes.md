@@ -2,13 +2,16 @@
 
 ## 1.42.0
 
+### DrawPlugin.ol2
+
+Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
+
 #### VectorLayerPlugin
 
 ol3:
 - Fixed ol3 error when label is not String.
 - Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 
-<<<<<<< HEAD
 ol2:
 - Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
