@@ -14,31 +14,32 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
     me._element = null;
     me._isVisible = false;
     me._loc;
+    me._popup;
   }, {
 
   _createControlElement: function () {
     var me = this,
         loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() ),
-        legend = me._templates.maplegend.clone(),
-        popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
+        legend = me._templates.maplegend.clone();
+        me._popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
 
         me._loc = loc;
 
         legend.on( "click", function () {
           if( me.isOpen() ) {
             me._isVisible = false;
-            popup.dialog.children().empty();
-            popup.close( true );
+            me._popup.dialog.children().empty();
+            me._popup.close( true );
             return;
           }
-          popup.show( me._loc.title );
-          popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
-          popup.moveTo( legend, 'left', true );
-          popup.makeDraggable();
-          popup.createCloseIcon();
+          me._popup.show( me._loc.title );
+          me._popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
+          me._popup.moveTo( legend, 'left', true );
+          me._popup.makeDraggable();
+          me._popup.createCloseIcon();
           me._isVisible = true;
           var legendContainer = me.getLayerLegend();
-          jQuery(popup.dialog).append(legendContainer);
+          jQuery(me._popup.dialog).append(legendContainer);
           legendContainer.find('div.oskari-select').trigger('change');
         });
 
@@ -123,6 +124,12 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
   },
   isOpen: function() {
     return this._isVisible;
+  },
+  refresh: function() {
+    this._popup.dialog.children().empty();
+    var legendContainer = me.getLayerLegend();
+    jQuery(this._popup.dialog).append(legendContainer);
+    legendContainer.find('div.oskari-select').trigger('change');
   },
 
   redrawUI: function() {
