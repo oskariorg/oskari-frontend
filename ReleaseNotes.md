@@ -44,6 +44,15 @@ Fixed rendering grid multiple times.
 
 Indicators in datatable are now paged if more than three indicators have been selected.
 
+Now selected region is saved to state.
+
+New ``RegionsetViewer`` component. Now also can be configured at regions are showed in vector layer.
+Show regions to also vectors following config:
+
+    {
+        vectorViewer: true
+    }
+
 #### grid
 
 ``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
