@@ -11,6 +11,11 @@ Some extra tags:
 
 ## 1.42
 
+#### [mod] [rpc] FeatureEvent
+
+Now ol2 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+
+
 #### [mod] [rpc] New rpc-client version
 
 This release has no functional changes.
