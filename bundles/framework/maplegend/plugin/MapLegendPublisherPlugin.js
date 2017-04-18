@@ -48,12 +48,10 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
   getLayerLegend: function() {
 
     var layers = this.getSandbox().findAllSelectedMapLayers().slice(0),
-        n,
         layer,
-        groupAttr,
         layerContainer,
         accordionPanel,
-        layerNames = [],
+        legendLayers = [],
         legendContainer = this._templates.legendContainer.clone(),
         legendInfo = this._templates.legendInfo.clone(),
         legendDivider = this._templates.legendDivider.clone(),
@@ -73,7 +71,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
         id: layer.getId(),
         title: layer.getName()
       }
-      layerNames.push( layerObject );
+      legendLayers.push( layerObject );
     });
     var options = {
         placeholder_text : 'layers',
@@ -81,7 +79,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
         disable_search_threshold: 10,
         width: '100%'
     };
-    var dropdown = select.create( layerNames, options );
+    var dropdown = select.create( legendLayers, options );
     dropdown.css( { width : '96%' } );
     select.adjustChosen();
     select.selectFirstValue();
@@ -106,14 +104,12 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
       legendLink.attr('href', layer.getLegendImage());
       legendLink.text(me._loc.newtab);
 
-      groupAttr = layer.getName();
-
-          accordionPanel = Oskari.clazz.create( 'Oskari.userinterface.component.AccordionPanel' );
-          accordionPanel.open();
-          accordionPanel.getContainer().append( legendLink );
-          accordionPanel.getContainer().append( legendImg );
-          accordionPanel.getHeader().remove();
-          accordion.addPanel( accordionPanel );
+      accordionPanel = Oskari.clazz.create( 'Oskari.userinterface.component.AccordionPanel' );
+      accordionPanel.open();
+      accordionPanel.getContainer().append( legendLink );
+      accordionPanel.getContainer().append( legendImg );
+      accordionPanel.getHeader().remove();
+      accordion.addPanel( accordionPanel );
 
     });
     return legendContainer;
