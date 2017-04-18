@@ -2,9 +2,15 @@
 
 ## 1.42.0
 
+### DrawPlugin.ol2
+
+Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
+
 #### VectorLayerPlugin ol2
 
 Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+
+Corre
 
 #### VectorLayerPlugin ol3
 
