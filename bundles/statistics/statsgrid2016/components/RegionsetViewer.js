@@ -105,6 +105,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     _bindToEvents : function() {
         var me = this;
         var sandbox = me.sb;
+        var state = me.service.getStateService();
 
         me.service.on('StatsGrid.IndicatorEvent', function(event) {
             // if indicator is removed/added
@@ -113,12 +114,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             // Always show the active indicator
-            me.render();
+            me.render(state.getRegion());
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
             // Need to update the map
-            me.render();
+            me.render(state.getRegion());
         });
 
         me.service.on('StatsGrid.RegionSelectedEvent', function(event){
@@ -127,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
             // Classification changed, need update map
-            me.render();
+            me.render(state.getRegion());
         });
 
         me.service.on('FeatureEvent', function(event){
@@ -136,9 +137,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 var features = event.getParams().features[0];
                 var region = features.geojson.features[0].properties.id;
 
-                // notify only for now
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
-                sandbox.notifyAll(eventBuilder(null, region));
+                state.selectRegion(region);
             }
         });
     }

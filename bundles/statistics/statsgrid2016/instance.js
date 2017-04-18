@@ -271,6 +271,10 @@ Oskari.clazz.define(
                 service.setActiveIndicator(state.active);
             }
 
+            if(state.activeRegion) {
+                service.selectRegion(state.activeRegion);
+            }
+
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
@@ -295,6 +299,11 @@ Oskari.clazz.define(
             var active = service.getActiveIndicator();
             if(active) {
                 state.active = active.hash;
+            }
+
+            var activeRegion = service.getRegion();
+            if(activeRegion) {
+                state.activeRegion = activeRegion;
             }
             return state;
         },

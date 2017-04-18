@@ -73,6 +73,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.updateModel(model, regions);
                 me.spinner.stop();
                 me.setHeaderHeight();
+                var state = me.service.getStateService();
+                me.grid.select(state.getRegion());
             });
         });
     },
