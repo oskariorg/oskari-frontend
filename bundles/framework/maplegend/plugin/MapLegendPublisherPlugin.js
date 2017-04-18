@@ -11,19 +11,88 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
       legendInfo: jQuery('<div class="legendInfo"></div>'),
       legendDivider: jQuery('<div class="maplegend-divider"></div>')
     };
+    me._index = 650;
     me._element = null;
     me._isVisible = false;
     me._loc;
     me._popup;
+    me._mobileDefs = {
+    buttons:  {
+        'mobile-maplegend': {
+            iconCls: 'mobile-maplegend',
+            tooltip: '',
+            show: true,
+            callback: function () {
+              me._toggleToolState();
+            },
+            sticky: true,
+            toggleChangeIcon: true
+        }
+    },
+    buttonGroup: 'mobile-toolbar'
+    };
   }, {
 
   _createControlElement: function () {
     var me = this,
-        loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() ),
-        legend = me._templates.maplegend.clone();
-        me._popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' );
+        loc = Oskari.getLocalization( 'maplegend', Oskari.getLang() );
+
+        me._popup = Oskari.clazz.create( 'Oskari.userinterface.component.Popup' ),
+        isMobile = Oskari.util.isMobile();
 
         me._loc = loc;
+
+        if( isMobile ) {
+         return this.createMobileElement();
+        } else {
+          return this.createDesktopElement();
+      }
+  },
+  createMobileElement: function() {
+          var me = this;
+          var el = jQuery( me.getMapModule().getMobileDiv() ).find( '#oskari_toolbar_mobile-toolbar_mobile-maplegend' );
+          var topOffsetElement = jQuery( 'div.mobileToolbarDiv' );
+          var popupCloseIcon = null;
+          var themeColours = me.getMapModule().getThemeColours();
+          var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+          me._popup = popupService.createPopup();
+
+          me._popup.addClass( 'maplegend__popup' );
+          me._popup.addClass( 'mobile-popup' );
+          me._popup.setColourScheme( { "bgColour" : "#e6e6e6" } );
+          me._popup.createCloseIcon();
+
+          popupService.closeAllPopups(true);
+          me._popup.onClose(function() {
+             me._isVisible = false;
+             me._resetMobileIcon( el, me._mobileDefs.buttons[ 'mobile-maplegend' ].iconCls );
+          });
+          var legendContainer = me.getLayerLegend();
+          legendContainer.find('div.oskari-select').trigger('change');
+          if(me._isVisible){
+          me._popup.show( me._loc.title, legendContainer );
+          // move popup if el and topOffsetElement
+          if ( el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0 ) {
+              me._popup.moveTo( el, 'bottom', true, topOffsetElement );
+          } else {
+              me._popup.moveTo( me.getMapModule().getMapEl(), 'center', true, null );
+          }
+          popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+          me._popup.setColourScheme({
+              'bgColour': themeColours.activeColour,
+              'titleColour': themeColours.activeTextColour,
+              'iconCls': popupCloseIcon
+          });
+          me._popup.addClass('mobile-popup');
+          }
+          return false;
+  },
+  createDesktopElement: function() {
+        var me = this;
+        var legend = me._templates.maplegend.clone();
+        var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+
+        popupService.closeAllPopups(true);
 
         legend.on( "click", function () {
           if( me.isOpen() ) {
@@ -31,19 +100,21 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
             me._popup.dialog.children().empty();
             me._popup.close( true );
             return;
-          }
+          } 
           me._popup.show( me._loc.title );
           me._popup.setColourScheme( { "bgColour" : "#424343", "titleColour" : "white" } );
           me._popup.moveTo( legend, 'left', true );
           me._popup.makeDraggable();
           me._popup.createCloseIcon();
+          me._popup.onClose(function() {
+             me._isVisible = false;
+          })
           me._isVisible = true;
           var legendContainer = me.getLayerLegend();
           jQuery(me._popup.dialog).append(legendContainer);
           legendContainer.find('div.oskari-select').trigger('change');
         });
-
-    return legend;
+        return legend;
   },
   getLayerLegend: function() {
 
@@ -116,40 +187,75 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
   },
    _createUI: function() {
       this._element = this._createControlElement();
-      this.addToPluginContainer( this._element );
+      if( this._element ){
+        this.addToPluginContainer( this._element );
+      }
   },
   isOpen: function() {
     return this._isVisible;
   },
   refresh: function() {
     this._popup.dialog.children().empty();
-    var legendContainer = me.getLayerLegend();
-    jQuery(this._popup.dialog).append(legendContainer);
-    legendContainer.find('div.oskari-select').trigger('change');
+    var legendContainer = this.getLayerLegend();
+    jQuery(this._popup.dialog).append( legendContainer );
+    legendContainer.find( 'div.oskari-select' ).trigger( 'change' );
   },
 
-  redrawUI: function() {
+  redrawUI: function( mapInMobileMode, forced ) {
     if( this.getElement() ) {
       this.teardownUI( true );
     }
       var me = this;
+      var mobileDefs = this.getMobileDefs();
       var sandbox = me.getSandbox();
+      var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+      if( !forced && toolbarNotReady ) {
+        return true;
+      }
+      if( !toolbarNotReady && mapInMobileMode ) {
+        this.addToolbarButtons( mobileDefs.buttons, mobileDefs.buttonGroup );
+      }
       this._createUI();
+
   },
-  teardownUI : function( stopping ) {
+  teardownUI : function( ) {
   //detach old element from screen
     this.getElement().detach();
     this.removeFromPluginContainer( this.getElement() );
+    var mobileDefs = this.getMobileDefs();
+    this.removeToolbarButtons( mobileDefs.buttons, mobileDefs.buttonGroup );
+  },
+  /**
+   * Toggle tool state.
+   * @method @private _toggleToolState
+   */
+  _toggleToolState: function(){
+      var me = this,
+      isMobile = Oskari.util.isMobile();
+
+      if(me.isOpen()) {
+          me._popup.dialog.children().empty();
+          me._isVisible = false;
+          me._popup.close(true);
+          return;
+      } else {
+        me._isVisible = true;
+        if( isMobile ) {
+          me.createMobileElement()
+        } else {
+          me.createDesktopElement();
+        }
+      }
   },
   /**
    * Get jQuery element.
    * @method @public getElement
    */
-  getElement: function(){
+  getElement: function() {
       return this._element;
   },
   stopPlugin: function() {
-    this.teardownUI( true );
+    this.teardownUI();
   }
 }, {
     'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
