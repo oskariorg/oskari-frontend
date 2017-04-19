@@ -107,6 +107,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPubli
           me._popup.makeDraggable();
           me._popup.createCloseIcon();
           me._popup.onClose(function() {
+             me._popup.dialog.children().empty();
              me._isVisible = false;
           })
           me._isVisible = true;
