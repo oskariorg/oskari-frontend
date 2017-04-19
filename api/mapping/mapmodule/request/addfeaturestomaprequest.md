@@ -5,6 +5,7 @@ Allows user to add features to map.
 ## Use cases
 
 - add features to map
+- update features from map, for example highlight
 
 ## Description
 
@@ -50,13 +51,18 @@ var geojsonObject = {
 };
 ```
 
+Geometry can also feature properties object. This will identify feature what you want to update. This is usefull for example highlight feature.
+```javascript
+var updateFeature = {'test_property':2};
+```
+
 Options object
 ```javascript
 {
-    layerId: 'MY_VECTOR_LAYER', 
+    layerId: 'MY_VECTOR_LAYER',
     clearPrevious: true,
     layerOptions: {
-    	minResolution: 0, 
+    	minResolution: 0,
     	maxResolution: 1000
     },
     centerTo: true,
@@ -69,13 +75,13 @@ Options object
 ```
 <ul>
 	<li>
-		<b>layerId</b> - In case you want to add features on a specified layer (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer. 
+		<b>layerId</b> - In case you want to add features on a specified layer (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer.
 	</li>
 	<li>
 		<b>clearPrevious</b> - when true, the previous features will be cleared
 	</li>
 	<li>
-		<b>layerOptions</b> - additional options of the layer.  
+		<b>layerOptions</b> - additional options of the layer.
 	</li>
 	<li>
 		<b>centerTo</b> - Whether to zoom to the added features.
@@ -105,7 +111,7 @@ Options object
 Usage example (GeoJSON)
 
 ```javascript
-//define the features as GeoJSON
+// Define the features as GeoJSON
 var x = 488704, y = 6939136;
 var geojsonObject = {
       'type': 'FeatureCollection',
@@ -140,19 +146,19 @@ var geojsonObject = {
     };```
 
 ```
-//some additional options for the layer
+// Some additional options for the layer
 var layerOptions = {
     'minResolution': 2,
     'maxResolution': 100
 };
-//override some default styles
+// Override some default styles
 var featureStyle = {
   stroke: {
     color: '#FF0000',
     width: 10
   }
 };
-//override feature style with feature property based style
+// Override feature style with feature property based style
  var optionalStyles = [{
                                 property: {
                                     value: 'AIRPLANE',
@@ -177,13 +183,13 @@ var featureStyle = {
                                     color: '#0000ff',
                                     width: 5
                                 }
-                            }];                            
+                            }];
 >- *key* is feature property name
 >- *value* is the property matching value to style
 ```
 
 ```
-//Add the features on a specific layer
+// Add the features on a specific layer
 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
     layerId: 'MY_VECTOR_LAYER',
@@ -198,15 +204,15 @@ Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
 Usage example (WKT)
 
 ```javascript
-//define a wkt-geometry
+// Define a wkt-geometry
 var WKT = "POLYGON ((358911.7134508261 6639617.669712467, 358911.7134508261 6694516.612323322, 382536.4910289571 6694516.612323322, 382536.4910289571 6639617.669712467, 358911.7134508261 6639617.669712467))";
 
-//some attributes for the feature
+// Some attributes for the feature
 var attributes = {
   test_property: 1
 };
 
-//styling
+// Styling
 var featureStyle = {
   fill: {
     color: 'rgba(0,0,0,0.3)',
@@ -217,20 +223,19 @@ var featureStyle = {
   },
   text : {
     scale : 1.3,
-	fill : {
-	  color : 'rgba(0,0,0,1)'
-	},
-	stroke : {
-	  color : 'rgba(255,255,255,1)',
-	  width : 2
-	},
-	labelProperty: 'test_property'
+	  fill : {
+	    color : 'rgba(0,0,0,1)'
+	  },
+	  stroke : {
+	    color : 'rgba(255,255,255,1)',
+	    width : 2
+	  },
+	  labelProperty: 'test_property'
   }
 };
 
-//add features
-var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-Oskari.getSandbox().postRequestByName(rn, [WKT, {
+// Add features
+channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [WKT, {
     layerId: 'MY_VECTOR_LAYER',
     clearPrevious: true,
     layerOptions: null,
@@ -239,6 +244,72 @@ Oskari.getSandbox().postRequestByName(rn, [WKT, {
     attributes: attributes
 }]);
 ```
+
+Update specific feature.
+```javascript
+// First add feature, feature format can be an WKT or GeoJSON
+// Define a wkt-geometry
+var WKT = "POLYGON ((358911.7134508261 6639617.669712467, 358911.7134508261 6694516.612323322, 382536.4910289571 6694516.612323322, 382536.4910289571 6639617.669712467, 358911.7134508261 6639617.669712467))";
+
+// Some attributes for the feature
+var attributes = {
+  test_property: 1
+};
+
+// Styling
+var featureStyle = {
+  fill: {
+    color: 'rgba(0,0,0,0.3)',
+  },
+  stroke: {
+    color: '#FF0000',
+    width: 10
+  },
+  text : {
+    scale : 1.3,
+    fill : {
+      color : 'rgba(0,0,0,1)'
+    },
+    stroke : {
+      color : 'rgba(255,255,255,1)',
+      width : 2
+    },
+    labelProperty: 'test_property'
+  }
+};
+
+// Add features
+channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [WKT, {
+    layerId: 'MY_VECTOR_LAYER',
+    clearPrevious: true,
+    layerOptions: null,
+    centerTo: false,
+    featureStyle: featureStyle,
+    attributes: attributes
+}]);
+
+// Now update previously added feature
+// For example change stroke style
+var featureStyle = {
+  stroke: {
+    color: '#00FF00',
+    width: 5
+  }
+};
+
+// Define wanted feature attributes
+var updatedFeatureAttributes = {'test_property':1};
+var params = [updatedFeatureAttributes, {
+    featureStyle: featureStyle,
+    layerId: 'MY_VECTOR_LAYER'
+}];
+
+channel.postRequest(
+    'MapModulePlugin.AddFeaturesToMapRequest',
+    params
+);
+```
+
 ## Related api
 
 - removeFeaturesFromMapRequest

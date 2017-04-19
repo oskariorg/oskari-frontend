@@ -24,7 +24,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "You do not have rights to use the data product {layer}.",
             "wfs_configuring_layer_failed": "Settings for the data product {layer} could not be configured.",
             "wfs_request_failed": "The data product {layer} request could not be completed.",
-            "features_parsing_failed": "Feature data on the data product {layer} could not be retrieved."
+            "features_parsing_failed": "Feature data on the data product {layer} could not be retrieved.",
+            "layer_load_fail": "Could not load layer"
         },
         "information": {
             "title": "Feature Data Rendering",
@@ -47,6 +48,10 @@ Oskari.registerLocalization(
                 "cancel": "Cancel",
                 "save": "Save"
             }
+        },
+        "scale_dialog": {
+          "title": "Scale updated",
+          "msg":"Layer not available on current zoom level"
         }
     }
 });

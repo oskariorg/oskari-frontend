@@ -27,7 +27,7 @@ function( degrees ) {
    */
   getDegrees: function () {
       return this._degrees;
-  },
+  }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']
 });

@@ -13,6 +13,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         descending: false
     };
 
+    this._maxCols = 3;
+
     // Keep latest sorting on memory
     this._sortOrder = null;
 }, {
@@ -90,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             {
                 cls:'statsgrid-grouping-header sources',
                 text: gridLoc.title + ' <span>('+indicators.length+')</span>',
-                maxCols: 3,
+                maxCols: me._maxCols,
                 pagingHandler: function(element, data){
                     element.html(gridLoc.title + ' <span>('+data.visible.start + '-' + data.visible.end +'/' + data.count+')</span>');
                     me.setHeaderHeight();
@@ -195,7 +197,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 sortBy.find('.orderTitle').attr('title', gridLoc.orderByAscending);
             }
 
-            content.css('width', '180px');
+            content.css('width', '30%');
         });
 
 
@@ -319,6 +321,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
+                // calculate cell width
+                var visibleCells = (indicators.length > me._maxCols) ? me._maxCols : indicators.length;
+                var cellWidth = 70 / visibleCells;
+                content.css('width', cellWidth + '%');
                 content.append(tableHeader);
             });
             if(indicators.length - 1 === id) {
@@ -337,6 +343,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
         log.info('Indicator added ', src, indId, selections);
+        var state = this.service.getStateService();
+        var hash = this.service.getStateService().getHash(datasrc, indId, selections);
+
+        state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
     },
     /**
@@ -426,15 +436,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     setHeaderHeight: function(){
         var me = this;
         var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+
+        // IE fix
         if(statsTableEl.length > 0) {
-            statsTableEl.addClass('autoheight');
+            var latestCell = statsTableEl.find('tbody tr').last();
+            latestCell.addClass('autoheight');
             // hack is needed by IE 11. Otherwise header elements with css like
             //   position : absolute, bottom : 0
             // will render in wrong location.
             // This will force a repaint which will fix the locations.
-            statsTableEl.removeClass('autoheight');
-            statsTableEl.hide();
-            statsTableEl.show(0);
+            latestCell.removeClass('autoheight');
+            latestCell.hide();
+            latestCell.show(0);
         }
     },
 

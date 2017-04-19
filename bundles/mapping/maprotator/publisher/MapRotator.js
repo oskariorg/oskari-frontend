@@ -10,12 +10,8 @@ function() {
   templates: {
       'toolOptions': '<div class="tool-options"></div>'
   },
-  supportedProjections: null,
-  noUI: null,
-  projectionTrasformationIsCheckedInModifyMode: false,
-  noUiIsCheckedInModifyMode: false,
-  started: false,
-  /**
+  noUI: false,
+/**
   * Get tool object.
   * @method getTool
   *
@@ -56,7 +52,7 @@ function() {
 
       me.setEnabled(true);
       var conf = data.configuration[me.bundleName].conf || {};
-      me.noUiIsCheckedInModifyMode = !!conf.noUI;
+      me.noUI = !!conf.noUI;
 
   },
   /**
@@ -74,11 +70,13 @@ function() {
       me.state.enabled = enabled;
       if(tool.config.instance.plugin === null && enabled) {
         tool.config.instance.createPlugin(true, true);
-        me.started = true;
+        me.__started = true;
       }
-      if(!enabled && me.started){
-        this.getMapRotatorInstance().stopPlugin();
-        me.started = false;
+      if(!enabled && me.__started){
+        if(me.getMapRotatorInstance().plugin && !me.noUI){
+            me.getMapRotatorInstance().stopPlugin();
+        }
+        me.__started = false;
       }
   },
   /**
@@ -118,28 +116,29 @@ function() {
     //CREATE CHECKBOX
     var me = this,
         template = jQuery(me.templates.toolOptions).clone(),
-        labelNoUI = "Hide UI";
+        loc = Oskari.getLocalization('maprotator', Oskari.getLang()),
+        labelNoUI = loc.display.publisher.noUI;
     var input = Oskari.clazz.create(
         'Oskari.userinterface.component.CheckboxInput'
     );
 
     input.setTitle( labelNoUI );
     input.setHandler( function( checked ) {
+        if(!me.getPlugin()){
+            return;
+        }
         if( checked === 'on' ){
             me.noUI = true;
             me.getPlugin().teardownUI();
         } else {
-            me.noUI = null;
+            me.noUI = false;
             me.getPlugin().redrawUI();
         }
     });
-    if(me.noUiIsCheckedInModifyMode) {
-        input.setChecked(true);
-        me.noUI = true;
-    }
+    input.setChecked(me.noUi);
+
     var inputEl = input.getElement();
     template.append(inputEl);
-
     return template;
 
   }
