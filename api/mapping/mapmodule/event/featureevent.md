@@ -1,10 +1,10 @@
 # FeatureEvent [rpc]
 
-Used to notify about add, remove and click events for features.
+Used to notify about add, remove, update and click events for features.
 
 ## Description
 
-Notifies other components that feature has been added, removed or clicked on the map. 
+Notifies other components that feature has been added, removed, updated (highlight) or clicked on the map.
 
 ## RPC
 
@@ -38,7 +38,8 @@ Occurs after adding or removing features to or from map, or after feature has be
             },
             "properties": {
               "test_property": 1,
-              "oskari-cursor": "zoom-in"
+              "oskari-cursor": "zoom-in",
+              "highlighted": false // or true. This property come from when update feature
             }
           }
         ]
@@ -95,7 +96,7 @@ Adds feature parameters to this._features and returns this
 
 ### getParams
 
-RPC needed function. Returns an object with keys 'features' and 'operation' where operation is one of: 'add', 'remove', 'click', 'zoom' and 
+RPC needed function. Returns an object with keys 'features' and 'operation' where operation is one of: 'add', 'remove', 'click', 'zoom' and
 features is an array containing objects presenting the features that were affected. Each feature object has the following properties:
 
 - id : id for the feature

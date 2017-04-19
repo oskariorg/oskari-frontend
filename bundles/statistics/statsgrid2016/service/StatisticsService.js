@@ -86,7 +86,9 @@
                     });
                     return;
                 }
+
                 var uiLabels = [];
+                var preferredFormatting = [];
                 for(var sel in indicator.selections){
                     var val = indicator.selections[sel];
 
@@ -107,15 +109,14 @@
                                 id : value.id || value,
                                 label : name
                             });
+
+                            preferredFormatting.push(name);
                         });
                     });
                 }
-                var preferredFormatting = [];
-                uiLabels.forEach(function(param) {
-                    preferredFormatting.push(param.label);
-                });
+
                 var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted = '( ' +  preferredFormatting.join(' / ') + ' )';
+                var selectorsFormatted = '(' +  preferredFormatting.join(' / ') + ')';
                 callback({
                     indicator : name,
                     source : Oskari.getLocalized(ind.source),
@@ -209,7 +210,8 @@
                 type: "GET",
                 dataType: 'json',
                 data : {
-                    regionset : regionset
+                    regionset : regionset,
+                    srs : this.sandbox.getMap().getSrsName()
                 },
                 url: this.sandbox.getAjaxUrl('GetRegions'),
                 success: function (pResp) {

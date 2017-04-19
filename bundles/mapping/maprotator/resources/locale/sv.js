@@ -1,15 +1,15 @@
 Oskari.registerLocalization(
 {
-    "lang": "fi",
+    "lang": "sv",
     "key": "maprotator",
     "value": {
-        "title": "Kartan pyöritys",
+        "title": "Kartrotation",
         "display":{
           "tooltip": {
-            "tool":"Pyöritä karttaa"
+            "tool":"Tillåt kartrotation"
           },
           "publisher": {
-                "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
+                "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
         }
     }
