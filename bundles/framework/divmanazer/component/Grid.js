@@ -1442,6 +1442,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 rows.removeClass('selected');
             }
             jQuery(rows[index]).addClass('selected');
+            this._dataSelected(value);
         },
         /**
          * @method removeSelections
@@ -1617,8 +1618,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     // not sorting objects
                     return 0;
                 }
+
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
+
+                var renderer = me.valueRenderer[pAttribute];
+                if (renderer) {
+                    nameA = renderer(nameA);
+                    nameB = renderer(nameB);
+                }
+
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         },
