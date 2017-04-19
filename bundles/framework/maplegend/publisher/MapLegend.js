@@ -16,7 +16,7 @@ function() {
    */
    getTool: function() {
        return {
-           id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin',
+           id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
            title: 'MapLegend',
            config: {
                instance: this.getInstance()

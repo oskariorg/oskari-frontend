@@ -1,9 +1,9 @@
-Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin',
+Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
   function( config, plugins ) {
     var me = this;
     me._config = config || {};
     me._plugins = plugins;
-    me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin';
+    me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin';
     me._defaultLocation = 'top right';
     me._templates = {
       maplegend: jQuery( '<div class="mapplugin maplegend questionmark"></div>' ),

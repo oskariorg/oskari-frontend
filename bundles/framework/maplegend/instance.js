@@ -268,7 +268,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         createPlugin: function() {
           var conf = this.conf || {};
 
-          var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPublisherPlugin', conf, this.plugins);
+          var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin', conf, this.plugins);
 
           this._mapmodule.registerPlugin(plugin);
           this._mapmodule.startPlugin(plugin);
