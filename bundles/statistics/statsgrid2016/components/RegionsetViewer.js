@@ -137,6 +137,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 var features = event.getParams().features[0];
                 var region = features.geojson.features[0].properties.id;
 
+                if(me.instance.conf.scrollDatatable) {
+                    state.setComponentState('datatable', {
+                        scroll: true
+                    });
+                }
                 state.selectRegion(region);
             }
         });

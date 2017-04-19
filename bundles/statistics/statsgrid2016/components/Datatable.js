@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
@@ -367,6 +366,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _bindToEvents : function() {
         var me = this;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
+        var state = this.service.getStateService();
+
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
             if(event.isRemoved()) {
                 me._handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
@@ -378,10 +379,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             log.info('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());
         });
+
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
-
             me.grid.select(event.getRegion());
+
+            var gridEl = me.mainEl.find('table.oskari-grid:visible');
+            var parent = gridEl.parents('.oskari-flyoutcontentcontainer');
+            var compState = state.getComponentState('datatable');
+            if(compState.scroll && parent.length>0) {
+                parent.scrollTop(0);
+                var row = parent.find('tr[data-id="'+event.getRegion()+'"]');
+                if(row.length > 0) {
+                    parent.scrollTop(row.position().top);
+                }
+
+                state.setComponentState('datatable', {
+                    scroll: false
+                });
+            }
+
         });
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
@@ -421,15 +438,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         noresults.find('.title').html(gridLoc.title);
         noresults.find('.content').html(gridLoc.noResults);
 
-        this.mainEl = main;
-        this.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+        me.mainEl = main;
+        me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
-        this.grid.addSelectionListener(function(grid, region) {
+        me.grid.addSelectionListener(function(grid, region) {
             me.service.getStateService().selectRegion(region);
         });
 
         el.append(main);
-        this._handleRegionsetChanged();
+        me._handleRegionsetChanged();
     },
 
     setHeaderHeight: function(){

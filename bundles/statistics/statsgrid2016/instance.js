@@ -63,7 +63,7 @@ Oskari.clazz.define(
             }
 
             if(this.conf && this.conf.vectorViewer) {
-                this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox);
+                this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
         },
         isEmbedded: function() {

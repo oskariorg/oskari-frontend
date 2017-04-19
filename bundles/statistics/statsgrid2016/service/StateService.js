@@ -24,6 +24,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         };
         this._timers = {};
+        this._componentStates = {
+            datatable: {
+                scroll: false
+            }
+        };
     }, {
         __name: "StatsGrid.StateService",
         __qname: "Oskari.statistics.statsgrid.StateService",
@@ -33,6 +38,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         getName: function () {
             return this.__name;
+        },
+
+        setComponentState: function(component, state){
+            this._componentStates[component] = state;
+        },
+        getComponentState: function(component){
+            return this._componentStates[component] || {};
         },
         /**
          * Resets the current state and sends events about the changes.
@@ -73,10 +85,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
          */
         selectRegion : function(region) {
-            this.activeRegion = region;
-            // notify
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
+            var me = this;
+
+            // if region is same than previous then return
+            if(region === me.activeRegion) {
+                return;
+            }
+            clearTimeout(me._timers.setActiveRegion);
+
+            me._timers.setActiveRegion = setTimeout(function(){
+                me.activeRegion = region;
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                me.sandbox.notifyAll(eventBuilder(me.getRegionset(), region));
+            }, 100);
         },
 
         /**
