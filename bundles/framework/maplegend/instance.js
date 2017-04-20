@@ -18,7 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.publisherplugin = null;
+        this.plugin = null;
         this.localization = null;
         this._mapmodule = null;
     }, {
@@ -200,7 +200,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
             sandbox.request(this, request);
 
-            if(this.publisherplugin){
+            if(this.plugin){
               this.stopPlugin();
             }
 
@@ -254,7 +254,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return jQuery('#contentMap').hasClass('published');
         },
         refreshUI: function() {
-            var plugin = this.isEmbedded() ? this.publisherplugin : this.plugins['Oskari.userinterface.Flyout'];
+            var plugin = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
             plugin.refresh();
         },
         /**
@@ -272,12 +272,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
           this._mapmodule.registerPlugin(plugin);
           this._mapmodule.startPlugin(plugin);
-          this.publisherplugin = plugin
+          this.plugin = plugin
         },
         stopPlugin: function() {
-          this._mapmodule.unregisterPlugin(this.publisherplugin);
-          this._mapmodule.stopPlugin(this.publisherplugin);
-          this.publisherplugin = null;
+          this._mapmodule.unregisterPlugin(this.plugin);
+          this._mapmodule.stopPlugin(this.plugin);
+          this.plugin = null;
         },
 
         /**

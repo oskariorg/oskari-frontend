@@ -28,7 +28,7 @@ function() {
    },
    getPlugin: function(){
     var maplegend = this.getInstance() || {};
-    return maplegend.publisherplugin;
+    return maplegend.plugin;
    },
   /**
    * Initialise tool
@@ -54,12 +54,12 @@ setEnabled : function(enabled) {
         request;
 
     me.state.enabled = enabled;
-    if(tool.config.instance.publisherplugin === null && enabled) {
+    if(tool.config.instance.plugin === null && enabled) {
       me.getInstance().createPlugin();
       me.__started = true;
     }
     if(!enabled && me.__started){
-      if(me.getInstance().publisherplugin){
+      if(me.getInstance().plugin){
           me.getInstance().stopPlugin();
       }
       me.__started = false;
