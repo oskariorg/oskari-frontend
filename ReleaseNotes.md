@@ -95,6 +95,25 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 Medium map height changed from 525 to 600 pixels.
 
+### myplacesimport
+
+Default config is now included in the code so configuration is optional.
+
+### timeseries
+
+Default config is now included in the code so configuration is optional.
+
+### promote
+
+UI text for bundle now uses Oskari.getLocalized() when parsing configuration.
+This means that for example URLs in localization can be presented as single value or a localized object:
+
+      "signupUrl": "/user",
+      "registerUrl": {
+        "en": "/user",
+        "fi": "/user"
+      }
+
 ## 1.41.3
 
 ### coordinatetool
