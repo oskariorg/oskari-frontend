@@ -6,7 +6,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugi
     me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin';
     me._defaultLocation = 'top right';
     me._templates = {
-      maplegend: jQuery( '<div class="mapplugin maplegend questionmark"></div>' ),
+      maplegend: jQuery( '<div class="mapplugin maplegend"></div>' ),
       legendContainer: jQuery( '<div class="legendSelector"></div>' ),
       legendInfo: jQuery('<div class="legendInfo"></div>'),
       legendDivider: jQuery('<div class="maplegend-divider"></div>')
@@ -91,6 +91,8 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugi
         var me = this;
         var legend = me._templates.maplegend.clone();
         var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+        var clrTheme = (me.getMapModule().getTheme() === 'dark') ? 'questionmark-dark' : 'questionmark-light';
+        legend.addClass(clrTheme);
 
         popupService.closeAllPopups(true);
 

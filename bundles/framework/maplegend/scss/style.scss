@@ -6,11 +6,18 @@
   padding-left: 8px;
   overflow: hidden; }
 
-  .questionmark {
+  .questionmark-dark {
     width:33px;
     height:33px;
     background-color: rgba(20, 20, 20, 0.8);;
     background-image: url('../images/Question-mark-dark.png');
+    border-radius: 50%;
+  }
+    .questionmark-light {
+    width:33px;
+    height:33px;
+    background-color: rgba(20, 20, 20, 0.8);;
+    background-image: url('../images/Question-mark-light.png');
     border-radius: 50%;
   }
   .legendInfo {
