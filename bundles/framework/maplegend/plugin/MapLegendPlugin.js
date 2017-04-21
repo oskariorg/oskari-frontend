@@ -183,7 +183,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 legendDivider = this._templates.legendDivider.clone(),
                 me = this;
 
-
             legendInfo.text(me._loc.infotext);
             legendContainer.append(legendInfo);
             legendContainer.append(legendDivider);
@@ -228,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 }
                 var legendImg = jQuery('<img></img>');
                 var legendLink = jQuery('<a target="_blank" ></a></br></br>');
-                legendImg.attr('src', layer.getLegendImage() + 'aaa');
+                legendImg.attr('src', layer.getLegendImage());
                 legendImg.on('load', function() {
                     // do stuff on success
                     successCb();
