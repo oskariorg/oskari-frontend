@@ -6,10 +6,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
  * @static constructor function
  */
 function () {
-    this.conf = {
-        "name": "MyPlacesImport",
-        "sandbox": "sandbox",
-        "flyoutClazz": "Oskari.mapframework.bundle.myplacesimport.Flyout"
+    // these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
+    this.defaultConf = {
+        name: 'MyPlacesImport',
+        sandbox: 'sandbox',
+        stateful: true,
+        flyoutClazz: 'Oskari.mapframework.bundle.myplacesimport.Flyout'
     };
     this.buttonGroup = 'myplaces';
     this.toolName = 'import';
@@ -29,7 +31,7 @@ function () {
      */
     start: function () {
         var me = this,
-            conf = this.conf,
+            conf = this.getConfiguration() || {},
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName),
             request;
