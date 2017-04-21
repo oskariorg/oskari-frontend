@@ -593,9 +593,6 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setLocation
          */
         setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
-        if( typeof layerId !== 'number' ) {
-            return;
-        }
           var me = this;
           var oskariLayer =me.plugin.getSandbox().getMap().getSelectedLayer( layerId );
             this.sendMessage('/service/wfs/setLocation', {
@@ -607,10 +604,13 @@ Oskari.clazz.category(
                 'tiles': tiles,
                 'manualRefresh': manualRefesh
             });
+            if( typeof layerId !== 'number' ) {
+                // don't track loading this way for userlayers, analysis, myplaces
+                return;
+            }
+            // track loading state for WFS-layers
+            oskariLayer.loadingDone(0);
             tiles.forEach(function(tile){
-              if(oskariLayer.getLoadingState().loaded != 0){
-                oskariLayer.loadingDone(0);
-              }
                me.plugin.getMapModule().loadingState( oskariLayer.getId(), true);
             });
         },
