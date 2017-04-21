@@ -6,7 +6,7 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugi
     me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin';
     me._defaultLocation = 'top right';
     me._templates = {
-      maplegend: jQuery( '<div class="mapplugin maplegend"></div>' ),
+      maplegend: jQuery( '<div class="mapplugin maplegend"><div class="icon"></div></div>' ),
       legendContainer: jQuery( '<div class="legendSelector"></div>' ),
       legendInfo: jQuery('<div class="legendInfo"></div>'),
       legendDivider: jQuery('<div class="maplegend-divider"></div>')
@@ -87,14 +87,38 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugi
           }
           return false;
   },
+  /**
+   * @public @method changeToolStyle
+   * Changes the tool style of the plugin
+   *
+   * @param {Object} style
+   * @param {jQuery} div
+   */
+  changeToolStyle: function (style, div) {
+      var me = this,
+          el = div || me.getElement();
+
+      if (!el) {
+          return;
+      }
+
+      var styleClass = 'toolstyle-' + (style ? style : 'default');
+
+      var classList = el.attr('class').split(/\s+/);
+      for(var c=0;c<classList.length;c++){
+          var className = classList[c];
+          if(className.indexOf('toolstyle-') > -1){
+              el.removeClass(className);
+          }
+      }
+      el.addClass(styleClass);
+  },
   createDesktopElement: function() {
         var me = this;
         var legend = me._templates.maplegend.clone();
         var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
         me._popup = popupService.createPopup();
-        var clrTheme = (me.getMapModule().getTheme() === 'dark') ? 'questionmark-dark' : 'questionmark-light';
         var themeColours = me.getMapModule().getThemeColours();
-        legend.addClass(clrTheme);
 
         popupService.closeAllPopups(true);
 
@@ -207,9 +231,18 @@ Oskari.clazz.define( 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugi
     return legendContainer;
   },
    _createUI: function() {
+      var me = this,
+                conf = me._config;
       this._element = this._createControlElement();
       if( this._element ){
         this.addToPluginContainer( this._element );
+      }
+      // Change the style if in the conf
+      if (conf && conf.toolStyle) {
+          me.changeToolStyle(conf.toolStyle, me.getElement());
+      } else {
+          var toolStyle = me.getToolStyleFromMapModule();
+          me.changeToolStyle(toolStyle, me.getElement());
       }
   },
   isOpen: function() {
