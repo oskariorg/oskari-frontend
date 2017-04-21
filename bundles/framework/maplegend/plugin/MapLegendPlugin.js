@@ -141,6 +141,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     return;
                 }
                 me._popup.show(me._loc.title);
+                var content = me._popup.getJqueryContent();
+                var parent = content.parents('.divmanazerpopup');
+                parent.hide();
                 var popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
 
                 me._popup.createCloseIcon();
@@ -159,8 +162,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._isVisible = true;
                 var legendContainer = me.getLayerLegend(function() {
                     me._popup.moveTo(legend, 'left', true);
+                    parent.show();
                 }, function(){
                     me._popup.moveTo(legend, 'left', true);
+                    parent.show();
                     me._popup.getJqueryContent().find('.accordion').remove();
                     me._popup.getJqueryContent().empty();
                     me._popup.getJqueryContent().find('.error').remove();
@@ -226,7 +231,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     return;
                 }
                 var legendImg = jQuery('<img></img>');
-                var legendLink = jQuery('<a target="_blank" ></a></br></br>');
+                var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
                 legendImg.attr('src', layer.getLegendImage());
                 legendImg.on('load', function() {
                     // do stuff on success
@@ -235,8 +240,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 legendImg.on('error', function() {
                     errorCb();
                 });
-                legendLink.attr('href', layer.getLegendImage());
-                legendLink.text(me._loc.newtab);
+                legendLink.find('a').attr('href', layer.getLegendImage());
+                legendLink.find('a').text(me._loc.newtab);
 
                 accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 accordionPanel.open();
