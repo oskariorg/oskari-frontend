@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
            });
 
           layer.events.register("tileerror", layer, function(){
-            oskariLayer.loadingError();
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
          });
          },
         /**
