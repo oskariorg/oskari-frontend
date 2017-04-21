@@ -73,6 +73,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 } else {
                     me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
                 }
+            }, function(){
+                // move popup if el and topOffsetElement
+                if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
+                    me._popup.moveTo(el, 'bottom', true, topOffsetElement);
+                } else {
+                    me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
+                }
+                me._popup.getJqueryContent().find('.accordion').remove();
+                me._popup.getJqueryContent().find('.error').remove();
+                me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
             });
             legendContainer.find('div.oskari-select').trigger('change');
             if (me._isVisible) {
@@ -149,16 +159,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._isVisible = true;
                 var legendContainer = me.getLayerLegend(function() {
                     me._popup.moveTo(legend, 'left', true);
+                }, function(){
+                    me._popup.moveTo(legend, 'left', true);
+                    me._popup.getJqueryContent().find('.accordion').remove();
+                    me._popup.getJqueryContent().empty();
+                    me._popup.getJqueryContent().find('.error').remove();
+                    me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 });
                 jQuery(me._popup.dialog).append(legendContainer);
                 legendContainer.find('div.oskari-select').trigger('change');
-
-
-
             });
             return legend;
         },
-        getLayerLegend: function(successCb) {
+        getLayerLegend: function(successCb, errorCb) {
 
             var layers = this.getSandbox().findAllSelectedMapLayers().slice(0),
                 layer,
@@ -215,10 +228,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 }
                 var legendImg = jQuery('<img></img>');
                 var legendLink = jQuery('<a target="_blank" ></a></br></br>');
-                legendImg.attr('src', layer.getLegendImage());
+                legendImg.attr('src', layer.getLegendImage() + 'aaa');
                 legendImg.on('load', function() {
                     // do stuff on success
                     successCb();
+                });
+                legendImg.on('error', function() {
+                    errorCb();
                 });
                 legendLink.attr('href', layer.getLegendImage());
                 legendLink.text(me._loc.newtab);
