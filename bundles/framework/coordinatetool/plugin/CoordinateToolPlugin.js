@@ -322,7 +322,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.createCloseIcon();
 
                 //hide mouse coordinates
-                popupContent.find('div.mousecoordinates-div').hide();
+                popupContent.find('.mousecoordinates-div').hide();
 
                 popupService.closeAllPopups(true);
                 me._popup.onClose(function() {

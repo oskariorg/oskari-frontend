@@ -1,13 +1,12 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
 function() {
 }, {
-  index : 4,
-  allowedLocations : ['top left', 'top right'],
-  lefthanded: 'top right',
-  righthanded: 'top right',
-  allowedSiblings : [
-  ],
-   bundleName: 'maplegend',
+    index : 4,
+    allowedLocations : ['top left', 'top right'],
+    lefthanded: 'top right',
+    righthanded: 'top right',
+    allowedSiblings : [],
+    bundleName: 'maplegend',
    /**
    * Get tool object.
    * @method getTool
@@ -42,29 +41,29 @@ function() {
       me.setEnabled(true);
   },
   /**
-* Set enabled.
-* @method setEnabled
-* @public
-*
-* @param {Boolean} enabled is tool enabled or not
-*/
-setEnabled : function(enabled) {
-    var me = this,
-        tool = me.getTool(),
-        request;
+  * Set enabled.
+  * @method setEnabled
+  * @public
+  *
+  * @param {Boolean} enabled is tool enabled or not
+  */
+  setEnabled : function(enabled) {
+      var me = this,
+          tool = me.getTool(),
+          request;
 
-    me.state.enabled = enabled;
-    if(tool.config.instance.plugin === null && enabled) {
-      me.getInstance().createPlugin();
-      me.__started = true;
-    }
-    if(!enabled && me.__started){
-      if(me.getInstance().plugin){
-          me.getInstance().stopPlugin();
+      me.state.enabled = enabled;
+      if(tool.config.instance.plugin === null && enabled) {
+        me.getInstance().createPlugin();
+        me.__started = true;
       }
-      me.__started = false;
-    }
-},
+      if(!enabled && me.__started){
+        if(me.getInstance().plugin){
+            me.getInstance().stopPlugin();
+        }
+        me.__started = false;
+      }
+  },
   /**
   * Get values.
   * @method getValues

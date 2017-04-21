@@ -272,7 +272,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
           this._mapmodule.registerPlugin(plugin);
           this._mapmodule.startPlugin(plugin);
-          this.plugin = plugin
+          this.plugin = plugin;
         },
         stopPlugin: function() {
           this._mapmodule.unregisterPlugin(this.plugin);

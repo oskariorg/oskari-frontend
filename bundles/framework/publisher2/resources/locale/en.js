@@ -63,10 +63,10 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
+                "FeedbackServiceTool": "Feedback (Open311) service",
                 "MapLegend":"Show map legend",
                 "MapRotator":"Enable map rotation",
                 "CrosshairTool": "Show map focal point",
-                "FeedbackServiceTool": "Feedback (Open311) service",
                 "toolbarToolNames": {
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
