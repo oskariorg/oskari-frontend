@@ -593,7 +593,7 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setLocation
          */
         setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
-        if(typeof layerId != 'number'){
+        if( typeof layerId !== 'number' ) {
             return;
         }
           var me = this;
