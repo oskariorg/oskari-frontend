@@ -593,6 +593,9 @@ Oskari.clazz.category(
          * sends message to /service/wfs/setLocation
          */
         setLocation: function (layerId, srs, bbox, zoom, grid, tiles, manualRefesh) {
+        if(typeof layerId != 'number'){
+            return;
+        }
           var me = this;
           var oskariLayer =me.plugin.getSandbox().getMap().getSelectedLayer( layerId );
             this.sendMessage('/service/wfs/setLocation', {
