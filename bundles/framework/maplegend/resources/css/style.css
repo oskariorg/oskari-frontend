@@ -85,6 +85,5 @@
   max-height: 400px;
   overflow: auto; }
 .popup-body .content {
-  overflow-y:hidden !important;
-}
+  overflow-y:hidden !important;}
 /*# sourceMappingURL=style.css.map */
