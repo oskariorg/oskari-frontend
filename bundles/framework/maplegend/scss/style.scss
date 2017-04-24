@@ -128,4 +128,7 @@ $lightIcon: url("../images/Question-mark-light.png");
     max-height: 400px;
     overflow:auto;
   }
+  .popup-body .content {
+  overflow-y:hidden !important;
+  }
 }
