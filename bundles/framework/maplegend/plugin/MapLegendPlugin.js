@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 legendContainer.find('div.oskari-select').trigger('change');
             });
             return legend;
-        }
+        },
         getLayerLegend: function(successCb, errorCb, singleLegend) {
 
             var layer,
@@ -247,7 +247,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             };
             var dropdown = select.create(legendLayers, options);
             dropdown.css({
-                width: '96%'
+                width: '96%',
+                paddingBottom: '1em'
             });
             select.adjustChosen();
             select.selectFirstValue();
