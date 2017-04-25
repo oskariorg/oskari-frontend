@@ -2,11 +2,19 @@
 
 ## 1.42.0
 
-#### VectorLayerPlugin ol3
+### DrawPlugin.ol2
 
-Fixed ol3 error when label is not String.
+Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
 
-Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+#### VectorLayerPlugin
+
+ol3:
+- Fixed ol3 error when label is not String.
+- Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
+ol2:
+- Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
 
 ### mapwfs2
 
@@ -58,6 +66,8 @@ grid.setGroupingHeader([
 
 Fixed double scrollbar when grid has column selector (like properties) and few rows in the table.
 
+Fixed sort when using column name renderer.
+
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
@@ -90,6 +100,8 @@ Now:
   });
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
+ol2 mapmodule now support fill.color -property when getting style.
 
 ### publisher2
 
