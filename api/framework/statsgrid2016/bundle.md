@@ -29,8 +29,7 @@ Indicator selector, regionset selector and a datagrid with the indicator data ar
         }],
         "grid": true,
         "allowClassification" : true,
-        "vectorViewer": true,
-        "scrollDatatable": true
+        "vectorViewer": true
       }
 ```
 
@@ -38,7 +37,6 @@ Indicator selector, regionset selector and a datagrid with the indicator data ar
 * `grid` is optional and defaults to true. Toggles if the datatable should be shown
 * `allowClassification` is optional and defaults to true. Toggles if the user can change the classification for the data.
 * `vectorViewer` is optional and default to false. Shows region on the map the vector format.
-* `scrollDatatable` is optional and defaults to false. This config only detected when vectorViewer is also setted true. When option is setted to true then map clicks scrolls datatable to selected row.
 
 
 ## Bundle state

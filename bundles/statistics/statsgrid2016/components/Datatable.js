@@ -386,17 +386,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
             var gridEl = me.mainEl.find('table.oskari-grid:visible');
             var parent = gridEl.parents('.oskari-flyoutcontentcontainer');
-            var compState = state.getComponentState('datatable');
-            if(compState.scroll && parent.length>0) {
+
+            if(event.getTriggeredBy() === 'map' && parent.length>0) {
                 parent.scrollTop(0);
                 var row = parent.find('tr[data-id="'+event.getRegion()+'"]');
                 if(row.length > 0) {
                     parent.scrollTop(row.position().top);
                 }
-
-                state.setComponentState('datatable', {
-                    scroll: false
-                });
             }
 
         });
@@ -442,7 +438,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
         me.grid.addSelectionListener(function(grid, region) {
-            me.service.getStateService().selectRegion(region);
+            me.service.getStateService().selectRegion(region, 'grid');
         });
 
         el.append(main);

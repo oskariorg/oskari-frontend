@@ -132,18 +132,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         });
 
         me.service.on('FeatureEvent', function(event){
-            if(event.getParams().operation === 'click' && event.hasFeatures()) {
-                // resolve region
-                var features = event.getParams().features[0];
-                var region = features.geojson.features[0].properties.id;
-
-                if(me.instance.conf.scrollDatatable) {
-                    state.setComponentState('datatable', {
-                        scroll: true
-                    });
-                }
-                state.selectRegion(region);
+            if(event.getParams().operation !== 'click' || !event.hasFeatures()) {
+                return;
             }
+
+            // resolve region
+            var features = event.getParams().features[0];
+            var region = features.geojson.features[0].properties.id;
+
+            state.selectRegion(region, 'map');
         });
     }
 

@@ -9,10 +9,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionSelectedEvent',
      * @method create called automatically on construction
      * @static
      */
-    function (regionset, region, currentSelection) {
+    function (regionset, region, currentSelection, triggeredBy) {
         this.regionset = regionset;
         this.region = region;
         this.currentSelection = currentSelection || [region];
+        this.triggeredBy = triggeredBy;
     }, {
         /**
          * @method getName
@@ -42,6 +43,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionSelectedEvent',
          */
         getSelection : function() {
             return this.currentSelection;
+        },
+
+        /**
+         * Triggered by
+         * return {String} triggered by
+         */
+        getTriggeredBy: function(){
+            return this.triggeredBy;
         }
     }, {
         'protocol': ['Oskari.mapframework.event.Event']
