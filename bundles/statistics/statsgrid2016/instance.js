@@ -16,7 +16,8 @@ Oskari.clazz.define(
             sandbox: 'sandbox',
             stateful: true,
             tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout'
+            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
+            vectorViewer: false
         };
         this.visible = false;
 
@@ -25,6 +26,8 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
+
+        this.regionsetViewer = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -57,6 +60,10 @@ Oskari.clazz.define(
             var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
             if(dsiservice) {
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
+            }
+
+            if(this.conf && this.conf.vectorViewer) {
+                this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
         },
         isEmbedded: function() {
@@ -110,7 +117,7 @@ Oskari.clazz.define(
                         // if adding failed, it might because group was not registered.
                         service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
                         // Try adding again
-                        service.addItemToGroup('indicators', data)
+                        service.addItemToGroup('indicators', data);
                     }
                 });
         },
@@ -188,7 +195,9 @@ Oskari.clazz.define(
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
-
+            },
+            FeatureEvent: function(evt) {
+                this.statsService.notifyOskariEvent(evt);
             }
         },
 
@@ -262,6 +271,10 @@ Oskari.clazz.define(
                 service.setActiveIndicator(state.active);
             }
 
+            if(state.activeRegion) {
+                service.selectRegion(state.activeRegion);
+            }
+
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
@@ -286,6 +299,11 @@ Oskari.clazz.define(
             var active = service.getActiveIndicator();
             if(active) {
                 state.active = active.hash;
+            }
+
+            var activeRegion = service.getRegion();
+            if(activeRegion) {
+                state.activeRegion = activeRegion;
             }
             return state;
         },

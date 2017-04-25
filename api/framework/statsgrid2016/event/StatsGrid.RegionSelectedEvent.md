@@ -20,6 +20,10 @@ Components handling regions can update "highlighted" regions or the latest selec
 <tr>
   <td> currentSelection</td><td> Number[] </td><td> for multiple selection this can be used to communicate the whole set of currently selected regions </td><td> array with region-param value as the only item </td>
 </tr>
+<tr>
+  <td> triggeredBy </td><td> String </td><td> component id what triggered event  </td><td> component id (map/grid) or null </td>
+</tr>
+
 </table>
 
 ## Event methods

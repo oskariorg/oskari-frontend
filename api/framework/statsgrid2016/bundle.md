@@ -28,13 +28,16 @@ Indicator selector, regionset selector and a datagrid with the indicator data ar
           "type": "system"
         }],
         "grid": true,
-        allowClassification : true
+        "allowClassification" : true,
+        "vectorViewer": true
       }
 ```
 
 * `sources` is required and describes the available datasources. Each datasource have their own indicator listings etc so any reference to indicator must include reference to the datasource the indicator is located in.
 * `grid` is optional and defaults to true. Toggles if the datatable should be shown
 * `allowClassification` is optional and defaults to true. Toggles if the user can change the classification for the data.
+* `vectorViewer` is optional and default to false. Shows region on the map the vector format.
+
 
 ## Bundle state
 
