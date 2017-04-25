@@ -62,17 +62,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
 
-            me._popup.addClass('maplegend__popup');
-            me._popup.addClass('mobile-popup');
-            me._popup.setColourScheme({
-                "bgColour": "#e6e6e6"
-            });
-            me._popup.createCloseIcon();
-
-            me._popup.onClose(function() {
-                me._isVisible = false;
-                me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-maplegend'].iconCls);
-            });
             var legendContainer = me.getLayerLegend(function() {
                 // move popup if el and topOffsetElement
                 if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
@@ -91,16 +80,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.getJqueryContent().find('.error').remove();
                 me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
             }, singleLegend);
+
             legendContainer.find('div.oskari-select').trigger('change');
+
             if (me._isVisible) {
                 me._popup.show(title, legendContainer);
-
                 popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                me._popup.createCloseIcon();
+                me._popup.onClose(function() {
+                    me._isVisible = false;
+                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-maplegend'].iconCls);
+                });
                 me._popup.setColourScheme({
                     'bgColour': themeColours.activeColour,
                     'titleColour': themeColours.activeTextColour,
                     'iconCls': popupCloseIcon
                 });
+                me._popup.addClass('maplegend__popup');
                 me._popup.addClass('mobile-popup');
             }
             return false;
@@ -141,10 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             popupService.closeAllPopups(true);
 
             legend.on("click", function() {
-                if (me.isOpen()) {
-                    me._isVisible = false;
-                    me._popup.dialog.children().empty();
-                    me._popup.close(true);
+                if( me._toggleToolState() === false){
                     return;
                 }
                 var legends = me.getLegends();
@@ -170,6 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.onClose(function() {
                     me._popup.dialog.children().empty();
                     me._isVisible = false;
+                    me._popup.close();
                 });
                 me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
                 me._isVisible = true;
@@ -367,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.dialog.children().empty();
                 me._isVisible = false;
                 me._popup.close(true);
-                return;
+                return me.isOpen();
             } else {
                 me._isVisible = true;
                 if (isMobile) {
