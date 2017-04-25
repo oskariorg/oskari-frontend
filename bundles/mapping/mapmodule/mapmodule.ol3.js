@@ -577,8 +577,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             style = jQuery.extend(true, {}, styleDef);
             var olStyle = {};
             if(Oskari.util.keyExists(style, 'fill.color')) {
+                var color = style.fill.color;
+                if(Oskari.util.keyExists(style, 'image.opacity')) {
+                    var rgb = null;
+                    // check if color is hex
+                    if (color.charAt(0) === '#') {
+                        rgb = Oskari.util.hexToRgb(color);
+                        color = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+style.image.opacity+')';
+                    }
+                    // else check at if color is rgb
+                    else if(color.indexOf('rgb(') > -1){
+                        var hexColor = '#' + Oskari.util.rgbToHex(color);
+                        rgb = Oskari.util.hexToRgb(hexColor);
+                        color = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+style.image.opacity+')';
+                    }
+                }
                 olStyle.fill = new ol.style.Fill({
-                  color: style.fill.color
+                  color: color
                 });
             }
             if(style.stroke) {
@@ -633,7 +648,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
             styleDef.image.size = size;
 
-            if(me.isSvg(style.image)) {
+            if(me.isSvg(styleDef.image)) {
                 var svg = me.getSvg(styleDef.image);
                 image = new ol.style.Icon({
                     src: svg,
@@ -642,7 +657,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 });
                 return image;
             }
-            else if(style.image && style.image.shape) {
+            else if(styleDef.image && styleDef.image.shape) {
                 var offsetX = (!isNaN(style.image.offsetX)) ? style.image.offsetX : 16;
                 var offsetY = (!isNaN(style.image.offsetY)) ? style.image.offsetY : 16;
                 image = new ol.style.Icon({
@@ -657,6 +672,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             if(styleDef.image.radius) {
                 image.radius = styleDef.image.radius;
+            } else {
+                image.radius = 1;
             }
             if(styleDef.snapToPixel) {
                 image.snapToPixel = styleDef.snapToPixel;

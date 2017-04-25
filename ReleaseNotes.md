@@ -114,6 +114,8 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 ol2 mapmodule now support fill.color -property when getting style.
 
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+
 ### publisher2
 
 Medium map height changed from 525 to 600 pixels.

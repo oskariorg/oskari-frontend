@@ -107,11 +107,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * @return {null|Number} null or selected region
          */
         getRegion: function(){
-            if(this.activeRegion) {
-                // return selected region
-                return this.activeRegion;
-            }
-            return null;
+            return this.activeRegion;
         },
 
 
@@ -281,12 +277,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
-
-            // if region is selected then highlight it also
-            var region = this.getRegion();
-            if(region) {
-                this.selectRegion(region);
-            }
 
             return ind;
         },

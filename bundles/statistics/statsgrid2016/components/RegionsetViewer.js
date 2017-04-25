@@ -43,20 +43,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
             regiongroups.forEach(function(regiongroup, index){
                 regiongroup.forEach(function(region){
-                    var color = Oskari.util.hexToRgb(colors[index]);
-                    // feature opacity
-                    color.a = 0.8;
                     optionalStyles.push({
                         property: {
                             value: region,
                             key: 'id'
                         },
                         fill: {
-                            color: 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')'
+                            color: '#' + colors[index]
                         },
                         stroke: {
                             color: '#000000',
                             width: (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1
+                        },
+                        image: {
+                            opacity: 0.8
                         }
                     });
                 });

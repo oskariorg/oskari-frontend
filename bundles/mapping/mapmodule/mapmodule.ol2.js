@@ -466,8 +466,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             olStyle.graphicWidth = size;
             olStyle.graphicHeight = size;
 
-            olStyle.fillOpacity = 0.8;
-
             // If svg marker
             if(me.isSvg(style.image)) {
                 var svg = this.getSvg(style.image);
