@@ -382,19 +382,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
         this.service.on('StatsGrid.RegionSelectedEvent', function(event) {
             log.info('Region selected! ', event.getRegion());
-            me.grid.select(event.getRegion());
 
+            var scrollableElement = null;
             var gridEl = me.mainEl.find('table.oskari-grid:visible');
             var parent = gridEl.parents('.oskari-flyoutcontentcontainer');
 
             if(event.getTriggeredBy() === 'map' && parent.length>0) {
-                parent.scrollTop(0);
-                var row = parent.find('tr[data-id="'+event.getRegion()+'"]');
-                if(row.length > 0) {
-                    parent.scrollTop(row.position().top);
-                }
+                scrollableElement = parent;
             }
-
+            me.grid.select(event.getRegion(), false, scrollableElement);
         });
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
