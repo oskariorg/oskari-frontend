@@ -155,21 +155,23 @@
             }
         }
     }, {
-            "title": "PostProcessor",
-            "fi": "PostProcessor",
-            "sv": "PostProcessor",
-            "en": "PostProcessor",
+        "bundlename": "maplegend",
+        "metadata": {
+            "Import-Bundle": {
+                "maplegend": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
             "bundlename": "postprocessor",
-            "bundleinstancename": "postprocessor",
             "metadata": {
                 "Import-Bundle": {
                     "postprocessor": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
+                }
+            }
         }
 ]
 }

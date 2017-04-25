@@ -1478,7 +1478,7 @@ Oskari.clazz.define(
           });
 
           source.on('tileloaderror', function() {
-            oskariLayer.loadingError();
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
           });
 
       },
