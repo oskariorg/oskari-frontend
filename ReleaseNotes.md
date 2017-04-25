@@ -79,6 +79,19 @@ Fixed double scrollbar when grid has column selector (like properties) and few r
 
 Fixed sort when using column name renderer.
 
+Grid.select can now set to scroll grid to selected row. If scrollableELement is setted then try to scroll to seelected row.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// add here some data to grid and so on
+
+grid.renderTo(jQuery('.datatable'));
+
+// select wanted row and  scroll to selected
+grid.select('wantedRowValue', false, jQuery('.datatable').parent());
+```
+
 ### coordinatetool
 
 Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
