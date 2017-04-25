@@ -90,6 +90,9 @@ Oskari.clazz.define(
                 '/wfs/filter': function () {
                     self.getWFSFilter.apply(self, arguments);
                 },
+                '/wfs/export': function () {
+                    self.getWFSExport.apply(self, arguments);
+                },
                 '/wfs/propertyfilter': function () {
                     self.getWFSFilter.apply(self, arguments);
                 },
@@ -375,6 +378,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var event = sandbox.getEventBuilder('WFSFeatureGeometriesEvent')(layer, keepPrevious);
         sandbox.notifyAll(event);
 
+    },
+    /**
+     * @method getWFSExport
+     * @param {Object} data
+     *
+     * response when wfs export data file is available
+     * Creates xxEvent
+     */
+    getWFSExport: function (data) {
+        var sandbox = this.plugin.getSandbox();
+        // Returns fileid (is now filename) data.data.fileId
+        // TODO: Add filename to redis in transport service and return here fileid
+        // TODO: Create action to load the export file via fileId
     },
 
     /**
@@ -706,6 +722,18 @@ Oskari.clazz.category(
             this.sendMessage('/service/wfs/setFilter', {
                 'filter': filter,
                 'keepPrevious': keepPrevious
+            });
+        },
+        /**
+         * @method setExport
+         * @param {String} format
+         *
+         * sends message to /service/wfs/setExport
+         */
+        setExport: function (format, id) {
+            this.sendMessage('/service/wfs/setExport', {
+                'format': format,
+                'layerId': id
             });
         },
         /**

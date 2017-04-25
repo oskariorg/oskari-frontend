@@ -456,6 +456,13 @@ Oskari.clazz.define(
                 WFSSetFilter: function (event) {
                     me.setFilterHandler(event);
                 },
+                /**
+                 * @method WFSSetExport
+                 * @param {Object} event
+                 */
+                WFSSetExport: function (event) {
+                    me.setExportHandler(event);
+                },
 
                 /**
                  * @method WFSSetPropertyFilter
@@ -1037,6 +1044,17 @@ Oskari.clazz.define(
             this.getIO().setFilter(event.getGeoJson(), keepPrevious);
         },
 
+        /**
+         * @method setExportHandler
+         * @param {Object} event
+         */
+        setExportHandler: function (event) {
+            var format;
+            if(event.getLayerId()) {
+                event.getFormat() ? format = event.getFormat() : 'GEOJSON';
+                this.getIO().setExport(format, event.getLayerId());
+            }
+        },
         /**
          * @method setPropertyFilterHandler
          * @param {Object} event
