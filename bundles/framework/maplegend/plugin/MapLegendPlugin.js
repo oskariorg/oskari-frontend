@@ -192,70 +192,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 legendInfo = this._templates.legendInfo.clone(),
                 legendDivider = this._templates.legendDivider.clone(),
                 me = this,
-                accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');        
+                accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
 
             if( singleLegend ) {
                 accordion.insertTo(legendContainer);
-                    if (accordionPanel) {
-                        accordion.removePanel(accordionPanel);
-                    }
-                    var legendLayer = me.getLegends();
-                    layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendLayer[0].id);
-
-                    if (!layer) {
-                        return;
-                    }
-                    var legendImg = jQuery('<img></img>');
-                    var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
-                    legendImg.attr('src', layer.getLegendImage());
-                    legendImg.on('load', function() {
-                        // do stuff on success
-                        successCb();
-                    });
-                    legendImg.on('error', function() {
-                        errorCb();
-                    });
-                    legendLink.find('a').attr('href', layer.getLegendImage());
-                    legendLink.find('a').text(me._loc.newtab);
-
-                    accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    accordionPanel.open();
-                    accordionPanel.getContainer().append(legendLink);
-                    accordionPanel.getContainer().append(legendImg);
-                    accordionPanel.getHeader().remove();
-                    accordion.addPanel(accordionPanel);
-                return legendContainer;
-            } else {
-            legendInfo.text(me._loc.infotext);
-            legendContainer.append(legendInfo);
-            legendContainer.append(legendDivider);
-
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-
-            var legendLayers = me.getLegends();
-            var options = {
-                placeholder_text: 'layers',
-                allow_single_deselect: false,
-                disable_search_threshold: 10,
-                width: '100%'
-            };
-            var dropdown = select.create(legendLayers, options);
-            dropdown.css({
-                width: '96%',
-                paddingBottom: '1em'
-            });
-            select.adjustChosen();
-            select.selectFirstValue();
-            legendContainer.append(dropdown);
-
-            accordion.insertTo(legendContainer);
-
-            dropdown.on("change", function(e, params) {
                 if (accordionPanel) {
                     accordion.removePanel(accordionPanel);
                 }
-                var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
-                layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
+                var legendLayer = me.getLegends();
+                layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendLayer[0].id);
 
                 if (!layer) {
                     return;
@@ -279,10 +224,65 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 accordionPanel.getContainer().append(legendImg);
                 accordionPanel.getHeader().remove();
                 accordion.addPanel(accordionPanel);
+                return legendContainer;
+            } else {
+                legendInfo.text(me._loc.infotext);
+                legendContainer.append(legendInfo);
+                legendContainer.append(legendDivider);
 
-            });
-            return legendContainer;
-        }
+                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+
+                var legendLayers = me.getLegends();
+                var options = {
+                    placeholder_text: 'layers',
+                    allow_single_deselect: false,
+                    disable_search_threshold: 10,
+                    width: '100%'
+                };
+                var dropdown = select.create(legendLayers, options);
+                dropdown.css({
+                    width: '96%',
+                    paddingBottom: '1em'
+                });
+                select.adjustChosen();
+                select.selectFirstValue();
+                legendContainer.append(dropdown);
+
+                accordion.insertTo(legendContainer);
+
+                dropdown.on("change", function(e, params) {
+                    if (accordionPanel) {
+                        accordion.removePanel(accordionPanel);
+                    }
+                    var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
+                    layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
+
+                    if (!layer) {
+                        return;
+                    }
+                    var legendImg = jQuery('<img></img>');
+                    var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
+                    legendImg.attr('src', layer.getLegendImage());
+                    legendImg.on('load', function() {
+                        // do stuff on success
+                        successCb();
+                    });
+                    legendImg.on('error', function() {
+                        errorCb();
+                    });
+                    legendLink.find('a').attr('href', layer.getLegendImage());
+                    legendLink.find('a').text(me._loc.newtab);
+
+                    accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                    accordionPanel.open();
+                    accordionPanel.getContainer().append(legendLink);
+                    accordionPanel.getContainer().append(legendImg);
+                    accordionPanel.getHeader().remove();
+                    accordion.addPanel(accordionPanel);
+
+                });
+                return legendContainer;
+            }
         },
         getLegends: function() {
             var layers = this.getSandbox().findAllSelectedMapLayers().slice(0);
