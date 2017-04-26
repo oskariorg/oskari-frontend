@@ -254,8 +254,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return jQuery('#contentMap').hasClass('published');
         },
         refreshUI: function() {
-            var plugin = this.isEmbedded() ? (this.plugin || this.plugins['Oskari.userinterface.Flyout']): this.plugins['Oskari.userinterface.Flyout'];
-            plugin.refresh();
+            var plugin = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
+            if(plugin) {
+                plugin.refresh();
+            }
         },
         /**
          * @method createUi
