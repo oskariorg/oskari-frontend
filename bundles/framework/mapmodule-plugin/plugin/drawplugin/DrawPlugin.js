@@ -47,9 +47,12 @@ Oskari.clazz.define(
          */
         startDrawing: function (params) {
             this.getMapModule().bringToTop(this.drawLayer);
+            // no harm in activating straight away
+            this.modifyControls.modify.activate();
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
+
             } else {
                 // Solve OL problem in select modify feature
                 if(this.modifyControls.modify.feature){
@@ -91,6 +94,8 @@ Oskari.clazz.define(
             // clear drawing
             if (this.drawLayer) {
                 this.drawLayer.destroyFeatures();
+                // no harm in activating straight away
+                this.modifyControls.modify.deactivate();
             }
         },
 
@@ -324,6 +329,7 @@ Oskari.clazz.define(
                     standalone: true
                 })
             };
+
             me.modifyControls.select = new OpenLayers.Control.SelectFeature(
                 me.drawLayer,
                 {
@@ -333,6 +339,7 @@ Oskari.clazz.define(
                     scope: me.modifyControls.modify
                 }
             );
+
 
             me.getMap().addLayers([me.drawLayer]);
             for (key in me.drawControls) {
@@ -345,8 +352,6 @@ Oskari.clazz.define(
                     me.getMap().addControl(me.modifyControls[key]);
                 }
             }
-            // no harm in activating straight away
-            me.modifyControls.modify.activate();
         },
 
         _createRequestHandlers: function () {

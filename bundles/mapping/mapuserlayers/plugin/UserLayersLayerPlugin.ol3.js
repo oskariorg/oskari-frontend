@@ -115,7 +115,7 @@ Oskari.clazz.define(
         });
 
         source.on('imageloaderror', function() {
-          oskariLayer.loadingError();
+          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
         });
 
       },

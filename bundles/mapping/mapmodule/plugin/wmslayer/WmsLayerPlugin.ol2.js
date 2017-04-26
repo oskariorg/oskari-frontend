@@ -143,7 +143,8 @@ Oskari.clazz.define(
          });
 
          layer.events.register("tileerror", layer, function(){
-           oskariLayer.loadingError();
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+
         });
         },
         /**

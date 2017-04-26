@@ -239,7 +239,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
            });
 
           layer.events.register("tileerror", layer, function(){
-            oskariLayer.loadingError();
+            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+
          });
          },
 

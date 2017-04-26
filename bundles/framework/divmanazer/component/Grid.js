@@ -1422,8 +1422,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} value id for the data to be selected
          * @param {Boolean} keepPrevious
          * True to keep previous selection, false to clear before selecting
+         * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
          */
-        select: function (value, keepPrevious) {
+        select: function (value, keepPrevious, scrollableElement) {
             var key = this.model.getIdField(),
                 dataArray = this.model.getData(),
                 index,
@@ -1442,6 +1443,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 rows.removeClass('selected');
             }
             jQuery(rows[index]).addClass('selected');
+            this._dataSelected(value);
+
+            if(scrollableElement) {
+                scrollableElement.scrollTop(0);
+                var row = scrollableElement.find('tr[data-id="'+value+'"]');
+                if(row.length > 0) {
+                    scrollableElement.scrollTop(row.position().top);
+                }
+            }
         },
         /**
          * @method removeSelections
@@ -1617,8 +1627,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     // not sorting objects
                     return 0;
                 }
+
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
+
+                var renderer = me.valueRenderer[pAttribute];
+                if (renderer) {
+                    nameA = renderer(nameA);
+                    nameB = renderer(nameB);
+                }
+
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
         },

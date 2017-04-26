@@ -216,20 +216,13 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
-			"title": "maplegend",
-			"fi": "maplegend",
-			"bundleinstancename": "maplegend",
-			"sv": "maplegend",
-			"en": "maplegend",
 			"bundlename": "maplegend",
 			"metadata": {
 				"Import-Bundle": {
 					"maplegend": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},

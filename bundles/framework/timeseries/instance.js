@@ -79,7 +79,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             }
             me.started = true;
 
-            var conf = me.conf,
+            var conf = me.conf || {},
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);

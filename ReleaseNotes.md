@@ -2,6 +2,20 @@
 
 ## 1.42.0
 
+### MapLegendPlugin
+
+Now map legend can also included for published map.
+
+### DrawPlugin.ol2
+
+Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
+
+#### VectorLayerPlugin ol2
+
+Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+
+Now ol2 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+
 #### VectorLayerPlugin ol3
 
 Fixed ol3 error when label is not String.
@@ -32,6 +46,15 @@ Fixed rendering grid multiple times.
 
 Indicators in datatable are now paged if more than three indicators have been selected.
 
+Now selected region is saved to state.
+
+New ``RegionsetViewer`` component. Now also can be configured at regions are showed in vector layer.
+Show regions to also vectors following config:
+
+    {
+        vectorViewer: true
+    }
+
 #### grid
 
 ``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
@@ -57,6 +80,21 @@ grid.setGroupingHeader([
 ```
 
 Fixed double scrollbar when grid has column selector (like properties) and few rows in the table.
+
+Fixed sort when using column name renderer.
+
+Grid.select can now set to scroll grid to selected row. If scrollableELement is setted then try to scroll to seelected row.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// add here some data to grid and so on
+
+grid.renderTo(jQuery('.datatable'));
+
+// select wanted row and  scroll to selected
+grid.select('wantedRowValue', false, jQuery('.datatable').parent());
+```
 
 ### coordinatetool
 
@@ -91,9 +129,32 @@ Now:
 
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
+ol2 mapmodule now support fill.color -property when getting style.
+
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+
 ### publisher2
 
 Medium map height changed from 525 to 600 pixels.
+
+### myplacesimport
+
+Default config is now included in the code so configuration is optional.
+
+### timeseries
+
+Default config is now included in the code so configuration is optional.
+
+### promote
+
+UI text for bundle now uses Oskari.getLocalized() when parsing configuration.
+This means that for example URLs in localization can be presented as single value or a localized object:
+
+      "signupUrl": "/user",
+      "registerUrl": {
+        "en": "/user",
+        "fi": "/user"
+      }
 
 ## 1.41.3
 

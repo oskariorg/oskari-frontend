@@ -79,7 +79,8 @@ me.grid.setGroupingHeader([
 
 grid.renderTo(someElement);
 
-
+// select row and scroll table to selected
+grid.select(wantedRowValue, false, scrollableElement);
 ```
 
 ## Dependencies

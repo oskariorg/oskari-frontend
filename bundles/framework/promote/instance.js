@@ -19,7 +19,6 @@ function() {
     this.started = false;
     this.plugins = {};
     this.localization = null;
-    this.userInterfaceLanguage = null;
     this.service = null;
 }, {
     /**
@@ -64,7 +63,7 @@ function() {
      */
     getLocalization: function(key) {
         if (this.conf && this.conf[key]) {
-            return this.conf[key][this.userInterfaceLanguage];
+            return Oskari.getLocalized(this.conf[key]);
         }
         if(!this._localization) {
             this._localization = Oskari.getLocalization(this.__name);
@@ -95,7 +94,6 @@ function() {
         var sandbox = Oskari.getSandbox(sandboxName);
 
         me.sandbox = sandbox;
-        me.userInterfaceLanguage = Oskari.getLang();
 
         this.localization = Oskari.getLocalization(this.getName());
 
@@ -117,7 +115,7 @@ function() {
                 for(var tool in this.conf.toolbarButtons[group]) {
                     var toolConfig = this.conf.toolbarButtons[group][tool];
                     // pick the tooltip in the current language
-                    toolConfig.tooltip = toolConfig.tooltip[me.userInterfaceLanguage];
+                    toolConfig.tooltip = Oskari.getLocalized(toolConfig.tooltip);
                     // disable button
                     toolConfig.enabled = false;
                     // set null
