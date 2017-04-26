@@ -233,13 +233,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 var legendImg = jQuery('<img></img>');
                 var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
                 legendImg.attr('src', layer.getLegendImage());
-                legendImg.on('load', function() {
-                    // do stuff on success
-                    successCb();
-                });
-                legendImg.on('error', function() {
-                    errorCb();
-                });
+
+                if(typeof successCb === 'function') {
+                    legendImg.on('load', function() {
+                        successCb();
+                    });
+                }
+                if(typeof errorCb === 'function') {
+                    legendImg.on('error', function() {
+                        errorCb();
+                    });
+                }
                 legendLink.find('a').attr('href', layer.getLegendImage());
                 legendLink.find('a').text(me._loc.newtab);
 
