@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### MapLegendPlugin
+
+Now map legend can also included for published map.
+
 ### DrawPlugin.ol2
 
 Fixed modify control swallowing events. Now modify control is activated when starting to draw features.

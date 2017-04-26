@@ -84,5 +84,6 @@
 .legendSelector .accordion {
   max-height: 400px;
   overflow: auto; }
-
+.popup-body .content {
+  overflow-y:hidden !important;}
 /*# sourceMappingURL=style.css.map */

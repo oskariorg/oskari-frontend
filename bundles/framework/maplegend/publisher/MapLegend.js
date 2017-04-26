@@ -35,10 +35,34 @@ function() {
    */
   init: function(data) {
       var me = this;
+
       if (!data || !data.configuration[me.bundleName]) {
           return;
       }
-      me.setEnabled(true);
+
+
+      me.setEnabled( true );
+  },
+  isDisplayed: function() {
+      var legendLayers = [];
+      var layers = this.__sandbox.findAllSelectedMapLayers().slice(0); 
+           layers.forEach(function(layer) {
+              if (!layer.getLegendImage()) {
+                  return;
+              }
+
+              var layerObject = {
+                id: layer.getId(),
+                title: layer.getName()
+              };
+              
+              legendLayers.push(layerObject);
+            });
+
+      if (legendLayers === undefined || legendLayers.length == 0) {
+        return false;
+      }
+      return true;
   },
   /**
   * Set enabled.
