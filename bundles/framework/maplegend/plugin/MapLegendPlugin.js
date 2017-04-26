@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 var legendContainer = me.getLayerLegend( function() {
                     me._popup.moveTo(legend, 'left', true);
                     parent.show();
-                }, function(){
+                }, function() {
                     me._popup.moveTo(legend, 'left', true);
                     parent.show();
                     me._popup.getJqueryContent().find('.accordion').remove();
@@ -178,6 +178,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     me._popup.getJqueryContent().find('.error').remove();
                     me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend);
+                if( singleLegend ) {
+                    jQuery("div.divmanazerpopup").find("div.content").remove();
+                }
                 jQuery(me._popup.dialog).append(legendContainer);
                 legendContainer.find('div.oskari-select').trigger('change');
             });
