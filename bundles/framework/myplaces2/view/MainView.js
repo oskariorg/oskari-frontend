@@ -42,6 +42,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             return this.popupId;
         },
 
+        getForm: function(){
+            return this.form;
+        },
         /**
          * @method init
          * implements Module protocol init method
@@ -219,8 +222,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     action: function () {
                         me.cleanupPopup();
                         // ask toolbar to select default tool
-                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
-                        me.instance.sandbox.request(me, toolbarRequest);
+                        //var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
+                        //me.instance.sandbox.request(me, toolbarRequest);
                     }
                 }, {
                     name: loc.buttons.save,
@@ -431,8 +434,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     loc = me.instance.getLocalization('notification').placeAdded;
                     dialog.show(loc.title, loc.message);
                     dialog.fadeout();
-                    // remove drawing
-                    me.drawPlugin.stopDrawing();
+                    // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
+                    //me.drawPlugin.stopDrawing();
                 } else {
                     loc = me.instance.getLocalization('notification').error;
                     me.instance.showMessage(loc.title, loc.savePlace);
@@ -449,24 +452,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          */
         cleanupPopup: function () {
             var sandbox = this.instance.sandbox,
-                hideRequest,
-                keyBoardRequest;
-
-            this.instance.enableGfi(true);
+                hideRequest;
 
             if (sandbox.hasHandler('InfoBox.HideInfoBoxRequest')) {
                 hideRequest = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this, hideRequest);
-            }
-
-            if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
-                keyBoardRequest = Oskari.requestBuilder('EnableMapKeyboardMovementRequest')();
-                sandbox.request(this, keyBoardRequest);
-            }
-
-            if (this.form) {
-                this.form.destroy();
-                this.form = undefined;
             }
         }
     }, {

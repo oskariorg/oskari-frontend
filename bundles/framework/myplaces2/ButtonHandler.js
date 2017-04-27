@@ -395,10 +395,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             },
             
             'InfoBox.InfoBoxEvent': function(event){
-                console.log(event);
-                var popupId = this.instance.getMainView().getPopupId();
+                var popupId = this.instance.getMainView().getPopupId(),
+                    sandbox = this.instance.getSandbox(),
+                    form = this.instance.getMainView().getForm(),
+                    keyBoardRequest;
+
                 if (event.getId() == popupId){
+                    this.instance.enableGfi(true);
                     this.sendStopDrawRequest(true);
+                    if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
+                        keyBoardRequest = Oskari.requestBuilder('EnableMapKeyboardMovementRequest')();
+                        sandbox.request(this, keyBoardRequest);
+                    }
+                    if (form) {
+                        form.destroy();
+                        form = undefined;
+                    }
                 }
             }
         }
