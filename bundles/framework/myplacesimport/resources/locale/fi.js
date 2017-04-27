@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             "finish": {
                 "success": {
                     "title": "Aineiston tuonti onnistui.",
-                    "message": "Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta."
+                    "message": "Aineistosta tuotiin <xx> kohdetta onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta."
                 },
                 "failure": {
                     "title": "Aineiston tuonti epäonnistui."

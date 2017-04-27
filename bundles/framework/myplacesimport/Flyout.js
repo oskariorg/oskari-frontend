@@ -303,7 +303,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             try {
                 json = JSON.parse(iframe.contents().find('pre').html());
-
                 if (this.__jsonError(json)) {
                     success = false;
                 }
@@ -316,6 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             if (success === true) {
                 this.instance.addUserLayer(json);
+                msg = msg.replace(/<xx>/g, json.featuresCount);
             } else {
                 title = null;
                 msg = locale.finish.failure.title;

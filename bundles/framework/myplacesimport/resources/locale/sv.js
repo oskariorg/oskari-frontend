@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             "finish": {
                 "success": {
                     "title": "Importering av dataset lyckades.",
-                    "message": "Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
+                    "message": "Dataset importerade med <xx> objekt. Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
                 },
                 "failure": {
                     "title": "Dataset importen lyckades inte. Försök på nytt senare."

@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             "finish": {
                 "success": {
                     "title": "Dataset Import Succeeded",
-                    "message": "The dataset has been imported. You can now find it in the \"My data\" menu."
+                    "message": "The dataset has been imported with <xx> features. You can now find it in the \"My data\" menu."
                 },
                 "failure": {
                     "title": "The dataset could not be imported."
