@@ -10,7 +10,7 @@ Oskari.clazz.define(
         me._name = 'DrawPlugin';
 
         me.drawControls = null;
-        me.currentDrawing = null
+        me.currentDrawing = null;
         me.drawLayer = null;
         me.editMode = false;
         me.currentDrawMode = null;
