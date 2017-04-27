@@ -2,6 +2,10 @@
 
 ## 1.42.0
 
+### search UI
+
+The "municipality" field label in results table has been replaced with a more generic "region".
+
 ### MapLegendPlugin
 
 Now map legend can also included for published map.

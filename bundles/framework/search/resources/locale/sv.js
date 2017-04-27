@@ -24,6 +24,7 @@ Oskari.registerLocalization(
         "grid": {
             "name": "Platsnamn",
             "village": "Kommun",
+            "region": "Region",
             "type": "Typ"
         },
         "resultBox": {
