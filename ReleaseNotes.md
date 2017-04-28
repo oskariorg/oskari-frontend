@@ -2,23 +2,27 @@
 
 ## 1.42.0
 
-### MapLegendPlugin
+### search UI
 
-Now map legend can also included for published map.
+The "municipality" field label in results table has been replaced with a more generic "region".
+
+### Map legend
+
+It is now possible to publish maps with legend functionality (using maplegend bundle). A new tool is shown on the map when maplegend is started on an embedded map.
 
 ### DrawPlugin.ol2
 
-Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
+Fixed modify control preventing events to flow as expected. Now modify control is activated when starting to draw features.
 
 #### VectorLayerPlugin ol2
 
-Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+Added support for optionalStyle on OpenLayers 2 based mapmodule when adding features to map with  ``AddFeaturesToMapRequest``.
 
-Now ol2 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+Now ol2 ``FeatureEvent`` returns GeoJSON as proper JSON like ol3 implementation (previously was String with escaped JSON content).
 
 #### VectorLayerPlugin ol3
 
-Fixed ol3 error when label is not String.
+Feature labels provided in style configuration is now always cast to String on OpenLayers 3. Numbers for example caused JS errors.
 
 Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 
@@ -27,29 +31,30 @@ Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 Added load events for the wfs-layers based on the StatusHandler.
 
 ### maprotator
-New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
+
+New bundle maprotator. Publisher part works with Openlayers 2 actual map rotating only works with Openlayers 3.
+Can be used in a published maps, select rotate map option when publishing to enable user/RPC to rotate the map.
 To rotate the map press SHIFT + ALT + Drag with mouse.
 
-Sends the map.rotated event when the map is rotating, from which you can get how many degrees the map has rotated.
+Sends the map.rotated event when the map is rotating from which you can get the map orientation in degrees.
 
 Can also be used with request:
 ```javascript
-  var requestBuilder = Oskari.requestBuilder('rotate.map');
-  var request = requestBuilder(180);
-  Oskari.getSandbox().request('maprotator', request);
+  var rotateMap = Oskari.requestBuilder('rotate.map');
+  Oskari.getSandbox().request('maprotator', rotateMap(180));
 ```
-in the requestbuilder put the degrees you want to rotate.
+Where 180 in the example above is the degrees for map rotation.
 
 ### statistics/statsgrid2016
 
-Fixed rendering grid multiple times.
+Fixed an issue where grid was needlessly rendered multiple times.
 
 Indicators in datatable are now paged if more than three indicators have been selected.
 
-Now selected region is saved to state.
+Selected region is now saved to bundle state.
 
-New ``RegionsetViewer`` component. Now also can be configured at regions are showed in vector layer.
-Show regions to also vectors following config:
+Initial implementation for new ``RegionsetViewer`` component. It can be used to show regionset on map as vector features instead of WMS-service.
+Can be activated with following bundle config (not production ready yet):
 
     {
         vectorViewer: true
@@ -83,7 +88,7 @@ Fixed double scrollbar when grid has column selector (like properties) and few r
 
 Fixed sort when using column name renderer.
 
-Grid.select can now set to scroll grid to selected row. If scrollableELement is setted then try to scroll to seelected row.
+Grid.select can now scroll the grid container to show the selected row (pass scrollableELement as parameter to use).
 
 For example:
 ```javascript
@@ -92,7 +97,7 @@ var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
 grid.renderTo(jQuery('.datatable'));
 
-// select wanted row and  scroll to selected
+// select row and scroll to selected
 grid.select('wantedRowValue', false, jQuery('.datatable').parent());
 ```
 

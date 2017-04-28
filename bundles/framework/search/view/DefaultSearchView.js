@@ -33,8 +33,8 @@ Oskari.clazz.define(
                 title: this.instance.getLocalization('grid').name,
                 prop: 'name'
             }, {
-                title: this.instance.getLocalization('grid').village,
-                prop: 'village'
+                title: this.instance.getLocalization('grid').region,
+                prop: 'region'
             }, {
                 title: this.instance.getLocalization('grid').type,
                 prop: 'type'
@@ -64,7 +64,7 @@ Oskari.clazz.define(
             resultTableRow : _.template(
                 '<tr>' +
                 '  <td><a href="JavaScript:void(0);">${name}</a></td>' +
-                '  <td>${village}</td>' +
+                '  <td>${region}</td>' +
                 '  <td>${type}</td>' +
                 '</tr>')
     	},
@@ -415,7 +415,7 @@ Oskari.clazz.define(
             resultActions.push(closeAction);
 
             var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>',
+                html: '<h3>' + result.name + '</h3>' + '<p>' + result.region + '<br/>' + result.type + '</p>',
                 actions: resultActions
             };
             var content = [contentItem];

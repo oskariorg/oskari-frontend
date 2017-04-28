@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "noresults": "No results could be found. Please check your search term and try again.",
                 "toomanyresults": "Over 100 results found. Please refine your search term and try again.",
                 "column_name": "Name",
+                "column_region": "Region",
                 "column_village": "Municipality",
                 "column_type": "Type"
             },
