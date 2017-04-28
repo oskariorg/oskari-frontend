@@ -11,9 +11,29 @@ Some extra tags:
 
 ## 1.42
 
+#### [mod] [rpc] SearchResultEvent
+
+``SearchResultEvent`` now includes a "region" key for result locations. It should be used instead of "village". Both are available and have the same value, but the village key will be removed in a future release.
+
+
+```javascript
+{
+"id": 0,
+"rank": 10,
+"lon": "327629.273",
+"region": "Tampere",
+"village": "Tampere",
+"channelId": "REGISTER_OF_NOMENCLATURE_CHANNEL",
+"name": "Tampere",
+"zoomScale": 56650,
+"type": "Kunta, kaupunki",
+"lat": "6822513.158"
+}
+```
+
 #### [mod] [rpc] FeatureEvent
 
-Now ol2 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+``FeatureEvent`` triggered on OpenLayers 2 based map now returns GeoJSON as JSON (previous returned String with escaped JSON).
 
 
 #### [mod] [rpc] New rpc-client version
