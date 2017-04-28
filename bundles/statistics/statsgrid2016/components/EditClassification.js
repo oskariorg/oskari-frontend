@@ -10,7 +10,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
             '<div class="classification-options">'+
-                '<div class="classification-method">'+
+                '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points">'+
+                    '<div class="label">'+ this.locale.classify.map.mapStyle +'</div>'+
+                    '<div class="method value">'+
+                        '<select class="map-style">'+
+                            '<option value="choropleth" selected="selected">'+this.locale.classify.map.choropleth+'</option>'+
+                            '<option value="points">'+this.locale.classify.map.points+'</option>'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
+
+                '<div class="classification-method visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
                     '<div class="method value">'+
                         '<select class="method">'+
@@ -22,7 +33,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="classification-count">'+
+                '<div class="classification-count visible-map-style-choropleth visible-map-style-points">'+
                     // use colorService.getOptionsForType()
                     '<div class="label">'+ this.locale.classify.classes +'</div>'+
                     '<div class="amount-class value">'+
@@ -31,7 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="classification-mode">'+
+                '<div class="classification-mode visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.classify.mode +'</div>'+
                     '<div class="classify-mode value">'+
                         '<select class="classify-mode">'+
@@ -42,7 +53,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="classification-colors">'+
+                '<div class="classification-colors visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.colorset.button +'</div>'+
                     '<div class="classification-colors value">'+
 
@@ -50,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '<button class="reverse-colors">'+this.locale.colorset.flipButton+'</button>'+
                 '</div>'+
 
-                '<div class="classification-color-set">'+
+                '<div class="classification-color-set visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
                     '<div class="color-set value">'+
                         '<select class="color-set">'+
@@ -73,6 +84,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._colorSelect = null;
     this._element = null;
 }, {
+    _toggleMapStyle: function(mapStyle) {
+        var me = this;
+
+        var style = mapStyle || 'choropleth';
+
+        me._element.find('.visible-map-style-points').hide();
+        me._element.find('.visible-map-style-choropleth').hide();
+        me._element.find('.visible-map-style-' + mapStyle).show();
+    },
     /**
      * @method setValues init selections
      * @param  {Object} classification options. Defaults to current active indicator options
@@ -92,6 +112,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             return;
         }
         classification = classification || state.getClassificationOpts(ind.hash);
+
+
+        me._element.find('select.map-style').unbind('change');
+        me._element.find('select.map-style').bind('change', function(){
+            var el = jQuery(this);
+            var value = el.val();
+            me._toggleMapStyle(value);
+        });
+
+        // TODO: check at if need trigger change when set value
+        me._element.find('select.map-style').val(classification.mapStyle || 'choropleth');
+
         me._element.find('select.method').val(classification.method);
 
         var amountRange = service.getColorService().getRange(classification.type);
@@ -152,7 +184,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             mode: me._element.find('select.classify-mode').val(),
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
-            reverseColors: me._element.find('button.reverse-colors').hasClass('primary')
+            reverseColors: me._element.find('button.reverse-colors').hasClass('primary'),
+            mapStyle: me._element.find('select.map-style').val()
         };
     },
 

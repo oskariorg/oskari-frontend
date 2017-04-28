@@ -108,7 +108,18 @@ Oskari.registerLocalization(
                 "discontinuous": "Epäjatkuva"
             },
             "editClassifyTitle": "Muokkaa luokittelua",
-            "classifyFieldsTitle": "Luokitteluarvot"
+            "classifyFieldsTitle": "Luokitteluarvot",
+            "map": {
+                "mapStyle": "Kartan tyyli",
+                "choropleth": "Koropleettikartta",
+                "points": "Pisteet",
+                "pointSize": "Pisteen koko",
+                "min": "Minimi",
+                "max": "Maksimi",
+                "color": "Väri",
+                "transparency": "Läpinäkyvyys",
+                "Show values": "Näytä arvot"
+            }
         },
         "colorset": {
             "button": "Värit",
