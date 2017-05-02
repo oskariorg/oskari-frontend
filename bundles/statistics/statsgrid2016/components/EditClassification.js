@@ -49,7 +49,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                // color
                 // transparency
                 // numeric value
 
@@ -64,12 +63,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="classification-colors visible-map-style-choropleth">'+
-                    '<div class="label">'+ this.locale.colorset.button +'</div>'+
+                '<div class="classification-colors visible-map-style-choropleth visible-map-style-points">'+
+                    '<div class="label visible-map-style-choropleth">'+ this.locale.colorset.button +'</div>'+
+                    '<div class="label visible-map-style-points">'+ this.locale.classify.map.color +'</div>'+
                     '<div class="classification-colors value">'+
 
                     '</div>'+
-                    '<button class="reverse-colors">'+this.locale.colorset.flipButton+'</button>'+
+                    '<button class="reverse-colors visible-map-style-choropleth">'+this.locale.colorset.flipButton+'</button>'+
                 '</div>'+
 
                 '<div class="classification-color-set visible-map-style-choropleth">'+
@@ -163,7 +163,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             me._element.find('button.reverse-colors').removeClass('primary');
         }
         // update color selection values
-        var colors = service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
+        var colors = null;
+        if(mapStyle === 'choropleth') {
+            colors = service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
+        } else {
+            colors = service.getColorService().getDefaultSimpleColors();
+        }
+
         me._colorSelect.setColorValues(colors);
         me._colorSelect.setValue(classification.name, true, true);
         me._colorSelect.refresh();
@@ -291,6 +297,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._element.find('select').prop('disabled', !enabled).trigger('chosen:updated');
         me._element.find('button').prop('disabled', !enabled);
         me._colorSelect.setEnabled(enabled);
+        me._element.find('.point-range').slider('option','disabled',!enabled);
     }
 
 });

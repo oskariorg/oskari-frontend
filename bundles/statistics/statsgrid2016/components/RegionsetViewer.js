@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             //circle.attr('fill-opacity', '0.5');
             circle.attr('cx', 32);
             circle.attr('cy', 32);
-            circle.attr('r', 32-strokeWidth/2);
+            circle.attr('r', 32-strokeWidth);
             style = {
                 property: {
                     value: region,
@@ -98,10 +98,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             }
             var colors = service.getColorService().getColorsForClassification(classification);
 
-            if(classification.mapStyle === 'points') {
-                classification.color = 'ff0000';
-            }
-
             service.getRegions(currentRegion, function(er, regions){
                 var regiongroups = classify.getGroups();
 
@@ -110,16 +106,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     var optionalStyles = [];
 
                     // Get point symbol size
-                    // FIXME: check this when get real min/max scale
-                    var min = classification.min || 20;
-                    var max = classification.max || 60;
+                    var min = classification.min || 30;
+                    var max = classification.max || 120;
 
                     var step = (max-min) / regiongroups.length;
 
                     var iconSize = min + step * index;
 
                     regiongroup.forEach(function(region){
-                        optionalStyles.push(me.getFeatureStyle(classification,region, classification.color || colors[index],highlightRegion, iconSize));
+                        optionalStyles.push(me.getFeatureStyle(classification,region, colors[index],highlightRegion, iconSize));
 
                         var addedRegion = jQuery.grep(regions, function( r, i ) {
                             return r.id === region;

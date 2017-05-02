@@ -1773,9 +1773,7 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
-if(style.size === 166) {
-console.log(markerHTML);
-}
+
             var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
 
             return svgSrc;
