@@ -49,7 +49,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                // transparency
+
+
                 // numeric value
 
                 '<div class="classification-mode visible-map-style-choropleth">'+
@@ -72,6 +73,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '<button class="reverse-colors visible-map-style-choropleth">'+this.locale.colorset.flipButton+'</button>'+
                 '</div>'+
 
+                // transparency
+                '<div class="point-transparency visible-map-style-points">'+
+                    '<div class="label">'+ this.locale.classify.map.transparency +'</div>'+
+                    '<div class="transparency-value value">'+
+                        '<select class="transparency-value">'+
+                        '</select>'+
+                    '</div>'+
+                '</div>'+
+
                 '<div class="classification-color-set visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
                     '<div class="color-set value">'+
@@ -89,6 +99,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             '</div>')
 
     };
+
+    var transparencyEl = this.__templates.classification.find('select.transparency-value');
+    for(var i=10;i<=80;i+=10) {
+        transparencyEl.append('<option value="'+i+'">'+ i +' %</option>');
+    }
+    this.__templates.classification.find('select.transparency-value option[value=20]').attr('selected', 'selected');
 
     this.log = Oskari.log('Oskari.statistics.statsgrid.EditClassification');
 
@@ -207,7 +223,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     getSelectedValues: function(){
         var me = this;
         var range = me._element.find('.point-range').slider('values');
-        return {
+        var values = {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
             mode: me._element.find('select.classify-mode').val(),
@@ -215,9 +231,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             name: me._colorSelect.getValue(),
             reverseColors: me._element.find('button.reverse-colors').hasClass('primary'),
             mapStyle: me._element.find('select.map-style').val(),
+            // only used for points vector
             min: range[0],
-            max: range[1]
+            max: range[1],
+            transparency: me._element.find('select.transparency-value').val()
+
         };
+
+        if(values.mapStyle !== 'points') {
+            delete values.min;
+            delete values.max;
+            delete values.transparency;
+        }
+
+        return values;
     },
 
     /**

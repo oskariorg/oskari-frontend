@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         var style = null;
         var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
         var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+        var opacity = (classification.transparency) ? (100 - parseFloat(classification.transparency))/100 : 0.8;
         if(mapStyle === 'points') {
             var svg = me._pointSymbol.clone();
             svg.attr('width', 64);
@@ -25,7 +26,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             circle.attr('stroke', strokeColor);
             circle.attr('stroke-width', strokeWidth);
             circle.attr('fill', '#' + color);
-            //circle.attr('fill-opacity', '0.5');
             circle.attr('cx', 32);
             circle.attr('cy', 32);
             circle.attr('r', 32-strokeWidth);
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     key: 'id'
                 },
                 image: {
-                    opacity: 0.8,
+                    opacity: opacity,
                     shape:{
                         data: svg.prop('outerHTML'),
                         x: 32,
