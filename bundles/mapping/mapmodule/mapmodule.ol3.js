@@ -653,7 +653,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 image = new ol.style.Icon({
                     src: svg,
                     size: [size, size],
-                    imgSize: [size, size]
+                    imgSize: [size, size],
+                    opacity: styleDef.image.opacity || 1
                 });
                 return image;
             }
@@ -665,7 +666,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     anchorYUnits: 'pixels',
                     anchorXUnits: 'pixels',
                     anchorOrigin: 'bottom-left',
-                    anchor: [offsetX,offsetY]
+                    anchor: [offsetX,offsetY],
+                    opacity: styleDef.image.opacity || 1
                 });
                 return image;
             }
