@@ -6,9 +6,65 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     this.LAYER_ID = 'STATS_LAYER';
 
     this._bindToEvents();
+
+    this._pointSymbol = jQuery('<svg><circle></circle></svg>');
 }, {
 /****** PUBLIC METHODS ******/
-    getGeoJSONFeatures: function(){},
+    getFeatureStyle: function(classification, region, color, highlightRegion, size){
+        var me = this;
+        var mapStyle = classification.mapStyle || 'choropleth';
+        var style = null;
+        var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
+        var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+        if(mapStyle === 'points') {
+            var svg = me._pointSymbol.clone();
+            svg.attr('width', 64);
+            svg.attr('height',64);
+
+            var circle = svg.find('circle');
+            circle.attr('stroke', strokeColor);
+            circle.attr('stroke-width', strokeWidth);
+            circle.attr('fill', '#' + color);
+            //circle.attr('fill-opacity', '0.5');
+            circle.attr('cx', 32);
+            circle.attr('cy', 32);
+            circle.attr('r', 32-strokeWidth/2);
+            style = {
+                property: {
+                    value: region,
+                    key: 'id'
+                },
+                image: {
+                    opacity: 0.8,
+                    shape:{
+                        data: svg.prop('outerHTML'),
+                        x: 32,
+                        y: 0
+                    },
+                    size: size
+                }
+            };
+        }
+        else {
+            style = {
+                property: {
+                    value: region,
+                    key: 'id'
+                },
+                fill: {
+                    color: '#' + color
+                },
+                stroke: {
+                    color: '#000000',
+                    width: strokeWidth
+                },
+                image: {
+                    opacity: 0.8
+                }
+            };
+        }
+        return style;
+    },
     render: function(highlightRegion){
         var me = this;
         var sandbox = me.sb;
@@ -30,87 +86,100 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 return;
             }
 
-
-
             var classification = state.getClassificationOpts(ind.hash);
+
+
             var classify = service.getClassificationService().getClassification(data, classification);
+            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+
             if(!classify) {
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
-                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
                 return;
             }
             var colors = service.getColorService().getColorsForClassification(classification);
 
-            var regiongroups = classify.getGroups();
-
-            var optionalStyles = [];
-
-            regiongroups.forEach(function(regiongroup, index){
-                regiongroup.forEach(function(region){
-                    optionalStyles.push({
-                        property: {
-                            value: region,
-                            key: 'id'
-                        },
-                        fill: {
-                            color: '#' + colors[index]
-                        },
-                        stroke: {
-                            color: '#000000',
-                            width: (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1
-                        },
-                        image: {
-                            opacity: 0.8,
-                            shape: '<svg width="32" height="32"><g fill="#9955ff" transform="matrix(0.06487924,0,0,0.06487924,0,1.73024e-6)"><g><path d="M 246.613,0 C 110.413,0 0,110.412 0,246.613 c 0,136.201 110.413,246.611 246.613,246.611 136.2,0 246.611,-110.412 246.611,-246.611 C 493.224,110.414 382.812,0 246.613,0 Z m 96.625,128.733 c 21.128,0 38.256,17.128 38.256,38.256 0,21.128 -17.128,38.256 -38.256,38.256 -21.128,0 -38.256,-17.128 -38.256,-38.256 0,-21.128 17.128,-38.256 38.256,-38.256 z m -196.743,0 c 21.128,0 38.256,17.128 38.256,38.256 0,21.128 -17.128,38.256 -38.256,38.256 -21.128,0 -38.256,-17.128 -38.256,-38.256 0,-21.128 17.128,-38.256 38.256,-38.256 z m 100.738,284.184 c -74.374,0 -138.225,-45.025 -165.805,-109.302 l 48.725,0 c 24.021,39.5 67.469,65.885 117.079,65.885 49.61,0 93.058,-26.384 117.079,-65.885 l 48.725,0 C 385.46,367.892 321.608,412.917 247.233,412.917 Z" /></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></g><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /><g transform="translate(0,-461.224)" /></svg>'
-                        }
-                    });
-                });
-            });
+            if(classification.mapStyle === 'points') {
+                classification.color = 'ff0000';
+            }
 
             service.getRegions(currentRegion, function(er, regions){
-                var features = [];
-                regions.forEach(function(region){
-                    //features.push(region.geojson);
-                    features.push({
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [region.point.lon, region.point.lat]
-                        },
-                        'properties': {
-                            'id': region.id,
-                            'name': region.name
+                var regiongroups = classify.getGroups();
+
+                regiongroups.forEach(function(regiongroup, index){
+                    var features = [];
+                    var optionalStyles = [];
+
+                    // Get point symbol size
+                    // FIXME: check this when get real min/max scale
+                    var min = classification.min || 20;
+                    var max = classification.max || 60;
+
+                    var step = (max-min) / regiongroups.length;
+
+                    var iconSize = min + step * index;
+
+                    regiongroup.forEach(function(region){
+                        optionalStyles.push(me.getFeatureStyle(classification,region, classification.color || colors[index],highlightRegion, iconSize));
+
+                        var addedRegion = jQuery.grep(regions, function( r, i ) {
+                            return r.id === region;
+                        });
+
+                        if(addedRegion && addedRegion.length === 1) {
+                            if(classification.mapStyle === 'points') {
+                                 features.push({
+                                    'type': 'Feature',
+                                    'geometry': {
+                                        'type': 'Point',
+                                        'coordinates': [addedRegion[0].point.lon, addedRegion[0].point.lat]
+                                    },
+                                    'properties': {
+                                        'id': addedRegion[0].id,
+                                        'name': addedRegion[0].name
+                                    }
+                                });
+                            } else {
+                                features.push(addedRegion[0].geojson);
+                            }
                         }
+
                     });
-                });
-                var geoJSON = {
-                    'type': 'FeatureCollection',
-                    'crs': {
-                        'type': 'name',
-                        'properties': {
-                          'name': sandbox.getMap().getSrsName()
-                        }
-                      },
-                      'features': features
-                };
-                var params = [geoJSON, {
-                    clearPrevious: true,
-                    featureStyle: {
-                        fill: {
-                            color: 'rgba(255,0,0,0.0)'
+
+
+                    // Add group features to map
+                    var geoJSON = {
+                        'type': 'FeatureCollection',
+                        'crs': {
+                            'type': 'name',
+                            'properties': {
+                              'name': sandbox.getMap().getSrsName()
+                            }
+                          },
+                          'features': features
+                    };
+                    var params = [geoJSON, {
+                        clearPrevious: false,
+                        featureStyle: {
+                            fill: {
+                                color: 'rgba(255,0,0,0.0)'
+                            },
+                            stroke : {
+                                color: '#000000',
+                                width: 1
+                            }
                         },
-                        stroke : {
-                            color: '#000000',
-                            width: 1
-                        }
-                    },
-                    optionalStyles: optionalStyles,
-                    layerId: me.LAYER_ID
-                }];
-                sandbox.postRequestByName(
-                    'MapModulePlugin.AddFeaturesToMapRequest',
-                    params
-                );
+                        optionalStyles: optionalStyles,
+                        layerId: me.LAYER_ID,
+                        prio: index
+                    }];
+                    sandbox.postRequestByName(
+                        'MapModulePlugin.AddFeaturesToMapRequest',
+                        params
+                    );
+
+                });
+
+
             });
         });
     },

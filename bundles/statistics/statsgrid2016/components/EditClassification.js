@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             '<div class="classification-options">'+
                 '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label">'+ this.locale.classify.map.mapStyle +'</div>'+
-                    '<div class="method value">'+
+                    '<div class="map-style value">'+
                         '<select class="map-style">'+
                             '<option value="choropleth" selected="selected">'+this.locale.classify.map.choropleth+'</option>'+
                             '<option value="points">'+this.locale.classify.map.points+'</option>'+
@@ -41,6 +41,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                         '</select>'+
                     '</div>'+
                 '</div>'+
+
+                '<div class="point-size oskariui visible-map-style-points">'+
+                    '<div class="label">'+ this.locale.classify.map.pointSize +'</div>'+
+                    '<div class="minmaxlabels"><div class="min">'+ this.locale.classify.map.min +'</div><div class="max">'+ this.locale.classify.map.max +'</div><div class="clear"></div></div>' +
+                    '<div class="point-range value">'+
+                    '</div>'+
+                '</div>'+
+
+                // color
+                // transparency
+                // numeric value
 
                 '<div class="classification-mode visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.classify.mode +'</div>'+
@@ -83,6 +94,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
     this._colorSelect = null;
     this._element = null;
+    this._rangeSlider = {
+        min: 30,
+        max: 200,
+        defaultValues: [30,120],
+        step: 10
+    };
 }, {
     _toggleMapStyle: function(mapStyle) {
         var me = this;
@@ -113,16 +130,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         }
         classification = classification || state.getClassificationOpts(ind.hash);
 
-
-        me._element.find('select.map-style').unbind('change');
         me._element.find('select.map-style').bind('change', function(){
             var el = jQuery(this);
             var value = el.val();
             me._toggleMapStyle(value);
         });
 
-        // TODO: check at if need trigger change when set value
-        me._element.find('select.map-style').val(classification.mapStyle || 'choropleth');
+        var mapStyle = classification.mapStyle || 'choropleth';
+        me._element.find('select.map-style').val(mapStyle);
+        me._toggleMapStyle(mapStyle);
 
         me._element.find('select.method').val(classification.method);
 
@@ -170,6 +186,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             }
 
         });
+
+        var min = classification.min || me._rangeSlider.defaultValues[0];
+        var max = classification.max || me._rangeSlider.defaultValues[1];
+
+        var rangeSlider = me._element.find('.point-range');
+        rangeSlider.slider('values', [min,max]);
     },
 
     /**
@@ -178,6 +200,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
      */
     getSelectedValues: function(){
         var me = this;
+        var range = me._element.find('.point-range').slider('values');
         return {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
@@ -185,7 +208,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             type: me._element.find('select.color-set').val(),
             name: me._colorSelect.getValue(),
             reverseColors: me._element.find('button.reverse-colors').hasClass('primary'),
-            mapStyle: me._element.find('select.map-style').val()
+            mapStyle: me._element.find('select.map-style').val(),
+            min: range[0],
+            max: range[1]
         };
     },
 
@@ -207,15 +232,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
+        var stateService = me.service.getStateService();
+        var updateClassification = function() {
+            stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
+        };
+
+        var rangeSlider = me._element.find('.point-range');
+
+        rangeSlider.slider({
+                    min: me._rangeSlider.min,
+                    max: me._rangeSlider.max,
+                    step:me._rangeSlider.step,
+                    range: true,
+                    values: me._rangeSlider.defaultValues,
+                    slide: function (event, ui) {
+
+                    },
+                    stop: function (event, ui) {
+                        updateClassification();
+                    }
+                });
+
         // setup initial values
         me.setValues();
         // might have been set before render
         this.setEnabled(this.__enabled);
 
-        var stateService = me.service.getStateService();
-        var updateClassification = function() {
-            stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
-        };
+
         me._colorSelect.setHandler(updateClassification);
         me._element.find('select').bind('change', updateClassification);
 

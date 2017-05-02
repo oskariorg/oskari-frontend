@@ -419,6 +419,26 @@ div.oskari-flyoutcontent{
                 width: 95%;
                 padding: 4px 5px;
             }
+
+            .point-size {
+                width: 90%;
+                .minmaxlabels {
+                    .min {
+                        float:left;
+                    }
+                    .max {
+                        float:right;
+                    }
+                    .clear {
+                        clear:both;
+                    }
+                }
+                .point-range {
+                    width: 150px;
+                    background-image: url(../images/opacity_slider.png);
+                    background-repeat: no-repeat;
+                }
+            }
         }
 
         .oskari-color-selection {

@@ -910,9 +910,9 @@ Oskari.clazz.define(
             }
           }
           else {
+            var tilesLoaded = 0;
+            var pendingTiles = 0;
             if(!errors) {
-              var tilesLoaded = 0;
-              var pendingTiles = 0;
               layers.forEach( function( layer ) {
                 tilesLoaded += layer.loaded;
                 pendingTiles += layer.tilesToLoad;
@@ -922,7 +922,7 @@ Oskari.clazz.define(
             } else {
                 this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                 oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
-                var errors = oskariLayer.getLoadingState().errors;
+                errors = oskariLayer.getLoadingState().errors;
                 oskariLayer.loadingDone(0);
 
                 setTimeout(function(){
@@ -1773,7 +1773,9 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
-
+if(style.size === 166) {
+console.log(markerHTML);
+}
             var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
 
             return svgSrc;
@@ -1912,7 +1914,11 @@ Oskari.clazz.define(
          * @returns {number} Size in pixels
          */
         getMarkerIconSize : function(size) {
-            return 40 + 10 * size;
+            if(size < 10) {
+                return 40 + 10 * size;
+            } else {
+                return size;
+            }
         },
 /* --------------- /SVG MARKER ------------------------ */
 
