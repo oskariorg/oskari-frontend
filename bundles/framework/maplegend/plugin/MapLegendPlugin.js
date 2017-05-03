@@ -136,6 +136,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var singleLegend = false;
             popupService.closeAllPopups(true);
 
+            legend.attr('title', me._loc.tooltip);  
+
             legend.on("click", function() {
                 if( me._toggleToolState() === false){
                     return;
