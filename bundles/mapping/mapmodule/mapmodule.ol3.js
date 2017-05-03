@@ -618,9 +618,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         __getStrokeStyle: function(styleDef) {
             var stroke = {};
+            if(styleDef.stroke.width === 0) {
+                return null;
+            }
             if(styleDef.stroke.color) {
                 stroke.color = styleDef.stroke.color;
             }
+
             if(styleDef.stroke.width) {
                 stroke.width = styleDef.stroke.width;
             }

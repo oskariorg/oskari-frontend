@@ -170,11 +170,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                             scale : 1.2,
                             fill : {
                                 color : textColor
-                            },/*
+                            },
                             stroke: {
-                                color: textColor,
                                 width: 0
-                            },*/
+                            },
                             labelProperty: 'label',
                             offsetX: 0,
                             offsetY: 0
