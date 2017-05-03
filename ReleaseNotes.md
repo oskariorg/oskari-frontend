@@ -4,7 +4,8 @@
 
 ### MapLegendPlugin
 
-Now map legend can also included for published map.
+A new plugin for maplegend which is available when publishing maps with legend data.
+Does not appear in publisher if no suitable layers are found.
 
 ### DrawPlugin.ol2
 
