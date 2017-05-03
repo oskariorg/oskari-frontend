@@ -136,6 +136,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var singleLegend = false;
             popupService.closeAllPopups(true);
 
+            legend.attr('title', me._loc.tooltip);  
+
+            var popupLocation = this.getPopupPosition();
+
             legend.on("click", function() {
                 if( me._toggleToolState() === false){
                     return;
@@ -168,20 +172,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
                 me._isVisible = true;
                 var legendContainer = me.getLayerLegend( function() {
-                    me._popup.moveTo(legend, 'left', true);
+                    me._popup.moveTo(legend, popupLocation, true);
                     parent.show();
-                }, function(){
-                    me._popup.moveTo(legend, 'left', true);
+                }, function() {
+                    me._popup.moveTo(legend, popupLocation, true);
                     parent.show();
                     me._popup.getJqueryContent().find('.accordion').remove();
                     me._popup.getJqueryContent().empty();
                     me._popup.getJqueryContent().find('.error').remove();
                     me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend);
+                if( singleLegend ) {
+                    me._popup.getJqueryContent().remove();
+                }
                 jQuery(me._popup.dialog).append(legendContainer);
                 legendContainer.find('div.oskari-select').trigger('change');
             });
             return legend;
+        },
+        getPopupPosition: function() {
+          var popupLocation;
+
+          if (this._config.location && this._config.location.classes === "top left") {
+                popupLocation = "right";
+            } else {
+                popupLocation = "left";
+            }
+        return popupLocation;
         },
         getLayerLegend: function(successCb, errorCb, singleLegend) {
 
