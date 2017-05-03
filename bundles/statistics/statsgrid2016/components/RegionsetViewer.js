@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
     this._bindToEvents();
 
-    this._pointSymbol = jQuery('<svg><circle></circle></svg>');
+    this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
 }, {
 /****** PUBLIC METHODS ******/
     _getFeatureStyle: function(classification, region, color, highlightRegion, size){
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 image: {
                     opacity: opacity,
                     shape:{
-                        data: svg.prop('outerHTML'),
+                        data: svg.html(),
                         x: 32,
                         y: 0
                     },
