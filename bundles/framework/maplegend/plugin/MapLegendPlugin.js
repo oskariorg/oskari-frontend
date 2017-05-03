@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 singleLegend = true;
             }
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
-
+            me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
             var legendContainer = me.getLayerLegend(function() {
                 // move popup if el and topOffsetElement
                 if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
@@ -136,20 +136,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var singleLegend = false;
             popupService.closeAllPopups(true);
 
+            legend.attr('title', me._loc.tooltip);
+
+            var popupLocation = this.getPopupPosition();
+
             legend.on("click", function() {
                 if( me._toggleToolState() === false){
                     return;
                 }
                 var legends = me.getLegends();
+                var title = me._loc.title;
                 if(legends.length === 1) {
-                    me._popup.show(me._loc.singleLegend + legends[0].title);
+                    title = me._loc.singleLegend + legends[0].title;
                     singleLegend = true;
-                } else {
-                    me._popup.show(me._loc.title);
                 }
                 var content = me._popup.getJqueryContent();
-                var parent = content.parents('.divmanazerpopup');
-                parent.hide();
+
+                me._popup.close(true);
                 var popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
 
                 me._popup.createCloseIcon();
@@ -168,20 +171,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
                 me._isVisible = true;
                 var legendContainer = me.getLayerLegend( function() {
-                    me._popup.moveTo(legend, 'left', true);
-                    parent.show();
-                }, function(){
-                    me._popup.moveTo(legend, 'left', true);
-                    parent.show();
-                    me._popup.getJqueryContent().find('.accordion').remove();
-                    me._popup.getJqueryContent().empty();
-                    me._popup.getJqueryContent().find('.error').remove();
-                    me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
+                    me._popup.show(title, legendContainer);
+                    me._popup.moveTo(legend, popupLocation, true);
+                }, function() {
+                    me._popup.show(title, legendContainer);
+                    me._popup.moveTo(legend, popupLocation, true);
+                    content.find('.accordion').remove();
+                    content.empty();
+                    content.find('.error').remove();
+                    content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend);
-                jQuery(me._popup.dialog).append(legendContainer);
+                if( singleLegend ) {
+                    me._popup.getJqueryContent().remove();
+                }
+
+
                 legendContainer.find('div.oskari-select').trigger('change');
             });
             return legend;
+        },
+        getPopupPosition: function() {
+          var popupLocation;
+
+          if (this._config.location && this._config.location.classes === "top left") {
+                popupLocation = "right";
+            } else {
+                popupLocation = "left";
+            }
+        return popupLocation;
         },
         getLayerLegend: function(successCb, errorCb, singleLegend) {
 
