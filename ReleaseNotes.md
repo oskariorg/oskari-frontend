@@ -8,7 +8,7 @@ The "municipality" field label in results table has been replaced with a more ge
 
 ### Map legend
 
-It is now possible to publish maps with legend functionality (using maplegend bundle). A new tool is shown on the map when maplegend is started on an embedded map.
+A new plugin for maplegend which is available when publishing maps with legend data. Does not appear in publisher if no suitable layers are found.
 
 ### DrawPlugin.ol2
 

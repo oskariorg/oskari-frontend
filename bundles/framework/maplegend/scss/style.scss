@@ -11,10 +11,8 @@ $lightIcon: url("../images/Question-mark-light.png");
   height: 32px;
   cursor: pointer;
   position: relative;
-  margin: 0 3px 0 10px !important;
   z-index: 15000;
   margin-bottom: 10px !important;
-  float:right;
   box-shadow: $iconShadow;
   -moz-box-shadow: $iconShadow;
   -webkit-box-shadow: $iconShadow;
@@ -125,10 +123,11 @@ $lightIcon: url("../images/Question-mark-light.png");
   }
 
   .accordion {
-    max-height: 400px;
     overflow:auto;
   }
-  .popup-body .content {
-    overflow-y:hidden !important;
+}
+.maplegend__popup {
+  .popup-body .content .accordion {
+    overflow-y: hidden !important;
   }
 }
