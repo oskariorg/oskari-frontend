@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     me._popup.getJqueryContent().append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend);
                 if( singleLegend ) {
-                    jQuery("div.divmanazerpopup").find("div.content").remove();
+                    me._popup.getJqueryContent().remove();
                 }
                 jQuery(me._popup.dialog).append(legendContainer);
                 legendContainer.find('div.oskari-select').trigger('change');
