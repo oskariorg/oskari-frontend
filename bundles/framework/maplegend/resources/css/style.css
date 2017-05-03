@@ -70,18 +70,21 @@
 .legendSelector .oskari-select {
   margin-left: 2%;
   margin-right: 2%; }
+
 .legendSelector .legendInfo {
   margin-left: 2%;
   font-style: italic; }
+
 .legendSelector .maplegend-divider {
   margin-bottom: 5px;
   height: 1px;
   border-top: 1px solid #DDDDDD;
   margin-left: 2%;
   margin-right: 2%; }
+
 .legendSelector .accordion {
   max-height: 400px;
   overflow: auto; }
-.popup-body .content {
-  overflow-y:hidden !important;}
-/*# sourceMappingURL=style.css.map */
+
+.maplegend__popup .popup-body .content {
+  overflow-y: hidden !important; }
