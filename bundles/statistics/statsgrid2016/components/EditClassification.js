@@ -49,10 +49,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-
-
-                // numeric value
-
                 '<div class="classification-mode visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.classify.mode +'</div>'+
                     '<div class="classify-mode value">'+
@@ -82,6 +78,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
+                // numeric value
+                '<div class="numeric-value visible-map-style-points">'+
+                '</div>'+
+
                 '<div class="classification-color-set visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
                     '<div class="color-set value">'+
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     };
 
     var transparencyEl = this.__templates.classification.find('select.transparency-value');
-    for(var i=10;i<=80;i+=10) {
+    for(var i=0;i<=70;i+=10) {
         transparencyEl.append('<option value="'+i+'">'+ i +' %</option>');
     }
     this.__templates.classification.find('select.transparency-value option[value=20]').attr('selected', 'selected');
@@ -114,8 +114,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         min: 30,
         max: 200,
         defaultValues: [30,120],
-        step: 10
+        step: 10,
+        element: null
     };
+    this._showNumericValueCheckButton = null;
+
 }, {
     _toggleMapStyle: function(mapStyle) {
         var me = this;
@@ -211,9 +214,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         var min = classification.min || me._rangeSlider.defaultValues[0];
         var max = classification.max || me._rangeSlider.defaultValues[1];
+        me._rangeSlider.element.slider('values', [min,max]);
 
-        var rangeSlider = me._element.find('.point-range');
-        rangeSlider.slider('values', [min,max]);
+        me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
     },
 
     /**
@@ -222,7 +225,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
      */
     getSelectedValues: function(){
         var me = this;
-        var range = me._element.find('.point-range').slider('values');
+        var range = me._rangeSlider.element.slider('values');
         var values = {
             method: me._element.find('select.method').val(),
             count: parseFloat(me._element.find('select.amount-class').val()),
@@ -234,14 +237,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             // only used for points vector
             min: range[0],
             max: range[1],
-            transparency: me._element.find('select.transparency-value').val()
-
+            transparency: me._element.find('select.transparency-value').val(),
+            showValues: (me._showNumericValueCheckButton.getValue() === 'on') ? true : false
         };
 
         if(values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
             delete values.transparency;
+        } else {
+            delete values.type;
+             delete values.mode;
         }
 
         return values;
@@ -270,21 +276,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
         };
 
-        var rangeSlider = me._element.find('.point-range');
+        if(!me._rangeSlider.element) {
+            me._rangeSlider.element = me._element.find('.point-range');
 
-        rangeSlider.slider({
-                    min: me._rangeSlider.min,
-                    max: me._rangeSlider.max,
-                    step:me._rangeSlider.step,
-                    range: true,
-                    values: me._rangeSlider.defaultValues,
-                    slide: function (event, ui) {
+            me._rangeSlider.element.slider({
+                min: me._rangeSlider.min,
+                max: me._rangeSlider.max,
+                step:me._rangeSlider.step,
+                range: true,
+                values: me._rangeSlider.defaultValues,
+                slide: function (event, ui) {
 
-                    },
-                    stop: function (event, ui) {
-                        updateClassification();
-                    }
-                });
+                },
+                stop: function (event, ui) {
+                    updateClassification();
+                }
+            });
+        }
+
+        if(!me._showNumericValueCheckButton) {
+            me._showNumericValueCheckButton = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+            me._showNumericValueCheckButton.setTitle(me.locale.classify.map.showValues);
+            me._showNumericValueCheckButton.setHandler(function(checked){
+                updateClassification();
+            });
+            me._element.find('.numeric-value').append(me._showNumericValueCheckButton.getElement());
+        }
+
 
         // setup initial values
         me.setValues();

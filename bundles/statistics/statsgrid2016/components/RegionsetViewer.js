@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     this._pointSymbol = jQuery('<svg><circle></circle></svg>');
 }, {
 /****** PUBLIC METHODS ******/
-    getFeatureStyle: function(classification, region, color, highlightRegion, size){
+    _getFeatureStyle: function(classification, region, color, highlightRegion, size){
         var me = this;
         var mapStyle = classification.mapStyle || 'choropleth';
         var style = null;
@@ -65,6 +65,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         }
         return style;
     },
+
+    _getFeature: function(classification,region, label) {
+        if(classification.mapStyle === 'points') {
+             return {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [region.point.lon, region.point.lat]
+                },
+                'properties': {
+                    'id': region.id,
+                    'name': region.name,
+                    'label': label
+                }
+            };
+        }
+        return region.geojson;
+    },
     render: function(highlightRegion){
         var me = this;
         var sandbox = me.sb;
@@ -88,7 +106,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
             var classification = state.getClassificationOpts(ind.hash);
 
-
             var classify = service.getClassificationService().getClassification(data, classification);
             sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
 
@@ -104,40 +121,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 regiongroups.forEach(function(regiongroup, index){
                     var features = [];
                     var optionalStyles = [];
+                    var color = colors[index];
 
                     // Get point symbol size
                     var min = classification.min || 30;
                     var max = classification.max || 120;
-
                     var step = (max-min) / regiongroups.length;
-
                     var iconSize = min + step * index;
 
                     regiongroup.forEach(function(region){
-                        optionalStyles.push(me.getFeatureStyle(classification,region, colors[index],highlightRegion, iconSize));
+                        optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
 
-                        var addedRegion = jQuery.grep(regions, function( r, i ) {
+                        var wantedRegion = jQuery.grep(regions, function( r, i ) {
                             return r.id === region;
                         });
 
-                        if(addedRegion && addedRegion.length === 1) {
-                            if(classification.mapStyle === 'points') {
-                                 features.push({
-                                    'type': 'Feature',
-                                    'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': [addedRegion[0].point.lon, addedRegion[0].point.lat]
-                                    },
-                                    'properties': {
-                                        'id': addedRegion[0].id,
-                                        'name': addedRegion[0].name
-                                    }
-                                });
-                            } else {
-                                features.push(addedRegion[0].geojson);
-                            }
+                        if(wantedRegion && wantedRegion.length === 1) {
+                            features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
                         }
-
                     });
 
 
@@ -152,21 +153,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                           },
                           'features': features
                     };
+
+                    var defaultFeatureStyle = {
+                        fill: {
+                            color: 'rgba(255,0,0,0.0)'
+                        },
+                        stroke : {
+                            color: '#000000',
+                            width: 1
+                        }
+                    };
+
+                    if(classification.showValues === true) {
+                        var textColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+                        defaultFeatureStyle.text = {
+                            scale : 1.2,
+                            fill : {
+                                color : textColor
+                            },/*
+                            stroke: {
+                                color: textColor,
+                                width: 0
+                            },*/
+                            labelProperty: 'label',
+                            offsetX: 0,
+                            offsetY: 0
+                        };
+                    }
                     var params = [geoJSON, {
                         clearPrevious: false,
-                        featureStyle: {
-                            fill: {
-                                color: 'rgba(255,0,0,0.0)'
-                            },
-                            stroke : {
-                                color: '#000000',
-                                width: 1
-                            }
-                        },
+                        featureStyle: defaultFeatureStyle,
                         optionalStyles: optionalStyles,
                         layerId: me.LAYER_ID,
                         prio: index
                     }];
+
                     sandbox.postRequestByName(
                         'MapModulePlugin.AddFeaturesToMapRequest',
                         params
