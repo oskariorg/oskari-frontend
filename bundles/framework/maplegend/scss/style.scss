@@ -123,9 +123,11 @@ $lightIcon: url("../images/Question-mark-light.png");
   }
 
   .accordion {
-    max-height: 400px;
     overflow:auto;
   }
 }
-.maplegend__popup .popup-body .content {
-  overflow-y: hidden !important; }
+.maplegend__popup {
+  .popup-body .content .accordion {
+    overflow-y: hidden !important;
+  }
+}
