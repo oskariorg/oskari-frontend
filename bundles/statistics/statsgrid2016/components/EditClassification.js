@@ -111,10 +111,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._colorSelect = null;
     this._element = null;
     this._rangeSlider = {
-        min: 30,
-        max: 200,
-        defaultValues: [30,120],
-        step: 10,
+        min: 1,
+        max: 11,
+        defaultValues: [1,11],
+        step: 1,
         element: null
     };
     this._showNumericValueCheckButton = null;

@@ -1743,7 +1743,12 @@ Oskari.clazz.define(
 
             svgObject.data = this.__addPositionMarks(svgObject);
 
+
+
             marker.append(svgObject.data);
+
+            // IE needs this because ol.style.Icon opacity property not work on IE
+            marker.css('opacity', style.opacity || 1);
 
             if(isWellknownMarker && style.shape.color) {
                 marker.find('.normal-color').attr('fill', style.shape.color);
@@ -1912,11 +1917,7 @@ Oskari.clazz.define(
          * @returns {number} Size in pixels
          */
         getMarkerIconSize : function(size) {
-            if(size < 10) {
-                return 40 + 10 * size;
-            } else {
-                return size;
-            }
+            return 40 + 10 * size;
         },
 /* --------------- /SVG MARKER ------------------------ */
 

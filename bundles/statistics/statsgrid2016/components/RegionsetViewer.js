@@ -67,6 +67,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     },
 
     _getFeature: function(classification,region, label) {
+
         if(classification.mapStyle === 'points') {
              return {
                 'type': 'Feature',
@@ -77,7 +78,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                 'properties': {
                     'id': region.id,
                     'name': region.name,
-                    'label': label
+                    'regionValue': label
                 }
             };
         }
@@ -124,23 +125,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     var color = colors[index];
 
                     // Get point symbol size
-                    var min = classification.min || 30;
-                    var max = classification.max || 120;
-                    var step = (max-min) / regiongroups.length;
-                    var iconSize = min + step * index;
+                    var min = classification.min;
+                    var max = classification.max;
+                    var iconSize = null;
+                    if(min && max) {
+                        var step = (max-min) / regiongroups.length;
+                        iconSize = min + step * index;
+                    }
 
                     regiongroup.forEach(function(region){
-                        optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
-
                         var wantedRegion = jQuery.grep(regions, function( r, i ) {
                             return r.id === region;
                         });
 
                         if(wantedRegion && wantedRegion.length === 1) {
+                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
                             features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
                         }
                     });
-
 
                     // Add group features to map
                     var geoJSON = {
@@ -174,7 +176,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                             stroke: {
                                 width: 0
                             },
-                            labelProperty: 'label',
+                            labelProperty: 'regionValue',
                             offsetX: 0,
                             offsetY: 0
                         };
@@ -187,14 +189,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         prio: index
                     }];
 
+
                     sandbox.postRequestByName(
                         'MapModulePlugin.AddFeaturesToMapRequest',
                         params
                     );
 
                 });
-
-
             });
         });
     },
@@ -214,7 +215,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             // Always show the active indicator
-            me.render(state.getRegion());
+           me.render(state.getRegion());
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function(event) {
