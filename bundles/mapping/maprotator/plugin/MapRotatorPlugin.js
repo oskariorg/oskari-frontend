@@ -29,6 +29,9 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
             degrees,
             eventBuilder = Oskari.eventBuilder( 'map.rotated' );
 
+        me._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
+
+
         if(!this.isSupported()){
           return compass;
         }
@@ -37,8 +40,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
           me._map.getView().setRotation( 0 );
           jQuery(this).css({ transform:'rotate(0deg)' });
         });
-        // me._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-        compass.attr('title', "me._locale.tooltip.tool");
+        compass.attr('title', me._locale.tooltip.tool);
 
         var DragRotate = new ol.interaction.DragRotate();
         this._map.addInteraction(DragRotate);
@@ -65,7 +67,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
     setRotation: function(deg) {
       //degrees to radians
       var rot = deg / 57.3;
-      if( deg === ""){
+      if( typeof deg !== "number" ) {
         rot = 0;
         deg = 0;
       }
