@@ -445,6 +445,19 @@ div.oskari-flyoutcontent{
             z-index: 10;
         }
     }
+
+    .statsgrid-svg {
+        float: left;
+    }
+    .statsgrid-range {
+        float: left;
+    }
+    .statsgrid-counter {
+        float: left;
+    }
+    .clear {
+        clear: both;
+    }
 }
 
 /* Mobile popup tuning */

@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 if(classification.name) {
                     colorIndex = !isNaN(classification.name) ? parseFloat(classification.name) : 0;
                 }
-                colors = Array.apply(null, Array(20)).map(String.prototype.valueOf,this._basicColors[colorIndex]);
+                colors = Array.apply(null, Array(this._basicColors.length)).map(String.prototype.valueOf,this._basicColors[colorIndex]);
             }
 
             if(classification.mapStyle !== 'points' && classification.reverseColors) {

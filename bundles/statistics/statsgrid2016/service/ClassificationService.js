@@ -229,7 +229,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             return false;
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

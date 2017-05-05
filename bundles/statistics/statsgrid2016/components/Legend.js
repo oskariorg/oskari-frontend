@@ -270,13 +270,67 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 return;
             }
             var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
-            var legend = classification.createLegend(colors);
+            var legend = me.getLegend(classification, classificationOpts, colors);
+
             if(!legend) {
                 legend = '<div>'+locale.legend.cannotCreateLegend+'</div>';
             }
             callback(legend, classificationOpts);
         });
     },
+
+    getLegend: function(classification, classificationOpts, colors) {
+        if(classificationOpts.mapStyle === 'points') {
+            var legend = jQuery('<div class="statsgrid-legend"></div>');
+            var block = jQuery('<div><div class="statsgrid-svg"></div><div class="statsgrid-range"></div><div class="statsgrid-counter"></div><div class="clear"></div></div>');
+            var ranges = classification.ranges;
+            var pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
+
+            var min = classificationOpts.min;
+            var max = classificationOpts.max;
+            var step = (max-min) / ranges.length;
+            var sb = this.sb;
+            var mapModule = sb.findRegisteredModuleInstance('MainMapModule');
+            ranges.forEach(function(range, index){
+                var b = block.clone();
+                var color = colors[0];
+                var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+                var point = pointSymbol.clone();
+                point.attr('width', 64);
+                point.attr('height',64);
+
+                var circle = point.find('circle');
+                circle.attr('stroke', strokeColor);
+                circle.attr('stroke-width', 1);
+                circle.attr('fill', '#' + color);
+                circle.attr('cx', 32);
+                circle.attr('cy', 32);
+                circle.attr('r', 31);
+                // Get point symbol size
+                var iconSize = null;
+                if(min && max) {
+                    iconSize = min + step * index;
+                }
+                var style = {/*
+                    opacity: opacity,*/
+                    shape:{
+                        data: point.html(),
+                        x: 32,
+                        y: 0
+                    },
+                    size: mapModule.getMarkerIconSize(iconSize)
+                };
+                var svg = mapModule.getSvg(style);
+                b.find('.statsgrid-svg').html('<img src="' + svg + '"></img>');
+                b.find('.statsgrid-range').html(range);
+                b.find('.statsgrid-counter').html('???????');
+                legend.append(b);
+            });
+            return legend;
+        }
+        return classification.createLegend(colors);
+    },
+
     /**
      * Creates the classification editor UI
      * @param  {Object}   options  values for the classification form to use as initial values
