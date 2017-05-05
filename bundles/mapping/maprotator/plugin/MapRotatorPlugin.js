@@ -45,7 +45,7 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
         var DragRotate = new ol.interaction.DragRotate();
         this._map.addInteraction(DragRotate);
 
-        this._map.on( 'pointerdrag', function( event ) {
+        this._map.on( 'pointerdrag', function( e ) {
            degrees = me._getRotation();
            compass.css({ transform:'rotate('+degrees+'deg)' });
 
@@ -65,13 +65,12 @@ Oskari.clazz.define( 'Oskari.mapping.maprotator.plugin.MapRotatorPlugin',
       this.addToPluginContainer(this._element);
     },
     setRotation: function(deg) {
-      //degrees to radians
-      var rot = deg / 57.3;
-      if( typeof deg !== "number" ) {
-        rot = 0;
-        deg = 0;
-      }
-      this._element.css({ transform:'rotate('+deg+'deg)' });
+      // if deg is number then transform degrees to radians otherwise use 0
+      var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
+      // if deg is number use it for degrees otherwise use 0
+      var degrees = (typeof deg === 'number') ? deg : 0;
+
+      this._element.css({ transform:'rotate('+degrees+'deg)' });
       this._map.getView().setRotation( rot );
     },
     _getRotation: function() {
