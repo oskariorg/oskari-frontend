@@ -138,6 +138,8 @@ ol2 mapmodule now support fill.color -property when getting style.
 
 ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
 
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
+
 ### publisher2
 
 Medium map height changed from 525 to 600 pixels.
