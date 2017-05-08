@@ -60,7 +60,9 @@ Can be activated with following bundle config (not production ready yet):
         vectorViewer: true
     }
 
-#### grid
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
+
+### divmanazer grid component
 
 ``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
 
