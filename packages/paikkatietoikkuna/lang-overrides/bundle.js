@@ -18,17 +18,17 @@ Oskari.clazz.define("Oskari.paikkis.language.Bundle", function() {
             {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/fi.js"
+                "src": "../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/fi.js"
             },
             {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/sv.js"
+                "src": "../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/sv.js"
             },
             {
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/en.js"
+                "src": "../../../bundles/paikkatietoikkuna/lang-overrides/resources/locale/en.js"
             }
         ]
     }
