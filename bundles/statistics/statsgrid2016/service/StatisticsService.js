@@ -64,6 +64,8 @@
                 });
                 return;
             }
+            // normalize to always have info-object (so far only holds optional description url of service with "url" key)
+            ds.info = ds.info || {};
             this.datasources.push(ds);
         },
 

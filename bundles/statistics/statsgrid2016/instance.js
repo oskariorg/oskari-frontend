@@ -108,10 +108,15 @@ Oskari.clazz.define(
                     indicator : id,
                     selections : selections
                 }, function(labels) {
+                    var datasource = me.statsService.getDatasource(ds);
+
                     var data = {
                         'id' : dsid,
                         'name' : labels.indicator,
-                        'source' : labels.source
+                        'source' : [labels.source, {
+                            name : datasource.name,
+                            url : datasource.info.url
+                        }]
                     };
                     if(!service.addItemToGroup('indicators', data)) {
                         // if adding failed, it might because group was not registered.
