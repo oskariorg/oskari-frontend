@@ -60,7 +60,9 @@ Can be activated with following bundle config (not production ready yet):
         vectorViewer: true
     }
 
-#### grid
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
+
+### divmanazer grid component
 
 ``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
 
@@ -137,6 +139,8 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 ol2 mapmodule now support fill.color -property when getting style.
 
 ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 
 ### publisher2
 
