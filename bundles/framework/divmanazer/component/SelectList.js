@@ -129,18 +129,18 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
       });
       // determine which way the dropdown should open
         selected.on('chosen:showing_dropdown', function(event, params) {
-           var chosen_container = $( event.target ).next( '.chosen-container' );
+           var chosen_container = jQuery( event.target ).next( '.chosen-container' );
            var dropdown = chosen_container.find( '.chosen-drop' );
-           var dropdown_top = dropdown.offset().top - $(window).scrollTop();
+           var dropdown_top = dropdown.offset().top - jQuery(window).scrollTop();
            var dropdown_height = dropdown.height();
-           var viewport_height = $(window).height();
+           var viewport_height = jQuery(window).height();
 
          if ( dropdown_top + dropdown_height > viewport_height ) {
             chosen_container.addClass( 'chosen-drop-up' );
          }
       });
       selected.on('chosen:hiding_dropdown', function(event, params) {
-         $( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
+         jQuery( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
       });
     }
   },
