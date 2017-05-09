@@ -79,10 +79,15 @@
   border-top: 1px solid #DDDDDD;
   margin-left: 2%;
   margin-right: 2%; }
-.legendSelector .accordion {
-  overflow: auto; }
+/*.legendSelector .accordion {
+  overflow: auto; }*/
 
-.maplegend__popup .popup-body .content .accordion {
-  overflow-y: hidden !important; }
+.maplegend__popup .popup-body .content .imgDiv {
+  max-height: 60vh;
+  overflow-y: auto !important; }
+.divmanazerpopup.mobile-popup {
+  max-width:80vh !important;
+  left: 0% !important;
+}
 
 /*# sourceMappingURL=style.css.map */
