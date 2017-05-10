@@ -282,22 +282,49 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
     getLegend: function(classification, classificationOpts, colors) {
         if(classificationOpts.mapStyle === 'points') {
             var legend = jQuery('<div class="statsgrid-legend"></div>');
-            var block = jQuery('<div><div class="statsgrid-svg"></div><div class="statsgrid-range"></div><div class="statsgrid-counter"></div><div class="clear"></div></div>');
+            var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
             var ranges = classification.ranges;
-            var pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
+            var svgTemplate = jQuery('<div><svg xmlns="http://www.w3.org/2000/svg"></div>');
 
-            var min = classificationOpts.min;
-            var max = classificationOpts.max;
-            var step = (max-min) / ranges.length;
+
+            var pointSymbol = jQuery('<div><svg viewBox="0 0 64 64">'+
+                '<svg width="64" height="64" x="0" y="0">'+
+                    '<circle stroke="#000000" stroke-width="0.8" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+                '</svg>'+
+            '</svg></div>');
+
+
             var sb = this.sb;
             var mapModule = sb.findRegisteredModuleInstance('MainMapModule');
-            ranges.forEach(function(range, index){
-                var b = block.clone();
+            var x = 0;
+            var y = 0;
+
+            var getMarkerSize = function(index) {
+                var iconSize = null;
+                var min = classificationOpts.min;
+                var max = classificationOpts.max;
+                var step = (max-min) / ranges.length;
+                if(min && max) {
+                    iconSize = max - step * index;
+                }
+                return iconSize;
+            };
+            var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
+            ranges.reverse().forEach(function(range, index){
+
                 var color = colors[0];
                 var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
                 var point = pointSymbol.clone();
-                point.attr('width', 64);
-                point.attr('height',64);
+                var svgMain = point.find('svg').first();
+                var iconSize = getMarkerSize(index);
+                var size = mapModule.getMarkerIconSize(iconSize);
+                svgMain.attr('width', size);
+                svgMain.attr('height', size);
+                x = (maxSize - size)/2;
+                y = (maxSize - size);
+
+                svgMain.attr('x', x);
+                svgMain.attr('y', y);
 
                 var circle = point.find('circle');
                 circle.attr('stroke', strokeColor);
@@ -306,26 +333,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 circle.attr('cx', 32);
                 circle.attr('cy', 32);
                 circle.attr('r', 31);
-                // Get point symbol size
-                var iconSize = null;
-                if(min && max) {
-                    iconSize = min + step * index;
-                }
-                var style = {/*
-                    opacity: opacity,*/
-                    shape:{
-                        data: point.html(),
-                        x: 32,
-                        y: 0
-                    },
-                    size: mapModule.getMarkerIconSize(iconSize)
-                };
-                var svg = mapModule.getSvg(style);
-                b.find('.statsgrid-svg').html('<img src="' + svg + '"></img>');
-                b.find('.statsgrid-range').html(range);
-                b.find('.statsgrid-counter').html('???????');
-                legend.append(b);
+
+                svgTemplate.find('svg').first().append(point.html());
             });
+
+            block.append(svgTemplate);
+            legend.append(block);
             return legend;
         }
         return classification.createLegend(colors);
