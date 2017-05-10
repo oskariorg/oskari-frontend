@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 content.find('.error').remove();
                 content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
             }, singleLegend, dropdown );
-            
+
             if( !singleLegend ) {
               dropdown.trigger('change');
             }
