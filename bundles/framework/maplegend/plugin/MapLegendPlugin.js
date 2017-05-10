@@ -54,6 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
             me._popup = popupService.createPopup();
             var singleLegend = false;
+            var dropdown = null;
             popupService.closeAllPopups(true);
 
             var legends = me.getLegends();
@@ -62,20 +63,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
             var content = me._popup.getJqueryContent();
             var legendContent = me.generateLegendContainer(singleLegend);
-            var dropdown = legendContent.find('.oskari-select');
+
+            if( !singleLegend ) {
+              dropdown = legendContent.find('.oskari-select');
+            }
 
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
             me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
 
             me.getLayerLegend( function( img ) {
                 content.find('.imgDiv').remove();
+                content.find('.legendLink').remove();
                 content.find('.error').remove();
                 var legendImage = jQuery('<div class="imgDiv"></div>');
-                var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
+                var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
                 legendLink.find('a').attr('href', img.src);
                 legendLink.find('a').text(me._loc.newtab);
                 legendImage.append(img);
                 content.append(legendContent);
+                content.append(legendLink);
                 content.append(legendImage);
                 // move popup if el and topOffsetElement
                 if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
@@ -94,7 +100,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
             }, singleLegend, dropdown );
 
-            dropdown.trigger('change');
+            if( !singleLegend ) {
+              dropdown.trigger('change');
+            }
 
             if ( me._isVisible ) {
                 me._popup.show( title, null );
@@ -148,6 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             me._popup.addClass('maplegend__popup');
             var themeColours = me.getMapModule().getThemeColours();
             var singleLegend = false;
+            var dropdown = null;
             popupService.closeAllPopups(true);
 
             legend.attr('title', me._loc.tooltip);
@@ -171,12 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
                 var content = me._popup.getJqueryContent();
                 var legendContent = me.generateLegendContainer(singleLegend);
-                if( !singleLegend ){
-                  var dropdown = legendContent.find('.oskari-select');
+                if( !singleLegend ) {
+                  dropdown = legendContent.find('.oskari-select');
                 }
                 content.append(legendContent);
-
-                // me._popup.close(true);
 
                 var popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
 
@@ -197,9 +204,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._isVisible = true;
                 me.getLayerLegend( function( img ) {
                     content.find('.imgDiv').remove();
+                    content.find('.legendLink').remove();
                     content.find('.error').remove();
                     var legendImage = jQuery('<div class="imgDiv"></div>');
-                    var legendLink = jQuery('<div><a target="_blank" ></a></br></br></div>');
+                    var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
                     legendLink.find('a').attr('href', img.src);
                     legendLink.find('a').text(me._loc.newtab);
                     legendImage.append(img);
@@ -212,6 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     content.find('.error').remove();
                     content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend, dropdown);
+
                 if( !singleLegend ) {
                   dropdown.trigger('change');
                 }
