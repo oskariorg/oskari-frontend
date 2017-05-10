@@ -143,7 +143,7 @@ Oskari.clazz.define(
           if (allowedEvents === null || allowedEvents === undefined) {
               allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
               'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-              'RPCUIEvent'];
+              'RPCUIEvent', 'map.rotated'];
           }
 
           if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -191,7 +191,8 @@ Oskari.clazz.define(
                   'DrawTools.StartDrawingRequest',
                   'DrawTools.StopDrawingRequest',
                   'MapModulePlugin.ZoomToFeaturesRequest',
-                  'MapModulePlugin.MapLayerUpdateRequest'];
+                  'MapModulePlugin.MapLayerUpdateRequest',
+                  'rotate.map'];
           }
           me._allowedFunctions = this.__arrayToObject(allowedFunctions);
           // try to get event/request builder for each of these to see that they really are supported!!
