@@ -135,6 +135,11 @@ Oskari.clazz.define(
 
         me._created = null;
 
+        me.loading = 0;
+        me.loaded = 0;
+        me.tilesToLoad = 0;
+        me.errors = 0;
+
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -424,6 +429,71 @@ Oskari.clazz.define(
                 return value;
             }
             return this._description;
+        },
+        /**
+         * Called when openlayers 2/3 starts loading tiles
+         * @method loadingStarted
+         * @param {Number} {optional} remaining
+         * @return {Number} number of currently loading items
+         */
+        loadingStarted: function(remaining) {
+
+          if(typeof remaining === 'undefined'){
+            this.loading +=1;
+          } else {
+            this.loading = remaining;
+          }
+          this.tilesToLoad = this.loading;
+
+          return this.loading === 1;
+        },
+        /**
+         * Called when openlayers 2/3 tileloadend event fires
+         * @method loadingDone
+         * @param {Number} {optional} remaining
+         * @return {Number} number of not yet loaded
+         */
+        loadingDone: function(remaining) {
+
+          if(typeof remaining === 'undefined'){
+            this.loading -=1;
+          } else {
+            this.loading = remaining;
+          }
+          this.loaded += 1;
+          return this.loading === 0;
+        },
+        /**
+         * Called when openlayers 2/3 tileloaderror event fires
+         * @method loadingError
+         * Increments the amount of errors for the layers
+         */
+        loadingError: function(errors) {
+
+          if(typeof errors === 'undefined'){
+            this.errors += 1;
+          } else {
+            this.errors = errors;
+          }
+          return this.errors;
+        },
+        /**
+         * Check if all the tiles/features have been loaded
+         * @method checkIfAllLoaded
+         * @return {boolean} true if this.loading === 0, else false
+         */
+        getLoadingState: function() {
+          var state = {
+            'loading': this.loading,
+            'loaded': this.loaded,
+            'errors': this.errors
+          };
+          return state;
+        },
+        resetLoadingState: function(){
+          this.loaded = 0;
+          this.errors = 0;
+          this.tilesToLoad = 0;
         },
         /**
          * @method addSubLayer

@@ -1,5 +1,170 @@
 # Release Notes
 
+## 1.42.0
+
+### search UI
+
+The "municipality" field label in results table has been replaced with a more generic "region".
+
+### Map legend
+
+A new plugin for maplegend which is available when publishing maps with legend data. Does not appear in publisher if no suitable layers are found.
+
+### DrawPlugin.ol2
+
+Fixed modify control preventing events to flow as expected. Now modify control is activated when starting to draw features.
+
+#### VectorLayerPlugin ol2
+
+Added support for optionalStyle on OpenLayers 2 based mapmodule when adding features to map with  ``AddFeaturesToMapRequest``.
+
+Now ol2 ``FeatureEvent`` returns GeoJSON as proper JSON like ol3 implementation (previously was String with escaped JSON content).
+
+#### VectorLayerPlugin ol3
+
+Feature labels provided in style configuration is now always cast to String on OpenLayers 3. Numbers for example caused JS errors.
+
+Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
+
+### mapwfs2
+
+Added load events for the wfs-layers based on the StatusHandler.
+
+### maprotator
+
+New bundle maprotator. Publisher part works with Openlayers 2 actual map rotating only works with Openlayers 3.
+Can be used in a published maps, select rotate map option when publishing to enable user/RPC to rotate the map.
+To rotate the map press SHIFT + ALT + Drag with mouse.
+
+Sends the map.rotated event when the map is rotating from which you can get the map orientation in degrees.
+
+Can also be used with request:
+```javascript
+  var rotateMap = Oskari.requestBuilder('rotate.map');
+  Oskari.getSandbox().request('maprotator', rotateMap(180));
+```
+Where 180 in the example above is the degrees for map rotation.
+
+### statistics/statsgrid2016
+
+Fixed an issue where grid was needlessly rendered multiple times.
+
+Indicators in datatable are now paged if more than three indicators have been selected.
+
+Selected region is now saved to bundle state.
+
+Initial implementation for new ``RegionsetViewer`` component. It can be used to show regionset on map as vector features instead of WMS-service.
+Can be activated with following bundle config (not production ready yet):
+
+    {
+        vectorViewer: true
+    }
+
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
+
+### divmanazer grid component
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// Set grouping headers
+grid.setGroupingHeader([
+    {
+        cls: 'firstClass',
+        text: 'First text'
+    },
+    {
+        cls:'secondClass',
+        text: 'Second text',
+        maxCols: 3,
+        pagingHandler: function(element, data){
+            console.log(data.visible.start + '-' + data.visible.end +'/' + data.count+')');
+        }
+    }
+]);
+```
+
+Fixed double scrollbar when grid has column selector (like properties) and few rows in the table.
+
+Fixed sort when using column name renderer.
+
+Grid.select can now scroll the grid container to show the selected row (pass scrollableELement as parameter to use).
+
+For example:
+```javascript
+var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+// add here some data to grid and so on
+
+grid.renderTo(jQuery('.datatable'));
+
+// select row and scroll to selected
+grid.select('wantedRowValue', false, jQuery('.datatable').parent());
+```
+
+### coordinatetool
+
+Arrow keys in lon and lat inputs now work as expected and don't move the map anymore.
+
+Fixed extra coordinate server transform calls.
+
+### Oskari.util
+
+Changed coordinate regex patterns to allow also negative minutes/seconds.
+
+### statslayer/index map interoperability
+
+Fixed an issue where opening index map with statslayer as base resulted in:
+
+- the normal map not refreshing on move after indexmap is opened
+- in some cases indexmap + normal map going to an infinite update-loop when zooming out
+
+### mapmodule
+
+getScreenshot function is now asynchronous and responds after all tiles have been loaded. It also takes a second parameter timeoutSeconds, which sets the maximum times it waits for tiles to load, by default it's 5 seconds
+
+Before:
+
+  var imageData = mapModule.getScreenshot();
+
+Now:
+
+  mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
+      //Do something with  imageData
+  });
+
+New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
+
+ol2 mapmodule now support fill.color -property when getting style.
+
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
+
+### publisher2
+
+Medium map height changed from 525 to 600 pixels.
+
+### myplacesimport
+
+Default config is now included in the code so configuration is optional.
+
+### timeseries
+
+Default config is now included in the code so configuration is optional.
+
+### promote
+
+UI text for bundle now uses Oskari.getLocalized() when parsing configuration.
+This means that for example URLs in localization can be presented as single value or a localized object:
+
+      "signupUrl": "/user",
+      "registerUrl": {
+        "en": "/user",
+        "fi": "/user"
+      }
+
 ## 1.41.3
 
 ### coordinatetool

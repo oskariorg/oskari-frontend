@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (!this.isLayerSupported(layer)) {
                 return;
             }
-
             var me = this;
             var map = me.getMap();
             var mapModule = me.getMapModule();
@@ -53,6 +52,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             this.setOLMapLayers(layer.getId(), wmtsHolderLayer);
             this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
                 me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
+                me._registerLayerEvents(wmtsLayer, layer);
+
                 // Get the reserved current index for wmts layer
                 var holderLayerIndex = mapModule.getLayerIndex(wmtsHolderLayer);
                 map.removeLayer(wmtsHolderLayer);
@@ -69,6 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 //                console.log("Error loading capabilitiesXML");
             });
 
+
         },
         /**
          * Reserves correct position for wmts layer, which will be added async later
@@ -80,14 +82,36 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         _getPlaceHolderWmtsLayer: function (layer) {
 
             var layerHolder = new ol.layer.Vector({
-                    source: new ol.source.Vector({}
-                    ),
+                    source: new ol.source.Vector({}),
                     title: 'layer_' + layer.getId(),
                     visible: false
                 }
             );
 
             return layerHolder;
+        },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+        var me = this;
+        var source = layer.getSource();
+
+        source.on('tileloadstart', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), true);
+        });
+
+        source.on('tileloadend', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), false);
+        });
+
+        source.on('tileloaderror', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+        });
+
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],

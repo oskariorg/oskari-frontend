@@ -210,9 +210,11 @@ Oskari.clazz.define(
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
-            panel.setTitleIcon('icon-funnel', function (event) {
+            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+                panel.setTitleIcon('icon-funnel', function (event) {
                 me.addFilterFunctionality(event, layer);
-            });
+                });
+            }
         },
 
         turnOnClickOff: function () {
@@ -221,6 +223,10 @@ Oskari.clazz.define(
         },
 
         addFilterFunctionality: function (event, layer) {
+            if (layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+                return;
+            }
+
             var me = this,
                 prevJson;
 

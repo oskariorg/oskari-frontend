@@ -1,5 +1,15 @@
 {
 	"startupSequence": [
+        {
+            "bundlename": "lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "lang-overrides": {
+                        "bundlePath": "../../../packages/paikkatietoikkuna/"
+                    }
+                }
+            }
+        },
 		{
 			"bundlename": "openlayers-default-theme",
 			"metadata": {
@@ -216,20 +226,13 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
-			"title": "maplegend",
-			"fi": "maplegend",
-			"bundleinstancename": "maplegend",
-			"sv": "maplegend",
-			"en": "maplegend",
 			"bundlename": "maplegend",
 			"metadata": {
 				"Import-Bundle": {
 					"maplegend": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},
@@ -264,20 +267,13 @@
 				"Require-Bundle-Instance": []
 			}
 		}, {
-			"instanceProps": {},
-			"title": "Featuredata",
-			"bundleinstancename": "featuredata2",
-			"fi": "Kohdetiedot",
-			"sv": "?",
-			"en": "?",
 			"bundlename": "featuredata2",
 			"metadata": {
 				"Import-Bundle": {
 					"featuredata2": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
-				},
-				"Require-Bundle-Instance": []
+				}
 			}
 		}, {
 			"instanceProps": {},
@@ -547,7 +543,16 @@
                 }
             }
         },
-	  {
+    {
+        "bundlename": "maprotator",
+        "metadata": {
+            "Import-Bundle": {
+                "maprotator": {
+                    "bundlePath": "../../../packages/mapping/ol3/"
+                }
+            }
+        }
+    }, {
 		"title": "Tampere",
 		"fi": "Tampere",
 		"sv": "Tampere",

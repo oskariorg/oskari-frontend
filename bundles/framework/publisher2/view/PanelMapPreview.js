@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         }, {
             id: 'medium',
             width: 700,
-            height: 525,
+            height: 600,
             // default option
             selected: true
         }, {

@@ -1,4 +1,5 @@
 /* Add this to startupsequence to get this bundle started
+Oskari.app.playBundle(
 {
   bundlename : 'system-message',
   metadata : {
@@ -8,7 +9,7 @@
   }
   }
   }
-}
+});
 */
 /*
 Searches dom for element with id="oskari-system-messages", that is used for displaying messages.
@@ -122,7 +123,7 @@ Oskari.clazz.define(
             var container = me._messageContainer.clone();
             var field = me._messageField.clone();
             //Get reference to the div we use to show the messages
-            this.messageElement = $('#oskari-system-messages');
+            this.messageElement = jQuery('#oskari-system-messages');
             this.messageElement.append(container, field);
             if (!this.messageElement.length) {
                 Oskari.log(me.getName()).warn('Could not find element with id #oskari-system-messages');
@@ -156,6 +157,9 @@ Oskari.clazz.define(
             var el = this.messageElement.find('.messagetext');
             el.show();
             el.text(message);
+            setTimeout(function(){
+              el.hide();
+            },3000);
             if(this.messages.length === 0){
               el.empty();
             }

@@ -1,3 +1,9 @@
+
+$pagingArrowBorderSize: 8px;
+$pagingArrowActiveColor: #f0f0f0;
+$pagingArrowHoverColor: #ffd400;
+$pagingArrowDeactiveColor: transparent;
+
 div.column-selector-placeholder {
   border-style: none;
   float: left;
@@ -33,7 +39,7 @@ div.icon-menu {
 }
 
 div.column-selector {
-    max-height: 350px;
+    max-height: 40%;
     width: 270px;
     overflow: auto;
     position: absolute;
@@ -83,8 +89,9 @@ input.excelExportButton {
   margin: 3px 10px 2px 5px;
 }
 
-table.oskari-grid {
 
+
+table.oskari-grid {
     [class*="span"] {
       float: none;
     }
@@ -153,18 +160,53 @@ table.oskari-grid {
         border: 1px solid #E6E6E6;
     }
 
+    th.grouping {
+      div.paging {
+        cursor:pointer;
+        margin: 0;
+        width:0;
+        height:0;
+        border-top:$pagingArrowBorderSize solid transparent;
+        border-bottom:$pagingArrowBorderSize solid transparent;
+
+        &.previous {
+          float:left;
+          border-right:$pagingArrowBorderSize solid $pagingArrowActiveColor;
+          &:hover {
+            border-right-color: $pagingArrowHoverColor;
+          }
+        }
+        &.next {
+          float:right;
+          border-left:$pagingArrowBorderSize solid $pagingArrowActiveColor;
+          &:hover {
+            border-left-color: $pagingArrowHoverColor;
+          }
+        }
+
+        &.hidden {
+          border-right-color: $pagingArrowDeactiveColor;
+          border-left-color: $pagingArrowDeactiveColor;
+          &:hover{
+            border-right-color: $pagingArrowDeactiveColor;
+            border-left-color: $pagingArrowDeactiveColor;
+          }
+        }
+      }
+
+      div.title {
+        float: left;
+        margin-left: 4px;
+      }
+    }
 }
 
 .oskari-grid-export {
-    width: 340px;
-
-    fieldset.oskari-formcomponent {
-        float: left;
-
-        label {
-            width: 170px;
-        }
-
-    }
-
+  width: 340px;
+  fieldset.oskari-formcomponent {
+      float: left;
+      label {
+          width: 170px;
+      }
+  }
 }

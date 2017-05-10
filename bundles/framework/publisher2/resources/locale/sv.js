@@ -63,6 +63,8 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagren meny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
                 "FeedbackServiceTool": "Feedback (Open311) functionality",
+                "MapLegend":"Visa kartförklaringen",
+                "MapRotator":"Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
                 "toolbarToolNames": {
                     "history_back": "Gå bakåt",

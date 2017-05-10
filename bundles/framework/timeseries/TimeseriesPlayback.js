@@ -18,6 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         this.sandbox = sandbox;
         this.loc = locale;
         this.mapmodule = mapmodule;
+        conf = conf || {};
         this.conf = conf;
         this.template = {};
 

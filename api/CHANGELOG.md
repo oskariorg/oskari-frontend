@@ -9,6 +9,40 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.42
+
+#### [mod] [rpc] SearchResultEvent
+
+``SearchResultEvent`` now includes a "region" key for result locations. It should be used instead of "village". Both are available and have the same value, but the village key will be removed in a future release.
+
+
+```javascript
+{
+"id": 0,
+"rank": 10,
+"lon": "327629.273",
+"region": "Tampere",
+"village": "Tampere",
+"channelId": "REGISTER_OF_NOMENCLATURE_CHANNEL",
+"name": "Tampere",
+"zoomScale": 56650,
+"type": "Kunta, kaupunki",
+"lat": "6822513.158"
+}
+```
+
+#### [mod] [rpc] FeatureEvent
+
+``FeatureEvent`` triggered on OpenLayers 2 based map now returns GeoJSON as JSON (previous returned String with escaped JSON).
+
+
+#### [mod] [rpc] New rpc-client version
+
+This release has no functional changes.
+
+As part of Oskari becoming an OSGeo-project the repositories are relocated from under https://github.com/nls-oskari to https://github.com/oskariorg.
+ This update only updates references in package.json for jschannel fork (dependency) and the RPC-client.
+
 ## 1.41
 
 ### [mod] [rpc] RouteResultEvent

@@ -30,7 +30,7 @@ div.icon-menu {
   max-height: 7px; }
 
 div.column-selector {
-  max-height: 350px;
+  max-height: 40%;
   width: 270px;
   overflow: auto;
   position: absolute;
@@ -110,6 +110,32 @@ table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
+table.oskari-grid th.grouping div.paging {
+  cursor: pointer;
+  margin: 0;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent; }
+  table.oskari-grid th.grouping div.paging.previous {
+    float: left;
+    border-right: 8px solid #f0f0f0; }
+    table.oskari-grid th.grouping div.paging.previous:hover {
+      border-right-color: #ffd400; }
+  table.oskari-grid th.grouping div.paging.next {
+    float: right;
+    border-left: 8px solid #f0f0f0; }
+    table.oskari-grid th.grouping div.paging.next:hover {
+      border-left-color: #ffd400; }
+  table.oskari-grid th.grouping div.paging.hidden {
+    border-right-color: transparent;
+    border-left-color: transparent; }
+    table.oskari-grid th.grouping div.paging.hidden:hover {
+      border-right-color: transparent;
+      border-left-color: transparent; }
+table.oskari-grid th.grouping div.title {
+  float: left;
+  margin-left: 4px; }
 
 .oskari-grid-export {
   width: 340px; }

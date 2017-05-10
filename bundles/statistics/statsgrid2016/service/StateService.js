@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
+        this.activeRegion = null;
         this._defaults = {
             classification: {
                 count: 5,
@@ -68,14 +69,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         },
         /**
-         * Selects the region. Only sends out an event for now, selected region is not tracked by the service.
+         * Selects the region.
          * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
+         * @param {String} componentId component id
          */
-        selectRegion : function(region) {
-            // notify only for now
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
-            this.sandbox.notifyAll(eventBuilder(this.getRegionset(), region));
+        selectRegion : function(region, componentId) {
+            var me = this;
+
+            // if region is same than previous then return
+            if(region === me.activeRegion) {
+                return;
+            }
+            clearTimeout(me._timers.setActiveRegion);
+
+            me._timers.setActiveRegion = setTimeout(function(){
+                me.activeRegion = region;
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
+                me.sandbox.notifyAll(eventBuilder(me.getRegionset(), region, null, componentId));
+            }, 100);
         },
+
+        /**
+         * Gets the active region.
+         * @method  @public getRegion
+         * @return {null|Number} null or selected region
+         */
+        getRegion: function(){
+            return this.activeRegion;
+        },
+
 
         /**
          * Sets the current classification and sends out event notifying about the change
@@ -244,8 +267,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections));
 
-
-
             return ind;
         },
         /**
@@ -282,6 +303,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
             this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, true));
+
+
+            // if no indicators then reset active region
+            if(this.indicators.length === 0) {
+                this.selectRegion(null);
+            }
+
             return removedIndicator;
         },
         /**

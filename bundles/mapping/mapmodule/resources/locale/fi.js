@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
                 "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Tarkenna hakusanaa ja yritä uudelleen.",
                 "column_name": "Nimi",
+                "column_region": "Alue",
                 "column_village": "Kunta",
                 "column_type": "Tyyppi"
             },

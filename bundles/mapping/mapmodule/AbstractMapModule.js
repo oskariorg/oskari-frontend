@@ -862,6 +862,90 @@ Oskari.clazz.define(
                 }
             }
         },
+        isLoading: function() {
+          var oskariLayers = this.getSandbox().getMap().getLayers();
+          var loading = false;
+          oskariLayers.forEach( function( layer ) {
+          if(loading) {
+            return;
+          }
+            loading = layer.getLoadingState().loading > 0;
+          });
+          return loading;
+        },
+        /**
+         * @method loadingState
+         * Gather info on layer loading status
+         * @param {Number} layerid, the id number of the abstract layer in loading
+         * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
+         */
+        loadingState: function( layerId, started, errors ) {
+          if(typeof errors === 'undefined') {
+            errors = false;
+          }
+          var done = false;
+          var me = this;
+          var layers = this.getSandbox().findAllSelectedMapLayers();
+          var oskariLayer = this.getSandbox().getMap().getSelectedLayer( layerId );
+          if( !oskariLayer ) {
+            return;
+          }
+
+          if( !this.progBar ) {
+            this.progBar = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
+            this.progBar.create(jQuery('#' + this.getMapElementId()));
+          }
+
+          if( this.loadtimer ) {
+            clearTimeout( this.loadtimer );
+          }
+
+          if( started ) {
+            var wasFirstTile = oskariLayer.loadingStarted();
+            if( wasFirstTile ) {
+                this.progBar.show();
+                layers.forEach( function( layer ) {
+                  oskariLayer.resetLoadingState();
+                });
+            }
+          }
+          else {
+            if(!errors) {
+              var tilesLoaded = 0;
+              var pendingTiles = 0;
+              layers.forEach( function( layer ) {
+                tilesLoaded += layer.loaded;
+                pendingTiles += layer.tilesToLoad;
+              });
+              done = oskariLayer.loadingDone();
+              this.progBar.updateProgressBar( pendingTiles -1, tilesLoaded );
+            } else {
+                this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
+                oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
+                var errors = oskariLayer.getLoadingState().errors;
+                oskariLayer.loadingDone(0);
+
+                setTimeout(function(){
+                  me.progBar.hide();
+                },2000);
+                tilesLoaded = 0;
+                pendingTiles = 0;
+                this.notifyErrors( errors );
+            }
+          }
+          if( done && !oskariLayer.getLoadingState().errors ) {
+            Oskari.log( this.getName() ).info( oskariLayer._layerName + " done" );
+          }
+
+          this.loadtimer = setTimeout( function() {
+            var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
+            var event = eventBuilder( done, 'maplayer' );
+            me._sandbox.notifyAll( event );
+          }, 50 );
+        },
+        notifyErrors: function( errors ) {
+              Oskari.log( this.getName() ).warn( "error: "+errors );
+        },
         /**
          * Returns state for mapmodule including plugins that have getState() function
          * @method getState

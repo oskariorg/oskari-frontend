@@ -375,41 +375,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     return JSON.stringify(prevMarkers) !== JSON.stringify(nextMarkers);
                 }
             }
-            /*{
-                rule: 'plugins',
-                cmp: function (prevState, nextState) {
-                    var me = this,
-                        prevPlugins = prevState.plugins,
-                        nextPlugins = nextState.plugins,
-                        pluginKey,
-                        prevKeys = [],
-                        nextKeys = [],
-                        prevPluginState,
-                        nextPluginState;
-
-                    // Only one or other has plugins, return true
-                    if ( (prevPlugins && !nextPlugins) || (!prevPlugins && nextPlugins) ) {
-                        return true;
-                    }
-
-                    for (pluginKey in prevPlugins) {
-                        prevKeys.push(pluginKey);
-                        prevPluginState = prevPlugins[pluginKey];
-                        nextPluginState = nextPlugins[pluginKey];
-
-                        // See if the plugins have the same state
-                        if (JSON.stringify(prevPluginState) !== JSON.stringify(nextPluginState)) {
-                            return true;
-                        }
-                    }
-
-                    for (pluginKey in nextPlugins) {
-                        nextKeys.push(pluginKey);
-                    }
-
-                    // See if plugin count matches (prevPlugins loop already checks if the plugins themselves match)
-                    return prevKeys.length === nextKeys.length;
-                }*/
         ],
 
         _compareState: function (prevState, nextState, returnFirst) {
@@ -489,8 +454,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         },
 
         historyMovePrevious: function () {
-            var sandbox = this.getSandbox();
-            switch (this._historyPrevious.length) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            switch (me._historyPrevious.length) {
                 case 0:
                     /* hard reset */
                     /*this.resetState();*/
@@ -498,8 +464,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 case 1:
                     /* soft reset (retains the future) */
                     var nextHistory = this._historyNext;
-                    this.resetState();
-                    this._historyNext = nextHistory;
+                    me.resetState();
+                    me._historyNext = nextHistory;
                     break;
                 default:
                     /* pops current state */

@@ -519,6 +519,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 olStyle.fontFamily = split[2];
             }
           }
+
+          if(Oskari.util.keyExists(style, 'fill.color')) {
+                olStyle.fillColor = style.fill.color;
+          }
           if(Oskari.util.keyExists(style.text, 'fill.color')) {
               olStyle.fontColor = style.text.fill.color;
           }

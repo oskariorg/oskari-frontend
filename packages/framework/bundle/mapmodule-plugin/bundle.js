@@ -491,6 +491,9 @@ Oskari.clazz.define(
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/map.layer.style.js"
                 }, {
+                   "type": "text/javascript",
+                   "src": "../../../../bundles/mapping/mapmodule/event/ProgressEvent.js"
+                }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js"
                 }, {
