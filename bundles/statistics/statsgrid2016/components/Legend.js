@@ -284,14 +284,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             var legend = jQuery('<div class="statsgrid-legend"></div>');
             var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
             var ranges = classification.ranges;
-            var svgTemplate = jQuery('<div><svg xmlns="http://www.w3.org/2000/svg"></div>');
+            var svg = jQuery('<div><svg xmlns="http://www.w3.org/2000/svg">'+
+                '   <svg class="symbols"></svg>'+
+                '   <svg class="texts"></svg>'+
+                '</svg></div>');
 
 
             var pointSymbol = jQuery('<div><svg viewBox="0 0 64 64">'+
-                '<svg width="64" height="64" x="0" y="0">'+
-                    '<circle stroke="#000000" stroke-width="0.8" fill="#ff0000" cx="32" cy="32" r="31"/>'+
-                '</svg>'+
+                '   <svg width="64" height="64" x="0" y="0">'+
+                '       <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+                '   </svg>'+
             '</svg></div>');
+
+            var lineAndText = jQuery('<div>'+
+                '   <svg>'+
+                '       <g>'+
+                '           <svg>'+
+                '               <line stroke="#000000" stroke-width="1"></line>'+
+                '           </svg>'+
+                '           <svg font-size="10">'+
+                '               <text fill="#000000"></text>'+
+                '           </svg>'+
+                '       </g>'+
+                '   </svg>'+
+                '</div>');
 
 
             var sb = this.sb;
@@ -311,7 +327,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             };
             var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
             ranges.reverse().forEach(function(range, index){
-
+                // Create point symbol
                 var color = colors[0];
                 var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
                 var point = pointSymbol.clone();
@@ -327,17 +343,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 svgMain.attr('y', y);
 
                 var circle = point.find('circle');
-                circle.attr('stroke', strokeColor);
-                circle.attr('stroke-width', 1);
-                circle.attr('fill', '#' + color);
-                circle.attr('cx', 32);
-                circle.attr('cy', 32);
-                circle.attr('r', 31);
+                circle.attr({
+                    'fill': '#' + color
+                });
 
-                svgTemplate.find('svg').first().append(point.html());
+                svg.find('svg.symbols').append(point.html());
+
+                // Create texts and lines
+                var label = lineAndText.clone();
+                var line = label.find('line');
+                line.attr({
+                    x1: maxSize/2,
+                    y1: y+2,
+                    x2: maxSize * 0.9,
+                    y2: y+2
+                });
+
+                svg.find('svg.texts').append(label.html());
             });
 
-            block.append(svgTemplate);
+            block.append(svg);
             legend.append(block);
             return legend;
         }
