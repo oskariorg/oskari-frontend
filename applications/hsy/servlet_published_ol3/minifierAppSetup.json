@@ -1,0 +1,140 @@
+{
+    "startupSequence": [{
+            "bundlename": "mapfull_ol3",
+            "metadata": {
+                "Import-Bundle": {
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapwfs2": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapstats": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapanalysis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapuserlayers": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "maparcgis": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapmodule": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "divmanazer",
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "infobox",
+            "metadata": {
+                "Import-Bundle": {
+                    "infobox": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "coordinatetool",
+            "bundleinstancename" : "coordinatetool",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetool" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
+                    }
+                }
+            }
+        },{
+            "bundlename": "toolbar",
+            "metadata": {
+                "Import-Bundle": {
+                    "toolbar": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "publishedstatehandler",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "publishedstatehandler" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "featuredata2",
+            "metadata": {
+                "Import-Bundle": {
+                    "featuredata2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "drawtools",
+            "metadata": {
+                "Import-Bundle": {
+                    "drawtools": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "routingService",
+            "metadata": {
+                "Import-Bundle": {
+                    "routingService": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "maprotator",
+            "metadata": {
+                "Import-Bundle": {
+                    "maprotator": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "rpc",
+            "metadata": {
+                "Import-Bundle": {
+                    "rpc": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }
+    ]
+}

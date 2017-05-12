@@ -100,6 +100,7 @@
     background-color: #ffd400; }
   to {
     background-color: #FDF8D9; } }
+
 div.oskari-flyoutcontent.statsgrid {
   /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
   max-width: 700px;
@@ -182,16 +183,6 @@ div.oskari-flyoutcontent.statsgrid {
     width: 336px; }
   div.oskari-flyoutcontent.statsgrid div.parameter div.clear {
     clear: both; }
-<<<<<<< HEAD
-
-div.oskari-flyoutcontent thead th {
-  border: none;
-  border-bottom: 1px solid #E6E6E6;
-  border-left: 1px solid #E6E6E6;
-  border-right: 1px solid #E6E6E6; }
-
-div.oskari-flyoutcontent .statsgrid-grouping-header {
-=======
   div.oskari-flyoutcontent.statsgrid thead th {
     border: none;
     border-bottom: 1px solid #E6E6E6;
@@ -214,7 +205,6 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
 .statsgrid-legend-plugin {
   border: 1px solid rgba(0, 0, 0, 0.2);
   pointer-events: auto;
->>>>>>> bf7e670a213344e0c2d6ec0d45c62f52ceb3af8e
   text-align: left;
   /* Float right to not overlap with other plugins */
   float: right; }
@@ -274,10 +264,12 @@ div.oskari-flyoutcontent .statsgrid-grouping-header {
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
   margin: 0px; }
+
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.accordion div.content {
   padding: 0;
   margin: 0;
   margin-left: 8px; }
+
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.geostats-legend div {
   margin: 2px 6px 2px 2px; }
 
