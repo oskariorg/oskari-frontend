@@ -101,10 +101,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     };
 
     var transparencyEl = this.__templates.classification.find('select.transparency-value');
-    for(var i=0;i<=70;i+=10) {
+    for(var i=100;i>=30;i-=10) {
         transparencyEl.append('<option value="'+i+'">'+ i +' %</option>');
     }
-    this.__templates.classification.find('select.transparency-value option[value=20]').attr('selected', 'selected');
+    this.__templates.classification.find('select.transparency-value option[value=80]').attr('selected', 'selected');
 
     this.log = Oskari.log('Oskari.statistics.statsgrid.EditClassification');
 
