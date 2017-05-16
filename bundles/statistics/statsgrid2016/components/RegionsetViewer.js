@@ -92,23 +92,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
 
+        // remove layer
+        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+
         if(!ind) {
-            // remove layer
-            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
             return;
         }
 
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
             if(err) {
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
                 return;
             }
 
             var classification = state.getClassificationOpts(ind.hash);
 
             var classify = service.getClassificationService().getClassification(data, classification);
-            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
 
             if(!classify) {
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
