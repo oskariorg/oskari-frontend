@@ -20,9 +20,9 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "editFeature": "Muokkaa kohdetta",
                 "editMultipleFeatures": "Muokkaa useita kohteita",
-                "deleteFeature": "Poista kohde",
                 "yes": "Kyllä",
-                "no": "Ei"
+                "no": "Ei",
+                "deleteFeature": "Poista kohde"
             },
             "tools": {
                 "point": "Lisää piste",

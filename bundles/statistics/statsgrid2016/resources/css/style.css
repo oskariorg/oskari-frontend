@@ -100,7 +100,6 @@
     background-color: #ffd400; }
   to {
     background-color: #FDF8D9; } }
-
 div.oskari-flyoutcontent.statsgrid {
   /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
   max-width: 700px;
@@ -264,12 +263,10 @@ div.oskari-flyoutcontent.statsgrid {
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
   margin: 0px; }
-
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.accordion div.content {
   padding: 0;
   margin: 0;
   margin-left: 8px; }
-
 .divmanazerpopup.statsgrid-mobile-legend .popup-body div.geostats-legend div {
   margin: 2px 6px 2px 2px; }
 
@@ -301,3 +298,5 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
       background-image: url("../images/table_light.png"); }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
     clear: both; }
+
+/*# sourceMappingURL=style.css.map */
