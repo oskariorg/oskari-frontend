@@ -22,6 +22,8 @@
         this.datasources = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
+
+        this._mapModes = ['wms']; // possible values: wms, vector
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",
@@ -31,6 +33,23 @@
         },
         getName: function () {
             return this.__name;
+        },
+        setMapModes: function(mapModes){
+            this._mapModes = mapModes;
+        },
+        getMapModes: function(){
+            return this._mapModes;
+        },
+        hasMapMode: function(mode){
+            var me = this;
+            var hasMode = false;
+            me._mapModes.forEach(function(mapmode){
+                if(mapmode === mode){
+                    hasMode = true;
+                    return;
+                }
+            });
+            return hasMode;
         },
         /**
          * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.

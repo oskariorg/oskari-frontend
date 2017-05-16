@@ -39,6 +39,9 @@ Oskari.clazz.define(
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
+            if(conf && conf.vectorViewer) {
+                me.statsService.setMapModes(['wms','vector']);
+            }
             statsService.addDatasource(conf.sources);
             // disable tile if we don't have anything to show or enable if we do
             this.getTile().setEnabled(this.hasData());
@@ -62,7 +65,8 @@ Oskari.clazz.define(
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
 
-            if(this.conf && this.conf.vectorViewer) {
+            if(conf && conf.vectorViewer) {
+                me.statsService.setMapModes(['choropleth','points']);
                 this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
         },

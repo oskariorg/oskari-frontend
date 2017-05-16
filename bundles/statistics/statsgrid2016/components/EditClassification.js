@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
             '<div class="classification-options">'+
-                '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points">'+
+                '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector">'+
                     '<div class="label">'+ this.locale.classify.map.mapStyle +'</div>'+
                     '<div class="map-style value">'+
                         '<select class="map-style">'+
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="point-size oskariui visible-map-style-points">'+
+                '<div class="point-size oskariui visible-map-style-points visible-on-vector">'+
                     '<div class="label">'+ this.locale.classify.map.pointSize +'</div>'+
                     '<div class="minmaxlabels"><div class="min">'+ this.locale.classify.map.min +'</div><div class="max">'+ this.locale.classify.map.max +'</div><div class="clear"></div></div>' +
                     '<div class="point-range value">'+
@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                 '</div>'+
 
                 // transparency
-                '<div class="point-transparency visible-map-style-points">'+
+                '<div class="point-transparency visible-map-style-points visible-on-vector">'+
                     '<div class="label">'+ this.locale.classify.map.transparency +'</div>'+
                     '<div class="transparency-value value">'+
                         '<select class="transparency-value">'+
@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                 '</div>'+
 
                 // numeric value
-                '<div class="numeric-value visible-map-style-points">'+
+                '<div class="numeric-value visible-map-style-points visible-on-vector">'+
                 '</div>'+
 
                 '<div class="classification-color-set visible-map-style-choropleth">'+
@@ -214,15 +214,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         });
         var min = classification.min || me._rangeSlider.defaultValues[0];
         var max = classification.max || me._rangeSlider.defaultValues[1];
+        var updateClassification = false;
 
         if(max-min<classification.count) {
             min = me._rangeSlider.defaultValues[0];
             max = me._rangeSlider.defaultValues[1];
+            updateClassification = true;
         }
         me._rangeSlider.element.slider('values', [min,max]);
         me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
-
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
+
+        if(updateClassification) {
+            state.setClassification(ind.hash,  me.getSelectedValues(), true);
+        }
     },
 
     /**
@@ -274,6 +279,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             return me._element;
         }
         me._element = me.__templates.classification.clone();
+
+        if(!service.hasMapMode('vector')) {
+            me._element.find('.visible-on-vector').remove();
+        }
+
         me._colorSelect = Oskari.clazz.create('Oskari.userinterface.component.ColorSelect');
         me._element.find('.classification-colors.value').append(me._colorSelect.getElement());
 
