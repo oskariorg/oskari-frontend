@@ -72,11 +72,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * @return {Object}               result with values and helper functions
          */
         getClassification : function(indicatorData, options) {
+            var me = this;
             if(typeof indicatorData !== 'object') {
                 throw new Error('Data expected as object with region/value as keys/values.');
             }
-            var opts = this._validateOptions(options);
-            var list = this._getDataAsList(indicatorData);
+            var opts = me._validateOptions(options);
+            var list = me._getDataAsList(indicatorData);
             if(list.length < 3) {
                 return;
             }
@@ -84,7 +85,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 opts.count = list.length -1;
             }
 
-            if (this._hasNonNumericValues(list)) {
+            if (me._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
                 throw new Error('Non-numeric data not supported for now');
             }
@@ -155,11 +156,122 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             // createLegend
             response.createLegend = function(colors, title) {
+                // Point legend
+                if(opts.mapStyle === 'points') {
+                    return me._getPointsLegend(stats.ranges, opts, colors[0]);
+                }
+
+                // Choropleth  legend
                 stats.setColors(colors);
                 var legendHTML = stats.getHtmlLegend(null, title || '', true, null, opts.mode);
                 return legendHTML;
             };
             return response;
+        },
+        _getPointsLegend: function(ranges, opts, color){
+            var legend = jQuery('<div class="statsgrid-legend"></div>');
+                var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
+                var svg = jQuery('<div>'+
+                    '   <svg xmlns="http://www.w3.org/2000/svg">'+
+                    '       <svg class="symbols"></svg>'+
+                    '       <svg class="texts"></svg>'+
+                    '   </svg>'+
+                    '</div>');
+
+
+                var pointSymbol = jQuery('<div>'+
+                    '   <svg viewBox="0 0 64 64">'+
+                    '       <svg width="64" height="64" x="0" y="0">'+
+                    '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+                    '       </svg>'+
+                    '   </svg>'+
+                    '</div>');
+
+                var lineAndText = jQuery('<div>'+
+                    '   <svg>'+
+                    '       <g>'+
+                    '           <svg>'+
+                    '               <line stroke="#000000" stroke-width="1"></line>'+
+                    '           </svg>'+
+                    '           <svg>'+
+                    '               <text fill="#000000"></text>'+
+                    '           </svg>'+
+                    '       </g>'+
+                    '   </svg>'+
+                    '</div>');
+
+
+                var sb = Oskari.getSandbox();
+                var mapModule = sb.findRegisteredModuleInstance('MainMapModule');
+                var x = 0;
+                var y = 0;
+
+                var getMarkerSize = function(index) {
+                    var iconSize = null;
+                    var min = opts.min;
+                    var max = opts.max;
+                    var count = opts.count;
+                    var step = (max-min) / ranges.length;
+                    if(min && max) {
+                        iconSize = (max - step * index);
+                    }
+                    return iconSize;
+                };
+                var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
+                var fontSize = 10;
+
+                svg.find('svg').first().attr('height', maxSize + fontSize);
+                svg.find('svg.symbols').attr('y', fontSize);
+                svg.find('svg.texts').attr('y', fontSize);
+                svg.find('svg.texts').attr('height', maxSize + fontSize);
+
+                ranges.reverse().forEach(function(range, index){
+                    // Create point symbol
+                    var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+                    var point = pointSymbol.clone();
+                    var svgMain = point.find('svg').first();
+                    var iconSize = getMarkerSize(index);
+
+                    var size = mapModule.getMarkerIconSize(iconSize);
+                    svgMain.attr('width', size);
+                    svgMain.attr('height', size);
+                    x = (maxSize - size)/2;
+                    y = (maxSize - size);
+
+                    svgMain.attr('x', x);
+                    svgMain.attr('y', y);
+
+                    var circle = point.find('circle');
+                    circle.attr({
+                        'fill': '#' + color
+                    });
+
+                    svg.find('svg.symbols').append(point.html());
+
+                    // Create texts and lines
+                    var label = lineAndText.clone();
+                    var line = label.find('line');
+                    line.attr({
+                        x1: maxSize/2,
+                        y1: y+2,
+                        x2: maxSize * 1.1,
+                        y2: y+2
+                    });
+
+                    var text = label.find('text');
+                    text.parent().attr('font-size', fontSize);
+                    text.attr({
+                        x: maxSize * 1.105,
+                        y: y + 7
+                    });
+                    text.html(range);
+
+                    svg.find('svg.texts').append(label.html());
+                });
+
+                block.append(svg);
+                legend.append(block);
+                return legend;
         },
         /**
          * Validates and normalizes options
