@@ -279,22 +279,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
         });
     },
 
-    getLegend: function(classification, classificationOpts, colors) {
-        if(classificationOpts.mapStyle === 'points') {
-            var legend = jQuery('<div class="statsgrid-legend"></div>');
+    _getPointsLegend: function(classification, classificationOpts, colors){
+        var legend = jQuery('<div class="statsgrid-legend"></div>');
             var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
             var ranges = classification.ranges;
-            var svg = jQuery('<div><svg xmlns="http://www.w3.org/2000/svg">'+
-                '   <svg class="symbols"></svg>'+
-                '   <svg class="texts"></svg>'+
-                '</svg></div>');
-
-
-            var pointSymbol = jQuery('<div><svg viewBox="0 0 64 64">'+
-                '   <svg width="64" height="64" x="0" y="0">'+
-                '       <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+            var svg = jQuery('<div>'+
+                '   <svg xmlns="http://www.w3.org/2000/svg">'+
+                '       <svg class="symbols"></svg>'+
+                '       <svg class="texts"></svg>'+
                 '   </svg>'+
-            '</svg></div>');
+                '</div>');
+
+
+            var pointSymbol = jQuery('<div>'+
+                '   <svg viewBox="0 0 64 64">'+
+                '       <svg width="64" height="64" x="0" y="0">'+
+                '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+                '       </svg>'+
+                '   </svg>'+
+                '</div>');
 
             var lineAndText = jQuery('<div>'+
                 '   <svg>'+
@@ -302,7 +305,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 '           <svg>'+
                 '               <line stroke="#000000" stroke-width="1"></line>'+
                 '           </svg>'+
-                '           <svg font-size="10">'+
+                '           <svg>'+
                 '               <text fill="#000000"></text>'+
                 '           </svg>'+
                 '       </g>'+
@@ -319,13 +322,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 var iconSize = null;
                 var min = classificationOpts.min;
                 var max = classificationOpts.max;
+                var count = classificationOpts.count;
                 var step = (max-min) / ranges.length;
                 if(min && max) {
-                    iconSize = max - step * index;
+                    iconSize = (max - step * index);
                 }
                 return iconSize;
             };
             var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
+            var fontSize = 10;
+
+            svg.find('svg').first().attr('height', maxSize + fontSize);
+            svg.find('svg.symbols').attr('y', fontSize);
+            svg.find('svg.texts').attr('y', fontSize);
+            svg.find('svg.texts').attr('height', maxSize + fontSize);
+
             ranges.reverse().forEach(function(range, index){
                 // Create point symbol
                 var color = colors[0];
@@ -333,6 +344,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 var point = pointSymbol.clone();
                 var svgMain = point.find('svg').first();
                 var iconSize = getMarkerSize(index);
+
                 var size = mapModule.getMarkerIconSize(iconSize);
                 svgMain.attr('width', size);
                 svgMain.attr('height', size);
@@ -355,9 +367,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
                 line.attr({
                     x1: maxSize/2,
                     y1: y+2,
-                    x2: maxSize * 0.9,
+                    x2: maxSize * 1.1,
                     y2: y+2
                 });
+
+                var text = label.find('text');
+                text.parent().attr('font-size', fontSize);
+                text.attr({
+                    x: maxSize * 1.105,
+                    y: y + 7
+                });
+                text.html(range);
 
                 svg.find('svg.texts').append(label.html());
             });
@@ -365,7 +385,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             block.append(svg);
             legend.append(block);
             return legend;
+    },
+
+    getLegend: function(classification, classificationOpts, colors) {
+        // Point legend
+        if(classificationOpts.mapStyle === 'points') {
+            return this._getPointsLegend(classification, classificationOpts, colors);
         }
+
+        // Choropleth  legend
         return classification.createLegend(colors);
     },
 

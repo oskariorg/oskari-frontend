@@ -157,11 +157,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @param  {String} type Colorset type
          * @return {Object} with keys min and max { min : 2, max : 9 }
          */
-        getRange: function(type) {
+        getRange: function(type, mapStyle) {
             var value = {
                 min : 2,
                 max : 2
             };
+
+            if(mapStyle === 'points') {
+                return {
+                    min: 2,
+                    max: 7
+                };
+            }
             this.colorsets.forEach(function(item) {
                 if(item.type !== type) {
                     return;

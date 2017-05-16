@@ -112,8 +112,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._element = null;
     this._rangeSlider = {
         min: 1,
-        max: 11,
-        defaultValues: [1,11],
+        max: 8,
+        defaultValues: [1,8],
         step: 1,
         element: null
     };
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         me._element.find('select.method').val(classification.method);
 
-        var amountRange = service.getColorService().getRange(classification.type);
+        var amountRange = service.getColorService().getRange(classification.type, mapStyle);
         // TODO: handle missing data: if we have data for 3 regions count can be 2.
         // If we have data for 2 regions, no classification can be done.
         var amount = me._element.find('select.amount-class');
@@ -174,6 +174,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             amount.append(op);
         }
         me._element.find('select.amount-class').val(classification.count);
+
         me._element.find('select.classify-mode').val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
         if(classification.reverseColors) {
@@ -211,10 +212,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             }
 
         });
-
         var min = classification.min || me._rangeSlider.defaultValues[0];
         var max = classification.max || me._rangeSlider.defaultValues[1];
+
+        if(max-min<classification.count) {
+            min = me._rangeSlider.defaultValues[0];
+            max = me._rangeSlider.defaultValues[1];
+        }
         me._rangeSlider.element.slider('values', [min,max]);
+        me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
 
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
     },
@@ -284,9 +290,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                 max: me._rangeSlider.max,
                 step:me._rangeSlider.step,
                 range: true,
-                values: me._rangeSlider.defaultValues,
+                values: [me._rangeSlider.defaultValues[0],me._rangeSlider.defaultValues[1]],
                 slide: function (event, ui) {
+                    var min = ui.values[0];
+                    var max = ui.values[1];
+                    var el = jQuery(this);
+                    var count = (!isNaN(el.attr('data-count'))) ? parseFloat(el.attr('data-count')) : 2;
 
+                    if(max-min >= count) {
+                        return true;
+                    }
+                    return false;
                 },
                 stop: function (event, ui) {
                     updateClassification();

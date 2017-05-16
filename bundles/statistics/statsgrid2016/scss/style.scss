@@ -345,7 +345,7 @@ div.oskari-flyoutcontent{
 
 .statsgrid-legend-container {
     background-color: #FFFFFF;
-    width: 200px;
+    width: 300px;
     font-size: 12px;
 
     >div.header {
@@ -421,21 +421,21 @@ div.oskari-flyoutcontent{
             }
 
             .point-size {
-                width: 90%;
                 .minmaxlabels {
                     .min {
                         float:left;
                     }
                     .max {
                         float:right;
+                        margin-right: 4%;
                     }
                     .clear {
                         clear:both;
                     }
                 }
                 .point-range {
-                    width: 150px;
-                    background-image: url(../images/opacity_slider.png);
+                    width: 90%;
+                    background-image: url(../images/opacity_slider_long.png);
                     background-repeat: no-repeat;
                 }
             }

@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             // precision is an integer between 0-20. Will be computed automatically by geostats if no value is set
             //opts.precision = opts.precision || 1;
-            var range = this._colorService.getRange(opts.type);
+            var range = this._colorService.getRange(opts.type, opts.mapStyle);
             if(opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups
                 throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
