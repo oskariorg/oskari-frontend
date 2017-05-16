@@ -47,20 +47,20 @@ Oskari.clazz.define('Oskari.mapping.mapstats.AbstractStatsLayerPlugin',
         _createPluginEventHandlers: function () {
             return {
                 'StatsGrid.RegionsetChangedEvent' : function (event) {
-                    //this.handleRegionsetChanged(event.getRegionset());
+                    this.handleRegionsetChanged(event.getRegionset());
                 },
                 'StatsGrid.ClassificationChangedEvent': function (event) {
-                    //this.renderActiveIndicator();
+                    this.renderActiveIndicator();
                 },
                 'StatsGrid.ActiveIndicatorChangedEvent' : function (event) {
-                    /*var ind = event.getCurrent();
+                    var ind = event.getCurrent();
                     if(!ind) {
                         // last indicator was removed -> no active indicators
                         this.handleIndicatorRemoved();
                     } else {
                         // active indicator changed -> update map
                         this.handleIndicatorChanged(ind.datasource, ind.indicator, ind.selections);
-                    }*/
+                    }
                 }
             };
         },
