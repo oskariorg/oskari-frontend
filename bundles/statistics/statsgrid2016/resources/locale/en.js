@@ -111,8 +111,8 @@ Oskari.registerLocalization(
             "classifyFieldsTitle": "Classification values",
             "map": {
                 "mapStyle": "Map style",
-                "choropleth": "choropleth map",
-                "points": "points",
+                "choropleth": "Choropleth map",
+                "points": "Points",
                 "pointSize": "Point size",
                 "min": "Minimum",
                 "max": "Maximum",

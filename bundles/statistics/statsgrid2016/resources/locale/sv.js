@@ -111,8 +111,8 @@ Oskari.registerLocalization(
             "classifyFieldsTitle": "Classification values",
             "map": {
                 "mapStyle": "Kartans stil",
-                "choropleth": "koropletkarta",
-                "points": "punkterna",
+                "choropleth": "Koropletkarta",
+                "points": "Punkterna",
                 "pointSize": "Punktens storlek",
                 "min": "Minimum",
                 "max": "Maximum",
