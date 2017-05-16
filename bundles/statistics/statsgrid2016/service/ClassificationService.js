@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 var pointSymbol = jQuery('<div>'+
                     '   <svg viewBox="0 0 64 64">'+
                     '       <svg width="64" height="64" x="0" y="0">'+
-                    '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"/>'+
+                    '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>'+
                     '       </svg>'+
                     '   </svg>'+
                     '</div>');
@@ -192,9 +192,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     '       <g>'+
                     '           <svg>'+
                     '               <line stroke="#000000" stroke-width="1"></line>'+
-                    '           </svg>'+
-                    '           <svg>'+
-                    '               <text fill="#000000"></text>'+
                     '           </svg>'+
                     '       </g>'+
                     '   </svg>'+
@@ -258,14 +255,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         y2: y+2
                     });
 
-                    var text = label.find('text');
-                    text.parent().attr('font-size', fontSize);
-                    text.attr({
+                    var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + range + '</text></svg>');
+                    text.find('text').attr({
                         x: maxSize * 1.105,
                         y: y + 7
                     });
-                    text.html(range);
-
+                    label.find('g').append(text);
                     svg.find('svg.texts').append(label.html());
                 });
 
