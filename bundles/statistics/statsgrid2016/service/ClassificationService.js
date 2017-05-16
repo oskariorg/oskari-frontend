@@ -158,7 +158,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             response.createLegend = function(colors, title) {
                 // Point legend
                 if(opts.mapStyle === 'points') {
-                    return me._getPointsLegend(stats.ranges, opts, colors[0]);
+                    stats.doCount();
+                    var counter = stats.counter;
+                    return me._getPointsLegend(stats.ranges, opts, colors[0], counter);
                 }
 
                 // Choropleth  legend
@@ -168,7 +170,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             return response;
         },
-        _getPointsLegend: function(ranges, opts, color){
+        _getPointsLegend: function(ranges, opts, color, counter){
             var legend = jQuery('<div class="statsgrid-legend"></div>');
                 var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
                 var svg = jQuery('<div>'+
@@ -250,12 +252,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     var line = label.find('line');
                     line.attr({
                         x1: maxSize/2,
-                        y1: y+2,
+                        y1: y+1.5,
                         x2: maxSize * 1.1,
-                        y2: y+2
+                        y2: y+1.5
                     });
 
-                    var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + range + '</text></svg>');
+                    var count = counter[index];
+                    var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + range + '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
                     text.find('text').attr({
                         x: maxSize * 1.105,
                         y: y + 7
