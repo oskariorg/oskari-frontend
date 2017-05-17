@@ -158,7 +158,7 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 ol2 mapmodule now support fill.color -property when getting style.
 
-ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color. Also own SVG image handles opacity right.
 
 ´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 
