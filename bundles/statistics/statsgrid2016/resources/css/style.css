@@ -217,7 +217,7 @@ div.oskari-flyoutcontent.statsgrid {
     margin: 0;
     height: auto;
     padding: 6px;
-    width: 100%;
+    width: auto;
     font-weight: bold; }
     .statsgrid-legend-container > div.header div.title {
       font-size: 14px; }
