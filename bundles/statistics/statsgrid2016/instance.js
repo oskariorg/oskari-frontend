@@ -39,7 +39,10 @@ Oskari.clazz.define(
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
-            if(conf && conf.vectorViewer) {
+
+            // Check if vector is configurated
+            // If it is set map modes to support also vector
+            if(conf && conf.vectorViewer === true) {
                 me.statsService.setMapModes(['wms','vector']);
             }
             statsService.addDatasource(conf.sources);
@@ -65,8 +68,9 @@ Oskari.clazz.define(
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
 
-            if(conf && conf.vectorViewer) {
-                me.statsService.setMapModes(['choropleth','points']);
+            // Check if configurated to show indicators on the map for vector format
+            if(conf && conf.vectorViewer === true) {
+                // regionsetViewer creation need be there because of start order
                 this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
         },
