@@ -217,7 +217,7 @@ div.oskari-flyoutcontent.statsgrid {
     margin: 0;
     height: auto;
     padding: 6px;
-    width: 94%;
+    width: 100%;
     font-weight: bold; }
     .statsgrid-legend-container > div.header div.title {
       font-size: 14px; }
@@ -317,5 +317,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
       background-image: url("../images/table_light.png"); }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
     clear: both; }
+
+.statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
+  overflow: hidden; }
 
 /*# sourceMappingURL=style.css.map */

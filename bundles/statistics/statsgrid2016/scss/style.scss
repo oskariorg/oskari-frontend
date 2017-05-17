@@ -353,7 +353,7 @@ div.oskari-flyoutcontent{
         margin: 0;
         height:auto;
         padding: 6px;
-        width: 94%;
+        width: 100%;
         font-weight: bold;
 
         div.title {
@@ -519,4 +519,11 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         clear: both;
     }
 
+}
+
+
+.statsgrid-legend-flyout {
+    .oskari-flyoutcontentcontainer{
+        overflow:hidden;
+    }
 }
