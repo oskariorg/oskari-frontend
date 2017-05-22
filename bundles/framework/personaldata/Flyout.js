@@ -55,8 +55,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 tabsLocalization = me.instance.getLocalization('tabs');
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
-                "myViews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance, tabsLocalization.myviews),
-                "publishedMaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance, tabsLocalization.publishedmaps),
+                "myviews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance, tabsLocalization.myviews),
+                "publishedmaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance, tabsLocalization.publishedmaps),
                 // TODO should we pass conf to accounttab here?
                 "account": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance, tabsLocalization.account)
             };
@@ -153,6 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     tab = this.tabsData[tabId];
                     panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                     panel.setTitle(tab.getTitle());
+                    panel.setId(tabId);
                     tab.addTabContent(panel.getContainer());
 
                     // binds tab to events
@@ -175,8 +176,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 return;
             }
             panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-            panel.setTitle(item.title, item.id);
+            panel.setTitle(item.title);
             panel.setContent(item.content);
+            panel.setId(item.id);
             this.tabsContainer.addPanel(panel, item.first);
         }
     }, {

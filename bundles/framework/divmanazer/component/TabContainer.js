@@ -77,7 +77,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer.children().eq(index-1).after(header);
             }
 
-            panel.insertAt(this.ui.find('div.tabsContentItem'),index);
             this.panels.splice(index,0,panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -142,9 +141,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             headerContainer.find('li').removeClass('active');
             // only direct children since we can have another tabcontainer inside
             tabs = this.ui.children().children('div.tab-content');
-            tabs.hide();
+            tabs.detach();
             panel.getHeader().addClass('active');
-            panel.getContainer().show();
+            panel.insertTo(this.ui.find('div.tabsContent'));
             panel.handleSelection(true);
             // notify listeners
             for (i = 0; i < this.tabChangeListeners.length; i += 1) {

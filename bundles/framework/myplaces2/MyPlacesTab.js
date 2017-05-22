@@ -112,12 +112,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
 
                     var editLink = this.linkTemplate.clone();
                     editLink.addClass('categoryOp');
+                    editLink.addClass('edit');
                     editLink.append(this.loc.editCategory);
                     editLink.bind('click', editLinkClosure(id));
                     panel.getContainer().append(editLink);
 
                     var deleteLink = this.linkTemplate.clone();
                     deleteLink.addClass('categoryOp');
+                    deleteLink.addClass('delete');
                     deleteLink.append(this.loc.deleteCategory);
                     deleteLink.bind('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
@@ -244,7 +246,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setId(id);
             panel.setTitle(category.getName());
-
             panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
             panel.grid.setVisibleFields(visibleFields);
