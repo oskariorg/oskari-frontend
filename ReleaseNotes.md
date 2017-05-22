@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.42.1
+
+### divmanazer Grid
+
+Programmatic selection of a row no longer triggers selection listeners.
+This fixes an issue where selecting a WFS-feature triggered an infinite loop in featuredata flyout.
+
 ## 1.42.0
 
 ### search UI
@@ -8,7 +15,7 @@ The "municipality" field label in results table has been replaced with a more ge
 
 ### Map legend
 
-It is now possible to publish maps with legend functionality (using maplegend bundle). A new tool is shown on the map when maplegend is started on an embedded map.
+A new plugin for maplegend which is available when publishing maps with legend data. Does not appear in publisher if no suitable layers are found.
 
 ### DrawPlugin.ol2
 
@@ -60,9 +67,22 @@ Can be activated with following bundle config (not production ready yet):
         vectorViewer: true
     }
 
-#### grid
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
 
-``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+### divmanazer grid component
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols is the number of columns to show before paging the content. You can also define pagingHandler callback function. The callback function is called when page is being changed and receives the title element as first parameter and as a second parameter an object describing the paging status:
+
+```
+ {
+    visible: {
+        start:1,
+        end:3
+    },
+    count:3
+}
+```
+Where "visible" tells the indexes of the visible columns and "count" is the total number of columns available.
 
 For example:
 ```javascript
@@ -124,19 +144,23 @@ getScreenshot function is now asynchronous and responds after all tiles have bee
 
 Before:
 
+```javascript
   var imageData = mapModule.getScreenshot();
-
+```
 Now:
 
+```javascript
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
   });
-
+```
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
 ol2 mapmodule now support fill.color -property when getting style.
 
-ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color. Also own SVG image handles opacity right.
+
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 
 ### publisher2
 

@@ -274,12 +274,48 @@ Oskari.clazz.define(
                 tpl.find('h4').html(group.name);
                 group.items.forEach(function(item) {
                     var itemTpl = jQuery('<div></div>');
-                    itemTpl.append(item.name + ' - ' + item.source);
+                    itemTpl.append(item.name);
+                    itemTpl.append(me.__formatItemSources(item.source));
                     tpl.append(itemTpl);
                 });
                 content.append(tpl);
             });
             return content;
+        },
+        /**
+         * The parameter can be undefined, string, object with url and name keys or array of such objects.
+         * @param  {String|Object|Object[]} src datasources for item to show on the UI
+         * @return {String|jQuery} appendable presentation of datasources for an UI item.
+         */
+        __formatItemSources : function(src) {
+            if(!src) {
+                return '';
+            }
+            var SEPARATOR = ' - ';
+            var formatSrc = function(item) {
+                if(typeof item ==='string') {
+                    return item;
+                }
+                if(!item.url) {
+                    return item.name;
+                }
+                var link = jQuery('<a target="_blank"></a>');
+                link.attr('href', item.url);
+                link.append(item.name);
+                return link;
+            }
+            var tpl = jQuery('<span></span>');
+            if(typeof src.forEach !== 'function') {
+                tpl.append(SEPARATOR);
+                tpl.append(formatSrc(src));
+                return tpl;
+            }
+
+            src.forEach(function(item) {
+                tpl.append(SEPARATOR);
+                tpl.append(formatSrc(item));
+            })
+            return tpl;
         },
         /**
          * @method _openDataSourcesDialog

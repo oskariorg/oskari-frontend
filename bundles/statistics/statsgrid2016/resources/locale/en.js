@@ -108,7 +108,18 @@ Oskari.registerLocalization(
                 "discontinuous": "Discrete"
             },
             "editClassifyTitle": "Edit classification",
-            "classifyFieldsTitle": "Classification values"
+            "classifyFieldsTitle": "Classification values",
+            "map": {
+                "mapStyle": "Map style",
+                "choropleth": "Choropleth map",
+                "points": "Points",
+                "pointSize": "Point size",
+                "min": "Minimum",
+                "max": "Maximum",
+                "color": "Color",
+                "transparency": "Transparency",
+                "showValues": "Show values"
+            }
         },
         "colorset": {
             "button": "Colors",

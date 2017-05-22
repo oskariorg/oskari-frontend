@@ -108,7 +108,18 @@ Oskari.registerLocalization(
                 "discontinuous": "Separat"
             },
             "editClassifyTitle": "Edit classification",
-            "classifyFieldsTitle": "Classification values"
+            "classifyFieldsTitle": "Classification values",
+            "map": {
+                "mapStyle": "Kartans stil",
+                "choropleth": "Koropletkarta",
+                "points": "Punkterna",
+                "pointSize": "Punktens storlek",
+                "min": "Minimum",
+                "max": "Maximum",
+                "color": "Färg",
+                "transparency": "Genomskinlighet",
+                "showValues": "Visa värdena"
+            }
         },
         "colorset": {
             "button": "Färger",

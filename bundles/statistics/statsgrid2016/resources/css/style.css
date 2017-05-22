@@ -210,14 +210,14 @@ div.oskari-flyoutcontent.statsgrid {
 
 .statsgrid-legend-container {
   background-color: #FFFFFF;
-  width: 200px;
+  width: 300px;
   font-size: 12px; }
   .statsgrid-legend-container > div.header {
     background-color: #fdf8d9;
     margin: 0;
     height: auto;
     padding: 6px;
-    width: 94%;
+    width: auto;
     font-weight: bold; }
     .statsgrid-legend-container > div.header div.title {
       font-size: 14px; }
@@ -257,8 +257,27 @@ div.oskari-flyoutcontent.statsgrid {
       margin-left: 0;
       width: 95%;
       padding: 4px 5px; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .min {
+      float: left; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .max {
+      float: right;
+      margin-right: 4%; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .minmaxlabels .clear {
+      clear: both; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .point-size .point-range {
+      width: 90%;
+      background-image: url(../images/opacity_slider_long.png);
+      background-repeat: no-repeat; }
     .statsgrid-legend-container > .accordion .accordion_panel .oskari-color-selection {
       z-index: 10; }
+  .statsgrid-legend-container .statsgrid-svg {
+    float: left; }
+  .statsgrid-legend-container .statsgrid-range {
+    float: left; }
+  .statsgrid-legend-container .statsgrid-counter {
+    float: left; }
+  .statsgrid-legend-container .clear {
+    clear: both; }
 
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend .popup-body > div.content {
@@ -298,5 +317,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
       background-image: url("../images/table_light.png"); }
   div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-published-toggle-buttons .clear {
     clear: both; }
+
+.statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
+  overflow: hidden; }
 
 /*# sourceMappingURL=style.css.map */

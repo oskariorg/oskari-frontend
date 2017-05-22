@@ -79,6 +79,13 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig();
             if (conf.layers) {
+                var clickHandler = function(e) {
+                    // clicking on map, check if feature is hit
+                    if (e.target && e.target._featureId) {
+                        me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                    }
+                    return true;
+                };
                 for (var i = 0; i < conf.layers.length; i++) {
                     var layer = conf.layers[i];
                     var layerId = layer.id;
@@ -90,13 +97,7 @@ Oskari.clazz.define(
 
                     var opacity = 100;
                     var olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + layerId);
-                    olLayer.events.register('click', this, function(e) {
-                        // clicking on map, check if feature is hit
-                        if (e.target && e.target._featureId) {
-                            me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
-                        }
-                        return true;
-                    });
+                    olLayer.events.register('click', this, clickHandler);
                     olLayer.events.fallThrough = true;
                     olLayer.setOpacity(opacity);
 
@@ -314,7 +315,6 @@ Oskari.clazz.define(
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
                 olLayer,
-                layer,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 featureInstance,
                 isOlLayerAdded = true,
@@ -354,9 +354,6 @@ Oskari.clazz.define(
             olLayer = me._map.getLayersByName(me._olLayerPrefix + options.layerId)[0];
             if (!olLayer) {
                 var opacity = 100;
-                if (layer) {
-                    opacity = layer.getOpacity() / 100;
-                }
                 olLayer = new OpenLayers.Layer.Vector(me._olLayerPrefix + options.layerId);
 
                 olLayer.events.register('click', this, function(e) {
@@ -429,15 +426,6 @@ Oskari.clazz.define(
                 me._layers[options.layerId] = olLayer;
             }
 
-            if (layer && layer !== null) {
-                mapLayerService.addLayer(layer, false);
-
-                window.setTimeout(function() {
-                        var request = me._sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
-                        me._sandbox.request(me.getName(), request);
-                    },
-                    50);
-            }
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
             var sandbox = this.getSandbox();
