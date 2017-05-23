@@ -256,7 +256,7 @@ Oskari.clazz.define(
             var title = this.tab.getTitle(),
                 content = this.tab.getContent(),
                 first = true,
-                id = 'oskari_myplaces2_tabpanel_header',
+                id = me.idPrefix,
                 reqName = 'PersonalData.AddTabRequest',
                 reqBuilder = sandbox.getRequestBuilder(reqName),
                 req = reqBuilder(title, content, first, id);

@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             headerContainer.append(header);
             panel.setHeader(header);
 
-            panel.insertTo(this.ui.find('div.tabsContent'));
             this.panels.push(panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -113,15 +112,14 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                     }
                 }
             }
-            var tabs = this.ui.children().children('div.tab-content');
-            tabs.hide();
+            this.ui.find('div.tab-content').detach();
+            panel.insertTo(this.ui.find('div.tabsContent'));
 
             var headerContainer = this.ui.find('ul li select');
             var options = headerContainer.find('option');
             options.removeAttr('selected');
             var panelIndex = this._getPanelIndex(panel);
             jQuery(options[panelIndex]).attr('selected', 'selected');
-            panel.getContainer().show();
             // notify listeners
             for (i = 0; i < this.tabChangeListeners.length; i++) {
                 this.tabChangeListeners[i](previousPanel, panel);

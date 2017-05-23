@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.43.0
+
+### tab container DOM handling
+
+Tabs that are not active don't have any content. The content is added when tab turns active.
+
 ## 1.42.1
 
 ### divmanazer Grid

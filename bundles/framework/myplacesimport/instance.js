@@ -176,7 +176,7 @@ function () {
             addTabReq;
 
         if (addTabReqBuilder) {
-            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent());
+            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent(), false, 'userlayers');
             sandbox.request(this, addTabReq);
         }
         return userLayersTab;
