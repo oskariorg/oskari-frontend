@@ -38,6 +38,7 @@ Oskari.clazz.define(
         getService : function() {
             if(!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
+
                 if(this._service) {
                     var me = this;
                     // init group for layers
@@ -367,6 +368,39 @@ Oskari.clazz.define(
                     'source' : indicators[id].organization
                 });
             });
+        },
+        /**
+         * @method addContentFromService
+         * Adds functionality to plugin
+         *
+         * @param {Object} content
+         *
+         */
+        addContentFromService: function (content, obj) {
+          var template = jQuery(".logoplugin");
+          template.append(content);
+          this.extended = undefined;
+          content.on("click", function() {
+            if(typeof this.extended !== 'undefined') {
+              this.extended.close(true);
+              this.extended = undefined;
+              return;
+            }
+            var me = this;
+            var popupTitle = obj.title;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            this.extended = dialog;
+
+            var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+            closeButton.setHandler(function () {
+                dialog.close(true);
+            });
+            var content = jQuery('<div><a target="_blank" href="'+obj.link+'">'+obj.linkTitle+'</a></div>');
+            dialog.show(popupTitle, content, [closeButton]);
+
+            var target = jQuery('div.about');
+            dialog.moveTo(target, 'top');
+          });
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
