@@ -17,6 +17,7 @@
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+        this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
 
         // pushed from instance
         this.datasources = [];
@@ -69,6 +70,9 @@
         },
         getColorService : function() {
             return this.colors;
+        },
+        getErrorService : function() {
+            return this.error;
         },
         addDatasource : function(ds) {
             if(!ds) {
@@ -297,6 +301,10 @@
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
+                    pResp = {
+                        complete: true,
+                        indicators: []
+                    };
                     me.cache.respondToQueue(cacheKey, null, pResp);
                     if(!pResp.complete) {
                         // wasn't complete dataset - remove from cache and poll for more
