@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
     indicatorSelected : function(el, datasrc, indId, elements) {
         var me = this;
         var locale = me.instance.getLocalization();
+        var errorService = me.service.getErrorService();
         var panelLoc = locale.panels.newSearch;
         elements = elements || {};
 
@@ -62,6 +63,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             }
             if(err) {
                 // notify error!!
+                errorService.show(locale.errors.title,locale.errors.indicatorMetadataError);
                 return;
             }
 
@@ -104,6 +106,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
                 selectContainer.push(select);
             });
 
+            if(indicator.regionsets.length === 0) {
+                errorService.show(locale.errors.title,locale.errors.regionsetsIsEmpty);
+            }
             var regionSelect = me.regionSelector.create(indicator.regionsets);
             me.regionSelector.setWidth(205);
             // try to select the current regionset as default selection
