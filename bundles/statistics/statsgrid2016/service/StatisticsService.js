@@ -301,10 +301,6 @@
                 },
                 url: me.sandbox.getAjaxUrl('GetIndicatorList'),
                 success: function (pResp) {
-                    pResp = {
-                        complete: true,
-                        indicators: []
-                    };
                     me.cache.respondToQueue(cacheKey, null, pResp);
                     if(!pResp.complete) {
                         // wasn't complete dataset - remove from cache and poll for more
