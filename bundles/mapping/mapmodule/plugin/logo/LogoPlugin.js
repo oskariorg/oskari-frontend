@@ -30,7 +30,8 @@ Oskari.clazz.define(
                 '</div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
-            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>')
+            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
+            extend: jQuery('<div style="display: inline-block"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -376,18 +377,22 @@ Oskari.clazz.define(
          * @param {Object} content
          *
          */
-        addContentFromService: function (content, obj) {
+        addContentFromService: function (links) {
           var template = jQuery(".logoplugin");
-          template.append(content);
+          var extend = this.templates.extend.clone();
+          extend.addClass('about');
+          extend.text("About");
+          template.append(extend);
           this.extended = undefined;
-          content.on("click", function() {
+          extend.on("click", function() {
             if(typeof this.extended !== 'undefined') {
               this.extended.close(true);
               this.extended = undefined;
               return;
             }
             var me = this;
-            var popupTitle = obj.title;
+            var popupTitle = "About";
+            var content = jQuery('<div></div>');
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.extended = dialog;
 
@@ -395,7 +400,10 @@ Oskari.clazz.define(
             closeButton.setHandler(function () {
                 dialog.close(true);
             });
-            var content = jQuery('<div><a target="_blank" href="'+obj.link+'">'+obj.linkTitle+'</a></div>');
+            links.forEach(function(link){
+              var anchorLink = jQuery('<div><a target="blank" href="'+link.link+'">'+link.title+'</a></div>');
+              content.append(anchorLink);
+            })
             dialog.show(popupTitle, content, [closeButton]);
 
             var target = jQuery('div.about');

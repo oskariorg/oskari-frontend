@@ -6,9 +6,8 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
  * @method create called automatically on construction
  * @static
  */
-function(sandbox, link) {
+function(link) {
     this._link = link;
-    this._sandbox = sandbox;
     this._plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin');
 }, {
   __name: "map.logo.service",
@@ -19,13 +18,8 @@ function(sandbox, link) {
   getName: function() {
       return this.__name;
   },
-  extend: function(div) {
-    var extend = {
-      link: this._link.link,
-      linkTitle: this._link.title,
-      title: 'About'
-    }
-    this._plugin.addContentFromService(div, extend);
+  extend: function() {
+    this._plugin.addContentFromService(this._link);
   },
   /**
    * Initializes the service (does nothing atm).
