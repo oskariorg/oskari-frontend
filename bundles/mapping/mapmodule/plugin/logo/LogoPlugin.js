@@ -378,6 +378,7 @@ Oskari.clazz.define(
          *
          */
         addContentFromService: function (info, links) {
+          var me = this;
           var template = jQuery(".logoplugin");
           var extend = this.templates.extend.clone();
           extend.addClass(info.toLowerCase());
@@ -398,7 +399,8 @@ Oskari.clazz.define(
 
             var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             closeButton.setHandler(function () {
-                dialog.close(true);
+                me.extended.close(true);
+                me.extended = undefined;
             });
             links.forEach(function(link){
               var anchorLink = jQuery('<div><a target="blank" href="'+link.link+'">'+link.title+'</a></div>');
