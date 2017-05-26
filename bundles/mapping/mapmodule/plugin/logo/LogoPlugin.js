@@ -31,7 +31,7 @@ Oskari.clazz.define(
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
-            extend: jQuery('<div style="display: inline-block"><a href="#"></a></div>')
+            extend: jQuery('<div style="display: inline-block; margin: 5px"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -377,11 +377,11 @@ Oskari.clazz.define(
          * @param {Object} content
          *
          */
-        addContentFromService: function (links) {
+        addContentFromService: function (info, links) {
           var template = jQuery(".logoplugin");
           var extend = this.templates.extend.clone();
-          extend.addClass('about');
-          extend.text("About");
+          extend.addClass(info.toLowerCase());
+          extend.find('a').text(info);
           template.append(extend);
           this.extended = undefined;
           extend.on("click", function() {
@@ -391,7 +391,7 @@ Oskari.clazz.define(
               return;
             }
             var me = this;
-            var popupTitle = "About";
+            var popupTitle = info;
             var content = jQuery('<div></div>');
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.extended = dialog;
@@ -406,7 +406,7 @@ Oskari.clazz.define(
             })
             dialog.show(popupTitle, content, [closeButton]);
 
-            var target = jQuery('div.about');
+            var target = jQuery('div.'+info.toLowerCase()+'');
             dialog.moveTo(target, 'top');
           });
         }

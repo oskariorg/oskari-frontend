@@ -4,6 +4,7 @@
 This service can be used to extend the Logo-plugin.
 
 ```javascript
+var info = 'About'
 var link = [
   {
     link: 'http://arctic-sdi.org/wp-content/uploads/2016/09/fact-sheet-copy-Sept-2016.pdf',
@@ -15,6 +16,6 @@ var link = [
   }
 ];
 
-var logoService = Oskari.clazz.create('Oskari.map.LogoPluginService', link);
+var logoService = Oskari.clazz.create('Oskari.map.LogoPluginService', info, link);
 logoService.extend();
 ```
