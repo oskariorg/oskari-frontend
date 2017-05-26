@@ -379,10 +379,10 @@ Oskari.clazz.define(
          */
         updateExtended: function (el) {
           var me = this;
-          if(!el && !this.getElement()) {
+          var template = el || this.getElement();
+          if(!template) {
             return;
           }
-          var template = el;
           var labels = this._extendService.getLabels();
 
           labels.forEach( function( link ) {
