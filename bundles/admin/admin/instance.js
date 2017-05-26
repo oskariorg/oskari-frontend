@@ -11,13 +11,6 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
      */
     function () {
         this._dialog = null;
-        this.requestHandlers = {
-            'Admin.AddTabRequest': Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.admin.request.AddTabRequestHandler',
-                    sandbox,
-                    this.plugins['Oskari.userinterface.Flyout']
-                )
-        };
     }, {
         /**
          * Shows message dialog. Closes any previous dialog.
