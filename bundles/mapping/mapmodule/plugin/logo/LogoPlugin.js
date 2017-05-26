@@ -62,13 +62,14 @@ Oskari.clazz.define(
             }
             return this._service;
         },
-        createExtendService: function() {
+        createExtendService: function(el) {
           var me = this;
+          var element = el;
           if(!this._extendService) {
               this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
           }
           this._extendService.on('change', function() {
-              me.updateExtended();
+              me.updateExtended(element);
           });
         },
         /**
@@ -145,8 +146,8 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
+            this.createExtendService(container);
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
-            this.createExtendService();
             this._createServiceLink(container);
 
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
@@ -218,6 +219,9 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 el = el || me.getElement();
 
+            if(!el || conf.hideDataSourceLink) {
+              return;
+            }
             var options = {
               id:'data-sources',
               callback: function(e) {
@@ -381,9 +385,12 @@ Oskari.clazz.define(
          * @param {Object} content
          *
          */
-        updateExtended: function () {
+        updateExtended: function (el) {
           var me = this;
-          var template = this.getElement();
+          if(!el || this.getElement()) {
+            return;
+          }
+          var template = el;
           var labels = this._extendService.getLabels();
 
           labels.forEach( function( link ) {
