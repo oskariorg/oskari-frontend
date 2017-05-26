@@ -54,7 +54,6 @@ Oskari.clazz.define(
                             'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                         });
                     });
-
                     // if service was created, add a change listener
                     this._service.on('change', function() {
                         me.updateDialog();
@@ -62,6 +61,15 @@ Oskari.clazz.define(
                 }
             }
             return this._service;
+        },
+        createExtendService: function() {
+          var me = this;
+          if(!this._extendService) {
+              this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
+          }
+          this._extendService.on('change', function() {
+              me.updateExtended();
+          });
         },
         /**
          * @method _createEventHandlers
@@ -138,6 +146,7 @@ Oskari.clazz.define(
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
+            this.createExtendService();
             this._createServiceLink(container);
 
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
@@ -186,21 +195,20 @@ Oskari.clazz.define(
             if(!el) {
                 return;
             }
-            var link = el.find('.terms a');
 
-            if (termsUrl) {
-                link.html(me._loc.terms);
-                link.attr('href', termsUrl);
-                link.click(function (evt) {
-                    evt.preventDefault();
-                    if (!me.inLayerToolsEditMode()) {
-                        window.open(termsUrl, '_blank');
-                    }
-                });
-                link.show();
-            } else {
-                link.hide();
-            }
+            var options = {
+              id:'terms',
+              callback: function (evt) {
+                  evt.preventDefault();
+                  if (!me.inLayerToolsEditMode()) {
+                      window.open(termsUrl, '_blank');
+                  }
+              }
+            };
+
+            me._extendService.addLabel(me._loc.terms, options);
+            me._extendService.trigger('change');
+
         },
 
         _createDataSourcesLink: function (el) {
@@ -208,26 +216,20 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 el = el || me.getElement();
 
-            if(!el) {
-                return;
-            }
-            var dataSources = el.find('.data-sources');
-
-            if (conf.hideDataSourceLink) {
-                dataSources.hide();
-            } else {
-                dataSources.show();
-                dataSources.find('a').html(me._loc.dataSources);
-                dataSources.unbind('click');
-                dataSources.click(function (e) {
-                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
-                        me._openDataSourcesDialog(e.target);
-                    } else if (me.dataSourcesDialog) {
-                        me.dataSourcesDialog.close(true);
-                        me.dataSourcesDialog = null;
-                    }
-                });
-            }
+            var options = {
+              id:'data-sources',
+              callback: function(e) {
+                if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
+                  me._openDataSourcesDialog(e.target);
+                } else if (me.dataSourcesDialog) {
+                  me.dataSourcesDialog.close(true);
+                  me.dataSourcesDialog = null;
+                }
+              }
+            };
+            
+            me._extendService.addLabel(me._loc.dataSources, options);
+            me._extendService.trigger('change');
         },
 
         /**
@@ -377,39 +379,20 @@ Oskari.clazz.define(
          * @param {Object} content
          *
          */
-        addContentFromService: function (info, links) {
+        updateExtended: function () {
           var me = this;
-          var template = jQuery(".logoplugin");
-          var extend = this.templates.extend.clone();
-          extend.addClass(info.toLowerCase());
-          extend.find('a').text(info);
-          template.append(extend);
-          this.extended = undefined;
-          extend.on("click", function() {
-            if(typeof this.extended !== 'undefined') {
-              this.extended.close(true);
-              this.extended = undefined;
-              return;
-            }
-            var me = this;
-            var popupTitle = info;
-            var content = jQuery('<div></div>');
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            this.extended = dialog;
+          var template = this.getElement();
+          var links = this._extendService.getLabels();
 
-            var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-            closeButton.setHandler(function () {
-                me.extended.close(true);
-                me.extended = undefined;
+          links.forEach( function( link ) {
+            var extend = me.templates.extend.clone();
+            extend.addClass(link.options.id.toLowerCase());
+            extend.find('a').text(link.title);
+            template.append(extend);
+            this.extended = undefined;
+            extend.on("click", function(e) {
+              var result = link.options.callback(e);
             });
-            links.forEach(function(link){
-              var anchorLink = jQuery('<div><a target="blank" href="'+link.link+'">'+link.title+'</a></div>');
-              content.append(anchorLink);
-            })
-            dialog.show(popupTitle, content, [closeButton]);
-
-            var target = jQuery('div.'+info.toLowerCase()+'');
-            dialog.moveTo(target, 'top');
           });
         }
     }, {

@@ -6,10 +6,18 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
  * @method create called automatically on construction
  * @static
  */
-function(info, link) {
-    this._info = info;
-    this._link = link;
-    this._plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin');
+function(sandbox) {
+  if(!sandbox) {
+      return null;
+  }
+  this.sandbox = sandbox;
+  var me = sandbox.getService(this.getQName());
+  if(me) {
+      return me;
+  }
+  this.labels = [];
+  sandbox.registerService(this);
+  Oskari.makeObservable(this);
 }, {
   __name: "map.logo.service",
   __qname : "Oskari.map.LogoPluginService",
@@ -19,16 +27,17 @@ function(info, link) {
   getName: function() {
       return this.__name;
   },
-  extend: function() {
-    this._plugin.addContentFromService(this._info, this._link);
+  getLabels: function() {
+    return this.labels;
   },
   /**
-   * Initializes the service (does nothing atm).
-   *
-   * @method init
+   * @method addLabel
+   * @param {String} title
+   * @param {Object} options {id, callback}
    */
-  init: function() {
-  },
+  addLabel: function( title, options) {
+    this.labels.push({ title: title, options: options });
+  }
 },{
     'protocol' : ['Oskari.framework.service.Service']
 });
