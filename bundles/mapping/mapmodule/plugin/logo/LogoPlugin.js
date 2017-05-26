@@ -64,7 +64,7 @@ Oskari.clazz.define(
         },
         createExtendService: function(el) {
           var me = this;
-          var element = el;
+          var element = el || this.getElement();
           if(!this._extendService) {
               this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
           }
@@ -153,7 +153,7 @@ Oskari.clazz.define(
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
             this._createTermsLink(termsUrl, container);
             this._createDataSourcesLink(container);
-
+            this._extendService.trigger("change");
             return container;
         },
 
@@ -208,7 +208,6 @@ Oskari.clazz.define(
               };
 
               me._extendService.addLabel(me._loc.terms, options);
-              me._extendService.trigger('change');
             } else {
               return;
             }
@@ -235,7 +234,6 @@ Oskari.clazz.define(
             };
 
             me._extendService.addLabel(me._loc.dataSources, options);
-            me._extendService.trigger('change');
         },
 
         /**
@@ -387,7 +385,7 @@ Oskari.clazz.define(
          */
         updateExtended: function (el) {
           var me = this;
-          if(!el || this.getElement()) {
+          if(!el && !this.getElement()) {
             return;
           }
           var template = el;
