@@ -195,20 +195,22 @@ Oskari.clazz.define(
             if(!el) {
                 return;
             }
+            if(termsUrl) {
+              var options = {
+                id:'terms',
+                callback: function (evt) {
+                    evt.preventDefault();
+                    if (!me.inLayerToolsEditMode()) {
+                        window.open(termsUrl, '_blank');
+                    }
+                }
+              };
 
-            var options = {
-              id:'terms',
-              callback: function (evt) {
-                  evt.preventDefault();
-                  if (!me.inLayerToolsEditMode()) {
-                      window.open(termsUrl, '_blank');
-                  }
-              }
-            };
-
-            me._extendService.addLabel(me._loc.terms, options);
-            me._extendService.trigger('change');
-
+              me._extendService.addLabel(me._loc.terms, options);
+              me._extendService.trigger('change');
+            } else {
+              return;
+            }
         },
 
         _createDataSourcesLink: function (el) {
@@ -216,9 +218,6 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 el = el || me.getElement();
 
-            if( conf.hideDataSourceLink ) {
-              return;
-            }
             var options = {
               id:'data-sources',
               callback: function(e) {
@@ -385,14 +384,13 @@ Oskari.clazz.define(
         updateExtended: function () {
           var me = this;
           var template = this.getElement();
-          var links = this._extendService.getLabels();
+          var labels = this._extendService.getLabels();
 
-          links.forEach( function( link ) {
+          labels.forEach( function( link ) {
             var extend = me.templates.extend.clone();
             extend.addClass(link.options.id.toLowerCase());
             extend.find('a').text(link.title);
             template.append(extend);
-            this.extended = undefined;
             extend.on("click", function(e) {
               var result = link.options.callback(e);
             });
