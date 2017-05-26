@@ -28,7 +28,9 @@ function(sandbox) {
       return this.__name;
   },
   getLabels: function() {
-    return this.labels;
+    var currentLabels = this.labels;
+    this.labels = [];
+    return currentLabels;
   },
   /**
    * @method addLabel
