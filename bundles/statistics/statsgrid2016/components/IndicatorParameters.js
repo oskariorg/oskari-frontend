@@ -117,6 +117,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function(
             // Add margin if there is selections
             if(indicator.selectors.length > 0) {
                 regionSelect.container.addClass('margintop');
+            } else {
+                errorService.show(locale.errors.title,locale.errors.indicatorMetadataIsEmpty);
             }
 
             if(elements.btn) {

@@ -131,6 +131,16 @@ Oskari.registerLocalization(
             "div": "Jakautuva",
             "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
             "cancel": "Peruuta"
+        },
+        "errors": {
+            "title": "Virhe",
+            "indicatorListError": "Virhe valitun aineiston indikaattorilistan haussa.",
+            "indicatorListIsEmpty": "Indikaattorilista on tyhjä.",
+            "indicatorMetadataError": "Virhe valitun indikaattorin sisältöjen haussa.",
+            "indicatorMetadataIsEmpty": "Indikaattorin valintoja ei saatu haettua.",
+            "regionsetsIsEmpty": "Indikaattorin aluevalintoja ei saatu haettua.",
+            "regionsDataError": "Virhe valitun aineiston tietojen haussa.",
+            "regionsDataIsEmpty": "Valitun aineiston tietoja ei saatu hauettua. "
         }
     }
 });

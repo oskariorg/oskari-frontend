@@ -49,6 +49,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     _handleRegionsetChanged: function(setId) {
         var currentRegion = this.getCurrentRegionset();
+        var locale = me.locale;
+        var errorService = me.service.getErrorService();
+
         if(!setId) {
             setId = this.getCurrentRegionset();
         }
@@ -66,7 +69,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.log.warn('Cannot get regions for wanted regionset='+setId);
                 me.spinner.stop();
                 // notify error!!
+                errorService.show(locale.errors.title,locale.errors.regionsDataError);
                 return;
+            }
+
+            if(regions.length === 0) {
+                errorService.show(locale.errors.title,locale.errors.regionsDataIsEmpty);
             }
             me.createModel(regions, function(model) {
                 me.updateModel(model, regions);

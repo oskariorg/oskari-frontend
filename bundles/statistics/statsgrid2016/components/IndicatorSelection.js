@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
                 me.spinner.stop();
 
                 if(result.indicators.length === 0) {
-                    errorService.show(locale.errors.title,locale.errors.indicatorMetadataIsEmpty);
+                    errorService.show(locale.errors.title,locale.errors.indicatorListIsEmpty);
                 }
             }
         });
