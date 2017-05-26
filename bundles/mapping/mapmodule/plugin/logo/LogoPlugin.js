@@ -19,15 +19,7 @@ Oskari.clazz.define(
         constLayerGroupId : 'layers',
         templates: {
             main :  jQuery(
-                '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
-                '  <div class="terms">' +
-                '    <a href="#" target="_blank"></a>' +
-                '  </div>' +
-                '  <div class="data-sources">' +
-                '    <a href="#"></a>' +
-                '  </div>' +
-                '</div>'
+                '<div class="mapplugin logoplugin"></div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
@@ -167,15 +159,17 @@ Oskari.clazz.define(
                 return;
             }
 
-            link = el.find('.icon');
-            link.unbind('click');
+            var options = {
+              id:'icon',
+              callback: function (event) {
+                  if (!me.inLayerToolsEditMode()) {
+                      linkParams = me.getSandbox().generateMapLinkParameters({});
+                      window.open(mapUrl + linkParams, '_blank');
+                  }
+              }
+            };
 
-            link.click(function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    linkParams = me.getSandbox().generateMapLinkParameters({});
-                    window.open(mapUrl + linkParams, '_blank');
-                }
-            });
+            me._extendService.addLabel('', options);
         },
 
         /**
