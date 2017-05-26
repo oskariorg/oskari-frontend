@@ -6,7 +6,7 @@
 
 TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).
 TabContainer now only includes the content panel that is visible to the user to the DOM. Previously all of the panels were part of the DOM, but hidden with CSS.
-When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previosly made visible).
+When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
 This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
 
 ## 1.42.1
