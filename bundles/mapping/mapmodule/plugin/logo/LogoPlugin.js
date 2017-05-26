@@ -216,6 +216,9 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 el = el || me.getElement();
 
+            if( conf.hideDataSourceLink ) {
+              return;
+            }
             var options = {
               id:'data-sources',
               callback: function(e) {
@@ -227,7 +230,7 @@ Oskari.clazz.define(
                 }
               }
             };
-            
+
             me._extendService.addLabel(me._loc.dataSources, options);
             me._extendService.trigger('change');
         },
