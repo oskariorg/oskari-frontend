@@ -21,7 +21,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
           jQuery.ajax({
             url:Oskari.getSandbox().getAjaxUrl('GetArticlesByTag'),
             data: {
-              tags: 'asdi-about, termsofuse_mappublication'
+              tags: 'asdi-about'
             },
             success: function (response) {
               me.data = response;
