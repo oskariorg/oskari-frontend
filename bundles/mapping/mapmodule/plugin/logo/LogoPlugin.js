@@ -390,7 +390,7 @@ Oskari.clazz.define(
             extend.find('a').text(link.title);
             template.append(extend);
             extend.on("click", function(e) {
-              if(link.options.callback) {
+              if(typeof link.options.callback === 'function') {
                 var result = link.options.callback(e);
               }
             });
