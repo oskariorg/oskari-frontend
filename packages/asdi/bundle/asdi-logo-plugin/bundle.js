@@ -20,10 +20,21 @@ Oskari.clazz.define("Oskari.asdi.logo.Bundle", function() {
     ],
     "source" : {
 
-        "scripts" : [{
+        "scripts" : [
+          {
             "type" : "text/javascript",
             "src" : "../../../../bundles/asdi/asdi-logo-plugin/instance.js"
-        }]
+          }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/asdi/asdi-logo-plugin/resources/locale/en.js"
+          }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/asdi/asdi-logo-plugin/resources/locale/fi.js"
+          }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/asdi/asdi-logo-plugin/resources/locale/se.js"
+          }
+        ]
     },
     "bundle" : {
         "manifest" : {

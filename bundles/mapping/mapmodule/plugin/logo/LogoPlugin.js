@@ -145,7 +145,6 @@ Oskari.clazz.define(
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
             this._createTermsLink(termsUrl, container);
             this._createDataSourcesLink(container);
-            this._extendService.trigger("change");
             return container;
         },
 
@@ -391,7 +390,9 @@ Oskari.clazz.define(
             extend.find('a').text(link.title);
             template.append(extend);
             extend.on("click", function(e) {
-              var result = link.options.callback(e);
+              if(link.options.callback) {
+                var result = link.options.callback(e);
+              }
             });
           });
         }

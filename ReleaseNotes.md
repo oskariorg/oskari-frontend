@@ -1,4 +1,9 @@
 # Release Notes
+## 1.43.0
+
+### LogoPluginService
+
+Logo-plugin provides a new service which constructs new items to the plugin. (links, texts)
 
 ## 1.42.1
 

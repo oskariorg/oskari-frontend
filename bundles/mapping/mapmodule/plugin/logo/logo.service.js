@@ -39,6 +39,7 @@ function(sandbox) {
    */
   addLabel: function( title, options) {
     this.labels.push({ title: title, options: options });
+    this.trigger("change");
   }
 },{
     'protocol' : ['Oskari.framework.service.Service']

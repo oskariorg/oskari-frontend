@@ -5,6 +5,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
     function() {
       this.dialog = null;
       this.data = null;
+      this._loc;
     }, {
         __name : 'asdi-logo-plugin',
         getName : function () {
@@ -12,6 +13,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
         },
 
         start: function() {
+          this._loc = Oskari.getLocalization('asdi-logo-plugin', Oskari.getLang());
           this.getAboutLinkContent();
           this.createLogoPlugin();
         },
@@ -43,8 +45,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
               me.createAboutDialog(event);
             }
           }
-          logoService.addLabel('About', options);
-          logoService.trigger("change");
+          logoService.addLabel(this._loc.title, options);
         },
 
         createAboutDialog(event) {
@@ -59,7 +60,7 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
             content.append(article.content.body);
           });
           var me = this;
-          var popupTitle = 'About';
+          var popupTitle = this._loc.title;
           var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
           var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
