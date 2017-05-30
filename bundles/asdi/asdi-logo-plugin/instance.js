@@ -26,7 +26,9 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
               tags: 'asdi-about'
             },
             success: function (response) {
-              me.data = response;
+              if( response.articles instanceof Array ) {
+                  me.data = response.articles[0].content.body;
+              }
             },
             error: function (jqXHR, textStatus) {
                 if(typeof errorCb === 'function' && jqXHR.status !== 0) {
@@ -56,9 +58,9 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
             return;
           }
           var content = jQuery('<div></div>');
-          this.data.articles.forEach( function (article) {
-            content.append(article.content.body);
-          });
+          if( this.data ){
+            content.append( this.data );
+          }
           var me = this;
           var popupTitle = this._loc.title;
           var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
