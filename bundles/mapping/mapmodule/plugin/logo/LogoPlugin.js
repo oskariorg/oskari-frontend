@@ -61,7 +61,7 @@ Oskari.clazz.define(
               this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
           }
           this._extendService.on('change', function() {
-              me.updateExtended(element);
+              me.updateLabels(element);
           });
         },
         /**
@@ -186,10 +186,9 @@ Oskari.clazz.define(
         _createTermsLink: function (termsUrl, el) {
             var me = this,
                 el = el || me.getElement();
-            if(!el) {
+            if(!el || !termsUrl) {
                 return;
             }
-            if(termsUrl) {
               var options = {
                 id:'terms',
                 callback: function (evt) {
@@ -201,9 +200,6 @@ Oskari.clazz.define(
               };
 
               me._extendService.addLabel(me._loc.terms, options);
-            } else {
-              return;
-            }
         },
 
         _createDataSourcesLink: function (el) {
@@ -370,32 +366,32 @@ Oskari.clazz.define(
             });
         },
         /**
-         * @method addContentFromService
+         * @method updateLabels
          * Adds functionality to plugin
          *
-         * @param {Object} content
+         * @param {jQuery} el
          *
          */
-        updateExtended: function (el) {
-          var me = this;
-          var template = el || this.getElement();
-          if(!template) {
-            return;
-          }
-          var labels = this._extendService.getLabels();
+         updateLabels: function (el) {
+           var me = this;
+           var template = el || this.getElement();
+           if(!template) {
+             return;
+           }
+           var labels = this._extendService.getLabels();
 
-          labels.forEach( function( link ) {
-            var extend = me.templates.extend.clone();
-            extend.addClass(link.options.id.toLowerCase());
-            extend.find('a').text(link.title);
-            template.append(extend);
-            extend.on("click", function(e) {
-              if(typeof link.options.callback === 'function') {
-                var result = link.options.callback(e);
-              }
-            });
-          });
-        }
+           labels.forEach( function( link ) {
+             var extend = me.templates.extend.clone();
+             extend.addClass(link.options.id.toLowerCase());
+             extend.find('a').text(link.title);
+             template.append(extend);
+             if(typeof link.options.callback === 'function') {
+               extend.on("click", function(e) {
+                 link.options.callback(e);
+               });
+             }
+           });
+         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
