@@ -13,12 +13,15 @@ Oskari.clazz.define("Oskari.asdi.logo.BundleInstance",
         },
 
         start: function() {
+          var errorCb = function (xhr, errorText) {
+            Oskari.log(this.getName(), errorText);
+          };
           this._loc = Oskari.getLocalization('asdi-logo-plugin', Oskari.getLang());
-          this.getAboutLinkContent();
+          this.getAboutLinkContent(errorCb);
           this.createLogoPlugin();
         },
 
-        getAboutLinkContent: function() {
+        getAboutLinkContent: function(errorCb) {
           var me = this;
           jQuery.ajax({
             url:Oskari.getSandbox().getAjaxUrl('GetArticlesByTag'),
