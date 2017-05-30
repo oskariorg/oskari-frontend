@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 fieldTemplate = jQuery('<tr class="dataField"><th class="label"></th><td class="value"></td></tr>'),
                 user = Oskari.user(),
                 localization = this.loc,
+                profileLink = jQuery('#oskari-profile-link'),
                 accountData = [{
                     label: localization.firstName,
                     value: user.getFirstName()
@@ -53,6 +54,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 bottomLinksContainer,
                 link,
                 changeInfoUrl = null;
+
+            profileLink.on('click', function() {
+              me.instance.openProfileTab();
+            });
+
             for (i = 0; i < accountData.length; i += 1) {
                 data = accountData[i];
                 fieldContainer = fieldTemplate.clone();
