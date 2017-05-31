@@ -3,21 +3,26 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "AdminAppSetup",
     "value": {
-        "title": "Appsetup import",
+        "title": "Add view",
         "textAreaPlaceholder": "Enter JSON",
-        "importButtonText": "Import",
+        "importButtonText": "Add",
         "error": {
             "title": "Error",
             "checkValue": "Check JSON",
-            "importError": "Appsetup import failed."
+            "importError": "Adding failed."
         },
         "ok": "OK",
         "success": {
-            "title": "Export succeed",
-            "description": "Appsetup export was successfull, below information to added view.",
+            "title": "Adding succeed",
+            "description": "Adding was successfull, below information to added view.",
             "viewId": "Id",
             "viewUuid": "Uuid",
             "viewUrl": "Link to view"
+        },
+        "description": {
+            "fillJSON": "Enter the desired view JSON in the text box below",
+            "current": "current",
+            "differentUuid": "If you want a different view replace above link uuid the other."
         }
     }
 });

@@ -3,21 +3,26 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "AdminAppSetup",
     "value": {
-        "title": "Appsetup tuonti",
+        "title": "Lisää näkymä",
         "textAreaPlaceholder": "Syötä JSON",
-        "importButtonText": "Tuo",
+        "importButtonText": "Lisää",
         "error": {
             "title": "Virhe",
             "checkValue": "Tarkista JSON",
-            "importError": "Appsetup vienti epäonnistui."
+            "importError": "Lisäys epäonnistui."
         },
         "ok": "OK",
         "success": {
-            "title": "Vienti onnistui",
-            "description": "Appsetup vienti onnistui, alla tiedot lisätystä näkymästä.",
+            "title": "Lisäys onnistui",
+            "description": "Lisäys onnistui, alla tiedot lisätystä näkymästä.",
             "viewId": "Id",
             "viewUuid": "Uuid",
             "viewUrl": "Linkki näkymään"
+        },
+        "description": {
+            "fillJSON": "Syötä allaolevaan tekstikenttään haluamasi näkymän JSON",
+            "current": "nykyinen",
+            "differentUuid": "Jos haluat toisen näkymän niin korvaa ylläolevasta linkistä uuid toisella."
         }
     }
 });

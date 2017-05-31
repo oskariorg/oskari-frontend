@@ -2,6 +2,10 @@
 
 ## 1.43.0
 
+### admin/appsetup
+
+``New admin bundle`` to import wanted view JSON.
+
 ### tab container DOM handling
 
 Tabs that are not active don't have any content. The content is added when tab turns active.

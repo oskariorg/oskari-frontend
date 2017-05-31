@@ -11,14 +11,34 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
      */
 
     function () {
-        this._locale = null;
+        this._localization = this.getLocalization();
         this._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        this._templates = {
+            tabContent: jQuery('<div><div class="appsetup__description"></div><div class="appsetup__textarea"></div><div class="appsetup__button"></div></div>'),
+            successMessage: jQuery('<div class="appsetup__message">'+
+                        '   <div>'+this._localization.success.description+'</div>'+
+                        '   <div class="response_data">'+
+                        '       <ul>'+
+                        '           <li><b>'+this._localization.success.viewId+'</b>: <span class="view-id"></span></li>'+
+                        '           <li><b>'+this._localization.success.viewUuid+'</b>: <span class="view-uuid"></span></li>'+
+                        '           <li><b>'+this._localization.success.viewUrl+'</b>: <a target="_blank"></a></li>'+
+                        '       </ul>'+
+                        '   </div>'+
+                        '</div>'),
+
+        };
     }, {
         getName : function() {
             return "AdminAppSetup";
         },
-        getLocale: function () {
-            return this._locale;
+        getLocalization: function (key) {
+            if (!this._localization) {
+                this._localization = Oskari.getLocalization(this.getName());
+            }
+            if (key) {
+                return this._localization[key];
+            }
+            return this._localization;
         },
         start : function() {
             var me = this;
@@ -26,20 +46,22 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             sandbox.register(this);
             me.sandbox = sandbox;
 
-            /* locale */
-            me._locale = Oskari.getLocalization(me.getName());
-
-            var content = jQuery('<div><div class="appsetup__textarea"></div><div class="appsetup__button"></div></div>');
+            var content = me._templates.tabContent.clone();
+            var description = content.find('.appsetup__description');
+            var currentViewUrl = me.sandbox.getAjaxUrl('Views') + '&uuid=' + controlParams.uuid;
+            description.html('<div>' + me._localization.description.fillJSON + ' ' +
+                '(<a href="' + currentViewUrl + '" target="_blank">' + me._localization.description.current + '</a>).</div>' +
+                '<div>' + this._localization.description.differentUuid + '</div>'
+                );
             me._jsonInput = Oskari.clazz.create('Oskari.userinterface.component.TextAreaInput');
             me._jsonInput.setName('json');
-            me._jsonInput.setPlaceholder(me._locale.textAreaPlaceholder);
+            me._jsonInput.setPlaceholder(me._localization.textAreaPlaceholder);
             me._jsonInput.setValue('');
             me._jsonInput.insertTo(content.find('.appsetup__textarea'));
 
             me._importBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            // make visually "primary" button (blue)
             me._importBtn.addClass('primary');
-            me._importBtn.setTitle(me._locale.importButtonText);
+            me._importBtn.setTitle(me._localization.importButtonText);
             me._importBtn.setHandler(function() {
                 me.importJSON();
             });
@@ -47,7 +69,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
 
             var reqBuilder = sandbox.getRequestBuilder('Admin.AddTabRequest');
             if(reqBuilder) {
-                var request = reqBuilder(me._locale.title, content, 3, 'appsetup');
+                var request = reqBuilder(me._localization.title, content, 3, 'appsetup');
                 sandbox.request(this, request);
             }
         },
@@ -57,7 +79,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
 
             var value =  me._jsonInput.getValue();
             if(value==='') {
-                me._popup.show(me._locale.error.title, me._locale.error.checkValue);
+                me._popup.show(me._localization.error.title, me._localization.error.checkValue);
                 me._popup.fadeout(5000);
                 return;
             }
@@ -68,7 +90,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             try{
                 parsed = JSON.parse(value);
             } catch(e) {
-                me._popup.show(me._locale.error.title, me._locale.error.checkValue);
+                me._popup.show(me._localization.error.title, me._localization.error.checkValue);
                 me._popup.fadeout(5000);
                 return;
             }
@@ -76,36 +98,25 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             me._importBtn.setEnabled(false);
 
             jQuery.ajax({
-                dataType : "json",
-                type : "POST",
+                type : 'POST',
+                dataType   : 'json',
+                contentType: 'application/json; charset=UTF-8',
                 url : me.sandbox.getAjaxUrl('Views'),
-                data : {
-                    data: JSON.stringify(parsed)
-                },
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
-                        x.overrideMimeType('application/json');
-                    }
-                },
+                data : JSON.stringify(parsed),
                 error : function() {
-                    me._popup.show(me._locale.error.title, me._locale.error.importError);
+                    me._popup.show(me._localization.error.title, me._localization.error.importError);
                     me._popup.fadeout(5000);
                     me._importBtn.setEnabled(true);
                 },
                 success : function(response) {
-                    var btn = me._popup.createCloseButton(me._locale.ok);
+                    var btn = me._popup.createCloseButton(me._localization.ok);
                     btn.addClass('primary');
-                    var message = jQuery('<div class="appsetup__message">'+
-                        '   <div>'+me._locale.success.description+'</div>'+
-                        '   <div class="response_data">'+
-                        '       <ul>'+
-                        '           <li><b>'+me._locale.success.viewId+'</b>: '+response.id+'</li>'+
-                        '           <li><b>'+me._locale.success.viewUuid+'</b>: '+response.uuid+'</li>'+
-                        '           <li><b>'+me._locale.success.viewUrl+'</b>: <a href="'+response.url+'" target="_blank">'+response.url+'</a></li>'+
-                        '       </ul>'+
-                        '   </div>'+
-                        '</div>');
-                    me._popup.show(me._locale.success.title, message, [btn]);
+                    var message = me._templates.successMessage.clone();
+                    message.find('span.view-id').html(response.id);
+                    message.find('span.view-uuid').html(response.uuid);
+                    message.find('a').html(response.url);
+                    message.find('a').attr('href',response.url);
+                    me._popup.show(me._localization.success.title, message, [btn]);
                     me._importBtn.setEnabled(true);
                     me._jsonInput.setValue('');
                 }
