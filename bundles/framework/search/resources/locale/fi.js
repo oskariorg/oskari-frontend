@@ -24,6 +24,7 @@ Oskari.registerLocalization(
         "grid": {
             "name": "Nimi",
             "village": "Kunta",
+            "region": "Alue",
             "type": "Tyyppi"
         },
         "resultBox": {

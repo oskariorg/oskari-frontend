@@ -520,6 +520,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
           }
 
+          if(style.text.stroke && typeof style.text.stroke.width === 'number') {
+            olStyle.labelOutlineWidth = style.text.stroke.width;
+          }
+
           if(Oskari.util.keyExists(style, 'fill.color')) {
                 olStyle.fillColor = style.fill.color;
           }

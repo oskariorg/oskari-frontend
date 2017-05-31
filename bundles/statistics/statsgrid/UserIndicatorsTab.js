@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 req;
 
             if (reqBuilder) {
-                req = reqBuilder(title, content);
+                req = reqBuilder(title, content, false, "statsgrid");
                 sandbox.request(this.instance, req);
             }
         },

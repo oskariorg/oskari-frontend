@@ -1443,7 +1443,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 rows.removeClass('selected');
             }
             jQuery(rows[index]).addClass('selected');
-            this._dataSelected(value);
 
             if(scrollableElement) {
                 scrollableElement.scrollTop(0);

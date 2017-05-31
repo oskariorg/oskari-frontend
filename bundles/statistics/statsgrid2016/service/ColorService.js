@@ -16,6 +16,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         });
         this.limits.defaultType = this.colorsets[9].type;
         this.limits.defaultName = this.colorsets[9].name;
+        this._basicColors = [
+            '00ff01',
+            '26bf4b',
+            '3233ff',
+            '652d90',
+            'cccccc',
+            '000000',
+            'bf2652',
+            'ff3334',
+            'f8931f',
+            'ffde00',
+            '666666',
+            'ffffff'
+        ];
     }, {
         __name: "StatsGrid.ColorService",
         __qname: "Oskari.statistics.statsgrid.ColorService",
@@ -49,16 +63,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object[]} array of colors to use for legend and map
          */
         getColorsForClassification : function(classification, includeHash) {
-            var set = this.getColorset(classification.count, classification.type, classification.name);
-
             var colors = [];
-            set.forEach(function(color) {
-                if(includeHash) {
-                    color = '#' + color;
+            var set = null;
+            if(classification.mapStyle !== 'points') {
+                set = this.getColorset(classification.count, classification.type, classification.name);
+                set.forEach(function(color) {
+                    if(includeHash) {
+                        color = '#' + color;
+                    }
+                    colors.push(color);
+                });
+            } else {
+                //for(var set = this._basicColors;
+                var colorIndex = 0;
+                if(classification.name) {
+                    colorIndex = !isNaN(classification.name) ? parseFloat(classification.name) : 0;
                 }
-                colors.push(color);
-            });
-            if(classification.reverseColors) {
+                colors = Array.apply(null, Array(this._basicColors.length)).map(String.prototype.valueOf,this._basicColors[colorIndex]);
+            }
+
+            if(classification.mapStyle !== 'points' && classification.reverseColors) {
                 colors.reverse();
             }
             return colors;
@@ -133,11 +157,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @param  {String} type Colorset type
          * @return {Object} with keys min and max { min : 2, max : 9 }
          */
-        getRange: function(type) {
+        getRange: function(type, mapStyle) {
             var value = {
                 min : 2,
                 max : 2
             };
+
+            if(mapStyle === 'points') {
+                return {
+                    min: 2,
+                    max: 7
+                };
+            }
             this.colorsets.forEach(function(item) {
                 if(item.type !== type) {
                     return;
@@ -148,6 +179,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 }
             });
             return value;
+        },
+        getDefaultSimpleColors: function(){
+            return this._basicColors;
         },
         /**
          * Options to show in classification UI for selected type and count

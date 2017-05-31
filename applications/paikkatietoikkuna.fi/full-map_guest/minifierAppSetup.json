@@ -1,6 +1,16 @@
 {
     "startupSequence": [
         {
+            "bundlename": "lang-overrides",
+            "metadata": {
+                "Import-Bundle": {
+                    "lang-overrides": {
+                        "bundlePath": "../../../packages/paikkatietoikkuna/"
+                    }
+                }
+            }
+        },
+        {
             "bundleinstancename": "openlayers-default-theme",
             "bundlename": "openlayers-default-theme",
             "metadata": {

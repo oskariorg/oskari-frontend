@@ -271,12 +271,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function(sandbox, loca
             }
             var colors = service.getColorService().getColorsForClassification(classificationOpts, true);
             var legend = classification.createLegend(colors);
+
             if(!legend) {
                 legend = '<div>'+locale.legend.cannotCreateLegend+'</div>';
             }
             callback(legend, classificationOpts);
         });
     },
+
     /**
      * Creates the classification editor UI
      * @param  {Object}   options  values for the classification form to use as initial values

@@ -1,24 +1,44 @@
 # Release Notes
 
+## 1.43.0
+
+### divmanazer TabContainer component
+
+TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).
+TabContainer now only includes the content panel that is visible to the user to the DOM. Previously all of the panels were part of the DOM, but hidden with CSS.
+When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
+This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
+
+## 1.42.1
+
+### divmanazer Grid
+
+Programmatic selection of a row no longer triggers selection listeners.
+This fixes an issue where selecting a WFS-feature triggered an infinite loop in featuredata flyout.
+
 ## 1.42.0
 
-### MapLegendPlugin
+### search UI
 
-Now map legend can also included for published map.
+The "municipality" field label in results table has been replaced with a more generic "region".
+
+### Map legend
+
+A new plugin for maplegend which is available when publishing maps with legend data. Does not appear in publisher if no suitable layers are found.
 
 ### DrawPlugin.ol2
 
-Fixed modify control swallowing events. Now modify control is activated when starting to draw features.
+Fixed modify control preventing events to flow as expected. Now modify control is activated when starting to draw features.
 
 #### VectorLayerPlugin ol2
 
-Now also ol2 supports optionalStyle property when adding features to map to  ``AddFeaturesToMapRequest``.
+Added support for optionalStyle on OpenLayers 2 based mapmodule when adding features to map with  ``AddFeaturesToMapRequest``.
 
-Now ol2 ``FeatureEvent`` returns GeoJSON JSON formatted (previous was String).
+Now ol2 ``FeatureEvent`` returns GeoJSON as proper JSON like ol3 implementation (previously was String with escaped JSON content).
 
 #### VectorLayerPlugin ol3
 
-Fixed ol3 error when label is not String.
+Feature labels provided in style configuration is now always cast to String on OpenLayers 3. Numbers for example caused JS errors.
 
 Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 
@@ -27,37 +47,51 @@ Fixed feature's style updated using ``MapModulePlugin.AddFeaturesToMapRequest``.
 Added load events for the wfs-layers based on the StatusHandler.
 
 ### maprotator
-New bundle maprotator, works with Openlayers 3. Can be used in a published map, select rotate map option when publishing for it to become usable.
+
+New bundle maprotator. Publisher part works with Openlayers 2 actual map rotating only works with Openlayers 3.
+Can be used in a published maps, select rotate map option when publishing to enable user/RPC to rotate the map.
 To rotate the map press SHIFT + ALT + Drag with mouse.
 
-Sends the map.rotated event when the map is rotating, from which you can get how many degrees the map has rotated.
+Sends the map.rotated event when the map is rotating from which you can get the map orientation in degrees.
 
 Can also be used with request:
 ```javascript
-  var requestBuilder = Oskari.requestBuilder('rotate.map');
-  var request = requestBuilder(180);
-  Oskari.getSandbox().request('maprotator', request);
+  var rotateMap = Oskari.requestBuilder('rotate.map');
+  Oskari.getSandbox().request('maprotator', rotateMap(180));
 ```
-in the requestbuilder put the degrees you want to rotate.
+Where 180 in the example above is the degrees for map rotation.
 
 ### statistics/statsgrid2016
 
-Fixed rendering grid multiple times.
+Fixed an issue where grid was needlessly rendered multiple times.
 
 Indicators in datatable are now paged if more than three indicators have been selected.
 
-Now selected region is saved to state.
+Selected region is now saved to bundle state.
 
-New ``RegionsetViewer`` component. Now also can be configured at regions are showed in vector layer.
-Show regions to also vectors following config:
+Initial implementation for new ``RegionsetViewer`` component. It can be used to show regionset on map as vector features instead of WMS-service.
+Can be activated with following bundle config (not production ready yet):
 
     {
         vectorViewer: true
     }
 
-#### grid
+Indicator attribution data now include the datasource name and optional link in addition to indicator source.
 
-``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols tells how many cols you allow to show before paging content. You can also define pagingHandler, it's called when paging is done, first param is title element and second parameter is object, what tells you visible information {visible: {start:1,end:3}, count:3}, paging object telss start and end page, count tells full count on cols.
+### divmanazer grid component
+
+``setGroupingHeader`` function now allows also setting maxCols and pagingHandler. maxCols is the number of columns to show before paging the content. You can also define pagingHandler callback function. The callback function is called when page is being changed and receives the title element as first parameter and as a second parameter an object describing the paging status:
+
+```
+ {
+    visible: {
+        start:1,
+        end:3
+    },
+    count:3
+}
+```
+Where "visible" tells the indexes of the visible columns and "count" is the total number of columns available.
 
 For example:
 ```javascript
@@ -83,7 +117,7 @@ Fixed double scrollbar when grid has column selector (like properties) and few r
 
 Fixed sort when using column name renderer.
 
-Grid.select can now set to scroll grid to selected row. If scrollableELement is setted then try to scroll to seelected row.
+Grid.select can now scroll the grid container to show the selected row (pass scrollableELement as parameter to use).
 
 For example:
 ```javascript
@@ -92,7 +126,7 @@ var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
 grid.renderTo(jQuery('.datatable'));
 
-// select wanted row and  scroll to selected
+// select row and scroll to selected
 grid.select('wantedRowValue', false, jQuery('.datatable').parent());
 ```
 
@@ -119,19 +153,23 @@ getScreenshot function is now asynchronous and responds after all tiles have bee
 
 Before:
 
+```javascript
   var imageData = mapModule.getScreenshot();
-
+```
 Now:
 
+```javascript
   mapModule.getScreenshot( function ( imageData, timeoutSeconds ){
       //Do something with  imageData
   });
-
+```
 New event (ProgressEvent) that tracks if something is progressing or not. Ex. usage, check if all tiles are loaded for layer.
 
 ol2 mapmodule now support fill.color -property when getting style.
 
-ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color. Also own SVG image handles opacity right.
+
+´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 
 ### publisher2
 

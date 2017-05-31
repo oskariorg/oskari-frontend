@@ -910,9 +910,9 @@ Oskari.clazz.define(
             }
           }
           else {
+            var tilesLoaded = 0;
+            var pendingTiles = 0;
             if(!errors) {
-              var tilesLoaded = 0;
-              var pendingTiles = 0;
               layers.forEach( function( layer ) {
                 tilesLoaded += layer.loaded;
                 pendingTiles += layer.tilesToLoad;
@@ -922,7 +922,7 @@ Oskari.clazz.define(
             } else {
                 this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
                 oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
-                var errors = oskariLayer.getLoadingState().errors;
+                errors = oskariLayer.getLoadingState().errors;
                 oskariLayer.loadingDone(0);
 
                 setTimeout(function(){
@@ -1743,7 +1743,12 @@ Oskari.clazz.define(
 
             svgObject.data = this.__addPositionMarks(svgObject);
 
+
+
             marker.append(svgObject.data);
+
+            // IE needs this because ol.style.Icon opacity property not work on IE
+            marker.css('opacity', style.opacity || 1);
 
             if(isWellknownMarker && style.shape.color) {
                 marker.find('.normal-color').attr('fill', style.shape.color);
