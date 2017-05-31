@@ -16,18 +16,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         this.container = undefined;
         this.template = undefined;
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        this.progressBarFile = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
     }, {
         __name: 'Oskari.mapframework.bundle.myplacesimport.Flyout',
         __templates: {
-            iframe: '<iframe src="JavaScript:\"\"" id="myplacesimport-target" name="myplacesimport-target" height="0" width="0" frameborder="0" scrolling="no"></iframe>',
             base: '<div class="content">' +
                     '<div class="info"></div>' +
                     '<div class="state"></div>' +
                 '</div>',
             help: '<div class="help icon-info"></div>',
             file: '<div class="file-import">' +
-                    '<form id="myplacesimport-form" method="post" enctype="multipart/form-data" target="myplacesimport-target">' +
-                        '<input type="file" name="file-import"></input>' +
+                    '<form id="myplacesimport-form" enctype="multipart/form-data">' +
+                        '<div class="file-import"><input type="file" name="file-import" accept="application/zip"></input></div>' +
                         '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
                         '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
                         '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             '<div class="style-form"></div>' +
                             '<input type="hidden" name="layer-style" />' +
                         '</div>' +
-                        '<input type="submit" value="Submit" class="primary" />' +
+                        '<input type="button" value="Submit" class="primary" />' +
                     '</form>' +
                 '</div>'
         },
@@ -72,10 +72,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          */
         startPlugin: function () {
             var container = this.getEl(),
-                iframe = jQuery(this.__templates.iframe).clone(),
                 tooltipCont = jQuery(this.__templates.help).clone();
             container.addClass('myplacesimport');
-            container.append(iframe);
             tooltipCont.attr('title', this.locale.help);
             container.append(tooltipCont);
 
@@ -83,6 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             container.append(this.getTemplate());
             /* progress */
             this.progressSpinner.insertTo(container);
+            this.progressBarFile.create(container);
         },
         /**
          * Interface method implementation
@@ -101,10 +100,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method refresh
          */
         refresh: function() {
-            this.container
-                .find('iframe')
-                .replaceWith(jQuery(this.__templates.iframe).clone());
-
             this.setTemplate(this.createUi());
         },
         /**
@@ -118,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 template = jQuery(this.__templates.base).clone();
 
             template.find('div.info')
-                .html(locale.description);
+                .html(locale.description.replace(/<xx>/g, this.instance.conf.maxFileSizeMb));
             template.find('div.state')
                 .html(this.__createFileImportTemplate(locale));
 
@@ -128,6 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         * Checks the file upload form file size
         * @private
         */
+        /*
         __checkFileSize: function(locale){
             var me = this,
                 maxFileSizeMb = me.instance.conf.maxFileSizeMb,
@@ -170,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             }
 
 
-        },
+        },*/
         /**
          * Creates the template for file upload form
          *
@@ -192,38 +188,108 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('div.source label').html(locale.layer.source);
             file.find('div.style label').html(locale.layer.style);
             file.find('div.style-form').html(styleForm.getForm());
-            file.find('input[name=file-import]').bind('change', function(e){
-                me.__checkFileSize(locale);
+            file.find('input[type=button]').val(locale.file.submit);
+
+            file.find('input[name=file-import]').on('change', function(e){
+                var file = this.files[0],
+                    maxFileSizeMb = me.instance.conf.maxFileSizeMb;
+                if ((file.size / 1048576) > maxFileSizeMb){ //size in mb
+                    me.container.find('form input[type=button]').prop('disabled', true);
+                    me.__showMessage(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), false);
+                }else{
+                    me.container.find('form input[type=button]').prop('disabled', false);
+                }
             });
 
-            file.find('form')
-                .attr('action', action)
-                .find('input[type=submit]')
-                    .val(locale.file.submit)
-                    .on('click', function(e) {
-                        var form = jQuery(this).parent(),
-                            styleJson = JSON.stringify(me.__getStyleValues(styleForm));
-                        // Set the value of the hidden style field
-                        form.find('input[name=layer-style]').val(styleJson);
-                        // Prevent from sending if there were missing fields
-                        if (me.__validateForm(form, locale)) {
-                            e.preventDefault();
-                        } else {
-                            me.progressSpinner.start();
-                            var executed = 0;
-                            me.container.find('iframe').on('load', function() {
-                                if (executed > 0) {
-                                    return;
+            file.find('input[type=button]').on('click', function (e){
+                var styleJson = JSON.stringify(me.__getStyleValues(styleForm)),
+                    form = file.find('form'); //jQuery(this).parent()
+                // Set the value of the hidden style field
+                form.find('input[name=layer-style]').val(styleJson);
+                // Prevent from sending if there were missing fields
+                if (me.__validateForm (form, locale)){
+                    return; //e.preventDefault()
+                };
+
+                jQuery.ajax({
+                    url: action,
+                    type: 'POST',
+                    data: new FormData(form[0]),
+                    cache : false,
+                    contentType: false, //multipart/form-data
+                    processData: false,
+                    //timeout : ,
+                    //dataType: 'json',
+                    xhr: function () {
+                        var myXhr = jQuery.ajaxSettings.xhr();//new XMLHttpRequest()
+                        if (myXhr.upload ){
+                            myXhr.upload.addEventListener('loadstart', function(e) {
+                                me.progressSpinner.start();
+                            });
+                            myXhr.upload.addEventListener('progress', function(e){
+                                if (e.lengthComputable) {
+                                    me.progressBarFile.show();
+                                    me.progressBarFile.updateProgressBar(e.total,e.loaded);
                                 }
-                                executed++;
-                                me.progressSpinner.stop();
-                                me.__finish(jQuery(this), locale);
                             });
                         }
-                    });
+                        return myXhr;
+                    },
 
+                    success: function (data, textStatus, jqXHR){
+                        me.progressSpinner.stop();
+                        me.__finish(data,locale);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown){
+                        var msg = null,
+                            title = locale.finish.failure.title,
+                            error = null,
+                            warning = null;
+                        me.progressSpinner.stop();
+                        if (textStatus === "error"){
+                            try {
+                                err = JSON.parse(jqXHR.responseText);
+                                console.log(err);
+                                if (err.error !== null && err.error !== undefined) {
+                                    error = err.error;
+                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped){
+                                        warning = locale.warning.features_skipped.replace(/<xx>/g, err.warning.featuresSkipped);
+                                    }
+                                }
+                            } catch (e) {
+                                Oskari.log(me.getName())
+                                .warn('Error whilst parsing json',e);
+                            }
+                        }else if (textStatus === "timeout"){
+                            error = textStatus;
+                        }else if (textStatus === "abort"){
+                             error = textStatus;
+                        }else if (textStatus === "parsererror"){
+                            error = textStatus;
+                        }
+
+                        // textual portion of the HTTP status
+                        if (errorThrown){
+                            Oskari.log(me.getName()).warn('Error whilst importing userlayer: ' + errorThrown);
+                        }
+
+                        if (typeof error === "string" && locale.error[error.toLowerCase()]) {
+                            msg = locale.error[error.toLowerCase()];
+                        } else {
+                            msg = locale.error.generic;
+                        }
+                        if (warning){
+                            msg = msg + warning;
+                        }
+                        me.__showMessage(title, msg, false);
+                    },
+                });
+                // Prevent page from submitting
+                return false;
+            });
             return file;
         },
+
         /**
          * Returns the visualization form's values.
          *
@@ -258,7 +324,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     lineCorner: formValues.area.lineCorner
                 };
             }
-
             return values;
         },
         /**
@@ -287,7 +352,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             return errors;
         },
         /**
-         * Sends the layer data to the backend and shows a message.
+         * Shows a message on success.
          * Also refreshes the UI
          *
          * @method __finish
@@ -295,35 +360,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param {jQuery} iframe
          * @param {Object} locale
          */
-        __finish: function(iframe, locale) {
+        __finish: function(response, locale){
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
                 json,
-                success = true;
-
-            try {
-                json = JSON.parse(iframe.contents().find('pre').html());
-                if (this.__jsonError(json)) {
-                    success = false;
+                me=this
+                fadeout = true;
+             try {
+                json = JSON.parse(response);
+                if (json.warning !== undefined && json.warning.featuresSkipped){
+                    msg = msg + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
+                    fadeout = false;
                 }
-            } catch(error) {
-                this.instance
-                    .getSandbox()
-                    .printWarn('Error whilst parsing user layer json', error);
-                success = false;
-            }
-
-            if (success === true) {
                 this.instance.addUserLayer(json);
                 msg = msg.replace(/<xx>/g, json.featuresCount);
-            } else {
-                title = null;
-                msg = locale.finish.failure.title;
+                this.__showMessage(title, msg, fadeout);
+                this.refresh();
+            } catch(error) {
+                Oskari.log(me.getName())
+                    .warn('Error whilst parsing user layer json', error);
             }
-
-            this.__showMessage(title, msg);
-            this.refresh();
         },
+
         /**
          * Displays a message on the screen
          *
@@ -331,16 +389,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @private
          * @param  {String} title
          * @param  {String} message
+         * @param  {boolean} fadeout
          */
-        __showMessage: function (title, message) {
+        __showMessage: function (title, message, fadeout) {
+            fadeout =  fadeout !== false;
             var me = this,
                 loc = this._locale,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                btn = dialog.createCloseButton(this.locale.file.fileOverSizeError.close);
+                btn = dialog.createCloseButton(this.locale.actions.close);
 
             dialog.makeModal();
             dialog.show(title, message, [btn]);
-            dialog.fadeout(5000);
+            if (fadeout) {
+                dialog.fadeout(5000);
+            }
         },
         /**
          * Checks if json is null or undefined or if it has a key `error`.
@@ -349,7 +411,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @private
          * @param  {JSON} json
          * @return {Boolean}
-         */
+         *//*
         __jsonError: function(json) {
             var error = false;
 
@@ -357,7 +419,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             else if (json.error) error = true;
 
             return error;
-        }
+        }*/
     }, {
         "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });
