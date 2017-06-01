@@ -115,11 +115,17 @@ Oskari.clazz.define(
                         }
                         break;
                     case 'line':
+                        if (!drawControls.line.handler.line){
+                            return;
+                        }
                         if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
                             return;
                         }
                         break;
                     case 'area':
+                        if (!drawControls.area.handler.polygon){
+                            return;
+                        }
                         components = drawControls.area.handler.polygon.geometry.components;
                         if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
                             return;
