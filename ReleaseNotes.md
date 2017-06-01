@@ -9,6 +9,11 @@ TabContainer now only includes the content panel that is visible to the user to 
 When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
 This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
 
+### paikkatietoikkuna/register
+
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+Bundle also creates registration popup to give information about registration before directing to registration page.
+
 ## 1.42.1
 
 ### divmanazer Grid
