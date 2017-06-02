@@ -38,7 +38,10 @@ function(sandbox) {
    * @param {Object} options {id, callback}
    */
   addLabel: function( title, options) {
-    this.labels.push({ title: title, options: options });
+    if(!title) {
+        return;
+    }
+    this.labels.push({ title: title, options: options || {} });
     this.trigger("change");
   }
 },{
