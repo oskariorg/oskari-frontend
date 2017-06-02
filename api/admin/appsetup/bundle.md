@@ -1,15 +1,14 @@
 # appsetup
 
-This bundle add new appsetup tab to generic admin ui. In this tab admins can import wanted view to current application.
+Importing and exporting AppSetups using JSON defintion.
 
 ## Description
 
-Admin users can add new view. When the insertion is successful, the details (uuid, id and url) of the added view are displayed.
+This bundle adds a new tab to generic admin ui. Admin users can import AppSetups (views) from JSON definitions to the system. Also provides a link for exporting AppSetups. The UI provides details (uuid, id and url) of the added view after successful import.
 
 ## Screenshot
 
 ![screenshot](appsetup.png)
-
 
 ## Bundle configuration
 
