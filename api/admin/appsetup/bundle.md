@@ -1,6 +1,6 @@
 # appsetup
 
-Importing and exporting AppSetups using JSON defintion.
+Importing and exporting AppSetups using JSON definition.
 
 ## Description
 
