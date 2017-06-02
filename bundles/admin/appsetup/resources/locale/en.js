@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "AdminAppSetup",
     "value": {
-        "title": "Add view",
+        "title": "Add AppSetup",
         "textAreaPlaceholder": "Enter JSON",
         "importButtonText": "Add",
         "error": {
@@ -13,16 +13,16 @@ Oskari.registerLocalization(
         },
         "ok": "OK",
         "success": {
-            "title": "Adding succeed",
-            "description": "Adding was successfull, below information to added view.",
+            "title": "Added successfully",
+            "description": "See details of the imported AppSetup below.",
             "viewId": "Id",
             "viewUuid": "Uuid",
-            "viewUrl": "Link to view"
+            "viewUrl": "Link to AppSetup"
         },
         "description": {
-            "fillJSON": "Enter the desired view JSON in the text box below",
+            "fillJSON": "Enter JSON definition of an AppSetup in the text box below",
             "current": "current",
-            "differentUuid": "If you want a different view replace above link uuid the other."
+            "differentUuid": "Replace the UUID value in the link if you want to export another AppSetup."
         }
     }
 });
