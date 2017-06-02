@@ -131,6 +131,16 @@ Oskari.registerLocalization(
             "div": "Divisible",
             "info2": "Select colors by clicking a color group you want.",
             "cancel": "Cancel"
+        },
+        "errors": {
+            "title": "Virhe",
+            "indicatorListError": "Aineiston tarjoajan aineistovalinnan haussa tapahtui virhe.",
+            "indicatorListIsEmpty": "Aineiston tarjoajan aineistovalinta on tyhjä.",
+            "indicatorMetadataError": "Aineiston valintojen haussa tapahtui virhe.",
+            "indicatorMetadataIsEmpty": "Aineiston valinnat on tyhjä.",
+            "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
+            "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
+            "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja. "
         }
     }
 });

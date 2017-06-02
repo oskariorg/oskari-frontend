@@ -134,13 +134,13 @@ Oskari.registerLocalization(
         },
         "errors": {
             "title": "Virhe",
-            "indicatorListError": "Virhe valitun aineiston indikaattorilistan haussa.",
-            "indicatorListIsEmpty": "Indikaattorilista on tyhjä.",
-            "indicatorMetadataError": "Virhe valitun indikaattorin sisältöjen haussa.",
-            "indicatorMetadataIsEmpty": "Indikaattorin valintoja ei saatu haettua.",
-            "regionsetsIsEmpty": "Indikaattorin aluevalintoja ei saatu haettua.",
-            "regionsDataError": "Virhe valitun aineiston tietojen haussa.",
-            "regionsDataIsEmpty": "Valitun aineiston tietoja ei saatu hauettua. "
+            "indicatorListError": "Aineiston tarjoajan aineistovalinnan haussa tapahtui virhe.",
+            "indicatorListIsEmpty": "Aineiston tarjoajan aineistovalinta on tyhjä.",
+            "indicatorMetadataError": "Aineiston valintojen haussa tapahtui virhe.",
+            "indicatorMetadataIsEmpty": "Aineiston valinnat on tyhjä.",
+            "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
+            "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
+            "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja. "
         }
     }
 });
