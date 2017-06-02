@@ -66,144 +66,146 @@
     height: 100%;
 }
 
-.statsgrid {
-    min-width: 100%;
-    min-height: 100%;
-    height: 100%;
+.oskariui-left {
+    .oskari-view {
+     &.statsgrid {
+        min-width: 100%;
+        min-height: 100%;
+        height: 100%;
 
-    .statsgrid-table {
-        min-height: 80%;
-        height: 80%;
-    }
-
-    .idContainer {
-        margin: 4px;
-        border: 1pt solid #40B0C0;
-        @include border-radius(5px);
-        padding: 4px;
-        background-color: #80F0A0;
-        cursor: pointer;
-    }
-
-    .indicator-cont {
-
-        .icon-info {
-            display: inline-block;
-            margin: 0 0 5px 5px;
+        .statsgrid-table {
+            min-height: 80%;
+            height: 80%;
         }
 
-    }
+        .idContainer {
+            margin: 4px;
+            border: 1pt solid #40B0C0;
+            @include border-radius(5px);
+            padding: 4px;
+            background-color: #80F0A0;
+            cursor: pointer;
+        }
 
-    .municipal-grid {
-        width: 100%;
-        height: 80%;
-    }
+        .indicator-cont {
 
-    .data-source-select {
-        margin-top: 5px;
+            .icon-info {
+                display: inline-block;
+                margin: 0 0 5px 5px;
+            }
 
-        .new-indicator-cont {
+        }
 
-            input {
+        .municipal-grid {
+            width: 100%;
+            height: 80%;
+        }
+
+        .data-source-select {
+            margin-top: 5px;
+
+            .new-indicator-cont {
+
+                input {
+                    margin-left: 10px;
+                }
+            }
+
+            .selector-cont {
+                clear: left;
+                float: left;
+            }
+
+        }
+
+        .parameters-cont {
+            min-height: 115px;
+            margin-bottom: 20px;
+
+            button {
+                margin: 8px 0 10px 8px;
+            }
+
+            .cannot-display-indicator {
                 margin-left: 10px;
             }
-            
         }
 
         .selector-cont {
-            clear: left;
-            float: left;
-        }
+            clear: both;
 
-    }
-
-    .parameters-cont {
-        min-height: 115px;
-        margin-bottom: 20px;
-
-        button {
-            margin: 8px 0 10px 8px;
-        }
-
-        .cannot-display-indicator {
-            margin-left: 10px;
-        }
-    }
-
-    .selector-cont {
-        clear: both;
-
-        label {
-            display: inline-block;
-            width: 80px;
-            padding: 10px;
-            vertical-align: top;
-        }
-
-        select {
-
-            &.indi {
-                width: 200px;
+            label {
+                display: inline-block;
+                width: 80px;
+                padding: 10px;
+                vertical-align: top;
             }
 
-            &.parameter {
-                width: 100px;
-            }
+            select {
 
-        }
+                &.indi {
+                    width: 200px;
+                }
 
-        /* Make chosen fit in a bit better */
-        /* TODO move this to either chosen override css or forms.css */
-        .chosen-container-single {
-            .chosen-single {
-                height: 34px;
-                line-height: 35px;
-
-                div b {
-                    background-position: 0px 8px;
+                &.parameter {
+                    width: 100px;
                 }
 
             }
 
-            .chosen-single-with-drop {
+            /* Make chosen fit in a bit better */
+            /* TODO move this to either chosen override css or forms.css */
+            .chosen-container-single {
+                .chosen-single {
+                    height: 34px;
+                    line-height: 35px;
 
-                div b {
-                    background-position: -16px 8px;
+                    div b {
+                        background-position: 0px 8px;
+                    }
+
+                }
+
+                .chosen-single-with-drop {
+
+                    div b {
+                        background-position: -16px 8px;
+                    }
+
+                }
+
+                .chosen-single, .chosen-single-with-drop {
+                    @include background-gradient(#fefefe, #e3e3e3);
                 }
 
             }
 
-            .chosen-single, .chosen-single-with-drop {
-                @include background-gradient(#fefefe, #e3e3e3);
+        }
+
+        .selectors-container {
+            position: relative;
+            min-width: 470px;
+            min-height: 157px;
+            @include box-sizing(border-box);
+
+            .indisel {
+                display: inline-block;
+            }
+
+            .new-indicator-cont {
+                float: left;
+                margin-top: 8px;
+                padding-left: 10px;
+
+                input {
+                    float: right;
+                    margin: 0px;
+                }
             }
 
         }
-
+     }
     }
-
-    .selectors-container {
-        position: relative;
-        min-width: 470px;
-        min-height: 157px;
-        @include box-sizing(border-box); 
-
-        .indisel {
-            display: inline-block;
-        }
-
-        .new-indicator-cont {
-            float: left;
-            margin-top: 8px;
-            padding-left: 10px;
-
-            input {
-                float: right;
-                margin: 0px;
-            }
-        }
-
-    }
-
 }
 
 .statsgrid-csv-button {
