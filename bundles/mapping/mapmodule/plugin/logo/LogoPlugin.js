@@ -382,7 +382,9 @@ Oskari.clazz.define(
 
            labels.forEach( function( link ) {
              var extend = me.templates.extend.clone();
-             extend.addClass(link.options.id.toLowerCase());
+             if(link.options.id) {
+               extend.addClass(link.options.id.toLowerCase());
+             }
              extend.find('a').text(link.title);
              template.append(extend);
              if(typeof link.options.callback === 'function') {
