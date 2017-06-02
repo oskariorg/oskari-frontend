@@ -14,6 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.registerInfo = jQuery('<div class="registerInfo"></div></br>');
         this.linkToTermsOfUse = jQuery('<div class="registerInfo2"></div>');
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
+        this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
+                                    " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
     },
     {
         /**
@@ -27,21 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         /**
          * @method startPlugin
          */
-        startPlugin: function () {
+        afterStart: function () {
             var me = this;
 
-            //TODO get urls from properties
-            //Delete when url comes from config
-            if (!me.termsUrl) {
-                me.termsUrl = 'https://www.paikkatietoikkuna.fi/web/fi/kayttoehdot';
-            }
-
-            //Delete when url comes from config
-            if (!me.registerUrl) {
-                me.registerUrl = 'https://www.paikkatietoikkuna.fi';
-            }
-
-            me.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' + " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
+            var conf = me.getConfiguration() || {};
+            me.termsUrl = conf.termsUrl || '';
+            me.registerUrl = conf.registerUrl || '';
 
             me.loginbar = me.loginbarTemplate.clone();
             me.loginbar.append(me.loginTemplate);
