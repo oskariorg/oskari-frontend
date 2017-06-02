@@ -4,7 +4,7 @@
 
 ### admin/appsetup
 
-``New admin bundle`` to import wanted view JSON.
+``New admin bundle`` for creating AppSetups (views) from JSON definition.
 
 
 ### divmanazer TabContainer component
