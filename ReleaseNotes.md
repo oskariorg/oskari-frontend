@@ -3,7 +3,20 @@
 
 ### LogoPluginService
 
-Logo-plugin provides a new service which constructs new items to the plugin. (links, texts)
+Logo-plugin now provides a new service which can be used to add new items next to the logo (links, texts):
+
+	var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
+	// just adding a text
+	logoService.addLabel('Hello');
+
+	// providing a callback and an id (to identify the label later on)
+	var options = {
+		id:'hello',
+		callback: function() {
+			alert("Hello");
+		}
+	};
+	logoService.addLabel('Alert', options);
 
 ## 1.42.1
 
