@@ -2,6 +2,11 @@
 
 ## 1.43.0
 
+### admin/appsetup
+
+``New admin bundle`` for creating AppSetups (views) from JSON definition.
+
+
 ### divmanazer TabContainer component
 
 TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).
