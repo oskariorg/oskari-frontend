@@ -9,6 +9,12 @@ TabContainer now only includes the content panel that is visible to the user to 
 When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
 This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
 
+### Myplaces2
+
+The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
+
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map. A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
+
 ## 1.42.1
 
 ### divmanazer Grid
