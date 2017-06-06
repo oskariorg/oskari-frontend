@@ -32,7 +32,7 @@ function() {
             me.setEnabled(false);
         }
     },
-    // required for dragndrop in publisher - also plugin needs to 
+    // required for dragndrop in publisher - also plugin needs to
     getPlugin : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         return stats.plugin;
@@ -128,7 +128,8 @@ function() {
                     statsgrid: {
                         conf : {
                             allowClassification: me.state.enabled,
-                            legendLocation : this.getPlugin().getLocation()
+                            legendLocation : this.getPlugin().getLocation(),
+                            vectorViewer: statsGridState.vectorViewer
                         }
                     }
                 }

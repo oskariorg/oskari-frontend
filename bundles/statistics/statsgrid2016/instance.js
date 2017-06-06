@@ -297,9 +297,10 @@ Oskari.clazz.define(
             var me = this;
             var service = this.statsService.getStateService();
             var state = {
-                indicators : [],
-                regionset : service.getRegionset(),
-                view :me.visible
+                indicators: [],
+                regionset: service.getRegionset(),
+                view: me.visible,
+                vectorViewer: (me.regionsetViewer !== null) ? true : false
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

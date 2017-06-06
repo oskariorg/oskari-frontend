@@ -120,7 +120,8 @@ function() {
                 statsgrid: {
                     state: statsGridState,
                     conf : {
-                        grid: me.state.enabled
+                        grid: me.state.enabled,
+                        vectorViewer: statsGridState.vectorViewer
                     }
                 }
             }
