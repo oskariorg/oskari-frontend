@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             var features = event.getParams().features[0];
             var region = features.geojson.features[0].properties.id;
 
-            state.selectRegion(region, 'map');
+            state.toggleRegion(region, 'map');
         });
     }
 

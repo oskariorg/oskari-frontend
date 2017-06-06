@@ -285,7 +285,7 @@ Oskari.clazz.define(
             }
 
             if(state.activeRegion) {
-                service.selectRegion(state.activeRegion);
+                service.toggleRegion(state.activeRegion);
             }
 
             // if state says view was visible fire up the UI, otherwise close it

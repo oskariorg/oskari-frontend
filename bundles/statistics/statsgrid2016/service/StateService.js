@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.indicators.forEach(function(ind) {
                 me.removeIndicator(ind.datasource, ind.indicator, ind.selections);
             });
-            this.selectRegion();
+            this.toggleRegion();
             this.setRegionset();
             this.classification = null;
         },
@@ -69,11 +69,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         },
         /**
-         * Selects the region.
+         * Toggle the region.
          * @param  {Number} region id for the region that was selected. Assumes it's from the current regionset.
          * @param {String} componentId component id
          */
-        selectRegion : function(region, componentId) {
+        toggleRegion : function(region, componentId) {
             var me = this;
 
             // if region is same than previous then unselect region
@@ -307,7 +307,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
 
             // if no indicators then reset active region
             if(this.indicators.length === 0) {
-                this.selectRegion(null);
+                this.toggleRegion(null);
             }
 
             return removedIndicator;
