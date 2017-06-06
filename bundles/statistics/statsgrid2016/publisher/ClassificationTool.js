@@ -32,7 +32,7 @@ function() {
             me.setEnabled(false);
         }
     },
-    // required for dragndrop in publisher - also plugin needs to 
+    // required for dragndrop in publisher - also plugin needs to
     getPlugin : function() {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         return stats.plugin;
@@ -114,6 +114,7 @@ function() {
     },
     getValues: function() {
         var me = this,
+            config  = me.__sandbox.getStatefulComponents().statsgrid.getConfiguration(),
             statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup publishedgrid
@@ -128,7 +129,8 @@ function() {
                     statsgrid: {
                         conf : {
                             allowClassification: me.state.enabled,
-                            legendLocation : this.getPlugin().getLocation()
+                            legendLocation : this.getPlugin().getLocation(),
+                            vectorViewer: config.vectorViewer
                         }
                     }
                 }

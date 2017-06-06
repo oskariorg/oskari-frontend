@@ -1,5 +1,10 @@
 # Release Notes
+
 ## 1.43.0
+
+### Grid
+
+Fixed subtable sorting.
 
 ### LogoPluginService
 
@@ -17,8 +22,6 @@ Logo-plugin now provides a new service which can be used to add new items next t
 		}
 	};
 	logoService.addLabel('Alert', options);
-
-## 1.43.0
 
 ### admin/appsetup
 
