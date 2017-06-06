@@ -10,80 +10,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
 }, {
 /****** PUBLIC METHODS ******/
-    _getFeatureStyle: function(classification, region, color, highlightRegion, size){
-        var me = this;
-        var mapStyle = classification.mapStyle || 'choropleth';
-        var style = null;
-        var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
-        var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
-        var opacity = (classification.transparency) ? (parseFloat(classification.transparency))/100 : 0.8;
-        if(mapStyle === 'points') {
-            var svg = me._pointSymbol.clone();
-            svg.attr('width', 64);
-            svg.attr('height',64);
-
-            var circle = svg.find('circle');
-            circle.attr('stroke', strokeColor);
-            circle.attr('stroke-width', strokeWidth);
-            circle.attr('fill', '#' + color);
-            circle.attr('cx', 32);
-            circle.attr('cy', 32);
-            circle.attr('r', 32-strokeWidth);
-            style = {
-                property: {
-                    value: region,
-                    key: 'id'
-                },
-                image: {
-                    opacity: opacity,
-                    shape:{
-                        data: svg.html(),
-                        x: 32,
-                        y: 0
-                    },
-                    size: size
-                }
-            };
-        }
-        else {
-            style = {
-                property: {
-                    value: region,
-                    key: 'id'
-                },
-                fill: {
-                    color: '#' + color
-                },
-                stroke: {
-                    color: '#000000',
-                    width: strokeWidth
-                },
-                image: {
-                    opacity: 0.8
-                }
-            };
-        }
-        return style;
-    },
-
-    _getFeature: function(classification,region, label) {
-
-        if(classification.mapStyle === 'points') {
-             return {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [region.point.lon, region.point.lat]
-                },
-                'properties': {
-                    'id': region.id,
-                    'name': region.name,
-                    'regionValue': label
-                }
-            };
-        }
-        return region.geojson;
-    },
     render: function(highlightRegion){
         var me = this;
         var sandbox = me.sb;
@@ -199,6 +125,80 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         });
     },
 /****** PRIVATE METHODS ******/
+    _getFeatureStyle: function(classification, region, color, highlightRegion, size){
+        var me = this;
+        var mapStyle = classification.mapStyle || 'choropleth';
+        var style = null;
+        var strokeWidth = (highlightRegion && (highlightRegion.toString() === region.toString())) ? 4 : 1;
+        var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+        var opacity = (classification.transparency) ? (parseFloat(classification.transparency))/100 : 0.8;
+        if(mapStyle === 'points') {
+            var svg = me._pointSymbol.clone();
+            svg.attr('width', 64);
+            svg.attr('height',64);
+
+            var circle = svg.find('circle');
+            circle.attr('stroke', strokeColor);
+            circle.attr('stroke-width', strokeWidth);
+            circle.attr('fill', '#' + color);
+            circle.attr('cx', 32);
+            circle.attr('cy', 32);
+            circle.attr('r', 32-strokeWidth);
+            style = {
+                property: {
+                    value: region,
+                    key: 'id'
+                },
+                image: {
+                    opacity: opacity,
+                    shape:{
+                        data: svg.html(),
+                        x: 32,
+                        y: 0
+                    },
+                    size: size
+                }
+            };
+        }
+        else {
+            style = {
+                property: {
+                    value: region,
+                    key: 'id'
+                },
+                fill: {
+                    color: '#' + color
+                },
+                stroke: {
+                    color: '#000000',
+                    width: strokeWidth
+                },
+                image: {
+                    opacity: 0.8
+                }
+            };
+        }
+        return style;
+    },
+
+    _getFeature: function(classification,region, label) {
+
+        if(classification.mapStyle === 'points') {
+             return {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [region.point.lon, region.point.lat]
+                },
+                'properties': {
+                    'id': region.id,
+                    'name': region.name,
+                    'regionValue': label
+                }
+            };
+        }
+        return region.geojson;
+    },
     /**
      * Listen to events that require re-rendering the UI
      */

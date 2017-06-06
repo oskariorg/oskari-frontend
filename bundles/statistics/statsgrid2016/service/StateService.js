@@ -76,9 +76,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         selectRegion : function(region, componentId) {
             var me = this;
 
-            // if region is same than previous then return
+            // if region is same than previous then unselect region
             if(region === me.activeRegion) {
-                return;
+                region = null;
             }
             clearTimeout(me._timers.setActiveRegion);
 
