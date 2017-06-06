@@ -299,8 +299,7 @@ Oskari.clazz.define(
             var state = {
                 indicators: [],
                 regionset: service.getRegionset(),
-                view: me.visible,
-                vectorViewer: (me.regionsetViewer !== null) ? true : false
+                view: me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

@@ -106,6 +106,7 @@ function() {
     },
     getValues: function() {
         var me = this,
+            config  = me.__sandbox.getStatefulComponents().statsgrid.getConfiguration(),
             statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup statsgrid
@@ -121,7 +122,7 @@ function() {
                     state: statsGridState,
                     conf : {
                         grid: me.state.enabled,
-                        vectorViewer: statsGridState.vectorViewer
+                        vectorViewer: config.vectorViewer
                     }
                 }
             }
