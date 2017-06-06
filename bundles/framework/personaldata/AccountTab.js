@@ -57,6 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
 
             profileLink.on('click', function() {
               me.instance.openProfileTab();
+              return false;
             });
 
             for (i = 0; i < accountData.length; i += 1) {
