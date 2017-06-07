@@ -38,7 +38,7 @@ function(sandbox) {
    * @param {Object} options {id, callback}
    */
   addLabel: function( title, options) {
-    if(!title) {
+    if(typeof title === undefined) {
         return;
     }
     this.labels.push({ title: title, options: options || {} });

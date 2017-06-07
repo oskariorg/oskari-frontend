@@ -23,7 +23,7 @@ Oskari.clazz.define(
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
-            extend: jQuery('<div style="display: inline-block; margin: 5px"><a href="#"></a></div>')
+            extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -384,6 +384,9 @@ Oskari.clazz.define(
              var extend = me.templates.extend.clone();
              if(link.options.id) {
                extend.addClass(link.options.id.toLowerCase());
+             }
+             if(link.options.id != 'icon') {
+               extend.css("margin","5px");
              }
              extend.find('a').text(link.title);
              template.append(extend);
