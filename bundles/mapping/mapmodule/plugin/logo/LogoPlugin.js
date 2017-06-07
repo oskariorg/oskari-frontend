@@ -19,18 +19,11 @@ Oskari.clazz.define(
         constLayerGroupId : 'layers',
         templates: {
             main :  jQuery(
-                '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
-                '  <div class="terms">' +
-                '    <a href="#" target="_blank"></a>' +
-                '  </div>' +
-                '  <div class="data-sources">' +
-                '    <a href="#"></a>' +
-                '  </div>' +
-                '</div>'
+                '<div class="mapplugin logoplugin"></div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
-            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>')
+            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
+            extend: jQuery('<div style="display: inline-block; margin: 5px"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -38,6 +31,7 @@ Oskari.clazz.define(
         getService : function() {
             if(!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
+
                 if(this._service) {
                     var me = this;
                     // init group for layers
@@ -52,7 +46,6 @@ Oskari.clazz.define(
                             'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                         });
                     });
-
                     // if service was created, add a change listener
                     this._service.on('change', function() {
                         me.updateDialog();
@@ -60,6 +53,16 @@ Oskari.clazz.define(
                 }
             }
             return this._service;
+        },
+        createExtendService: function(el) {
+          var me = this;
+          var element = el || this.getElement();
+          if(!this._extendService) {
+              this._extendService = Oskari.clazz.create('Oskari.map.LogoPluginService', this.getSandbox());
+          }
+          this._extendService.on('change', function() {
+              me.updateLabels(element);
+          });
         },
         /**
          * @method _createEventHandlers
@@ -135,13 +138,13 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
+            this.createExtendService(container);
             this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
             this._createServiceLink(container);
 
             var termsUrl = this.getSandbox().getLocalizedProperty(conf.termsUrl);
             this._createTermsLink(termsUrl, container);
             this._createDataSourcesLink(container);
-
             return container;
         },
 
@@ -155,15 +158,17 @@ Oskari.clazz.define(
                 return;
             }
 
-            link = el.find('.icon');
-            link.unbind('click');
+            var options = {
+              id:'icon',
+              callback: function (event) {
+                  if (!me.inLayerToolsEditMode()) {
+                      linkParams = me.getSandbox().generateMapLinkParameters({});
+                      window.open(mapUrl + linkParams, '_blank');
+                  }
+              }
+            };
 
-            link.click(function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    linkParams = me.getSandbox().generateMapLinkParameters({});
-                    window.open(mapUrl + linkParams, '_blank');
-                }
-            });
+            me._extendService.addLabel('', options);
         },
 
         /**
@@ -181,24 +186,20 @@ Oskari.clazz.define(
         _createTermsLink: function (termsUrl, el) {
             var me = this,
                 el = el || me.getElement();
-            if(!el) {
+            if(!el || !termsUrl) {
                 return;
             }
-            var link = el.find('.terms a');
-
-            if (termsUrl) {
-                link.html(me._loc.terms);
-                link.attr('href', termsUrl);
-                link.click(function (evt) {
+              var options = {
+                id:'terms',
+                callback: function (evt) {
                     evt.preventDefault();
                     if (!me.inLayerToolsEditMode()) {
                         window.open(termsUrl, '_blank');
                     }
-                });
-                link.show();
-            } else {
-                link.hide();
-            }
+                }
+              };
+
+              me._extendService.addLabel(me._loc.terms, options);
         },
 
         _createDataSourcesLink: function (el) {
@@ -206,26 +207,22 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 el = el || me.getElement();
 
-            if(!el) {
-                return;
+            if(!el || conf.hideDataSourceLink) {
+              return;
             }
-            var dataSources = el.find('.data-sources');
+            var options = {
+              id:'data-sources',
+              callback: function(e) {
+                if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
+                  me._openDataSourcesDialog(e.target);
+                } else if (me.dataSourcesDialog) {
+                  me.dataSourcesDialog.close(true);
+                  me.dataSourcesDialog = null;
+                }
+              }
+            };
 
-            if (conf.hideDataSourceLink) {
-                dataSources.hide();
-            } else {
-                dataSources.show();
-                dataSources.find('a').html(me._loc.dataSources);
-                dataSources.unbind('click');
-                dataSources.click(function (e) {
-                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
-                        me._openDataSourcesDialog(e.target);
-                    } else if (me.dataSourcesDialog) {
-                        me.dataSourcesDialog.close(true);
-                        me.dataSourcesDialog = null;
-                    }
-                });
-            }
+            me._extendService.addLabel(me._loc.dataSources, options);
         },
 
         /**
@@ -367,7 +364,36 @@ Oskari.clazz.define(
                     'source' : indicators[id].organization
                 });
             });
-        }
+        },
+        /**
+         * @method updateLabels
+         * Adds functionality to plugin
+         *
+         * @param {jQuery} el
+         *
+         */
+         updateLabels: function (el) {
+           var me = this;
+           var template = el || this.getElement();
+           if(!template) {
+             return;
+           }
+           var labels = this._extendService.getLabels();
+
+           labels.forEach( function( link ) {
+             var extend = me.templates.extend.clone();
+             if(link.options.id) {
+               extend.addClass(link.options.id.toLowerCase());
+             }
+             extend.find('a').text(link.title);
+             template.append(extend);
+             if(typeof link.options.callback === 'function') {
+               extend.on("click", function(e) {
+                 link.options.callback(e);
+               });
+             }
+           });
+         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

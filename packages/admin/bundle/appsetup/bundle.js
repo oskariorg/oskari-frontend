@@ -1,9 +1,9 @@
 /**
- * @class Oskari.admin.bundle.admin.GenericAdminBundle
+ * @class Oskari.admin.bundle.appsetup.AppSetupAdminBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundle",
+Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -15,10 +15,7 @@ function() {
         var me = this;
 
         /* or this if you want to tailor instance also */
-        var inst = Oskari.clazz.create("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
-            'GenericAdmin',
-            "Oskari.admin.bundle.admin.GenericAdminFlyout"
-            );
+        var inst = Oskari.clazz.create("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance");
 
         return inst;
 
@@ -33,42 +30,37 @@ function() {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/instance.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/DefaultViews.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/request/AddTabRequest.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/Flyout.js"
+            "src" : "../../../../bundles/admin/appsetup/instance.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../bundles/admin/appsetup/resources/css/style.css"
         }],
 
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/fi.js"
+            "src" : "../../../../bundles/admin/appsetup/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/sv.js"
+            "src" : "../../../../bundles/admin/appsetup/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin/resources/locale/en.js"
+            "src" : "../../../../bundles/admin/appsetup/resources/locale/en.js"
         }]
     },
     "bundle" : {
         "manifest" : {
-            "Bundle-Identifier" : "admin",
-            "Bundle-Name" : "admin",
+            "Bundle-Identifier" : "appsetup",
+            "Bundle-Name" : "appsetup",
             "Bundle-Author" : [{
-                "Name" : "ev",
+                "Name" : "MK",
                 "Organisation" : "nls.fi",
                 "Temporal" : {
-                    "Start" : "2013",
-                    "End" : "2013"
+                    "Start" : "2017",
+                    "End" : "2017"
                 },
                 "Copyleft" : {
                     "License" : {
@@ -92,4 +84,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("admin", "Oskari.admin.bundle.admin.GenericAdminBundle");
+Oskari.bundle_manager.installBundleClass("appsetup", "Oskari.admin.bundle.appsetup.AppSetupAdminBundle");

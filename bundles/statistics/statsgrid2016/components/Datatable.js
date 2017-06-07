@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         me.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
 
         me.grid.addSelectionListener(function(grid, region) {
-            me.service.getStateService().selectRegion(region, 'grid');
+            me.service.getStateService().toggleRegion(region, 'grid');
         });
 
         el.append(main);
