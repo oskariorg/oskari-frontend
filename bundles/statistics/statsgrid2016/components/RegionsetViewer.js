@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         var currentRegion = service.getStateService().getRegionset();
         var state = service.getStateService();
         var ind = state.getActiveIndicator();
+        var locale = me.instance.getLocalization();
 
         // remove layer
         sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
@@ -42,6 +43,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             var colors = service.getColorService().getColorsForClassification(classification);
 
             service.getRegions(currentRegion, function(er, regions){
+                if(err) {
+                    me.log.warn('Cannot get regions for wanted regionset='+currentRegion);
+                    // notify error!!
+                    errorService.show(locale.errors.title,locale.errors.regionsDataError);
+                    return;
+                }
+                if(regions.length === 0) {
+                    errorService.show(locale.errors.title,locale.errors.regionsDataIsEmpty);
+                }
                 var regiongroups = classify.getGroups();
 
                 regiongroups.forEach(function(regiongroup, index){

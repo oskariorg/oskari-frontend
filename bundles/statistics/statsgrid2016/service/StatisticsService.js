@@ -17,6 +17,7 @@
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+        this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
 
         // pushed from instance
         this.datasources = [];
@@ -69,6 +70,9 @@
         },
         getColorService : function() {
             return this.colors;
+        },
+        getErrorService : function() {
+            return this.error;
         },
         addDatasource : function(ds) {
             if(!ds) {
