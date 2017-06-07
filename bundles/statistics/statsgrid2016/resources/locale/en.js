@@ -133,14 +133,14 @@ Oskari.registerLocalization(
             "cancel": "Cancel"
         },
         "errors": {
-            "title": "Virhe",
-            "indicatorListError": "Aineiston tarjoajan aineistovalinnan haussa tapahtui virhe.",
-            "indicatorListIsEmpty": "Aineiston tarjoajan aineistovalinta on tyhjä.",
-            "indicatorMetadataError": "Aineiston valintojen haussa tapahtui virhe.",
-            "indicatorMetadataIsEmpty": "Aineiston valinnat on tyhjä.",
-            "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
-            "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
-            "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja. "
+            "title": "Error",
+            "indicatorListError": "Error fetching the list of data sources.",
+            "indicatorListIsEmpty": "The list of data is empty.",
+            "indicatorMetadataError": "Error fetching data attribute list",
+            "indicatorMetadataIsEmpty": "Data attribute list is empty.",
+            "regionsetsIsEmpty": "Error fetching suitable regions for the data.",
+            "regionsDataError": "Error fetching regions.",
+            "regionsDataIsEmpty": "The list of suitable regions is empty."
         }
     }
 });
