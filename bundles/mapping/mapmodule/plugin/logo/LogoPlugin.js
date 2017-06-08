@@ -115,7 +115,7 @@ Oskari.clazz.define(
         _setLayerToolsEditModeImpl: function () {
             var me = this;
             // TODO document why this is done...
-            if (!me.inLayerToolsEditMode()) {
+            if (!me.inLayerToolsEditMode() && me.getElement()) {
                 me.setLocation(
                     me.getElement().parents('.mapplugins').attr(
                         'data-location'
