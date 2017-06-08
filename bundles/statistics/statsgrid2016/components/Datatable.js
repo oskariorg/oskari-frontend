@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         if(!setId) {
             return;
         }
-        var me = this;
         var regionset = this.service.getRegionsets(setId);
 
         if(this.getIndicators().length>0){
