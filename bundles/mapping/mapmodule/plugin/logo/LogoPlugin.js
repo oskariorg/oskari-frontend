@@ -115,7 +115,7 @@ Oskari.clazz.define(
         _setLayerToolsEditModeImpl: function () {
             var me = this;
             // TODO document why this is done...
-            if (!me.inLayerToolsEditMode()) {
+            if (!me.inLayerToolsEditMode() && me.getElement()) {
                 me.setLocation(
                     me.getElement().parents('.mapplugins').attr(
                         'data-location'
@@ -150,11 +150,11 @@ Oskari.clazz.define(
 
         _createServiceLink: function (el) {
             var me = this,
-                el = el || me.getElement(),
+                element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
                 link,
                 linkParams;
-            if(!el) {
+            if(!element) {
                 return;
             }
 
@@ -185,8 +185,8 @@ Oskari.clazz.define(
         },
         _createTermsLink: function (termsUrl, el) {
             var me = this,
-                el = el || me.getElement();
-            if(!el || !termsUrl) {
+                element = el || me.getElement();
+            if(!element || !termsUrl) {
                 return;
             }
               var options = {
@@ -205,9 +205,9 @@ Oskari.clazz.define(
         _createDataSourcesLink: function (el) {
             var me = this,
                 conf = me.getConfig() || {},
-                el = el || me.getElement();
+                element = el || me.getElement();
 
-            if(!el || conf.hideDataSourceLink) {
+            if(!element || conf.hideDataSourceLink) {
               return;
             }
             var options = {
@@ -300,7 +300,7 @@ Oskari.clazz.define(
                 link.attr('href', item.url);
                 link.append(item.name);
                 return link;
-            }
+            };
             var tpl = jQuery('<span></span>');
             if(typeof src.forEach !== 'function') {
                 tpl.append(SEPARATOR);
@@ -309,9 +309,11 @@ Oskari.clazz.define(
             }
 
             src.forEach(function(item) {
-                tpl.append(SEPARATOR);
-                tpl.append(formatSrc(item));
-            })
+                if(item) {
+                    tpl.append(SEPARATOR);
+                    tpl.append(formatSrc(item));
+                }
+            });
             return tpl;
         },
         /**
