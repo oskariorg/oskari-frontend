@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             msg = locale.error.generic;
                         }
                         if (warning){
-                            msg = msg + warning;
+                            msg = msg + " " + warning;
                         }
                         me.__showMessage(title, msg, false);
                     },
@@ -369,7 +369,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
              try {
                 json = JSON.parse(response);
                 if (json.warning !== undefined && json.warning.featuresSkipped){
-                    msg = msg + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
+                    msg = msg + " " + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
                     fadeout = false;
                 }
                 this.instance.addUserLayer(json);
