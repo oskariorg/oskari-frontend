@@ -108,7 +108,18 @@ Oskari.registerLocalization(
                 "discontinuous": "Epäjatkuva"
             },
             "editClassifyTitle": "Muokkaa luokittelua",
-            "classifyFieldsTitle": "Luokitteluarvot"
+            "classifyFieldsTitle": "Luokitteluarvot",
+            "map": {
+                "mapStyle": "Kartan tyyli",
+                "choropleth": "Koropleettikartta",
+                "points": "Pisteet",
+                "pointSize": "Pisteen koko",
+                "min": "Minimi",
+                "max": "Maksimi",
+                "color": "Väri",
+                "transparency": "Läpinäkyvyys",
+                "showValues": "Näytä arvot"
+            }
         },
         "colorset": {
             "button": "Värit",
@@ -120,6 +131,16 @@ Oskari.registerLocalization(
             "div": "Jakautuva",
             "info2": "Valitse värit klikkaamalla haluamaasi väriryhmää.",
             "cancel": "Peruuta"
+        },
+        "errors": {
+            "title": "Virhe",
+            "indicatorListError": "Aineiston tarjoajien haussa tapahtui virhe.",
+            "indicatorListIsEmpty": "Aineiston tarjoajan aineistolista on tyhjä.",
+            "indicatorMetadataError": "Aineiston valintojen haussa tapahtui virhe.",
+            "indicatorMetadataIsEmpty": "Aineiston valinnat on tyhjä.",
+            "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
+            "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
+            "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja."
         }
     }
 });

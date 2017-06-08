@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Rotating map",
         "display":{
           "tooltip": {
-            "tool":"Rotating map"
+            "tool":"Rotate map"
              },
             "publisher": {
               "noUI": "Hide user interface (Use RPC interface)"

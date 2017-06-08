@@ -7,13 +7,13 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.GenericAdminBundle",
 /**
  * @method create called automatically on construction
  * @static
- */ 
+ */
 function() {
 
 }, {
     "create" : function() {
         var me = this;
-        
+
         /* or this if you want to tailor instance also */
         var inst = Oskari.clazz.create("Oskari.admin.bundle.admin.GenericAdminBundleInstance",
             'GenericAdmin',
@@ -76,7 +76,7 @@ function() {
                         "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
                     }
                 }
-            }],        
+            }],
             "Bundle-Version" : "1.0.0",
             "Import-Namespace" : ["Oskari"],
             "Import-Bundle" : {}

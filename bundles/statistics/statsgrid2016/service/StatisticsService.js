@@ -17,11 +17,14 @@
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
+        this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
 
         // pushed from instance
         this.datasources = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
+
+        this._mapModes = ['wms']; // possible values: wms, vector
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",
@@ -31,6 +34,23 @@
         },
         getName: function () {
             return this.__name;
+        },
+        setMapModes: function(mapModes){
+            this._mapModes = mapModes;
+        },
+        getMapModes: function(){
+            return this._mapModes;
+        },
+        hasMapMode: function(mode){
+            var me = this;
+            var hasMode = false;
+            me._mapModes.forEach(function(mapmode){
+                if(mapmode === mode){
+                    hasMode = true;
+                    return;
+                }
+            });
+            return hasMode;
         },
         /**
          * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.
@@ -51,6 +71,9 @@
         getColorService : function() {
             return this.colors;
         },
+        getErrorService : function() {
+            return this.error;
+        },
         addDatasource : function(ds) {
             if(!ds) {
                 // log error message
@@ -64,6 +87,8 @@
                 });
                 return;
             }
+            // normalize to always have info-object (so far only holds optional description url of service with "url" key)
+            ds.info = ds.info || {};
             this.datasources.push(ds);
         },
 

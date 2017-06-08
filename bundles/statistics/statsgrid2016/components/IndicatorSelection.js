@@ -28,6 +28,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
      */
     _populateIndicators : function(select, datasrc) {
         var me = this;
+        var errorService = me.service.getErrorService();
+        var locale = me.instance.getLocalization();
 
         if(!datasrc || datasrc === '') {
             return;
@@ -39,6 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             if(err) {
                 // notify error!!
                 Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn(" Error getting indicator list");
+                errorService.show(locale.errors.title,locale.errors.indicatorListError);
                 return;
             }
 
@@ -56,6 +59,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function(i
             select.setValue(value);
             if(result.complete) {
                 me.spinner.stop();
+
+                if(result.indicators.length === 0) {
+                    errorService.show(locale.errors.title,locale.errors.indicatorListIsEmpty);
+                }
             }
         });
     },

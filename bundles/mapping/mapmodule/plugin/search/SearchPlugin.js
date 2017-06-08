@@ -75,7 +75,7 @@ Oskari.clazz.define(
                 '  <thead>' +
                 '    <tr>' +
                 '      <th>' + me._loc.column_name + '</th>' +
-                '      <th>' + me._loc.column_village + '</th>' +
+                '      <th>' + me._loc.column_region + '</th>' +
                 '      <th>' + me._loc.column_type + '</th>' +
                 '    </tr>' +
                 '  </thead>' +
@@ -442,7 +442,7 @@ Oskari.clazz.define(
 
                         var row = me.templateResultsRow.clone(),
                             name = resultItem.name,
-                            municipality = resultItem.village,
+                            region = resultItem.region,
                             type = resultItem.type,
                             cells = row.find('td'),
                             xref = jQuery(cells[0]).find('a');
@@ -452,7 +452,7 @@ Oskari.clazz.define(
                         xref.append(name);
                         xref.click(clickFunction);
 
-                        jQuery(cells[1]).attr('title', municipality).append(municipality);
+                        jQuery(cells[1]).attr('title', region).append(region);
                         jQuery(cells[2]).attr('title', type).append(type);
 
                         tableBody.append(row);

@@ -11,10 +11,8 @@ $lightIcon: url("../images/Question-mark-light.png");
   height: 32px;
   cursor: pointer;
   position: relative;
-  margin: 0 3px 0 10px !important;
   z-index: 15000;
   margin-bottom: 10px !important;
-  float:right;
   box-shadow: $iconShadow;
   -moz-box-shadow: $iconShadow;
   -webkit-box-shadow: $iconShadow;
@@ -123,12 +121,13 @@ $lightIcon: url("../images/Question-mark-light.png");
     margin-left: 2%;
     margin-right: 2%;
   }
-
-  .accordion {
-    max-height: 400px;
-    overflow:auto;
-  }
-  .popup-body .content {
-    overflow-y:hidden !important;
-  }
+}
+.maplegend__popup {
+  .popup-body .content .imgDiv {
+    max-height: 60vh;
+    overflow-y: auto !important; }
+}
+.divmanazerpopup.mobile-popup {
+  max-width:80vh !important;
+  left: 0% !important;
 }

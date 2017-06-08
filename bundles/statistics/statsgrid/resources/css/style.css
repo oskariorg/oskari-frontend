@@ -16,7 +16,7 @@
 .statsgrid_100 {
   height: 100%; }
 
-.statsgrid {
+.oskariui-left .oskari-view.statsgrid {
   min-width: 100%;
   min-height: 100%;
   height: 100%; }

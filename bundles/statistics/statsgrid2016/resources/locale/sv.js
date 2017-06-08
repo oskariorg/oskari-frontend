@@ -108,7 +108,18 @@ Oskari.registerLocalization(
                 "discontinuous": "Separat"
             },
             "editClassifyTitle": "Edit classification",
-            "classifyFieldsTitle": "Classification values"
+            "classifyFieldsTitle": "Classification values",
+            "map": {
+                "mapStyle": "Kartans stil",
+                "choropleth": "Koropletkarta",
+                "points": "Punkterna",
+                "pointSize": "Punktens storlek",
+                "min": "Minimum",
+                "max": "Maximum",
+                "color": "Färg",
+                "transparency": "Genomskinlighet",
+                "showValues": "Visa värdena"
+            }
         },
         "colorset": {
             "button": "Färger",
@@ -120,6 +131,16 @@ Oskari.registerLocalization(
             "div": "Delbar",
             "info2": "Välj färgerna genom att klicka på färggruppen",
             "cancel": "Avbryt"
+        },
+        "errors": {
+            "title": "Fel",
+            "indicatorListError": "Ett fel uppstod vid hämtningen av listan av de valda datakällorna.",
+            "indicatorListIsEmpty": "Listan av datamängder är tom.",
+            "indicatorMetadataError": "Ett fel uppstod vid hämtningen av datamängdens attributlista.",
+            "indicatorMetadataIsEmpty": "Datamängdens attributlista är tom.",
+            "regionsetsIsEmpty": "Ett fel uppstod vid hämtningen av lämpliga regioner för datamängden.",
+            "regionsDataError": "Ett fel uppstod vid hämtningen av regionernas värden.",
+            "regionsDataIsEmpty": "Listan av lämpliga regioner är tom. Regionernas värden kunde inte ges åt den valda datamängden."
         }
     }
 });

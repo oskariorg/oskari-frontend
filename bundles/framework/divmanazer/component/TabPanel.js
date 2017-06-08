@@ -21,16 +21,21 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
         this.selectionHandler = null;
         this.priority = 1.0;
         this.html = this.template.clone();
-        this.html.hide();
     }, {
 
         /**
          * @method setId
-         * Sets the panel id
+         * Sets id to class for header and content
          * @param {String} id id for the panel
          */
         setId: function (id) {
             this.id = id;
+            this.html.addClass(id);
+            if (!this.header) {
+                header = this.templateTabHeader.clone();
+                this.header = header;
+            }
+            this.header.addClass(id);
         },
         /**
          * @method getId
