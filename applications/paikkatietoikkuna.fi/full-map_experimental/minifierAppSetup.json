@@ -602,6 +602,17 @@
 		            }
 		        }
 		    }
+		},
+		{
+		    "bundlename" : "layers",
+		    "bundleinstancename" : "layers",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "layers" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
 		}
 	]
 }

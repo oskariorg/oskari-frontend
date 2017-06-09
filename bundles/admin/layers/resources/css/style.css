@@ -1,0 +1,12 @@
+div.tab-content.appsetup div.appsetup__textarea div.input-controls {
+  width: 400px; }
+  div.tab-content.appsetup div.appsetup__textarea div.input-controls textarea {
+    width: 400px;
+    height: 250px; }
+div.tab-content.appsetup div.appsetup__description {
+  margin-bottom: 6px; }
+
+.appsetup__message .response_data {
+  margin-left: 12px; }
+
+/*# sourceMappingURL=style.css.map */
