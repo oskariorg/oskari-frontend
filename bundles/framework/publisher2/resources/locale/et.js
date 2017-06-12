@@ -66,6 +66,7 @@ Oskari.registerLocalization(
                 "CrosshairTool": "Näita kaardi keskpunkti",
                 "FeedbackServiceTool": "",
                 "toolbarToolNames": {
+                    "history": "Liigu eelmisesse või järgmisesse",
                     "history_back": "Liigu eelmisesse vaatesse",
                     "history_forward": "Liigu järgmisesse vaatesse",
                     "measureline": "Mõõda vahemaad",
