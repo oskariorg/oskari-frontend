@@ -25,7 +25,7 @@ Oskari.clazz.define(
         this.lastSort = null;
         // Actions that get added to the search result popup
         this.resultActions = {};
-
+        this.autocomplete = false;
         this._searchContainer = null;
 
         this.resultHeaders = [
@@ -85,8 +85,13 @@ Oskari.clazz.define(
             var doSearch = function () {
             	me.__doSearch();
             };
+            var doAutocomplete = function() {
+                me.autocomplete = true;
+                me.__doSearch();
+            };
             button.setHandler(doSearch);
             field.bindEnterKey(doSearch);
+            field.bindUpKey(doAutocomplete);
 
             var controls = searchContainer.find('div.controls');
             controls.append(field.getField());
@@ -185,7 +190,9 @@ Oskari.clazz.define(
 
             var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
             if(reqBuilder) {
-                me.getSandbox().request(this.instance, reqBuilder(searchKey));
+                var request = reqBuilder(searchKey);
+                request.setAutocomplete(true);
+                me.getSandbox().request(this.instance, request);
             }
         },
         handleSearchResult : function(isSuccess, result, searchedFor) {
@@ -194,9 +201,21 @@ Oskari.clazz.define(
             var button = this.getButton();
             if(isSuccess) {
                 // happy case
-                field.setEnabled(true);
-                button.setEnabled(true);
-                me._renderResults(result, searchedFor);
+                if (me.autocomplete) {
+                    var results =  [];
+                    for (var i = 0; i < result.totalCount; i++) {
+                        results.push({ value: result.locations[i].name, data: result.locations[i].name });
+                    }
+                    field.autocomplete(results);
+                    me.autocomplete = false;
+                    field.setEnabled(true);
+                    button.setEnabled(true);
+                }
+                else {
+                    field.setEnabled(true);
+                    button.setEnabled(true);
+                    me._renderResults(result, searchedFor);
+                }
                 return;
             }
             // error handling

@@ -60,11 +60,12 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          */
         handleRequest : function(core, request) {
             var params = request.getSearchParams();
+            var autocomplete = request.getAutocomplete();
             // backward compatibility code, can be removed in Oskari 1.36
             if(typeof params === 'object') {
                 params = params.searchKey;
             }
-            this.doSearch(params);
+            this.doSearch(params, null, null, autocomplete);
         },
         /**
          * @method doSearch
@@ -77,7 +78,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Function}
          *            onComplete callback method for search completion
          */
-        doSearch: function(searchString, onSuccess, onError) {
+        doSearch: function(searchString, onSuccess, onError, autocomplete) {
             var lang = Oskari.getLang();
             var sb = Oskari.getSandbox();
             var epsg = Oskari.getSandbox().getMap().getSrsName();
@@ -89,7 +90,8 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 data: {
                     "searchKey": searchString,
                     "Language": lang,
-                    "epsg": epsg
+                    "epsg": epsg,
+                    "autocomplete": autocomplete
                 },
                 success: function(response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
