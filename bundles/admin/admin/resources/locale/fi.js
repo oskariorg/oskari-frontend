@@ -26,6 +26,9 @@ Oskari.registerLocalization(
                     "listTitle": "Guest-käyttäjillä ei ole oikeuksia näihin tasoihin:",
                     "viewUpdated": "Oletusnäkymä (id=${id}) on päivitetty."
                 }
+            },
+            "layersimport": {
+                "title": "Lisää karttatasoja"
             }
         }
     }

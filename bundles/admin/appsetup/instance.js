@@ -79,7 +79,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
             var value =  me._jsonInput.getValue();
             if(value==='') {
                 me._popup.show(me._localization.error.title, me._localization.error.checkValue);
-                me._popup.fadeout(5000);
+                me._popup.fadeout();
                 return;
             }
 
@@ -90,7 +90,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
                 parsed = JSON.parse(value);
             } catch(e) {
                 me._popup.show(me._localization.error.title, me._localization.error.checkValue);
-                me._popup.fadeout(5000);
+                me._popup.fadeout();
                 return;
             }
 
@@ -104,7 +104,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
                 data : JSON.stringify(parsed),
                 error : function() {
                     me._popup.show(me._localization.error.title, me._localization.error.importError);
-                    me._popup.fadeout(5000);
+                    me._popup.fadeout();
                     me._importBtn.setEnabled(true);
                 },
                 success : function(response) {

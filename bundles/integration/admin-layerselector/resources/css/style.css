@@ -60,6 +60,10 @@ div.admin-layerselector {
   div.admin-layerselector div.tab-content div.oskarifield {
     padding: 10px;
     min-height: 35px; }
+  div.admin-layerselector div.tool-export {
+    float: left;
+    margin-left: 4px;
+    margin-right: 4px; }
   div.admin-layerselector div.layer,
   div.admin-layerselector div.create-layer {
     padding: 6px 10px 6px 20px;
@@ -349,3 +353,5 @@ div.divmanazerpopup div.content div.admin-layerselector {
         margin-right: 20px; }
       div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer div.add-layer-send {
         display: none; }
+
+/*# sourceMappingURL=style.css.map */

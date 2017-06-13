@@ -26,6 +26,17 @@ Oskari.registerLocalization(
                     "listTitle": "Guest users have no rights to see following map layers:",
                     "viewUpdated": "The default view (id=${id}) has been updated."
                 }
+            },
+            "layersimport": {
+                "title": "Add maplayers",
+                "textAreaPlaceholder": "Enter JSON",
+                "description": "Enter JSON definition of an Layers in the text box below.",
+                "importButtonText": "Add",
+                "error": {
+                    "title": "Error",
+                    "checkValue": "Check JSON",
+                    "importError": "Adding failed."
+                }
             }
         }
     }

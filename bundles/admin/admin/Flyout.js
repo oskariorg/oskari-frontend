@@ -8,13 +8,21 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
     function() {
         this.tabsContainer = null;
     }, {
-        tabs : [{
-            'id' : 'defaultviews',
-            'clazz' : 'Oskari.admin.bundle.admin.DefaultViews'
-        }],
+        tabs : [
+            {
+                'id' : 'defaultviews',
+                'clazz' : 'Oskari.admin.bundle.admin.DefaultViews'
+            },
+            {
+                'id' : 'layersimport',
+                'clazz' : 'Oskari.admin.bundle.admin.LayersImport'
+            }
+        ],
 
         /* App specific methods */
         createUI : function () {
+            var el = this.getEl();
+            var parent = el.parents('.oskari-flyout');
             if(this.tabsContainer) {
                 return;
             }
@@ -26,6 +34,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
                 tabsContainer.addPanel(me.__createTab(tabDef));
             });
             tabsContainer.insertTo(this.getEl());
+            if (!parent.hasClass('admin')) {
+                parent.addClass('admin');
+            }
         },
         __createTab : function(tabDef) {
             var tab = Oskari.clazz.create(tabDef.clazz, this.locale[tabDef.id] || {}, this.instance);

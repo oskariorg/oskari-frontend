@@ -197,6 +197,7 @@ Oskari.registerLocalization(
         "add": "Tillägg",
         "save": "Lagra",
         "delete": "Ta bort",
-        "ok": "OK"
+        "ok": "OK",
+        "export" : "Exportera"
     }
 });
