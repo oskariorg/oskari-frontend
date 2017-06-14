@@ -121,7 +121,7 @@ define([
                     });
                 }
 
-                var exportLayer = jQuery('<div class="tool-export"><a>' + this.instance.getLocalization('export') + '</a></div>');
+                var exportLayer = jQuery('<div class="tool-export cursor-pointer"><a>' + this.instance.getLocalization('export') + '</a></div>');
                 var layerExportUrl = this.instance.sandbox.getAjaxUrl('Layers') + '&id=' + layer.getId();
                 exportLayer.find('a').bind('click', function(){
                     window.open(layerExportUrl, '_blank');

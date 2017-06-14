@@ -28,7 +28,15 @@ Oskari.registerLocalization(
                 }
             },
             "layersimport": {
-                "title": "Lisää karttatasoja"
+                "title": "Lisää karttatasoja",
+                "textAreaPlaceholder": "Syötä JSON",
+                "description": "Syötä allaolevaan tekstikenttään karttatasojen JSON.",
+                "importButtonText": "Lisää",
+                "error": {
+                    "title": "Virhe",
+                    "checkValue": "Tarkista JSON",
+                    "importError": "Lisäys epäonnistui."
+                }
             }
         }
     }

@@ -26,6 +26,17 @@ Oskari.registerLocalization(
                     "listTitle": "Guest-anvandare har inte rätt till de här kartlagren:",
                     "viewUpdated": "Antaglig vy (id=${id}) uppdaterat."
                 }
+            },
+            "layersimport": {
+                "title": "Add maplayers",
+                "textAreaPlaceholder": "Ange JSON",
+                "description": "Ange JSON-definitionen av ett lager i textrutan nedan.",
+                "importButtonText": "Importera",
+                "error": {
+                    "title": "Fel",
+                    "checkValue": "Checka JSON",
+                    "importError": "Utsikt misslyckades att importera."
+                }
             }
         }
     }

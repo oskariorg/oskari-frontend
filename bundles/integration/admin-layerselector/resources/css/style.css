@@ -64,6 +64,8 @@ div.admin-layerselector {
     float: left;
     margin-left: 4px;
     margin-right: 4px; }
+  div.admin-layerselector div.cursor-pointer {
+    cursor: pointer; }
   div.admin-layerselector div.layer,
   div.admin-layerselector div.create-layer {
     padding: 6px 10px 6px 20px;
