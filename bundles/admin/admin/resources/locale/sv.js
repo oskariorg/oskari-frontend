@@ -30,7 +30,7 @@ Oskari.registerLocalization(
             "layersimport": {
                 "title": "Add maplayers",
                 "textAreaPlaceholder": "Ange JSON",
-                "description": "Ange JSON-definitionen av ett lager i textrutan nedan.",
+                "description": "Ange JSON-definitionen av ett lager i textrutan nedan. Du kan få lagret JSON för Layers Admin, klicka på Export-link för önskat lager",
                 "importButtonText": "Importera",
                 "error": {
                     "title": "Fel",

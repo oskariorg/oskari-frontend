@@ -1,13 +1,18 @@
 .oskari-flyout.admin {
 
     .layersimport {
-        div.input-controls {
-                width: 400px;
+        div.description {
+            width:400px;
+            margin-bottom:6px;
+        }
 
-                textarea {
-                    width: 400px;
-                    height: 250px;
-                }
+        div.input-controls {
+            width: 400px;
+
+            textarea {
+                width: 400px;
+                height: 250px;
+            }
         }
     }
 }

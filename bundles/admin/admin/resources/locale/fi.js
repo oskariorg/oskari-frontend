@@ -30,7 +30,7 @@ Oskari.registerLocalization(
             "layersimport": {
                 "title": "Lisää karttatasoja",
                 "textAreaPlaceholder": "Syötä JSON",
-                "description": "Syötä allaolevaan tekstikenttään karttatasojen JSON.",
+                "description": "Syötä allaolevaan tekstikenttään karttatasojen JSON. Tason JSON:in saat karttatasojen ylläpidosto klikkaamalla Vie-linkkiä haluamasi karttatason kohdalla.",
                 "importButtonText": "Lisää",
                 "error": {
                     "title": "Virhe",
