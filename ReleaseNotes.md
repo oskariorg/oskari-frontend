@@ -2,6 +2,14 @@
 
 ## 1.43.0
 
+### Admin layerselector
+
+Added ``Export`` link to layers. For clicking Export-button new window opened where is showed current layer JSON.
+
+### admin/admin
+
+Added ``Layers Import`` new tab for admins where layers can be imported (JSON-format).
+
 ### Grid
 
 Fixed subtable sorting.
@@ -37,7 +45,7 @@ This might affect usage of the component if an external code snippet assumes tha
 
 ### paikkatietoikkuna/register
 
-New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in.
 Bundle also creates registration popup to give information about registration before directing to registration page.
 
 ## 1.42.1
