@@ -34,9 +34,15 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin/instance.js"
-        },{
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../bundles/admin/admin/resources/css/style.css"
+        }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin/DefaultViews.js"
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/admin/admin/LayersImport.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin/request/AddTabRequest.js"
