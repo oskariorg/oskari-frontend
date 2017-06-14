@@ -4,13 +4,17 @@ Generic admin ui which other admin bundles can hook to.
 
 ## Description
 
-Bundle manages administrative functionalities that can have minimal UI requirements. Currently only default view management is implemented.
+Bundle manages administrative functionalities that can have minimal UI requirements. Currently default view management and layers import implemented.
 
 ### Default Views
 
 Lists Oskari views that are configured as default views. This includes a global default and any possible role-based default views.
 The listing includes functionality to set the current map location and layers to given default view. It also warns if any of the layers are
 not accessible by guest users.
+
+### Layers Import
+
+Allows admin users Import maplayers to current applications.
 
 ## Bundle configuration
 
