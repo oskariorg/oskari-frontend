@@ -92,7 +92,7 @@ table {
 
 /*Sivupalkin v‰rityksen muuttaminen*/
 #maptools {
-    background-color: #0073b0 !important;
+    background-color: #2D2D2D !important;
     height: 100%;
     position: absolute;
     top: 0;
@@ -101,18 +101,18 @@ table {
 }
 
 /*Kuvan lis‰‰minen sivupalkkiin*/
-#tk-logo {
+livi-logo {
 				height:183px;
 				width:100px;
 				margin-left:15px;
 				margin-top:5px;
 				padding-bottom:5px;
-				background:url("/Oskari/applications/tk/servlet/images/tk_m_white_100x143.png") no-repeat;
+				background:url("/Oskari/applications/livi/servlet/images/logo.png") no-repeat;
 				cursor:pointer;
 			}  
 							
-<div id="tk-logo">
-        <img src="/Oskari/applications/tk/servlet/images/tk_m_white_100x143.png" alt="TK" width="153" height="76">
+<div id="livi-logo">
+        <img src="/Oskari/applications/livi/servlet/images/logo.png" alt="LV" width="153" height="76">
     </div> 
 	
 	
