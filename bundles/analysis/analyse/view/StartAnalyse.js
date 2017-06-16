@@ -3001,10 +3001,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _saveAnalyse: function (selections, features) {
-            /*var sandbox = this.instance.getSandbox(),
-                url = sandbox.getAjaxUrl();
-            */
-            alert('TODO: save analyse data operations');
+            // TODO: save analyse data operations
+            var log = Oskari.log('Oskari.analysis.bundle.analyse.view.StartAnalyse');
+            log.warn('Save analyse not implemented!!');
         },
 
         /**

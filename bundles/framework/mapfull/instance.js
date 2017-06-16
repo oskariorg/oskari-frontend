@@ -393,7 +393,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         stop: function () {
             this.getSandbox().unregisterStateful(this.mediator.bundleId);
-            alert('Stopped!');
         },
 
         /**
