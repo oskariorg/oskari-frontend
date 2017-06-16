@@ -152,7 +152,6 @@ Oskari.clazz.define(
             var me = this,
                 element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
-                link,
                 linkParams;
             if(!element) {
                 return;
@@ -387,7 +386,7 @@ Oskari.clazz.define(
              if(link.options.id) {
                extend.addClass(link.options.id.toLowerCase());
              }
-             if(link.options.id != 'icon') {
+             if(link.options.id !== 'icon') {
                extend.css("margin","5px");
              }
              extend.find('a').text(link.title);
