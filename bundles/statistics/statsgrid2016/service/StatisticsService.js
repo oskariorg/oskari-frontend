@@ -24,7 +24,8 @@
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
 
-        this._mapModes = ['wms']; // possible values: wms, vector
+        // possible values: wms, vector
+        this._mapModes = ['wms'];
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",

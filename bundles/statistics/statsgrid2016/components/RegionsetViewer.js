@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     }
 
                     regiongroup.forEach(function(region){
-                        var wantedRegion = jQuery.grep(regions, function( r, i ) {
+                        var wantedRegion = jQuery.grep(regions, function(r) {
                             return r.id === region;
                         });
 

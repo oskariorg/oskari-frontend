@@ -74,7 +74,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                     colors.push(color);
                 });
             } else {
-                //for(var set = this._basicColors;
                 var colorIndex = 0;
                 if(classification.name) {
                     colorIndex = !isNaN(classification.name) ? parseFloat(classification.name) : 0;
