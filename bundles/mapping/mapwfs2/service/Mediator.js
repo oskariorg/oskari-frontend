@@ -266,7 +266,7 @@ Oskari.clazz.define(
          * Sorts array's fields to match with featurePropertiesIndexes
          * include only user_layer table fields and hiddenfields
          */
-        sortArrayByFeaturePropertyIndexes (layer, array){
+        sortArrayByFeaturePropertyIndexes: function(layer, array){
             var arrangedFields = [];
             var orderedFieldsIndexes = layer.getFeaturePropertyIndexes();
             if (orderedFieldsIndexes.length > 0 && array.length > 0){
