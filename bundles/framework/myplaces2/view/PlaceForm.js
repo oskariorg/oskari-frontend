@@ -26,7 +26,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '    <input type="text" data-name="placename" placeholder="' + loc.placename.placeholder + '" />' +
             '  </div>' +
             '  <div class="field">' +
-            '    <textarea data-name="placedesc" placeholder="' + loc.placedesc.placeholder + '"></textarea>' +
+            '    <input type="text" data-name="placedesc" placeholder="' + loc.placedesc.placeholder + '" />' +
             '  </div>' +
             '  <div class="field">' +
             '    <input type="text" data-name="placeAttention" placeholder="' + loc.placeAttention.placeholder + '"/>' +
@@ -105,7 +105,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 
             if (this.initialValues) {
                 ui.find('input[data-name=placename]').attr('value', this.initialValues.place.name);
-                ui.find('textarea[data-name=placedesc]').append(this.initialValues.place.desc);
+                ui.find('input[data-name=placedesc]').attr('value', this.initialValues.place.desc);
                 ui.find('input[data-name=placeAttention]').attr('value', this.initialValues.place.attention_text);
                 ui.find('input[data-name=placelink]').attr('value', this.initialValues.place.link);
                 ui.find('input[data-name=imagelink]').attr('value', this.initialValues.place.imageLink);
@@ -136,7 +136,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             if (onScreenForm.length > 0) {
                 // found form on screen
                 var placeName = onScreenForm.find('input[data-name=placename]').val(),
-                    placeDesc = onScreenForm.find('textarea[data-name=placedesc]').val(),
+                    placeDesc = onScreenForm.find('input[data-name=placedesc]').val(),
                     placeAttention = onScreenForm.find('input[data-name=placeAttention]').val(),
                     placeLink = onScreenForm.find('input[data-name=placelink]').val();
                 if (placeLink) {
@@ -181,7 +181,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             if (onScreenForm.length > 0) {
                 // found form on screen
                 onScreenForm.find('input[name=placename]').val(data.place.name);
-                onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
+                onScreenForm.find('input[name=placedesc]').val(data.place.desc);
                 onScreenForm.find('input[name=placeAttention]').val(data.place.attention_text);
                 onScreenForm.find('input[name=placelink]').val(data.place.link);
                 onScreenForm.find('input[name=imagelink]').val(data.place.imageLink);

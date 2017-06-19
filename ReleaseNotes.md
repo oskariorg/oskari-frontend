@@ -2,6 +2,32 @@
 
 ## 1.43.0
 
+### Grid
+
+Fixed subtable sorting.
+
+### LogoPluginService
+
+Logo-plugin now provides a new service which can be used to add new items next to the logo (links, texts):
+
+	var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
+	// just adding a text
+	logoService.addLabel('Hello');
+
+	// providing a callback and an id (to identify the label later on)
+	var options = {
+		id:'hello',
+		callback: function() {
+			alert("Hello");
+		}
+	};
+	logoService.addLabel('Alert', options);
+
+### admin/appsetup
+
+``New admin bundle`` for creating AppSetups (views) from JSON definition.
+
+
 ### divmanazer TabContainer component
 
 TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).

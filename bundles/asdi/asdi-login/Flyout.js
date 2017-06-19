@@ -31,6 +31,9 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 '       <input type="reset" id="cancel" value="" class="oskari-formcomponent oskari-button">'+
                 '       <input type="submit" id="submit" value="" class="oskari-button oskari-formcomponent primary">'+
                 '   </div>'+
+                '   <div class="asdiLoginInputField">'+
+                '      <a href="/user/reset">' + locale.passwdreset + '</a>'+
+                '   </div>' +
                 '</div>'+
                 '</form>'
                 )

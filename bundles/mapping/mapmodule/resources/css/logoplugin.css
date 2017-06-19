@@ -18,7 +18,6 @@
     cursor: pointer; }
   .logoplugin .data-sources, .logoplugin .terms {
     display: inline-block;
-    margin: 5px;
     cursor: pointer; }
     .logoplugin .data-sources .data-sources a, .logoplugin .data-sources .terms a, .logoplugin .terms .data-sources a, .logoplugin .terms .terms a {
       /* Filter below requires that the element has height or smthn... */

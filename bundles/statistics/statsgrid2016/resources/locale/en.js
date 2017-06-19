@@ -131,6 +131,16 @@ Oskari.registerLocalization(
             "div": "Divisible",
             "info2": "Select colors by clicking a color group you want.",
             "cancel": "Cancel"
+        },
+        "errors": {
+            "title": "Error",
+            "indicatorListError": "Error fetching the list of data sources.",
+            "indicatorListIsEmpty": "The list of data is empty.",
+            "indicatorMetadataError": "Error fetching data attribute list",
+            "indicatorMetadataIsEmpty": "Data attribute list is empty.",
+            "regionsetsIsEmpty": "Error fetching suitable regions for the data.",
+            "regionsDataError": "Error fetching regions.",
+            "regionsDataIsEmpty": "The list of suitable regions is empty."
         }
     }
 });

@@ -10,7 +10,8 @@ Oskari.registerLocalization(
             "username": "Username",
             "password": "Password",
             "login": "Kirjaudu",
-            "cancel": "Peruuta"
+            "cancel": "Peruuta",
+            "passwdreset": "Unohditko salasanan?"
         }
     }
 });

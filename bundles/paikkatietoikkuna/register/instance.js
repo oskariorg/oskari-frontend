@@ -60,18 +60,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         showRegisterPopup: function () {
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                popupTitle = this.loc.popup['title'],
                 buttons = [];
-            
+
             me.popupContent = me.wrapper.clone();
 
             registerInfo = me.registerInfo.clone();
-            registerInfo.append(me.loc.popup['registerInfo']);
+            registerInfo.append(me.loc.popup.registerInfo);
 
             var linkInfo = me.linkToTermsOfUse.clone();
-            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.termsUrl + '>' + this.loc.popup['termsOfUseLink'] + '</a>');
+            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.termsUrl + '>' + this.loc.popup.termsOfUseLink + '</a>');
             linkInfo.append(termsOfUseTemplate);
-            linkInfo.prepend(me.loc.popup['registerInfo2']);
+            linkInfo.prepend(me.loc.popup.registerInfo2);
 
             me.popupContent.append(registerInfo);
             me.popupContent.append(linkInfo);
@@ -91,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             );
             continueBtn.addClass('primary');
             continueBtn.setId('oskari_paikkatietoikkuna_register_buttons_continue');
-            continueBtn.setTitle(me.loc.popup['continueBtn']);
+            continueBtn.setTitle(me.loc.popup.continueBtn);
             continueBtn.setHandler(function () {
                 window.open(me.registerUrl, '_blank');
                 popup.close(true);
@@ -99,14 +98,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             buttons.push(continueBtn);
 
             popup.addClass('oskari_paikkatietoikkuna_register_popup');
-            popup.show(me.loc.popup['title'], me.popupContent, buttons);
+            popup.show(me.loc.popup.title, me.popupContent, buttons);
             popup.makeModal();
         },
 
         changeLoggedInMode: function () {
             var me = this,
                 user = Oskari.user().getName();
-            
+
             $('.registerLinks').detach();
 
             me.loggedInTemplate = jQuery('<div class="loggedIn">' + user + '</br><a id="logoutLink">' + this.loc.logout + '</a></div>');

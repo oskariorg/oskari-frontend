@@ -123,7 +123,7 @@ Oskari.registerLocalization(
                 "lastName": "Surname",
                 "nickName": "Nickname",
                 "email": "E-mail",
-                "changeInfo": "Updata account data",
+                "changeInfo": "Update account data",
                 "changePassword": "Change password",
                 "removeAccount": "Delete Account",
                 "changeInfoUrl": "/web/en/profile"

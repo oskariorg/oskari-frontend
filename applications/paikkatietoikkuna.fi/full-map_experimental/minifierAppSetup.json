@@ -591,6 +591,17 @@
                     }
                 }
             }
-	  }
+	  },
+	  {
+		    "bundlename" : "appsetup",
+		    "bundleinstancename" : "appsetup",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "appsetup" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
+		}
 	]
 }
