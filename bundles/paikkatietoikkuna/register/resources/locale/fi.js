@@ -10,7 +10,7 @@ Oskari.registerLocalization(
         "logout" :"Kirjaudu ulos",
         "popup": {
             "title": "Rekisteröidy Paikkatietoikkunaan",
-            "registerInfo": "Rekisteröityneenä käyttäjänä voit julkaista karttoja, käyttää analyysitoimintoa sekä tuoda kartalle omia aineistoja. Rekisteröityminen tapahtuu Maanmittauslaitoksen tunnistuspalvelussa. Rekisteröitymisen jälkeen sinut ohjataan takaisin Paikkatietoikkunaan.",
+            "registerInfo": "Rekisteröityneenä käyttäjänä voit julkaista karttoja, käyttää analyysitoimintoa sekä tuoda kartalle omia aineistoja. Rekisteröityminen tapahtuu Maanmittauslaitoksen tunnistuspalvelussa. Rekisteröitymisen jälkeen palaa takaisin Paikkatietoikkunaan.",
             "registerInfo2": "Rekisteröitymällä hyväksyt Paikkatietoikkunan ",
             "termsOfUseLink": "käyttöehdot",
             "continueBtn": "Jatka rekisteröitymään"

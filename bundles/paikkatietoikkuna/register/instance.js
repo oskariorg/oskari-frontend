@@ -34,7 +34,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
 
             var conf = me.getConfiguration() || {};
             me.termsUrl = conf.termsUrl || '';
-            me.registerUrl = conf.registerUrl || '';
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/';
+            me.loginUrl = conf.loginUrl || 'https://kartta.paikkatietoikkuna.fi/login';
 
             me.loginbar = me.loginbarTemplate.clone();
             me.loginbar.append(me.loginTemplate);
@@ -47,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             });
 
             jQuery('#loginLink').click(function () {
-                //TODO: go to login, and when user is logged in, change to loggedin mode
+                window.open(me.loginUrl, '_blank');
                 me.changeLoggedInMode();
             });
         },
@@ -92,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             continueBtn.setId('oskari_paikkatietoikkuna_register_buttons_continue');
             continueBtn.setTitle(me.loc.popup['continueBtn']);
             continueBtn.setHandler(function () {
-                //TODO: open registration page
                 window.open(me.registerUrl, '_blank');
                 popup.close(true);
             });
