@@ -38,11 +38,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             me.loginUrl = conf.loginUrl || 'https://kartta.paikkatietoikkuna.fi/login';
 
             me.loginbar = me.loginbarTemplate.clone();
-            me.loginbar.append(me.loginTemplate);
-
             me.loginContainer = jQuery(me.loginContainerId);
-            me.loginContainer.append(me.loginbar);
 
+            if (Oskari.user()._loggedIn) {
+                me.changeLoggedInMode();
+            } else {
+                me.loginbar.append(me.loginTemplate);
+            }
+
+            me.loginContainer.append(me.loginbar);
+            
             jQuery('#registerLink').click(function () {
                 me.showRegisterPopup();
             });
@@ -106,7 +111,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this,
                 user = Oskari.user().getName();
 
-            $('.registerLinks').detach();
+            if ($('.registerLinks')) {
+                $('.registerLinks').detach();
+            }
 
             me.loggedInTemplate = jQuery('<div class="loggedIn">' + user + '</br><a id="logoutLink">' + this.loc.logout + '</a></div>');
             me.loginbar.append(me.loggedInTemplate);
