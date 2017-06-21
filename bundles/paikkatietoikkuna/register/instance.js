@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
         this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
                                     " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
-        me.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
+        this.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
     },
     {
         /**
