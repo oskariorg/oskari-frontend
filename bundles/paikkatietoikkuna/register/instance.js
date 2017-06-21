@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             });
 
             jQuery('#loginLink').click(function () {
-                window.open(me.loginUrl, '_blank');
+                window.location.href = me.loginUrl;
                 me.changeLoggedInMode();
             });
         },
