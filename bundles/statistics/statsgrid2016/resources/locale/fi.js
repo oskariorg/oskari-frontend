@@ -141,6 +141,14 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
             "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
             "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja."
+        },
+        "datacharts": {
+          "flyout": "Taulukko ja kuvaajat",
+          "barchart": "Pylväskuvio",
+          "linechart": "Viivakuvio",
+          "table": "Taulukko",
+          "desc": "Kuvaajat",
+          "nodata": "Ei valittuja indikaattoreita"
         }
     }
 });

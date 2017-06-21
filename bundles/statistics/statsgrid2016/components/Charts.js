@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
   createChart: function () {
     var graph = this._template.graph;
     if(this.data === null) {
-      graph.append(jQuery('<h3>'+this.loc.DataDescriptor.nodata+'</h3>'));
+      graph.append(jQuery('<h3>'+this.loc.datacharts.nodata+'</h3>'));
       return;
     }
     var me = this;

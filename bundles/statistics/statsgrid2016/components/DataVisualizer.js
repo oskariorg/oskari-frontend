@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     accordion.addPanel(panel);
     accordion.insertTo(el);
     this.addTab("asd");
-    var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.loc.DataDescriptor.flyout, {
+    var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.loc.datacharts.flyout, {
         width: 'auto',
         height: 'auto',
         cls: 'statsgrid-chart-flyout'
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     return this.__datachartFlyout;
   },
   _getPanels: function() {
-    return this._createChartsPanel(this.loc.DataDescriptor.desc);
+    return this._createChartsPanel(this.loc.datacharts.desc);
   },
   /**
    * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
 
               var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
               defaultPanel.setTitle(
-                  this.loc.DataDescriptor.barchart,
+                  this.loc.datacharts.barchart,
                   'oskari_datachart_tabpanel_header'
               );
               defaultPanel.setContent(this.createBarCharts());
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
               me.tabsContainer.addPanel(defaultPanel);
       }
       var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-      panel.setTitle(this.loc.DataDescriptor.linechart, 'oskari_datachart_tabpanel_header');
+      panel.setTitle(this.loc.datacharts.linechart, 'oskari_datachart_tabpanel_header');
       panel.setId('oskari_datachart_tabpanel_header');
       panel.setContent("");
       panel.setPriority(1.0);

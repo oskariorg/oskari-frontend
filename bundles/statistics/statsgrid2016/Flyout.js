@@ -50,6 +50,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             flyout.setContent(container);
             return this.__legendFlyout;
         },
+        getDataCharts : function () {
+          //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
+          if( this.datacharts ) {
+            return this.datacharts;
+          }
+          this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', Oskari.getSandbox(), this.instance.getLocalization());
+          return this.datacharts;
+        },
+        showDataCharts: function () {
+          //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
+          var me = this;
+          this.addSideTool("Charts", function(el, bounds) {
+              // lazy render
+              var datacharts = me.getDataCharts();
+              if(datacharts.isVisible()) {
+                  datacharts.__datachartFlyout.hide();
+              } else {
+                  datacharts.createUi();
+                  // show and reset position
+                  datacharts.__datachartFlyout.move(bounds.right, bounds.top, true);
+                  datacharts.__datachartFlyout.show();
+                  datacharts.__datachartFlyout.bringToTop();
+              }
+          });
+        },
         showLegend : function(enabled) {
             if(!enabled) {
                 this.removeSideTools();
@@ -94,6 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 parent.find('.oskari-flyouttools').show();
             }
             this.showLegend(!isEmbedded);
+            this.showDataCharts();
 
             this.addContent(this.getEl(), isEmbedded);
         },
@@ -126,7 +152,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             });
 
             accordion.insertTo(el);
-
+            // barchart.createChart(el);
             // Add grid
             var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb, this.instance.getLocalization());
             grid.showRegionsetSelector(!isEmbedded);
