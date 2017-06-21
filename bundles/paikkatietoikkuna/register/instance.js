@@ -34,20 +34,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
 
             var conf = me.getConfiguration() || {};
             me.termsUrl = conf.termsUrl || '';
-            me.registerUrl = conf.registerUrl || '';
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/';
+            me.loginUrl = conf.loginUrl || 'https://kartta.paikkatietoikkuna.fi/auth';
 
             me.loginbar = me.loginbarTemplate.clone();
-            me.loginbar.append(me.loginTemplate);
-
             me.loginContainer = jQuery(me.loginContainerId);
-            me.loginContainer.append(me.loginbar);
 
+            if (Oskari.user().isLoggedIn()) {
+                me.changeLoggedInMode();
+            } else {
+                me.loginbar.append(me.loginTemplate);
+            }
+
+            me.loginContainer.append(me.loginbar);
+            
             jQuery('#registerLink').click(function () {
                 me.showRegisterPopup();
             });
 
             jQuery('#loginLink').click(function () {
-                //TODO: go to login, and when user is logged in, change to loggedin mode
+                window.location.href = me.loginUrl;
                 me.changeLoggedInMode();
             });
         },
@@ -91,7 +97,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             continueBtn.setId('oskari_paikkatietoikkuna_register_buttons_continue');
             continueBtn.setTitle(me.loc.popup.continueBtn);
             continueBtn.setHandler(function () {
-                //TODO: open registration page
                 window.open(me.registerUrl, '_blank');
                 popup.close(true);
             });
@@ -106,7 +111,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this,
                 user = Oskari.user().getName();
 
-            $('.registerLinks').detach();
+            if ($('.registerLinks')) {
+                $('.registerLinks').detach();
+            }
 
             me.loggedInTemplate = jQuery('<div class="loggedIn">' + user + '</br><a id="logoutLink">' + this.loc.logout + '</a></div>');
             me.loginbar.append(me.loggedInTemplate);
