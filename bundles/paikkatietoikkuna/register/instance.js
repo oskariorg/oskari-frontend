@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             me.loginbar = me.loginbarTemplate.clone();
             me.loginContainer = jQuery(me.loginContainerId);
 
-            if (Oskari.user()._loggedIn) {
+            if (Oskari.user().isLoggedIn()) {
                 me.changeLoggedInMode();
             } else {
                 me.loginbar.append(me.loginTemplate);
