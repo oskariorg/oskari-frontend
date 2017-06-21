@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
         this.loginbarTemplate = jQuery('<div class="registerLoginBar"></div>');
         this.loginTemplate = jQuery('<div class="registerLinks"><a id="loginLink">' + this.loc.login + '</a>' +
                                     " - " + '<a id="registerLink">' + this.loc.register + '</a></div>');
+        me.loggedInTemplate = jQuery('<div class="loggedIn">' +  Oskari.user().getName() + '</br><a href="/logout">' + this.loc.logout + '</a></div>');
     },
     {
         /**
@@ -41,21 +42,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             me.loginContainer = jQuery(me.loginContainerId);
 
             if (Oskari.user().isLoggedIn()) {
-                me.changeLoggedInMode();
+                me.loginbar.append(me.loggedInTemplate);
             } else {
                 me.loginbar.append(me.loginTemplate);
+                me.loginbar.find('#loginLink').attr('href', me.loginUrl);
+                jQuery('#registerLink').click(function () {
+                    me.showRegisterPopup();
+                });
             }
 
             me.loginContainer.append(me.loginbar);
-            
-            jQuery('#registerLink').click(function () {
-                me.showRegisterPopup();
-            });
-
-            jQuery('#loginLink').click(function () {
-                window.location.href = me.loginUrl;
-                me.changeLoggedInMode();
-            });
         },
 
         /**
@@ -105,22 +101,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             popup.addClass('oskari_paikkatietoikkuna_register_popup');
             popup.show(me.loc.popup.title, me.popupContent, buttons);
             popup.makeModal();
-        },
-
-        changeLoggedInMode: function () {
-            var me = this,
-                user = Oskari.user().getName();
-
-            if ($('.registerLinks')) {
-                $('.registerLinks').detach();
-            }
-
-            me.loggedInTemplate = jQuery('<div class="loggedIn">' + user + '</br><a id="logoutLink">' + this.loc.logout + '</a></div>');
-            me.loginbar.append(me.loggedInTemplate);
-            jQuery('#logoutLink').click(function () {
-                $('.loggedIn').detach();
-                me.loginbar.append(me.loginTemplate);
-            });
         }
     },
     {
