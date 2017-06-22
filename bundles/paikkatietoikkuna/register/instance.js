@@ -40,13 +40,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
 
             me.loginbar = me.loginbarTemplate.clone();
             me.loginContainer = jQuery(me.loginContainerId);
-
             if (Oskari.user().isLoggedIn()) {
                 me.loginbar.append(me.loggedInTemplate);
             } else {
                 me.loginbar.append(me.loginTemplate);
                 me.loginbar.find('#loginLink').attr('href', me.loginUrl);
-                jQuery('#registerLink').click(function () {
+                me.loginbar.find('#registerLink').click(function () {
                     me.showRegisterPopup();
                 });
             }
