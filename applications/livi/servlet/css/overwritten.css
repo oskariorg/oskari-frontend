@@ -97,7 +97,6 @@ table {
 	color: #FFFFFF;
 }  
   
-
 /*Sivupalkin v‰rityksen muuttaminen*/
 #maptools {
     background-color: #2D2D2D !important;
@@ -109,21 +108,21 @@ table {
 }
 
 /*Kuvan lis‰‰minen sivupalkkiin*/
-#logo {
-				height:183px;
-				width:100px;
-				margin-left:15px;
+#livi-logo {
+				height:107px;
+				width:107px;
+				margin-left:30px;
 				margin-top:5px;
 				padding-bottom:5px;
-				background:url("/Oskari/applications/livi/servlet/images/logo.png") no-repeat;
+				background:url("/Oskari/applications/livi/servlet/images/livilogosmall.png") no-repeat;
 				cursor:pointer;
 			}  
 			
 
 							
 <div id="livi-logo">
-        <img src="/Oskari/applications/livi/servlet/images/logo.png" alt="LV" width="153" height="76">
-    </div> 
+        <img src="/Oskari/applications/livi/servlet/images/livilogosmall.png" alt="LV" width="107" height="107">
+    </div>  
     
 <div id="language">
             <c:if test="${language == 'fi'}">
@@ -139,9 +138,3 @@ table {
                 <a href="./?lang=sv">PÂ svenska</a>
             </c:if>
         </div>
-	
-	
-
-
-  
-  
