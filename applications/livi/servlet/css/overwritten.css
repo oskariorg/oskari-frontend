@@ -114,6 +114,21 @@ livi-logo {
 <div id="livi-logo">
         <img src="/Oskari/applications/livi/servlet/images/logo.png" alt="LV" width="153" height="76">
     </div> 
+    
+<div id="language">
+            <c:if test="${language == 'fi'}">
+                <a href="./?lang=sv">På svenska</a> -
+                <a href="./?lang=en">In English</a>
+            </c:if>
+            <c:if test="${language == 'sv'}">
+                <a href="./?lang=fi">Suomeksi</a> -
+                <a href="./?lang=en">In English</a>
+            </c:if>
+            <c:if test="${language == 'en'}">
+                <a href="./?lang=fi">Suomeksi</a> -
+                <a href="./?lang=sv">På svenska</a>
+            </c:if>
+        </div>
 	
 	
 
