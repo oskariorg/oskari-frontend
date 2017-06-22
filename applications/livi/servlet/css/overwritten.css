@@ -84,10 +84,18 @@ table {
   /* 3d-dark theme */
   /* 3d-light theme */ }
   
-  
-    
-  
-  
+/* language selector */
+
+.language-link {
+    text-decoration: underline;
+    color: #FFFFFF;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.language-link:hover {
+	color: #FFFFFF;
+}  
   
 
 /*Sivupalkin v‰rityksen muuttaminen*/
@@ -101,7 +109,7 @@ table {
 }
 
 /*Kuvan lis‰‰minen sivupalkkiin*/
-livi-logo {
+#logo {
 				height:183px;
 				width:100px;
 				margin-left:15px;
@@ -110,6 +118,8 @@ livi-logo {
 				background:url("/Oskari/applications/livi/servlet/images/logo.png") no-repeat;
 				cursor:pointer;
 			}  
+			
+
 							
 <div id="livi-logo">
         <img src="/Oskari/applications/livi/servlet/images/logo.png" alt="LV" width="153" height="76">
