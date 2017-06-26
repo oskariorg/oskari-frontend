@@ -83,7 +83,7 @@ div.basic_publisher div.data input {
 
 div.basic_publisher > div.content {
   overflow: auto;
-  height: calc(100% - 108px); }
+  height: calc(100% - 68px); }
 
 div.basic_publisher > div.header {
   background-color: #FDF8D9;
