@@ -452,6 +452,16 @@
 		        }
 		    }
 		}, {
+		    "bundlename" : "register",
+		    "bundleinstancename" : "register",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "register" : {
+		                "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+		            }
+		        }
+		    }
+		}, {
 		    "bundlename" : "admin",
 		    "bundleinstancename" : "admin",
 		    "metadata" : {
