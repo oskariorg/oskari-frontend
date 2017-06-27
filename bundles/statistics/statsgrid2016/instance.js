@@ -30,9 +30,9 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this._tileExtensions = [];
         this._templates = {
-            search: '<div class="statsgrid-functionality" id="material-search"></div>',
-            view: '<div class="statsgrid-functionality" id="material-view"></div>',
-            edit: '<div class="statsgrid-functionality" id="material-edit"></div>'
+            search: jQuery('<div class="statsgrid-functionality" id="material-search"></div>'),
+            view: jQuery('<div class="statsgrid-functionality" id="material-view"></div>'),
+            edit: jQuery('<div class="statsgrid-functionality" id="material-edit"></div>')
         }
     }, {
         afterStart: function (sandbox) {
@@ -46,8 +46,8 @@ Oskari.clazz.define(
 
             var conf = this.getConfiguration() || {};
             
-            for( var template in this._templates ) {
-              var icon = jQuery(this._templates[template]);
+            for ( var template in this._templates ) {
+              var icon = this._templates[template];
               this.extendTile(icon);
             }
             this.hideExtension();
@@ -224,7 +224,6 @@ Oskari.clazz.define(
                     }
                     me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
                   });
-                  // this.getTile().showExtension(this.getFlyout().showDataCharts.bind(this.getFlyout()));
                 }
                 var renderMode = this.isEmbedded();
                 // rendermode changes if we are in geoportal and open the flyout in publisher

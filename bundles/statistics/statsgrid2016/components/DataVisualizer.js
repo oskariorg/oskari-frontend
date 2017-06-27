@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
+  this.events();
 }, {
   _template: {
     error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
@@ -43,6 +44,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     flyout.setContent(el);
     this.__datachartFlyout = flyout;
     this._isOpen = true;
+    // return this.__datachartFlyout;
+  },
+  getFlyout: function() {
     return this.__datachartFlyout;
   },
   _getPanels: function() {
@@ -136,7 +140,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     });
     return indicatorData;
   },
+  events: function() {
+    var me = this;
+        this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
+            var current = event.getCurrent();
+            if(current) {
+                me.createBarCharts();
+            }
+        });
+  },
   createBarCharts: function () {
+    if( this.getFlyout() === null ) {
+      this.createUi();
+    }
     var data = this.getIndicatorData();
     if( data === undefined ) {
       Oskari.log("no indicator data");
@@ -144,9 +160,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     }
     if( !this.barchart ) {
       this.barchart = Oskari.clazz.create('Oskari.statistics.statsgrid.Charts', Oskari.getSandbox(), this.loc, data, this.getActiveIndicator());
-      return this.barchart.createChart();
+      var barchart = this.barchart.createChart();
+      this.tabsContainer.panels[0].getContainer().append(barchart);
     } else {
-      return this.barchart.updateChart(data);
+      var updated = this.barchart.updateChart(data);
+      this.tabsContainer.panels[0].getContainer().append(updated);
     }
     
   },
@@ -162,7 +180,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
                   this.loc.datacharts.barchart,
                   'oskari_datachart_tabpanel_header'
               );
-              defaultPanel.setContent(this.createBarCharts());
+              // defaultPanel.setContent(this.createBarCharts());
               defaultPanel.getContainer().prepend(this.createDropdown(this.loc.datacharts.indicatorVar));
               defaultPanel.getContainer().prepend(this.createDropdown(this.loc.datacharts.descColor));
               defaultPanel.setId('oskari_search_tabpanel_header');

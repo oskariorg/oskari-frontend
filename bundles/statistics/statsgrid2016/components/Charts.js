@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
 
     this._template.container.append(this._template.select);
   },
-  updateChart: function (data, el) {
+  updateChart: function (data) {
     var svg = d3.select(this._template.graph[0]);
     svg.remove();
     return this.createChart(data);
@@ -51,6 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
   createChart: function (data) {
     if( data ) {
       this.data = data;
+      this._template.graph.empty();
     }
     var stateService = this.service.getStateService();
     var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
@@ -168,6 +169,9 @@ svg.append("g")
     .attr("width", function (d) {
       return x(d.value);
     });
+    if( !data ) {
+      this._template.container.append(this._template.graph);
+    }
     return this._template.graph;
     // this._template.container.append(this._template.graph);
   }
