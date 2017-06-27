@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          * @private @property _model
          */
         this._model = model;
+
         // Put locale into model so templates can get codeList values...
         model.locale = locale;
 
@@ -450,6 +451,64 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '            <% }); %>' +
                     '        <% }); %>' +
                     '    <% } %>' +
+                    '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
+                    '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
+                    '           <br> <h2> <%= dataQuality.nodeName %> </h2>' +
+                    '           <% if (dataQuality.nameOfMeasure.value) { %>' +
+                    '               <%= dataQuality.nameOfMeasure.label %> : <%= dataQuality.nameOfMeasure.value %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureDescription.value) { %>' +
+                    '               <%= dataQuality.measureDescription.label %> : <%= dataQuality.measureDescription.value %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodType.value) { %>' +
+                    '               <%= dataQuality.evaluationMethodType.label %> : <%= dataQuality.evaluationMethodType.value %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationAuthorization.value) { %>' +
+                    '               <%= dataQuality.measureIdentificationAuthorization.label %> : <%= dataQuality.measureIdentificationAuthorization.value %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationCode.value) { %>' +
+                    '               <%= dataQuality.measureIdentificationCode.label %> : <%= dataQuality.measureIdentificationCode.value %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.dateTime.length) { %>' +
+                    '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
+                    '                   <% if (dateTime.value) { %>' +
+                    '                       <%= dateTime.label %> : <%= dateTime.value %> <br>' +
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.conformanceResultList.length) { %>' +
+                    '               <br> <h3> Conformance Results </h3>' +
+                    '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
+                    '                   <% if (conformanceResult.pass == "true") {%> <p><%=locale.qualityContent.qualityPassTrue%></p><%}' +
+                    '                       else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
+                    '                   <% if (conformanceResult.explanation.value) { %>' +
+                    '                       <%= conformanceResult.explanation.label %> : <%= conformanceResult.explanation.value %> <br>' +
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.quantitativeResultList.length) { %>' +
+                    '               <br> <h3> Quantitative Results </h3>' +
+                    '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
+                    '                   <% if (quantitativeResult.valueType.value) { %>' +
+                    '                       <%= quantitativeResult.valueType.label %> : <%= quantitativeResult.valueType.value %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.valueUnit.value) { %>' +
+                    '                       <%= quantitativeResult.valueUnit.label %> : <%= quantitativeResult.valueUnit.value %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.errorStatistic.value) { %>' +
+                    '                       <%= quantitativeResult.errorStatistic.label %> : <%= quantitativeResult.errorStatistic.value %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (dataQuality.quantitativeResult.value.length) { %>' +
+                    '                       <% _.forEach(dataQuality.quantitativeResult.value, function (value) { %>' +
+                    '                           <% if (value.value) { %>' +
+                    '                               <%= value.label %> : <%= value.value %> <br>' +
+                    '                           <% } %>' +
+                    '                       <% }); %> '+
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
+                    '       <% }); %> '+
+                    '    <% } %> '+
                     '    <% if (dataQualities.length) { %>' +
                     '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
                     '           <% if (dataQuality.absoluteExternalPositionalAccuracyList.length) { %>' +
