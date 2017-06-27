@@ -83,6 +83,8 @@ Oskari.clazz.define(
             var button = this.getButton();
 
             var doSearch = function () {
+                field.setEnabled(false);
+                button.setEnabled(false);
             	me.__doSearch();
             };
             var doAutocomplete = function() {
@@ -172,8 +174,6 @@ Oskari.clazz.define(
 			var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
-	        field.setEnabled(false);
-	        button.setEnabled(false);
 
             searchContainer.find('div.resultList').empty();
             searchContainer.find('div.info').empty();

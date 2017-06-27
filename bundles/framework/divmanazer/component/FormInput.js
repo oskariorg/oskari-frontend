@@ -417,6 +417,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             input.autocomplete({
                 source: results
             });
+            input.autocomplete('search', input.val());
         },
         addClass: function(className) {
             var input = this._field.find('input');
