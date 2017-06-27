@@ -205,22 +205,6 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Koordinaattin�ytt�",
-            "bundleinstancename": "coordinatedisplay",
-            "fi": "coordinatedisplay",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "coordinatedisplay",
-            "metadata": {
-                "Import-Bundle": {
-                    "coordinatedisplay": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
             "title": "maplegend",
             "fi": "maplegend",
             "bundleinstancename": "maplegend",
