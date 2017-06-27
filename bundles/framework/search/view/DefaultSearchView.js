@@ -203,8 +203,8 @@ Oskari.clazz.define(
                 // happy case
                 if (me.autocomplete) {
                     var results =  [];
-                    for (var i = 0; i < result.totalCount; i++) {
-                        results.push({ value: result.locations[i].name, data: result.locations[i].name });
+                    for (var i = 0; i < result.methods.length; i++) {
+                        results.push({ value: result.methods[i], data: result.methods[i] });
                     }
                     field.autocomplete(results);
                     me.autocomplete = false;
