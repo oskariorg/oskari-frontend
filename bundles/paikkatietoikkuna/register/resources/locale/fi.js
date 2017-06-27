@@ -12,7 +12,8 @@ Oskari.registerLocalization(
             "title": "Rekisteröidy Paikkatietoikkunaan",
             "registerInfo": "Rekisteröityneenä käyttäjänä voit julkaista karttoja, käyttää analyysitoimintoa sekä tuoda kartalle omia aineistoja. Rekisteröityminen tapahtuu Maanmittauslaitoksen tunnistuspalvelussa. Rekisteröitymisen jälkeen palaa takaisin Paikkatietoikkunaan.",
             "registerInfo2": "Rekisteröitymällä hyväksyt Paikkatietoikkunan ",
-            "termsOfUseLink": "käyttöehdot",
+            "termsOfUseLinkText": "käyttöehdot",
+            "termsOfUseLink": "http://maanmittauslaitos.fi/asioi-verkossa/paikkatietoikkuna",
             "continueBtn": "Jatka rekisteröitymään"
         }
     }
