@@ -3,18 +3,19 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "Register",
     "value": {
-        "title": "Rekisteröidy",
+        "title": "Registrera",
         "desc": "",
-        "login": "Kirjaudu",
-        "register": "Rekisteröidy",
-        "logout": "Log out",
+        "login": "Logga in",
+        "register": "Registrera",
+        "logout": "Logga ut",
         "popup": {
-            "title": "Rekisteröidy Paikkatietoikkunaan",
-            "registerInfo": "Rekisteröityneenä käyttäjänä voit julkaista karttoja, käyttää analyysitoimintoa sekä tuoda kartalle omia aineistoja. Rekisteröityminen tapahtuu Maanmittauslaitoksen tunnistuspalvelussa. Rekisteröitymisen jälkeen sinut ohjataan takaisin Paikkatietoikkunaan.",
-            "registerInfo2": "Rekisteröitymällä hyväksyt Paikkatietoikkunan ",
-            "termsOfUseLink": "käyttöehdot",
-            "continueBtn": "Jatka rekisteröitymään",
-            "cancelBtn": "Peruuta"
+            "title": "Registrera dig på Paikkatietoikkuna",
+            "registerInfo": "Som registrerad användare kan du publicera kartor, använda analysfunktionen samt hämta egna datamängder till tjänsten. Registreringen sker via Lantmäteriets identifieringstjänst. Gå tillbaka till Paikkatietoikkuna efter registreringen.",
+            "registerInfo2": "Genom att registrera dig som användare godkänner du ",
+            "termsOfUseLinkText": "användarvillkoren",
+            "termsOfUseLink": "http://maanmittauslaitos.fi/sv/e-tjanster/geodataportalen-paikkatietoikkuna",
+            "continueBtn": "Fortsätt till registreringen",
+            "cancelBtn": "Avbryt"
         }
     }
 });
