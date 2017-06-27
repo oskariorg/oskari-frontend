@@ -148,7 +148,9 @@ Oskari.registerLocalization(
           "linechart": "Viivakuvio",
           "table": "Taulukko",
           "desc": "Kuvaajat",
-          "nodata": "Ei valittuja indikaattoreita"
+          "nodata": "Ei valittuja indikaattoreita",
+          "indicatorVar": "Kuvaajassa esitettävä muuttuja",
+          "descColor": "Kuvaajan väri"
         }
     }
 });

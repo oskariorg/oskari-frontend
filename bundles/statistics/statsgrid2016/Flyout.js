@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
+        this.flyoutInstance = this;
     }, {
         /**
          * @method getName
@@ -53,27 +54,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getDataCharts : function () {
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           if( this.datacharts ) {
-            return this.datacharts;
+            return this.datacharts.createUi();
           }
           this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', Oskari.getSandbox(), this.instance.getLocalization());
-          return this.datacharts;
+          return this.datacharts.createUi();
         },
         showDataCharts: function () {
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           var me = this;
-          this.addSideTool("Charts", function(el, bounds) {
+          // this.addSideTool("Charts", function(el, bounds) {
               // lazy render
-              var datacharts = me.getDataCharts();
-              if(datacharts.isVisible()) {
-                  datacharts.__datachartFlyout.hide();
+              var flyout = me.getDataCharts();
+              if( flyout.isVisible() ) {
+                  flyout.hide();
               } else {
-                  datacharts.createUi();
                   // show and reset position
-                  datacharts.__datachartFlyout.move(bounds.right, bounds.top, true);
-                  datacharts.__datachartFlyout.show();
-                  datacharts.__datachartFlyout.bringToTop();
+                  flyout.move(600, 300, true);
+                  flyout.show();
+                  flyout.bringToTop();
               }
-          });
+          // });
         },
         showLegend : function(enabled) {
             if(!enabled) {
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 parent.find('.oskari-flyouttools').show();
             }
             this.showLegend(!isEmbedded);
-            this.showDataCharts();
+            // this.showDataCharts();
 
             this.addContent(this.getEl(), isEmbedded);
         },

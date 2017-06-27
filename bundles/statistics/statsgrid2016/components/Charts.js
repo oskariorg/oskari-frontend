@@ -1,16 +1,18 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc, data) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc, data, activeIndicator) {
   this.sb = sandbox;
   this.loc = loc;
   this.data = data;
+  this.activeIndicator = activeIndicator;
   this.__chartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
   this.container = null;
+  this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
   _template: {
     btn: _.template('<button>${ icon }</button>'),
     select: jQuery('<div class="dropdown"></div>'),
     graph: jQuery('<div id="graphic"></div>'),
-    container: jQuery('<div class="dataDescriptionContainer" style="padding:20px"></div>')
+    container: jQuery('<div class="dataDescriptionContainer" style="padding:10px"></div>')
   },
   createDropdown: function () {
     var dataOptions = {
@@ -41,15 +43,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
 
     this._template.container.append(this._template.select);
   },
-  createChart: function () {
+  updateChart: function (data, el) {
+    var svg = d3.select(this._template.graph[0]);
+    svg.remove();
+    return this.createChart(data);
+  },
+  createChart: function (data) {
+    if( data ) {
+      this.data = data;
+    }
+    var stateService = this.service.getStateService();
+    var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
+    var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+
     var graph = this._template.graph;
     if(this.data === null) {
       graph.append(jQuery('<h3>'+this.loc.datacharts.nodata+'</h3>'));
       return;
     }
     var me = this;
-    graph.append(this._template.btn({icon:"Zoom In"}));
-    graph.append(this._template.btn({icon:"Zoom Out"}));
+    // graph.append(this._template.btn({icon:"Zoom In"}));
+    // graph.append(this._template.btn({icon:"Zoom Out"}));
     //sort bars based on value
     this.data = this.data.sort(function (a, b) {
       return d3.ascending(a.value, b.value);
@@ -62,7 +76,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
       bottom: 15,
       left: 60
     };
-    var colors = ['#0000b4','#0082ca','#0094ff','#0d4bcf','#0066AE','#074285','#00187B','#285964','#405F83','#416545','#4D7069','#6E9985','#7EBC89','#0283AF','#79BCBF','#99C19E'];
 
     var width = 960 - margin.left - margin.right,
     height = this.data.length * 20 - margin.top - margin.bottom;

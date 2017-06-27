@@ -28,6 +28,12 @@ Oskari.clazz.define(
         this.togglePlugin = null;
 
         this.regionsetViewer = null;
+        this._tileExtensions = [];
+        this._templates = {
+            search: '<div class="statsgrid-functionality" id="material-search"></div>',
+            view: '<div class="statsgrid-functionality" id="material-view"></div>',
+            edit: '<div class="statsgrid-functionality" id="material-edit"></div>'
+        }
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -39,7 +45,12 @@ Oskari.clazz.define(
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
-
+            
+            for( var template in this._templates ) {
+              var icon = jQuery(this._templates[template]);
+              this.extendTile(icon);
+            }
+            this.hideExtension();
             // Check if vector is configurated
             // If it is set map modes to support also vector
             if(conf && conf.vectorViewer === true) {
@@ -73,6 +84,28 @@ Oskari.clazz.define(
                 // regionsetViewer creation need be there because of start order
                 this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
+        },
+        extendTile: function (el) {
+          var container = this.getTile().container.append(el);
+          var extension = container.find(el);
+          this._tileExtensions.push(extension);
+        },
+        hideExtension: function () {
+          this._tileExtensions.forEach(function(extension){
+            extension.hide();
+          });
+        },
+        showExtension: function (el, callback) {
+          // this.extensions.forEach( function(extension) {
+            el.show();
+            el.on("click", function(event){
+              event.stopPropagation();
+              callback();
+            })
+          // });
+        },
+        getExtensions: function () {
+          return this._tileExtensions;
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -173,12 +206,25 @@ Oskari.clazz.define(
                     // not me/no data -> do nothing
                     return;
                 }
+                var me = this;
                 var wasClosed = event.getViewState() === 'close';
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
                 if(wasClosed){
+                  this.hideExtension();
                     return;
+                } else {
+                  this.getExtensions().forEach(function(extension) {
+                    if(extension[0].id === "material-search") {
+                      me.showExtension(extension, function() {
+                        alert("0");
+                      });
+                      return;
+                    }
+                    me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
+                  });
+                  // this.getTile().showExtension(this.getFlyout().showDataCharts.bind(this.getFlyout()));
                 }
                 var renderMode = this.isEmbedded();
                 // rendermode changes if we are in geoportal and open the flyout in publisher

@@ -320,5 +320,21 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 
 .statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
   overflow: hidden; }
-
+.statsgrid-functionality {
+    margin-right: 2px;
+    margin-left: 2px;
+    background-color: lightgray;
+    width:36px;
+    height: 36px;
+    display: inline-block;
+  }
+  #material-view {
+        background-image: url("../images/table_light.png");
+  }
+  #material-search {
+        background-image: url("../images/mobile-search-light.png");
+  }
+  div.tab-material-controls div.title {
+    font-weight: bold;
+  }
 /*# sourceMappingURL=style.css.map */
