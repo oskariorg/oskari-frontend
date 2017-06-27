@@ -2,6 +2,10 @@
 
 ## 1.43.0
 
+### Publisher2/history tools
+
+History tools (moving to previous or next view) can no be published only together. If there are published maps with only one of history tools, the other one will be added there as well. This is done because moving to next view is useless without possibility to move to previous view.
+
 ### Grid
 
 Fixed subtable sorting.

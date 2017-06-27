@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          */
         init: function(data) {
             var me = this;
-            me.selectedOptions = {};
+            me.selectedTools = {};
             me._storedData = {};
             if (!data || !data.configuration) {
                 return;
@@ -89,7 +89,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 });
             }
-            me.selectedOptions = {
+
+            //checkboxes in ui
+            me.selectedOptionsUi = {
+                history: true,
+                measureline : true,
+                measurearea : true
+            };
+
+            //tools on map
+            me.selectedTools = {
                 history_back : true,
                 history_forward : true,
                 measureline : true,
@@ -98,11 +107,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             if(pluginConf.buttons) {
                 //if there are no selected tools in configuration, select them all when tools are selected
-                for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName) && pluginConf.buttons.indexOf(toolName) === -1) {
-                        me.selectedOptions[toolName] = false;
+                for (toolName in me.selectedTools) {
+                    if (me.selectedTools.hasOwnProperty(toolName) && pluginConf.buttons.indexOf(toolName) === -1) {
+                        me.selectedTools[toolName] = false;
+                        if (me.selectedOptionsUi[toolName]) {
+                            me.selectedOptionsUi[toolName] = false;
+                        }
                     }
                 }
+            }
+
+            // unselect history tools only if both are unselected
+            if (!me.selectedTools["history_back"] && !me.selectedTools["history_forward"]) {
+                me.selectedOptionsUi["history"] = false;
+            } else {
+                // if one of history tools is selected, select the other one too
+                me.selectedTools["history_forward"] = true;
+                me.selectedTools["history_back"] = true;
             }
 
             me.drawOptions = {
@@ -131,7 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     me.setEnabled(true);
                 }
             }
-
         },
 
         /**
@@ -161,8 +181,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 return null;
             }
 
-            for (toolName in me.selectedOptions) {
-                if (me.selectedOptions.hasOwnProperty(toolName) && me.selectedOptions[toolName]) {
+            for (toolName in me.selectedTools) {
+                if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
                     buttons.push(toolName);
                 }
             }
@@ -253,15 +273,31 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var _toggleToolOption = function (toolName) {
                 return function () {
                     //check if tool was selected or unselected
-                    var toolState = me.selectedOptions[toolName];
+                    var toolState = me.selectedOptionsUi[toolName];
 
                     // if tool was selected, unselect tool and send removeToolButtonRequest
                     if (toolState) {
-                        me.selectedOptions[toolName] = false;
-                        tool.__plugin.removeToolButton(toolName);
+                        me.selectedOptionsUi[toolName] = false;
+                        if (toolName === "history") {
+                            tool.__plugin.removeToolButton("history_back");
+                            me.selectedTools["history_back"] = false;
+                            tool.__plugin.removeToolButton("history_forward");
+                            me.selectedTools["history_forward"] = false;
+                        } else {
+                            tool.__plugin.removeToolButton(toolName);
+                            me.selectedTools[toolName] = false;
+                        }
                     } else {
-                        me.selectedOptions[toolName] = true;
-                        tool.__plugin.addToolButton(toolName);
+                        me.selectedOptionsUi[toolName] = true;
+                        if (toolName === "history") {
+                            tool.__plugin.addToolButton("history_back");
+                            me.selectedTools["history_back"] = true;
+                            tool.__plugin.addToolButton("history_forward");
+                            me.selectedTools["history_forward"] = true;
+                        } else {
+                            tool.__plugin.addToolButton(toolName);
+                            me.selectedTools[toolName] = true;
+                        }
                     }
                 };
             };
@@ -274,17 +310,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 options = jQuery(me.templates.toolOptions).clone();
 
-                for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                for (toolName in me.selectedOptionsUi) {
+                    if (me.selectedOptionsUi.hasOwnProperty(toolName)) {
                         // create checkbox
                         var selectTool = jQuery(me.templates.toolOption).clone();
                         selectTool.find('label')
                             .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
 
                         //set selected values checked
-                        if (me.selectedOptions[toolName]) {
+                        if (me.selectedOptionsUi[toolName]) {
                             selectTool.find('input').attr('checked', 'checked');
-                            tool.__plugin.addToolButton(toolName);
+                            if (toolName === "history") {
+                                tool.__plugin.addToolButton("history_back");
+                                tool.__plugin.addToolButton("history_forward");
+                            } else {
+                                tool.__plugin.addToolButton(toolName);
+                            }
                         }
 
                         //add button to div
@@ -301,8 +342,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 tool.toolContainer.find(".extraOptions").append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
-                for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName)) {
+                for (toolName in me.selectedTools) {
+                    if (me.selectedTools.hasOwnProperty(toolName)) {
                         tool.__plugin.removeToolButton(toolName);
                     }
                 }
@@ -553,8 +594,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         _hasActiveTools: function () {
             var me = this;
 
-            for (toolName in me.selectedOptions) {
-                if (me.selectedOptions.hasOwnProperty(toolName) && me.selectedOptions[toolName]) {
+            for (toolName in me.selectedTools) {
+                if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
                     return true;
                 }
             }
@@ -580,8 +621,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             if(me.__plugin) {
                 //send remove request per active button
-                for (toolName in me.selectedOptions) {
-                    if (me.selectedOptions.hasOwnProperty(toolName) && toolName) {
+                for (toolName in me.selectedTools) {
+                    if (me.selectedTools.hasOwnProperty(toolName) && toolName) {
                         me.__plugin.removeToolButton(toolName);
                     }
                 }
