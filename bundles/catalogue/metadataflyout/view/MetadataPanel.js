@@ -479,8 +479,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           <% if (dataQuality.conformanceResultList.length) { %>' +
                     '               <br> <h3> Conformance Results </h3>' +
                     '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
-                    '                   <% if (conformanceResult.pass == "true") {%> <p><%=locale.qualityContent.qualityPassTrue%></p><%}' +
-                    '                       else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
+                    '                   <% if (conformanceResult.specification.value) { %>' +
+                    '                       <%= conformanceResult.specification.label %> : <%= conformanceResult.specification.value %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
                     '                   <% if (conformanceResult.explanation.value) { %>' +
                     '                       <%= conformanceResult.explanation.label %> : <%= conformanceResult.explanation.value %> <br>' +
                     '                   <% } %>' +
