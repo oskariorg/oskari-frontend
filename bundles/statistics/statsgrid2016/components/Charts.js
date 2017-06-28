@@ -14,51 +14,36 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
     graph: jQuery('<div id="graphic"></div>'),
     container: jQuery('<div class="dataDescriptionContainer" style="padding:10px"></div>')
   },
-  createDropdown: function () {
-    var dataOptions = {
-        placeholder_text: "asd",
-        allow_single_deselect : true,
-        disable_search_threshold: 10,
-        no_results_text: "locale.panels.newSearch.noResults",
-        width: '100%'
-    };
-    var dataSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-    var dataDropdown = dataSelect.create(undefined, dataOptions);
-    dataDropdown.css({width:'100%'});
-    this._template.select.append(dataDropdown);
-    dataSelect.adjustChosen();
-
-    var clrOptions = {
-        placeholder_text: "asd",
-        allow_single_deselect : true,
-        disable_search_threshold: 10,
-        no_results_text: "locale.panels.newSearch.noResults",
-        width: '100%'
-    };
-    var clrSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-    var clrDropdown = clrSelect.create(undefined, clrOptions);
-    clrDropdown.css({width:'100%'});
-    this._template.select.append(clrDropdown);
-    clrSelect.adjustChosen();
-
-    this._template.container.append(this._template.select);
-  },
   updateChart: function (data) {
     var svg = d3.select(this._template.graph[0]);
     svg.remove();
     return this.createChart(data);
   },
-  createChart: function (data) {
+  updateColor: function (colors) {
+    if( colors ) {
+      this.createChart(null, [colors]);
+    } else {
+      Oskari.log("No color provided.");
+    }
+  },
+  createChart: function (data, clr) {
+    //Clear previous graphs
+    this._template.graph.empty(); 
+
     if( data ) {
       this.data = data;
-      this._template.graph.empty();
     }
     var stateService = this.service.getStateService();
     var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
-    var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+
+    if( clr ) {
+      var colors = clr;
+    } else {
+      var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+    }
 
     var graph = this._template.graph;
-    if(this.data === null) {
+    if( this.data === null ) {
       graph.append(jQuery('<h3>'+this.loc.datacharts.nodata+'</h3>'));
       return;
     }
@@ -79,7 +64,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
     };
 
     var width = 960 - margin.left - margin.right,
-    height = this.data.length * 20 - margin.top - margin.bottom;
+    height = this.data.length * 21 - margin.top - margin.bottom;
 
     var svg = d3.select(this._template.graph[0]).append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -90,7 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
     function make_x_gridlines() {
     return d3.svg.axis()
         .scale(x)
-        // .orient("bottom")
+        .orient("bottom")
         .ticks(me.data.length)
     }
     function zoomed() {
@@ -105,7 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
     })]);
 
     var y = d3.scale.ordinal()
-    .rangeRoundBands([height, 0], .1)
+    .rangeRoundBands([height, 0])
     .domain(this.data.map(function (d) {
       return d.name;
     }));
@@ -118,7 +103,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Charts', function(sandbox, loc,
     var yAxis = d3.svg.axis()
     .scale(y)
     //no tick marks
-    .tickSize(1)
+    .tickSize(0)
     .orient("left");
 
     var gy = svg.append("g")
@@ -169,11 +154,8 @@ svg.append("g")
     .attr("width", function (d) {
       return x(d.value);
     });
-    if( !data ) {
-      this._template.container.append(this._template.graph);
-    }
+
     return this._template.graph;
-    // this._template.container.append(this._template.graph);
   }
 }, {
     /**

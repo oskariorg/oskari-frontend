@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
-        this.flyoutInstance = this;
     }, {
         /**
          * @method getName
@@ -54,26 +53,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getDataCharts : function () {
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           if( this.datacharts ) {
-            return this.datacharts.createUi();
+            return this.datacharts;
           }
           this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', Oskari.getSandbox(), this.instance.getLocalization());
-          return this.datacharts.createUi();
+          return this.datacharts;
         },
         showDataCharts: function () {
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           var me = this;
-          // this.addSideTool("Charts", function(el, bounds) {
               // lazy render
-              var flyout = me.getDataCharts();
-              if( flyout.isVisible() ) {
-                  flyout.hide();
+              var charts = me.getDataCharts();
+              if( charts.getFlyout() === null ) {
+                charts.createUi();
+              }
+            this.chartsFlyout = charts.getFlyout();
+            if( charts.getCharts() === null ) {
+                charts.createBarCharts();
+            }
+              if( this.chartsFlyout.isVisible() ) {
+                  this.chartsFlyout.hide();
               } else {
                   // show and reset position
-                  flyout.move(600, 300, true);
-                  flyout.show();
-                  flyout.bringToTop();
+                  this.chartsFlyout.move(600, 300, true);
+                  this.chartsFlyout.show();
+                  this.chartsFlyout.bringToTop();
               }
-          // });
         },
         showLegend : function(enabled) {
             if(!enabled) {

@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
+  this._barchart = null;
   this.events();
 }, {
   _template: {
@@ -44,10 +45,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     flyout.setContent(el);
     this.__datachartFlyout = flyout;
     this._isOpen = true;
-    // return this.__datachartFlyout;
   },
   getFlyout: function() {
     return this.__datachartFlyout;
+  },
+  getCharts: function() {
+    return this._barchart;
   },
   _getPanels: function() {
     return this._createChartsPanel(this.loc.datacharts.desc);
@@ -64,48 +67,91 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       container.append(this._template.charts);
 
       panel.on('open', function() {
-          me._setPanelState(panel);
       });
       panel.on('close', function() {
-          me._setPanelState(panel);
       });
       panel.setTitle(title);
       return panel;
   },
-    createDropdown: function (title) {
-    var dataOptions = {
-        placeholder_text: "asd",
-        allow_single_deselect : true,
-        disable_search_threshold: 10,
-        no_results_text: "locale.panels.newSearch.noResults",
-        width: '80%'
-    };
-    var dataSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-    var dataDropdown = dataSelect.create(undefined, dataOptions);
-    dataDropdown.css({width:'100%'});
-    this._template.select.append(dataDropdown);
-    dataSelect.adjustChosen();
+    createIndicatorSelector: function (title) {
+      var me = this;
+      var datasources = this.service.getDatasource();
+      var panelLoc = this.loc.panels.newSearch;
 
-    var clrOptions = {
-        placeholder_text: "asd",
-        allow_single_deselect : true,
-        disable_search_threshold: 10,
-        no_results_text: "locale.panels.newSearch.noResults",
-        width: '100%'
-    };
-    var clrSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-    var clrDropdown = clrSelect.create(undefined, clrOptions);
-    clrDropdown.css({width:'100%'});
-    this._template.select.append(clrDropdown);
-    clrSelect.adjustChosen();
+    this.service.getIndicatorMetadata(this.getActiveIndicator().datasource, this.getActiveIndicator().indicator, function(err, indicator) {
+      indicator.selectors.forEach(function(selector, index) {
+        var selections = [];
+        selector.allowedValues.forEach(function(val) {
+            var name = val.name || val.id || val;
+            val.title = val.name;
+            var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
 
-    var title = jQuery('<div class="title">'+title+'</div>');
-    this._template.tabControl.append(title);
-    this._template.tabControl.append(clrDropdown);
+            var valObject = {
+                    id : val.id || val,
+                    title : optName
+            };
+            selections.push(valObject);
+        });
+
+        var options = {
+            placeholder_text: "dasd",
+            allow_single_deselect : true,
+            disable_search_threshold: 10,
+            no_results_text: "locale.panels.newSearch.noResults",
+            width: '100%'
+        };
+        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var dropdown = select.create(selections, options);
+        dropdown.css({width:'100%'});
+        me._template.select.append(dropdown);
+        select.adjustChosen();
+        select.selectFirstValue();
+
+        var titleHolder = jQuery('<div class="title">'+title+'</div>');
+        me._template.tabControl.append(titleHolder);
+        me._template.tabControl.append(dropdown);
+    });
+  });
+  
+    return this._template.tabControl;
+  },
+    createColorSelector: function (title) {
+      var me = this;
+        var selections = [{
+          id: "singleColor",
+          title: this.loc.datacharts.selectClr
+        }, {
+          id: "mapClr",
+          title: this.loc.datacharts.clrFromMap
+        }];
+
+        var options = {
+            placeholder_text: "Select color",
+            allow_single_deselect : true,
+            disable_search_threshold: 10,
+            no_results_text: "locale.panels.newSearch.noResults",
+            width: '100%'
+        };
+        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var dropdown = select.create(selections, options);
+        dropdown.css({width:'100%'});
+        me._template.select.append(dropdown);
+        select.adjustChosen();
+
+        //update color based on selection
+        dropdown.on("change", function(evt) {
+          if( evt.target.selectedIndex === 1 ) {
+            me._barchart.updateColor("#DC143C");
+          } else {
+            me._barchart.createChart();
+          }
+        });
+
+        var title = jQuery('<div class="title">'+title+'</div>');
+        me._template.tabControl.append(title);
+        me._template.tabControl.append(dropdown);
 
     return this._template.tabControl;
-
-    // this._template.container.append(this._template.select);
   },
   getActiveIndicator: function() {
     return this.service.getStateService().getActiveIndicator();
@@ -159,14 +205,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       return;
     }
     if( !this.barchart ) {
-      this.barchart = Oskari.clazz.create('Oskari.statistics.statsgrid.Charts', Oskari.getSandbox(), this.loc, data, this.getActiveIndicator());
-      var barchart = this.barchart.createChart();
+      this._barchart = Oskari.clazz.create('Oskari.statistics.statsgrid.Charts', Oskari.getSandbox(), this.loc, data, this.getActiveIndicator());
+      var barchart = this._barchart.createChart();
       this.tabsContainer.panels[0].getContainer().append(barchart);
     } else {
-      var updated = this.barchart.updateChart(data);
+      var updated = this._barchart.updateChart(data);
       this.tabsContainer.panels[0].getContainer().append(updated);
     }
-    
   },
   addTab: function (item) {
       var me = this,
@@ -181,8 +226,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
                   'oskari_datachart_tabpanel_header'
               );
               // defaultPanel.setContent(this.createBarCharts());
-              defaultPanel.getContainer().prepend(this.createDropdown(this.loc.datacharts.indicatorVar));
-              defaultPanel.getContainer().prepend(this.createDropdown(this.loc.datacharts.descColor));
+              defaultPanel.getContainer().prepend(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
+              defaultPanel.getContainer().prepend(this.createColorSelector(this.loc.datacharts.descColor));
               defaultPanel.setId('oskari_search_tabpanel_header');
               defaultPanel.setPriority(1.0);
               me.tabsContainer.addPanel(defaultPanel);
