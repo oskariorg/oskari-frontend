@@ -68,6 +68,7 @@ Oskari.registerLocalization(
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
+                    "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
                     "measureline": "Matkan mittaus",

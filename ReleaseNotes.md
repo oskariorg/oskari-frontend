@@ -1,5 +1,53 @@
 # Release Notes
 
+## 1.43.0
+
+### Minifier script
+
+No longer assumes "oskari" as the folder name when processing images. Now determines the folder name based on the parent-folder name for the Gruntfile.js
+
+### Publisher2/history tools
+
+History tools (moving to previous or next view) can no be published only together. If there are published maps with only one of history tools, the other one will be added there as well. This is done because moving to next view is useless without possibility to move to previous view.
+
+### Grid
+
+Fixed subtable sorting.
+
+### LogoPluginService
+
+Logo-plugin now provides a new service which can be used to add new items next to the logo (links, texts):
+
+	var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
+	// just adding a text
+	logoService.addLabel('Hello');
+
+	// providing a callback and an id (to identify the label later on)
+	var options = {
+		id:'hello',
+		callback: function() {
+			alert("Hello");
+		}
+	};
+	logoService.addLabel('Alert', options);
+
+### admin/appsetup
+
+``New admin bundle`` for creating AppSetups (views) from JSON definition.
+
+
+### divmanazer TabContainer component
+
+TabPanel can now have an identifier that is added as class to both the header and content containers (easier to reference from tests etc).
+TabContainer now only includes the content panel that is visible to the user to the DOM. Previously all of the panels were part of the DOM, but hidden with CSS.
+When a tab is changed the previously shown panel is detached (previously hidden) and the current tabs panel is inserted to DOM (previously made visible).
+This might affect usage of the component if an external code snippet assumes that all the tabs are accessible via DOM.
+
+### paikkatietoikkuna/register
+
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+Bundle also creates registration popup to give information about registration before directing to registration page.
+
 ## 1.42.1
 
 ### divmanazer Grid
@@ -158,7 +206,7 @@ New event (ProgressEvent) that tracks if something is progressing or not. Ex. us
 
 ol2 mapmodule now support fill.color -property when getting style.
 
-ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color.
+ol3 mapmodule getStyle also handle image.opacity same as than ol2 side. Opacity setted here in fill color. Also own SVG image handles opacity right.
 
 ´map.DataProviderInfoService´ from LogoPlugin can now handle multiple sources for attribution data including an optional link in addition to name.
 

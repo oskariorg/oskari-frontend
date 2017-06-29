@@ -39,6 +39,12 @@ Oskari.clazz.define(
             me.statsService = statsService;
 
             var conf = this.getConfiguration() || {};
+
+            // Check if vector is configurated
+            // If it is set map modes to support also vector
+            if(conf && conf.vectorViewer === true) {
+                me.statsService.setMapModes(['wms','vector']);
+            }
             statsService.addDatasource(conf.sources);
             // disable tile if we don't have anything to show or enable if we do
             this.getTile().setEnabled(this.hasData());
@@ -62,7 +68,9 @@ Oskari.clazz.define(
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
 
-            if(this.conf && this.conf.vectorViewer) {
+            // Check if configurated to show indicators on the map for vector format
+            if(conf && conf.vectorViewer === true) {
+                // regionsetViewer creation need be there because of start order
                 this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             }
         },
@@ -277,7 +285,7 @@ Oskari.clazz.define(
             }
 
             if(state.activeRegion) {
-                service.selectRegion(state.activeRegion);
+                service.toggleRegion(state.activeRegion);
             }
 
             // if state says view was visible fire up the UI, otherwise close it
@@ -289,9 +297,9 @@ Oskari.clazz.define(
             var me = this;
             var service = this.statsService.getStateService();
             var state = {
-                indicators : [],
-                regionset : service.getRegionset(),
-                view :me.visible
+                indicators: [],
+                regionset: service.getRegionset(),
+                view: me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

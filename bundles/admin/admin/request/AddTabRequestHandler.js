@@ -10,9 +10,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin.request.AddTabRequestHandl
  * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
  *          reference to search
  */
-function(sandbox, search) {
+function(sandbox, flyout) {
     this.sandbox = sandbox;
-    this.search = search;
+    this.flyout = flyout;
 }, {
     /**
      * @method handleRequest
@@ -22,7 +22,7 @@ function(sandbox, search) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        this.search.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority(), "id": request.getId()});
+        this.flyout.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority(), "id": request.getId()});
    }
 }, {
     /**

@@ -209,7 +209,9 @@ Oskari.clazz.define(
                 this,
                 reqBuilder(
                     this.localization.personalDataTab.title,
-                    tab.getContent()
+                    tab.getContent(),
+                    false,
+                    'analyse'
                 )
             );
         },

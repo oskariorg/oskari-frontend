@@ -345,7 +345,7 @@ div.oskari-flyoutcontent{
 
 .statsgrid-legend-container {
     background-color: #FFFFFF;
-    width: 200px;
+    width: 300px;
     font-size: 12px;
 
     >div.header {
@@ -353,7 +353,7 @@ div.oskari-flyoutcontent{
         margin: 0;
         height:auto;
         padding: 6px;
-        width: 94%;
+        width: auto;
         font-weight: bold;
 
         div.title {
@@ -419,11 +419,44 @@ div.oskari-flyoutcontent{
                 width: 95%;
                 padding: 4px 5px;
             }
+
+            .point-size {
+                .minmaxlabels {
+                    .min {
+                        float:left;
+                    }
+                    .max {
+                        float:right;
+                        margin-right: 4%;
+                    }
+                    .clear {
+                        clear:both;
+                    }
+                }
+                .point-range {
+                    width: 90%;
+                    background-image: url(../images/opacity_slider_long.png);
+                    background-repeat: no-repeat;
+                }
+            }
         }
 
         .oskari-color-selection {
             z-index: 10;
         }
+    }
+
+    .statsgrid-svg {
+        float: left;
+    }
+    .statsgrid-range {
+        float: left;
+    }
+    .statsgrid-counter {
+        float: left;
+    }
+    .clear {
+        clear: both;
     }
 }
 
@@ -486,4 +519,11 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         clear: both;
     }
 
+}
+
+
+.statsgrid-legend-flyout {
+    .oskari-flyoutcontentcontainer{
+        overflow:hidden;
+    }
 }

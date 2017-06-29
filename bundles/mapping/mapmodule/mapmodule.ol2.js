@@ -202,7 +202,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          *     wanting to notify at end of the chain for performance reasons or similar) (optional)
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
-            this.getMap().zoomToExtent(bounds);
+            // OpenLayers.Bounds or Array (left, bottom, right, top)
+            this.getMap().zoomToExtent(new OpenLayers.Bounds(bounds.left, bounds.bottom, bounds.right, bounds.top));
             this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
@@ -518,6 +519,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if(split[2]) {
                 olStyle.fontFamily = split[2];
             }
+          }
+
+          if(style.text.stroke && typeof style.text.stroke.width === 'number') {
+            olStyle.labelOutlineWidth = style.text.stroke.width;
           }
 
           if(Oskari.util.keyExists(style, 'fill.color')) {

@@ -67,6 +67,7 @@ Oskari.registerLocalization(
                 "MapRotator":"Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
                 "toolbarToolNames": {
+                    "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
                     "measureline": "Mät avstånd",
