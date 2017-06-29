@@ -442,17 +442,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 ),
                 'quality': _.template(
                     '<article>' +
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
                     '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
                     '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
                     '           <br> <h2> <%= dataQuality.nodeName %> </h2>' +
+                    '           <% if (dataQuality.linageStatement.value) { %>' +
+                    '               <%= dataQuality.linageStatement.label %> : <%= dataQuality.linageStatement.value %> <br>' +
+                    '           <% } %>' +
                     '           <% if (dataQuality.nameOfMeasure.value) { %>' +
                     '               <%= dataQuality.nameOfMeasure.label %> : <%= dataQuality.nameOfMeasure.value %> <br>' +
                     '           <% } %>' +
