@@ -444,61 +444,61 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '<article>' +
                     '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
                     '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
-                    '           <br> <h2> <%= dataQuality.nodeName %> </h2>' +
-                    '           <% if (dataQuality.linageStatement.value) { %>' +
-                    '               <%= dataQuality.linageStatement.label %> : <%= dataQuality.linageStatement.value %> <br>' +
+                    '           <br> <h2> ${dataQuality.UIlabel}</h2>' +
+                    '           <% if (dataQuality.linageStatement) { %>' +
+                                    this.locale.heading.lineageStatement + ' : <%= dataQuality.linageStatement %> <br>' +
                     '           <% } %>' +
-                    '           <% if (dataQuality.nameOfMeasure.value) { %>' +
-                    '               <%= dataQuality.nameOfMeasure.label %> : <%= dataQuality.nameOfMeasure.value %> <br>' +
+                    '           <% if (dataQuality.nameOfMeasure) { %>' +
+                                    this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
                     '           <% } %>' +
-                    '           <% if (dataQuality.measureDescription.value) { %>' +
-                    '               <%= dataQuality.measureDescription.label %> : <%= dataQuality.measureDescription.value %> <br>' +
+                    '           <% if (dataQuality.measureDescription) { %>' +
+                                    this.locale.qualityContent.measureDescription + ' : <%= dataQuality.measureDescription %> <br>' +
                     '           <% } %>' +
-                    '           <% if (dataQuality.evaluationMethodType.value) { %>' +
-                    '               <%= dataQuality.evaluationMethodType.label %> : <%= dataQuality.evaluationMethodType.value %> <br>' +
+                    '           <% if (dataQuality.evaluationMethodType) { %>' +
+                                    this.locale.qualityContent.evaluationMethodType + ' : <%= dataQuality.evaluationMethodType %> <br>' +
                     '           <% } %>' +
-                    '           <% if (dataQuality.measureIdentificationAuthorization.value) { %>' +
-                    '               <%= dataQuality.measureIdentificationAuthorization.label %> : <%= dataQuality.measureIdentificationAuthorization.value %> <br>' +
+                    '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
+                                    this.locale.qualityContent.measureIdentificationAuthorization + ' : <%= dataQuality.measureIdentificationAuthorization %> <br>' +
                     '           <% } %>' +
-                    '           <% if (dataQuality.measureIdentificationCode.value) { %>' +
-                    '               <%= dataQuality.measureIdentificationCode.label %> : <%= dataQuality.measureIdentificationCode.value %> <br>' +
+                    '           <% if (dataQuality.measureIdentificationCode) { %>' +
+                                   this.locale.qualityContent.measureIdentificationCode + ' : <%= dataQuality.measureIdentificationCode %> <br>' +
                     '           <% } %>' +
                     '           <% if (dataQuality.dateTime.length) { %>' +
                     '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
-                    '                   <% if (dateTime.value) { %>' +
-                    '                       <%= dateTime.label %> : <%= dateTime.value %> <br>' +
+                    '                   <% if (dateTime) { %>' +
+                                            this.locale.qualityContent.dateTime + ' : <%= dateTime %> <br>' +
                     '                   <% } %>' +
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.conformanceResultList.length) { %>' +
-                    '               <br> <h3> Conformance Results </h3>' +
+                    '               <br> <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
                     '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
-                    '                   <% if (conformanceResult.specification.value) { %>' +
-                    '                       <%= conformanceResult.specification.label %> : <%= conformanceResult.specification.value %> <br>' +
+                    '                   <% if (conformanceResult.specification) { %>' +
+                                            this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
                     '                   <% } %>' +
                     '                   <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
                     '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
-                    '                   <% if (conformanceResult.explanation.value) { %>' +
-                    '                       <%= conformanceResult.explanation.label %> : <%= conformanceResult.explanation.value %> <br>' +
+                    '                   <% if (conformanceResult.explanation) { %>' +
+                                            this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
                     '                   <% } %>' +
                     '               <% }); %> '+
                     '           <% } %>' +
                     '           <% if (dataQuality.quantitativeResultList.length) { %>' +
-                    '               <br> <h3> Quantitative Results </h3>' +
+                    '               <br> <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
                     '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
-                    '                   <% if (quantitativeResult.valueType.value) { %>' +
-                    '                       <%= quantitativeResult.valueType.label %> : <%= quantitativeResult.valueType.value %> <br>' +
+                    '                   <% if (quantitativeResult.valueType) { %>' +
+                                            this.locale.qualityContent.valueType + ': <%= quantitativeResult.valueType %> <br>' +
                     '                   <% } %>' +
-                    '                   <% if (quantitativeResult.valueUnit.value) { %>' +
-                    '                       <%= quantitativeResult.valueUnit.label %> : <%= quantitativeResult.valueUnit.value %> <br>' +
+                    '                   <% if (quantitativeResult.valueUnit) { %>' +
+                                            this.locale.qualityContent.valueUnit + ': <%= quantitativeResult.valueUnit %> <br>' +
                     '                   <% } %>' +
-                    '                   <% if (quantitativeResult.errorStatistic.value) { %>' +
-                    '                       <%= quantitativeResult.errorStatistic.label %> : <%= quantitativeResult.errorStatistic.value %> <br>' +
+                    '                   <% if (quantitativeResult.errorStatistic) { %>' +
+                                            this.locale.qualityContent.errorStatistic + ': <%= quantitativeResult.errorStatistic %> <br>' +
                     '                   <% } %>' +
-                    '                   <% if (dataQuality.quantitativeResult.value.length) { %>' +
-                    '                       <% _.forEach(dataQuality.quantitativeResult.value, function (value) { %>' +
-                    '                           <% if (value.value) { %>' +
-                    '                               <%= value.label %> : <%= value.value %> <br>' +
+                    '                   <% if (dataQuality.quantitativeResult.length) { %>' +
+                    '                       <% _.forEach(dataQuality.quantitativeResult, function (value) { %>' +
+                    '                           <% if (value) { %>' +
+                                                    this.locale.qualityContent.value + ': <%= value %> <br>' +
                     '                           <% } %>' +
                     '                       <% }); %> '+
                     '                   <% } %>' +
@@ -603,6 +603,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
         },
+
+        preprocessModel : {
+            'quality' : function(model) {
+                if(!model.dataQualityObject || !model.dataQualityObject.dataQualityNodes || !model.dataQualityObject.dataQualityNodes.length) {
+                    return model;
+                };
+                var loc = this.locale.heading;
+                model.dataQualityObject.dataQualityNodes.forEach(function(dataQuality) {
+                    dataQuality.UIlabel =  loc[dataQuality.nodeName];
+                });
+                return model;
+            }
+        },
         /**
          * @public @method init
          *
@@ -640,6 +653,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (me._templates.tabs[tabId]) {
                         //the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
+                        if(me.preprocessModel[tabId]) {
+                            me.preprocessModel[tabId].apply(me, [model]);
+                        }
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
