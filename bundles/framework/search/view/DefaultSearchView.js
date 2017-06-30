@@ -93,7 +93,10 @@ Oskari.clazz.define(
             };
             button.setHandler(doSearch);
             field.bindEnterKey(doSearch);
-            field.bindUpKey(doAutocomplete);
+
+            if(this.instance.conf.autocomplete === true) {
+                field.bindUpKey(doAutocomplete);
+            }
 
             var controls = searchContainer.find('div.controls');
             controls.append(field.getField());
