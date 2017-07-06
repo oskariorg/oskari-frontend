@@ -24,8 +24,7 @@ Oskari.clazz.define("Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance",
                         '           <li><b>'+this._localization.success.viewUrl+'</b>: <a target="_blank"></a></li>'+
                         '       </ul>'+
                         '   </div>'+
-                        '</div>'),
-
+                        '</div>')
         };
     }, {
         getName : function() {

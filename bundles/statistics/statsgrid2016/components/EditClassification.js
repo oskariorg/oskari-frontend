@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         me._element.find('.visible-map-style-points').hide();
         me._element.find('.visible-map-style-choropleth').hide();
-        me._element.find('.visible-map-style-' + mapStyle).show();
+        me._element.find('.visible-map-style-' + style).show();
     },
     /**
      * @method setValues init selections
@@ -177,17 +177,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         me._element.find('select.classify-mode').val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
-        if(classification.reverseColors) {
-            me._element.find('button.reverse-colors').addClass('primary');
-        } else {
+        me._element.find('button.reverse-colors').addClass('primary');
+        if(!classification.reverseColors) {
             me._element.find('button.reverse-colors').removeClass('primary');
         }
         // update color selection values
-        var colors = null;
+        var colors = service.getColorService().getDefaultSimpleColors();
         if(mapStyle === 'choropleth') {
             colors = service.getColorService().getOptionsForType(classification.type, classification.count, classification.reverseColors);
-        } else {
-            colors = service.getColorService().getDefaultSimpleColors();
         }
 
         me._colorSelect.setColorValues(colors);
@@ -216,7 +213,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var max = classification.max || me._rangeSlider.defaultValues[1];
         var updateClassification = false;
 
-        if(max-min<classification.count) {
+        if(max-min < classification.count) {
             min = me._rangeSlider.defaultValues[0];
             max = me._rangeSlider.defaultValues[1];
             updateClassification = true;
@@ -312,7 +309,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     }
                     return false;
                 },
-                stop: function (event, ui) {
+                stop: function () {
                     updateClassification();
                 }
             });
@@ -321,7 +318,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         if(!me._showNumericValueCheckButton) {
             me._showNumericValueCheckButton = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
             me._showNumericValueCheckButton.setTitle(me.locale.classify.map.showValues);
-            me._showNumericValueCheckButton.setHandler(function(checked){
+            me._showNumericValueCheckButton.setHandler(function(){
                 updateClassification();
             });
             me._element.find('.numeric-value').append(me._showNumericValueCheckButton.getElement());

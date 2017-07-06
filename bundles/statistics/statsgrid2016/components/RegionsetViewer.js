@@ -10,6 +10,131 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
 }, {
 /****** PUBLIC METHODS ******/
+    render: function(highlightRegion){
+        var me = this;
+        var sandbox = me.sb;
+        var service = me.service;
+        var currentRegion = service.getStateService().getRegionset();
+        var state = service.getStateService();
+        var ind = state.getActiveIndicator();
+        var locale = me.instance.getLocalization();
+
+        // remove layer
+        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+
+        if(!ind) {
+            return;
+        }
+
+        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
+            if(err) {
+                Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                return;
+            }
+
+            var classification = state.getClassificationOpts(ind.hash);
+
+            var classify = service.getClassificationService().getClassification(data, classification);
+
+            if(!classify) {
+                Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
+                return;
+            }
+            var colors = service.getColorService().getColorsForClassification(classification);
+
+            service.getRegions(currentRegion, function(er, regions){
+                if(err) {
+                    me.log.warn('Cannot get regions for wanted regionset='+currentRegion);
+                    // notify error!!
+                    errorService.show(locale.errors.title,locale.errors.regionsDataError);
+                    return;
+                }
+                if(regions.length === 0) {
+                    errorService.show(locale.errors.title,locale.errors.regionsDataIsEmpty);
+                }
+                var regiongroups = classify.getGroups();
+
+                regiongroups.forEach(function(regiongroup, index){
+                    var features = [];
+                    var optionalStyles = [];
+                    var color = colors[index];
+
+                    // Get point symbol size
+                    var min = classification.min;
+                    var max = classification.max;
+                    var iconSize = null;
+                    if(min && max) {
+                        var step = (max-min) / regiongroups.length;
+                        iconSize = min + step * index;
+                    }
+
+                    regiongroup.forEach(function(region){
+                        var wantedRegion = jQuery.grep(regions, function(r) {
+                            return r.id === region;
+                        });
+
+                        if(wantedRegion && wantedRegion.length === 1) {
+                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
+                            features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
+                        }
+                    });
+
+                    // Add group features to map
+                    var geoJSON = {
+                        'type': 'FeatureCollection',
+                        'crs': {
+                            'type': 'name',
+                            'properties': {
+                              'name': sandbox.getMap().getSrsName()
+                            }
+                          },
+                          'features': features
+                    };
+
+                    var defaultFeatureStyle = {
+                        fill: {
+                            color: 'rgba(255,0,0,0.0)'
+                        },
+                        stroke : {
+                            color: '#000000',
+                            width: 1
+                        }
+                    };
+
+                    if(classification.showValues === true) {
+                        var textColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
+                        defaultFeatureStyle.text = {
+                            scale : 1.2,
+                            fill : {
+                                color : textColor
+                            },
+                            stroke: {
+                                width: 0
+                            },
+                            labelProperty: 'regionValue',
+                            offsetX: 0,
+                            offsetY: 0
+                        };
+                    }
+                    var params = [geoJSON, {
+                        clearPrevious: false,
+                        featureStyle: defaultFeatureStyle,
+                        optionalStyles: optionalStyles,
+                        layerId: me.LAYER_ID,
+                        prio: index
+                    }];
+
+
+                    sandbox.postRequestByName(
+                        'MapModulePlugin.AddFeaturesToMapRequest',
+                        params
+                    );
+
+                });
+            });
+        });
+    },
+/****** PRIVATE METHODS ******/
     _getFeatureStyle: function(classification, region, color, highlightRegion, size){
         var me = this;
         var mapStyle = classification.mapStyle || 'choropleth';
@@ -84,121 +209,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
         }
         return region.geojson;
     },
-    render: function(highlightRegion){
-        var me = this;
-        var sandbox = me.sb;
-        var service = me.service;
-        var currentRegion = service.getStateService().getRegionset();
-        var state = service.getStateService();
-        var ind = state.getActiveIndicator();
-
-        // remove layer
-        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
-
-        if(!ind) {
-            return;
-        }
-
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, state.getRegionset(), function(err, data) {
-            if(err) {
-                Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
-                return;
-            }
-
-            var classification = state.getClassificationOpts(ind.hash);
-
-            var classify = service.getClassificationService().getClassification(data, classification);
-
-            if(!classify) {
-                Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
-                return;
-            }
-            var colors = service.getColorService().getColorsForClassification(classification);
-
-            service.getRegions(currentRegion, function(er, regions){
-                var regiongroups = classify.getGroups();
-
-                regiongroups.forEach(function(regiongroup, index){
-                    var features = [];
-                    var optionalStyles = [];
-                    var color = colors[index];
-
-                    // Get point symbol size
-                    var min = classification.min;
-                    var max = classification.max;
-                    var iconSize = null;
-                    if(min && max) {
-                        var step = (max-min) / regiongroups.length;
-                        iconSize = min + step * index;
-                    }
-
-                    regiongroup.forEach(function(region){
-                        var wantedRegion = jQuery.grep(regions, function( r, i ) {
-                            return r.id === region;
-                        });
-
-                        if(wantedRegion && wantedRegion.length === 1) {
-                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
-                            features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
-                        }
-                    });
-
-                    // Add group features to map
-                    var geoJSON = {
-                        'type': 'FeatureCollection',
-                        'crs': {
-                            'type': 'name',
-                            'properties': {
-                              'name': sandbox.getMap().getSrsName()
-                            }
-                          },
-                          'features': features
-                    };
-
-                    var defaultFeatureStyle = {
-                        fill: {
-                            color: 'rgba(255,0,0,0.0)'
-                        },
-                        stroke : {
-                            color: '#000000',
-                            width: 1
-                        }
-                    };
-
-                    if(classification.showValues === true) {
-                        var textColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
-                        defaultFeatureStyle.text = {
-                            scale : 1.2,
-                            fill : {
-                                color : textColor
-                            },
-                            stroke: {
-                                width: 0
-                            },
-                            labelProperty: 'regionValue',
-                            offsetX: 0,
-                            offsetY: 0
-                        };
-                    }
-                    var params = [geoJSON, {
-                        clearPrevious: false,
-                        featureStyle: defaultFeatureStyle,
-                        optionalStyles: optionalStyles,
-                        layerId: me.LAYER_ID,
-                        prio: index
-                    }];
-
-
-                    sandbox.postRequestByName(
-                        'MapModulePlugin.AddFeaturesToMapRequest',
-                        params
-                    );
-
-                });
-            });
-        });
-    },
-/****** PRIVATE METHODS ******/
     /**
      * Listen to events that require re-rendering the UI
      */
@@ -240,7 +250,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
             var features = event.getParams().features[0];
             var region = features.geojson.features[0].properties.id;
 
-            state.selectRegion(region, 'map');
+            state.toggleRegion(region, 'map');
         });
     }
 

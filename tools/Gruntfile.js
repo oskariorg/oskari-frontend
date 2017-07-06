@@ -1,6 +1,7 @@
 /*global module:false*/
 var _ = require('lodash'),
     path =  require('path');
+var OSKARI_FOLDER = path.basename(path.join(process.cwd(),'..'));
 
 module.exports = function (grunt) {
     'use strict';
@@ -426,7 +427,7 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            var TO_MATCH = 'oskari' + path.sep + 'bundles',
+            var TO_MATCH = OSKARI_FOLDER + path.sep + 'bundles',
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {

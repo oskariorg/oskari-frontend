@@ -285,7 +285,7 @@ Oskari.clazz.define(
             }
 
             if(state.activeRegion) {
-                service.selectRegion(state.activeRegion);
+                service.toggleRegion(state.activeRegion);
             }
 
             // if state says view was visible fire up the UI, otherwise close it
@@ -297,9 +297,9 @@ Oskari.clazz.define(
             var me = this;
             var service = this.statsService.getStateService();
             var state = {
-                indicators : [],
-                regionset : service.getRegionset(),
-                view :me.visible
+                indicators: [],
+                regionset: service.getRegionset(),
+                view: me.visible
             };
             service.getIndicators().forEach(function(ind) {
                 state.indicators.push({

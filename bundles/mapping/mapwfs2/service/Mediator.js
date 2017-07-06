@@ -234,7 +234,51 @@ Oskari.clazz.define(
             });
             this.__initInProgress = true;
             this.sendMessage('/service/wfs/init', message);
+        },
+
+        /**
+         * @method setOrderForFeatureProperties
+         * @param {UserLayer} layer
+         * @param {Array} fields; feature properties from channel: /wfs/properties
+         *
+         * Checks the order of feature properties by comparing fields to Userlayer's
+         * featureProperties and adds fields indexes to featurePropertiesIndexes
+         * featureProperties comes from user_layer table fields column
+         */
+        setOrderForFeatureProperties: function(layer, fields){
+            var orderedFieldsIndexes = [],
+                orderedFields = layer.getFeatureProperties(),
+                unOrderedFields = fields;
+
+            for (i = 0; i < orderedFields.length; i++){
+                index = unOrderedFields.indexOf(orderedFields[i]);
+                if (index !== -1){
+                    orderedFieldsIndexes.push(index);
+                }
+            }
+            layer.setFeaturePropertyIndexes(orderedFieldsIndexes);
+        },
+        /**
+         * @method sortArrayByFeaturePropertyIndexes
+         * @param {UserLayer} layer
+         * @param {Array} array
+         *
+         * Sorts array's fields to match with featurePropertiesIndexes
+         * include only user_layer table fields and hiddenfields
+         */
+        sortArrayByFeaturePropertyIndexes: function(layer, array){
+            var arrangedFields = [];
+            var orderedFieldsIndexes = layer.getFeaturePropertyIndexes();
+            if (orderedFieldsIndexes.length > 0 && array.length > 0){
+                for(i = 0; i < orderedFieldsIndexes.length; i++){
+                    arrangedFields.push(array[orderedFieldsIndexes[i]]);
+                }
+                return arrangedFields;
+            }else{
+                return array;
+            }
         }
+
     });
 
 // receive from backend
@@ -258,8 +302,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 this.plugin.mapMoveHandler();
             }
 
-            layer.setFields(data.data.fields);
-            layer.setLocales(data.data.locales);
+            if (typeof layer.getFeatureProperties === "function"){
+                this.setOrderForFeatureProperties(layer,data.data.fields);
+                layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
+                layer.setLocales (this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
+            }else{
+                layer.setFields(data.data.fields);
+                layer.setLocales(data.data.locales);
+            }
 
         }
 
@@ -282,9 +332,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     getWFSFeature: function (data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
             self = this;
-
         if (data.data.feature !== 'empty' && data.data.feature !== 'max') {
-            layer.setActiveFeature(data.data.feature);
+            feature = data.data.feature;
+        }
+
+        if (typeof layer.getFeatureProperties === "function"){
+            layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
+        } else{
+            layer.setActiveFeature(feature);
         }
 
         if (this._featureTimer) {
@@ -337,6 +392,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
+            if (typeof layer.getFeatureProperties === "function" && data.data.features !== 'empty'){
+                features = data.data.features;
+                for (i=0; i<features.length; i++){
+                    features [i] = this.sortArrayByFeaturePropertyIndexes (layer, features[i]);
+                }
+            }
             var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
             sandbox.notifyAll(infoEvent);
         }

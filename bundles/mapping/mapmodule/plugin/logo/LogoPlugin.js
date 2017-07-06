@@ -23,7 +23,7 @@ Oskari.clazz.define(
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
-            extend: jQuery('<div style="display: inline-block; margin: 5px"><a href="#"></a></div>')
+            extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
         },
         _initImpl : function() {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -115,7 +115,7 @@ Oskari.clazz.define(
         _setLayerToolsEditModeImpl: function () {
             var me = this;
             // TODO document why this is done...
-            if (!me.inLayerToolsEditMode()) {
+            if (!me.inLayerToolsEditMode() && me.getElement()) {
                 me.setLocation(
                     me.getElement().parents('.mapplugins').attr(
                         'data-location'
@@ -150,11 +150,10 @@ Oskari.clazz.define(
 
         _createServiceLink: function (el) {
             var me = this,
-                el = el || me.getElement(),
+                element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
-                link,
                 linkParams;
-            if(!el) {
+            if(!element) {
                 return;
             }
 
@@ -185,8 +184,8 @@ Oskari.clazz.define(
         },
         _createTermsLink: function (termsUrl, el) {
             var me = this,
-                el = el || me.getElement();
-            if(!el || !termsUrl) {
+                element = el || me.getElement();
+            if(!element || !termsUrl) {
                 return;
             }
               var options = {
@@ -205,9 +204,9 @@ Oskari.clazz.define(
         _createDataSourcesLink: function (el) {
             var me = this,
                 conf = me.getConfig() || {},
-                el = el || me.getElement();
+                element = el || me.getElement();
 
-            if(!el || conf.hideDataSourceLink) {
+            if(!element || conf.hideDataSourceLink) {
               return;
             }
             var options = {
@@ -300,7 +299,7 @@ Oskari.clazz.define(
                 link.attr('href', item.url);
                 link.append(item.name);
                 return link;
-            }
+            };
             var tpl = jQuery('<span></span>');
             if(typeof src.forEach !== 'function') {
                 tpl.append(SEPARATOR);
@@ -309,9 +308,11 @@ Oskari.clazz.define(
             }
 
             src.forEach(function(item) {
-                tpl.append(SEPARATOR);
-                tpl.append(formatSrc(item));
-            })
+                if(item) {
+                    tpl.append(SEPARATOR);
+                    tpl.append(formatSrc(item));
+                }
+            });
             return tpl;
         },
         /**
@@ -384,6 +385,9 @@ Oskari.clazz.define(
              var extend = me.templates.extend.clone();
              if(link.options.id) {
                extend.addClass(link.options.id.toLowerCase());
+             }
+             if(link.options.id !== 'icon') {
+               extend.css("margin","5px");
              }
              extend.find('a').text(link.title);
              template.append(extend);

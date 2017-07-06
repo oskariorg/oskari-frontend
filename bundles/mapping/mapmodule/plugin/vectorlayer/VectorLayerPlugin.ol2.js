@@ -315,7 +315,6 @@ Oskari.clazz.define(
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
                 olLayer,
-                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 featureInstance,
                 isOlLayerAdded = true,
                 styleMap = new OpenLayers.StyleMap();

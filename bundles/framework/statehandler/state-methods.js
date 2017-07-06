@@ -50,6 +50,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         // get initial state from server
         me._currentViewId = me._defaultViewId;
         startupState = me._getStartupState();
+        var log = Oskari.log('Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance');
+
         if (startupState) {
             me.useState(startupState);
         } else {
@@ -64,11 +66,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                         me.useState(me._getStartupState());
                         me._historyEnabled = true;
                     } else {
-                        alert('error in getting configuration');
+                        log.warn('error in getting configuration');
                     }
                 },
                 error: function () {
-                    alert('error loading conf');
+                    log.warn('error loading conf');
                     me._historyEnabled = true;
                 },
                 complete: function () {
