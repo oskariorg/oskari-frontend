@@ -12,6 +12,13 @@ Changed import file POST to use ajax XHR2 instead of iframe. Added upload progre
 
 Now shows imported feature count in the success message. On error shows error message and tips. The message popup doesn't fadeout if error or warning occurs.
 
+### Myplaces2
+
+The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
+
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map. 
+A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
+
 ## 1.43.0
 
 ### Minifier script
