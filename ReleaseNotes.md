@@ -48,6 +48,12 @@ This might affect usage of the component if an external code snippet assumes tha
 New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
 Bundle also creates registration popup to give information about registration before directing to registration page.
 
+### Myplacesimport
+
+Changed import file POST to use ajax XHR2 instead of iframe. Added upload progress bar and error handling. Some localization changes and error messages added. Choose a file dialog now shows only zip-files and folders.
+
+Now shows imported feature count in the success message. On error shows error message and tips. The message popup doesn't fadeout if error or warning occurs.
+
 ## 1.42.1
 
 ### divmanazer Grid
