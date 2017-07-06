@@ -220,7 +220,7 @@ Oskari.clazz.define(
 
                 me.getMapModule().getMap().addPopup(popup);
 
-                me._panMapToShowPopup(lonlat);
+                setTimeout(me._panMapToShowPopup.bind(me, lonlat), 0);
 
                 popup.setBackgroundColor('transparent');
                 jQuery(popup.div).css('overflow', 'visible');
@@ -612,18 +612,22 @@ Oskari.clazz.define(
             var me = this,
                 pixels = me.getMap().getViewPortPxFromLonLat(lonlat),
                 size = me.getMap().getCurrentSize(),
-                width = size.w,
-                height = size.h;
+                width = size.w - 128, // add some safety margin here so the popup close button won't go under the zoombar...
+                height = size.h - 128;
             // if infobox would be out of screen
             // -> move map to make infobox visible on screen
             var panx = 0,
                 pany = 0,
                 popup = jQuery('.olPopup'),
-                infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
-                infoboxHeight = popup.height() + 128;
+                infoboxWidth = popup.width(),
+                infoboxHeight = popup.height();
 
             if (pixels.x + infoboxWidth > width) {
-                panx = width - (pixels.x + infoboxWidth);
+                if (infoboxWidth > width) {
+                    panx = -pixels.x;
+                } else {
+                    panx = width - (pixels.x + infoboxWidth);
+                }
             }
             if (pixels.y + infoboxHeight > height) {
                 pany = height - (pixels.y + infoboxHeight);
