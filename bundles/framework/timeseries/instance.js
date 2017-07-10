@@ -195,7 +195,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 layers = me.sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
                 //the first layer to have times set, we'll use!
-                if (layers[i].getAttributes().times) {
+                if (layers[i].hasTimeseries()) {
                     //only reinitialise if the control has not yet been initialised with the data of this layer
                     if (!(me._modules.playback.getControl()) ||
                         !(me._modules.playback.getSelectedLayerId()) ||

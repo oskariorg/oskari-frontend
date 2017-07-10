@@ -21,6 +21,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         conf = conf || {};
         this.conf = conf;
         this.template = {};
+        this._isPlaying = false;
 
         for (p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
@@ -262,36 +263,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             }
         },
         /**
-         * @method  @private _goNext go next
-         */
-        _goNext: function(){
-            var me = this;
-            var popup = me._control.filter('.mapplugin-timeseries-popup');
-            var popupIndex = parseInt(popup.attr(me._TIMESERIES_INDEX));
-            if(isNaN(popupIndex)){
-                return;
-            }
-            if(me._playbackSlider.times.length-1<popupIndex+1) {
-                popup.attr(me._TIMESERIES_INDEX, -1);
-                me._goNext();
-            } else {
-                popupIndex++;
-                popup.attr(me._TIMESERIES_INDEX, popupIndex);
-                me._calculatePopupPosition();
-            }
-
-        },
-        /**
          * @method  @private _startPlayback start playback
          */
         _startPlayback: function(){
             var me = this;
             me._control.find('.playback-button .play').hide();
             me._control.find('.playback-button .pause').show();
-            clearInterval(me._timers.slideInterval);
-            me._timers.slideInterval = setInterval(function(){
-                me._goNext();
-            }, me._animationSpeedMs);
+            me._isPlaying = true;
+            me._requestPlayback();
         },
         /**
          * @method  _stopPlayback stop playback
@@ -300,7 +279,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var me = this;
             me._control.find('.playback-button .pause').hide();
             me._control.find('.playback-button .play').show();
-            me._stopTimers();
+            me._isPlaying = false;
+            me._requestPlayback();
         },
         /**
          * @method  @private _setSliderHandlers set button handlers
@@ -366,26 +346,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             popup.css('left', leftPopup + 'px');
             popup.css('top', topPopup + 'px');
             popup.show();
-
-            clearTimeout(me._timers.updatemap);
-
-            // Update map
-            me._timers.updatemap = setTimeout(function(){
-                me._updateLayer(me._playbackSlider.times[popupIndex].value);
-            }, me._layerUpdateTimeMs);
         },
         /**
-         * @method  @private _updateLayer update layer
-         * @param  {String} time time value
+         * @method  @private _requestPlayback request timeseries animation playback from layer
+         * @param  {Boolean} shouldPlay start or continue playing (animation)
          */
-        _updateLayer: function(time){
+        _requestPlayback: function(){
             var me = this;
-            var updateRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                    updateRequest;
-                var params = {};
-                params[me._dimensionName] = time;
-                updateRequest = updateRequestBuilder(me._selectedLayerId, true, params);
-                me.sandbox.request(me.instance, updateRequest);
+            var popup = me._control.filter('.mapplugin-timeseries-popup');
+            var popupIndex = parseInt(popup.attr(me._TIMESERIES_INDEX));
+            if(isNaN(popupIndex)){
+                return;
+            }
+            var time = me._playbackSlider.times[popupIndex].value
+            var playbackRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerPlaybackRequest');
+            var playbackRequest;
+
+            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying);
+            me.sandbox.request(this.instance, playbackRequest);
         },
         /**
          * @method  @private _addDayLines add day lines to slider
@@ -489,6 +467,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             if(!isNaN(index) && index >= 0 && index < me._playbackSlider.times.length && prevIndex != index) {
                 timeSeriesPopup.attr(me._TIMESERIES_INDEX, index);
                 me._calculatePopupPosition();
+                me._requestPlayback();
             }
         },
         /**
@@ -496,10 +475,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
          */
         handleMapSizeChanged: function(){
             var me = this;
-            clearTimeout(me._timers.popupPosition);
-            me._timers.popupPosition = setTimeout(function(){
-                me._calculatePopupPosition();
-            }, 50);
             me._addDayLines();
             me._addInternalLines();
         },
@@ -522,15 +497,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             y = evt.pageY-elementTop;
 
             return {x:x, y:y};
-        },
-        /**
-         * @method  @private_stopTimers stop timers
-         */
-        _stopTimers: function(){
-            var me = this;
-            clearInterval(me._timers.slideInterval);
-            clearTimeout(me._timers.popupPosition);
-            clearTimeout(me._timers.updatemap);
         },
         getControl: function() {
             return this._control;

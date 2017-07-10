@@ -1199,6 +1199,14 @@ Oskari.clazz.define(
             return this._realtime;
         },
         /**
+         * @method hasTimeseries
+         * @return {Boolean}
+         * Has timeseries data
+         */
+        hasTimeseries: function () {
+            return !!this.getAttributes().times;
+        },
+        /**
          * @method setRefreshRate
          * @param {Number} refreshRate
          */

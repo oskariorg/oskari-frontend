@@ -236,6 +236,7 @@ Oskari.clazz.define(
             //register request handlers
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
+                mapLayerPlaybackHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlaybackRequestHandler', sandbox, this),
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
@@ -244,6 +245,7 @@ Oskari.clazz.define(
             };
 
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
+            sandbox.requestHandler('MapModulePlugin.MapLayerPlaybackRequest', this.requestHandlers.mapLayerPlaybackHandler);
             sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
@@ -2343,6 +2345,18 @@ Oskari.clazz.define(
                     plugin.updateLayerParams(layer, forced, params);
                 }
             });
+        },
+        /**
+         * @method handleMapLayerPlaybackRequest
+         * Start playback of timeline on requested layer
+         * @param {String} layerId layerId
+         * @param {String} time requested point in time
+         * @param {Boolean} playing should the animation start/stop 
+         * @param {Number} nthStep playback only nth time steps (optional, default 1)
+         */
+        handleMapLayerPlaybackRequest: function(layerId, time, playing, nthStep){
+            console.log('requested!!', time);
+            this.handleMapLayerUpdateRequest(layerId, false, {'TIME': time});
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {
