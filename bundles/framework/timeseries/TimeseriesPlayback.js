@@ -355,7 +355,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var playbackRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerPlaybackRequest');
             var playbackRequest;
 
-            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying);
+            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying, 32);
             me.sandbox.request(this.instance, playbackRequest);
         },
         /**

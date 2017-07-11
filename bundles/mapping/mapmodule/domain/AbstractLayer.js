@@ -145,6 +145,7 @@ Oskari.clazz.define(
         me._currentTime = null;
         me._mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         me._timeseriesTimeout = null;
+        me._nthStep = 1;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1226,7 +1227,7 @@ Oskari.clazz.define(
                 timeToNext = this._lastFrameLoadTime + 4000 - Date.now();
                 clearTimeout(this._timeseriesTimeout);
                 this._timeseriesTimeout = setTimeout(function(){
-                    var nextTime = this._getNextTimestep();
+                    var nextTime = this._getNextTimestep(this._nthStep);
                     if(nextTime) {
                         this._setLayerTimestep(nextTime, true);
                     } else {
@@ -1236,9 +1237,10 @@ Oskari.clazz.define(
             }
             this._scheduleNextTimestep = false;
         },
-        _getNextTimestep(){
+        _getNextTimestep(numSteps){
             var times = this.getAttributes().times;
             var nextTime;
+            numSteps = numSteps || 1;
             if(!times) {
                 console.warn('layer does not have "times" attribute');
                 return;
@@ -1254,14 +1256,14 @@ Oskari.clazz.define(
                     console.warn('current timestep not found in "times" array');
                     return;
                 }
-                if(index >= times.length-1) {
-                    console.warn('at last timestep, cannot advance');
+                if(index + numSteps > times.length-1) {
+                    console.warn('timestep would be after timeseries end, cannot advance');
                     return;
                 }
-                nextTime = times[index+1];
+                nextTime = times[index+numSteps];
             } else {
-                var interval = moment.duration(times.interval);
-                var next = moment(this._currentTime).add(interval);
+                var interval = moment.duration(times.interval).milliseconds() * numSteps;
+                var next = moment(this._currentTime).add(interval, 'milliseconds');
                 if(next.isAfter(times.end)) {
                     console.warn('next timestep would be after end of series, cannot advance');
                     return;
@@ -1271,11 +1273,12 @@ Oskari.clazz.define(
 
             return nextTime;
         },
-        configureTimeseriesPlayback(time, playing){
+        configureTimeseriesPlayback(time, playing, nthStep){
             if(!this.hasTimeseries()){
                 console.warn('Layer does not have timeseries! Cannot start playback.');
                 return;
             }
+            this._nthStep = nthStep || 1;
             this._setLayerTimestep(time, playing);
             if(!playing) {
                 this._stopTimeseriesPlayback();

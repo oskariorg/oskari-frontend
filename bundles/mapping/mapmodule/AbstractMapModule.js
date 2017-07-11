@@ -2356,7 +2356,7 @@ Oskari.clazz.define(
          */
         handleMapLayerPlaybackRequest: function(layerId, time, playing, nthStep){
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            layer.configureTimeseriesPlayback(time, playing);
+            layer.configureTimeseriesPlayback(time, playing, nthStep);
         },
         sendTimeseriesAnimationEvent(layerId, time, playing) {
             var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
