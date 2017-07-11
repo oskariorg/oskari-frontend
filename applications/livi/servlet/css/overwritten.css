@@ -117,7 +117,10 @@ table {
 				background:url("/Oskari/applications/livi/servlet/images/livilogosmall.png") no-repeat;
 				cursor:pointer;
 			}  
-			
+/*XY-infonappula*/
+#mapdiv.elf-reverse-geocode {
+        cursor: crosshair !important;
+}
 
 							
 <div id="livi-logo">
