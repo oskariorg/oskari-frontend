@@ -184,6 +184,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             },
             'AfterMapLayerRemoveEvent': function(event) {
                 this._checkIfTimeseriesLayersExist();
+            },
+            'TimeseriesAnimationEvent': function(event) {
+                 this._modules.playback.setPlaybackState(event.getLayerId(), event.getTime(), event.getPlaying());
             }
         },
         /**

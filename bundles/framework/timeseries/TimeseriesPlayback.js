@@ -262,7 +262,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             me._control.find('.playback-button .play').hide();
             me._control.find('.playback-button .pause').show();
             me._isPlaying = true;
-            me._requestPlayback();
         },
         /**
          * @method  _stopPlayback stop playback
@@ -272,7 +271,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             me._control.find('.playback-button .pause').hide();
             me._control.find('.playback-button .play').show();
             me._isPlaying = false;
-            me._requestPlayback();
         },
         /**
          * @method  @private _setSliderHandlers set button handlers
@@ -284,12 +282,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             me._control.find('.playback-button .play').click(function(evt){
                 evt.preventDefault();
                 me._startPlayback();
+                me._requestPlayback();
             });
 
             // Pause button
             me._control.find('.playback-button .pause').click(function(evt){
                 evt.preventDefault();
                 me._stopPlayback();
+                me._requestPlayback();
             });
 
 
@@ -495,5 +495,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         },
         getSelectedLayerId: function() {
             return this._selectedLayerId;
+        },
+        setPlaybackState: function (layerId, time, playing) {
+            if(this._selectedLayerId !== layerId) {
+                console.warn('event layerId is not current');
+                return;
+            }
+            if(playing) {
+                this._startPlayback();
+            } else {
+                this._stopPlayback();
+            }
+            var index;
+            this._playbackSlider.times.find(function(t, i){
+                if(t.value === time) {
+                    index = i;
+                    return true;
+                }
+            });
+            if(typeof index === 'number'){
+                var timeSeriesPopup = this._control.filter('.mapplugin-timeseries-popup');
+                timeSeriesPopup.attr(this._TIMESERIES_INDEX, index);
+                this._calculatePopupPosition();
+            }
         }
 });

@@ -497,6 +497,9 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/event/AfterMapMoveEvent.js"
                 }, {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/event/TimeseriesAnimationEvent.js"
+                }, {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/event/GetInfoResultEvent.js"
                 }, {
                     "type": "text/javascript",

@@ -1224,15 +1224,15 @@ Oskari.clazz.define(
             var timeToNext;
             if(this._scheduleNextTimestep) {
                 timeToNext = this._lastFrameLoadTime + 4000 - Date.now();
+                clearTimeout(this._timeseriesTimeout);
                 this._timeseriesTimeout = setTimeout(function(){
                     var nextTime = this._getNextTimestep();
                     if(nextTime) {
-                        this._setLayerTimestep(nextTime);
-                        this._scheduleNextTimestep = true;
+                        this._setLayerTimestep(nextTime, true);
                     } else {
                         this._stopTimeseriesPlayback();
                     }
-                }.bind(this), Math.min(500, timeToNext));
+                }.bind(this), Math.max(1000, timeToNext));
             }
             this._scheduleNextTimestep = false;
         },
@@ -1276,10 +1276,8 @@ Oskari.clazz.define(
                 console.warn('Layer does not have timeseries! Cannot start playback.');
                 return;
             }
-            this._setLayerTimestep(time);
-            if(playing) {
-                this._scheduleNextTimestep = true;
-            } else {
+            this._setLayerTimestep(time, playing);
+            if(!playing) {
                 this._stopTimeseriesPlayback();
             }
         },
@@ -1287,12 +1285,15 @@ Oskari.clazz.define(
             clearTimeout(this._timeseriesTimeout);
             this._timeseriesTimeout = null;
             this._scheduleNextTimestep = false;
+            this._mapModule.sendTimeseriesAnimationEvent(this._id, this._currentTime, false);
         },
-        _setLayerTimestep(time){
+        _setLayerTimestep(time, playing){
             this._currentTime = time;
             this._lastFrameLoadTime = Date.now();
+            this._scheduleNextTimestep = playing;
             
             this._mapModule.handleMapLayerUpdateRequest(this._id, true, {"TIME": time});
+            this._mapModule.sendTimeseriesAnimationEvent(this._id, time, playing);
         },
         /**
          * @method setRefreshRate

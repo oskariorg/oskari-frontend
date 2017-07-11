@@ -2355,9 +2355,13 @@ Oskari.clazz.define(
          * @param {Number} nthStep playback only nth time steps (optional, default 1)
          */
         handleMapLayerPlaybackRequest: function(layerId, time, playing, nthStep){
-            console.log('requested!!', time);
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
             layer.configureTimeseriesPlayback(time, playing);
+        },
+        sendTimeseriesAnimationEvent(layerId, time, playing) {
+            var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
+            var evt = eventBuilder(layerId, time, playing);
+            this.getSandbox().notifyAll(evt);
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {
