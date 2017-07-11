@@ -22,6 +22,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         this.conf = conf;
         this.template = {};
         this._isPlaying = false;
+        this._dragTimeout = null;
 
         for (p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
@@ -295,7 +296,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
 
             // Slider click
             me._control.find('.oskari-timeslider').mouseup(function(e) {
-                me._moveSlider(e);
+                me._moveSlider(e, true);
             });
 
             // Slider popup drag
@@ -447,7 +448,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
          * @method  @private _moveSlider move slider
          * @param  {Object} e jQuery event
          */
-        _moveSlider: function(e){
+        _moveSlider: function(e, isInstant){
             var me = this;
             var timeSlider = me._control.find('.oskari-timeslider');
             var sliderWidth = timeSlider.width();
@@ -456,10 +457,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var pixelsPerTimeSerie = sliderWidth / (me._playbackSlider.times.length-1);
             var index = parseInt(position.x/pixelsPerTimeSerie);
             var prevIndex = timeSeriesPopup.attr(me._TIMESERIES_INDEX);
+            var requestCallback = function(){
+                me._dragTimeout = null;
+                me._requestPlayback();
+            };
             if(!isNaN(index) && index >= 0 && index < me._playbackSlider.times.length && prevIndex != index) {
                 timeSeriesPopup.attr(me._TIMESERIES_INDEX, index);
                 me._calculatePopupPosition();
-                me._requestPlayback();
+                if(isInstant) {
+                    requestCallback();
+                } else if(me._dragTimeout === null) {
+                    me._dragTimeout = setTimeout(requestCallback, 500);
+                }
             }
         },
         /**
