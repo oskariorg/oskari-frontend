@@ -140,6 +140,11 @@ Oskari.clazz.define(
         me.tilesToLoad = 0;
         me.errors = 0;
 
+        me._lastFrameLoadTime = 0;
+        me._scheduleNextTimestep = false;
+        me._currentTime = null;
+        me._mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        me._timeseriesTimeout = null;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -461,7 +466,12 @@ Oskari.clazz.define(
             this.loading = remaining;
           }
           this.loaded += 1;
-          return this.loading === 0;
+          if(this.loading === 0){
+            this._advancePlayback();
+            return true;
+          } else {
+            return false;
+          }
         },
         /**
          * Called when openlayers 2/3 tileloaderror event fires
@@ -1205,6 +1215,84 @@ Oskari.clazz.define(
          */
         hasTimeseries: function () {
             return !!this.getAttributes().times;
+        },
+        /**
+         * @method _advancePlayback
+         * Schedule new timeseries frame if needed
+         */
+        _advancePlayback: function() {
+            var timeToNext;
+            if(this._scheduleNextTimestep) {
+                timeToNext = this._lastFrameLoadTime + 4000 - Date.now();
+                this._timeseriesTimeout = setTimeout(function(){
+                    var nextTime = this._getNextTimestep();
+                    if(nextTime) {
+                        this._setLayerTimestep(nextTime);
+                        this._scheduleNextTimestep = true;
+                    } else {
+                        this._stopTimeseriesPlayback();
+                    }
+                }.bind(this), Math.min(500, timeToNext));
+            }
+            this._scheduleNextTimestep = false;
+        },
+        _getNextTimestep(){
+            var times = this.getAttributes().times;
+            var nextTime;
+            if(!times) {
+                console.warn('layer does not have "times" attribute');
+                return;
+            }
+            if(!this._currentTime) {
+                console.warn('current timestep not set for layer');
+                return;
+            }
+
+            if(Array.isArray(times)){
+                var index = times.indexOf(this._currentTime);
+                if(index < 0) {
+                    console.warn('current timestep not found in "times" array');
+                    return;
+                }
+                if(index >= times.length-1) {
+                    console.warn('at last timestep, cannot advance');
+                    return;
+                }
+                nextTime = times[index+1];
+            } else {
+                var interval = moment.duration(times.interval);
+                var next = moment(this._currentTime).add(interval);
+                if(next.isAfter(times.end)) {
+                    console.warn('next timestep would be after end of series, cannot advance');
+                    return;
+                }
+                nextTime = next.toISOString();
+            }
+
+            return nextTime;
+        },
+        configureTimeseriesPlayback(time, playing){
+            if(!this.hasTimeseries()){
+                console.warn('Layer does not have timeseries! Cannot start playback.');
+                return;
+            }
+            this._setLayerTimestep(time);
+            if(playing) {
+                this._scheduleNextTimestep = true;
+            } else {
+                this._stopTimeseriesPlayback();
+            }
+        },
+        _stopTimeseriesPlayback() {
+            clearTimeout(this._timeseriesTimeout);
+            this._timeseriesTimeout = null;
+            this._scheduleNextTimestep = false;
+        },
+        _setLayerTimestep(time){
+            this._currentTime = time;
+            this._lastFrameLoadTime = Date.now();
+            
+            this._mapModule.handleMapLayerUpdateRequest(this._id, true, {"TIME": time});
         },
         /**
          * @method setRefreshRate

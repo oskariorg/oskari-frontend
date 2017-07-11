@@ -2356,7 +2356,8 @@ Oskari.clazz.define(
          */
         handleMapLayerPlaybackRequest: function(layerId, time, playing, nthStep){
             console.log('requested!!', time);
-            this.handleMapLayerUpdateRequest(layerId, false, {'TIME': time});
+            var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+            layer.configureTimeseriesPlayback(time, playing);
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

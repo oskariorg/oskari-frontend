@@ -38,14 +38,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             hours: [],
             intervalCount: 0
         };
-
-        this._animationSpeedMs = (conf.animationSpeed && !isNaN(conf.animationSpeed)) ? conf.animationSpeed : 4000;
-        this._layerUpdateTimeMs = 100;
-        this._timers = {
-            popupPosition: null,
-            slideInterval: null,
-            updatemap: null
-        };
         this._isPopupMove = false;
         this._selectedLayerId = null;
         this._dimensionName = null;
