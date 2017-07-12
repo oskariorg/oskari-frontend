@@ -145,7 +145,9 @@ Oskari.clazz.define(
         me._currentTime = null;
         me._mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         me._timeseriesTimeout = null;
+        me._timeseriesPlaying = false;
         me._nthStep = 1;
+        me._imageBuffer = Oskari.clazz.create('Oskari.mapframework.domain.ImageBuffer');
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1221,21 +1223,40 @@ Oskari.clazz.define(
          * @method _advancePlayback
          * Schedule new timeseries frame if needed
          */
-        _advancePlayback: function() {
-            var timeToNext;
-            if(this._scheduleNextTimestep) {
-                timeToNext = this._lastFrameLoadTime + 1000 - Date.now();
-                clearTimeout(this._timeseriesTimeout);
-                this._timeseriesTimeout = setTimeout(function(){
-                    var nextTime = this._getNextTimestep(this._nthStep);
-                    if(nextTime) {
-                        this._setLayerTimestep(nextTime, true);
-                    } else {
-                        this._stopTimeseriesPlayback();
-                    }
-                }.bind(this), Math.max(500, timeToNext));
+        _advancePlayback: function () {
+            if (this._scheduleNextTimestep) {
+                var nextStep = this._getNextTimestep(this._nthStep);
+                if (nextStep) {
+                    var imagesToLoad = this._getTileUrls(nextStep);
+                    this._imageBuffer.loadImages(imagesToLoad, function (success) {
+                        if (!this._timeseriesPlaying) {
+                            return;
+                        }
+                        var millisSinceLastFrame = Date.now() - this._lastFrameLoadTime;
+                        if (millisSinceLastFrame >= 500) {
+                            this._setLayerTimestep(nextStep, true);
+                        } else {
+                            clearTimeout(this._timeseriesTimeout);
+                            this._timeseriesTimeout = setTimeout(function () {
+                                this._setLayerTimestep(nextStep, true);
+                            }.bind(this), 500 - millisSinceLastFrame);
+                        }
+                    }.bind(this), 2000);
+                } else {
+                    this._stopTimeseriesPlayback();
+                }
             }
             this._scheduleNextTimestep = false;
+        },
+        _getTileUrls: function (time) {
+            var OLlayers = this._mapModule.getOLMapLayers(this._id);
+            var urls = [];
+            OLlayers[0].grid.forEach(function (a) {
+                a.forEach(function (b) {
+                    urls.push(b.url.replace(/([?&])(TIME=[^&]*)/, '$1TIME=' + encodeURIComponent(time)));
+                });
+            });
+            return urls;
         },
         _getNextTimestep(numSteps){
             var times = this.getAttributes().times;
@@ -1288,12 +1309,14 @@ Oskari.clazz.define(
             clearTimeout(this._timeseriesTimeout);
             this._timeseriesTimeout = null;
             this._scheduleNextTimestep = false;
+            this._timeseriesPlaying = false;
             this._mapModule.sendTimeseriesAnimationEvent(this._id, this._currentTime, false);
         },
         _setLayerTimestep(time, playing){
             this._currentTime = time;
             this._lastFrameLoadTime = Date.now();
             this._scheduleNextTimestep = playing;
+            this._timeseriesPlaying = playing;
             
             this._mapModule.handleMapLayerUpdateRequest(this._id, true, {"TIME": time});
             this._mapModule.sendTimeseriesAnimationEvent(this._id, time, playing);
@@ -1393,3 +1416,46 @@ Oskari.clazz.define(
 
     }
 );
+
+
+Oskari.clazz.define(
+    'Oskari.mapframework.domain.ImageBuffer',
+    function () {
+        this._images = [];
+        this._currentBatch = 0;
+        this._timeout = null;
+    },
+    {
+        loadImages: function (urls, callback, timeout) {
+            var me = this;
+            me._images = [];
+            me._currentBatch += 1;
+            clearTimeout(me._timeout);
+
+            var batch = me._currentBatch;
+            var aborted = false;
+            var numCompleted = 0;
+
+            urls.forEach(function (url) {
+                var image = document.createElement('img');
+                image.onload = function () {
+                    if (batch === me._currentBatch && !aborted) {
+                        numCompleted += 1;
+                        if (numCompleted === urls.length) {
+                            callback(true);
+                        }
+                    }
+                }
+                image.src = url;
+                me._images.push(image);
+            });
+            if (typeof timeout === 'number') {
+                me._timeout = setTimeout(function () {
+                    if (numCompleted < urls.length) {
+                        callback(false);
+                    }
+                    aborted = true;
+                }, timeout);
+            }
+        }
+    });
