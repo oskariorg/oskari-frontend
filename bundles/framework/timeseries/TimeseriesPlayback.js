@@ -110,10 +110,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             me._addDayLines();
             me._addInternalLines();
 
-            if(autoPlay) {
-                me._startPlayback();
-            }
-
+            me._isPlaying = autoPlay;
+            me._requestPlayback();
         },
         /**
          * @method  @public removeSlider remove slider
