@@ -1224,7 +1224,7 @@ Oskari.clazz.define(
         _advancePlayback: function() {
             var timeToNext;
             if(this._scheduleNextTimestep) {
-                timeToNext = this._lastFrameLoadTime + 4000 - Date.now();
+                timeToNext = this._lastFrameLoadTime + 1000 - Date.now();
                 clearTimeout(this._timeseriesTimeout);
                 this._timeseriesTimeout = setTimeout(function(){
                     var nextTime = this._getNextTimestep(this._nthStep);
@@ -1233,7 +1233,7 @@ Oskari.clazz.define(
                     } else {
                         this._stopTimeseriesPlayback();
                     }
-                }.bind(this), Math.max(1000, timeToNext));
+                }.bind(this), Math.max(500, timeToNext));
             }
             this._scheduleNextTimestep = false;
         },
