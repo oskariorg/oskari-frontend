@@ -14,6 +14,21 @@ div.mapplugin.timeseries {
   position:absolute;
   opacity: 0.9;
 
+  div.timestep-holder {
+    margin-top: 10px;
+    float:left;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #333438;
+    margin-left: 10px;
+
+    select {
+      width: calc(100% - 10px);
+    }
+  }
+
   div.playback-button {
     margin-top:10px;
     float:left;
@@ -71,7 +86,7 @@ div.mapplugin.timeseries {
 
   .oskari-timeslider {
     margin-top:10px;
-    width:90%;
+    width:80%;
     height:$slideHeight;
     background-color: $sliderBackgroundColor;
     float:left;
