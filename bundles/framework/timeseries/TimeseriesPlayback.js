@@ -42,6 +42,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         this._isPopupMove = false;
         this._selectedLayerId = null;
         this._dimensionName = null;
+        this._nthStep = 1;
     }, {
 
         __templates: {
@@ -54,11 +55,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                         '</div>'+
                         '<div class="timestep-holder">'+
                             '<select>'+ 
-                            '<option value="1">1x</option>'+
-                            '<option value="2">2x</option>'+
-                            '<option value="4">4x</option>'+
-                            '<option value="8">8x</option>'+
-                            '<option value="16">16x</option>'+
+                                '<option value="1">1x</option>'+
+                                '<option value="2">2x</option>'+
+                                '<option value="4">4x</option>'+
+                                '<option value="8">8x</option>'+
+                                '<option value="16">16x</option>'+
                             '</select>'+
                         '</div>'+
                         '<div class="oskari-timeslider-empty">&nbsp;</div>'+
@@ -302,6 +303,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
                 me._requestPlayback();
             });
 
+            // Skip select menu
+            me._control.find('.timestep-holder select').change(function() {
+                me._nthStep = parseInt(this.value);
+                if(me._isPlaying) {
+                    me._requestPlayback();
+                }
+            });
+
 
             // Slider click
             me._control.find('.oskari-timeslider').mouseup(function(e) {
@@ -364,7 +373,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             var playbackRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerPlaybackRequest');
             var playbackRequest;
 
-            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying, 32);
+            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying, me._nthStep);
             me.sandbox.request(this.instance, playbackRequest);
         },
         /**
