@@ -144,10 +144,9 @@ Oskari.clazz.define(
         me._scheduleNextTimestep = false;
         me._currentTime = null;
         me._mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        me._timeseriesTimeout = null;
-        me._timeseriesPlaying = false;
         me._nthStep = 1;
         me._imageBuffer = Oskari.clazz.create('Oskari.mapframework.domain.ImageBuffer');
+        me._cancelBuffering = null;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1224,29 +1223,21 @@ Oskari.clazz.define(
          * Schedule new timeseries frame if needed
          */
         _advancePlayback: function () {
-            if (this._scheduleNextTimestep) {
-                var nextStep = this._getNextTimestep(this._nthStep);
+            var me = this;
+            if (me._scheduleNextTimestep) {
+                var nextStep = me._getNextTimestep(this._nthStep);
                 if (nextStep) {
-                    var imagesToLoad = this._getTileUrls(nextStep);
-                    this._imageBuffer.loadImages(imagesToLoad, function (success) {
-                        if (!this._timeseriesPlaying) {
-                            return;
-                        }
-                        var millisSinceLastFrame = Date.now() - this._lastFrameLoadTime;
-                        if (millisSinceLastFrame >= 500) {
-                            this._setLayerTimestep(nextStep, true);
-                        } else {
-                            clearTimeout(this._timeseriesTimeout);
-                            this._timeseriesTimeout = setTimeout(function () {
-                                this._setLayerTimestep(nextStep, true);
-                            }.bind(this), 500 - millisSinceLastFrame);
-                        }
-                    }.bind(this), 2000);
+                    var imagesToLoad = me._getTileUrls(nextStep);
+                    var millisToTarget = 500 - Date.now() + me._lastFrameLoadTime;
+                    var millisTimeout = 2000;
+                    me._cancelBuffering = me._imageBuffer.loadImages(imagesToLoad, millisToTarget, millisTimeout, function (success) {
+                        me._setLayerTimestep(nextStep, true);
+                    });
                 } else {
-                    this._stopTimeseriesPlayback();
+                    me._stopTimeseriesPlayback();
                 }
             }
-            this._scheduleNextTimestep = false;
+            me._scheduleNextTimestep = false;
         },
         _getTileUrls: function (time) {
             var OLlayers = this._mapModule.getOLMapLayers(this._id);
@@ -1305,18 +1296,23 @@ Oskari.clazz.define(
                 this._stopTimeseriesPlayback();
             }
         },
+        _resetBuffer() {
+            if(this._cancelBuffering){
+                this._cancelBuffering();
+                this._cancelBuffering = null;
+            }
+        },
         _stopTimeseriesPlayback() {
-            clearTimeout(this._timeseriesTimeout);
-            this._timeseriesTimeout = null;
+            this._resetBuffer();
             this._scheduleNextTimestep = false;
-            this._timeseriesPlaying = false;
             this._mapModule.sendTimeseriesAnimationEvent(this._id, this._currentTime, false);
         },
         _setLayerTimestep(time, playing){
             this._currentTime = time;
             this._lastFrameLoadTime = Date.now();
             this._scheduleNextTimestep = playing;
-            this._timeseriesPlaying = playing;
+
+            this._resetBuffer();
             
             this._mapModule.handleMapLayerUpdateRequest(this._id, true, {"TIME": time});
             this._mapModule.sendTimeseriesAnimationEvent(this._id, time, playing);
@@ -1424,11 +1420,13 @@ Oskari.clazz.define(
         this._images = [];
         this._currentBatch = 0;
         this._timeout = null;
+        this._startTime;
     },
     {
-        loadImages: function (urls, callback, timeout) {
+        loadImages: function (urls, millisToTarget, millisToTimeout, callback) {
             var me = this;
             me._images = [];
+            me._startTime = Date.now();
             me._currentBatch += 1;
             clearTimeout(me._timeout);
 
@@ -1442,20 +1440,31 @@ Oskari.clazz.define(
                     if (batch === me._currentBatch && !aborted) {
                         numCompleted += 1;
                         if (numCompleted === urls.length) {
-                            callback(true);
+                            clearTimeout(me._timeout);
+                            var timeLeftToTarget = me._startTime + millisToTarget - Date.now();
+                            if(timeLeftToTarget <= 0){
+                                callback(true);
+                            } else {
+                                me._timeout = setTimeout(function () {
+                                    callback(true);
+                                }, timeLeftToTarget);
+                            }
                         }
                     }
                 }
                 image.src = url;
                 me._images.push(image);
             });
-            if (typeof timeout === 'number') {
-                me._timeout = setTimeout(function () {
-                    if (numCompleted < urls.length) {
-                        callback(false);
-                    }
-                    aborted = true;
-                }, timeout);
+
+            me._timeout = setTimeout(function () {
+                if (numCompleted < urls.length && !aborted) {
+                    callback(false);
+                }
+            }, millisToTimeout);
+
+            return function() {
+                aborted = true;
+                clearTimeout(me._timeout);
             }
         }
     });
