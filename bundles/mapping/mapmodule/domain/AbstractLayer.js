@@ -147,6 +147,7 @@ Oskari.clazz.define(
         me._nthStep = 1;
         me._imageBuffer = Oskari.clazz.create('Oskari.mapframework.domain.ImageBuffer');
         me._cancelBuffering = null;
+        this._frameInterval = 1000;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1228,9 +1229,9 @@ Oskari.clazz.define(
                 var nextStep = me._getNextTimestep(this._nthStep);
                 if (nextStep) {
                     var imagesToLoad = me._getTileUrls(nextStep);
-                    var millisToTarget = 500 - Date.now() + me._lastFrameLoadTime;
-                    var millisTimeout = 2000;
-                    me._cancelBuffering = me._imageBuffer.loadImages(imagesToLoad, millisToTarget, millisTimeout, function (success) {
+                    var millisToTarget = this._frameInterval - Date.now() + me._lastFrameLoadTime;
+                    var millisTimeout = 5000;
+                    me._cancelBuffering = me._imageBuffer.loadImages(imagesToLoad, millisToTarget, Math.max(millisToTarget, millisTimeout), function (success) {
                         me._setLayerTimestep(nextStep, true);
                     });
                 } else {
@@ -1285,12 +1286,13 @@ Oskari.clazz.define(
 
             return nextTime;
         },
-        configureTimeseriesPlayback(time, playing, nthStep){
+        configureTimeseriesPlayback(time, playing, interval, nthStep){
             if(!this.hasTimeseries()){
                 console.warn('Layer does not have timeseries! Cannot start playback.');
                 return;
             }
             this._nthStep = nthStep || 1;
+            this._frameInterval = interval;
             this._setLayerTimestep(time, playing);
             if(!playing) {
                 this._stopTimeseriesPlayback();

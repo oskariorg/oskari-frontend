@@ -2354,9 +2354,9 @@ Oskari.clazz.define(
          * @param {Boolean} playing should the animation start/stop 
          * @param {Number} nthStep playback only nth time steps (optional, default 1)
          */
-        handleMapLayerPlaybackRequest: function(layerId, time, playing, nthStep){
+        handleMapLayerPlaybackRequest: function(layerId, time, playing, interval, nthStep){
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            layer.configureTimeseriesPlayback(time, playing, nthStep);
+            layer.configureTimeseriesPlayback(time, playing, interval, nthStep);
         },
         sendTimeseriesAnimationEvent(layerId, time, playing) {
             var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');

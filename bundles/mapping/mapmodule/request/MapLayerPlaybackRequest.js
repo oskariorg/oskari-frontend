@@ -15,13 +15,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
      * @param {Boolean}
      *            playing should the animation start/stop 
      * @param {Number}
+     *            frameInterval minimun time beween frames
+     * @param {Number}
      *            nthStep playback only nth time steps (optional, default 1)
      */
 
-    function (layerId, time, playing, nthStep) {
+    function (layerId, time, playing, frameInterval, nthStep) {
         this._layerId = layerId;
         this._time = time;
         this._playing = playing;
+        this._frameInterval = frameInterval;
         this._nthStep = nthStep || 1;
     }, {
         /** @static @property __name request name */
@@ -53,6 +56,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
          */
         isPlaying: function () {
             return this._playing;
+        },
+         /**
+         * @method getInterval
+         * @return {Number}
+         */
+        getInterval: function () {
+            return this._frameInterval;
         },
          /**
          * @method getStep
