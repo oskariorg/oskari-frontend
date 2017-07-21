@@ -1,3 +1,5 @@
+
+
 table td {
   text-align: left;
   vertical-align: top; }
@@ -12,14 +14,27 @@ table {
   background: #fafafa;
 }
 
-/* flyout toolbar*/
+ #contentMap {
+    height: 100%;
+    margin-left: 170px;
+}
 
+#login input[type="submit"] {
+  width: 97%;
+}
+
+#login {
+    padding-top: 25px;
+}
+
+/* flyout toolbar*/
 .oskari-flyoutheading {
   background-color: #3db7e4 !important; /*uusi v‰ri*/
-  border-top: 1px solid #3db7e4;
-  border-bottom: 1px solid #3db7e4;
+  border-top: 1px solid #3db7e4 !important;
+  border-bottom: 1px solid #3db7e4 !important;
   height: 14px;
   width: 100%; }
+  
 .oskari-flyouttoolbar {
   height: 57px;
   width: 100%;
@@ -105,6 +120,10 @@ table {
     top: 0;
     width: 120px;  
     z-index: 2;
+}
+
+	div.toolrow div.tool.selected, div.toolrow div.tool:hover:not(.disabled), div.toolrow div.tool:active:not(.disabled) {
+    background-color: #3db7e4 !important;
 }
 
 /*Kuvan lis‰‰minen sivupalkkiin*/
