@@ -77,7 +77,10 @@ function() {
                 tooltip: me.getLocalization('tooltip'),
                 sticky: false,
                 callback : function() {
-                    alert(me.getLocalization('toolClicked'));
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(null, me.getLocalization('toolClicked'));
+                    dialog.makeModal();
+                    dialog.fadeout();
                 }
             }));
         }

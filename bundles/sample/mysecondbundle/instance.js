@@ -110,7 +110,14 @@ Oskari.clazz.define("Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleI
              * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
              */
             'MapClickedEvent': function (event) {
-                alert('Map clicked');
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var message = jQuery('<div><div>Map clicked</div><div class="lon">Lon:<span class="value"></span></div><div class="lat">Lat:<span class="value"></span></div></div>');
+                var lonlat = event.getLonLat();
+                message.find('.lon span').html(lonlat.lon);
+                message.find('.lat span').html(lonlat.lat);
+                dialog.show(null, message);
+                dialog.makeModal();
+                dialog.fadeout();
             }
         },
 

@@ -180,7 +180,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     '   </svg>'+
                     '</div>');
 
-
                 var pointSymbol = jQuery('<div>'+
                     '   <svg viewBox="0 0 64 64">'+
                     '       <svg width="64" height="64" x="0" y="0">'+
@@ -199,17 +198,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     '   </svg>'+
                     '</div>');
 
-
                 var sb = Oskari.getSandbox();
                 var mapModule = sb.findRegisteredModuleInstance('MainMapModule');
-                var x = 0;
-                var y = 0;
+                var x = 0, y = 0;
+                var fontSize = 10;
 
                 var getMarkerSize = function(index) {
                     var iconSize = null;
                     var min = opts.min;
                     var max = opts.max;
-                    var count = opts.count;
                     var step = (max-min) / ranges.length;
                     if(min && max) {
                         iconSize = (max - step * index);
@@ -217,7 +214,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     return iconSize;
                 };
                 var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
-                var fontSize = 10;
 
                 svg.find('svg').first().attr('height', maxSize + fontSize);
                 svg.find('svg.symbols').attr('y', fontSize);
@@ -226,7 +222,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 ranges.reverse().forEach(function(range, index){
                     // Create point symbol
-                    var strokeColor = Oskari.util.isDarkColor('#'+color) ? '#ffffff' : '#000000';
                     var point = pointSymbol.clone();
                     var svgMain = point.find('svg').first();
                     var iconSize = getMarkerSize(index);

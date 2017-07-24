@@ -15,6 +15,8 @@ function() {
     this.description = undefined;
     this.source = undefined;
     this.renderingElement = undefined;
+    this.featureProperties = []; //property names in fixed order from user_layer table fields column
+    this.featurePropertyIndexes = [];
 }, {
     setDescription: function(desc) {
         this.description = desc;
@@ -33,6 +35,18 @@ function() {
     },
     getRenderingElement: function() {
         return this.renderingElement;
+    },
+    setFeatureProperties: function(fields){
+            this.featureProperties = fields;
+    },
+    getFeatureProperties: function(){
+            return this.featureProperties;
+    },
+    setFeaturePropertyIndexes: function(indexes){
+            this.featurePropertyIndexes = indexes;
+    },
+    getFeaturePropertyIndexes: function(){
+            return this.featurePropertyIndexes;
     }
 }, {
     "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]

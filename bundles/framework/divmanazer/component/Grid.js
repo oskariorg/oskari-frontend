@@ -1673,10 +1673,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // to string so number will work also
             var nameA = a[pAttribute],
                 numericValue,
-                split = pAttribute.split('.'); // if not found, try subtable
+                split = pAttribute.split('.');
 
+            // if not found, try subtable
             if (typeof nameA === 'undefined' && split.length > 1) {
-                nameA = a[split[0]][split[1]];
+                var splitted = a[split[0]];
+                if(splitted && splitted[split[1]]) {
+                    nameA = splitted[split[1]];
+                }
             }
             if (!nameA && typeof nameA !== 'number') {
                 nameA = '';
