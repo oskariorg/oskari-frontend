@@ -72,8 +72,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           var me = this;
               var charts = me.getDataCharts();
-              if( charts.getFlyout() === null ) {
+              if( charts.getFlyout() === null || charts.shouldUpdate) {
                 charts.createUi();
+                charts.shouldUpdate = false;
               }
             this.chartsFlyout = charts.getFlyout();
             if( charts.getCharts() === null ) {

@@ -10,6 +10,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
   this._barchart = null;
+  this.shouldUpdate = false;
+  this._select
   this.events();
 }, {
   _template: {
@@ -78,6 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       var datasources = this.service.getDatasource();
       var panelLoc = this.loc.panels.newSearch;
       if( this.getActiveIndicator() === null ) {
+        this.shouldUpdate = true;
         return;
       }
 
@@ -109,10 +112,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
         me._template.select.append(dropdown);
         select.adjustChosen();
         select.selectFirstValue();
+        this._select = select;
 
         var titleHolder = jQuery('<div class="title">'+title+'</div>');
         me._template.tabControl.append(titleHolder);
         me._template.tabControl.append(dropdown);
+
+        var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
+
+          me._template.tabControl.on('change', function() {
+            params.indicatorSelected(null,
+                select.getValue(),
+                null,
+                null
+              );
+        });
     });
   });
   
@@ -161,6 +175,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
   },
   getRegionset() {
     return this.service.getStateService().getRegionset();
+  },
+  getSelect () {
+    return this._select;
   },
   getIndicatorData: function() {
     var indicatorData = [];
