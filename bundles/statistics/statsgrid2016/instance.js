@@ -30,9 +30,9 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this._tileExtensions = [];
         this._templates = {
-            search: jQuery('<div class="statsgrid-functionality" id="material-search"></div>'),
-            view: jQuery('<div class="statsgrid-functionality" id="material-view"></div>'),
-            edit: jQuery('<div class="statsgrid-functionality" id="material-edit"></div>')
+            search: jQuery('<span class="statsgrid-functionality" id="material-search"><h5 id="material-desc">Aineistohaku</h5></span>'),
+            view: jQuery('<span class="statsgrid-functionality" id="material-view"><h5 id="material-desc">Haun tulokset</h5></span>'),
+            edit: jQuery('<span class="statsgrid-functionality" id="material-edit"><h5 id="material-desc">Aineiston muokkaus</h5></span>')
         }
     }, {
         afterStart: function (sandbox) {
@@ -98,9 +98,14 @@ Oskari.clazz.define(
         showExtension: function (el, callback) {
           // this.extensions.forEach( function(extension) {
             el.show();
-            el.on("click", function(event){
-              event.stopPropagation();
-              callback();
+            el.on("click", function(event) {
+                if( jQuery(this).hasClass('material-selected') ) {
+                    jQuery(this).removeClass('material-selected');
+                } else {
+                    jQuery(this).addClass('material-selected').siblings().removeClass('material-selected');
+                }
+                event.stopPropagation();
+                callback();
             })
           // });
         },
@@ -211,18 +216,22 @@ Oskari.clazz.define(
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
-                if(wasClosed){
+                if( wasClosed ) {
                   this.hideExtension();
                     return;
                 } else {
                   this.getExtensions().forEach(function(extension) {
                     if(extension[0].id === "material-search") {
-                      me.showExtension(extension, function() {
-                        alert("0");
-                      });
-                      return;
+                        //the flyout will be opened so we put the selected icon on it
+                        extension.addClass('material-selected')
+                        me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
                     }
-                    me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
+                    if(extension[0].id === "material-view"){
+                        me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
+                    }
+                    if(extension[0].id === "material-edit"){
+                        me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
+                    }
                   });
                 }
                 var renderMode = this.isEmbedded();

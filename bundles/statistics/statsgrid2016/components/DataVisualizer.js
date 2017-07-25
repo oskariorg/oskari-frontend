@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     if( this.__datachartFlyout ) {
         return this.__datachartFlyout;
     }
-    this.addTab("asd");
+    this.addTab("");
     var accordion = Oskari.clazz.create(
           'Oskari.userinterface.component.Accordion'
         );
@@ -77,6 +77,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       var me = this;
       var datasources = this.service.getDatasource();
       var panelLoc = this.loc.panels.newSearch;
+      if( this.getActiveIndicator() === null ) {
+        return;
+      }
 
     this.service.getIndicatorMetadata(this.getActiveIndicator().datasource, this.getActiveIndicator().indicator, function(err, indicator) {
       indicator.selectors.forEach(function(selector, index) {

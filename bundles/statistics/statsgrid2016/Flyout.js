@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
+        this._visible = false;
     }, {
         /**
          * @method getName
@@ -20,6 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getName: function () {
             return 'Oskari.statistics.statsgrid.Flyout';
         },
+        
         /**
          * @method startPlugin
          *
@@ -28,6 +30,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          */
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
+        },
+        toggleFlyout: function () {
+            this._visible = !this._visible;
+            if ( this._visible ) {
+                this.container.parent().parent().hide();
+            } else {
+                this.container.parent().parent().show();
+            }
         },
         getLegendFlyout : function() {
             if(this.__legendFlyout) {
@@ -61,7 +71,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         showDataCharts: function () {
           //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           var me = this;
-              // lazy render
               var charts = me.getDataCharts();
               if( charts.getFlyout() === null ) {
                 charts.createUi();
@@ -123,12 +132,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 parent.find('.oskari-flyouttools').show();
             }
             this.showLegend(!isEmbedded);
-            // this.showDataCharts();
 
             this.addContent(this.getEl(), isEmbedded);
         },
 
-        setGridHeaderHeight: function(){
+        setGridHeaderHeight: function() {
             var me = this;
 
             if(me._grid) {
@@ -137,6 +145,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         },
 
         addContent : function (el, isEmbedded) {
+
             var me = this;
             var sb = this.instance.getSandbox();
 
