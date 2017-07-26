@@ -338,6 +338,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   #material-desc {
     margin-left: 3.9em;
     white-space: nowrap;
+    text-transform: none !important;
   }
   .material-selected {
     background-color: #ffd400;

@@ -87,7 +87,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
       var keyValue = {};
 
     this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function(err, indicator) {
-      // var hash = self.service.getStateService().getHash(self.getIndicator().datasource, self.getIndicator().indicator, self.getIndicator());
 
       indicator.selectors.forEach(function(selector, index) {
         var selections = [];
