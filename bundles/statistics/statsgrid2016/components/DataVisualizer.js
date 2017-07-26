@@ -1,9 +1,10 @@
 /*
 * Creates a flyout with accordion containing charts from Charts.js
 */
-Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandbox, loc) {
-  this.sb = sandbox;
+Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(instance, loc) {
+  this.sb = instance.getSandbox();
   this.loc = loc;
+  this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
   this.container = null;
@@ -79,18 +80,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       var me = this;
       var datasources = this.service.getDatasource();
       var panelLoc = this.loc.panels.newSearch;
-      if( this.getActiveIndicator() === null ) {
+      if( this.getIndicator() === null ) {
         this.shouldUpdate = true;
         return;
       }
+      var keyValue = {};
 
-    this.service.getIndicatorMetadata(this.getActiveIndicator().datasource, this.getActiveIndicator().indicator, function(err, indicator) {
+    this.service.getIndicatorMetadata(this.getIndicator().datasource, this.getIndicator().indicator, function(err, indicator) {
+      // var hash = self.service.getStateService().getHash(self.getIndicator().datasource, self.getIndicator().indicator, self.getIndicator());
+
       indicator.selectors.forEach(function(selector, index) {
         var selections = [];
+        var self = me;
         selector.allowedValues.forEach(function(val) {
+          val.selections = {};
             var name = val.name || val.id || val;
             val.title = val.name;
             var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
+
+            //ALERT HACK
+            val.selections.Tiedot = val.id;
+            //HACK END
+
+            //save the id as a key in an object and put the selections as value, in the select on change event we can then compare the value we get to the key and get the value
+            keyValue[val.id] = val.selections;
 
             var valObject = {
                     id : val.id || val,
@@ -120,14 +133,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
     });
   });
 
-          var params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', me.instance, me.sb);
+        me._template.tabControl.on('change', { self: me, keyValue: keyValue }, function( event ) {
+            //hackish way of setting selected value as and new indicator and then getting the new indicator
+            var hash = event.data.self.service.getStateService().getHash( event.data.self.getIndicator().datasource, event.data.self.getIndicator().indicator, event.data.keyValue[ event.data.self.getSelect().getValue() ]);
+            
+            event.data.self.service.getStateService().addIndicator( event.data.self.getIndicator().datasource, event.data.self.getIndicator().indicator, event.data.keyValue[ event.data.self.getSelect().getValue() ]
+            ,event.data.self.getIndicator().classification );
 
-          me._template.tabControl.on('change', { self: me }, function( event ) {
-            params.indicatorSelected(null,
-                event.data.self.getSelect().getValue(),
-                null,
-                null
-              );
+            var data = event.data.self.getIndicatorData( hash );
+
+            var updated = event.data.self._barchart.updateChart(data);
+            event.data.self.tabsContainer.panels[0].getContainer().append(updated);
         });
   
     return this._template.tabControl;
@@ -170,8 +186,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
 
     return this._template.tabControl;
   },
-  getActiveIndicator: function () {
-    return this.service.getStateService().getActiveIndicator();
+  getIndicator: function (hash) {
+    if( !hash ) {
+      return this.service.getStateService().getActiveIndicator();
+    } else {
+      return this.service.getStateService().getIndicator(hash);
+    }
   },
   getRegionset: function () {
     return this.service.getStateService().getRegionset();
@@ -179,10 +199,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
   getSelect: function () {
     return this._select;
   },
-  getIndicatorData: function() {
+  getIndicatorData: function(hash) {
     var indicatorData = [];
     var regionsNames = [];
-    var activeIndicator = this.getActiveIndicator();
+    var activeIndicator = this.getIndicator(hash);
     if( activeIndicator === null ) {
       this._template.container.append(this._template.error({msg : this.locale.legend.noActive}));
       return;
@@ -225,7 +245,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(sandb
       return;
     }
     if( !this.barchart ) {
-      this._barchart = Oskari.clazz.create('Oskari.statistics.statsgrid.Charts', Oskari.getSandbox(), this.loc, data, this.getActiveIndicator());
+      this._barchart = Oskari.clazz.create('Oskari.statistics.statsgrid.Charts', Oskari.getSandbox(), this.loc, data, this.getIndicator());
       var barchart = this._barchart.createChart();
       this.tabsContainer.panels[0].getContainer().append(barchart);
     } else {
