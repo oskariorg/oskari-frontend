@@ -407,6 +407,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          * @private
          */
         _isColor: function (value) {
+            if(value === -1) {
+                return true;
+            }
             return this.validateTool.validateHexColor(value);
         },
         validateCategoryFormValues: function (values) {
