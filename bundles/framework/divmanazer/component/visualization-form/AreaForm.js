@@ -592,9 +592,6 @@ Oskari.clazz.define(
                 'stroke-linecap': 'butt'
             });
 
-            // checkerboard background for visualization of transparency
-            previewTemplate.prepend('<defs><pattern id="checker" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect fill="#eee" x="0" width="10" height="10" y="0"/><rect fill="#eee" x="10" width="10" height="10" y="10"/></defs><rect x="0" y="0" width="50" height="50" fill="url(#checker)"/>');
-
             preview.empty();
 
             // Patterns (IE8 compatible version)
@@ -703,6 +700,10 @@ Oskari.clazz.define(
                 }
                 previewTemplate.prepend(pathSvg);
             }
+
+            // checkerboard background for visualization of transparency
+            previewTemplate.prepend('<defs><pattern id="checker" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect fill="#eee" x="0" width="10" height="10" y="0"/><rect fill="#eee" x="10" width="10" height="10" y="10"/></defs><rect x="0" y="0" width="50" height="50" fill="url(#checker)"/>');
+
             preview.append(previewTemplate);
 
             if (me.values.lineStyle === 2) {
