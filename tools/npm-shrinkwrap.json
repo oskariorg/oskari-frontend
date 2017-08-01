@@ -1665,9 +1665,9 @@
       "resolved": "https://registry.npmjs.org/https-browserify/-/https-browserify-0.0.1.tgz"
     },
     "hydrolysis": {
-      "version": "1.23.1",
+      "version": "1.23.3",
       "from": "hydrolysis@>=1.19.1 <2.0.0",
-      "resolved": "https://registry.npmjs.org/hydrolysis/-/hydrolysis-1.23.1.tgz",
+      "resolved": "https://registry.npmjs.org/hydrolysis/-/hydrolysis-1.23.3.tgz",
       "dependencies": {
         "espree": {
           "version": "2.2.5",
