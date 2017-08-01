@@ -1,12 +1,18 @@
 Oskari.registerLocalization(
 {
     "lang": "sv",
-    "key": "coordinatetool",
+    "key": "kordinatstransformation",
     "value": {
         "title": "",
         "desc": "",
-        "display": {
-
+        "flyout": {
+            "flyoutTitle": "kordinats",
+                "coordinatesystem": {
+                    "geodesicdatum": "Geodeettinen datumi",
+                    "coordinatesystem": "Koordinaatisto",
+                    "geodesiccoordinatesystem": "Geodeettinen koordinaattijärjestelmä",
+                    "heightsystem":"Korkeusjärjestelmä"
+            }
         }
     }
 });

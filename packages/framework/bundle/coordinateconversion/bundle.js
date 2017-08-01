@@ -31,37 +31,46 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
         },
 
         /*
-         * coordinatedisplay
+         * coordinateconversion
          */
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/instance.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/Tile.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/Flyout.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/plugin/ConversionPlugin.js"
         }
         ],
         "locales": [ {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordianteconversion/resources/locale/en.js"
+            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordianteconversion/resources/locale/fi.js"
+            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/fi.js"
         },{
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordianteconversion/resources/locale/sv.js"
+            "src": "../../../../bundles/framework/coordinateconversion/resources/locale/sv.js"
         } ]
     },
     "bundle": {
         "manifest": {
-            "Bundle-Identifier": "coordianteconversion",
-            "Bundle-Name": "coordianteconversion",
+            "Bundle-Identifier": "coordinateconversion",
+            "Bundle-Name": "coordinateconversion",
             "Bundle-Author": [{
-                "Name": "ah",
+                "Name": "mmldev",
                 "Organisation": "nls.fi",
                 "Temporal": {
-                    "Start": "2009",
-                    "End": "2011"
+                    "Start": "2017",
+                    "End": "?"
                 },
                 "Copyleft": {
                     "License": {
@@ -90,3 +99,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
     "dependencies": ["jquery"]
 
 });
+Oskari.bundle_manager.installBundleClass("coordinateconversion", "Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundle");

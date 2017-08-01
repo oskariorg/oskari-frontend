@@ -1,9 +1,34 @@
+/*
+* Oskari.app.playBundle(
+    {
+    bundlename : 'coordinateconversion',
+        metadata : {
+            "Import-Bundle" : {
+                "coordinateconversion" : {
+                    bundlePath : '/Oskari/packages/framework/bundle/'
+                }
+            }
+        }
+});
+            var l = appSetup.startupSequence.length;
+            appSetup.startupSequence[l] = {
+                "bundleinstancename":"coordinateconversion",
+                "bundlename":"coordinateconversion" ,
+                "fi":"",
+                "sv":"",
+                "en":"",
+                "title":"coordinateconversion" 
+            }
+            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/framework/bundle/" } } };
+*/
 Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundleInstance",
 function () {
         this.sandbox = null;
         this._localization = null;
+        this.plugins = {};
+        this._mapmodule = null;
 }, {
-    __name: 'coordinateconverter',
+    __name: 'coordinateconversion',
     /**
      * @method getName
      * @return {String} the name for the component
@@ -31,6 +56,26 @@ function () {
         return this.sandbox;
     },
     /**
+     * @method startExtension
+     * implements Oskari.userinterface.Extension protocol startExtension method
+     * Creates a flyout and a tile:
+     * Oskari.mapframework.bundle.maplegend.Flyout
+     * Oskari.mapframework.bundle.maplegend.Tile
+     */
+    startExtension: function () {
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.Flyout', this);
+        this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.Tile', this);
+    },
+    /**
+     * @method stopExtension
+     * implements Oskari.userinterface.Extension protocol stopExtension method
+     * Clears references to flyout and tile
+     */
+    stopExtension: function () {
+        // this.plugins['Oskari.userinterface.Flyout'] = null;
+        this.plugins['Oskari.userinterface.Tile'] = null;
+    },
+    /**
      * @method getLocalization
      * Returns JSON presentation of bundles localization data for
      * current language.
@@ -52,26 +97,55 @@ function () {
         }
         return this._localization;
     },
+    isEmbedded: function() {
+        return jQuery('#contentMap').hasClass('published');
+    },
      /**
      * @method start
      * implements BundleInstance protocol start methdod
      */
     start: function () {
         var me = this;
-
+        console.log("I'm in!!!!!!");
         var conf = me.conf || {},
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName);
         me.setSandbox(sandbox);
-        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        var locale = this.getLocalization('display');
-        this.plugin = plugin;
+        me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var locale = this.getLocalization();
         sandbox.register(me);
+        if( !me.isEmbedded() ) {
+            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
+            me.createUi();
+        } else {
+             me.createPlugin();
+        }
     },
     stop: function () {
         this.sandbox = null;
         this.started = false;
-    }
+    },
+    createPlugin: function() {
+        var conf = this.conf || {};
+
+        var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinateconversion.plugin.ConversionPlugin', conf, this.plugins);
+
+        this._mapmodule.registerPlugin(plugin);
+        this._mapmodule.startPlugin(plugin);
+        this.plugin = plugin;
+    },
+    getPlugins: function() {
+        return this.plugins;
+    },
+    /**
+     * @method createUi
+     * (re)creates the UI for "all layers" functionality
+     */
+    createUi: function () {
+        this.plugins['Oskari.userinterface.Flyout'].createUi();
+        this.plugins['Oskari.userinterface.Tile'].refresh();
+    },
 
 }, {
         /**
