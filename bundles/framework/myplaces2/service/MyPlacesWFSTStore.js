@@ -135,8 +135,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 category.setAreaLineWidth(featAtts.border_width);
                 category.setAreaLineStyle(featAtts.border_dasharray);
                 category.setAreaLineCorner(featAtts.border_linejoin);
-                category.setAreaLineColor(typeof featAtts.border_color === 'string' ? this._formatColorFromServer(featAtts.border_color) : -1);
-                category.setAreaFillColor(typeof featAtts.fill_color === 'string' ? this._formatColorFromServer(featAtts.fill_color) : -1);
+                category.setAreaLineColor(typeof featAtts.border_color === 'string' ? this._formatColorFromServer(featAtts.border_color) : null);
+                category.setAreaFillColor(typeof featAtts.fill_color === 'string' ? this._formatColorFromServer(featAtts.fill_color) : null);
                 category.setAreaFillStyle(featAtts.fill_pattern);
                 category.setDotShape(featAtts.dot_shape);
                 category.setDotColor(this._formatColorFromServer(featAtts.dot_color));
@@ -209,8 +209,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     'border_width': m.getAreaLineWidth(),
                     'border_dasharray': m.getAreaLineStyle(),
                     'border_linejoin': m.getAreaLineCorner(),
-                    'border_color': typeof m.getAreaLineColor() === 'string' ? this._prefixColorForServer(m.getAreaLineColor()) : '',
-                    'fill_color': typeof m.getAreaFillColor() === 'string' ? this._prefixColorForServer(m.getAreaFillColor()) : '',
+                    'border_color': typeof m.getAreaLineColor() === 'string' ? this._prefixColorForServer(m.getAreaLineColor()) : null,
+                    'fill_color': typeof m.getAreaFillColor() === 'string' ? this._prefixColorForServer(m.getAreaFillColor()) : null,
                     'fill_pattern': m.getAreaFillStyle(),
                     'dot_color': this._prefixColorForServer(m.getDotColor()),
                     'dot_size': m.getDotSize(),

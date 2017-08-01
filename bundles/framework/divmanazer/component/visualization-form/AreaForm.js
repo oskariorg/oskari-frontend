@@ -370,7 +370,7 @@ Oskari.clazz.define(
                 };
 
                 // If the default value is not included in the color cells
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== -1) {
+                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
                     colorCheckbox.attr('checked', true);
                 }
                 colorCheckbox.change(function () {
@@ -393,7 +393,7 @@ Oskari.clazz.define(
                         }
                         customColorChangeHandler(colorTypeId);
                     } else {
-                        me.values[colorType] = -1;
+                        me.values[colorType] = null;
                         me.activeColorCell[colorTypeId] = -1;
                         
                     }
@@ -401,9 +401,9 @@ Oskari.clazz.define(
                 });
                 content.prepend(colorCheckbox);
 
-                // if the color is not picked from selection and not transparent (-1), it must be users own color
+                // if the color is not picked from selection and not transparent (null), it must be users own color
                 // select user colors checkbox
-                if (!statedChosenColor && me.values[cType] !== -1) {
+                if (!statedChosenColor && me.values[cType] !== null) {
                     colorCheckbox.checked = true;
                     content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
                 }
@@ -416,7 +416,7 @@ Oskari.clazz.define(
                 redValue = me.templateColorValue.clone();
                 redValue.addClass('custom-red-value');
                 redValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== -1) {
+                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
                     redValue.val(parseInt(me.values[cType].substring(0, 2), 16));
                     redValue.prop('disabled', false);
                 }
@@ -427,7 +427,7 @@ Oskari.clazz.define(
                 greenValue = me.templateColorValue.clone();
                 greenValue.addClass('custom-green-value');
                 greenValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== -1) {
+                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
                     greenValue.val(parseInt(me.values[cType].substring(2, 4), 16));
                     greenValue.prop('disabled', false);
                 }
@@ -438,7 +438,7 @@ Oskari.clazz.define(
                 blueValue = me.templateColorValue.clone();
                 blueValue.addClass('custom-blue-value');
                 blueValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== -1) {
+                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
                     blueValue.val(parseInt(me.values[cType].substring(4), 16));
                     blueValue.prop('disabled', false);
                 }
@@ -446,9 +446,9 @@ Oskari.clazz.define(
                 content.find('label.custom-blue-value').text('B');
                 content.find('input.custom-blue-value').attr('id', c + 'blue-value');
 
-                // if the color is not picked from selection and not transparent (-1), it must be users own color
+                // if the color is not picked from selection and not transparent (null), it must be users own color
                 // add color values to the input fields
-                if (!statedChosenColor && me.values[cType] !== -1) {
+                if (!statedChosenColor && me.values[cType] !== null) {
                     rgb = Oskari.util.hexToRgb(me.values[cType]);
                     content.find('input.custom-color.custom-red-value').val(rgb.r);
                     content.find('input.custom-color.custom-green-value').val(rgb.g);
@@ -476,7 +476,7 @@ Oskari.clazz.define(
                     }
 
                     me.activeColorCell[index] = -1;
-                    me.values[type + 'Color'] = -1;
+                    me.values[type + 'Color'] = null;
 
                     jQuery('#color-checkbox-' + index).attr('checked', false);
                     jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
@@ -578,11 +578,11 @@ Oskari.clazz.define(
 
             var previewTemplate = me._previewTemplates[me.values.lineStyle].clone();
             var fill = (parseInt(me.values.fillStyle,10) < 0) ? '#' + me.values.fillColor : 'none';
-            if (me.values.fillStyle >= 0 || me.values.fillColor === -1) {
+            if (me.values.fillStyle >= 0 || me.values.fillColor === null) {
                 fill = 'none';
             }
 
-            var line = me.values.lineColor !== -1 ? '#' + me.values.lineColor : 'none';
+            var line = me.values.lineColor !== null ? '#' + me.values.lineColor : 'none';
 
             previewTemplate.find('path').attr({
                 'fill': fill,
