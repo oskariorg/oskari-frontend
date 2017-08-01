@@ -45,6 +45,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/plugin/ConversionPlugin.js"
+        }, {
+            "type": "text/css",
+            "src": "../../../../bundles/framework/coordinateconversion/resources/css/coordinateconversion.css"
         }
         ],
         "locales": [ {

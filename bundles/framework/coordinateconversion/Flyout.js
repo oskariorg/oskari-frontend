@@ -12,11 +12,29 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me.container = null;
         me.loc = me.instance.getLocalization("flyout");
         me._template = {
-            coordinatesystem: _.template('<span><%= this.loc.coordinatesystem.geodesicdatum %></span> ' +
-                                    '<span><%= this.loc.coordinatesystem.coordinatesystem %></span> ' +
-                                    '<span><%= this.loc.coordinatesystem.geodesiccoordinatesystem %></span> ' +
-                                    '<span><%= this.loc.coordinatesystem.heightsystem %></span> '
+            coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
+                                    '<h4><%= title %></h4>'+
+                                    '<span><b><%= datum %></b></span> </br> ' +
+                                    '<span><b><%= coordsystem %></b></span> </br> ' +
+                                    '<span><b><%= geodesiccsystem%></b></span> </br> ' +
+                                    '<span><b><%= heightsystem %></b></span> </div>'
                                 ),
+            coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
+                                            '<h4><%= title %></h4>'+
+                                            '<table>' +
+                                            '<tr>' +
+                                                '<td><input type="radio" value="1"><%= file %></td>'+
+                                                '<td><input type="radio" value="2"><%= clipboard %></td>'+
+                                                '<td><input type="radio" value="3"><%= map %></td>'+
+                                                '<td><input id="choose" type="button" value="<%= choose %>"></td>'+
+                                            '</tr>'+
+                                            '</table> </div>'),
+            coordinatefield: _.template('<div class="coordinateconverision-field">' +
+                                        '<span> <h4> <% input %> </h4> <h4> <% result %> </h4> </span>' +
+                                        '</div>'),
+            coordinatefieldbuttons: _.template('<div class="coordinateconverision-buttons">' +
+                                        
+                                        '</div>')
         }
     }, {
         /**
@@ -36,8 +54,26 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             }
         },
         createUi: function() {
-            var appen = this._template.coordinatesystem;
-            this.container.append(appen);
+            var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
+                                                          datum: this.loc.coordinatesystem.geodesicdatum,
+                                                          coordsystem: this.loc.coordinatesystem.coordinatesystem,
+                                                          geodesiccsystem:this.loc.coordinatesystem.geodesiccoordinatesystem,
+                                                          heightsystem:this.loc.coordinatesystem.heightsystem });
+
+            var coordinatedatasource = this._template.coordinatedatasource({ title: this.loc.datasource.title, 
+                                                                             file: this.loc.datasource.file,
+                                                                             clipboard: this.loc.datasource.clipboard,
+                                                                             map: this.loc.datasource.map,
+                                                                             choose: this.loc.datasource.choose });
+    
+            var coordinatefield = this._template.coordinatefield({  input: this.loc.coordinatefield.input,
+                                                                    result: this.loc.coordinatefield.result,
+                                                                    convert: this.loc.coordinatefield.convert });
+
+            jQuery(this.container).append(coordinatesystem);
+            jQuery(this.container).append(coordinatesystem);
+            jQuery(this.container).append(coordinatedatasource);
+            jQuery(this.container).append(coordinatefield);
         },
         /**
          * @method startPlugin

@@ -1,12 +1,31 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "coordinatetool",
+    "key": "coordinateconversion",
     "value": {
-        "title": "",
+        "title": "Koordinaattimuunnos",
         "desc": "",
-        "display": {
-
+        "flyout": {
+            "flyoutTitle": "Koordinaattimuunnos",
+            "coordinatesystem": {
+                "title": "Koordinaattijärjestelmän tiedot",
+                "geodesicdatum": "Geodeettinen datumi",
+                "coordinatesystem": "Koordinaatisto",
+                "geodesiccoordinatesystem": "Geodeettinen koordinaattijärjestelmä",
+                "heightsystem":"Korkeusjärjestelmä"
+            },
+            "datasource": {
+                "title": "Koordinaattitietojen lähde",
+                "file": "Tiedostosta",
+                "clipboard": "Kopionti leikepöydältä",
+                "map": "Kartalta",
+                "choose":"Valitse sijainti kartalta"
+            },
+            "coordinatefield": {
+                "input": "Muuntteavat koordinaatit",
+                "result": "Tuloskoordinaatit",
+                "convert": "Muunna"
+            }
         }
     }
 });

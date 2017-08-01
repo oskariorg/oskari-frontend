@@ -1,0 +1,23 @@
+.coordinateconversion-csystem {
+    display: inline-block;
+    border-left: 1px solid black;
+    font-size: 12px;
+    padding-left: 3px;
+}
+#choose {
+  color:#08233e;
+    font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
+    font-size:70%;
+    padding:8px;
+    background:url(overlay.png) repeat-x center #E5E5E5;
+    background-color:rgba(229,229,229,1);
+    /* border:1px solid #ffcc00; */
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    border-bottom:1px solid #9f9f9f;
+    -moz-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    -webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    cursor:pointer;
+}
