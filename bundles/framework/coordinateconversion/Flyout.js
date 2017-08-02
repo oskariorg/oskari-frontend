@@ -21,17 +21,48 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
-                                            '<table>' +
-                                            '<tr>' +
-                                                '<td><input type="radio" value="1"><%= file %></td>'+
-                                                '<td><input type="radio" value="2"><%= clipboard %></td>'+
-                                                '<td><input type="radio" value="3"><%= map %></td>'+
-                                                '<td><input id="choose" type="button" value="<%= choose %>"></td>'+
-                                            '</tr>'+
-                                            '</table> </div>'),
-            coordinatefield: _.template('<div class="coordinateconverision-field">' +
-                                        '<span> <h4> <% input %> </h4> <h4> <% result %> </h4> </span>' +
-                                        '</div>'),
+                                            '<form>'+
+                                                '<input type="radio" name="load" value="1"><%= file %>'+
+                                                '<input type="radio" name="load" value="2"><%= clipboard %>'+
+                                                '<input type="radio" name="load" value="3"><%= map %>'+
+                                                '<input style="display: none;" id="choose" type="button" value="<%= choose %>">'+
+                                            '</form> </div>'),
+            datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
+                                    '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput" style="display:none">'+
+                                        '<div class="box__input">'+
+                                            '<input type="file" name="file" id="file" class="box__file" />'+
+                                            '<label>  <%= fileupload %> <label for="file" style="cursor: pointer;"><a><%= link %></a> </label> </label> '+
+                                        '</div>'+
+                                        '<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
+                                        '<div class="box__success"><%= success %></div>'+
+                                        '<div class="box__error"><%= error %></div>'+
+                                    '</form>'+
+                                    '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
+                                        '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
+                                    '</div>'
+                                    ),  
+            conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
+            inputcoordinatefield: _.template('<div class="coordinatefield" style="display:inline-block;">' +
+                                        '<h5> <%= input %> </h5>' +
+                                        '<table id="coordinatestoconvert" style="border: 1px solid black;">'+
+                                        '</table>'+
+                                    '</div>'),
+            resultcoordinatefield: _.template('<div class="coordinatefield" style="display:inline-block; padding-left: 8px;">' +
+                                                    '<h5> <%= result %> </h5>' +
+                                                    '<table id="convertedcoordinates" style="border: 1px solid black;">'+
+                                                    '</table>'+
+                                                '</div>'),
+            conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block; padding-left: 8px;">' +
+                                            '<span> <input id="convert" type="button" value="<%= convert %> >>"> </span>' +
+                                         '</div>'),
+            tablerow: _.template('<tr>' +
+                                    '<td style=" border: 1px solid black ;">'+
+                                    '</td>'+
+                                    '<td style=" border: 1px solid black ;">'+
+                                    '</td>'+
+                                    '<td style=" border: 1px solid black ;">'+
+                                    '</td>'+
+                                    '</tr>'),
             coordinatefieldbuttons: _.template('<div class="coordinateconverision-buttons">' +
                                         
                                         '</div>')
@@ -54,6 +85,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             }
         },
         createUi: function() {
+            var me = this;
             var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
                                                           datum: this.loc.coordinatesystem.geodesicdatum,
                                                           coordsystem: this.loc.coordinatesystem.coordinatesystem,
@@ -66,14 +98,124 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                                                              map: this.loc.datasource.map,
                                                                              choose: this.loc.datasource.choose });
     
-            var coordinatefield = this._template.coordinatefield({  input: this.loc.coordinatefield.input,
-                                                                    result: this.loc.coordinatefield.result,
-                                                                    convert: this.loc.coordinatefield.convert });
+            var inputcoordinatefield = this._template.inputcoordinatefield({  input: this.loc.coordinatefield.input });
+
+            var conversionbutton = this._template.conversionbutton({ convert: this.loc.coordinatefield.convert });
+
+            var resultcoordinatefield = this._template.resultcoordinatefield({ result: this.loc.coordinatefield.result });
+
+            var datasourceinfo = this._template.datasourceinfo({ fileupload: this.loc.datasourceinfo.fileupload,
+                                                            link: this.loc.datasourceinfo.link,
+                                                            clipboardupload: this.loc.datasourceinfo.clipboardupload,
+                                                            uploading: this.loc.datasourceinfo.uploading,
+                                                            success: this.loc.datasourceinfo.success,
+                                                            error: this.loc.datasourceinfo.error });
+
+
 
             jQuery(this.container).append(coordinatesystem);
             jQuery(this.container).append(coordinatesystem);
             jQuery(this.container).append(coordinatedatasource);
-            jQuery(this.container).append(coordinatefield);
+            jQuery(this.container).append(datasourceinfo);
+
+            this._template.conversionfield.append(inputcoordinatefield);
+            this._template.conversionfield.append(conversionbutton);
+            this._template.conversionfield.append(resultcoordinatefield);
+            jQuery(this.container).append(this._template.conversionfield);
+
+            for( var i = 0; i < 10; i++ ) {
+                jQuery(this.container).find("#coordinatestoconvert").append(this._template.tablerow);
+                jQuery(this.container).find("#convertedcoordinates").append(this._template.tablerow);
+            }
+
+        jQuery('input[type=radio][name=load]').change(function() {
+            if (this.value == '1') {
+                jQuery(me.container).find('.coordinateconversion-clipboardinfo').hide();
+                jQuery(me.container).find('#choose').hide();
+                jQuery(me.container).find('#fileinput').show();
+            }
+            else if (this.value == '2') {
+                jQuery(me.container).find('#fileinput').hide();
+                jQuery(me.container).find('#choose').hide();
+                jQuery(me.container).find('.coordinateconversion-clipboardinfo').show();
+            }
+            if(this.value == '3') {
+                jQuery(me.container).find('#fileinput').hide();
+                jQuery(me.container).find('.coordinateconversion-clipboardinfo').hide();    
+                jQuery(me.container).find('#choose').show();
+            }
+        });
+
+         if( this.canUseAdvancedUpload() ) {
+            this.handleDragAndDrop();
+         }
+        },
+        canUseAdvancedUpload: function() {
+            var div = document.createElement('div');
+            return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+         },
+        handleDragAndDrop: function() {
+            //Function for newer browsers with support for drag and drop
+            var me = this;
+            var form = jQuery(this.container).find('.box');
+            var input = form.find('input[type="file"]');
+            form.addClass('has-advanced-upload');
+
+             var droppedFiles = false;
+
+            form.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+            .on('dragover dragenter', function() {
+                form.addClass('is-dragover');
+            })
+            .on('dragleave dragend drop', function() {
+                form.removeClass('is-dragover');
+            })
+            .on('drop', function(e) {
+                droppedFiles = e.originalEvent.dataTransfer.files;
+                form.trigger('submit');
+            });
+            
+
+            form.on('submit', function(e) {
+                if (form.hasClass('is-uploading')) return false;
+
+                form.addClass('is-uploading').removeClass('is-error');
+
+                e.preventDefault();
+
+                var ajaxData = new FormData(form.get(0));
+
+                if (droppedFiles) {
+                    jQuery.each( droppedFiles, function(i, file) {
+                    ajaxData.append( input.attr('name'), file );
+                    });
+                }
+
+                jQuery.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: ajaxData,
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    complete: function() {
+                        form.removeClass('is-uploading');
+                    },
+                    success: function(data) {
+                        form.addClass( data.success == true ? 'is-success' : 'is-error' );
+                        if (!data.success) $errorMsg.text(data.error);
+                    },
+                    error: function() {
+                        form.addClass('is-error').removeClass('is-uploading');
+                    // Log the error, show an alert, whatever works for you
+                    }
+                });
+            
+            });
         },
         /**
          * @method startPlugin
