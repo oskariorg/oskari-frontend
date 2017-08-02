@@ -365,7 +365,7 @@ Oskari.clazz.define(
                             values[i] = '0' + values[i];
                         }
                     }
-                    me.values[(colorType === '0') ? 'lineColor' : 'fillColor'] = values.join('');
+                    me.values[(colorType === 0) ? 'lineColor' : 'fillColor'] = values.join('');
                     me._updatePreview();
                 };
 
