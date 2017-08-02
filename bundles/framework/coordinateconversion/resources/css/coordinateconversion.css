@@ -96,3 +96,36 @@ table {
 .box.is-uploading .box__uploading {
   display: block;
 }
+input[type="radio"] {
+    display:none;
+}
+input[type="radio"] + label {
+    color: black;
+    font-family:Arial, sans-serif;
+    font-size:14px;
+}
+input[type="radio"] + label span {
+    display:inline-block;
+    width:12px;
+    height:12px;
+    margin:-1px 4px 0 0;
+    vertical-align:middle;
+    cursor:pointer;
+    -moz-border-radius:  50%;
+    border-radius:  50%;
+    border: 0.5px solid black;
+}
+input[type="radio"] + label span {
+     background-color:whitesmoke;
+}
+input[type="radio"]:checked + label span{
+     background-color:black;
+}
+
+input[type="radio"] + label span,
+input[type="radio"]:checked + label span {
+  -webkit-transition:background-color 0.4s linear;
+  -o-transition:background-color 0.4s linear;
+  -moz-transition:background-color 0.4s linear;
+  transition:background-color 0.4s linear;
+}
