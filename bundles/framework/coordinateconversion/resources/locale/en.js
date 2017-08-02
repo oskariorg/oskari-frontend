@@ -21,6 +21,14 @@ Oskari.registerLocalization(
                 "map": "Map",
                 "choose":"Choose location from map"
             },
+             "datasourceinfo": {
+                "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
+                "link":"valitse selaamalla",
+                "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
+                "uploading":"Ladataan",
+                "success":"Valmis!",
+                "error":"Virhe!",
+            },
             "coordinatefield": {
                 "input": "Muuntteavat koordinaatit",
                 "result": "Tuloskoordinaatit",
