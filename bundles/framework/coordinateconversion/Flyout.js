@@ -14,17 +14,17 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
-                                    '<span><b><%= datum %></b></span> </br> ' +
-                                    '<span><b><%= coordsystem %></b></span> </br> ' +
-                                    '<span><b><%= geodesiccsystem%></b></span> </br> ' +
-                                    '<span><b><%= heightsystem %></b></span> </div>'
+                                    '<span class="datum"><b><%= datum %></b></span> </br> ' +
+                                    '<span class="coordsystem"><b><%= coordsystem %></b></span> </br> ' +
+                                    '<span class="geodesiccsystem"><b><%= geodesiccsystem%></b></span> </br> ' +
+                                    '<span class="heightsystem"><b><%= heightsystem %></b></span> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
                                             '<form>'+
-                                                '<input type="radio" name="load" value="1"><%= file %>'+
-                                                '<input type="radio" name="load" value="2"><%= clipboard %>'+
-                                                '<input type="radio" name="load" value="3"><%= map %>'+
+                                                '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
+                                                '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
+                                                '<input type="radio" id="map" name="load" value="3"><label for="map"> <span></span> <%= map %> </label>'+
                                                 '<input style="display: none;" id="choose" type="button" value="<%= choose %>">'+
                                             '</form> </div>'),
             datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
@@ -112,7 +112,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                                             error: this.loc.datasourceinfo.error });
 
 
-
+            jQuery( coordinatesystem ).find('span').each(function (index) {
+               var select = me.createSelect({title:"asd",id:"1"}, "span");
+               this.append(select);
+            });
             jQuery(this.container).append(coordinatesystem);
             jQuery(this.container).append(coordinatesystem);
             jQuery(this.container).append(coordinatedatasource);
@@ -145,7 +148,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 jQuery(me.container).find('#choose').show();
             }
         });
-
          if( this.canUseAdvancedUpload() ) {
             this.handleDragAndDrop();
          }
@@ -216,6 +218,29 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 });
             
             });
+        },
+        createSelect: function(data, id) {
+            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', id);
+            var selections = [];
+            var valObject = {
+                id : data.id || data,
+                title : data.title
+            };
+            var options = {
+                placeholder_text: "placeholderText",
+                allow_single_deselect : true,
+                disable_search_threshold: 10,
+                width: '100%'
+            };
+            selections.push(valObject);
+            var dropdown = select.create(selections, options);
+            dropdown.css({width:'205px'});
+            select.adjustChosen();
+            select.selectFirstValue();
+            if(index > 0) {
+                dropdown.parent().addClass('margintop');
+            }
+            return dropdown;
         },
         /**
          * @method startPlugin
