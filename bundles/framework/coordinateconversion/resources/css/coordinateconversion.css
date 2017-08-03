@@ -1,15 +1,14 @@
 .coordinateconversion-csystem {
     display: inline-block;
-    border-left: 1px solid black;
     font-size: 12px;
     padding-left: 3px;
 }
-#choose {
+#overlay-btn {
   color:#08233e;
     font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
     font-size:70%;
     padding:8px;
-    /* background:url(overlay.png) repeat-x center #E5E5E5; */
+     background:url(../images/overlay-gray.png) repeat-x center #E5E5E5; 
     background-color:rgba(229,229,229,1);
     /* border:1px solid #ffcc00; */
     -moz-border-radius:2px;
@@ -20,30 +19,74 @@
     -webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
     cursor:pointer;
+    text-shadow: none;
 }
 table {
   border-collapse:collapse;
+}
+#targetcoordsystem {
+    margin-left: 2em;
 }
 #rowwidth {
     max-width: 100px !important;
 }
 .coordinateconversion-field {
-    display: inline-block;
+    height:auto;
+    /* display: inline-block; */
 }
-.coordinatefield {
-    width: 187px !important;
+.coordinatefield-input {
+    float:left;
+    width: 22em !important;
+}
+.coordinatefield-result {
+    float:left;
+    width: 22em !important;
 }
 .conversionbtn {
-    top: 50%;
+    float:left;
+    margin-top: 6.25rem;
 }
-/* .fileinfo {
-     border: 1px solid black;
-     font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
-     font-size:90%;
-     margin-top:2%;
-     margin-left:3%;
-     height: 2em;
-} */
+.coordinateconversion-buttons{
+    clear: left;
+}
+.export {
+    float:right;
+}
+.show {
+    float:right;
+}
+.clear {
+    float:left;
+}
+#convert {
+    color:cornsilk;
+    font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
+    font-size:80%;
+    vertical-align: middle;
+    background:url(../images/overlay-blue.png) repeat-x center #E5E5E5; 
+    background-color:rgba(229,229,229,1);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    text-shadow: none;
+}
+.overlay-btn {
+      color:#08233e;
+    font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
+    font-size:70%;
+    padding:8px;
+     background:url(../images/overlay-gray.png) repeat-x center #E5E5E5; 
+    background-color:rgba(229,229,229,1);
+    /* border:1px solid #ffcc00; */
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    border-bottom:1px solid #9f9f9f;
+    -moz-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    -webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+    cursor:pointer;
+    text-shadow: none;
+}
+
 .clipboardinfo {
     margin-top:2%;
     margin-left:3%;
