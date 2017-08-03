@@ -33,6 +33,11 @@ Oskari.registerLocalization(
                 "input": "Muuntteavat koordinaatit",
                 "result": "Tuloskoordinaatit",
                 "convert": "Muunna"
+            },
+            "utils": {
+                "clear":"Tyhjennä kentät",
+                "show":"Näytä sijainnit kartalla",
+                "export":"Vie tulokset tiedostoon"
             }
         }
     }
