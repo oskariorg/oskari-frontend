@@ -343,9 +343,11 @@ Oskari.util = (function () {
             width: 500,
             height: 400
         };
+
+        var mapdiv = jQuery('#mapdiv');
         var size = {
-            height: jQuery(window).height(),
-            width: jQuery(window).width()
+            height: mapdiv.height(),
+            width: mapdiv.width()
         };
 
         var isSizeMobile = false;
