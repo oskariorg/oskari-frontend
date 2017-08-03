@@ -17,6 +17,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
     "source": {
 
         "scripts": [
+        {
+            "type": "text/json",
+            "src": "../../../../bundles/framework/coordinateconversion/resources/values.json"
+        },
         /*
          * Abstract base
          */
@@ -42,6 +46,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/Flyout.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/components/helper.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/plugin/ConversionPlugin.js"

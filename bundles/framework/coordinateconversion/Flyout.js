@@ -148,6 +148,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             }
         this.selectGetValue(input_instance, false);
         this.selectGetValue(target_instance, true);
+
+        this.handleButtons();
         this.handleRadioButtons();
          if( this.canUseAdvancedUpload() ) {
             this.handleDragAndDrop();
@@ -214,6 +216,17 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 }
             });
          },
+        /**
+         * @method handleRadioButtons
+         * Inits the on change listeners for the radio buttons
+         * 
+         */
+        handleButtons: function () {
+            var helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', this.instance, this.loc);
+            jQuery(this.container).find('.choosecoords').on("click", function () {
+                var coords = helper.getCoordinatesFromMap();
+            });
+        },
         /**
          * @method handleDragAndDrop
          * Checks for drag and drop events, on submit makes ajax request
