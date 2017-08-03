@@ -9,10 +9,11 @@ Oskari.registerLocalization(
             "flyoutTitle": "Koordinaattimuunnos",
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
-                "geodesicdatum": "Geodeettinen datumi",
-                "coordinatesystem": "Koordinaatisto",
-                "geodesiccoordinatesystem": "Geodeettinen koordinaattijärjestelmä",
-                "heightsystem":"Korkeusjärjestelmä"
+                "geodetic_datum": "Geodeettinen datumi",
+                "coordinate_system": "Koordinaatisto",
+                "map_projection": "Karttaprojektiojärjestelmä",
+                "geodetic_coordinatesystem": "Geodeettinen koordinaattijärjestelmä",
+                "heigth_system":"Korkeusjärjestelmä"
             },
             "datasource": {
                 "title": "Koordinaattitietojen lähde",

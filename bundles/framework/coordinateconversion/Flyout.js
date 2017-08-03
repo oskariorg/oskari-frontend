@@ -14,11 +14,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
-                                    '<div class="datum"><b><%= datum %></b></div> </br> ' +
-                                    '<div class="coordsystem"><b><%= coordsystem %></b></div> </br> ' +
-                                    '<div class="mapprojection" style="display:none;"></div>' +
-                                    '<div class="geodesiccsystem"><b><%= geodesiccsystem%></b></div> </br> ' +
-                                    '<div class="heightsystem"><b><%= heightsystem %></b></div> </div>'
+                                    '<div class="geodetic-datum"><b><%= geodetic_datum %></b></div> </br> ' +
+                                    '<div class="coordinate-system"><b><%= coordinate_system %></b></div> </br> ' +
+                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> </div> </br>' +
+                                    '<div class="geodetic-coordinatesystem"><b><%= geodetic_coordinate_system %> </b></div> </br> ' +
+                                    '<div class="height-system"><b><%= height_system %></b></div> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
@@ -88,12 +88,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             }
         },
         createUi: function() {
+
             var me = this;
             var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
-                                                          datum: this.loc.coordinatesystem.geodesicdatum,
-                                                          coordsystem: this.loc.coordinatesystem.coordinatesystem,
-                                                          geodesiccsystem:this.loc.coordinatesystem.geodesiccoordinatesystem,
-                                                          heightsystem:this.loc.coordinatesystem.heightsystem });
+                                                          geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
+                                                          coordinate_system: this.loc.coordinatesystem.coordinate_system,
+                                                          map_projection: this.loc.coordinatesystem.map_projection,
+                                                          geodetic_coordinate_system:this.loc.coordinatesystem.geodetic_coordinatesystem,
+                                                          height_system:this.loc.coordinatesystem.heigth_system });
 
             var coordinatedatasource = this._template.coordinatedatasource({ title: this.loc.datasource.title, 
                                                                              file: this.loc.datasource.file,
@@ -154,11 +156,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         /**
          * @method selectGetValue
          * which key corresponds to which dropdown in the array:
-         * [0] = datum,
-         * [1] = koordinaatiso
-         * [2] = karttaprojectio
-         * [3] = geodesiccoordinatesystem
-         * [4] = korkeusjärjestelmä
+         * [0] = geodetic datum,
+         * [1] = coordinate system
+         * [2] = map projection
+         * [3] = geodetic coordinate system
+         * [4] = heigth system
          */
         selectGetValue: function ( instance, called ) {
             if( !called ) {
@@ -346,7 +348,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             jQuery.each( json, function ( key, value ) {
                 var size = Object.keys(value).length;
                  jQuery.each( value, function ( key, val ) {
-                    debugger;
                     var valObject = {
                         id : val.id,
                         title : val.title
