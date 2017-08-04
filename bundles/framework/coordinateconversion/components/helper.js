@@ -1,10 +1,12 @@
 Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', function(instance, locale) {
     this.loc = locale;
+    this.instance = instance;
     this.sb = instance.sandbox;
     this.sb.register(this);
     for (var p in this.eventHandlers) {
     this.sb.registerForEventByName(this, p);
     this.clickCoordinates = null;
+    this.moveReq = this.sb.getRequestBuilder('MapMoveRequest');
 }
 }, {
     getName: function() {
@@ -22,6 +24,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
     },
     getCoordinatesFromMap: function() {
         return this.clickCoordinates;
+    },
+    moveToCoords: function (coords) {
+        var req = this.moveReq(coords.lon, coords.lat, 9);
+        this.sb.request(this.instance, req);
     },
     /**
      * @method onEvent
