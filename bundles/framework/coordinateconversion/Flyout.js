@@ -239,7 +239,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 }
             });
             jQuery(this.container).find('.show').on("click", function () {
-                var coords = helper.moveToCoords( );                
+                /* 
+                * Need to get the real coordinates which have been converted by the backend
+                * Use these to test the functionality:
+                * var coord = { lon: 65, lat: 30 }
+                */
+                helper.moveToCoords( );                
             });
         },
         addToInputTable: function (coords) {
