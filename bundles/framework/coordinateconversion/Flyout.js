@@ -45,27 +45,28 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
             inputcoordinatefield: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
-                                        '<table id="coordinatestoconvert" style="border: 1px solid black;">'+
+                                        '<div class="scrollable">'+
+                                        '<table id="coordinatefield-input" style="border: 1px solid black;">'+
+                                        '<tbody></tbody'+
                                         '</table>'+
-                                    '</div>'),
+                                    '</div> </div>'),
             resultcoordinatefield: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left: 8px;">' +
                                                     '<h5> <%= result %> </h5>' +
-                                                    '<table id="convertedcoordinates" style="border: 1px solid black;">'+
+                                                    '<div class="scrollable">'+
+                                                    '<table id="coordinatefield-target" style="border: 1px solid black;">'+
+                                                    '<tbody></tbody'+
                                                     '</table>'+
-                                                '</div>'),
+                                                '</div> </div>'),
             conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block; padding-left: 8px;">' +
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             tablerow: _.template('<tr>' +
-                                    '<td style=" border: 1px solid black ;">'+
-                                    '</td>'+
-                                    '<td style=" border: 1px solid black ;">'+
-                                    '</td>'+
-                                    '<td style=" border: 1px solid black ;">'+
-                                    '</td>'+
+                                    '<td style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
+                                    '<td style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td style=" border: 1px solid black ;"> </td>'+
                                     '</tr>'),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
-                                        '<input id="overlay-btn" class=clear" type="button" value="<%= clear %> ">' +
+                                        '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
                                         '<input id="overlay-btn" class="show" type="button" value="<%= show %> ">' +
                                         '<input id="overlay-btn" class="export" type="button" value="<%= fileexport %> ">' +
                                         '</div>')
@@ -141,10 +142,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             jQuery( this.container ).find('#targetcoordsystem').find('div').each(function (index) {
                 jQuery(this).append(target_instance.dropdowns[index]);
             });
-
+            var coords = {} 
             for( var i = 0; i < 10; i++ ) {
-                jQuery(this.container).find("#coordinatestoconvert").append(this._template.tablerow);
-                jQuery(this.container).find("#convertedcoordinates").append(this._template.tablerow);
+                jQuery(this.container).find("#coordinatefield-input").append(this._template.tablerow( { coords: coords } ) );
+                jQuery(this.container).find("#coordinatefield-target").append(this._template.tablerow( { coords: coords } ) );
             }
         this.selectGetValue(input_instance, false);
         this.selectGetValue(target_instance, true);
@@ -222,10 +223,30 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          * 
          */
         handleButtons: function () {
+            var me = this;
             var helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', this.instance, this.loc);
             jQuery(this.container).find('.choosecoords').on("click", function () {
                 var coords = helper.getCoordinatesFromMap();
+                me.addToInputTable(coords);
+                
             });
+            jQuery(this.container).find('.clear').on("click", function () {
+                var table = jQuery('#coordinatefield-input tr td');
+                for(var i = 0; i < table.length; i++){
+                    if( table[i].textContent != "  ") {
+                        table[i].remove();
+                    }
+                }
+            });
+            jQuery(this.container).find('.show').on("click", function () {
+                var coords = helper.moveToCoords( );                
+            });
+        },
+        addToInputTable: function (coords) {
+            var table = jQuery(this.container).find('#coordinatefield-input');
+            var row = this._template.tablerow( { coords: coords } );
+            table.append(row);
+
         },
         /**
          * @method handleDragAndDrop
@@ -383,9 +404,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         dropdown.css({width:'150px', float:'right'});
                         select.adjustChosen();
                         select.selectFirstValue();
-                        if(index > 0) {
-                            dropdown.parent().addClass('margintop');
-                        }
+                        // if(index > 0) {
+                        //     dropdown.parent().addClass('margintop');
+                        // }
                         dropdowns.push(dropdown);
                         selectInstances.push(select);
                      }
