@@ -38,6 +38,11 @@ table {
     float:left;
     width: 22em !important;
 }
+.scrollable {
+    overflow-y: auto;
+    height:13em;
+    margin-bottom: 1em;
+}
 .coordinatefield-result {
     float:left;
     width: 22em !important;
