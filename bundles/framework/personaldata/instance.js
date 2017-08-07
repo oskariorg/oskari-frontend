@@ -37,7 +37,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
           Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
           var flyout = this.plugins['Oskari.userinterface.Flyout'];
           flyout.tabsContainer.panels.forEach(function(panel){
-            if(panel.title === "My Account") {
+            if(panel.id === "account") {
               flyout.tabsContainer.select(panel);
             }
           })
