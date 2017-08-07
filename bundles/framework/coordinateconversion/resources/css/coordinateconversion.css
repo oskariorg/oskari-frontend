@@ -177,3 +177,26 @@ input[type="radio"]:checked + label span {
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
+.hoverable{
+    width:100%; 
+    border-collapse:collapse; 
+}
+.hoverable td{ 
+    padding:7px; border:#4e95f4 1px solid;
+}
+/* Define the hover highlight color for the table row */
+.hoverable tr:hover {
+        background-color: #ffff99;
+}
+.hoverable tr:hover td .removerow { 
+    /* float: right; */
+    display: inline-block;
+}
+.removerow {
+    float: right; 
+    display: none;
+    border: 1px solid green;
+    background-color: red;
+    height:0.75em;
+    width:0.75em;
+}
