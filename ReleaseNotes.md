@@ -1,5 +1,11 @@
 # Release Notes
 
+## Next release version
+
+### Visualization form UI for polygon styles with no fill / no stroke
+
+User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being renderend. Requires updated code in oskari-server.
+
 ## 1.44.0
 
 ### Oskari.util
