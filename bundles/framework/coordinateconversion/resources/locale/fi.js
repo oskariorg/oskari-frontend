@@ -33,7 +33,10 @@ Oskari.registerLocalization(
             "coordinatefield": {
                 "input": "Muunnettavat koordinaatit",
                 "result": "Tuloskoordinaatit",
-                "convert": "Muunna"
+                "convert": "Muunna",
+                "north":"N",
+                "east":"E",
+                "ellipse_height":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
                 "clear": "Tyhjennä kentät",
