@@ -144,7 +144,7 @@ Oskari.clazz.define(
         me._scheduleNextTimestep = false;
         me._currentTime = null;
         me._mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        me._nthStep = 1;
+        me._stepInterval = 60000; // 1 minute
         me._imageBuffer = Oskari.clazz.create('Oskari.mapframework.domain.ImageBuffer');
         me._cancelBuffering = null;
         this._frameInterval = 1000;
@@ -1226,7 +1226,7 @@ Oskari.clazz.define(
         _advancePlayback: function () {
             var me = this;
             if (me._scheduleNextTimestep) {
-                var nextStep = me._getNextTimestep(this._nthStep);
+                var nextStep = me._getNextTimestep(this._stepInterval);
                 if (nextStep) {
                     var imagesToLoad = me._getTileUrls(nextStep);
                     var millisToTarget = this._frameInterval - Date.now() + me._lastFrameLoadTime;
@@ -1250,10 +1250,10 @@ Oskari.clazz.define(
             });
             return urls;
         },
-        _getNextTimestep(numSteps){
+        _getNextTimestep(stepInterval){
             var times = this.getAttributes().times;
             var nextTime;
-            numSteps = numSteps || 1;
+            var projection;
             if(!times) {
                 console.warn('layer does not have "times" attribute');
                 return;
@@ -1269,30 +1269,40 @@ Oskari.clazz.define(
                     console.warn('current timestep not found in "times" array');
                     return;
                 }
-                if(index + numSteps > times.length-1) {
+                if(index === times.length-1) {
                     console.warn('timestep would be after timeseries end, cannot advance');
                     return;
                 }
-                nextTime = times[index+numSteps];
+                projection = moment(this._currentTime).add(stepInterval, 'milliseconds');
+                index = _.sortedIndex(times, projection.toISOString()); // binary search into times to find next "time" after step interval
+                if(index > times.length-1) {
+                    index = times.length-1;
+                }
+                nextTime = times[index];
             } else {
-                var interval = moment.duration(times.interval).milliseconds() * numSteps;
-                var next = moment(this._currentTime).add(interval, 'milliseconds');
+                var interval = moment.duration(times.interval).asMilliseconds();
+                var numIntervals = Math.floor(stepInterval / interval);
+                if(numIntervals === 0) {
+                    numIntervals = 1; // at least one timestep interval
+                }
+
+                projection = moment(this._currentTime).add(interval * numIntervals, 'milliseconds');
                 if(next.isAfter(times.end)) {
                     console.warn('next timestep would be after end of series, cannot advance');
                     return;
                 }
-                nextTime = next.toISOString();
+                nextTime = projection.toISOString();
             }
 
             return nextTime;
         },
-        configureTimeseriesPlayback(time, playing, interval, nthStep){
+        configureTimeseriesPlayback(time, playing, frameInterval, stepInterval){
             if(!this.hasTimeseries()){
                 console.warn('Layer does not have timeseries! Cannot start playback.');
                 return;
             }
-            this._nthStep = nthStep || 1;
-            this._frameInterval = interval;
+            this._stepInterval = stepInterval;
+            this._frameInterval = frameInterval;
             this._setLayerTimestep(time, playing);
             if(!playing) {
                 this._stopTimeseriesPlayback();

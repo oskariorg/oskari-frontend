@@ -17,15 +17,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
      * @param {Number}
      *            frameInterval minimun time beween frames
      * @param {Number}
-     *            nthStep playback only nth time steps (optional, default 1)
+     *            stepInterval target millisedonds between timeseries "times"
      */
 
-    function (layerId, time, playing, frameInterval, nthStep) {
+    function (layerId, time, playing, frameInterval, stepInterval) {
         this._layerId = layerId;
         this._time = time;
         this._playing = playing;
         this._frameInterval = frameInterval;
-        this._nthStep = nthStep || 1;
+        this._stepInterval = stepInterval;
     }, {
         /** @static @property __name request name */
         __name: "MapModulePlugin.MapLayerPlaybackRequest",
@@ -61,15 +61,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
          * @method getInterval
          * @return {Number}
          */
-        getInterval: function () {
+        getFrameInterval: function () {
             return this._frameInterval;
         },
          /**
          * @method getStep
          * @return {Number}
          */
-        getStep: function () {
-            return this._nthStep;
+        getStepInterval: function () {
+            return this._stepInterval;
         }
     }, {
         /**

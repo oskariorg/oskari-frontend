@@ -30,9 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
             var layerId = request.getLayerId();
             var time = request.getTime();
             var playing = request.isPlaying();
-            var nthStep = request.getStep();
-            var interval = request.getInterval();
-            this.mapModule.handleMapLayerPlaybackRequest(layerId, time, playing, interval, nthStep);
+            var stepInterval = request.getStepInterval();
+            var frameInterval = request.getFrameInterval();
+            this.mapModule.handleMapLayerPlaybackRequest(layerId, time, playing, frameInterval, stepInterval);
         }
     }, {
         /**
