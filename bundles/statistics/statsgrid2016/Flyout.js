@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
           if( this.datacharts ) {
             return this.datacharts;
           }
-          this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', this.instance, this.instance.getLocalization());
+          this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', this.instance);
           return this.datacharts;
         },
         showDataCharts: function () {

@@ -1,9 +1,9 @@
 /*
 * Creates a flyout with accordion containing charts from Charts.js
 */
-Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(instance, loc) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(instance) {
   this.sb = instance.getSandbox();
-  this.loc = loc;
+  this.loc = instance.getLocalization();
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
@@ -96,7 +96,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
             var name = val.name || val.id || val;
             val.title = val.name;
             var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
-
             //ALERT HACK
             val.selections.Tiedot = val.id;
             //HACK END
@@ -112,7 +111,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
         });
 
         var options = {
-            placeholder_text: "dasd",
+            placeholder_text: "",
             allow_single_deselect : true,
             disable_search_threshold: 10,
             no_results_text: "locale.panels.newSearch.noResults",
