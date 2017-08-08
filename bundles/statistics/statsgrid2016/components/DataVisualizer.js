@@ -3,7 +3,7 @@
 */
 Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(instance) {
   this.sb = instance.getSandbox();
-  this.loc = instance.getLocalization();
+  this.loc = instance.getLocalization()
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
@@ -96,13 +96,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
             var name = val.name || val.id || val;
             val.title = val.name;
             var optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
-            //ALERT HACK
+            // ALERT HACK
             val.selections.Tiedot = val.id;
-            //HACK END
+            // HACK END
 
-            //save the id as a key in an object and put the selections as value, in the select on change event we can then compare the value we get to the key and get the value
+            // save the id as a key in an object and put the selections as value, in the select on change event we can then compare the value we get to the key and get the value
             keyValue[val.id] = val.selections;
-
             var valObject = {
                     id : val.id || val,
                     title : optName
@@ -203,7 +202,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
     var regionsNames = [];
     var activeIndicator = this.getIndicator(hash);
     if( activeIndicator === null ) {
-      this._template.container.append(this._template.error({msg : this.locale.legend.noActive}));
+      this._template.container.append(this._template.error({msg : this.loc.legend.noActive}));
       return;
     }
     var regionSet = this.getRegionset();
