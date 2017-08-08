@@ -52,6 +52,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
   getFlyout: function() {
     return this.__datachartFlyout;
   },
+  isActiveIndicator: function() {
+    return this.service.getStateService().getActiveIndicator();
+  },
   getCharts: function() {
     return this._barchart;
   },
@@ -229,7 +232,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function(event) {
             var current = event.getCurrent();
             if(current) {
-                me.createBarCharts();
+                if( me.getCharts() !== null ) {
+                  me.createBarCharts();
+                }
             }
         });
   },
