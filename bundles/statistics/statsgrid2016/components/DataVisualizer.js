@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
     if( this.__datachartFlyout ) {
         return this.__datachartFlyout;
     }
-    this.addTab("");
+    this.addTab();
     var accordion = Oskari.clazz.create(
           'Oskari.userinterface.component.Accordion'
         );
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
         }];
 
         var options = {
-            placeholder_text: "Select color",
+            placeholder_text: this.loc.datacharts.chooseColor,
             allow_single_deselect : true,
             disable_search_threshold: 10,
             no_results_text: "locale.panels.newSearch.noResults",
@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
       this.tabsContainer.panels[0].getContainer().append(updated);
     }
   },
-  addTab: function (item) {
+  addTab: function () {
       var me = this,
       flyout = jQuery(me.container);
       // Change into tab mode if not already

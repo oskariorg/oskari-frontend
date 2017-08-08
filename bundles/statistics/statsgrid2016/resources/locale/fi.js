@@ -152,7 +152,8 @@ Oskari.registerLocalization(
           "indicatorVar": "Kuvaajassa esitettävä muuttuja",
           "descColor": "Kuvaajan väri",
           "selectClr": "Valittu väri",
-          "clrFromMap": "Värit kartalla olevan luokittelun mukaan"
+          "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
+          "chooseColor": "Valitse väri"
         }
     }
 });

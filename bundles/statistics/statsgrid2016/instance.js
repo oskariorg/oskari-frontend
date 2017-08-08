@@ -96,7 +96,6 @@ Oskari.clazz.define(
           });
         },
         showExtension: function (el, callback) {
-          // this.extensions.forEach( function(extension) {
             el.show();
             el.on("click", function(event) {
                 if( jQuery(this).hasClass('material-selected') ) {
@@ -107,7 +106,6 @@ Oskari.clazz.define(
                 event.stopPropagation();
                 callback();
             })
-          // });
         },
         getExtensions: function () {
           return this._tileExtensions;
