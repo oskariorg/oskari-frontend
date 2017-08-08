@@ -174,6 +174,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
         dropdown.on("change", function(evt) {
           if( evt.target.selectedIndex === 1 ) {
             me._barchart.updateColor("#DC143C");
+            evt.stopPropagation();
           } else {
             me._barchart.createChart();
           }
@@ -271,12 +272,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
               defaultPanel.setPriority(1.0);
               me.tabsContainer.addPanel(defaultPanel);
       }
-      var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-      panel.setTitle(this.loc.datacharts.linechart, 'oskari_datachart_tabpanel_header');
-      panel.setId('oskari_datachart_tabpanel_header');
-      panel.setContent("");
-      panel.setPriority(1.0);
-      me.tabsContainer.addPanel(panel);
       this._template.charts.append(me.tabsContainer.ui);
   },
   isVisible: function() {

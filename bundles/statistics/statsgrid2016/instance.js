@@ -31,8 +31,8 @@ Oskari.clazz.define(
         this._tileExtensions = [];
         this._templates = {
             search: jQuery('<span class="statsgrid-functionality" id="material-search"><h5 id="material-desc">Aineistohaku</h5></span>'),
-            view: jQuery('<span class="statsgrid-functionality" id="material-view"><h5 id="material-desc">Haun tulokset</h5></span>'),
-            edit: jQuery('<span class="statsgrid-functionality" id="material-edit"><h5 id="material-desc">Aineiston muokkaus</h5></span>')
+            view: jQuery('<span class="statsgrid-functionality" id="material-view"><h5 id="material-desc">Haun tulokset</h5></span>')
+            // edit: jQuery('<span class="statsgrid-functionality" id="material-edit"><h5 id="material-desc">Aineiston muokkaus</h5></span>')
         }
     }, {
         afterStart: function (sandbox) {
@@ -229,9 +229,9 @@ Oskari.clazz.define(
                     if(extension[0].id === "material-view"){
                         me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
                     }
-                    if(extension[0].id === "material-edit"){
-                        me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
-                    }
+                    // if(extension[0].id === "material-edit"){
+                    //     me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
+                    // }
                   });
                 }
                 var renderMode = this.isEmbedded();
