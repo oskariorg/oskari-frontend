@@ -2,6 +2,10 @@
 
 ## 1.44.0
 
+### Oskari.util
+
+Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
+
 ### infobox
 
 Fixed issue where Get Feature Info (GFI) popup did not fit on the visible map area.
@@ -16,7 +20,7 @@ Now shows imported feature count in the success message. On error shows error me
 
 The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
 
-DrawPlugin now checks preconditions before trying to save the drawn figures on the map. 
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
 A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
 
 ## 1.43.0
@@ -64,7 +68,7 @@ This might affect usage of the component if an external code snippet assumes tha
 
 ### paikkatietoikkuna/register
 
-New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in.
 Bundle also creates registration popup to give information about registration before directing to registration page.
 
 ## 1.42.1
