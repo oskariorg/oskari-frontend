@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
   getFlyout: function() {
     return this.__datachartFlyout;
   },
-  isActiveIndicator: function() {
+  hasActiveIndicator: function() {
     return this.service.getStateService().getActiveIndicator();
   },
   getCharts: function() {
