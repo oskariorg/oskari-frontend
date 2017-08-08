@@ -36,6 +36,13 @@ Oskari.registerLocalization(
                 "convert": "Muunna",
                 "north":"N",
                 "east":"E",
+                "kkjnorth":"Pohjois-koordinaatti [m]",
+                "kkjeast":"Itä-koordinaatti [m]",
+                "lat":"Leveysaste",
+                "lon":"Pituusaste",
+                "geox":"Geosentrinen X [m]",
+                "geoy":"Geosentrinen Y [m]",
+                "geoz":"Geosentrinen Z [m]",
                 "ellipse_height":"Ellipsoidinen korkeus [m]"
             },
             "utils": {

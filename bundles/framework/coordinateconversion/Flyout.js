@@ -48,14 +48,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                         '<div class="scrollable">'+
                                         '<table class="hoverable" id="coordinatefield-input" style="border: 1px solid black;">'+
                                         '<tbody>'+
-                                            '<tr class="rowHeader">' +
-                                                '<th style=" border: 1px solid black ;" id="nort"><%= north %></th>'+
-                                                '<th style=" border: 1px solid black ;" id="east"><%= east %></th>'+
-                                                '<th style=" border: 1px solid black;" id="ellipse_height" ><%= ellipse_height %></th>'+
-                                            '</tr>'+
                                         '</tbody'+
                                         '</table>'+
                                     '</div> </div>'),
+            fieldheader: _.template('<tr class="rowHeader">' +
+                                                '<th style=" border: 1px solid black ;" id="nort"><%= north %></th>'+
+                                                '<th style=" border: 1px solid black ;" id="east"><%= east %></th>'+
+                                                '<th style=" border: 1px solid black;" id="ellipse_height" ><%= ellipse_height %></th>'+
+                                            '</tr>'),
             resultcoordinatefield: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left: 8px;">' +
                                                     '<h5> <%= result %> </h5>' +
                                                     '<div class="scrollable">'+
@@ -156,8 +156,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 jQuery(this.container).find("#coordinatefield-input").append(this._template.tablerow( { coords: coords } ) );
                 jQuery(this.container).find("#coordinatefield-target").append(this._template.tablerow( { coords: coords } ) );
             }
-        this.selectGetValue(input_instance, false);
-        this.selectGetValue(target_instance, true);
+        var inputValues = this.selectGetValue(input_instance, false);
+        var targetValues = this.selectGetValue(target_instance, true);
 
         this.handleButtons();
         this.handleRadioButtons();
@@ -176,17 +176,15 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          */
         selectGetValue: function ( instance, called ) {
             var kkj = false;
-
+            var me = this;
+            var values = [];
             if( !called ) {
                 jQuery( this.container ).find('#inputcoordsystem').on("change", function() {
-                    var selects = jQuery(this).find(".oskari-select");
-                    for (var i = 0; i < selects.length; i++ ) {
-                    var vl = instance.instances[i].getValue();
+                    for (var i = 0; i < instance.instances.length; i++ ) {
 
                     //First dropdown
                     if( instance.instances[0].getValue() === 'DATUM.KKJ' ) {
                         kkj = true;
-                      
                         instance.dropdowns[1].find('option:contains(3D)').hide();
 
                         instance.dropdowns[3].find('option:not(:contains(KKJ))').hide();
@@ -217,13 +215,13 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     }
                     if( instance.instances[1].getValue() === 'KOORDINAATISTO.SUORAK.2D' ) {
                         if( kkj ) {
-                            instance.dropdowns[2].find('option:contains(KKJ))').show();
+                            instance.dropdowns[2].find('option:contains(KKJ)').show();
                             instance.dropdowns[2].find('option:not(:contains(KKJ))').hide();
+                        } else {
+                            instance.dropdowns[2].find('option:contains(ETRS)').show();
+                            instance.dropdowns[2].find('option:not(:contains(ETRS))').hide();
                         }
-                        instance.dropdowns[2].find('option:not(:contains(KKJ))').show();
-                        instance.dropdowns[2].find('option:contains(KKJ))').hide();
                     }
-
 
                     if( instance.instances[1].getValue() === 'KOORDINAATISTO.SUORAK.2D' ) {
                         jQuery('.map-projection').show();
@@ -232,6 +230,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     }
 
                     instance.instances[i].update();
+                    values = [];
+                    for (var i = 0; i < instance.instances.length; i++ ) {
+                        var vl = instance.instances[i].getValue();
+                        values.push(vl);
+                    }
+                    me.updateTableTitle(values);
                     }
                 });
             } else {
@@ -242,6 +246,52 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 }
                 });
             }
+            return values;
+        },
+        updateTableTitle: function (values) {
+            var x = y = z = "";
+            if( values[3].indexOf("COORDSYS.KKJ") !== -1 ) {
+                x = this.loc.coordinatefield.kkjnorth
+                y = this.loc.coordinatefield.kkjeast
+                z = ""
+            }
+            if( values[3].indexOf("COORDSYS.ETRS") !== -1 ) {
+                x = this.loc.coordinatefield.kkjeast
+                y = this.loc.coordinatefield.kkjnorth
+                z = ""
+            }
+            if( values[1].indexOf("KOORDINAATISTO.MAANT.2D") !== -1 ) {
+                x = this.loc.coordinatefield.lon
+                y = this.loc.coordinatefield.lat
+                z = ""
+            } else if(values[1].indexOf("KOORDINAATISTO.MAANT.3D") !== -1 ) {
+                x = this.loc.coordinatefield.lon
+                y = this.loc.coordinatefield.lat
+                z = this.loc.coordinatefield.ellipse_height
+            }
+            if(values[1].indexOf("KOORDINAATISTO.SUORAK.3D") !== -1 ) {
+                   x = this.loc.coordinatefield.geox
+                   y = this.loc.coordinatefield.geoy
+                   z = this.loc.coordinatefield.geoz
+            }
+               
+
+                // if(value === 'MAANT') {
+                //    x = this.loc.coordinatefield.north
+                //    y = this.loc.coordinatefield.east
+                //    z = ""
+                // }
+
+            if(jQuery(this.container).find('.rowHeader')) {
+                jQuery(this.container).find('.rowHeader').remove();
+            }
+
+            var fieldheader = this._template.fieldheader({
+                                                                north: x,
+                                                                east: y,
+                                                                ellipse_height: z });
+
+            jQuery(this.container).find("#coordinatefield-input").prepend(fieldheader);
         },
         /**
          * @method canUseAdvancedUpload
@@ -408,9 +458,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                             },
                         "mapprojection": {
                             0: { "id":"DATUM.KARTTAPJ.DEFAULT", "title":"Mikä tahansa"},
-                            1: { "id":"DATUM.KKJ", "title":"ETRS-GK"},
-                            2: { "id":"DATUM.EUREF-FIN", "title":"ETSR-TM"},
-                            3: { "id":"DATUM.EUREF-FIN", "title":"KKJ"}
+                            1: { "id":"DATUM.KKJ", "title":"KKJ"},
+                            2: { "id":"DATUM.EUREF-FIN", "title":"ETRS-TM"},
+                            3: { "id":"DATUM.EUREF-FIN", "title":"ETRS-GK"}
                             },
                         "etrsCoordsys": {
                             0: { "id":"COORDSYS.DEFAULT", "title":"Valitse" },
