@@ -87,15 +87,21 @@ Oskari.clazz.define(
                 button.setEnabled(false);
             	me.__doSearch();
             };
-            var doAutocomplete = function() {
+
+            var doNormalSearch = function () {
+                me.autocomplete = false;
+                me.__doSearch();
+            }
+
+            var doAutocompleteSearch = function() {
                 me.autocomplete = true;
                 me.__doSearch();
             };
-            button.setHandler(doSearch);
-            field.bindEnterKey(doSearch);
+            button.setHandler(doNormalSearch);
+            field.bindEnterKey(doNormalSearch);
 
             if(this.instance.conf.autocomplete === true) {
-                field.bindUpKey(doAutocomplete);
+                field.bindUpKey(doAutocompleteSearch);
             }
 
             var controls = searchContainer.find('div.controls');
@@ -194,7 +200,7 @@ Oskari.clazz.define(
             var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
             if(reqBuilder) {
                 var request = reqBuilder(searchKey);
-                request.setAutocomplete(true);
+                request.setAutocomplete(me.autocomplete);
                 me.getSandbox().request(this.instance, request);
             }
         },
