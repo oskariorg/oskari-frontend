@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             return this.__legendFlyout;
         },
         getDataCharts : function () {
-          //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           if( this.datacharts ) {
             return this.datacharts;
           }
@@ -69,7 +68,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
           return this.datacharts;
         },
         showDataCharts: function () {
-          //NEED TO UPDATE THIS IF INDICATORS HAVE CHANGED
           var me = this;
               var charts = me.getDataCharts();
               if( charts.getFlyout() === null || charts.shouldUpdate) {
@@ -77,13 +75,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 charts.shouldUpdate = false;
               }
             this.chartsFlyout = charts.getFlyout();
-            if( charts.getCharts() === null ) {
+            if( charts.getCharts() === null && charts.isActiveIndicator() !== null ) {
                 charts.createBarCharts();
             }
               if( this.chartsFlyout.isVisible() ) {
                   this.chartsFlyout.hide();
               } else {
-                  // show and reset position
                   this.chartsFlyout.move(600, 300, true);
                   this.chartsFlyout.show();
                   this.chartsFlyout.bringToTop();
