@@ -205,22 +205,6 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Koordinaattin�ytt�",
-            "bundleinstancename": "coordinatedisplay",
-            "fi": "coordinatedisplay",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "coordinatedisplay",
-            "metadata": {
-                "Import-Bundle": {
-                    "coordinatedisplay": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
             "title": "maplegend",
             "fi": "maplegend",
             "bundleinstancename": "maplegend",
@@ -366,6 +350,16 @@
             "metadata" : {
                 "Import-Bundle" : {
                     "routesearch" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "register",
+            "bundleinstancename" : "register",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "register" : {
                         "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
                     }
                 }

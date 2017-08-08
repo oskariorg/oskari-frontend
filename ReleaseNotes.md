@@ -1,6 +1,37 @@
 # Release Notes
 
+## 1.44.0
+
+### Oskari.util
+
+Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
+
+### infobox
+
+Fixed issue where Get Feature Info (GFI) popup did not fit on the visible map area.
+
+### Myplacesimport
+
+Changed import file POST to use ajax XHR2 instead of iframe. Added upload progress bar and error handling. Some localization changes and error messages added. Choose a file dialog now shows only zip-files and folders.
+
+Now shows imported feature count in the success message. On error shows error message and tips. The message popup doesn't fadeout if error or warning occurs.
+
+### Myplaces2
+
+The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
+
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
+A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
+
 ## 1.43.0
+
+### Minifier script
+
+No longer assumes "oskari" as the folder name when processing images. Now determines the folder name based on the parent-folder name for the Gruntfile.js
+
+### Publisher2/history tools
+
+History tools (moving to previous or next view) can no be published only together. If there are published maps with only one of history tools, the other one will be added there as well. This is done because moving to next view is useless without possibility to move to previous view.
 
 ### Grid
 
@@ -37,7 +68,7 @@ This might affect usage of the component if an external code snippet assumes tha
 
 ### paikkatietoikkuna/register
 
-New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in.
 Bundle also creates registration popup to give information about registration before directing to registration page.
 
 ## 1.42.1

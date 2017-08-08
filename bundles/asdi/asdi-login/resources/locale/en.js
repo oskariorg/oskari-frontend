@@ -10,7 +10,8 @@ Oskari.registerLocalization(
             "username": "Username",
             "password": "Password",
             "login": "Login",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "passwdreset": "Forgot password?"
         }
     }
 });

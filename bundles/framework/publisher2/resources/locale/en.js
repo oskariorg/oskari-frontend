@@ -68,6 +68,7 @@ Oskari.registerLocalization(
                 "MapRotator":"Enable map rotation",
                 "CrosshairTool": "Show map focal point",
                 "toolbarToolNames": {
+                    "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
                     "measureline": "Measure distance",
