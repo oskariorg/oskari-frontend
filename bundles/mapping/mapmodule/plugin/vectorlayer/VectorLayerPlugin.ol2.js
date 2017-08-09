@@ -370,6 +370,14 @@ Oskari.clazz.define(
                 layer.setOpacity(options.opacity || 100);
                 layer.setVisible(true);
                 layer.setId(options.layerId);
+
+                if(options.layerPermissions) {
+                    for(var permission in options.layerPermissions) {
+                        if(options.layerPermissions.hasOwnProperty(permission)) {
+                            layer.addPermission(permission, options.layerPermissions[permission]);
+                        }
+                    }
+                }
             }
 
             // Update layer description and name always
