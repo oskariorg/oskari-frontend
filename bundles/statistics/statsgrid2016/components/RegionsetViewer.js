@@ -116,6 +116,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                             offsetY: 0
                         };
                     }
+
+                    var region = service.getRegionsets(currentRegion);
+
                     var params = [geoJSON, {
                         clearPrevious: false,
                         featureStyle: defaultFeatureStyle,
@@ -126,9 +129,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         opacity: 80,
                         layerName: locale.layer.name,
                         layerInspire: locale.layer.inspireName,
-                        layerOrganizationName: locale.layer.organizationName
+                        layerOrganizationName: locale.layer.organizationName,
+                        layerDescription: region.name
                     }];
-
 
                     sandbox.postRequestByName(
                         'MapModulePlugin.AddFeaturesToMapRequest',

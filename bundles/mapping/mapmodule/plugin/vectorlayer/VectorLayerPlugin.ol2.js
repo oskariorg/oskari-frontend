@@ -365,13 +365,22 @@ Oskari.clazz.define(
             var layer = mapLayerService.findMapLayer(options.layerId);
             if(!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setName(options.layerName || 'VECTOR');
                 layer.setInspireName(options.layerInspire || 'VECTOR');
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
                 layer.setOpacity(options.opacity || 100);
                 layer.setVisible(true);
                 layer.setId(options.layerId);
             }
+
+            // Update layer description and name always
+            if(options.layerDescription) {
+                layer.setDescription(options.layerDescription);
+            }
+            layer.setName(options.layerName || 'VECTOR');
+            if(mapLayerService.findMapLayer(options.layerId)) {
+                mapLayerService.updateLayer(options.layerId, layer);
+            }
+
 
             olLayer = me._getOlLayer(layer);
 
