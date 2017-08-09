@@ -66,7 +66,10 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
     selectFirstValue: function(){
       var chosen = this.element.find('select');
       chosen.find('option:nth-child(2)').attr('selected', 'selected');
-      chosen.trigger('chosen:updated');
+      this.update();
+    },
+    update: function() {
+      this.element.find('select').trigger('chosen:updated');
     },
     /**@method updateOptions
     *  updates an already defined chosen with new data
@@ -92,7 +95,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         option.val(choice.id).text(choice.title);
         chosen.append(option);
       });
-      chosen.trigger('chosen:updated');
+      this.update();
     },
     getId: function(){
       return this.id;
@@ -102,7 +105,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         Oskari.log('Oskari.userinterface.component.SelectList').warn(" Couldn't set value, no element. Call create to initialize");
       }
       this.element.find('select').val(value);
-      this.element.find('select').trigger('chosen:updated');
+      this.update();
     },
     getValue: function(){
       if(typeof this.element === 'undefined'){
