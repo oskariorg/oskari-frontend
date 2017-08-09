@@ -40,6 +40,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                     '</form>'+
                                     '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
                                         '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
+                                    '</div>' +
+                                    '<div class="coordinateconversion-mapinfo" style=display:none;">'+
+                                        '<div class="mapinfo"> <i><%= mapinfo %><i> </div>'+
                                     '</div>'
                                     ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
@@ -122,6 +125,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             var datasourceinfo = this._template.datasourceinfo({ fileupload: this.loc.datasourceinfo.fileupload,
                                                             link: this.loc.datasourceinfo.link,
                                                             clipboardupload: this.loc.datasourceinfo.clipboardupload,
+                                                            mapinfo: this.loc.datasourceinfo.mapinfo,
                                                             uploading: this.loc.datasourceinfo.uploading,
                                                             success: this.loc.datasourceinfo.success,
                                                             error: this.loc.datasourceinfo.error });
@@ -228,10 +232,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     } else {
                         jQuery('.map-projection').hide();
                     }
-
-                    instance.instances[i].update();
+                    
                     values = [];
                     for (var i = 0; i < instance.instances.length; i++ ) {
+                        instance.instances[i].update();
                         var vl = instance.instances[i].getValue();
                         values.push(vl);
                     }
@@ -286,10 +290,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 jQuery(this.container).find('.rowHeader').remove();
             }
 
-            var fieldheader = this._template.fieldheader({
-                                                                north: x,
-                                                                east: y,
-                                                                ellipse_height: z });
+            var fieldheader = this._template.fieldheader({  north: x,
+                                                            east: y,
+                                                            ellipse_height: z });
 
             jQuery(this.container).find("#coordinatefield-input").prepend(fieldheader);
         },
@@ -310,22 +313,27 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          */
         handleRadioButtons: function() {
             var me = this;
+            var clipboardInfo = jQuery(me.container).find('.coordinateconversion-clipboardinfo');
+            var mapInfo = jQuery(me.container).find('.coordinateconversion-mapinfo');
+            var fileInput = jQuery(me.container).find('#fileinput');
+
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
-                    jQuery(me.container).find('.coordinateconversion-clipboardinfo').hide();
-                    jQuery(me.container).find('.choosecoords').hide();
-                    jQuery(me.container).find('#fileinput').show();
+                    clipboardInfo.hide();
+                    mapInfo.hide();
+                    fileInput.show();
                     me.selectFromMap = false;
                 }
                 else if (this.value == '2') {
-                    jQuery(me.container).find('#fileinput').hide();
-                    jQuery(me.container).find('.choosecoords').hide();
-                    jQuery(me.container).find('.coordinateconversion-clipboardinfo').show();
+                    fileInput.hide();
+                    clipboardInfo.show();
+                    mapInfo.hide();
                     me.selectFromMap = false;
                 }
                 if(this.value == '3') {
-                    jQuery(me.container).find('#fileinput').hide();
-                    jQuery(me.container).find('.coordinateconversion-clipboardinfo').hide();
+                    fileInput.hide();
+                    clipboardInfo.hide();
+                    mapInfo.show();
                     me.selectFromMap = true;                    
                 }
             });

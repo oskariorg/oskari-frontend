@@ -95,7 +95,12 @@ table {
 .clipboardinfo {
     margin-top:2%;
     margin-left:3%;
-    font-size:0.8em;
+    font-size:0.95em;
+}
+.mapinfo {
+    margin-top:2%;
+    margin-left:3%;
+    font-size:0.95em;
 }
 .box__file {
 	width: 0.1px;
@@ -195,8 +200,9 @@ input[type="radio"]:checked + label span {
 .removerow {
     float: right; 
     display: none;
-    border: 1px solid green;
-    background-color: red;
-    height:0.75em;
-    width:0.75em;
+    /*border: 1px solid green;*/
+    border-radius: 50%;
+    height:1.3em;
+    width:1.4em;
+    background-image: url('../images/icon-close.png');
 }
