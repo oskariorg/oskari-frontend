@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         layerName: locale.layer.name,
                         layerInspire: locale.layer.inspireName,
                         layerOrganizationName: locale.layer.organizationName,
-                        layerDescription: region.name,
+                        layerDescription: (region && region.name) ? region.name : null,
                         layerPermissions: {
                             'publish': 'publication_permission_ok'
                         }
