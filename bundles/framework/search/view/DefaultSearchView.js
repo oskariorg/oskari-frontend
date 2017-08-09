@@ -197,10 +197,8 @@ Oskari.clazz.define(
                 me.getSandbox().request(this.instance, request);
             }
         },
-        __doAutocompleteSearch : function(){
-			var field = this.getField();
-            var button = this.getButton();
-            var searchContainer = this.getContainer();
+        __doAutocompleteSearch : function() {
+            var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
             this.searchservice.doAutocompleteSearch(searchKey, this.handleAutocompleteResult);
         },
@@ -238,11 +236,10 @@ Oskari.clazz.define(
                 results.push({ value: result.methods[i], data: result.methods[i] });
             }
             field.autocomplete(results);
-            me.autocomplete = false;
         },
 
         focus: function () {
-        	this.getField().focus();
+            this.getField().focus();
         },
 
         _validateSearchKey: function (key) {
