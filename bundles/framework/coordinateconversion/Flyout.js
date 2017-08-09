@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 var table = jQuery('#coordinatefield-input tr td');
                 for(var i = 0; i < table.length; i++){
                     if( table[i].textContent != "  ") {
-                        table[i].remove();
+                        jQuery(table[i]).parent().remove();
                     }
                 }
             });
