@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
      */
     function(params) {
         this._searchparams = params;
-        this._autocomplete = false;
     }, {
         /** @static @property __name request name */
         __name : "SearchRequest",
@@ -31,14 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
          */
         getSearchParams : function() {
             return this._searchparams;
-        },
-
-        setAutocomplete : function(autocomplete) {
-           this._autocomplete = autocomplete;
-        },
-
-        getAutocomplete : function () {
-            return this._autocomplete;
         }
     }, {
         /**
