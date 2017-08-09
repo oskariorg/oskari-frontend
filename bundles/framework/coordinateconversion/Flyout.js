@@ -55,14 +55,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                         '</table>'+
                                     '</div> </div>'),
             fieldheader: _.template('<tr class="rowHeader">' +
-                                                '<th style=" border: 1px solid black ;" id="nort"><%= north %></th>'+
-                                                '<th style=" border: 1px solid black ;" id="east"><%= east %></th>'+
-                                                '<th style=" border: 1px solid black;" id="ellipse_height" ><%= ellipse_height %></th>'+
+                                                '<th id="nort"><%= north %></th>'+
+                                                '<th id="east"><%= east %></th>'+
+                                                '<th id="ellipse_height" ><%= ellipse_height %></th>'+
                                             '</tr>'),
             resultcoordinatefield: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left: 8px;">' +
                                                     '<h5> <%= result %> </h5>' +
                                                     '<div class="scrollable">'+
-                                                    '<table class="hoverable" id="coordinatefield-target" style="border: 1px solid black;">'+
+                                                    '<table class=" hoverable" id="coordinatefield-target" style="border: 1px solid black;">'+
                                                     '<tbody></tbody'+
                                                     '</table>'+
                                                 '</div> </div>'),
@@ -294,7 +294,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                                             east: y,
                                                             ellipse_height: z });
 
-            jQuery(this.container).find("#coordinatefield-input").prepend(fieldheader);
+            jQuery(this.container).find("#coordinatefield-input tbody").prepend(fieldheader);
         },
         /**
          * @method canUseAdvancedUpload

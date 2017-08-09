@@ -21,9 +21,7 @@
     cursor:pointer;
     text-shadow: none;
 }
-table {
-  border-collapse:collapse;
-}
+
 #targetcoordsystem {
     margin-left: 2em;
 }
@@ -36,16 +34,17 @@ table {
 }
 .coordinatefield-input {
     float:left;
-    width: 22em !important;
+    width: 24em !important;
 }
 .scrollable {
     overflow-y: auto;
     height:13em;
     margin-bottom: 1em;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 .coordinatefield-result {
     float:left;
-    width: 22em !important;
+    width: 24em !important;
 }
 .conversionbtn {
     float:left;
@@ -182,20 +181,62 @@ input[type="radio"]:checked + label span {
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
-.hoverable{
-    width:100%; 
-    border-collapse:collapse; 
+.hoverable {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 15em;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
 }
 .hoverable td{ 
     padding:7px; border:#4e95f4 1px solid;
+    width:33% !important;
 }
 /* Define the hover highlight color for the table row */
 .hoverable tr:hover {
-        background-color: #ffff99;
+    background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}
+tr:hover td {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
 }
 .hoverable tr:hover td .removerow { 
     /* float: right; */
     display: inline-block;
+}
+
+/*td, th { border: 1px solid #CCC; height: 30px; }  Make cells a bit taller */
+
+.rowHeader th {
+  color:#D5DDE5;;
+  background:#1b1e24;
+  border-bottom:2px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  height: 1.5em;
+  font-size:1.1em;
+  font-weight: 100;
+  text-align:left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+
+}
+
+td {  
+    background: #FAFAFA; /* Lighter grey background */
+    text-align: center; /* Center our text */
+}
+.rowHeader {
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 .removerow {
     float: right; 
