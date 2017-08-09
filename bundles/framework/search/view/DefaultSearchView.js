@@ -235,16 +235,17 @@ Oskari.clazz.define(
             field.setEnabled(true);
             button.setEnabled(true);
 
-            var errorKey = result ? result.responseText : null,
-                msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+            if (me.autocomplete === false) {
+                var errorKey = result ? result.responseText : null,
+                    msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
 
-            if (errorKey) {
-                if (typeof me.instance.getLocalization(errorKey) === 'string') {
-                    msg = me.instance.getLocalization(errorKey);
+                if (errorKey) {
+                    if (typeof me.instance.getLocalization(errorKey) === 'string') {
+                        msg = me.instance.getLocalization(errorKey);
+                    }
                 }
+                me._showError(msg);
             }
-
-            me._showError(msg);
         },
 
         focus: function () {
