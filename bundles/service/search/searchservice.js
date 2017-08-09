@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             if(typeof params === 'object') {
                 params = params.searchKey;
             }
-            this.doSearch(params, null, null);
+            this.doSearch(params);
         },
         /**
          * @method doSearch
@@ -79,8 +79,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          */
         doSearch: function(searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
-            var sb = Oskari.getSandbox();
-            var epsg = Oskari.getSandbox().getMap().getSrsName();
+            var sb = this.sandbox || Oskari.getSandbox();
             var evtBuilder = sb.getEventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: "json",
@@ -89,7 +88,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 data: {
                     "searchKey": searchString,
                     "Language": lang,
-                    "epsg": epsg,
+                    "epsg": sb.getMap().getSrsName(),
                     "autocomplete": false
                 },
                 success: function(response) {
@@ -107,8 +106,11 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             });
         },
         doAutocompleteSearch: function(searchKey, onSuccess) {
+            if(typeof onSuccess !== 'function') {
+                return;
+            }
             var lang = Oskari.getLang();
-            var epsg = Oskari.getSandbox().getMap().getSrsName();
+            var sb = this.sandbox || Oskari.getSandbox();
             jQuery.ajax({
                 dataType: "json",
                 type: "POST",
@@ -116,13 +118,11 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 data: {
                     "searchKey": searchKey,
                     "Language": lang,
-                    "epsg": epsg,
+                    "epsg": sb.getMap().getSrsName(),
                     "autocomplete": true
                 },
                 success: function(response) {
-                    if(typeof onSuccess === 'function') {
-                        onSuccess(response);
-                    }
+                    onSuccess(response);
                 }
             });
         },
