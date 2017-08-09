@@ -60,12 +60,11 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          */
         handleRequest : function(core, request) {
             var params = request.getSearchParams();
-            var autocomplete = request.getAutocomplete();
             // backward compatibility code, can be removed in Oskari 1.36
             if(typeof params === 'object') {
                 params = params.searchKey;
             }
-            this.doSearch(params, null, null, autocomplete);
+            this.doSearch(params, null, null, false);
         },
         /**
          * @method doSearch

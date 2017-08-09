@@ -16,7 +16,7 @@ Oskari.clazz.define(
     function (instance) {
         this.instance = instance;
         this.sandbox = this.instance.getSandbox();
-
+        this.searchservice = Oskari.clazz.create('Oskari.service.search.SearchService');
         this.state = null;
         // last search result is saved so we can sort it in client
         this.lastResult = null;
@@ -83,22 +83,19 @@ Oskari.clazz.define(
             var button = this.getButton();
 
             var doSearch = function () {
+                me.autocomplete = false;
                 field.setEnabled(false);
                 button.setEnabled(false);
             	me.__doSearch();
             };
 
-            var doNormalSearch = function () {
-                me.autocomplete = false;
-                me.__doSearch();
-            }
-
             var doAutocompleteSearch = function() {
                 me.autocomplete = true;
-                me.__doSearch();
+                me.__doAutocompleteSearch();
             };
-            button.setHandler(doNormalSearch);
-            field.bindEnterKey(doNormalSearch);
+
+            button.setHandler(doSearch);
+            field.bindEnterKey(doSearch);
 
             if(this.instance.conf.autocomplete === true) {
                 field.bindUpKey(doAutocompleteSearch);
@@ -200,10 +197,17 @@ Oskari.clazz.define(
             var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
             if(reqBuilder) {
                 var request = reqBuilder(searchKey);
-                request.setAutocomplete(me.autocomplete);
                 me.getSandbox().request(this.instance, request);
             }
         },
+        __doAutocompleteSearch : function(){
+			var field = this.getField();
+            var button = this.getButton();
+            var searchContainer = this.getContainer();
+            var searchKey = field.getValue(this.instance.safeChars);
+            this.searchservice.doSearch(searchKey, null, null, true);
+        },
+
         handleSearchResult : function(isSuccess, result, searchedFor) {
             var me = this;
             var field = this.getField();
