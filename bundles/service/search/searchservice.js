@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             if(typeof params === 'object') {
                 params = params.searchKey;
             }
-            this.doSearch(params, null, null, false);
+            this.doSearch(params, null, null);
         },
         /**
          * @method doSearch
@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Function}
          *            onComplete callback method for search completion
          */
-        doSearch: function(searchString, onSuccess, onError, autocomplete) {
+        doSearch: function(searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
             var sb = Oskari.getSandbox();
             var epsg = Oskari.getSandbox().getMap().getSrsName();
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     "searchKey": searchString,
                     "Language": lang,
                     "epsg": epsg,
-                    "autocomplete": autocomplete
+                    "autocomplete": false
                 },
                 success: function(response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
@@ -105,9 +105,27 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     }
                 }
             });
-        }
-    },
-    {
+        },
+        doAutocompleteSearch: function(searchKey, onSuccess) {
+            var lang = Oskari.getLang();
+            var epsg = Oskari.getSandbox().getMap().getSrsName();
+            jQuery.ajax({
+                dataType: "json",
+                type: "POST",
+                url: this._searchUrl,
+                data: {
+                    "searchKey": searchKey,
+                    "Language": lang,
+                    "epsg": epsg,
+                    "autocomplete": true
+                },
+                success: function(response) {
+                    if(typeof onSuccess === 'function') {
+                        onSuccess(response);
+                    }
+                }
+            });
+        },
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

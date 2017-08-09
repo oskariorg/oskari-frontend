@@ -25,7 +25,6 @@ Oskari.clazz.define(
         this.lastSort = null;
         // Actions that get added to the search result popup
         this.resultActions = {};
-        this.autocomplete = false;
         this._searchContainer = null;
 
         this.resultHeaders = [
@@ -83,14 +82,12 @@ Oskari.clazz.define(
             var button = this.getButton();
 
             var doSearch = function () {
-                me.autocomplete = false;
                 field.setEnabled(false);
                 button.setEnabled(false);
             	me.__doSearch();
             };
 
             var doAutocompleteSearch = function() {
-                me.autocomplete = true;
                 me.__doAutocompleteSearch();
             };
 
@@ -205,7 +202,7 @@ Oskari.clazz.define(
             var button = this.getButton();
             var searchContainer = this.getContainer();
             var searchKey = field.getValue(this.instance.safeChars);
-            this.searchservice.doSearch(searchKey, null, null, true);
+            this.searchservice.doAutocompleteSearch(searchKey, this.handleAutocompleteResult);
         },
 
         handleSearchResult : function(isSuccess, result, searchedFor) {
@@ -213,39 +210,35 @@ Oskari.clazz.define(
             var field = this.getField();
             var button = this.getButton();
             if(isSuccess) {
-                // happy case
-                if (me.autocomplete) {
-                    var results =  [];
-                    for (var i = 0; i < result.methods.length; i++) {
-                        results.push({ value: result.methods[i], data: result.methods[i] });
-                    }
-                    field.autocomplete(results);
-                    me.autocomplete = false;
-                    field.setEnabled(true);
-                    button.setEnabled(true);
-                }
-                else {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
-                    me._renderResults(result, searchedFor);
-                }
+                field.setEnabled(true);
+                button.setEnabled(true);
+                me._renderResults(result, searchedFor);
                 return;
             }
             // error handling
             field.setEnabled(true);
             button.setEnabled(true);
 
-            if (me.autocomplete === false) {
-                var errorKey = result ? result.responseText : null,
-                    msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+            var errorKey = result ? result.responseText : null,
+                msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
 
-                if (errorKey) {
-                    if (typeof me.instance.getLocalization(errorKey) === 'string') {
-                        msg = me.instance.getLocalization(errorKey);
-                    }
+            if (errorKey) {
+                if (typeof me.instance.getLocalization(errorKey) === 'string') {
+                    msg = me.instance.getLocalization(errorKey);
                 }
-                me._showError(msg);
             }
+            me._showError(msg);
+        },
+
+        handleAutocompleteResult: function (result) {
+            var me = this;
+            var field = this.getField();
+            var results =  [];
+            for (var i = 0; i < result.methods.length; i++) {
+                results.push({ value: result.methods[i], data: result.methods[i] });
+            }
+            field.autocomplete(results);
+            me.autocomplete = false;
         },
 
         focus: function () {
