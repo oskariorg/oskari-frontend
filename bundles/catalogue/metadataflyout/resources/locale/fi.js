@@ -402,7 +402,7 @@ Oskari.registerLocalization(
                 "valueType" : "Laatutuloksen tyyppi",
                 "valueUnit" : "Laatutuloksen yksikkö",
                 "errorStatistic" : "Tilastollinen menetelmä",
-                "value" : "Arvo"
+                "value" : "Arvo",
                 "conformanceResult" : "Vaatimuksenmukaisuus",
                 "quantitativeResult" : "Mitattu laatutulos"
             },
