@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             }
         var inputValues = this.selectGetValue(input_instance, false);
         var targetValues = this.selectGetValue(target_instance, true);
-
+        this.handleClipboard();
         this.handleButtons();
         this.handleRadioButtons();
          if( this.canUseAdvancedUpload() ) {
@@ -306,6 +306,22 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             var div = document.createElement('div');
             return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
          },
+        handleClipboard: function () {
+            jQuery(this.container).find('coordinatefield-input').on('paste', function(e){
+                    
+                var clipboardData, pastedData;
+                        // Stop data actually being pasted into div
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                        // Get pasted data via clipboard API
+                    clipboardData = e.clipboardData || window.clipboardData;
+                    pastedData = clipboardData.getData('Text');
+                    
+                    // Do whatever with pasteddata
+                    alert(pastedData);
+            });
+        },
         /**
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
