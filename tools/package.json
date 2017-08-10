@@ -1,5 +1,5 @@
 {
-  "name": "oskaritools",
+  "name": "OskariTools",
   "version": "0.0.1",
   "description": "Build tools for Oskari applications",
   "author": "nls-oskari",
@@ -12,18 +12,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "core": "node build-core.js",
-    "sprite": "grunt sprite:main",
-    "build": "grunt release:servlet",
-    "build-paikkis": "grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map_ol3/minifierAppSetup.json",
-    "build-dev-paikkis": "grunt devRelease:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json",
-    "build-asdi": "grunt release:asdi:../applications/asdi/asdi_guest/minifierAppSetup.json,../applications/asdi/asdi_published/minifierAppSetup.json",
-    "build-elf": "grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
-    "build-ol3": "grunt buildOskariOL3",
-    "trim": "grunt trimtrailingspaces",
-    "lint": "jshint ../bundles",
-    "oskari2excel": "grunt genL10nExcels",
-    "excel2oskari": "grunt impL10nExcels",
-    "clean-l10n": "grunt localizationJSCleanup"
+    "sprite": "./node_modules/.bin/grunt sprite:main",
+    "build": "./node_modules/.bin/grunt release:servlet",
+    "build-paikkis": "./node_modules/.bin/grunt release:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map_ol3/minifierAppSetup.json",
+    "build-dev-paikkis": "./node_modules/.bin/grunt devRelease:paikkis:../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json",
+    "build-asdi": "./node_modules/.bin/grunt release:asdi:../applications/asdi/asdi_guest/minifierAppSetup.json,../applications/asdi/asdi_published/minifierAppSetup.json",
+    "build-elf": "./node_modules/.bin/grunt release:elf:../applications/elf/elf_guest/minifierAppSetup.json,../applications/elf/elf_published/minifierAppSetup.json",
+    "build-ol3": "./node_modules/.bin/grunt buildOskariOL3",
+    "trim": "./node_modules/.bin/grunt trimtrailingspaces",
+    "lint": "./node_modules/.bin/jshint ../bundles",
+    "oskari2excel": "./node_modules/.bin/grunt genL10nExcels",
+    "excel2oskari": "./node_modules/.bin/grunt impL10nExcels",
+    "clean-l10n": "./node_modules/.bin/grunt localizationJSCleanup"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",
@@ -44,9 +44,5 @@
     "uglify-js": "^2.6.2",
     "uglifycss": "0.0.20",
     "xml2js": "^0.4.16"
-  },
-  "directories": {
-    "doc": "docs",
-    "example": "examples"
   }
 }
