@@ -1,11 +1,5 @@
 # Release Notes
 
-## Next release version
-
-### Visualization form UI for polygon styles with no fill / no stroke
-
-User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being renderend. Requires updated code in oskari-server.
-
 ## 1.44.0
 
 ### Oskari.util
@@ -34,6 +28,10 @@ A line should have 2 points or finished figure (double click) and an area should
 The default search UI now includes an optional autocomplete functionality.
 Searchchannels in oskari-server must provide support for it to be useful.
 See oskari-server ReleaseNotes on details how to support autocompletion.
+
+### Visualization form UI for polygon styles with no fill / no stroke
+
+User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
 
 ## 1.43.0
 
