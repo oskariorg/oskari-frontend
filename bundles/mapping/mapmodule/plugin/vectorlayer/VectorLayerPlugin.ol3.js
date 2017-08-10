@@ -401,7 +401,7 @@ Oskari.clazz.define(
             }
             //check if layer is already on map
             if (me._olLayers[options.layerId]) {
-                olLayer = me._olLayers[options.layerId];
+                olLayer = me._getOlLayer(layer, options.layerOptions);
                 vectorSource = olLayer.getSource();
 
                 //layer is already on map
@@ -435,7 +435,6 @@ Oskari.clazz.define(
                 } else {
                     vectorSource.addFeatures(features);
                 }
-                me.raiseVectorLayer(olLayer);
             } else {
                 //let's create vector layer with features and add it to the map
                 vectorSource = new ol.source.Vector({
@@ -498,8 +497,9 @@ Oskari.clazz.define(
                     me._sandbox.request(me, request);
                 }
             }
-
-            olLayer.setVisible(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
+            if(options.showLayer) {
+                olLayer.setVisible(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
+            }
         },
          /**
          * @method _updateFeature

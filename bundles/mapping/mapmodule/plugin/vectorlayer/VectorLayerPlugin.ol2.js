@@ -535,9 +535,13 @@ Oskari.clazz.define(
                     var request = requestBuilder(layer.getId());
                     me._sandbox.request(me, request);
                 }
+
             }
 
-            olLayer.display(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
+            if(options.showLayer) {
+                olLayer.display(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
+            }
+
         },
         /**
          * @method getStyle
