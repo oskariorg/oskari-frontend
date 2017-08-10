@@ -304,7 +304,7 @@ Oskari.clazz.define(
         _getOlLayer: function(layer, layerOpts) {
             var me = this;
             if(!layer || layer.getLayerType() !== 'vector') {
-                return;
+                return null;
             }
 
             if(!layerOpts) {
@@ -320,18 +320,17 @@ Oskari.clazz.define(
                     me._map.layers.length
                 );
                 me._olLayers[layer.getId()] = olLayer;
+                olLayer.events.fallThrough = true;
+                olLayer.events.register('click', this, function(e) {
+                    // clicking on map, check if feature is hit
+                    if (e.target && e.target._featureId) {
+                        me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
+                    }
+                    return true;
+                });
             }
 
-
             olLayer.setOpacity(layer.getOpacity() / 100);
-            olLayer.events.fallThrough = true;
-            olLayer.events.register('click', this, function(e) {
-                // clicking on map, check if feature is hit
-                if (e.target && e.target._featureId) {
-                    me.__featureClicked([olLayer.getFeatureById(e.target._featureId)], olLayer);
-                }
-                return true;
-            });
 
             return olLayer;
         },
@@ -391,6 +390,9 @@ Oskari.clazz.define(
 
 
             olLayer = me._getOlLayer(layer);
+            if(!olLayer) {
+                return;
+            }
 
             if (options.clearPrevious === true) {
                 olLayer.removeAllFeatures();
@@ -651,6 +653,9 @@ Oskari.clazz.define(
             }
 
             var openLayer = me._getOlLayer(layer, layerOpts);
+            if(!openLayer) {
+                return;
+            }
 
             this.getSandbox().printDebug(
                 '#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for ' +
