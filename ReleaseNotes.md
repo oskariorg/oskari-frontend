@@ -23,6 +23,12 @@ The drawn figures are now removed from the map when PlaceForm is closed by click
 DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
 A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
 
+### Search
+
+The default search UI now includes an optional autocomplete functionality.
+Searchchannels in oskari-server must provide support for it to be useful.
+See oskari-server ReleaseNotes on details how to support autocompletion.
+
 ## 1.43.0
 
 ### Minifier script
