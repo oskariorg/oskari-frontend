@@ -41,6 +41,9 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList',
         if(!dataKey.id && !dataKey.title){
           option.val(dataKey).text(dataKey);
         }
+        if(dataKey.cls) {
+          option.addClass(dataKey.cls);
+        }
         option.val(dataKey.id).text(dataKey.title);
         select.find('select').append(option);
       }
