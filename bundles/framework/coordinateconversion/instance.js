@@ -106,7 +106,6 @@ function () {
      */
     start: function () {
         var me = this;
-        console.log("I'm in!!!!!!");
         var conf = me.conf || {},
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName);

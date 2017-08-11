@@ -3,6 +3,9 @@
     font-size: 12px;
     padding-left: 3px;
 }
+ .coordinateconversion-csystem,  .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
+    clear: left;
+} 
 #overlay-btn {
   color:#08233e;
     font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
@@ -246,4 +249,19 @@ td {
     height:1.3em;
     width:1.4em;
     background-image: url('../images/icon-close.png');
+}
+.select {
+    float:right;
+}
+.dropdown_title {
+    float: left;
+    font-weight: bold;
+    word-break: break-word;
+    max-width:12em !important;
+}
+.infolink {
+    float:right;
+    background-image: url('../images/icon-info.png');
+    height: 1.3em;
+    width: 1.3em;
 }

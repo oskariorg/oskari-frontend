@@ -15,11 +15,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
-                                    '<div class="geodetic-datum"><b><%= geodetic_datum %></b></div> </br> ' +
-                                    '<div class="coordinate-system"><b><%= coordinate_system %></b></div> </br> ' +
-                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> </div> </br>' +
-                                    '<div class="geodetic-coordinatesystem"><b><%= geodetic_coordinate_system %> </b></div> </br> ' +
-                                    '<div class="height-system"><b><%= height_system %></b></div> </div>'
+                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
+                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
+                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br>' +
+                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> </b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
+                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <div class="select"></div> <a href="#"><div class="infolink"></div></a> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
@@ -70,9 +70,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             tablerow: _.template('<tr>' +
-                                    '<td id="cell" contenteditable="true" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td id="cell" contenteditable="true" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td id="cell" headers="ellipse_height" style=" border: 1px solid black;"> </td><div class="removerow"></div>'+
+                                    '<td class="cell" contenteditable="true" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
+                                    '<td class="cell" contenteditable="true" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"> </td><div class="removerow"></div>'+
                                 '</tr> '),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
@@ -148,11 +148,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             jQuery(this.container).append(utilbuttons);
 
             var input_instance = me.createSelect();
-            jQuery( this.container ).find('#inputcoordsystem').find('div').each(function (index) {
+            jQuery( this.container ).find('#inputcoordsystem').find('.select').each(function (index) {
                 jQuery(this).append(input_instance.dropdowns[index]);
             });
             var target_instance = me.createSelect();
-            jQuery( this.container ).find('#targetcoordsystem').find('div').each(function (index) {
+            jQuery( this.container ).find('#targetcoordsystem').find('.select').each(function (index) {
                 jQuery(this).append(target_instance.dropdowns[index]);
             });
             var coords = {} 
@@ -179,7 +179,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          * [4] = heigth system
          */
         selectGetValue: function ( instance, called ) {
-            var kkj = false;
             var me = this;
             var values = [];
             if( !called ) {
@@ -232,6 +231,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         var vl = instance.instances[j].getValue();
                         values.push(vl);
                     }
+                    me.updateEditable(values);
+                    me.updateTableTitle(values);
                     }
                 });
             } else {
@@ -246,7 +247,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         },
         updateEditable: function (values) {
             var rows = jQuery(this.container).find("#coordinatefield-input tr");
-            if( values[4] !== "KORKEUSJ.DEFAULT" ) {
+            if( values[4] !== "KORKEUSJ_DEFAULT" ) {
                 rows.each( function (row) {
                     jQuery(this).find('td:last').attr("contenteditable", true);
                     jQuery(this).find('td:last').css('background-color','');
@@ -311,8 +312,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
          },
         handleClipboard: function () {
-            document.getElementById("cell").addEventListener('paste', function(e){
-                    
+            var me = this;
+           var cells = document.getElementsByClassName("cell");
+
+           for(var i = 0; i < cells.length; i++ ) {
+               cells[i].addEventListener('paste', function(e) {
                 var clipboardData, pastedData;
                         // Stop data actually being pasted into div
                     e.stopPropagation();
@@ -322,9 +326,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     clipboardData = e.clipboardData || window.clipboardData;
                     pastedData = clipboardData.getData('Text');
                     
-                    // Do whatever with pasteddata
-                    alert(pastedData);
+                    me.populateTableWithData(pastedData);
             });
+           }
+        },
+        populateTableWithData: function( data ) {
+            var table = jQuery(this.container).find('.coordinatefield-input');
         },
         /**
          * @method handleRadioButtons
