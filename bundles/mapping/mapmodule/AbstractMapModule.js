@@ -1743,8 +1743,6 @@ Oskari.clazz.define(
 
             svgObject.data = this.__addPositionMarks(svgObject);
 
-
-
             marker.append(svgObject.data);
 
             // IE needs this because ol.style.Icon opacity property not work on IE
@@ -1779,7 +1777,7 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
 
-            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+            var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(markerHTML);
 
             return svgSrc;
         },
