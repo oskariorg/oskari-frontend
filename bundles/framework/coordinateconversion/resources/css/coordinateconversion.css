@@ -37,7 +37,7 @@
 }
 .coordinatefield-input {
     float:left;
-    width: 24em !important;
+    width: 20em !important;
 }
 .scrollable {
     overflow-y: auto;
@@ -47,7 +47,7 @@
 }
 .coordinatefield-result {
     float:left;
-    width: 24em !important;
+    width: 20em !important;
 }
 .conversionbtn {
     float:left;
