@@ -70,9 +70,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             tablerow: _.template('<tr>' +
-                                    '<td headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td headers="ellipse_height" style=" border: 1px solid black;"> <div class="removerow"></div> </td>'+
+                                    '<td id="cell" contenteditable="true" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
+                                    '<td id="cell" contenteditable="true" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td id="cell" headers="ellipse_height" style=" border: 1px solid black;"> </td><div class="removerow"></div>'+
                                 '</tr> '),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
@@ -186,60 +186,52 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 jQuery( this.container ).find('#inputcoordsystem').on("change", function() {
                     for (var i = 0; i < instance.instances.length; i++ ) {
 
-                    //First dropdown
-                    if( instance.instances[0].getValue() === 'DATUM.KKJ' ) {
-                        kkj = true;
-                        instance.dropdowns[1].find('option:contains(3D)').hide();
+                    instance.dropdowns[i].find('option').hide();
+                    instance.dropdowns[i].find('.'+ instance.instances[0].getValue()).show();
 
-                        instance.dropdowns[3].find('option:not(:contains(KKJ))').hide();
-                        //if hidden
-                        instance.dropdowns[3].find('option:contains(KKJ)').show();
-                    } else {
-                        kkj = false;
-                        instance.dropdowns[3].find('option:contains(KKJ)').hide();
+                    // Koordinaatisto special cases
+                    if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
+                    }
+                    if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_3D" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
+                    }
+                    if( instance.instances[1].getValue() === "KOORDINAATISTO_SUORAK_2D" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
+                    }
+                    if( instance.instances[1].getValue() === "KOORDINAATISTO_SUORAK_3D" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
+                    }
+                    // Karttaprojektiojärjestelmä special cases
+                    if( instance.instances[2].getValue() === "KKJ_KAISTA" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
+                    }
+                    if( instance.instances[2].getValue() === "TM" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
+                    } 
+                    if( instance.instances[2].getValue() === "GK" ) {
+                        instance.dropdowns[3].find('option').hide();
+                        instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
+                    }
                         
-                        //if hidden
-                        instance.dropdowns[1].find('option:contains(3D)').show();
-                        instance.dropdowns[3].find('option:not(:contains(KKJ))').show();
-
-                    }
-                    
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO.SUORAK.3D' ) {
-                        instance.dropdowns[3].find('option:not(:contains(EUREF-FIN-XYZ))').hide();
-                    }
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO.MAANT.2D' ) {
-                        if( kkj ) {
-                            instance.dropdowns[3].find('option:not(:contains(KKJ-Hayford))').hide();
-                        } else {
-                            instance.dropdowns[3].find('option:not(:contains(EUREF-FIN-GRS80))').hide();
-                        }
-                    }
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO.MAANT.3D' ) {
-                        instance.dropdowns[3].find('option:not(:contains(EUREF-FIN-GRS80h))').hide();
-                    }
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO.SUORAK.2D' ) {
-                        if( kkj ) {
-                            instance.dropdowns[2].find('option:contains(KKJ)').show();
-                            instance.dropdowns[2].find('option:not(:contains(KKJ))').hide();
-                        } else {
-                            instance.dropdowns[2].find('option:contains(ETRS)').show();
-                            instance.dropdowns[2].find('option:not(:contains(ETRS))').hide();
-                        }
-                    }
-
-                    if( instance.instances[1].getValue() === 'KOORDINAATISTO.SUORAK.2D' ) {
+                    if( instance.instances[1].getValue() === 'KOORDINAATISTO_SUORAK_2D' ) {
                         jQuery('.map-projection').show();
                     } else {
                         jQuery('.map-projection').hide();
                     }
                     
                     values = [];
-                    for (var i = 0; i < instance.instances.length; i++ ) {
-                        instance.instances[i].update();
-                        var vl = instance.instances[i].getValue();
+                    instance.instances[i].update();
+                    for (var j = 0; j < instance.instances.length; j++ ) {
+                        var vl = instance.instances[j].getValue();
                         values.push(vl);
                     }
-                    me.updateTableTitle(values);
                     }
                 });
             } else {
@@ -251,6 +243,25 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 });
             }
             return values;
+        },
+        updateEditable: function (values) {
+            var rows = jQuery(this.container).find("#coordinatefield-input tr");
+            if( values[4] !== "KORKEUSJ.DEFAULT" ) {
+                rows.each( function (row) {
+                    jQuery(this).find('td:last').attr("contenteditable", true);
+                    jQuery(this).find('td:last').css('background-color','');
+                });
+                
+            } else {
+                rows.each( function (row) {
+                    var lastCell = jQuery(this).find('td:last');
+                    lastCell.attr("contenteditable", false);
+                    // if last cell is not empty and no heightsystem is selected, gray it out
+                    if(lastCell.html() !== ' ') {
+                        lastCell.css('background-color','gray');
+                    }
+                })
+            }
         },
         updateTableTitle: function (values) {
             var x = y = z = "";
@@ -278,13 +289,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                    y = this.loc.coordinatefield.geoy
                    z = this.loc.coordinatefield.geoz
             }
-               
-
-                // if(value === 'MAANT') {
-                //    x = this.loc.coordinatefield.north
-                //    y = this.loc.coordinatefield.east
-                //    z = ""
-                // }
 
             if(jQuery(this.container).find('.rowHeader')) {
                 jQuery(this.container).find('.rowHeader').remove();
@@ -307,7 +311,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
          },
         handleClipboard: function () {
-            jQuery(this.container).find('coordinatefield-input').on('paste', function(e){
+            document.getElementById("cell").addEventListener('paste', function(e){
                     
                 var clipboardData, pastedData;
                         // Stop data actually being pasted into div
@@ -468,60 +472,61 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         },
         createSelect: function() {
             var json = {
-                        "geodesicdatum": {
-                            0: { "id":"DATUM.DEFAULT", "title":"Mikä tahansa"},
-                            1: { "id":"DATUM.KKJ", "title":"KKJ"},
-                            2: { "id":"DATUM.EUREF-FIN", "title":"EUREF-FIN"}
+                        "geodeticdatum": {
+                            0: { "id":"DATUM_DEFAULT", "title":"Mikä tahansa", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                            1: { "id":"DATUM_KKJ", "title":"KKJ", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                            2: { "id":"DATUM_EUREF-FIN", "title":"EUREF-FIN", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                             },
                         "koordinaatisto": {
-                            0: { "id":"KOORDINAATISTO.DEFAULT", "title":"Mikä tahansa" },
-                            1: { "id":"KOORDINAATISTO.SUORAK.2D", "title":"Suorakulmainen 2D (Taso)" },
-                            2: { "id":"KOORDINAATISTO.SUORAK.3D", "title":"Suorakulmainen 3D" },
-                            3: { "id":"KOORDINAATISTO.MAANT.2D", "title":"Maantieteellinen 2D" },
-                            4: { "id":"KOORDINAATISTO.MAANT.3D", "title":"Maantieteellinen 3D" }
+                            0: { "id":"KOORDINAATISTO_DEFAULT", "title":"Mikä tahansa" },
+                            1: { "id":"KOORDINAATISTO_SUORAK_2D", "title":"Suorakulmainen 2D (Taso)", "cls":"DATUM_KKJ DATUM_EUREF-FIN" },
+                            2: { "id":"KOORDINAATISTO_SUORAK_3D", "title":"Suorakulmainen 3D", "cls":"DATUM_EUREF-FIN" },
+                            3: { "id":"KOORDINAATISTO_MAANT_2D", "title":"Maantieteellinen 2D", "cls":"DATUM_EUREF-FIN DATUM_KKJ" },
+                            4: { "id":"KOORDINAATISTO_MAANT_3D", "title":"Maantieteellinen 3D", "cls":"DATUM_EUREF-FIN" }
                             },
                         "mapprojection": {
-                            0: { "id":"DATUM.KARTTAPJ.DEFAULT", "title":"Mikä tahansa"},
-                            1: { "id":"DATUM.KKJ", "title":"KKJ"},
-                            2: { "id":"DATUM.EUREF-FIN", "title":"ETRS-TM"},
-                            3: { "id":"DATUM.EUREF-FIN", "title":"ETRS-GK"}
+                            0: { "id":"DATUM_KARTTAPJ_DEFAULT", "title":"Mikä tahansa"},
+                            1: { "id":"KKJ_KAISTA", "title":"KKJ", "cls":"DATUM_KKJ"},
+                            2: { "id":"TM", "title":"ETRS-TM",  "cls":"DATUM_EUREF-FIN"},
+                            3: { "id":"GK", "title":"ETRS-GK",  "cls":"DATUM_EUREF-FIN"}
                             },
-                        "etrsCoordsys": {
-                            0: { "id":"COORDSYS.DEFAULT", "title":"Valitse" },
-                            1: { "id":"COORDSYS.ETRS-GK19", "title":"ETRS-GK19" },
-                            2: { "id":"COORDSYS.ETRS-GK20", "title":"ETRS-GK20" },
-                            3: { "id":"COORDSYS.ETRS-GK21", "title":"ETRS-GK21" },
-                            4: { "id":"COORDSYS.ETRS-GK22", "title":"ETRS-GK22" },
-                            5: { "id":"COORDSYS.ETRS-GK23", "title":"ETRS-GK23" },
-                            6: { "id":"COORDSYS.ETRS-GK24", "title":"ETRS-GK24" },
-                            7: { "id":"COORDSYS.ETRS-GK25", "title":"ETRS-GK25" },
-                            8: { "id":"COORDSYS.ETRS-GK26", "title":"ETRS-GK26" },
-                            9: { "id":"COORDSYS.ETRS-GK27", "title":"ETRS-GK27" },
-                            10: { "id":"COORDSYS.ETRS-GK28", "title":"ETRS-GK28" },
-                            11: { "id":"COORDSYS.ETRS-GK29", "title":"ETRS-GK29" },
-                            12: { "id":"COORDSYS.ETRS-GK30", "title":"ETRS-GK30" },
-                            13: { "id":"COORDSYS.ETRS-GK31", "title":"ETRS-GK31" },
-                            14: { "id":"COORDSYS.ETRS-LAEA", "title":"ETRS-LAEA" },
-                            15: { "id":"COORDSYS.ETRS-LCC", "title":"ETRS-LCC" },
-                            16: { "id":"COORDSYS.ETRS-TM34", "title":"ETRS-TM34" },
-                            17: { "id":"COORDSYS.ETRS-TM35", "title":"ETRS-TM35" },
-                            18: { "id":"COORDSYS.ETRS-TM35FIN", "title":"ETRS-TM35FIN" },
-                            19: { "id":"COORDSYS.EUREF-FIN-GEO2D", "title":"EUREF-FIN-GRS80" },
-                            20: { "id":"COORDSYS.EUREF-FIN-GEO3D", "title":"EUREF-FIN-GRS80h" },
-                            21: { "id":"COORDSYS.ETRS-EUREF-FIN.SUORAK3d", "title":"EUREF-FIN-XYZ" },
-                            22: { "id":"COORDSYS.KKJ0", "title":"KKJ kaista 0" },
-                            23: { "id":"COORDSYS.KKJ1", "title":"KKJ kaista 1" },
-                            23: { "id":"COORDSYS.KKJ2", "title":"KKJ kaista 2" },
-                            24: { "id":"COORDSYS.KKJ3", "title":"KKJ kaista 3 / YKJ" },
-                            25: { "id":"COORDSYS.KKJ4", "title":"KKJ kaista 4" },
-                            26: { "id":"COORDSYS.KKJ5", "title":"KKJ kaista 5" },
-                            27: { "id":"COORDSYS.KKJ.GEO", "title":"KKJ-Hayford" }
+                        "coordinatesystem": {
+                            0: { "id":"COORDSYS_DEFAULT", "title":"Valitse" },
+                            1: { "id":"COORDSYS_ETRS-GK19", "title":"ETRS-GK19", "cls":"DATUM_EUREF-FIN GK" },
+                            2: { "id":"COORDSYS_ETRS-GK20", "title":"ETRS-GK20", "cls":"DATUM_EUREF-FIN GK" },
+                            3: { "id":"COORDSYS_ETRS-GK21", "title":"ETRS-GK21", "cls":"DATUM_EUREF-FIN GK" },
+                            4: { "id":"COORDSYS_ETRS-GK22", "title":"ETRS-GK22", "cls":"DATUM_EUREF-FIN GK" },
+                            5: { "id":"COORDSYS_ETRS-GK23", "title":"ETRS-GK23", "cls":"DATUM_EUREF-FIN GK" },
+                            6: { "id":"COORDSYS_ETRS-GK24", "title":"ETRS-GK24", "cls":"DATUM_EUREF-FIN GK" },
+                            7: { "id":"COORDSYS_ETRS-GK25", "title":"ETRS-GK25", "cls":"DATUM_EUREF-FIN GK" },
+                            8: { "id":"COORDSYS_ETRS-GK26", "title":"ETRS-GK26", "cls":"DATUM_EUREF-FIN GK" },
+                            9: { "id":"COORDSYS_ETRS-GK27", "title":"ETRS-GK27", "cls":"DATUM_EUREF-FIN GK" },
+                            10: { "id":"COORDSYS_ETRS-GK28", "title":"ETRS-GK28", "cls":"DATUM_EUREF-FIN GK" },
+                            11: { "id":"COORDSYS_ETRS-GK29", "title":"ETRS-GK29", "cls":"DATUM_EUREF-FIN GK" },
+                            12: { "id":"COORDSYS_ETRS-GK30", "title":"ETRS-GK30", "cls":"DATUM_EUREF-FIN GK" },
+                            13: { "id":"COORDSYS_ETRS-GK31", "title":"ETRS-GK31", "cls":"DATUM_EUREF-FIN GK" },
+                            14: { "id":"COORDSYS_ETRS-LAEA", "title":"ETRS-LAEA", "cls":"DATUM_EUREF-FIN GK" },
+                            15: { "id":"COORDSYS_ETRS-LCC", "title":"ETRS-LCC", "cls":"DATUM_EUREF-FIN" },
+                            16: { "id":"COORDSYS_ETRS-TM34", "title":"ETRS-TM34", "cls":"DATUM_EUREF-FIN TM" },
+                            17: { "id":"COORDSYS_ETRS-TM35", "title":"ETRS-TM35", "cls":"DATUM_EUREF-FIN TM" },
+                            18: { "id":"COORDSYS_ETRS-TM35", "title":"ETRS-TM36", "cls":"DATUM_EUREF-FIN TM" },
+                            19: { "id":"COORDSYS_ETRS-TM35FIN", "title":"ETRS-TM35FIN", "cls":"DATUM_EUREF-FIN TM" },
+                            20: { "id":"COORDSYS_EUREF-FIN-GEO2D", "title":"EUREF-FIN-GRS80", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_2D" },
+                            21: { "id":"COORDSYS_EUREF-FIN-GEO3D", "title":"EUREF-FIN-GRS80h", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_3D" },
+                            22: { "id":"COORDSYS_ETRS-EUREF-FIN_SUORAK3d", "title":"EUREF-FIN-XYZ", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_SUORAK_3D" },
+                            23: { "id":"COORDSYS_KKJ0", "title":"KKJ kaista 0", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            24: { "id":"COORDSYS_KKJ1", "title":"KKJ kaista 1", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            25: { "id":"COORDSYS_KKJ2", "title":"KKJ kaista 2", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            26: { "id":"COORDSYS_KKJ3", "title":"KKJ kaista 3 / YKJ", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            27: { "id":"COORDSYS_KKJ4", "title":"KKJ kaista 4", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            28: { "id":"COORDSYS_KKJ5", "title":"KKJ kaista 5", "cls":"DATUM_KKJ KKJ_KAISTA" },
+                            29: { "id":"COORDSYS_KKJ_GEO", "title":"KKJ-Hayford", "cls":"DATUM_KKJ KOORDINAATISTO_MAANT_2D" }
                             },
                         "heigthsystem": {
-                            0: { "id":"KORKEUSJ.DEFAULT", "title":"Ei mitään"},
-                            1: { "id":"KORKEUSJ.N2000", "title":"N2000"},
-                            2: { "id":"KORKEUSJ.N60", "title":"N60"},
-                            3: { "id":"KORKEUSJ.N43", "title":"N43"}
+                            0: { "id":"KORKEUSJ_DEFAULT", "title":"Ei mitään","cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                            1: { "id":"KORKEUSJ_N2000", "title":"N2000", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                            2: { "id":"KORKEUSJ_N60", "title":"N60", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"},
+                            3: { "id":"KORKEUSJ_N43", "title":"N43", "cls":"DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT"}
                             }
                         }
 
@@ -534,7 +539,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                  jQuery.each( value, function ( key, val ) {
                     var valObject = {
                         id : val.id,
-                        title : val.title
+                        title : val.title,
+                        cls: val.cls
                     };
                     selections.push( valObject );
                     if (key === "0") {
