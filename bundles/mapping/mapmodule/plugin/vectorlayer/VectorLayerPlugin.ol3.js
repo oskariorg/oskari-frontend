@@ -86,8 +86,53 @@ Oskari.clazz.define(
                 },
                 AfterMapLayerRemoveEvent: function(event) {
                     me.afterMapLayerRemoveEvent(event);
+                },
+                AfterChangeMapLayerOpacityEvent: function(event) {
+                    me._afterChangeMapLayerOpacityEvent(event);
                 }
             };
+        },
+        /**
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent} event
+         */
+        _afterChangeMapLayerOpacityEvent: function(event) {
+            console.warn('Need implemented _afterChangeMapLayerOpacityEvent!');
+            return;
+
+            var me = this,
+                layer = event.getMapLayer();
+
+            if (!layer.isLayerOfType('VECTOR')) {
+                return;
+            }
+
+            this.getSandbox().printDebug(
+                'Setting Layer Opacity for ' + layer.getId() + ' to ' +
+                layer.getOpacity()
+            );
+            var olLayer = me._olLayers[layer.getId()];
+            if (olLayer) {
+                var changed = false;
+                olLayer.setOpacity(layer.getOpacity() / 100);
+                if(me._features[layer.getId()]) {
+                    _.forEach(me._features[layer.getId()], function(data) {
+                        _.forEach(data, function(featureArray) {
+                            _.forEach(featureArray, function(feature) {
+                                changed = me.handleSvgOpacity(feature, layer, (layer.getOpacity() / 100), true);
+                                olLayer.getSource().clear();
+                                olLayer.getSource().addFeature();
+
+                            });
+                        });
+                    });
+                }
+                if(changed) {
+                    olLayer.setOpacity(1);
+                }
+            }
         },
         /**
          * Find features from layers controlled by vectorlayerplugin and handle clicks for all those features
@@ -273,6 +318,44 @@ Oskari.clazz.define(
             olLayer.setOpacity(layer.getOpacity() / 100);
             return olLayer;
         },
+
+        /**
+         * Handles layer opacity when using SVG markers. This need be done in this way, because IE 11 opacity
+         * changes not work if used SVG icon and tryed change ol.layer.Vector layer opacity.
+         * @param  {ol.Feature} feature
+         * @param  {Oskari.mapframework.domain.VectorLayer} layer
+         * @param  {Double} opacity
+         */
+        handleSvgOpacity: function(feature, layer, opacity, notChange) {
+            var isSvg = function(f){
+                var hasImage = (
+                    f &&
+                    typeof f.getStyle == 'function' &&
+                    typeof f.getStyle().getImage == 'function' &&
+                    typeof f.getStyle().getImage().getSrc == 'function'
+                );
+                return (hasImage) ? feature.getStyle().getImage().getSrc().indexOf('svg') > 0 : false;
+            };
+
+            if(isSvg(feature)){
+                var size = feature.getStyle().getImage().getSize();
+                var svg = decodeURIComponent(feature.getStyle().getImage().getSrc().split(',')[1]);
+                var svgEl = jQuery(svg);
+                svgEl.css('opacity', opacity);
+                var image = new ol.style.Icon({
+                    src: 'data:image/svg+xml,' + encodeURIComponent(svgEl.outerHTML()),
+                    size: size,
+                    imgSize: size,
+                    opacity: 1
+                });
+                feature.getStyle().setImage(image);
+                if(!notChange) {
+                    layer.setOpacity(100);
+                }
+                return true;
+            }
+            return false;
+        },
         /**
          * @method addFeaturesToMap
          * @public
@@ -391,9 +474,9 @@ Oskari.clazz.define(
             });
 
             var prio = options.prio || 0;
-
             _.forEach(features, function(feature) {
-                me.setupFeatureStyle(options, feature);
+                me.setupFeatureStyle(options, feature, false);
+                me.handleSvgOpacity(feature, layer, ((options.opacity || 100)/100));
             });
 
             if (!me._features[options.layerId]) {
@@ -668,6 +751,8 @@ Oskari.clazz.define(
         setupFeatureStyle: function(options, feature, update) {
             var me = this;
             var style = this.getStyle(options, feature, update);
+
+
             //set up property-based labeling
             if(update && typeof feature.getId === 'function') {
                 options.featureStyle = me._featureStyles[feature.getId()] || options.featureStyle;
