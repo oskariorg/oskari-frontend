@@ -311,27 +311,59 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             var div = document.createElement('div');
             return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
          },
+        /**
+         * @method handleClipboard
+         *
+         * Handles the paste event in the input table
+         * example data to paste:
+         *   "lon":"1334", "lat":"1233434",
+         *   "lon":"1434", "lat":"1234454"
+         * currently only works in format specified above in the example
+         */
         handleClipboard: function () {
+            
             var me = this;
-           var cells = document.getElementsByClassName("cell");
+            var cells = document.getElementsByClassName("cell");
 
-           for(var i = 0; i < cells.length; i++ ) {
-               cells[i].addEventListener('paste', function(e) {
-                var clipboardData, pastedData;
+            for(var i = 0; i < cells.length; i++ ) {
+                cells[i].addEventListener('paste', function(e) {
+                    var clipboardData, pastedData;
                         // Stop data actually being pasted into div
-                    e.stopPropagation();
-                    e.preventDefault();
+                        e.stopPropagation();
+                        e.preventDefault();
 
                         // Get pasted data via clipboard API
-                    clipboardData = e.clipboardData || window.clipboardData;
-                    pastedData = clipboardData.getData('Text');
-                    
-                    me.populateTableWithData(pastedData);
-            });
-           }
+                        clipboardData = e.clipboardData || window.clipboardData;
+                        pastedData = clipboardData.getData('Text');
+
+                        var lastSemiColon = new RegExp(/([""'])*?\,$/gm);
+                        var firstQuotationMark = new RegExp(/^"/gm);
+                        lastSemiColon.test(pastedData);
+
+                        var match = pastedData.match(firstQuotationMark);
+                        for(var i = 0; i < match.length; i++) {
+                            match[i] = '"'+i+'"'+':'+'{"';
+                        }
+                        var i = -1;
+                        replaced = pastedData.replace(lastSemiColon, '"},' )
+                        replaced = replaced.replace( firstQuotationMark, function( piece ) {
+                            i++;
+                            return match[i];
+                        });
+                        me.populateTableWithData("{"+replaced+"}}");
+
+                });
+            }
         },
         populateTableWithData: function( data ) {
+            var jsonCoords = JSON.parse(data);
             var table = jQuery(this.container).find('.coordinatefield-input');
+            for (var key in jsonCoords) {
+                if (jsonCoords.hasOwnProperty(key)) {
+                    var row = this._template.tablerow( { coords: jsonCoords[key] } );
+                    table.find('tr:first').after(row);
+                }
+            }
         },
         /**
          * @method handleRadioButtons
@@ -564,7 +596,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         selections = [];
                         options = {};
 
-                        dropdown.css({width:'150px', float:'right'});
+                        dropdown.css({width:'130px', float:'right'});
                         select.adjustChosen();
                         select.selectFirstValue();
                         // if(index > 0) {
