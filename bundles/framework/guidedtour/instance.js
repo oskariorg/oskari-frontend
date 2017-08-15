@@ -136,9 +136,7 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                return '' +
-                    this.ref._localization.page2.title +
-                    '<span>1/8</span>';
+                return this.ref._localization.page2.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -146,6 +144,11 @@ Oskari.clazz.define(
                 var loc = me._localization.page2;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this.ref;
+                var loc = me._localization.page2;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
@@ -163,27 +166,16 @@ Oskari.clazz.define(
                         openLink.show();
                         closeLink.hide();
                     });
-                content.append('<br /><br />');
-                content.append(openLink);
-                content.append(closeLink);
                 closeLink.show();
                 openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //   var loc = this.ref._localization('page2');
-            //   var tt = "'" + loc.tileText + "'";
-            //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
-            //   return jQuery(sel);
-            // },
-            // positionAlign : 'right',
+                return [openLink, closeLink];
+            }
         }, {
             setScope: function (inst) {
                 this.ref = inst;
             },
             getTitle: function () {
-                var p3 = this.ref._localization.page3.title;
-                return p3 + '<span>2/8</span>';
+                return this.ref._localization.page3.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -191,6 +183,11 @@ Oskari.clazz.define(
                 var loc = me._localization.page3;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
+                return content;
+            },
+            getLinks: function () {
+                var me = this.ref;
+                var loc = me._localization.page3;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
@@ -208,27 +205,16 @@ Oskari.clazz.define(
                         openLink.show();
                         closeLink.hide();
                     });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
                 closeLink.show();
                 openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page3');
-            //     var sel =
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'
+                return [openLink, closeLink];
+            }
         }, {
             setScope: function (inst) {
                 this.ref = inst;
             },
             getTitle: function () {
-                var p4 = this.ref._localization.page4.title;
-                return p4 + '<span>3/8</span>';
+                return this.ref._localization.page4.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -236,6 +222,11 @@ Oskari.clazz.define(
                 var loc = me._localization.page4;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
+                return content;
+            },
+            getLinks: function () {
+                var me = this.ref;
+                var loc = me._localization.page4;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
@@ -253,26 +244,16 @@ Oskari.clazz.define(
                         openLink.show();
                         closeLink.hide();
                     });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
                 closeLink.show();
                 openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page4');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'*/
+                return [openLink, closeLink];
+            }
         }, {
             setScope: function (inst) {
                 this.ref = inst;
             },
             getTitle: function () {
-                var p6 = this.ref._localization.page6.title;
-                return p6 + '<span>4/8</span>';
+                return this.ref._localization.page6.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -280,6 +261,11 @@ Oskari.clazz.define(
                 var loc = me._localization.page6;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
+                return content;
+            },
+            getLinks: function () {
+                var me = this.ref;
+                var loc = me._localization.page6;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
@@ -297,26 +283,16 @@ Oskari.clazz.define(
                         openLink.show();
                         closeLink.hide();
                     });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
                 closeLink.show();
                 openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'
+                return [openLink, closeLink];
+            }
         }, {
             setScope: function (inst) {
                 this.ref = inst;
             },
             getTitle: function () {
-                var p5 = this.ref._localization.page5.title;
-                return p5 + '<span>5/8</span>';
+                return this.ref._localization.page5.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -324,6 +300,11 @@ Oskari.clazz.define(
                 var loc = me._localization.page5;
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this.ref;
+                var loc = me._localization.page5;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
@@ -341,26 +322,16 @@ Oskari.clazz.define(
                         openLink.show();
                         closeLink.hide();
                     });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
                 closeLink.show();
                 openLink.hide();
-                return content;
-            } //),
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page6');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'*/
+                return [openLink, closeLink];
+            }
         }, {
             setScope: function (inst) {
                 this.ref = inst;
             },
             getTitle: function () {
-                var p7 = this.ref._localization.page7.title;
-                return p7 + '<span>6/8</span>';
+                return this.ref._localization.page7.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -380,8 +351,7 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p8 = this.ref._localization.page8.title;
-                return p8 + '<span>7/8</span>';
+                return this.ref._localization.page8.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -402,8 +372,7 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p9 = this.ref._localization.page9.title;
-                return p9 + '<span>8/8</span>';
+                return this.ref._localization.page9.title;
             },
             getContent: function () {
                 var me = this.ref;
@@ -422,8 +391,13 @@ Oskari.clazz.define(
             var step = this._guideSteps[stepIndex];
             step.setScope(this);
             var buttons = this._getDialogButton(dialog);
-            var title = step.getTitle();
+            var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
             var content = step.getContent();
+            if(step.getLinks) {
+                var links = step.getLinks();
+                content.append('<br /><br />');
+                links.forEach(function(l){content.append(l)});
+            }
             if (step.appendTourSeenCheckbox) {
                 content.append('<br><br>');
                 var checkboxTemplate =
