@@ -71,9 +71,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             tablerow: _.template('<tr>' +
-                                    '<td class="cell" contenteditable="true" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td class="cell" contenteditable="true" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"> </td><div class="removerow"></div>'+
+                                    '<td class="cell" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
+                                    '<td class="cell" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
@@ -247,7 +247,20 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             return values;
         },
         updateEditable: function (values) {
+            if(typeof values === null) {
+                values = undefined;
+            }
             var rows = jQuery(this.container).find("#coordinatefield-input tr");
+            if(!this.insertWithClipboard) {
+                rows.each( function (row) {
+                    jQuery(this).find('td').attr("contenteditable", false);
+                });
+            }
+            else {
+                rows.each( function (row) {
+                    jQuery(this).find('td').attr("contenteditable", true);
+                });
+            }
             if( values[4] !== "KORKEUSJ_DEFAULT" ) {
                 rows.each( function (row) {
                     jQuery(this).find('td:last').attr("contenteditable", true);
@@ -409,6 +422,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     me.selectFromMap = true; 
                     me.insertWithClipboard = false;                   
                 }
+                me.updateEditable();
             });
          },
         /**
