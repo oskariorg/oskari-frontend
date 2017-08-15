@@ -218,12 +218,15 @@ tr:hover td {
     /* float: right; */
     display: inline-block;
 }
+.cell {
+    height: 1em;
+}
 
 /*td, th { border: 1px solid #CCC; height: 30px; }  Make cells a bit taller */
 
 .rowHeader th {
-  color:#D5DDE5;;
-  background:#1b1e24;
+  
+  background:#ffd400;
   border-bottom:2px solid #9ea7af;
   border-right: 1px solid #343a45;
   height: 1.5em;
