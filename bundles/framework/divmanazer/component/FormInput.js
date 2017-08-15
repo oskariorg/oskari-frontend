@@ -14,16 +14,16 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             input;
         Oskari.log('Oskari.userinterface.component.FormInput').warn('Deprecated - please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
-        this.template = jQuery('<div class="oskarifield"><label for="oskari_input" class="oskarifield_label"></label><input id="oskari_input" class="oskarifield_input" type="text" /></div>');
+        this.template = jQuery('<div class="oskarifield"><label class="oskarifield_label"></label><input id="oskari_input" class="oskarifield_input" type="text" /></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
         this.templateTooltip = jQuery('<div class="icon-info"></div>');
         this.templateClearButton = jQuery('<div class="icon-close"></div>');
         this._field = this.template.clone();
 
-        label = this._field.find('label');
+        label = this._field.find('.oskarifield_label');
         label.attr('for', name);
 
-        input = this._field.find('input').focus();
+        input = this._field.find('.oskarifield_input').focus();
 
         input.attr('name', name);
         this._name = name;
@@ -34,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._contentCheckMsg = 'illegal characters';
 
         this._bindFocusAndBlur();
-        this.bindOnInput();
         // word characters, digits, whitespace and chars '-,.?!' allowed
         this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
@@ -110,7 +109,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setPlaceholder: function (pLabel) {
             var input = this._field.find('input');
             input.attr('placeholder', pLabel);
+            // if we set placeholder we can set the label aswell for floating label
             this.setLabel(pLabel);
+            this.bindOnInput();
         },
         /**
          * @method setRequired
