@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me.container = null;
         me.loc = me.instance.getLocalization("flyout");
         me.selectFromMap = false;
+        me.insertWithClipboard = false;
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
@@ -319,6 +320,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          *   "lon":"1334", "lat":"1233434",
          *   "lon":"1434", "lat":"1234454"
          * currently only works in format specified above in the example
+         * https://regex101.com <- good place to test
          */
         handleClipboard: function () {
             
@@ -327,10 +329,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
 
             for(var i = 0; i < cells.length; i++ ) {
                 cells[i].addEventListener('paste', function(e) {
-                    var clipboardData, pastedData;
                         // Stop data actually being pasted into div
                         e.stopPropagation();
                         e.preventDefault();
+
+                    if( me.insertWithClipboard === false ) {
+                        return;
+                    }
+                    var clipboardData, pastedData;
 
                         // Get pasted data via clipboard API
                         clipboardData = e.clipboardData || window.clipboardData;
@@ -338,7 +344,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
 
                         var lastSemiColon = new RegExp(/([""'])*?\,$/gm);
                         var firstQuotationMark = new RegExp(/^"/gm);
-                        lastSemiColon.test(pastedData);
+                        
+                        var regexpTests = function() {
+                            var a = lastSemiColon.test(pastedData);
+                            var b = firstQuotationMark.test(pastedData);
+                            return [a,b]
+                        }
 
                         var match = pastedData.match(firstQuotationMark);
                         for(var i = 0; i < match.length; i++) {
@@ -382,9 +393,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     mapInfo.hide();
                     fileInput.show();
                     me.selectFromMap = false;
+                    me.insertWithClipboard = false;
                 }
                 else if (this.value == '2') {
                     fileInput.hide();
+                    me.insertWithClipboard = true;
                     clipboardInfo.show();
                     mapInfo.hide();
                     me.selectFromMap = false;
@@ -393,7 +406,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     fileInput.hide();
                     clipboardInfo.hide();
                     mapInfo.show();
-                    me.selectFromMap = true;                    
+                    me.selectFromMap = true; 
+                    me.insertWithClipboard = false;                   
                 }
             });
          },
