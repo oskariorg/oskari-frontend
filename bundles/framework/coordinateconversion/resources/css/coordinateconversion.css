@@ -5,6 +5,7 @@
 }
  .coordinateconversion-csystem,  .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
     clear: left;
+    padding-top: 0.875em;
 } 
 #overlay-btn {
   color:#08233e;
