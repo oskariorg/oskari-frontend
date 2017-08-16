@@ -86,21 +86,21 @@ div.mapplugin.backgroundLayerSelectionPlugin div.content {
     border-bottom-right-radius: 2px; }
   div.mapplugin.backgroundLayerSelectionPlugin div.content ul li:hover {
     color: #ff9100; }
-  div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown div.currentSelection {
+  div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection {
     display: block; }
-    div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown div.currentSelection div.header-icon {
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection div.header-icon {
       float: left;
       clear: none;
       margin-left: -5px;
       margin-top: 7px; }
-  div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown ul {
+  div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul {
     display: none;
     width: 151px;
     margin: 0 auto;
     height: auto;
     border: 1px solid #3c3c3c;
     border-bottom-width: 0; }
-    div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown ul li {
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul li {
       background-color: #fafafa;
       color: #3c3c3c;
       display: block;
@@ -114,11 +114,11 @@ div.mapplugin.backgroundLayerSelectionPlugin div.content {
       -o-border-radius: 0;
       -ms-border-radius: 0;
       border-radius: 0; }
-    div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown ul li.selected {
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul li.selected {
       display: none; }
-  div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown .open ul {
+  div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown.open ul {
     display: block; }
-  div.mapplugin.backgroundLayerSelectionPlugin div.content .dropdown .open div.currentSelection {
+  div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown.open div.currentSelection {
     -webkit-border-top-left-radius: 0;
     -webkit-border-top-right-radius: 0;
     -moz-border-radius-topleft: 0;

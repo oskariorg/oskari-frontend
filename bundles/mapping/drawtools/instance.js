@@ -37,6 +37,12 @@ function() {
     __name : 'DrawTools',
 
     /**
+     * @static
+     * @property __validShapeTypes
+     */
+    __validShapeTypes : ["Point","Circle","Polygon","Box","Square","LineString"],
+
+    /**
      * @method getName
      * @return {String} the name for the component
      */
@@ -105,15 +111,29 @@ function() {
      *
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest/
+     * @param {Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest}
      */
     handleRequest : function(core, request) {
+        var shapeType = request.getShape();
         if (request.getName() === 'DrawTools.StartDrawingRequest') {
-            this.drawPlugin.draw(request.getId(), request.getShape(), request.getOptions());
+            if(!this.isValidShapeType(shapeType)){
+                Oskari.log(this.getName()).error('Illegal shape type for StartDrawingRequest: ' + shapeType + '. Must be one of: ' + this.__validShapeTypes.join(', ') + '.');
+                return;
+            }
+            this.drawPlugin.draw(request.getId(), shapeType, request.getOptions());
         }
         else if (request.getName() === 'DrawTools.StopDrawingRequest') {
             this.drawPlugin.stopDrawing(request.getId(), request.isClearCurrent());
         }
+    },
+
+    /** 
+     * @method isValidShapeType
+     * @param {string} shapeType shape type to be drawn
+     * @return {boolean} 
+     */
+    isValidShapeType (shapeType){
+        return this.__validShapeTypes.indexOf(shapeType) >= 0;
     },
     /**
      * @method onEvent

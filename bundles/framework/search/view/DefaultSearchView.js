@@ -16,7 +16,7 @@ Oskari.clazz.define(
     function (instance) {
         this.instance = instance;
         this.sandbox = this.instance.getSandbox();
-        this.searchservice = Oskari.clazz.create('Oskari.service.search.SearchService');
+        this.searchservice = instance.service;
         this.state = null;
         // last search result is saved so we can sort it in client
         this.lastResult = null;
@@ -200,7 +200,13 @@ Oskari.clazz.define(
         __doAutocompleteSearch : function() {
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
-            this.searchservice.doAutocompleteSearch(searchKey, this.handleAutocompleteResult);
+            this.searchservice.doAutocompleteSearch(searchKey, function(result) {
+                var autocompleteValues =  [];
+                for (var i = 0; i < result.methods.length; i++) {
+                    autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });
+                }
+                field.autocomplete(autocompleteValues);
+            });
         },
 
         handleSearchResult : function(isSuccess, result, searchedFor) {
@@ -226,16 +232,6 @@ Oskari.clazz.define(
                 }
             }
             me._showError(msg);
-        },
-
-        handleAutocompleteResult: function (result) {
-            var me = this;
-            var field = this.getField();
-            var results =  [];
-            for (var i = 0; i < result.methods.length; i++) {
-                results.push({ value: result.methods[i], data: result.methods[i] });
-            }
-            field.autocomplete(results);
         },
 
         focus: function () {
