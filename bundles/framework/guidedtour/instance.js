@@ -130,6 +130,7 @@ Oskari.clazz.define(
         _initSteps: function() {
             var me = this;
             var delegate = {
+                bundleName: me.getName(),
                 priority: 0,
                 getTitle: function () {
                     return me._localization.page1.title;
@@ -144,6 +145,14 @@ Oskari.clazz.define(
         },
 
         addStep: function(delegate){
+            if(this.conf && this.conf.steps) {
+                var stepSpec = this.conf.steps;
+                var index = stepSpec.map(function(s){return s.bundleName}).indexOf(delegate.bundleName);
+                if(index < 0) {
+                    return;
+                }
+                delegate.priority = index + 1;
+            }
             if(typeof delegate.priority === 'number') {
                 var priorities = this._guideSteps.map(function(d){return d.priority});
                 var insertLocation = _.sortedIndex(priorities, delegate.priority);
@@ -226,7 +235,7 @@ Oskari.clazz.define(
                 buttons = [],
                 bn = 'Oskari.userinterface.component.Button',
                 closeTxt = me._localization.button.close;
-                
+
             if(this.guideStep !== this._guideSteps.length - 1){
                 var closeBtn = dialog.createCloseButton(closeTxt);
                 closeBtn.setId('oskari_guidedtour_button_close');
