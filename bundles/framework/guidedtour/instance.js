@@ -145,13 +145,29 @@ Oskari.clazz.define(
         },
 
         addStep: function(delegate){
+            var me = this;
             if(this.conf && this.conf.steps) {
+                // step ordering
                 var stepSpec = this.conf.steps;
                 var index = stepSpec.map(function(s){return s.bundleName}).indexOf(delegate.bundleName);
                 if(index < 0) {
                     return;
                 }
                 delegate.priority = index + 1;
+
+                // custom content
+                var content = stepSpec[index].content;
+                if(content){
+                    delegate.getContent = function() {return jQuery('<div></div>')} // empty placeholder while loading
+                    this._getGuideContent(content, function(success, response){
+                        if(success){
+                            delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>')};
+                            delegate.getTitle = function() {return response.title};
+                        } else {
+                            Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
+                        }
+                    })
+                }
             }
             if(typeof delegate.priority === 'number') {
                 var priorities = this._guideSteps.map(function(d){return d.priority});
@@ -332,6 +348,32 @@ Oskari.clazz.define(
         stop: function () {
             // unregister module from sandbox
             this.sandbox.unregister(this);
+        },
+        _getGuideContent(tags, callback){
+            var me = this;
+            jQuery.ajax({
+                url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
+                data: {
+                    tags: tags
+                },
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                success: function (resp) {
+                    if (resp && resp.articles[0] && resp.articles[0].content) {
+                        callback(true, resp.articles[0].content);
+                    } else {
+                        callback(false);
+                    }
+                },
+                error: function () {
+                    callback(false);
+                }
+            });
         }
     }, {
         protocol: ['Oskari.bundle.BundleInstance',

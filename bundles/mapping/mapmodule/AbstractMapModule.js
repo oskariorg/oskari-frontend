@@ -2391,9 +2391,9 @@ Oskari.clazz.define(
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if(requestBuilder){
-                    me.__guidedTourDelegateTemplates.forEach(function(template){
+                    me.__guidedTourDelegateTemplates.forEach(function(template, i){
                         var delegate = {
-                            bundleName: me.getName()
+                            bundleName: me.getName() + '_' + (i+1)
                         };
                         for(prop in template){
                             if(typeof template[prop] === 'function') {
