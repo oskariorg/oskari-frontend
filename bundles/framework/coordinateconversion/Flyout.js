@@ -251,24 +251,27 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 values = undefined;
             }
             var rows = jQuery(this.container).find("#coordinatefield-input tr");
-            if(!this.insertWithClipboard) {
-                rows.each( function (row) {
+            if( !this.insertWithClipboard ) {
+                rows.each( function ( row ) {
                     jQuery(this).find('td').attr("contenteditable", false);
                 });
             }
             else {
-                rows.each( function (row) {
+                rows.each( function ( row ) {
                     jQuery(this).find('td').attr("contenteditable", true);
                 });
             }
+            if(values === undefined) {
+                return;
+            }
             if( values[4] !== "KORKEUSJ_DEFAULT" ) {
-                rows.each( function (row) {
+                rows.each( function ( row ) {
                     jQuery(this).find('td:last').attr("contenteditable", true);
                     jQuery(this).find('td:last').css('background-color','');
                 });
                 
             } else {
-                rows.each( function (row) {
+                rows.each( function ( row ) {
                     var lastCell = jQuery(this).find('td:last');
                     lastCell.attr("contenteditable", false);
                     // if last cell is not empty and no heightsystem is selected, gray it out
@@ -330,8 +333,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          *
          * Handles the paste event in the input table
          * example data to paste:
-         *   "lon":"1334", "lat":"1233434",
-         *   "lon":"1434", "lat":"1234454"
+            lon:1234, lat:1234,
+            lon:0000, lat:123456
          * currently only works in format specified above in the example
          * https://regex101.com <- good place to test
          */
@@ -355,36 +358,31 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         clipboardData = e.clipboardData || window.clipboardData;
                         pastedData = clipboardData.getData('Text');
 
-                        var lastSemiColon = new RegExp(/([""'])*?\,$/gm);
-                        var firstQuotationMark = new RegExp(/^"/gm);
+                        var lonlat = new RegExp(/(lon|lat)[\:][0-9]+[\,]?/g);
+                        var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9]+[\,].*,?/g);
+                        var numeric = new RegExp(/[0-9]+/);
                         
-                        var regexpTests = function() {
-                            var a = lastSemiColon.test(pastedData);
-                            var b = firstQuotationMark.test(pastedData);
-                            return [a,b]
+                        var jsonLonLat = {};
+                        var fullLonLatMatch = pastedData.match(fullLonlat);
+                        for(var i = 0; i < fullLonLatMatch.length; i++) {
+                            jsonLonLat[i] = {lon:'',lat:''};
+                            var lonlatMatch = fullLonLatMatch[i].match(lonlat);
+                            var lonValue = lonlatMatch[0].match(numeric);
+                            var latValue = lonlatMatch[1].match(numeric);
+                            jsonLonLat[i].lon = lonValue[0];
+                            jsonLonLat[i].lat = latValue[0]
                         }
 
-                        var match = pastedData.match(firstQuotationMark);
-                        for(var i = 0; i < match.length; i++) {
-                            match[i] = '"'+i+'"'+':'+'{"';
-                        }
-                        var i = -1;
-                        replaced = pastedData.replace(lastSemiColon, '"},' )
-                        replaced = replaced.replace( firstQuotationMark, function( piece ) {
-                            i++;
-                            return match[i];
-                        });
-                        me.populateTableWithData("{"+replaced+"}}");
+                        me.populateTableWithData(jsonLonLat);
 
                 });
             }
         },
         populateTableWithData: function( data ) {
-            var jsonCoords = JSON.parse(data);
             var table = jQuery(this.container).find('.coordinatefield-input');
-            for (var key in jsonCoords) {
-                if (jsonCoords.hasOwnProperty(key)) {
-                    var row = this._template.tablerow( { coords: jsonCoords[key] } );
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var row = this._template.tablerow( { coords: data[key] } );
                     table.find('tr:first').after(row);
                 }
             }
