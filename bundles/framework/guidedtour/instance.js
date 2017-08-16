@@ -33,6 +33,7 @@ Oskari.clazz.define(
         this._localization = locale;
         this.mediator = null;
         this.guideStep = 0;
+        this._dialog = null;
     },
     {
         /**
@@ -99,11 +100,17 @@ Oskari.clazz.define(
             if (jQuery.cookie('pti_tour_seen') !== '1') {
                 var me = this,
                     conf = me.conf, // Should this not come as a param?
-                    sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                    sandboxName = (conf ? conf.sandbox : 'sandbox'),
                     sandbox = Oskari.getSandbox(sandboxName);
-                me.sandbox = sandbox;
                 // register to sandbox as a module
                 sandbox.register(me);
+                // register request handlers
+                sandbox.requestHandler(
+                    'Guidedtour.AddToGuidedTourRequest',
+                    Oskari.clazz.create('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', me)
+                );
+                me.sandbox = sandbox;
+                
                 me._startGuide();
             }
         },
@@ -112,9 +119,18 @@ Oskari.clazz.define(
                 pn = 'Oskari.userinterface.component.Popup',
                 dialog = Oskari.clazz.create(pn);
             me.guideStep = 0;
+            me._dialog = dialog;
             dialog.makeDraggable();
             dialog.addClass('guidedtour');
             me._showGuideContentForStep(me.guideStep, dialog);
+        },
+
+        addStep: function(delegate){
+            this._guideSteps.push(delegate);
+            console.log('got step')
+            if(this._dialog) {
+                this._showGuideContentForStep(this.guideStep, this._dialog);
+            }
         },
 
         _guideSteps: [{
@@ -131,46 +147,9 @@ Oskari.clazz.define(
                 content.append(this.ref._localization.page1.message);
                 return content;
             }
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                return this.ref._localization.page2.title;
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('Search');
-                var loc = me._localization.page2;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                return content;
-            },
-            getLinks: function() {
-                var me = this.ref;
-                var loc = me._localization.page2;
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('Search');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('Search');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
-            }
-        }, {
+        }],
+        
+        _oldSteps: [{
             setScope: function (inst) {
                 this.ref = inst;
             },
@@ -389,7 +368,8 @@ Oskari.clazz.define(
 
         _showGuideContentForStep: function (stepIndex, dialog) {
             var step = this._guideSteps[stepIndex];
-            step.setScope(this);
+            step.setScope && step.setScope(this);
+            step.show && step.show();
             var buttons = this._getDialogButton(dialog);
             var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
             var content = step.getContent();
