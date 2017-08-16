@@ -126,14 +126,26 @@ Oskari.clazz.define(
         },
 
         addStep: function(delegate){
-            this._guideSteps.push(delegate);
-            console.log('got step')
+            if(typeof delegate.priority === 'number') {
+                var priorities = this._guideSteps.map(function(d){return d.priority});
+                var insertLocation = _.sortedIndex(priorities, delegate.priority);
+                this._guideSteps.splice(insertLocation, 0, delegate);
+                if(this.guideStep >= insertLocation) { // correct current location
+                    this.guideStep++;
+                }
+            } else {
+                delegate.priority = this._guideSteps[this._guideSteps.length-1].priority + 1;
+                this._guideSteps.push(delegate);
+            }
+            console.log(delegate.bundleName, 'registered instself at priority', delegate.priority);
+            
             if(this._dialog) {
                 this._showGuideContentForStep(this.guideStep, this._dialog);
             }
         },
 
         _guideSteps: [{
+            priority: 0,
             appendTourSeenCheckbox: true,
 
             setScope: function (inst) {
@@ -434,6 +446,12 @@ Oskari.clazz.define(
             var rn = 'userinterface.UpdateExtensionRequest';
             this.sandbox.postRequestByName(rn, [extension, 'close']);
         },
+        _moveGuideStep(delta, dialog){
+            var currentStep = this._guideSteps[this.guideStep];
+            currentStep.hide && currentStep.hide();
+            this.guideStep += delta;
+            this._showGuideContentForStep(this.guideStep, dialog);
+        },
         _getDialogButton: function (dialog) {
             var me = this,
                 buttons = [],
@@ -450,8 +468,7 @@ Oskari.clazz.define(
                 prevBtn.setTitle(prevTxt);
                 prevBtn.setHandler(
                     function () {
-                        me.guideStep--;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(-1, dialog);
                     }
                 );
                 buttons.push(prevBtn);
@@ -464,8 +481,7 @@ Oskari.clazz.define(
                 startBtn.setTitle(startTxt);
                 startBtn.setHandler(
                     function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(1, dialog);
                     }
                 );
                 buttons.push(startBtn);
@@ -479,8 +495,7 @@ Oskari.clazz.define(
                 nextBtn.setTitle(nextTxt);
                 nextBtn.setHandler(
                     function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(1, dialog);
                     }
                 );
                 buttons.push(nextBtn);

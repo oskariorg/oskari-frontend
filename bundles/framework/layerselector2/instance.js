@@ -390,8 +390,12 @@ Oskari.clazz.define(
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
+            priority: 20,
             show: function(){
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
+            },
+            hide: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
             },
             getTitle: function () {
                 return this.getLocalization('guidedTour').title
@@ -436,7 +440,9 @@ Oskari.clazz.define(
             function sendRegister() {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if(requestBuilder){
-                    var delegate = {};
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
                     for(prop in me.__guidedTourDelegateTemplate){
                         if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
