@@ -34,6 +34,7 @@ Oskari.clazz.define(
         this.mediator = null;
         this.guideStep = 0;
         this._dialog = null;
+        this._guideSteps = [];
     },
     {
         /**
@@ -119,10 +120,27 @@ Oskari.clazz.define(
                 pn = 'Oskari.userinterface.component.Popup',
                 dialog = Oskari.clazz.create(pn);
             me.guideStep = 0;
+            me._initSteps();
             me._dialog = dialog;
             dialog.makeDraggable();
             dialog.addClass('guidedtour');
             me._showGuideContentForStep(me.guideStep, dialog);
+        },
+
+        _initSteps: function() {
+            var me = this;
+            var delegate = {
+                priority: 0,
+                getTitle: function () {
+                    return me._localization.page1.title;
+                },
+                getContent: function () {
+                    var content = jQuery('<div></div>');
+                    content.append(me._localization.page1.message);
+                    return content;
+                }
+            };
+            this._guideSteps = [delegate];
         },
 
         addStep: function(delegate){
@@ -143,27 +161,11 @@ Oskari.clazz.define(
             }
         },
 
-        _guideSteps: [{
-            priority: 0,
-            appendTourSeenCheckbox: true,
-
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                return this.ref._localization.page1.title;
-            },
-            getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.ref._localization.page1.message);
-                return content;
-            }
-        }],
-
         _showGuideContentForStep: function (stepIndex, dialog) {
             var step = this._guideSteps[stepIndex];
-            step.setScope && step.setScope(this);
-            step.show && step.show();
+            if(step.show) {
+                step.show();
+            }
             var buttons = this._getDialogButton(dialog);
             var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
             var content = step.getContent();
@@ -172,7 +174,7 @@ Oskari.clazz.define(
                 content.append('<br /><br />');
                 links.forEach(function(l){content.append(l)});
             }
-            if (step.appendTourSeenCheckbox) {
+            if (stepIndex === 0 || stepIndex === this._guideSteps.length - 1) {
                 content.append('<br><br>');
                 var checkboxTemplate =
                     jQuery('<input type="checkbox" ' + 'name="pti_tour_seen" ' + 'id="pti_tour_seen" ' + 'value="1">');
@@ -211,26 +213,11 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _getFakeExtension: function (name) {
-            return {
-                getName: function () {
-                    return name;
-                }
-            };
-        },
-        _openExtension: function (name) {
-            var extension = this._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
-            this.sandbox.postRequestByName(rn, [extension, 'attach']);
-        },
-        _closeExtension: function (name) {
-            var extension = this._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
-            this.sandbox.postRequestByName(rn, [extension, 'close']);
-        },
         _moveGuideStep(delta, dialog){
             var currentStep = this._guideSteps[this.guideStep];
-            currentStep.hide && currentStep.hide();
+            if(currentStep.hide) {
+                currentStep.hide();
+            }
             this.guideStep += delta;
             this._showGuideContentForStep(this.guideStep, dialog);
         },
@@ -239,9 +226,12 @@ Oskari.clazz.define(
                 buttons = [],
                 bn = 'Oskari.userinterface.component.Button',
                 closeTxt = me._localization.button.close;
-            var closeBtn = dialog.createCloseButton(closeTxt);
-            closeBtn.setId('oskari_guidedtour_button_close');
-            buttons.push(closeBtn);
+                
+            if(this.guideStep !== this._guideSteps.length - 1){
+                var closeBtn = dialog.createCloseButton(closeTxt);
+                closeBtn.setId('oskari_guidedtour_button_close');
+                buttons.push(closeBtn);
+            }
 
             if (this.guideStep > 1) {
                 var prevBtn = Oskari.clazz.create(bn);
