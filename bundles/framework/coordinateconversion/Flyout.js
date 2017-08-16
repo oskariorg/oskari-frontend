@@ -333,8 +333,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          *
          * Handles the paste event in the input table
          * example data to paste:
-            lon:1234, lat:1234,
-            lon:0000, lat:123456
+            lon:385000.5, lat:667500.75,
+            lon:385545.5, lat:6675310.75
          * currently only works in format specified above in the example
          * https://regex101.com <- good place to test
          */
