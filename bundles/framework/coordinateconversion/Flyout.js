@@ -358,9 +358,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         clipboardData = e.clipboardData || window.clipboardData;
                         pastedData = clipboardData.getData('Text');
 
-                        var lonlat = new RegExp(/(lon|lat)[\:][0-9]+[\,]?/g);
-                        var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9]+[\,].*,?/g);
-                        var numeric = new RegExp(/[0-9]+/);
+                        var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
+                        var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
+                        var numeric = new RegExp(/[0-9.]+/);
                         
                         var jsonLonLat = {};
                         var fullLonLatMatch = pastedData.match(fullLonlat);
