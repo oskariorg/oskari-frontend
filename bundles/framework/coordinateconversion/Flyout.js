@@ -50,11 +50,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             inputcoordinatefield: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
                                         '<div class="scrollable">'+
-                                        '<table class="hoverable" id="coordinatefield-input" style="border: 1px solid black;">'+
-                                        '<tbody>'+
-                                        '</tbody'+
-                                        '</table>'+
-                                    '</div> </div>'),
+                                            '<div style="width:100%;height:100%; overflow:auto;">'+
+                                            '<table class="hoverable" id="coordinatefield-input" style="border: 1px solid black;">'+
+                                                '<tbody></tbody'+
+                                            '</table>'+
+                                    '</div></div></div>'),
             fieldheader: _.template('<tr class="rowHeader">' +
                                                 '<th id="nort"><%= north %></th>'+
                                                 '<th id="east"><%= east %></th>'+
@@ -73,7 +73,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             tablerow: _.template('<tr>' +
                                     '<td class="cell" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
                                     '<td class="cell" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"> <div class="removerow"></div></td>'+
+                                    '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
+                                    '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
@@ -233,7 +234,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         values.push(vl);
                     }
                     me.updateEditable(values);
-                    me.updateTableTitle(values);
+                    // me.updateTableTitle(values);
                     }
                 });
             } else {
@@ -275,7 +276,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     var lastCell = jQuery(this).find('td:last');
                     lastCell.attr("contenteditable", false);
                     // if last cell is not empty and no heightsystem is selected, gray it out
-                    if(lastCell.html() !== ' ') {
+                    if(lastCell.html() !== '') {
                         lastCell.css('background-color','gray');
                     }
                 })
@@ -370,7 +371,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                             var lonValue = lonlatMatch[0].match(numeric);
                             var latValue = lonlatMatch[1].match(numeric);
                             jsonLonLat[i].lon = lonValue[0];
-                            jsonLonLat[i].lat = latValue[0]
+                            jsonLonLat[i].lat = latValue[0];
                         }
 
                         me.populateTableWithData(jsonLonLat);
@@ -378,6 +379,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 });
             }
         },
+        /**
+         * @method populateTableWithData
+         *
+         * {Object} data, each key need to have property lon & lat 
+         */
         populateTableWithData: function( data ) {
             var table = jQuery(this.container).find('.coordinatefield-input');
             for (var key in data) {
