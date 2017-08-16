@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Meet een lijn in de kaart. Dubbelklik om te stoppen met meten.",
                 "measurearea": "Meet een gebied in de kaart. Dubbelklik om te stoppen met meten."
             }
+        },
+        "guidedTour": {
+            "title": "Gereedschappen",
+            "message": "Gebruik de gereedschappen om plaatsen toe te voegen, kaartweergaves te bewaren, een link te delen naar een kaartweergave of terug te keren naar een eerdere kaartweergave. Houd uw muisaanwijzer op het gereedschap om de gereedschapsinformatie weer te geven."
         }
     }
 });

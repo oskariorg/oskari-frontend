@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Dibujar una línea y medirla. Haga clic para el punto inicial y los vértices, doble clic para el punto final",
                 "measurearea": "Dibujar una área y medirla. Haga clic para el punto inicial y los vértices de la línea de borde; doble clic para el punto final de la línea de borde"
             }
+        },
+        "guidedTour": {
+            "title": "Herramientas",
+            "message": "Usar las herramientas para añadir sitios, guardar una vista, compartir un enlace a una vista o volver a una vista previa. Mantenga el puntero sobre una herramienta para ver su descripción"
         }
     }
 });

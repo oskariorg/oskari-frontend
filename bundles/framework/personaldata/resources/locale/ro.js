@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Da",
             "no": "Nu"
+        },
+        "guidedTour": {
+            "title": "Datele mele",
+            "message": "Toate locaţiile pe care le-aţi marcat pe hartă, vederile de hartă salvate precum şi hărţile înglobate sunt afişate aici când sunteţi autentificat în acest serviciu",
+            "openLink": "Afişare datele mele",
+            "closeLink": "Ascundere datele mele",
+            "tileText": "Datele mele"
         }
     }
 });

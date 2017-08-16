@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Kartes slānis",
                 "type-wfs": "Datu produkts"
             }
+        },
+        "guidedTour": {
+            "title": "Izvēlētie kartes slāņi",
+            "message": "Jūs varat mainīt secību kādā karšu slāņi tiek attēloti, klikšķinot un pavelkot, kā arī mainīt to caurspīdīgumu. Izmaiņas tiek parādītas kartes logā",
+            "openLink": "Rādīt izvēlētos kartes slāņus",
+            "closeLink": "Paslēpt izvēlētos kartes slāņus",
+            "tileText": "Izvēlētie kartes slāņi"
         }
     }
 });

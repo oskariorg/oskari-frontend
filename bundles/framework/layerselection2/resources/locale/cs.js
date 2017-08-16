@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Mapová vrstva",
                 "type-wfs": "Datový produkt"
             }
+        },
+        "guidedTour": {
+            "title": "Vybrané mapové vrstvy",
+            "message": "Kliknutím a tažením lze měnit pořadí zobrazení mapových vrstev a jejich průhlednost. Změny se zobrazí v mapovém okně.",
+            "openLink": "Zobrazit vybrané mapové vrstvy",
+            "closeLink": "Skrýt vybrané mapové vrstvy",
+            "tileText": "Vybrané mapové vrstvys"
         }
     }
 });

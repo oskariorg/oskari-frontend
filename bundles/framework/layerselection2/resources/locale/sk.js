@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Chýba logický operátor."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Vybrané mapové vrstvy",
+            "message": "Môžete zmeniť poradie v ktorom sú mapové vrstvy zobrazené kliknutím a ťahaním a rovnako môžete zmeniť ich transparentnosť. Zmeny sa zobrazia v mapovom okne",
+            "openLink": "Zobraziť vybrané mapové vrstvy",
+            "closeLink": "Skryť vybrané mapové vrstvy",
+            "tileText": "Vybrané mapové vrstvy"
         }
     }
 });

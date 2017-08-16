@@ -130,6 +130,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nej"
+        },
+        "guidedTour": {
+            "title": "Min data",
+            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, inbäddade kartor, indikatorer, analys och dataset. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
+            "openLink": "Visa Mina data",
+            "closeLink": "Göm Mina data",
+            "tileText": "Min data"
         }
     }
 });
