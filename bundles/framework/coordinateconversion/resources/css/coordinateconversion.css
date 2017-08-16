@@ -41,7 +41,7 @@
     width: 20em !important;
 }
 .scrollable {
-    overflow-y: auto;
+    overflow: hidden;
     height:13em;
     margin-bottom: 1em;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
@@ -214,12 +214,17 @@ tr:hover td {
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-.hoverable tr:hover td .removerow { 
+.hoverable tr:hover .cell.control { 
     /* float: right; */
     display: inline-block;
 }
 .cell {
     height: 1em;
+}
+.cell.control {
+    border: inherit; 
+    border-bottom: 1px solid black;
+     display: none; 
 }
 
 /*td, th { border: 1px solid #CCC; height: 30px; }  Make cells a bit taller */
@@ -246,9 +251,6 @@ td {
         box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 .removerow {
-    float: right; 
-    display: none;
-    /*border: 1px solid green;*/
     border-radius: 50%;
     height:1.3em;
     width:1.4em;
