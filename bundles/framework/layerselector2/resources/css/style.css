@@ -90,7 +90,7 @@ div.layerselector2 div.layerGroup {
 div.layerselector2 div.tab-content {
   padding: 0; }
   div.layerselector2 div.tab-content div.oskarifield {
-    padding: 10px;
+    margin: 10px; 
     position: relative; }
     div.layerselector2 div.tab-content div.oskarifield input[type=text] {
       width: 90%; }

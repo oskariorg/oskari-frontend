@@ -25,11 +25,11 @@ div.oskarifield div.icon-close {
   text-overflow: ellipsis;
   top: 0;
   text-align: left;
-  transform: translateY(3px);
+  transform: translateY(0.1875em);
   transition: all .2s ease-out;
   user-select: none;
   white-space: nowrap;
-  width: 100%;
+  width: 30em;
   z-index: 1;
 }
 
@@ -55,8 +55,8 @@ div.oskarifield div.icon-close {
 }
 
 .oskarifield--not-empty .oskarifield_input {
-  padding-bottom: 2px;
-  padding-top: 18px;
+  padding-bottom: 0.125em;
+  padding-top: 1.125em; 
 }
 
 ::-webkit-input-placeholder {
