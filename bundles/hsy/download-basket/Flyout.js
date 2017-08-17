@@ -1,18 +1,18 @@
 /**
- * @class Oskari.hsy.bundle.downloadBasket.Flyout
+ * @class Oskari.mapframework.bundle.downloadBasket.Flyout
  *
  */
 /**
- * @class Oskari.hsy.bundle.downloadBasket.Flyout
+ * @class Oskari.mapframework.bundle.downloadBasket.Flyout
  *
  */
-Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
+Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
 
     /**
      * @static @method create called automatically on construction
      *
      * @param
-     * {Oskari.hsy.bundle.downloadBasket}
+     * {Oskari.mapframework.bundle.downloadBasket}
      * instance
      * Reference to component that created the tile
      *
@@ -27,17 +27,17 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
     }, {
   /*      tabs: [{
             'id': 'download-basket-cropping-tab',
-            'clazz': 'Oskari.hsy.bundle.downloadBasket.Cropping'
+            'clazz': 'Oskari.mapframework.bundle.downloadBasket.Cropping'
         },{
             'id': 'download-basket-tab',
-            'clazz': 'Oskari.hsy.bundle.downloadBasket.Basket'
+            'clazz': 'Oskari.mapframework.bundle.downloadBasket.Basket'
         }],*/
         /**
          * @method getName
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.hsy.bundle.downloadBasket.Flyout';
+            return 'Oskari.mapframework.bundle.downloadBasket.Flyout';
         },
 
         /**
@@ -159,4 +159,3 @@ Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Flyout',
         protocol: ['Oskari.userinterface.Flyout']
     }
 );
-
