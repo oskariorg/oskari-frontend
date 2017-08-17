@@ -377,7 +377,7 @@ Oskari.clazz.define(
                     var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
                     var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
                     jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
-                    
+
                     if (this.checked) {
                         if(me.activeColorCell[colorTypeId] > -1){
                             var cell = me.activeColorCell[colorTypeId].toString();
@@ -395,7 +395,7 @@ Oskari.clazz.define(
                     } else {
                         me.values[colorType] = null;
                         me.activeColorCell[colorTypeId] = -1;
-                        
+
                     }
                     me._updatePreview(dialogContent);
                 });

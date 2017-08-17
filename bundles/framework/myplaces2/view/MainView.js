@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         getSandbox: function () {
             return this.instance.sandbox;
         },
-        
+
         /**
          * @method getPopupId
          * @return {String} popupid
