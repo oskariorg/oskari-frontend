@@ -25,7 +25,7 @@
         Oskari.makeObservable(this);
 
         // possible values: wms, vector
-        this._mapModes = ['wms'];
+        this._mapModes = ['vector'];
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.statsgrid.StatisticsService",

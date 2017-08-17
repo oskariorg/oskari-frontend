@@ -5,15 +5,12 @@
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule.VectorLayerPlugin',
     function() {
-        var me = this;
-
-        me._clazz =
-            'Oskari.mapframework.mapmodule.VectorLayerPlugin';
-        me._name = 'VectorLayerPlugin';
-        this._olLayerPrefix = "vectorlayer_";
+        this._features = {};
+        this._olLayers = {};
         this._supportedFormats = {};
-        this._nextVectorId = 0;
-        this._nextFeatureId = 0;
+        this._olLayerPrefix = "vectorlayer_";
+        this._featureStyles = {};
+        this._layerStyles = {};
         this._defaultStyle = {
             fill: {
                 color: 'rgba(255,0,255,0.2)'
@@ -36,16 +33,10 @@ Oskari.clazz.define(
                 stroke: {
                     color: 'rgba(255,255,255,1)',
                     width: 2
-                },
-                offsetX: 55,
-                offsetY: 10
+                }
             }
         };
-        this._pointerMoveAdded = false;
-        this._layers = {};
-        this._features = {};
-        this._layerStyles = {};
-        this._featureStyles = {};
+        this._nextFeatureId = 0;
     }, {
         /**
          * @method register
@@ -101,7 +92,7 @@ Oskari.clazz.define(
 
                     me._map.addLayer(olLayer);
                     me.raiseVectorLayer(olLayer);
-                    me._layers[layerId] = olLayer;
+                    me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
             }
@@ -122,8 +113,32 @@ Oskari.clazz.define(
                 },
                 AfterMapLayerRemoveEvent: function(event) {
                     me.afterMapLayerRemoveEvent(event);
+                },
+                AfterChangeMapLayerOpacityEvent: function(event) {
+                    me._afterChangeMapLayerOpacityEvent(event);
                 }
             };
+        },
+        /**
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent} event
+         */
+        _afterChangeMapLayerOpacityEvent: function(event) {
+            var me = this,
+                layer = event.getMapLayer();
+
+            if (!layer.isLayerOfType('VECTOR')) {
+                return;
+            }
+
+            this.getSandbox().printDebug(
+                'Setting Layer Opacity for ' + layer.getId() + ' to ' +
+                layer.getOpacity()
+            );
+
+            me.handleLayerOpacity(layer, (layer.getOpacity() / 100), true);
         },
         /**
          * Find features from layers controlled by vectorlayerplugin and handle clicks for all those features
@@ -133,7 +148,7 @@ Oskari.clazz.define(
             var me = this;
             var features = [];
             this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function(feature, layer) {
-                _.forEach(me._layers, function(vectorlayer, id) {
+                _.forEach(me._olLayers, function(vectorlayer, id) {
                     if (vectorlayer === layer) {
                         features.push({
                             feature: feature,
@@ -206,7 +221,7 @@ Oskari.clazz.define(
                 } else if (_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
                 }
-                olLayer = me._layers[layerId];
+                olLayer = me._olLayers[layerId];
 
                 if (!olLayer) {
                     return;
@@ -220,17 +235,17 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(olLayer);
-                    delete this._layers[layerId];
+                    delete this._olLayers[layerId];
                     delete this._features[layerId];
                 }
             }
             // Removes all features from all layers
             else {
-                for (layerId in me._layers) {
-                    if (me._layers.hasOwnProperty(layerId)) {
-                        olLayer = me._layers[layerId];
+                for (layerId in me._olLayers) {
+                    if (me._olLayers.hasOwnProperty(layerId)) {
+                        olLayer = me._olLayers[layerId];
                         this._map.removeLayer(olLayer);
-                        delete this._layers[layerId];
+                        delete this._olLayers[layerId];
                         delete this._features[layerId];
                     }
                 }
@@ -285,6 +300,44 @@ Oskari.clazz.define(
             }
             return 'GeoJSON';
         },
+
+        _getOlLayer: function(layer, layerOpts) {
+            var me = this;
+            if(!layer || layer.getLayerType() !== 'vector') {
+                return null;
+            }
+
+            if(!layerOpts) {
+                layerOpts = {};
+            }
+
+            var olLayer = me._olLayers[layer.getId()];
+            if(!olLayer) {
+                olLayer = new ol.layer.Vector({
+                    name: me._olLayerPrefix + layer.getId(),
+                    id: layer.getId()
+                });
+                me._olLayers[layer.getId()] = olLayer;
+                me._map.addLayer(olLayer);
+                me.raiseVectorLayer(olLayer);
+            }
+            olLayer.setOpacity(layer.getOpacity() / 100);
+            return olLayer;
+        },
+
+        /**
+         * Handles layer opacity.
+         * @param  {Oskari.mapframework.domain.VectorLayer} layer
+         * @param  {Double} opacity
+         */
+        handleLayerOpacity: function(layer, opacity) {
+            var me = this;
+            var features = null;
+            var olLayer = me._olLayers[layer.getId()];
+            if(olLayer) {
+                olLayer.setOpacity(opacity);
+            }
+        },
         /**
          * @method addFeaturesToMap
          * @public
@@ -293,12 +346,11 @@ Oskari.clazz.define(
          * @param {Object} geometry the geometry WKT string or GeoJSON object
          * @param {Object} options additional options
          */
-
         addFeaturesToMap: function(geometry, options) {
             var me = this,
                 geometryType = me._getGeometryType(geometry),
                 format = me._supportedFormats[geometryType],
-                layer,
+                olLayer,
                 vectorSource,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
@@ -312,6 +364,37 @@ Oskari.clazz.define(
             }
             if (!me._features[options.layerId]) {
                 me._features[options.layerId] = [];
+            }
+
+            if(!options.layerName) {
+                options.layerName = 'VECTOR';
+            }
+
+            layer = mapLayerService.findMapLayer(options.layerId);
+            if(!layer) {
+                layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
+                layer.setInspireName(options.layerInspireName || 'VECTOR');
+                layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
+                layer.setOpacity(options.opacity || 100);
+                layer.setVisible(true);
+                layer.setId(options.layerId);
+
+                if(options.layerPermissions) {
+                    for(var permission in options.layerPermissions) {
+                        if(options.layerPermissions.hasOwnProperty(permission)) {
+                            layer.addPermission(permission, options.layerPermissions[permission]);
+                        }
+                    }
+                }
+            }
+
+            // Update layer description and name always
+            if(options.layerDescription) {
+                layer.setDescription(options.layerDescription);
+            }
+            layer.setName(options.layerName || 'VECTOR');
+            if(mapLayerService.findMapLayer(options.layerId)) {
+                mapLayerService.updateLayer(options.layerId, layer);
             }
 
             if(!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
@@ -342,7 +425,7 @@ Oskari.clazz.define(
                         var jTarget = typeof target === "string" ? jQuery("#" + target) : jQuery(target);
                         var originalCursor = me.getMapModule().getCursorStyle();
                         var hit = this.forEachFeatureAtPixel(evt.pixel,
-                            function(feature, layer) {
+                            function(feature, olLayer) {
                                 if (feature.getProperties()['oskari-cursor']) {
                                     cursor = feature.getProperties()['oskari-cursor'];
                                 }
@@ -373,18 +456,18 @@ Oskari.clazz.define(
             });
 
             var prio = options.prio || 0;
-
             _.forEach(features, function(feature) {
-                me.setupFeatureStyle(options, feature);
+                me.setupFeatureStyle(options, feature, false);
             });
+
 
             if (!me._features[options.layerId]) {
                 me._features[options.layerId] = [];
             }
             //check if layer is already on map
-            if (me._layers[options.layerId]) {
-                layer = me._layers[options.layerId];
-                vectorSource = layer.getSource();
+            if (me._olLayers[options.layerId]) {
+                olLayer = me._getOlLayer(layer, options.layerOptions);
+                vectorSource = olLayer.getSource();
 
                 //layer is already on map
                 //clear old features if defined so
@@ -392,7 +475,6 @@ Oskari.clazz.define(
                     vectorSource.clear();
                     me._features[options.layerId] = [];
                 }
-
                 // prio handling
                 me._features[options.layerId].push({
                     data: features,
@@ -400,8 +482,6 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
-                    vectorSource.clear();
-
                     me._features[options.layerId].sort(function(a, b) {
                         return b.prio - a.prio;
                     });
@@ -417,29 +497,21 @@ Oskari.clazz.define(
                 } else {
                     vectorSource.addFeatures(features);
                 }
-                me.raiseVectorLayer(layer);
             } else {
                 //let's create vector layer with features and add it to the map
                 vectorSource = new ol.source.Vector({
                     features: features
                 });
-                layer = new ol.layer.Vector({
-                    name: me._olLayerPrefix + options.layerId,
-                    id: options.layerId,
-                    source: vectorSource
-                });
-                if (options.layerOptions) {
-                    layer.setProperties(options.layerOptions);
+                olLayer = me._getOlLayer(layer, options.layerOptions);
+                if(!olLayer) {
+                    return;
                 }
+                olLayer.setSource(vectorSource);
 
                 me._features[options.layerId].push({
                     data: features,
                     prio: prio
                 });
-
-                me._layers[options.layerId] = layer;
-                me._map.addLayer(layer);
-                me.raiseVectorLayer(layer);
             }
 
             // notify other components that features have been added
@@ -454,7 +526,7 @@ Oskari.clazz.define(
                 if (!feature.getGeometry()) {
                     event = errorEvent;
                 }
-                event.addFeature(feature.getId(), geojson, layer.get('id'));
+                event.addFeature(feature.getId(), geojson, olLayer.get('id'));
             });
             if (errorEvent.hasFeatures()) {
                 sandbox.notifyAll(errorEvent);
@@ -474,6 +546,22 @@ Oskari.clazz.define(
                         this.getMapModule().zoomToScale(options.minScale, true);
                     }
                 }
+            }
+
+            if(options.showLayer && !mapLayerService.findMapLayer(options.layerId)) {
+                mapLayerService.addLayer(layer);
+
+                var requestBuilder = me._sandbox.getRequestBuilder(
+                    'AddMapLayerRequest'
+                );
+                if (requestBuilder) {
+                    var request = requestBuilder(layer.getId());
+                    me._sandbox.request(me, request);
+                }
+            }
+
+            if(options.showLayer) {
+                olLayer.setVisible(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
         },
          /**
@@ -582,12 +670,12 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
         removeMapLayerFromMap: function(layer) {
-            if (!this._layers[layer.getId()]) {
+            if (!this._olLayers[layer.getId()]) {
                 return;
             }
-            var vectorLayer = this._layers[layer.getId()];
+            var vectorLayer = this._olLayers[layer.getId()];
             this._map.removeLayer(vectorLayer);
-            delete this._layers[layer.getId()];
+            delete this._olLayers[layer.getId()];
 
         },
         /**
@@ -611,7 +699,7 @@ Oskari.clazz.define(
             if (!id) {
                 return null;
             }
-            return this._layers[id];
+            return this._olLayers[id];
         },
         /**
          * Possible workaround for arranging the feature draw order within a layer
@@ -643,6 +731,7 @@ Oskari.clazz.define(
         setupFeatureStyle: function(options, feature, update) {
             var me = this;
             var style = this.getStyle(options, feature, update);
+
             //set up property-based labeling
             if(update && typeof feature.getId === 'function') {
                 options.featureStyle = me._featureStyles[feature.getId()] || options.featureStyle;
@@ -815,11 +904,11 @@ Oskari.clazz.define(
             var me = this,
                 features = [];
             _.each(layers, function(layerId) {
-                if (!me._layers[layerId]) {
+                if (!me._olLayers[layerId]) {
                     // invalid layerId
                     return;
                 }
-                var sourceFeatures = me._layers[layerId].getSource().getFeatures();
+                var sourceFeatures = me._olLayers[layerId].getSource().getFeatures();
                 if (_.isEmpty(featureQuery)) {
                     // no query requirements, add all features in layer
                     features = features.concat(sourceFeatures);
@@ -853,7 +942,7 @@ Oskari.clazz.define(
             var me = this,
                 layers = [];
             if (_.isEmpty(layerIds)) {
-                _.each(me._layers, function(key, value) {
+                _.each(me._olLayers, function(key, value) {
                     layers.push(value);
                 });
             } else {
@@ -871,7 +960,7 @@ Oskari.clazz.define(
          */
         getLayerFeatures: function(id) {
             var me = this;
-            var features = me._layers[id].getSource().getFeatures();
+            var features = me._olLayers[id].getSource().getFeatures();
             var formatter = me._supportedFormats.GeoJSON;
 
             var geojson = formatter.writeFeaturesObject(features);
