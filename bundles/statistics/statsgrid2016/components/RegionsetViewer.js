@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         showLayer: true,
                         opacity: classification.opacity ||80,
                         layerName: locale.layer.name,
-                        layerInspire: locale.layer.inspireName,
+                        layerInspireName: locale.layer.inspireName,
                         layerOrganizationName: locale.layer.organizationName,
                         layerDescription: (region && region.name) ? region.name : null,
                         layerPermissions: {

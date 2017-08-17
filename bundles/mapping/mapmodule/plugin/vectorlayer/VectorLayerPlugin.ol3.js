@@ -10,6 +10,33 @@ Oskari.clazz.define(
         this._supportedFormats = {};
         this._olLayerPrefix = "vectorlayer_";
         this._featureStyles = {};
+        this._layerStyles = {};
+        this._defaultStyle = {
+            fill: {
+                color: 'rgba(255,0,255,0.2)'
+            },
+            stroke: {
+                color: 'rgba(0,0,0,1)',
+                width: 2
+            },
+            image: {
+                radius: 4,
+                fill: {
+                    color: 'rgba(0,0,0,1)'
+                }
+            },
+            text: {
+                scale: 1.3,
+                fill: {
+                    color: 'rgba(0,0,0,1)'
+                },
+                stroke: {
+                    color: 'rgba(255,255,255,1)',
+                    width: 2
+                }
+            }
+        };
+        this._nextFeatureId = 0;
     }, {
         /**
          * @method register
@@ -346,7 +373,7 @@ Oskari.clazz.define(
             layer = mapLayerService.findMapLayer(options.layerId);
             if(!layer) {
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
-                layer.setInspireName(options.layerInspire || 'VECTOR');
+                layer.setInspireName(options.layerInspireName || 'VECTOR');
                 layer.setOrganizationName(options.layerOrganizationName || 'VECTOR');
                 layer.setOpacity(options.opacity || 100);
                 layer.setVisible(true);
@@ -448,7 +475,6 @@ Oskari.clazz.define(
                     vectorSource.clear();
                     me._features[options.layerId] = [];
                 }
-
                 // prio handling
                 me._features[options.layerId].push({
                     data: features,
@@ -456,8 +482,6 @@ Oskari.clazz.define(
                 });
 
                 if (options.prio && !isNaN(options.prio)) {
-                    vectorSource.clear();
-
                     me._features[options.layerId].sort(function(a, b) {
                         return b.prio - a.prio;
                     });
@@ -707,7 +731,6 @@ Oskari.clazz.define(
         setupFeatureStyle: function(options, feature, update) {
             var me = this;
             var style = this.getStyle(options, feature, update);
-
 
             //set up property-based labeling
             if(update && typeof feature.getId === 'function') {
