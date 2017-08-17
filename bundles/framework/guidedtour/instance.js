@@ -141,7 +141,7 @@ Oskari.clazz.define(
                     return content;
                 }
             };
-            this._guideSteps = [delegate];
+            this.addStep(delegate);
         },
 
         addStep: function(delegate){
@@ -150,30 +150,41 @@ Oskari.clazz.define(
                 // step ordering
                 var stepSpec = this.conf.steps;
                 var index = stepSpec.map(function(s){return s.bundleName}).indexOf(delegate.bundleName);
-                if(index < 0) {
-                    return;
+                if(delegate.bundleName !== me.getName()) {
+                    if(index < 0) {
+                        return;
+                    }
+                    delegate.priority = index + 1;
                 }
-                delegate.priority = index + 1;
 
                 // custom content
-                var content = stepSpec[index].content;
-                if(content){
-                    delegate.getContent = function() {return jQuery('<div></div>')} // empty placeholder while loading
-                    this._getGuideContent(content, function(success, response){
-                        if(success){
-                            delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>')};
-                            delegate.getTitle = function() {return response.title};
-                        } else {
-                            Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
+                if(index >= 0) {
+                    var content = stepSpec[index].content;
+                    var reRenderTarget = null;
+                    if(content){
+                        delegate.getContent = function() { // empty placeholder while loading
+                            reRenderTarget = jQuery('<div></div>');
+                            return reRenderTarget; 
                         }
-                    })
+                        this._getGuideContent(content, function(success, response){
+                            if(success){
+                                delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>')};
+                                if(reRenderTarget) {
+                                    reRenderTarget.prepend(response.body);
+                                }
+                                delegate.getTitle = function() {return response.title};
+                            } else {
+                                Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
+                            }
+                        });
+                    }
                 }
             }
             if(typeof delegate.priority === 'number') {
                 var priorities = this._guideSteps.map(function(d){return d.priority});
                 var insertLocation = _.sortedIndex(priorities, delegate.priority);
                 this._guideSteps.splice(insertLocation, 0, delegate);
-                if(this.guideStep >= insertLocation) { // correct current location
+                if(this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
                     this.guideStep++;
                 }
             } else {

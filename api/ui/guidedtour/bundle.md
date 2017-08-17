@@ -27,10 +27,16 @@ Which dialogs to show and their order is defined with an Array in the property "
   </tr>
 </table>
 
+To replace the content of the first "Welcome" dialog, add element with bundleName "GuidedTour" and with content tags.
+
 
 ```javascript
 {  
-   steps:[  
+   steps:[
+      {  
+         "bundleName":"GuidedTour",
+         "content":"tour_welcome"
+      },
       {  
          "bundleName":"Search"
       },
