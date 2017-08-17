@@ -1,9 +1,9 @@
 /**
-* @class Oskari.hsy.bundle.downloadBasket.BundleInstance
+* @class Oskari.mapframework.bundle.downloadBasket.BundleInstance
 *
-* Oskari.hsy.bundle.downloadBasket.
+* Oskari.mapframework.bundle.downloadBasket.
 */
-Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
+Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
 
     /**
      * @method create called automatically on construction
@@ -92,9 +92,9 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
                 }
             }
             
-            me.cropping = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Cropping',this._localization.flyout['download-basket-cropping-tab'], me);
+            me.cropping = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Cropping',this._localization.flyout['download-basket-cropping-tab'], me);
             me.cropping.setId('download-basket-cropping-tab');
-            me.basket = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Basket',this._localization.flyout['download-basket-tab'], me);
+            me.basket = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Basket',this._localization.flyout['download-basket-tab'], me);
             me.basket.setId('download-basket-tab');
 
             me.cropping.setBasket(me.basket);
@@ -215,8 +215,8 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.BundleInstance",
          * Oskari.mapframework.bundle.layerselection2.Tile
          */
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.hsy.bundle.downloadBasket.Tile', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Flyout', this);
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Tile', this);
         },
         /**
          * @method stopExtension
