@@ -132,7 +132,7 @@ function() {
      * @param {string} shapeType shape type to be drawn
      * @return {boolean}
      */
-    isValidShapeType (shapeType){
+    isValidShapeType: function(shapeType){
         return this.__validShapeTypes.indexOf(shapeType) >= 0;
     },
     /**
