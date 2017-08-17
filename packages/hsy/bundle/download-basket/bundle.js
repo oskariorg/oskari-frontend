@@ -1,14 +1,14 @@
 /**
- * @class Oskari.hsy.bundle.downloadBasket.Bundle
+ * @class Oskari.mapframework.bundle.downloadBasket.Bundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.Bundle", function () {
+Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.Bundle", function () {
 
 }, {
     "create": function () {
         var me = this;
-        var inst = Oskari.clazz.create("Oskari.hsy.bundle.downloadBasket.BundleInstance");
+        var inst = Oskari.clazz.create("Oskari.mapframework.bundle.downloadBasket.BundleInstance");
 
         return inst;
 
@@ -23,36 +23,36 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.Bundle", function () {
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/instance.js"
+            "src": "../../../../bundles/framework/download-basket/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/Flyout.js"
+            "src": "../../../../bundles/framework/download-basket/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/Cropping.js"
+            "src": "../../../../bundles/framework/download-basket/Cropping.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/Basket.js"
+            "src": "../../../../bundles/framework/download-basket/Basket.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/Tile.js"
+            "src": "../../../../bundles/framework/download-basket/Tile.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/hsy/download-basket/resources/css/style.css"
+            "src": "../../../../bundles/framework/download-basket/resources/css/style.css"
         }],
 
         "locales": [{
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/resources/locale/en.js"
+            "src": "../../../../bundles/framework/download-basket/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/resources/locale/fi.js"
+            "src": "../../../../bundles/framework/download-basket/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/hsy/download-basket/resources/locale/sv.js"
+            "src": "../../../../bundles/framework/download-basket/resources/locale/sv.js"
         }]
     },
     "bundle": {
@@ -94,4 +94,4 @@ Oskari.clazz.define("Oskari.hsy.bundle.downloadBasket.Bundle", function () {
 
 });
 
-Oskari.bundle_manager.installBundleClass("download-basket", "Oskari.hsy.bundle.downloadBasket.Bundle");
+Oskari.bundle_manager.installBundleClass("download-basket", "Oskari.mapframework.bundle.downloadBasket.Bundle");
