@@ -34,21 +34,21 @@ To replace the content of the first "Welcome" dialog, add element with bundleNam
 {  
    steps:[
       {  
-         "bundleName":"GuidedTour",
-         "content":"tour_welcome"
+         "bundleName": "GuidedTour",
+         "content": "tour_welcome"
       },
       {  
-         "bundleName":"Search"
+         "bundleName": "Search"
       },
       {  
-         "bundleName":"PersonalData"
+         "bundleName": "PersonalData"
       },
       {  
-         "bundleName":"MainMapModule_1"
+         "bundleName": "MainMapModule_1"
       },
       {  
-         "bundleName":"MainMapModule_2",
-         "content":"tour_zoom"
+         "bundleName": "MainMapModule_2",
+         "content": "tour_zoom"
       }
    ]
 }
@@ -102,15 +102,18 @@ Example:
 
 ```javascript
 var me = this;
+function updateExtension(payload) {
+    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', payload);
+}
 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-if(requestBuilder){
+if (requestBuilder) {
     var delegate = {
         priority: 10,
-        show: function(){
-            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']);
+        show: function () {
+            updateExtension([null, 'attach', 'Search']);
         },
-        hide: function(){
-            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
+        hide: function () {
+            updateExtension([null, 'close', 'Search']);
         },
         getTitle: function () {
             return me.localization.guidedTour.title;
@@ -120,14 +123,14 @@ if(requestBuilder){
             content.append(me.localization.guidedTour.message);
             return content;
         },
-        getLinks: function() {
+        getLinks: function () {
             var loc = me.localization.guidedTour;
             var linkTemplate = jQuery('<a href="#"></a>');
             var openLink = linkTemplate.clone();
             openLink.append(loc.openLink);
             openLink.bind('click',
                 function () {
-                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']);
+                    updateExtension([null, 'attach', 'Search']);
                     openLink.hide();
                     closeLink.show();
                 });
@@ -135,7 +138,7 @@ if(requestBuilder){
             closeLink.append(loc.closeLink);
             closeLink.bind('click',
                 function () {
-                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
+                    updateExtension([null, 'close', 'Search']);
                     openLink.show();
                     closeLink.hide();
                 });
