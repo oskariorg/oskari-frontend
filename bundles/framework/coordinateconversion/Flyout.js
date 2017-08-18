@@ -272,12 +272,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             if( values[4] !== "KORKEUSJ_DEFAULT" ) {
                 rows.each( function ( row ) {
                     jQuery(this).find('td:last').attr("contenteditable", true);
-                    jQuery(this).find('td:last').css('background-color','');
+                    jQuery(this).find('td:nth-last-child(2)').css('background-color','');
                 });
                 
             } else {
                 rows.each( function ( row ) {
-                    var lastCell = jQuery(this).find('td:last');
+                    var lastCell = jQuery(this).find('td:nth-last-child(2)');
                     lastCell.attr("contenteditable", false);
                     // if last cell is not empty and no heightsystem is selected, gray it out
                     if(lastCell.html() !== '') {
