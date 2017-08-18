@@ -16,11 +16,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
-                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
-                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
-                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br>' +
-                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> </b> <div class="select"></div>  <a href="#"><div class="infolink"></div></a> </div> </br> ' +
-                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <div class="select"></div> <a href="#"><div class="infolink"></div></a> </div>'
+                                    '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
+                                    '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div>  </div> </br> ' +
+                                    '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br>' +
+                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> </b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
+                                    '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
