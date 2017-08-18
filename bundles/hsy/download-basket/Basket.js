@@ -1,11 +1,11 @@
 /**
- * @class Oskari.hsy.bundle.downloadBasket.Cropping
+ * @class Oskari.mapframework.bundle.downloadBasket.Cropping
  *
  * Renders the "admin channels" flyout.
  *
  */
 Oskari.clazz.define(
-    'Oskari.hsy.bundle.downloadBasket.Basket',
+    'Oskari.mapframework.bundle.downloadBasket.Basket',
     function (localization, parent) {
         this.instance = parent;
         this._sandbox = parent.getSandbox();
