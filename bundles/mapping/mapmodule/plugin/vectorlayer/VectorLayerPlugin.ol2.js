@@ -207,6 +207,7 @@ Oskari.clazz.define(
                 foundFeatures,
                 olLayer,
                 layerId;
+
             if (layer && layer !== null) {
                 if (layer instanceof OpenLayers.Layer.Vector) {
                     layerId = layer.id;
@@ -215,6 +216,7 @@ Oskari.clazz.define(
                 }
                 olLayer = me._map.getLayersByName(me._olLayerPrefix + layerId)[0];
             }
+
             // Removes only wanted features from the given maplayer
             if (olLayer) {
                 if (identifier && identifier !== null && value && value !== null) {
@@ -224,6 +226,7 @@ Oskari.clazz.define(
                 //remove all features from the given layer
                 else {
                     this._map.removeLayer(me._olLayers[layerId]);
+                    this._removeFeaturesByAttribute(olLayer);
                     delete this._olLayers[layerId];
                     delete this._features[layerId];
                 }
@@ -233,6 +236,8 @@ Oskari.clazz.define(
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
+                        this._removeFeaturesByAttribute(olLayer);
+                        this._map.removeLayer(olLayer);
                         delete this._olLayers[layerId];
                         delete this._features[layerId];
                     }
@@ -541,7 +546,6 @@ Oskari.clazz.define(
             if(options.showLayer) {
                 olLayer.display(!!me._sandbox.findMapLayerFromSelectedMapLayers(options.layerId) && layer.isVisible());
             }
-
         },
         /**
          * @method getStyle

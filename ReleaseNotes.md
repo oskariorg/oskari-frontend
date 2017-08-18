@@ -2,6 +2,20 @@
 
 ## 1.44.0
 
+### framework/download-basket
+
+Added support to use download basket. Layers need following layer attributes:
+- unique: layer unique column name
+- geometryColumn (optional): cropping layer filter type, currently supported value STRING. These means at filter is made by STRING query for backend (property LIKE 'wantedvalue%'), otherwise used int/double/boolean filter
+- geometry: layer geometry column name
+- cropping: true/false, if true then used layer for cropping selection
+- basemap: true/false, if true then skipping it for using download basket
+- raster: true/false, is layer raster layer? if true then show popup for this at not supported and skipping it
+
+Known issues:
+    - only localized in Finnish
+    - only supported one license type
+
 ### statistics/statsgrid2016
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
