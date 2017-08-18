@@ -193,7 +193,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     // Koordinaatisto special cases
                     if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
                         instance.dropdowns[3].find('option').hide();
-                        instance.dropdowns[i].find('.'+ instance.instances[1].getValue()).show();
+                        jQuery(instance.dropdowns[i].find('.'+instance.instances[0].getValue()+'.'+ instance.instances[1].getValue())).show();
+        
                     }
                     if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_3D" ) {
                         instance.dropdowns[3].find('option').hide();
@@ -225,6 +226,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         jQuery('.map-projection').show();
                     } else {
                         jQuery('.map-projection').hide();
+                        instance.instances[2].setValue('DATUM_KARTTAPJ_DEFAULT');
                     }
                     
                     values = [];
@@ -234,8 +236,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         values.push(vl);
                     }
                     me.updateEditable(values);
-                    // me.updateTableTitle(values);
+                    if(i == instance.instances.length -1) {
+                     me.updateTableTitle(values);
                     }
+                }
                 });
             } else {
                 jQuery( this.container ).find('#targetcoordsystem').on("change", function() {
@@ -284,26 +288,26 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         },
         updateTableTitle: function (values) {
             var x = y = z = "";
-            if( values[3].indexOf("COORDSYS.KKJ") !== -1 ) {
+            if( values[3].indexOf("COORDSYS_KKJ") !== -1 ) {
                 x = this.loc.coordinatefield.kkjnorth
                 y = this.loc.coordinatefield.kkjeast
                 z = ""
             }
-            if( values[3].indexOf("COORDSYS.ETRS") !== -1 ) {
+            if( values[3].indexOf("COORDSYS_ETRS") !== -1 ) {
                 x = this.loc.coordinatefield.kkjeast
                 y = this.loc.coordinatefield.kkjnorth
                 z = ""
             }
-            if( values[1].indexOf("KOORDINAATISTO.MAANT.2D") !== -1 ) {
+            if( values[1].indexOf("KOORDINAATISTO_MAANT_2D") !== -1 ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = ""
-            } else if(values[1].indexOf("KOORDINAATISTO.MAANT.3D") !== -1 ) {
+            } else if(values[1].indexOf("KOORDINAATISTO_MAANT_3D") !== -1 ) {
                 x = this.loc.coordinatefield.lon
                 y = this.loc.coordinatefield.lat
                 z = this.loc.coordinatefield.ellipse_height
             }
-            if(values[1].indexOf("KOORDINAATISTO.SUORAK.3D") !== -1 ) {
+            if(values[1].indexOf("KOORDINAATISTO_SUORAK_3D") !== -1 ) {
                    x = this.loc.coordinatefield.geox
                    y = this.loc.coordinatefield.geoy
                    z = this.loc.coordinatefield.geoz
@@ -313,11 +317,13 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 jQuery(this.container).find('.rowHeader').remove();
             }
 
+            if( x !== '' && y !== '' || z !== '' ) {
             var fieldheader = this._template.fieldheader({  north: x,
                                                             east: y,
                                                             ellipse_height: z });
 
-            jQuery(this.container).find("#coordinatefield-input tbody").prepend(fieldheader);
+            jQuery(this.container).find("#coordinatefield-input").prepend(fieldheader);
+            }
         },
         /**
          * @method canUseAdvancedUpload
