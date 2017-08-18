@@ -71,8 +71,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
             tablerow: _.template('<tr>' +
-                                    '<td class="cell" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td class="cell" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
+                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
+                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
                                     '<td class="cell" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             if(typeof values === null) {
                 values = undefined;
             }
-            var rows = jQuery(this.container).find("#coordinatefield-input tr");
+            var rows = this.getRows().not('td:last');
             if( !this.insertWithClipboard ) {
                 rows.each( function ( row ) {
                     jQuery(this).find('td').attr("contenteditable", false);
@@ -463,8 +463,15 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                 * Use these to test the functionality:
                 * var coord = { lon: 385545.5, lat: 6675310.75 }
                 */
-                var coord = { lon: 385545.5, lat: 6675310.75 }
-                helper.moveToCoords( coord );                
+            var rows = me.getRows();
+            rows.each(function () {
+                var lat = jQuery(this).find('.lat').html();
+                var lon = jQuery(this).find('.lon').html();
+                if(lat != "  " && lon != "  "){
+                    var coords = { lon: lon, lat: lat };
+                    helper.moveToCoords(coords);
+                }
+            })
             });
             jQuery('.removerow').on('click', function () {
                 
@@ -478,6 +485,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             jQuery('.removerow').on('click', function () {
                 jQuery(this).parent().parent().remove();
             });
+        },
+        getRows: function () {
+            var rows = jQuery(this.container).find("#coordinatefield-input tr");
+            return rows;
         },
         /**
          * @method handleDragAndDrop

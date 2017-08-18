@@ -26,8 +26,16 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
         return this.clickCoordinates;
     },
     moveToCoords: function (coords) {
-        var req = this.moveReq(coords.lon, coords.lat, 9);
-        this.sb.request(this.instance, req);
+    var reqBuilder = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+        if (reqBuilder) {
+                var data = {
+                    x: Number(coords.lon),
+                    y: Number(coords.lat),
+                    iconUrl: '/Oskari/resources/icons/marker-pin2.png'
+                };
+            var request = reqBuilder(data);
+            this.sb.request('MainMapModule', request);
+        }
     },
     /**
      * @method onEvent
