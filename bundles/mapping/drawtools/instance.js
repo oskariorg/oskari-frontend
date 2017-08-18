@@ -114,8 +114,8 @@ function() {
      * @param {Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest}
      */
     handleRequest : function(core, request) {
-        var shapeType = request.getShape();
         if (request.getName() === 'DrawTools.StartDrawingRequest') {
+            var shapeType = request.getShape();
             if(!this.isValidShapeType(shapeType)){
                 Oskari.log(this.getName()).error('Illegal shape type for StartDrawingRequest: ' + shapeType + '. Must be one of: ' + this.__validShapeTypes.join(', ') + '.');
                 return;
