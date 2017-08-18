@@ -1,15 +1,15 @@
 /*
- * @class Oskari.hsy.bundle.downloadBasket.Tile
+ * @class Oskari.mapframework.bundle.downloadBasket.Tile
  *
  * Renders the "Download basket" tile.
  */
-Oskari.clazz.define('Oskari.hsy.bundle.downloadBasket.Tile',
+Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
 
 /**
  * @method create called automatically on construction
  * @static
  * @param
- * {Oskari.hsy.bundle.downloadBasket}
+ * {Oskari.mapframework.bundle.downloadBasket}
  * instance
  *      reference to component that created the tile
  */
@@ -24,7 +24,7 @@ function(instance) {
      * @return {String} the name for the component
      */
     getName : function() {
-        return 'Oskari.hsy.bundle.downloadBasket.Tile';
+        return 'Oskari.mapframework.bundle.downloadBasket.Tile';
     },
     /**
      * @method setEl
@@ -102,7 +102,7 @@ function(instance) {
      */
     refresh: function(){
         var me = this;
-        var basketItems = jQuery('.download-basket__component').length;     
+        var basketItems = jQuery('.download-basket__component').length;
         jQuery('.download-basket-tile .oskari-tile-status').html(basketItems);
         me.notifyUser();
     },
@@ -113,7 +113,7 @@ function(instance) {
     notifyUser : function() {
         var me = this;
         var status = this.container.children('.oskari-tile-status');
-        
+
         // stop current animation
         status.stop();
         // blink 2 times
@@ -141,7 +141,7 @@ function(instance) {
                     me._blink(element, --count);
                 }
             });
-        });  
+        });
     }
 }, {
     /**

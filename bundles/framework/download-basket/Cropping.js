@@ -1,11 +1,11 @@
 /**
- * @class Oskari.hsy.bundle.downloadBasket.Cropping
+ * @class Oskari.mapframework.bundle.downloadBasket.Cropping
  *
- * Renders the "admin channels" flyout.
+ * Renders the "Download basket cropping".
  *
  */
 Oskari.clazz.define(
-    'Oskari.hsy.bundle.downloadBasket.Cropping',
+    'Oskari.mapframework.bundle.downloadBasket.Cropping',
     function (localization, parent) {
         this.instance = parent;
         this._sandbox = parent.getSandbox();
@@ -36,7 +36,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this;
-            _map = me.mapModule.getMap();
+            var map = me.mapModule.getMap();
 
             //Loop cropping layers and create cropping btns
             jQuery.each(me.getCroppingLayers(), function( key, value ) {
@@ -75,15 +75,15 @@ Oskari.clazz.define(
                         me.activateNormalGFI(true);
                         me.activateNormalWFSReq(true);
                         jQuery('.cropping-btn').removeClass('selected');
-                        me.disableAllCroppingLayers(_map);
-                        me.removeAllFeaturesFromCroppingLayer(_map);
+                        me.disableAllCroppingLayers(map);
+                        me.removeAllFeaturesFromCroppingLayer(map);
                         jQuery('.oskari__download-basket-temp-basket').hide();
                         jQuery('.oskari__download-basket-help').hide();
                         me.reqularControl.deactivate();
                     }else{
                         //User has some cropping going on
                         if(jQuery('.oskari__download-basket-temp-basket').is(':visible')){
-                            me.confirmCroppingAreaChange(value, _map, el, value.rect);
+                            me.confirmCroppingAreaChange(value, map, el, value.rect);
                         }else{
                             //Fresh user selection
                             me.activateNormalGFI(false);
@@ -93,12 +93,12 @@ Oskari.clazz.define(
                             jQuery('.oskari__download-basket-help').show();
                             if(value.rect){
                                 me.reqularControl.activate();
-                                me.removeAllFeaturesFromCroppingLayer(_map);
-                                me.disableAllCroppingLayers(_map);
+                                me.removeAllFeaturesFromCroppingLayer(map);
+                                me.disableAllCroppingLayers(map);
                             }else{
                                 me.reqularControl.deactivate();
-                                me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
-                                me.removeAllFeaturesFromCroppingLayer(_map);
+                                me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),map);
+                                me.removeAllFeaturesFromCroppingLayer(map);
                             }
                         }
                     }
@@ -121,14 +121,11 @@ Oskari.clazz.define(
             var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             moveToBasketBtn.addClass('approve');
             moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
-            jQuery(moveToBasketBtn.getElement()).click(
-                function (event) {
-                    me.addToBasket(_map);
-                    jQuery('.oskari__download-basket-temp-basket').hide();
-                    me.removeAllFeaturesFromCroppingLayer(_map);
-                    event.preventDefault();
-                }
-            );
+            moveToBasketBtn.setHandler(function() {
+                me.addToBasket(map);
+                jQuery('.oskari__download-basket-temp-basket').hide();
+                me.removeAllFeaturesFromCroppingLayer(map);
+            });
             moveToBasketBtn.insertTo(me._templates.tempbasket);
             me._templates.tempbasket.find('p').html(me._getLocalization('users-temp-basket'));
 
@@ -138,7 +135,7 @@ Oskari.clazz.define(
             jQuery(clearTempBasket.getElement()).click(
                 function (event) {
                     jQuery('.oskari__download-basket-temp-basket').hide();
-                    me.removeAllFeaturesFromCroppingLayer(_map);
+                    me.removeAllFeaturesFromCroppingLayer(map);
                     event.preventDefault();
                 }
             );
@@ -203,7 +200,7 @@ Oskari.clazz.define(
                 "featuresadded" : function(layer) {
                     var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
                     var index = me.croppingVectorLayer.features.length-1;
-                    me.croppingVectorLayer.features[index].attributes['croppingMode'] = layerCroppingMode;
+                    me.croppingVectorLayer.features[index].attributes.croppingMode = layerCroppingMode;
                     me.addToTempBasket(me.croppingVectorLayer.features.length);
                     }
                 }
@@ -234,7 +231,7 @@ Oskari.clazz.define(
             var allLayers = mapService.getAllLayers();
             var croppingLayers = jQuery.grep(allLayers, function(n) {
               var attributes = n.getAttributes();
-              if(attributes.rajaus){
+              if(attributes.cropping){
                 return n;
               }
             });
@@ -296,8 +293,6 @@ Oskari.clazz.define(
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
             layerNameLang = jQuery('.cropping-btn.selected').val();
 
-            console.info();
-
             jQuery.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -320,14 +315,14 @@ Oskari.clazz.define(
                         if(founded !== null && founded.length>0){
                             me.croppingVectorLayer.removeFeatures(founded);
                         }else{
-                            features[0].attributes['cropid'] = data.features[0].id;
-                            features[0].attributes['layerName'] = layerName;
-                            features[0].attributes['layerUrl'] = layerUrl;
-                            features[0].attributes['uniqueKey'] = layerUniqueKey;
-                            features[0].attributes['geometryColumn'] = layerGeometryColumn;
-                            features[0].attributes['geometryName'] = layerGeometry;
-                            features[0].attributes['croppingMode'] = layerCroppingMode;
-                            features[0].attributes['layerNameLang'] = layerNameLang;
+                            features[0].attributes.cropid = data.features[0].id;
+                            features[0].attributes.layerName= layerName;
+                            features[0].attributes.layerUrl = layerUrl;
+                            features[0].attributes.uniqueKey = layerUniqueKey;
+                            features[0].attributes.geometryColumn = layerGeometryColumn;
+                            features[0].attributes.geometryName = layerGeometry;
+                            features[0].attributes.croppingMode = layerCroppingMode;
+                            features[0].attributes.layerNameLang = layerNameLang;
 
                             me.croppingVectorLayer.addFeatures(features);
                             map.setLayerIndex(me.croppingVectorLayer, 1000000);
@@ -343,6 +338,17 @@ Oskari.clazz.define(
                     );
                 }
             });
+        },
+
+        _openPopup: function(title, message) {
+            var me = this;
+            if(me._popup) {
+                me._popup.close(true);
+            } else {
+                me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            }
+            me._popup.show(title,message);
+            me._popup.fadeout();
         },
 
         /**
@@ -519,7 +525,6 @@ Oskari.clazz.define(
          */
         addToBasket: function(map){
             var me = this;
-            var wrapper = jQuery(".oskari__download-basket-wrapper");
             var selectedLayers = me._buildLayerList();
             var croppedAreaFeatures = me.croppingVectorLayer.features;
             var basketObject = {};
@@ -596,8 +601,20 @@ Oskari.clazz.define(
                 componentClone.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
                 componentClone.find('.basket__content-cropping>span').text(basketObject.cropLayerNameLang);
 
-                componentClone.find('.basket__content-license>strong').text(me._getLocalization('basket-license-title'));
-                componentClone.find('.basket__content-license>a').text(me._getLocalization('basket-license-name')).attr("href",me._getLocalization('basket-license-url'));
+                // License link handling
+                var licenseTitle = componentClone.find('.basket__content-license>strong');
+                var licenseLink = componentClone.find('.basket__content-license>a');
+                if(me.instance.conf.licenseInfo && me.instance.conf.licenseInfo.url) {
+                    licenseTitle.text(me._getLocalization('basket-license-title'));
+                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
+                        me.instance.conf.licenseName ||
+                        me._getLocalization('basket-license-name'));
+                    licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
+                        me.instance.conf.licenseUrl);
+                } else {
+                    licenseTitle.remove();
+                    licenseLink.remove();
+                }
 
                 componentClone.find('.icon-close').click(function(event){
                     jQuery(this).parents('.download-basket__component').remove();
@@ -639,10 +656,6 @@ Oskari.clazz.define(
                 if(!layer.isInScale(mapScale)) {
                     continue;
                 }
-                //for WFS layer
-               /* if(!layer.isFeatureInfoEnabled()) {
-                    continue;
-                }   */
                 if(!layer.isVisible()) {
                     continue;
                 }
@@ -653,9 +666,6 @@ Oskari.clazz.define(
                 if(layer._layerType=='WMTS'){
                     continue;
                 }
-               /* if(attributes.rajaus){
-                    continue;
-                }*/
                 if(attributes.basemap){
                     continue;
                 }
@@ -663,7 +673,8 @@ Oskari.clazz.define(
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     btn = dialog.createCloseButton('OK');
                     btn.addClass('primary');
-                    dialog.show(me._getLocalization('basket-raster-problem-title'), layer.getName()+' '+me._getLocalization('basket-raster-problem'), [btn]);
+                    dialog.show(me._getLocalization('basket-raster-problem-title'),
+                        layer.getName()+' '+me._getLocalization('basket-raster-problem'), [btn]);
                     continue;
                 }
 

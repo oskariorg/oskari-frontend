@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.downloadBasket.Cropping
  *
- * Renders the "admin channels" flyout.
+ * Renders the "Download basket".
  *
  */
 Oskari.clazz.define(
@@ -177,7 +177,7 @@ Oskari.clazz.define(
                         });
                         btn.addClass('primary');
                         dialog.show(me._getLocalization('basket-thank-you'), me._getLocalization('basket-email-will-be'), [btn]);
-                    }else{
+                    } else {
                          me._openPopup(
                             me._getLocalization('title'),
                             me._getLocalization('error-in-downloading')
@@ -203,6 +203,17 @@ Oskari.clazz.define(
                 url : ajaxUrl + 'action_route=DownloadAll'
             });
 
+        },
+
+        _openPopup: function(title, message) {
+            var me = this;
+            if(me._popup) {
+                me._popup.close(true);
+            } else {
+                me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            }
+            me._popup.show(title,message);
+            me._popup.fadeout();
         },
 
         /**

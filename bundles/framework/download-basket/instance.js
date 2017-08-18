@@ -91,10 +91,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                     sandbox.registerForEventByName(me, p);
                 }
             }
-            
-            me.cropping = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Cropping',this._localization.flyout['download-basket-cropping-tab'], me);
+
+            me.cropping = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Cropping',
+                this._localization.flyout['download-basket-cropping-tab'], me);
             me.cropping.setId('download-basket-cropping-tab');
-            me.basket = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Basket',this._localization.flyout['download-basket-tab'], me);
+            me.basket = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Basket',
+                this._localization.flyout['download-basket-tab'], me);
             me.basket.setId('download-basket-tab');
 
             me.cropping.setBasket(me.basket);
