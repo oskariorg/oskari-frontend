@@ -2,7 +2,7 @@
 
 <table class="table">
   <tr>
-    <td>ID</td><td>Oskari.hsy.bundle.downloadBasket.Bundle</td>
+    <td>ID</td><td>Oskari.mapframework.bundle.downloadBasket.Bundle</td>
   </tr>
 </table>
 
@@ -22,7 +22,31 @@ e.g.
 
 ## Bundle configuration
 
-No configuration is required.
+Some configuration is needed for license info:
+* licenseName is used to show license name. Can be localized or only one. If licenseName is not configured and licenseUrl is configured then showed default Greative Common 4.0 lisence name.
+* licenseUrl is used to show license link. Can be localized or only one.
+
+```javascript
+// Localized
+"conf": {
+  "licenseName": {
+    "en": "Creative Common 4.0",
+    "fi": "Creative Common 4.0",
+    "sv": "Creative Common 4.0"
+  },
+  "licenseUrl": {
+    "en": "http://your.license.url",
+    "fi": "http://your.license.url",
+    "sv": "http://your.license.url"
+  }
+}
+
+// Only one
+"conf": {
+  "licenseName": "Creative Common 4.0",
+  "licenseUrl": "http://your.license.url"
+}
+```
 
 ## Bundle state
 
