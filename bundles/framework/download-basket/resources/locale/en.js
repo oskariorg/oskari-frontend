@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-    "lang": "fi",
+    "lang": "en",
     "key": "download-basket",
     "value": {
         "title" : "Latauskori",
@@ -27,10 +27,8 @@ Oskari.registerLocalization({
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
                 "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
-                "basket-license-url" : "https://www.hsy.fi/fi/asiantuntijalle/avoindata/lisenssi/Sivut/default.aspx",
                 "basket-raster-problem-title" : "Huomautus",
-                "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palvelusta, mutta aineistopyynnön voi tehdä osoitteeseen sepe@hsy.fi. Voit myös hyödyntää aineistoa rajapintojen kautta http://kartta.hsy.fi/geoserver/wms ja http://kartta.hsy.fi/geoserver/wfs"
-
+                "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palvelusta."
             },
             "download-basket-tab" : {
                 "title" : "Latauskori",
