@@ -13,7 +13,7 @@ download-basket can read.
 e.g.
 {"forceProxy":true} -> proxies all map data to Oskari Core
 {"raster":"true"} -> means that layer is e.g. geotiff or layergroup and cannot be used in download-basket
-{"unique":"kokotun","forceProxy":true,"geometryColumn":"STRING","rajaus":"true","geometry":"geom"} -> means that layer is a cropping layer and is used in UI
+{"unique":"kokotun","forceProxy":true,"geometryColumn":"STRING","cropping":"true","geometry":"geom"} -> means that layer is a cropping layer and is used in UI
 
 ## Screenshot
 
