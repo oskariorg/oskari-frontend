@@ -333,6 +333,9 @@ Oskari.clazz.define(
                 el.find('.oskari__download-basket-help').show();
                 el.find('.download-basket__component').remove();
 
+                el.find('.oskari__download-basket-user-info').hide();
+                el.find('.oskari__download-basket-wrapper').show();
+
                 me._selected.forEach(function(basketItem, index){
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
@@ -376,18 +379,20 @@ Oskari.clazz.define(
                         licenseLink.remove();
                     }
 
-                    basketEl.find('.icon-close').click(function(event){
+                    basketEl.find('.icon-close-dark').click(function(event){
                         var basketEl = jQuery(this).parents('.download-basket__component');
                         basketEl.remove();
-                        me.instance.addBasketNotify();
+
                         if(el.find('.download-basket__component').length === 0){
                             el.find('.oskari__download-basket-wrapper').find('.empty-basket').show();
                             el.find('.oskari__download-basket-buttons').find('input.next').hide();
+                            el.find('.oskari__download-basket-buttons').find('input.empty').hide();
                             me._selected = [];
                         }
                         var index = basketEl.attr('data-index');
                         me._selected.splice(index,1);
                         event.preventDefault();
+                        me.instance.addBasketNotify();
                     });
 
                     el.find('.oskari__download-basket-wrapper').append(basketEl);

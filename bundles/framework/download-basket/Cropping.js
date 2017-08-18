@@ -551,22 +551,10 @@ Oskari.clazz.define(
                     basketObject.cropMode = feature_value.attributes.croppingMode;
 
                     me.basket.addToBasket(basketObject);
-
-                    console.warn('Debricated. Remove this when ready!!!');
-                    me.addToBasketUiComponent(basketObject, feature_value);
                 });
             });
             me.instance.addBasketNotify();
         },
-
-        /**
-         * [addToBasketUiComponent creates ui component for basket]
-         */
-        addToBasketUiComponent: function(basketObject){
-            console.warn('Debricated. Remove these when ready!!!');
-
-        },
-
         /**
         * [_buildLayerList finds layer that user has chowsen to be cropped]
         * @return {[layer]} [array of layers]

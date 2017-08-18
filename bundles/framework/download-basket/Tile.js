@@ -62,10 +62,6 @@ function(instance) {
     createUI : function() {
         this.container.addClass('download-basket-tile');
         this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
-        //TODO
-/*        if(jQuery('.download-basket-tile').length>0){
-            jQuery('.download-basket-tile').append(this.container);
-        }*/
     },
     /**
      * @method getTitle
@@ -102,7 +98,7 @@ function(instance) {
      */
     refresh: function(){
         var me = this;
-        var basketItems = jQuery('.download-basket__component').length;
+        var basketItems = me.instance.basket._selected.length;
         jQuery('.download-basket-tile .oskari-tile-status').html(basketItems);
         me.notifyUser();
     },
