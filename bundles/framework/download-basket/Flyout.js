@@ -75,11 +75,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
             }
             var me = this,
                 tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+            tabsContainer.addTabChangeListener(me.tabChanged);
             this.tabsContainer = tabsContainer;
 
             tabsContainer.addPanel(me.instance.cropping);
             tabsContainer.addPanel(me.instance.basket);
             tabsContainer.insertTo(this.container);
+        },
+        tabChanged: function(previous, current){
+            if(current.getId() === 'download-basket-tab'){
+                current.createBasket();
+            }
         },
         getEventHandlers: function () {
 

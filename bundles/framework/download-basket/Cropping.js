@@ -121,7 +121,7 @@ Oskari.clazz.define(
             var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             moveToBasketBtn.addClass('approve');
             moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
-            moveToBasketBtn.setHandler(function() {
+            jQuery(moveToBasketBtn.getElement()).click(function() {
                 me.addToBasket(map);
                 jQuery('.oskari__download-basket-temp-basket').hide();
                 me.removeAllFeaturesFromCroppingLayer(map);
@@ -550,6 +550,9 @@ Oskari.clazz.define(
                     };
                     basketObject.cropMode = feature_value.attributes.croppingMode;
 
+                    me.basket.addToBasket(basketObject);
+
+                    console.warn('Debricated. Remove this when ready!!!');
                     me.addToBasketUiComponent(basketObject, feature_value);
                 });
             });
@@ -559,83 +562,9 @@ Oskari.clazz.define(
         /**
          * [addToBasketUiComponent creates ui component for basket]
          */
-        addToBasketUiComponent: function(basketObject, features){
-            var me = this,
-            template = jQuery(
-                '<div class="download-basket__component">'+
-                    '<div class="download-basket__component-title">'+
-                        '<div class="download-basket__component-layer-name"></div>'+
-                        '<div class="icon-close download-basket__component-title-close"></div>'+
-                        '<div class="download-basket__component-title-clear"></div>'+
-                    '</div>'+
-                        '<div class="download-basket__component-content">'+
-                            '<p class="basket__content-cropping"><strong></strong><span></span></p>'+
-                            /*'<p class="basket__content-area-cropped"></p>'+*/
-                            '<p class="basket__content-license"><strong></strong><a target="_blank"></a></p>'+
-                        '</div>'+
-                '</div>');
+        addToBasketUiComponent: function(basketObject){
+            console.warn('Debricated. Remove these when ready!!!');
 
-                var componentClone = template.clone();
-                componentClone.attr("data-layer-name",basketObject.layerName);
-                componentClone.attr("data-layer-wmsurl",basketObject.layerUrl);
-                componentClone.attr("data-bbox-bottom",basketObject.bbox.bottom);
-                componentClone.attr("data-bbox-left",basketObject.bbox.left);
-                componentClone.attr("data-bbox-right",basketObject.bbox.right);
-                componentClone.attr("data-bbox-top",basketObject.bbox.top);
-                componentClone.attr("data-cropping-layer",basketObject.cropLayerName);
-                componentClone.attr("data-cropping-url",basketObject.cropLayerUrl);
-                componentClone.attr("data-cropping-mode",basketObject.cropMode);
-                var identifiers = [];
-                var identifier = {
-                    layerName: basketObject.cropLayerName,
-                    uniqueColumn: basketObject.cropUniqueKey,
-                    geometryColumn : basketObject.cropGeometryColumn,
-                    geometryName : basketObject.cropGeometryName,
-                    uniqueValue: basketObject.cropUniqueKeyValue
-                };
-                identifiers.push(identifier);
-
-                componentClone.attr("data-identifiers", JSON.stringify(identifiers));
-
-                componentClone.find('.download-basket__component-layer-name').text(basketObject.layerNameLang);
-                componentClone.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
-                componentClone.find('.basket__content-cropping>span').text(basketObject.cropLayerNameLang);
-
-                // License link handling
-                var licenseTitle = componentClone.find('.basket__content-license>strong');
-                var licenseLink = componentClone.find('.basket__content-license>a');
-                if(me.instance.conf.licenseInfo && me.instance.conf.licenseInfo.url) {
-                    licenseTitle.text(me._getLocalization('basket-license-title'));
-                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
-                        me.instance.conf.licenseName ||
-                        me._getLocalization('basket-license-name'));
-                    licenseLink.attr('href',me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
-                        me.instance.conf.licenseUrl);
-                } else {
-                    licenseTitle.remove();
-                    licenseLink.remove();
-                }
-
-                componentClone.find('.icon-close').click(function(event){
-                    jQuery(this).parents('.download-basket__component').remove();
-                    me.instance.addBasketNotify();
-                    if(jQuery('.download-basket__component').length === 0){
-                        jQuery('.oskari__download-basket-wrapper').find('.empty-basket').show();
-                        jQuery('.oskari__download-basket-buttons').find('input.next').hide();
-                    }
-                    event.preventDefault();
-                });
-
-                jQuery(".oskari__download-basket-wrapper").append(componentClone);
-
-                jQuery('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').css({opacity: 0.2});
-                jQuery('.oskari__download-basket').parents('.oskariTabs').find('li').not('.active').animate({opacity: 1}, 700 );
-
-                jQuery('.oskari__download-basket-help').show();
-
-                jQuery('.oskari__download-basket-wrapper').find('.empty-basket').hide();
-                jQuery('.oskari__download-basket-buttons').find('input.empty').show();
-                jQuery('.oskari__download-basket-buttons').find('input.next').show();
         },
 
         /**

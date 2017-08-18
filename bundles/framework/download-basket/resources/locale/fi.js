@@ -13,7 +13,7 @@ Oskari.registerLocalization({
                 "title" : "Rajaus",
                 "choose-cropping-mode" : "Valitse haluamasi rajausvaihtoehto",
                 "choose-wanted-areas-from-map" : "Valitse kartalta klikkaamalla alue tai alueet, joilta haluat ladata aineistoja. Rajaus ottaa mukaan kaikki aineistot, jotka leikkaavat rajausalueen  kanssa. Mikäli kerralla ladattava aineistokokonaisuus on tiedostokooltaan suuri, saattaa lataamisessa kestää pidempään. Latauskoriin siirretyt aineistot näkyvät latauskori-välilehdellä. Poista rajaus klikkaamalla valitsemaasi aluetta uudestaan.",
-                "users-temp-basket" : "Alueita valittuna: <strong></strong>kpl, haluatko siirtää kohteet latauskoriin?",
+                "users-temp-basket" : "Alueita valittuna: <strong></strong> kpl, haluatko siirtää kohteet latauskoriin?",
                 "move-to-basket" : "Siirrä latauskoriin",
                 "temp-basket-empty" : "Poista valinta",
                 "rect-cropping" : "Suorakaide",
@@ -24,12 +24,8 @@ Oskari.registerLocalization({
                 "yes" : "Kyllä",
                 "no-layers-selected-title" : "Valitse karttataso",
                 "no-layers-selected-message" : "Valitse haluamasi aineistot KARTTATASOT valikosta, joista haluat ladata aineistoa",
-                "basket-cropping-layer-title" : "Rajausaineisto: ",
-                "basket-license-title" : "Käyttöehdot: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
                 "basket-raster-problem-title" : "Huomautus",
                 "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palvelusta."
-
             },
             "download-basket-tab" : {
                 "title" : "Latauskori",
@@ -45,7 +41,10 @@ Oskari.registerLocalization({
                 "check-form-error" : "Tarkista",
                 "error-in-downloading" : "Aineistojen lataus epäonnistui",
                 "basket-thank-you" : "Kiitos latauksesta!",
-                "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria."
+                "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria.",
+                "basket-cropping-layer-title" : "Rajausaineisto: ",
+                "basket-license-title" : "Käyttöehdot: ",
+                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi"
             }
         }
     }
