@@ -329,7 +329,7 @@ Oskari.clazz.define(
                  }
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
                 geometryFunction = function(coordinates, geometry) {

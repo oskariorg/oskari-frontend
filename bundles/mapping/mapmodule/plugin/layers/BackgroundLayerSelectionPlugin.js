@@ -131,7 +131,7 @@ Oskari.clazz.define(
 
                 /**
                  * @method MapSizeChangedEvent
-                 * 
+                 *
                  * Changes selector into dropdown if map is too narrow to fit buttons
                  */
                 MapSizeChangedEvent: function (evt) {
@@ -141,7 +141,7 @@ Oskari.clazz.define(
                     var el = this.getElement();
                     var buttonWidth = el.find('div.content li').outerWidth() || 0;
                     var showAsDropdown = buttonWidth * this._config.baseLayers.length > evt.getWidth() - 300; /// 150px margin on each side -> -300
-                    
+
                     el.find('div.content').toggleClass('dropdown', showAsDropdown);
                 },
             };

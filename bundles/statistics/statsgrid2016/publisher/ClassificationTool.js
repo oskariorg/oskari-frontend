@@ -71,7 +71,7 @@ function() {
             layer;
         for (i = 0; i < selectedLayers.length; i += 1) {
             layer = selectedLayers[i];
-            if (layer.getLayerType() === 'stats') {
+            if (layer.getId() === 'STATS_LAYER') {
                 statsLayer = layer;
                 break;
             }

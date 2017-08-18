@@ -70,7 +70,16 @@ Options object
     attributes: null,
     cursor: 'zoom-in',
     prio: 1,
-    minScale: 1451336
+    minScale: 1451336,
+    layerInspireName: 'Inspire theme name',
+    layerOrganizationName: 'Organization name',
+    showLayer: true,
+    opacity: 80,
+    layerName: 'Layer name',
+    layerDescription: 'Description text',
+    layerPermissions: {
+        'publish': 'publication_permission_ok'
+    }
 }
 ```
 <ul>
@@ -104,6 +113,24 @@ Options object
   <li>
     <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
   </li>
+
+  <li>
+    <b>layerInspireName</b> - Layer Inspire name when adding layer to visible (see showLayer).
+  </li><li>
+    <b>layerOrganizationName</b> - Layer organization name when adding layer to visible (see showLayer).
+  </li><li>
+    <b>showLayer</b> - Adds layer to visible (adds layer to layerservice and also select current layer to selected).
+  </li><li>
+    <b>opacity</b> - Layer opacity.
+  </li><li>
+    <b>layerName</b> - Layer name. If already added layer then update layer name.
+  </li><li>
+    <b>layerDescription</b> - Layer description. If already added layer then update layer description.
+  </li><li>
+    <b>layerPermissions</b> - Layer permissions.
+  </li>
+
+
 </ul>
 
 ## Examples

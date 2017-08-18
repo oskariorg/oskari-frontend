@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
         "getName": function () {
             return this.__name;
         },
-        
+
         openProfileTab: function() {
           Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
           var flyout = this.plugins['Oskari.userinterface.Flyout'];

@@ -9,6 +9,19 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.44
+
+#### [mod] [rpc]AddFeaturesToMapRequest
+
+New functionalities for ``AddFeaturesToMapRequest``. New options available:
+- layerInspireName : Inspire name for added layer
+- layerOrganizationName: Organization name for added layer
+- showLayer: Show layer to layerselector2/layerselection2. If setted truue then show map (add layer to mapservice).
+- opacity: Added layer opacity
+- layerName: Added layer name (showed in layerselector2/layerselection2)
+- layerDescription: Added layer description (showed subtitle in layerselection2)
+- layerPermissions: Added layer permission
+
 ## 1.42
 
 #### [mod] [rpc] SearchResultEvent
