@@ -449,6 +449,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input.val('');
                 input.trigger('change');
                 input.trigger('keyup');
+                jQuery(this).parent().removeClass('oskarifield--not-empty');
             });
             input.after(clearButton);
         },
