@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._requiredMsg = 'required';
         this._contentCheck = false;
         this._contentCheckMsg = 'illegal characters';
+        this._labelMargin = null;
 
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
@@ -39,10 +40,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
         bindOnInput: function() {
+            var me = this;
             this._field.find('.oskarifield_input').on('input', function() {
                 var $field = jQuery(this).closest('.oskarifield');
                 if (this.value) {
                     $field.addClass('oskarifield--not-empty');
+                    if(me._labelMargin !== null) {
+                        $field.find('.oskarifield_label').css('top', me._labelMargin + 'px');
+                    }
                 } else {
                     $field.removeClass('oskarifield--not-empty');
                 }
@@ -112,6 +117,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             // if we set placeholder we can set the label aswell for floating label
             this.setLabel(pLabel);
             this.bindOnInput();
+        },
+        addMarginToLabel: function ( margin ) {
+           this._labelMargin = margin;
         },
         /**
          * @method setRequired
