@@ -8,6 +8,20 @@ Bundles now register themselves into the guided tour with an AddToGuidedTourRequ
 
 By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
 
+### framework/download-basket
+
+Added support to use download basket. Layers need following layer attributes:
+- unique: layer unique column name
+- geometryColumn (optional): cropping layer filter type, currently supported value STRING. These means at filter is made by STRING query for backend (property LIKE 'wantedvalue%'), otherwise used int/double/boolean filter
+- geometry: layer geometry column name
+- cropping: true/false, if true then used layer for cropping selection
+- basemap: true/false, if true then skipping it for using download basket
+- raster: true/false, is layer raster layer? if true then show popup for this at not supported and skipping it
+
+Known issues:
+    - only localized in Finnish
+    - only supported one license type
+
 ### statistics/statsgrid2016
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
