@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "The logical operator is missing."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Selected Layers",
+            "message": "In the Selected Layers menu you can find all the open map layers and define settings how to display them on the map view. <br/><br/> Sort map layers by dragging them. <br/> Control map layer opacity. <br/> Select a different style, if it is available. <br/> Open feature data in the table, if data are available. <br/> Show or hide map layers temporarily.",
+            "openLink": "Show Selected Layers",
+            "closeLink": "Hide Selected Layers",
+            "tileText": "Selected Layers"
         }
     }
 });

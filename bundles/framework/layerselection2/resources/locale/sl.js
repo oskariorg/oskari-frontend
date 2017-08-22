@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Manjka logični operator"
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Izbrani sloji karte",
+            "message": "V meniju ''Izbrani sloji karte'' lahko definiraš, kako bodo prikazani izbrani sloji karte. Sloje karte lahko razvrščaš z vlečenjem.  Za nekatere sloje lahko določiš tudi prosojnost in v naprej definirane sloge prikaza. Za podatkovne proizvode lahko prikažeš izvorne podatke v obliki preglednice.",
+            "openLink": "Prikaži izbrane sloje karte",
+            "closeLink": "Skrij izbrane sloje karte",
+            "tileText": "Izbrani sloji karte"
         }
     }
 });

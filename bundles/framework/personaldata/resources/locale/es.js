@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Sí",
             "no": "No"
+        },
+        "guidedTour": {
+            "title": "Mis datos",
+            "message": "El meúu «Mis datos» contiene todos sus sitios salvados, vistas de mapa, mapas embebidos, indicadores, análisis y conjuntos de datos. Usted puede también verificar su información de cuenta. «Mis datos» sólo se muestran a usuarios que han entrado en el sistema",
+            "openLink": "Mostrar mis datos",
+            "closeLink": "Ocultar mis datos",
+            "tileText": "Mis datos"
         }
     }
 });

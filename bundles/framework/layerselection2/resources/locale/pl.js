@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Warstwa mapy",
                 "type-wfs": "Produkt"
             }
+        },
+        "guidedTour": {
+            "title": "Wybrane warstwy mapy",
+            "message": "Możesz zmienić kolejność w jakiej mapy są wyświetlane poprzez kliknięcie lub przeciągnięcie, a także poprzez zmianę ich przejrzystości. Zmiany pokazane są w oknie mapowym.",
+            "openLink": "Wyświetl wybrane warstwy mapy",
+            "closeLink": "Ukryj wybrane warstwy mapy",
+            "tileText": "Wybrane warstwy mapy"
         }
     }
 });

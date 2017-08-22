@@ -79,6 +79,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Slojevi",
+            "message": "Možete da izaberete podatke koji će biti prikazani na mapi izborom slojeva karte. Kliknite na kategoriju da bi ste je otvorili i izaberite sloj ili upišite slova sadržana u imenu podataka koje tražite u polje za pretragu.",
+            "openLink": "Prikaži slojeve",
+            "closeLink": "Sakrij slojeve",
+            "tileText": "Slojevi"
         }
     }
 });

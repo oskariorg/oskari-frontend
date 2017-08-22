@@ -79,6 +79,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Mapové vrstvy",
+            "message": "Výběrem mapových vrstev lze vybrat datové produkty pro zobrazení v mapě. Pro otevření kategorie na ni klikněte a vyberte vrstvu nebo napište do vyhledávacího pole pár písmen, které jsou obsaženy ve jménu datového produktu, který hledáte.",
+            "openLink": "Zobrazit mapové vrstvy",
+            "closeLink": "Skrýt mapové vrstvy",
+            "tileText": "Mapové vrstvy"
         }
     }
 });

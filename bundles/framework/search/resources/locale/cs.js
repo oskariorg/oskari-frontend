@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Zavřít",
             "title": "Výsledky vyhledávání"
+        },
+        "guidedTour": {
+            "title": "Vyhledávání",
+            "message": "Využijte vyhledávací funkce pro přímé zobrazení místa, které hledáte.",
+            "openLink": "Zobrazit vyhledávání",
+            "closeLink": "Skrýt vyhledávání",
+            "tileText": "Vyhledávání"
         }
     }
 });

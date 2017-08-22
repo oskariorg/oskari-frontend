@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Mbyll",
             "title": "Rezultatet e kërkimit"
+        },
+        "guidedTour": {
+            "title": "Kërkim",
+            "message": "Përdor funksionin kërkues për ta lëvizur pamjen në hartë direkt në vendin ku ju jeni duke kërkuar",
+            "openLink": "Paraqit kërkimin",
+            "closeLink": "Fsheh kërkimin",
+            "tileText": "Kërkim"
         }
     }
 });

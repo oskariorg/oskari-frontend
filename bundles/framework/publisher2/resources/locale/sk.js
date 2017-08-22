@@ -243,6 +243,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Zobraziť iba zverejniteľné mapové vrstvy."
             }
+        },
+        "guidedTour": {
+            "title": "Vytvoriť mapu",
+            "message": "Mapu, ktorú ste si vytvorili, môžete jednoducho vložiť na Vašu webovú stránku. Jednoducho zadefinujte veľkosť a užívateľské rozhranie Vašej mapy a skopírujte a vložte HTML link na Vašu webovú stránku.",
+            "openLink": "Zobraziť vytvorenie mapy",
+            "closeLink": "Skryť vytvorenie mapy",
+            "tileText": "Vytvoriť mapu"
         }
     }
 });

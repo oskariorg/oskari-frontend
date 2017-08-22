@@ -79,6 +79,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Shtresat e hartës",
+            "message": "Ju mund ti zgjedhni produket e të dhënave për t'u paraqitur në hartë duke përzgjedhur shtresat e hartës. Klikoni në kategori për ta hapur atë dhe përzgjedh një shtresë apo shkruani disa shkronja që janë të përfshira në emrin e të dhënave të produktit të për të cilin ju jeni duke shikuar në fushën e kërkimit",
+            "openLink": "Paraqit shtresat e hartës",
+            "closeLink": "Fsheh shtresat e hartës",
+            "tileText": "Shtresat e hartës"
         }
     }
 });

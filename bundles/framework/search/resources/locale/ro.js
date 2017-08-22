@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Închidere",
             "title": "Căutare Rezultate"
+        },
+        "guidedTour": {
+            "title": "Căutare",
+            "message": "Folosiţi funcţia căutare pentru a muta harta direct pe locul pe care îl căutaţi",
+            "openLink": "Afişare căutare",
+            "closeLink": "Ascundere căutare",
+            "tileText": "Căutare"
         }
     }
 });

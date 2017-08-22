@@ -33,6 +33,8 @@ Oskari.clazz.define(
         this._localization = locale;
         this.mediator = null;
         this.guideStep = 0;
+        this._dialog = null;
+        this._guideSteps = [];
     },
     {
         /**
@@ -99,11 +101,17 @@ Oskari.clazz.define(
             if (jQuery.cookie('pti_tour_seen') !== '1') {
                 var me = this,
                     conf = me.conf, // Should this not come as a param?
-                    sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                    sandboxName = (conf ? conf.sandbox : 'sandbox'),
                     sandbox = Oskari.getSandbox(sandboxName);
-                me.sandbox = sandbox;
                 // register to sandbox as a module
                 sandbox.register(me);
+                // register request handlers
+                sandbox.requestHandler(
+                    'Guidedtour.AddToGuidedTourRequest',
+                    Oskari.clazz.create('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', me)
+                );
+                me.sandbox = sandbox;
+                
                 me._startGuide();
             }
         },
@@ -112,319 +120,97 @@ Oskari.clazz.define(
                 pn = 'Oskari.userinterface.component.Popup',
                 dialog = Oskari.clazz.create(pn);
             me.guideStep = 0;
+            me._initSteps();
+            me._dialog = dialog;
             dialog.makeDraggable();
             dialog.addClass('guidedtour');
             me._showGuideContentForStep(me.guideStep, dialog);
         },
 
-        _guideSteps: [{
-            appendTourSeenCheckbox: true,
+        _initSteps: function() {
+            var me = this;
+            var delegate = {
+                bundleName: me.getName(),
+                priority: 0,
+                getTitle: function () {
+                    return me._localization.page1.title;
+                },
+                getContent: function () {
+                    var content = jQuery('<div></div>');
+                    content.append(me._localization.page1.message);
+                    return content;
+                }
+            };
+            this.addStep(delegate);
+        },
 
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                return this.ref._localization.page1.title;
-            },
-            getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.ref._localization.page1.message);
-                return content;
+        addStep: function(delegate){
+            var me = this;
+            if(this.conf && this.conf.steps) {
+                // step ordering
+                var stepSpec = this.conf.steps;
+                var index = stepSpec.map(function(s){return s.bundleName}).indexOf(delegate.bundleName);
+                if(delegate.bundleName !== me.getName()) {
+                    if(index < 0) {
+                        return;
+                    }
+                    delegate.priority = index + 1;
+                }
+
+                // custom content
+                if(index >= 0) {
+                    var content = stepSpec[index].content;
+                    var reRenderTarget = null;
+                    if(content){
+                        delegate.getContent = function() { // empty placeholder while loading
+                            reRenderTarget = jQuery('<div></div>');
+                            return reRenderTarget; 
+                        }
+                        this._getGuideContent(content, function(success, response){
+                            if(success){
+                                delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>')};
+                                if(reRenderTarget) {
+                                    reRenderTarget.prepend(response.body);
+                                }
+                                delegate.getTitle = function() {return response.title};
+                            } else {
+                                Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
+                            }
+                        });
+                    }
+                }
             }
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                return '' +
-                    this.ref._localization.page2.title +
-                    '<span>1/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('Search');
-                var loc = me._localization.page2;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('Search');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('Search');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br /><br />');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //   var loc = this.ref._localization('page2');
-            //   var tt = "'" + loc.tileText + "'";
-            //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
-            //   return jQuery(sel);
-            // },
-            // positionAlign : 'right',
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p3 = this.ref._localization.page3.title;
-                return p3 + '<span>2/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('LayerSelector');
-                var loc = me._localization.page3;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('LayerSelector');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('LayerSelector');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page3');
-            //     var sel =
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p4 = this.ref._localization.page4.title;
-                return p4 + '<span>3/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('LayerSelection');
-                var loc = me._localization.page4;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('LayerSelection');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('LayerSelection');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page4');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'*/
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p6 = this.ref._localization.page6.title;
-                return p6 + '<span>4/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('Publisher');
-                var loc = me._localization.page6;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('Publisher');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('Publisher');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //,
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page5');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p5 = this.ref._localization.page5.title;
-                return p5 + '<span>5/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._openExtension('PersonalData');
-                var loc = me._localization.page5;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function () {
-                        me._openExtension('PersonalData');
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function () {
-                        me._closeExtension('PersonalData');
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                content.append('<br><br>');
-                content.append(openLink);
-                content.append(closeLink);
-                closeLink.show();
-                openLink.hide();
-                return content;
-            } //),
-            // getPositionRef : function () {
-            //     var loc = this.ref._localization('page6');
-            //     return jQuery("div.oskari-tile-title:contains('" +
-            //                   loc.tileText + "')");
-            // },
-            // positionAlign : 'right'*/
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p7 = this.ref._localization.page7.title;
-                return p7 + '<span>6/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                me._closeExtension('PersonalData');
-                var loc = me._localization.page7;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                return content;
-            },
-            getPositionRef: function () {
-                return jQuery('#toolbar');
-            },
-            positionAlign: 'right'
-
-        }, {
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p8 = this.ref._localization.page8.title;
-                return p8 + '<span>7/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                var loc = me._localization.page8;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                return content;
-            },
-            getPositionRef: function () {
-                return jQuery('.panbuttonDiv');
-            },
-            positionAlign: 'left'
-
-        }, {
-            appendTourSeenCheckbox: true,
-
-            setScope: function (inst) {
-                this.ref = inst;
-            },
-            getTitle: function () {
-                var p9 = this.ref._localization.page9.title;
-                return p9 + '<span>8/8</span>';
-            },
-            getContent: function () {
-                var me = this.ref;
-                var loc = me._localization.page9;
-                var content = jQuery('<div></div>');
-                content.append(loc.message);
-                return content;
-            },
-            getPositionRef: function () {
-                return jQuery('.pzbDiv');
-            },
-            positionAlign: 'left'
-        }],
+            if(typeof delegate.priority === 'number') {
+                var priorities = this._guideSteps.map(function(d){return d.priority});
+                var insertLocation = _.sortedIndex(priorities, delegate.priority);
+                this._guideSteps.splice(insertLocation, 0, delegate);
+                if(this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
+                    this.guideStep++;
+                }
+            } else {
+                delegate.priority = this._guideSteps[this._guideSteps.length-1].priority + 1;
+                this._guideSteps.push(delegate);
+            }
+            
+            if(this._dialog) {
+                this._showGuideContentForStep(this.guideStep, this._dialog);
+            }
+        },
 
         _showGuideContentForStep: function (stepIndex, dialog) {
             var step = this._guideSteps[stepIndex];
-            step.setScope(this);
+            if(step.show) {
+                step.show();
+            }
             var buttons = this._getDialogButton(dialog);
-            var title = step.getTitle();
+            var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
             var content = step.getContent();
-            if (step.appendTourSeenCheckbox) {
+            if(step.getLinks) {
+                var links = step.getLinks();
+                content.append('<br /><br />');
+                links.forEach(function(l){content.append(l)});
+            }
+            if (stepIndex === 0 || stepIndex === this._guideSteps.length - 1) {
                 content.append('<br><br>');
                 var checkboxTemplate =
                     jQuery('<input type="checkbox" ' + 'name="pti_tour_seen" ' + 'id="pti_tour_seen" ' + 'value="1">');
@@ -463,31 +249,25 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _getFakeExtension: function (name) {
-            return {
-                getName: function () {
-                    return name;
-                }
-            };
-        },
-        _openExtension: function (name) {
-            var extension = this._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
-            this.sandbox.postRequestByName(rn, [extension, 'attach']);
-        },
-        _closeExtension: function (name) {
-            var extension = this._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
-            this.sandbox.postRequestByName(rn, [extension, 'close']);
+        _moveGuideStep(delta, dialog){
+            var currentStep = this._guideSteps[this.guideStep];
+            if(currentStep.hide) {
+                currentStep.hide();
+            }
+            this.guideStep += delta;
+            this._showGuideContentForStep(this.guideStep, dialog);
         },
         _getDialogButton: function (dialog) {
             var me = this,
                 buttons = [],
                 bn = 'Oskari.userinterface.component.Button',
                 closeTxt = me._localization.button.close;
-            var closeBtn = dialog.createCloseButton(closeTxt);
-            closeBtn.setId('oskari_guidedtour_button_close');
-            buttons.push(closeBtn);
+
+            if(this.guideStep !== this._guideSteps.length - 1){
+                var closeBtn = dialog.createCloseButton(closeTxt);
+                closeBtn.setId('oskari_guidedtour_button_close');
+                buttons.push(closeBtn);
+            }
 
             if (this.guideStep > 1) {
                 var prevBtn = Oskari.clazz.create(bn);
@@ -496,8 +276,7 @@ Oskari.clazz.define(
                 prevBtn.setTitle(prevTxt);
                 prevBtn.setHandler(
                     function () {
-                        me.guideStep--;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(-1, dialog);
                     }
                 );
                 buttons.push(prevBtn);
@@ -510,8 +289,7 @@ Oskari.clazz.define(
                 startBtn.setTitle(startTxt);
                 startBtn.setHandler(
                     function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(1, dialog);
                     }
                 );
                 buttons.push(startBtn);
@@ -525,8 +303,7 @@ Oskari.clazz.define(
                 nextBtn.setTitle(nextTxt);
                 nextBtn.setHandler(
                     function () {
-                        me.guideStep++;
-                        me._showGuideContentForStep(me.guideStep, dialog);
+                        me._moveGuideStep(1, dialog);
                     }
                 );
                 buttons.push(nextBtn);
@@ -582,6 +359,32 @@ Oskari.clazz.define(
         stop: function () {
             // unregister module from sandbox
             this.sandbox.unregister(this);
+        },
+        _getGuideContent(tags, callback){
+            var me = this;
+            jQuery.ajax({
+                url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
+                data: {
+                    tags: tags
+                },
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                success: function (resp) {
+                    if (resp && resp.articles[0] && resp.articles[0].content) {
+                        callback(true, resp.articles[0].content);
+                    } else {
+                        callback(false);
+                    }
+                },
+                error: function () {
+                    callback(false);
+                }
+            });
         }
     }, {
         protocol: ['Oskari.bundle.BundleInstance',

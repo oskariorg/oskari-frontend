@@ -16,6 +16,12 @@ Known issues:
     - only localized in Finnish
     - only supported one license type
 
+### Guidedtour
+
+Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
+
+By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
+
 ### statistics/statsgrid2016
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
