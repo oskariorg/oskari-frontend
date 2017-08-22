@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Yes",
             "no": "No"
+        },
+        "guidedTour": {
+            "title": "My Data",
+            "message": "In the My Data menu you can check all your saved data and profile information. <br/><br/> Check and edit your saved places, map views, embedded maps, indicators, analysis and datasets. <br/><br/> My Data is available only for logged-in users.",
+            "openLink": "Show My data",
+            "closeLink": "Hide My data",
+            "tileText": "My Data"
         }
     }
 });

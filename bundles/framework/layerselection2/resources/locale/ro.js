@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Strat de hartă",
                 "type-wfs": "Produs de hartă"
             }
+        },
+        "guidedTour": {
+            "title": "Straturi hartă selectate",
+            "message": "Puteţi schimba ordinea în care straturile sunt afişate prin selectare şi mutare; de asemenea puteţi schimba şi transparenţa acestora.  Schimbările sunt afişate în fereastra de hartă",
+            "openLink": "Afişare straturi hartă selectate",
+            "closeLink": "Ascundere straturi hartă selectate",
+            "tileText": "Straturi hartă selectate"
         }
     }
 });

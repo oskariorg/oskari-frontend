@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Looginen operaattori puuttuu."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Valitut tasot",
+            "message": "Valitut tasot -valikossa näet avoinna olevat karttatasot ja voit määritellä, miten ne esitetään karttanäkymässä. <br/> Raahaa karttatasot uuteen järjestykseen. <br/> Säädä tasojen läpinäkyvyyttä. <br/> Valitse karttatasolle toinen tyyli, jos karttatasolle on määritelty useampia tyylejä. <br/> Avaa tietotuotteiden kohdetiedot taulukkomuodossa. <br/> Näytä tai piilota karttataso tilapäisesti.",
+            "openLink": "Näytä Valitut tasot",
+            "closeLink": "Piilota Valitut tasot",
+            "tileText": "Valitut tasot"
         }
     }
 });

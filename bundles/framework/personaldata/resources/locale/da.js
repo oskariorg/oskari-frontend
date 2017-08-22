@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nej"
+        },
+        "guidedTour": {
+            "title": "Mine data",
+            "message": "Alle steder du har markeret på kortet, dine map views og indlejrede kort er vist her, når du er logget ind på servicen",
+            "openLink": "Vis mine data",
+            "closeLink": "Skjul mine data",
+            "tileText": "Mine data"
         }
     }
 });

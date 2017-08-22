@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Näytä vain vektoritasot",
                 "remove": "Poista suodatus"
             }
+        },
+        "guidedTour": {
+            "title": "Karttatasot",
+            "message": "Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot. <br/><br/> Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan. <br/><br/> Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Löydät uusimmat karttatasot, vektoritasot ja julkaistavissa olevat karttatasot valmiiksi määritellyiltä listoilta. <br/><br/>  Avoinna olevat karttatasot voit tarkistaa Valitut tasot -valikosta.",
+            "openLink": "Näytä Karttatasot",
+            "closeLink": "Piilota Karttatasot",
+            "tileText": "Karttatasot"
         }
     }
 });

@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nee"
+        },
+        "guidedTour": {
+            "title": "Mijn gegevens",
+            "message": "Alle plaatsen die u op de kaart hebt gemarkeerd, uw opgeslagen kaartweergaves en geïntegreerde kaarten worden hier weergegeven wanneer u bent aangemeld bij de dienst.",
+            "openLink": "Toon mijn gegevens",
+            "closeLink": "Verberg mijn gegevens",
+            "tileText": "Mijn gegevens"
         }
     }
 });

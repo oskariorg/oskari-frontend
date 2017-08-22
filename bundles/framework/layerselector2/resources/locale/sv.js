@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Visa endast vektorlager",
                 "remove": "Ta bort filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kartlager",
+            "message": "Från Kartlager-menyn du kan välja kartlagret för att visas på kartan. Du kan lista kartlager med tema eller dataleverantör. Du kan också söka kartlager med kartlagernamn, en dataleverantörs namn eller ett sökord. De valda kartlagren kan kontrolleras i valda lagren-menyn.",
+            "openLink": "Visa kartlagren",
+            "closeLink": "Göm kartlagren",
+            "tileText": "Kartlagren"
         }
     }
 });
