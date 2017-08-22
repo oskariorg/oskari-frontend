@@ -205,7 +205,7 @@ Oskari.clazz.define(
             var buttons = this._getDialogButton(dialog);
             var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
             var content = step.getContent();
-            if(step.getLinks) {
+            if(typeof step.getLinks === 'function' && step.getLinks() !== null) {
                 var links = step.getLinks();
                 content.append('<br /><br />');
                 links.forEach(function(l){content.append(l);});
