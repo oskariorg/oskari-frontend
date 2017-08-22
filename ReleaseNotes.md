@@ -2,6 +2,11 @@
 
 ## 1.44.0
 
+### Drawtools
+
+Fixed failing StopDrawingRequest.
+
+
 ### Guidedtour
 
 Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
@@ -21,15 +26,6 @@ Added support to use download basket. Layers need following layer attributes:
 Known issues:
     - only localized in Finnish
     - only supported one license type
-<<<<<<< HEAD
-
-### Guidedtour
-
-Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
-
-By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
-=======
->>>>>>> f36e898ed3c3bca033ef234312d142bf22983b35
 
 ### statistics/statsgrid2016
 
