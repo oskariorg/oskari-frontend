@@ -111,7 +111,7 @@ function() {
      *
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest}
+     * @param {Oskari.mapping.drawtools.request.StartDrawingRequest|Oskari.mapping.drawtools.request.StopDrawingRequest} request
      */
     handleRequest : function(core, request) {
         if (request.getName() === 'DrawTools.StartDrawingRequest') {
