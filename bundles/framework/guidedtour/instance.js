@@ -249,7 +249,7 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _moveGuideStep(delta, dialog){
+        _moveGuideStep: function(delta, dialog){
             var currentStep = this._guideSteps[this.guideStep];
             if(currentStep.hide) {
                 currentStep.hide();
@@ -360,7 +360,7 @@ Oskari.clazz.define(
             // unregister module from sandbox
             this.sandbox.unregister(this);
         },
-        _getGuideContent(tags, callback){
+        _getGuideContent: function(tags, callback){
             var me = this;
             jQuery.ajax({
                 url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
