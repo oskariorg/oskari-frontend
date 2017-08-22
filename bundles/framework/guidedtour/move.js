@@ -18,7 +18,7 @@ const mappings = {
     'page7': {path: '/../../mapping/toolbar/'},
     'page8': {path: '/../../mapping/mapmodule/', multi: 'help1'},
     'page9': {path: '/../../mapping/mapmodule/', multi: 'help2'}
-}
+};
 const targetProperty = 'guidedTour';
 
 var localizations = glob.sync(__dirname + '/' + localePath + '**.js').map(path => {return {path, lang: path.match(/([^/]*)[.]js$/)[1]}});
@@ -56,7 +56,7 @@ localizations.forEach(loc => {
         }
         delete json.value[key];
     })
-    
+
     writeLocFile(loc.path, json);
 });
 

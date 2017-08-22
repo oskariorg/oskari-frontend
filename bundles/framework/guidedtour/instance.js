@@ -2,23 +2,23 @@
  * @class Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance
  *
  * Add this to startupsequence to get this bundle started
- {
- title : 'guidedtour',
- fi : 'guidedtour',
- sv : '?',
- en : '?',
- bundlename : 'guidedtour',
- bundleinstancename : 'guidedtour',
- metadata : {
- "Import-Bundle" : {
- "guidedtour" : {
- bundlePath : '/<path to>/packages/framework/bundle/'
- }
- },
- "Require-Bundle-Instance" : []
- },
- instanceProps : {}
- }
+     {
+     title : 'guidedtour',
+     fi : 'guidedtour',
+     sv : '?',
+     en : '?',
+     bundlename : 'guidedtour',
+     bundleinstancename : 'guidedtour',
+     metadata : {
+     "Import-Bundle" : {
+     "guidedtour" : {
+     bundlePath : '/<path to>/packages/framework/bundle/'
+     }
+     },
+     "Require-Bundle-Instance" : []
+     },
+     instanceProps : {}
+     }
  */
 Oskari.clazz.define(
     'Oskari.framework.bundle.guidedtour.GuidedTourBundleInstance',
@@ -111,7 +111,7 @@ Oskari.clazz.define(
                     Oskari.clazz.create('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', me)
                 );
                 me.sandbox = sandbox;
-                
+
                 me._startGuide();
             }
         },
@@ -149,7 +149,7 @@ Oskari.clazz.define(
             if(this.conf && this.conf.steps) {
                 // step ordering
                 var stepSpec = this.conf.steps;
-                var index = stepSpec.map(function(s){return s.bundleName}).indexOf(delegate.bundleName);
+                var index = stepSpec.map(function(s){return s.bundleName;}).indexOf(delegate.bundleName);
                 if(delegate.bundleName !== me.getName()) {
                     if(index < 0) {
                         return;
@@ -164,15 +164,15 @@ Oskari.clazz.define(
                     if(content){
                         delegate.getContent = function() { // empty placeholder while loading
                             reRenderTarget = jQuery('<div></div>');
-                            return reRenderTarget; 
-                        }
+                            return reRenderTarget;
+                        };
                         this._getGuideContent(content, function(success, response){
                             if(success){
-                                delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>')};
+                                delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>');};
                                 if(reRenderTarget) {
                                     reRenderTarget.prepend(response.body);
                                 }
-                                delegate.getTitle = function() {return response.title};
+                                delegate.getTitle = function() {return response.title;};
                             } else {
                                 Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
                             }
@@ -181,7 +181,7 @@ Oskari.clazz.define(
                 }
             }
             if(typeof delegate.priority === 'number') {
-                var priorities = this._guideSteps.map(function(d){return d.priority});
+                var priorities = this._guideSteps.map(function(d){return d.priority;});
                 var insertLocation = _.sortedIndex(priorities, delegate.priority);
                 this._guideSteps.splice(insertLocation, 0, delegate);
                 if(this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
@@ -191,7 +191,7 @@ Oskari.clazz.define(
                 delegate.priority = this._guideSteps[this._guideSteps.length-1].priority + 1;
                 this._guideSteps.push(delegate);
             }
-            
+
             if(this._dialog) {
                 this._showGuideContentForStep(this.guideStep, this._dialog);
             }
@@ -208,7 +208,7 @@ Oskari.clazz.define(
             if(step.getLinks) {
                 var links = step.getLinks();
                 content.append('<br /><br />');
-                links.forEach(function(l){content.append(l)});
+                links.forEach(function(l){content.append(l);});
             }
             if (stepIndex === 0 || stepIndex === this._guideSteps.length - 1) {
                 content.append('<br><br>');
@@ -249,7 +249,7 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _moveGuideStep(delta, dialog){
+        _moveGuideStep: function(delta, dialog){
             var currentStep = this._guideSteps[this.guideStep];
             if(currentStep.hide) {
                 currentStep.hide();
@@ -360,7 +360,7 @@ Oskari.clazz.define(
             // unregister module from sandbox
             this.sandbox.unregister(this);
         },
-        _getGuideContent(tags, callback){
+        _getGuideContent: function(tags, callback){
             var me = this;
             jQuery.ajax({
                 url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',

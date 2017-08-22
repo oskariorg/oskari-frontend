@@ -346,7 +346,7 @@ Oskari.clazz.define(
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
             },
             getTitle: function () {
-                return this.localization.guidedTour.title
+                return this.localization.guidedTour.title;
             },
             getContent: function () {
                 var content = jQuery('<div></div>');
@@ -391,7 +391,7 @@ Oskari.clazz.define(
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(prop in me.__guidedTourDelegateTemplate){
+                    for(var prop in me.__guidedTourDelegateTemplate){
                         if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
