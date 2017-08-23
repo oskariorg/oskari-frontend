@@ -87,10 +87,7 @@ ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
 };
 
 ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
-    // var me = this,
-        // wfsTileCache = this.getWFSTileCache_(),
-        // layerTileInfos = wfsTileCache.tileInfos,
-        // lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
+
 };
 
 /**
@@ -101,11 +98,9 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
         i,
         me = this,
         bboxKey;
-        // dataForTile;
 
     var wfsTileCache = me.getWFSTileCache_();
         var layerTileInfos = wfsTileCache.tileInfos;
-        // lastTileSetIdentifier =  wfsTileCache.tileSetIdentifier;
 
     this.purgeWFSTileCache_();
 
@@ -228,7 +223,6 @@ ol.source.OskariAsyncTileImage.prototype.setupImageContent = function(boundsObj,
       return;
     }
 
-    // var tileCache = this.getWFSTileCache_();
     var layerTileInfos = this.getWFSTileCache_().tileInfos;
     var tileInfo = layerTileInfos[bboxKey],
         tileCoord = tileInfo ? tileInfo.tileCoord: undefined,
