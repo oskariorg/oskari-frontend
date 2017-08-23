@@ -1497,7 +1497,11 @@ goog.inherits = function(childCtor, parentCtor) {
  * @return {*} The return value of the superclass method.
  */
 goog.base = function(me, opt_methodName, var_args) {
-  var caller = arguments.callee.caller;
+	function caller (){
+		return agruments.callee.caller;
+	}
+  var caller = caller();
+
   if (caller.superClass_) {
     // This is a constructor. Call the superclass constructor.
     return caller.superClass_.constructor.apply(
@@ -1541,5 +1545,3 @@ goog.base = function(me, opt_methodName, var_args) {
 goog.scope = function(fn) {
   fn.call(goog.global);
 };
-
-
