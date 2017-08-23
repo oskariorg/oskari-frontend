@@ -2,6 +2,10 @@
 
 ## 1.44.0
 
+### FormInput
+
+Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
+
 ### Drawtools
 
 Fixed failing StopDrawingRequest.
