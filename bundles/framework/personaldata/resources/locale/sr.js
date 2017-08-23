@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Da",
             "no": "Ne"
+        },
+        "guidedTour": {
+            "title": "Moji podaci",
+            "message": "Za registrovane korisnike ovde se prikazuju lokacije obeležene na mapi, sačuvani prikazi mapa i ugrađene mape",
+            "openLink": "Prikaži moje podatke",
+            "closeLink": "Sakrij moje podatke",
+            "tileText": "Moji podaci"
         }
     }
 });

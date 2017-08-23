@@ -141,6 +141,11 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Ett fel uppstod vid hämtningen av lämpliga regioner för datamängden.",
             "regionsDataError": "Ett fel uppstod vid hämtningen av regionernas värden.",
             "regionsDataIsEmpty": "Listan av lämpliga regioner är tom. Regionernas värden kunde inte ges åt den valda datamängden."
+        },
+        "layer": {
+            "name": "Tematiska kart region",
+            "inspireName": "Tematiska kart",
+            "organizationName": "Tematiska kart"
         }
     }
 });

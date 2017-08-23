@@ -393,7 +393,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     content.find('div.measurementResult').html(resultText);
                 }
             },
-            
+
             'InfoBox.InfoBoxEvent': function(event){
                 var popupId = this.instance.getMainView().getPopupId(),
                     sandbox = this.instance.getSandbox(),

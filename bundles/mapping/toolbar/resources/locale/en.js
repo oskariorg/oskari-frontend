@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Draw a measurable line by cliking its breaking points. Finally double-click an ending point.",
                 "measurearea": "Draw a measurable area by clicking its corner points. Finally double-click an ending point."
             }
+        },
+        "guidedTour": {
+            "title": "Tools",
+            "message": "Use tools to edit your map view. Keep a mouse pointer on top of tool and you can read instructions for the tool. <br/> <br/> Some of tools are available only for logged-in users."
         }
     }
 });

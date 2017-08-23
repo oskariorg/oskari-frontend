@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Pomicanje prikaza karte",
+                "message": "Prikaz na karti možete pomicati tako da kliknete mišem i povlačite ili pomoću naredbi za pomicanje. Na zadani prikaz možete se vratiti klikom na tipku na sredini naredbe za pomicanje. Savjet: Pomicati kartu možete također pomoću strelica na tipkovnici"
+            },
+            "help2": {
+                "title": "Zumiranje - povećavanje i smanjivanje",
+                "message": "Možete povećavati i smanjivati kartu upotrebom klizača za mjerilo ili tipkama plus i minus odmah do klizača. Savjet: Zumirati možete koristeći tipku plus i minus sa tipkovnice ili uvećavati pomoću dvostrukog klika na kartu. Zumirati je moguće i kotačićem na mišu."
+            }
         }
     }
 });

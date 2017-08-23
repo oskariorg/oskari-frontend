@@ -403,10 +403,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
         /**
          * @method _isColor
          * Checks value for a hex color
-         * @return {Boolean} true if ok, false -> not a color
+         * @return {Boolean} true if ok, false -> not a color. null is valid color.
          * @private
          */
         _isColor: function (value) {
+            if(value === null) {
+                return true;
+            }
             return this.validateTool.validateHexColor(value);
         },
         validateCategoryFormValues: function (values) {

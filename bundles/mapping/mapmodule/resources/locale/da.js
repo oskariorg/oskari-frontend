@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Panorer på map viewet",
+                "message": "Du kan flytte view'et på kortet ved at klikke og trække eller ved hjælp af panoreringsfunktionen| Gå tilbage til standard-view'et ved at klikke på knappen midt i panoreringsfunktionen. Tip: du kan også panorere ved hjælp af piletasterne."
+            },
+            "help2": {
+                "title": "Zoom ind og zoom ud",
+                "message": "Du kan zoome ind og ud på kortet ved at bruge skalering-scrollbaren eller plus- og minustasterne på scrollbaren. Du kan også zoome ved hjælp af plus- og minustasterne, ved at dobbeltklikke på kortet eller ved hjælp af dit musehjul."
+            }
         }
     }
 });

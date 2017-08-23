@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Näita ainult vektorkihte",
                 "remove": "Eemalda filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kaardikihid",
+            "message": "Kaardil kuvatavaid andmetooteid saab valida kaardikihte valides. Kliki avamiseks kategoorial ning vali kiht või kirjuta otsinguväljale mõned andmetoote nimes sisalduvad tähed.",
+            "openLink": "Näita kaardikihte",
+            "closeLink": "Peida kaardikihid",
+            "tileText": "Kaardikihid"
         }
     }
 });

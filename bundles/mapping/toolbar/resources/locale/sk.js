@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Nakresli merateľnú líniu kliknutím na jej lomové body. Nakoniec dvojklik na koncovom bode.",
                 "measurearea": "Nakresli merateľnú plochu kliknutím na jej rohové body. Nakoniec dvojklik na koncovom bode."
             }
+        },
+        "guidedTour": {
+            "title": "Nástroje",
+            "message": "Použite nástroje na pridanie umiestnení, uloženie zobrazenia mapy, zdieľanie linku k zobrazeniu mapy alebo na vrátenie k predchádzajúcemu zobrazeniu mapy. Podržte kurzor myši nad daným nástrojom na zobrazenie tipu nástroja"
         }
     }
 });

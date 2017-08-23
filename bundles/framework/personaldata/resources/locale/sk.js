@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Áno",
             "no": "Nie"
+        },
+        "guidedTour": {
+            "title": "Moje údaje",
+            "message": "Všetky miesta, ktoré ste si označili na mape, uložené mapové zobrazenia a vložené mapy, sa zobrazia na tomto mieste, keď sa prihlásite do služby",
+            "openLink": "Zobraziť moje údaje",
+            "closeLink": "Skryť moje údaje",
+            "tileText": "Moje údaje"
         }
     }
 });

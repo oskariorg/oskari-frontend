@@ -340,11 +340,13 @@ Oskari.clazz.define(
                         me.coverageButton.val(me.getLocalization('delimitArea'));
                     }
                     me.drawCoverage = true;
-                    if( document.getElementById('oskari_metadatacatalogue_forminput_searchassistance') === null ) {
-                        return;
+                  
+                    var input = document.getElementById('oskari_metadatacatalogue_forminput_searchassistance');
+                    if(input) {
+                        input.focus();
                     }
-                    document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                    var emptyData = {};
+
+                  var emptyData = {};
                     if (me.coverageButton) {
                         me.coverageButton[0].data = '';
                     }

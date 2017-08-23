@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Bezárás",
             "title": "Keresési eredmények"
+        },
+        "guidedTour": {
+            "title": "Keresés",
+            "message": "Használja a keresés funkciót a kívánt hely térképnézetben való megjelenítéséhez",
+            "openLink": "Keresés megjelenítése",
+            "closeLink": "Keresés elrejtése",
+            "tileText": "Keresés"
         }
     }
 });

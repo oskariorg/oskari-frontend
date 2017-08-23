@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kartenebenen",
+            "message": "Sie können die Datenprodukte auswählen, die auf der Karte angezeigt werden sollen, indem Sie die Kartenebenen markieren. Klicken Sie auf eine Kategorie, um sie zu öffnen und wählen Sie eine Ebene aus. Oder geben Sie einige Buchstaben Ihres Suchbegriffs in das Suchfeld ein.",
+            "openLink": "Zeige Kartenebenen",
+            "closeLink": "Verberge Kartenebenen",
+            "tileText": "Kartenebenen"
         }
     }
 });

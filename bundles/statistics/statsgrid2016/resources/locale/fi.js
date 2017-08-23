@@ -141,6 +141,11 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Aluevalintoja ei saatu valitulle aineistolle.",
             "regionsDataError": "Alueen arvojen haussa tapahtui virhe.",
             "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja."
+        },
+        "layer": {
+            "name": "Teemakartan aluejako",
+            "inspireName": "Teemakartta",
+            "organizationName": "Teemakartta"
         }
     }
 });

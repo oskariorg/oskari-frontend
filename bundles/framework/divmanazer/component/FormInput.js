@@ -378,11 +378,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             var me = this,
                 input = this._field.find('input');
 
-            input.keydown(function (event) {
-                if (me._isUpPress(event)) {
-                    event.preventDefault();
-                    callback(event);
-                }
+            input.keyup(function () {
+                callback(event);
             });
         },
 
@@ -434,7 +431,18 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input.keyup(callback);
             }
         },
-
+        autocomplete: function (results) {
+            var input = this._field.find('input');
+            input.attr('autocomplete', 'on');
+            input.autocomplete({
+                source: results
+            });
+            input.autocomplete('search', input.val());
+        },
+        addClass: function(className) {
+            var input = this._field.find('input');
+            input.addClass(className)
+        },
         /**
          * @method addClearButton
          * Adds a clear button to the field

@@ -105,6 +105,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Karte zentrieren"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Kartenansicht verschieben",
+                "message": "Sie können den Kartenausschnitt durch Anklicken und Ziehen verschieben oder die Verschiebe-Funktion nutzen. Durch Klicken der mittleren Schaltfläche der Verschiebe-Funktion kehren Sie zur Standardansicht zurück. Tipp: Sie können den Kartenausschnitt ebenfalls mit den Pfeiltasten Ihrer Tastatur verschieben."
+            },
+            "help2": {
+                "title": "Herein- und Herauszoomen",
+                "message": "Sie können die Karte vergrößern und verkleinern, indem Sie die Maßstabs-Scrollbalken oder die Plus- und Minustaste neben dem Scrollbalken verwenden. Tipp: Sie können die Karte ebenfalls mit Hilfe der Plus- und Minustasten auf der Tastatur vergrößern und verkleinern. Oder Sie vergrößern die Karte indem Sie doppelt darauf klicken. Zusätzlich können Sie das Mausrad verwenden, um zu zoomen."
+            }
         }
     }
 });
