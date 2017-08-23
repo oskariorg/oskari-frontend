@@ -1,7 +1,5 @@
 .routesearch {
-
     > div {
-
         ul {
             list-style-type: none;
             margin-top: 6px;
@@ -22,11 +20,8 @@
                         color: #3C3C3C;
                         text-shadow: -1px -1px 1px #FFFFFF;
                     }
-
                 }
-
             }
-
         }
 
         .oskarifield {
@@ -39,25 +34,18 @@
                 span {
                     display: block;
                 }
-
             }
 
             input {
-                margin-top: 6px;
-
                 &[type=text] {
                     margin-right: 12px;
                     width: 330px;
                 }
-
             }
 
             .icon-close {
                 margin-left: -20px;
             }
-
         }
-
     }
-
 }

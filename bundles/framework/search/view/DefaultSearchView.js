@@ -398,7 +398,7 @@ Oskari.clazz.define(
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
-                var zoom = {scale : result.zoomScale};
+                zoom = {scale : result.zoomScale};
             }
             sandbox.request(
                 me.instance.getName(),
@@ -413,19 +413,19 @@ Oskari.clazz.define(
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
                     resultAction = {};
-                    resultAction['name'] = name;
-                    resultAction['type'] = 'link';
-                    resultAction['action'] = action(result);
-                    resultAction['group'] = 1;
+                    resultAction.name = name;
+                    resultAction.type = 'link';
+                    resultAction.action = action(result);
+                    resultAction.group = 1;
                     resultActions.push(resultAction);
                 }
             }
 
             var closeAction = {};
-            closeAction['name'] = loc.close;
-            closeAction['type'] = 'link';
-            closeAction['group'] = 1;
-            closeAction['action'] = function () {
+            closeAction.name = loc.close;
+            closeAction.type = 'link';
+            closeAction.group = 1;
+            closeAction.action = function () {
                 var rN = 'InfoBox.HideInfoBoxRequest',
                     rB = sandbox.getRequestBuilder(rN),
                     request = rB(popupId);
