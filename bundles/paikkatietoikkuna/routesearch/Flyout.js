@@ -181,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     field
                 );
                 tmp.addClearButton();
-                tmp.setLabel(me.locale[field]);
+                tmp.setPlaceholder(me.locale[field]);
 
                 tmp.getField().find('input[type=text]').autocomplete({
                     delay: 300,
