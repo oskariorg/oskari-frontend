@@ -190,6 +190,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     instance.dropdowns[i].find('option').hide();
                     instance.dropdowns[i].find('.'+ instance.instances[0].getValue()).show();
 
+
                     // Koordinaatisto special cases
                     if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
                         instance.dropdowns[3].find('option').hide();
@@ -228,7 +229,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         jQuery('.map-projection').hide();
                         instance.instances[2].setValue('DATUM_KARTTAPJ_DEFAULT');
                     }
-                    
+
+                    if( instance.instances[0].getValue() !== this.currentDatum || this.currentDatum === undefined) {
+                        if( i != 0 ) {
+                            instance.instances[i].resetToPlaceholder();
+                        }
+                    }
                     values = [];
                     instance.instances[i].update();
                     for (var j = 0; j < instance.instances.length; j++ ) {
@@ -238,6 +244,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     me.updateEditable(values);
                     if(i == instance.instances.length -1) {
                      me.updateTableTitle(values);
+                     this.currentDatum = instance.instances[0].getValue();
                     }
                 }
                 });
