@@ -444,10 +444,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             var me = this;
             var helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', this.instance, this.loc);
             jQuery(this.container).find('.clear').on("click", function () {
-                var table = jQuery('#coordinatefield-input tr td');
-                for(var i = 0; i < table.length; i++){
-                    if( table[i].textContent != "  ") {
-                        jQuery(table[i]).parent().remove();
+                var cells = jQuery('#coordinatefield-input tr .cell:not(.cell.control)');
+                for(var i = 0; i < cells.length; i++) {
+                    var trimmedCellValue = jQuery.trim( jQuery( cells[i] ).html());
+                    if( trimmedCellValue !== "" ) {
+                        jQuery(cells[i]).parent().remove();
                     }
                 }
             });
