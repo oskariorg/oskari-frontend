@@ -47,7 +47,7 @@ Oskari.registerLocalization(
                 "ellipse_height":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
-                "clear": "Tyhjennä kentät",
+                "clear": "Tyhjennä taulukot",
                 "show": "Näytä sijainnit kartalla",
                 "export": "Vie tulokset tiedostoon"
             }

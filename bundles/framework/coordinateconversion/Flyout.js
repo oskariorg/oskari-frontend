@@ -25,8 +25,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
                                             '<h4><%= title %></h4>'+
                                             '<form>'+
-                                                '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
                                                 '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
+                                                '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
                                                 '<input type="radio" id="map" name="load" value="3"><label for="map"> <span></span> <%= map %> </label>'+
                                             '</form> </div>'),
             datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
@@ -190,7 +190,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     instance.dropdowns[i].find('option').hide();
                     instance.dropdowns[i].find('.'+ instance.instances[0].getValue()).show();
 
-
                     // Koordinaatisto special cases
                     if( instance.instances[1].getValue() === "KOORDINAATISTO_MAANT_2D" ) {
                         instance.dropdowns[3].find('option').hide();
@@ -227,7 +226,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         jQuery('.map-projection').show();
                     } else {
                         jQuery('.map-projection').hide();
-                        instance.instances[2].setValue('DATUM_KARTTAPJ_DEFAULT');
+                        instance.instances[2].resetToPlaceholder();
                     }
 
                     if( instance.instances[0].getValue() !== this.currentDatum || this.currentDatum === undefined) {
@@ -242,9 +241,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                         values.push(vl);
                     }
                     me.updateEditable(values);
-                    if(i == instance.instances.length -1) {
-                     me.updateTableTitle(values);
-                     this.currentDatum = instance.instances[0].getValue();
+                    if( i == instance.instances.length -1 ) {
+                        me.updateTableTitle(values);
+                        this.currentDatum = instance.instances[0].getValue();
                     }
                 }
                 });
