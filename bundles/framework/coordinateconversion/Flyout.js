@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                                             '<form>'+
                                                 '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
                                                 '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                                                '<input type="radio" id="map" name="load" value="3"><label for="map"> <span></span> <%= map %> </label>'+
+                                                '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>"'+
                                             '</form> </div>'),
             datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
                                     '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput" style="display:none">'+
@@ -63,10 +63,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             resultcoordinatefield: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left: 8px;">' +
                                                     '<h5> <%= result %> </h5>' +
                                                     '<div class="scrollable">'+
-                                                    '<table class=" hoverable" id="coordinatefield-target" style="border: 1px solid black;">'+
-                                                    '<tbody></tbody'+
-                                                    '</table>'+
-                                                '</div> </div>'),
+                                                        '<table class=" hoverable" id="coordinatefield-target" style="border: 1px solid black;">'+
+                                                            '<tbody></tbody'+
+                                                        '</table>'+
+                                                    '</div>'+
+                                                '</div>'),
             conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block; padding-left: 8px;">' +
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
@@ -386,7 +387,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                             jsonLonLat[i].lat = latValue[0];
                         }
 
-                        me.populateTableWithData(jsonLonLat);
+                        me.populateTableWithData(e.target, jsonLonLat);
 
                 });
             }
@@ -396,12 +397,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
          *
          * {Object} data, each key need to have property lon & lat 
          */
-        populateTableWithData: function( data ) {
-            var table = jQuery(this.container).find('.coordinatefield-input');
+        populateTableWithData: function( cell, data ) {
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     var row = this._template.tablerow( { coords: data[key] } );
-                    table.find('tr:first').after(row);
+                    jQuery(cell).parent().after(row);
                 }
             }
         },
@@ -431,15 +431,16 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
                     mapInfo.hide();
                     me.selectFromMap = false;
                 }
-                if(this.value == '3') {
+                me.updateEditable();
+            });
+            
+                jQuery('.mapselect').on("click", function() {
                     fileInput.hide();
                     clipboardInfo.hide();
                     mapInfo.show();
                     me.selectFromMap = true; 
                     me.insertWithClipboard = false;                   
-                }
-                me.updateEditable();
-            });
+                });
          },
         /**
          * @method handleRadioButtons

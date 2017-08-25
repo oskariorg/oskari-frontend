@@ -19,7 +19,7 @@ Oskari.registerLocalization(
                 "title": "Koordinaattitietojen lähde",
                 "file": "Tiedostosta",
                 "clipboard": "Kopionti leikepöydältä",
-                "map": "Kartalta",
+                "map": "Valitse sijainnit kartalta",
                 "choose":"Valitse sijainti kartalta"
             },
             "datasourceinfo": {
