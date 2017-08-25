@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.ConversionView',
+Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversion',
     function (instance) {
         var me = this;
         me.instance = instance;
@@ -78,6 +78,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.Conversio
                                         '</div>')
         }
     }, {
+        getName: function() {
+            return 'Oskari.framework.bundle.coordinateconversion.view.conversion';
+        },
         createUI: function(container) {
            var me = this;
            this.conversionContainer = container;
@@ -460,6 +463,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.Conversio
             });
 
                 jQuery('.mapselect').on("click", function() {
+                    me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
                     fileInput.hide();
                     clipboardInfo.hide();
                     mapInfo.show();
@@ -482,12 +486,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.Conversio
                     if( trimmedCellValue !== "" ) {
                         jQuery(cells[i]).parent().remove();
                     }
-                }
-            });
-            jQuery('#mapdiv').on("click", function () {
-                if( me.selectFromMap ) {
-                    var coords = helper.getCoordinatesFromMap();
-                    me.addToInputTable(coords);
                 }
             });
             jQuery(this.conversionContainer).find('.show').on("click", function () {

@@ -26,7 +26,7 @@ Oskari.registerLocalization(
                 "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
-                "mapinfo":"Tämän ollessa valittuna valitse kartalta klikkaamalla yksi tai useampia pisteitä.",
+                "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
                 "uploading":"Ladataan",
                 "success":"Valmis!",
                 "error":"Virhe!",
