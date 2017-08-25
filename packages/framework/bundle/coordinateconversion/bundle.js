@@ -51,7 +51,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
             "src": "../../../../bundles/framework/coordinateconversion/components/helper.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/plugin/ConversionPlugin.js"
+            "src": "../../../../bundles/framework/coordinateconversion/view/ConversionView.js"
         }, {
             "type": "text/css",
             "src": "../../../../bundles/framework/coordinateconversion/resources/css/coordinateconversion.css"
