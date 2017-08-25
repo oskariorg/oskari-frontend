@@ -31,7 +31,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
                 var data = {
                     x: Number(coords.lon),
                     y: Number(coords.lat),
-                    iconUrl: '/Oskari/resources/icons/marker-pin2.png'
+                    iconUrl: '/Oskari/resources/icons/marker-pin2.png',
+                    msg: "lon: "+coords.lon+ "lat: "+coords.lat
                 };
             var request = reqBuilder(data);
             this.sb.request('MainMapModule', request);
