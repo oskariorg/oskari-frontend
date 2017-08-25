@@ -11,7 +11,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me.instance = instance;
         me.loc = this.instance.getLocalization("flyout");
         me.container = null;
-        this.conversionView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.ConversionView', me.instance);
+        this.conversionView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.conversion', me.instance);
+        this.mapselectView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.mapselect', me.instance);
     }, {
         /**
          * @method getName
@@ -31,6 +32,15 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         },
         createUi: function() {
             var view = this.conversionView.createUI(this.container);
+        },
+        shouldUpdate: function (caller) {
+            if(caller === 'Oskari.framework.bundle.coordinateconversion.view.conversion') {
+                jQuery(this.container).parent().parent().hide();
+                var mapselect = this.mapselectView.show();
+            }
+            else {
+                jQuery(this.container).parent().parent().show();
+            }
         },
         /**
          * @method startPlugin

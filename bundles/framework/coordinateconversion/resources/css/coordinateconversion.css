@@ -61,10 +61,13 @@
     float:right;
 }
 .show {
-    float:right;
+    float:left;
 }
 .clear {
     float:left;
+}
+.heightsystem {
+    background-color: lightgray;
 }
 #convert {
     color:cornsilk;
