@@ -28,8 +28,9 @@ Oskari.registerLocalization(
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
                 "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
                 "uploading":"Ladataan",
-                "success":"Valmis!",
+                "success":"Valmis",
                 "error":"Virhe!",
+                "cancel":"Peruuta"
             },
             "coordinatefield": {
                 "input": "Muunnettavat koordinaatit",

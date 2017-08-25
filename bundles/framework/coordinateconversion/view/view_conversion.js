@@ -505,12 +505,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         },
         addToInputTable: function (coords) {
             var table = jQuery(this.conversionContainer).find('#coordinatefield-input');
-            var row = this._template.tablerow( { coords: coords } );
-            table.find('tr:first').after(row);
-            //append the click event to the new rows aswell
-            jQuery('.removerow').on('click', function () {
-                jQuery(this).parent().parent().remove();
-            });
+            for (var i = 0; i < coords.length; i++ ) {
+                var row = this._template.tablerow( { coords: coords[i] } );
+                table.find('tr:first').after(row);
+                //append the click event to the new rows aswell
+                jQuery('.removerow').on('click', function () {
+                    jQuery(this).parent().parent().remove();
+                }); 
+            }
         },
         getRows: function () {
             var rows = jQuery(this.conversionContainer).find("#coordinatefield-input tr");

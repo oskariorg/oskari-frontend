@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect
         me.loc = me.instance.getLocalization("flyout");
         me.helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', me.instance, me.loc);
         me.mapselectContainer = null;
-        me._template = jQuery('<div class="conversion-mapselect"></div>')
+        me.mapcoords = [];        
     }, {
         getName: function() {
             return 'Oskari.framework.bundle.coordinateconversion.view.mapselect';
@@ -14,24 +14,35 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect
             var me = this;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton('OK'),
+            btn = dialog.createCloseButton(this.loc.datasourceinfo.success),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
+            cancelBtn.setTitle(this.loc.datasourceinfo.cancel);
             btn.addClass('primary');
+
+            cancelBtn.setHandler(function() {
+                dialog.close();
+                me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
+                me.mapcoords = [];
+            });
 
             btn.setHandler(function() {
                 dialog.close();
+                me.instance.plugins['Oskari.userinterface.Flyout'].conversionView.addToInputTable(me.mapcoords);
                 me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
+                me.mapcoords = [];
             })
 
             dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
+            dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);
             this.getCoordinatesFromMap();
         },
         getCoordinatesFromMap: function() {
             var me = this;
             jQuery('#mapdiv').on("click", function () {
                     var coords = me.helper.getCoordinatesFromMap();
-                    me.instance.plugins['Oskari.userinterface.Flyout'].conversionView.addToInputTable(coords);
+                    if(coords != null) {
+                        me.mapcoords.push(coords);
+                    }
             });
         }
     }
