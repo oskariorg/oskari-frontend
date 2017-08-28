@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
                 charts.shouldUpdate = false;
               }
             this.chartsFlyout = charts.getFlyout();
-            if( charts.getCharts() === null && charts.hasActiveIndicator() !== null ) {
+            if( charts.getCharts() !== null && charts.hasActiveIndicator() !== null ) {
                 charts.createBarCharts();
             }
               if( this.chartsFlyout.isVisible() ) {
