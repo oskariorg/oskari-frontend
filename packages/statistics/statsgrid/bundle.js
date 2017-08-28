@@ -125,7 +125,7 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "expose" : "d3",
-                "src": "../../../libraries/d3/d3_3.5.16.js"
+                "src":"../../../libraries/d3/d3.min.js"
             }],
             "locales": [{
                 "lang": "fi",
