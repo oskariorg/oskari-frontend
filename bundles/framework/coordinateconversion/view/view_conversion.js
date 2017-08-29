@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                             '<form>'+
                                                 '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
                                                 '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
-                                                '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>"'+
+                                                '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>">'+
                                             '</form> </div>'),
             datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
                                     '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput" style="display:none">'+
@@ -41,10 +41,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                     '</div>'
                                     ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
-            oskari_table_content: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
+            oskari_input_table_content: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
                                         '<div class="oskari-table-content">'+
-                                         '<div style="width:100%;height:100%; overflow:auto;">'+
+                                         '<div style="width:100%;height:98%; overflow:auto;">'+
                                             '<table class="hoverable" id="oskari-coordinate-table" style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
                                                 '<tbody></tbody'+
                                             '</table>'+
@@ -62,10 +62,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                              '</thead>'+
                                         ' </table>'+
                                      '</div>'),
-            oskari_table_content_result: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left:8px;">' +
+            oskari_result_table_content: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left:8px;">' +
                                         '<h5> <%= result %> </h5>' +
                                         '<div class="oskari-table-content-target">'+
-                                         '<div style="width:100%;height:100%; overflow:auto;">'+
+                                         '<div style="width:100%;height:98%; overflow:auto;">'+
                                             '<table class="hoverable" id="oskari-coordinate-table-result" style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
                                                 '<tbody></tbody'+
                                             '</table>'+
@@ -107,14 +107,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                                                              map: this.loc.datasource.map,
                                                                              choose: this.loc.datasource.choose });
     
-            var inputcoordinatefield = this._template.oskari_table_content({  input: this.loc.coordinatefield.input,
+            var inputcoordinatefield = this._template.oskari_input_table_content({  input: this.loc.coordinatefield.input,
                                                                             north:this.loc.coordinatefield.north,
                                                                             east:this.loc.coordinatefield.east,
                                                                             ellipse_height: "" });
 
             var conversionbutton = this._template.conversionbutton({ convert: this.loc.coordinatefield.convert });
 
-            var resultcoordinatefield = this._template.oskari_table_content_result({ result: this.loc.coordinatefield.result });
+            var resultcoordinatefield = this._template.oskari_result_table_content({ result: this.loc.coordinatefield.result });
 
             var datasourceinfo = this._template.datasourceinfo({ fileupload: this.loc.datasourceinfo.fileupload,
                                                             link: this.loc.datasourceinfo.link,
@@ -452,14 +452,13 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
          */
         handleRadioButtons: function() {
             var me = this;
-            var clipboardInfo = jQuery(me.container).find('.coordinateconversion-clipboardinfo');
-            var mapInfo = jQuery(me.container).find('.coordinateconversion-mapinfo');
-            var fileInput = jQuery(me.container).find('#fileinput');
+            var clipboardInfo = jQuery(me.conversionContainer).find('.coordinateconversion-clipboardinfo');
+            var mapInfo = jQuery(me.conversionContainer).find('.coordinateconversion-mapinfo');
+            var fileInput = jQuery(me.conversionContainer).find('#fileinput');
 
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
                     clipboardInfo.hide();
-                    mapInfo.hide();
                     fileInput.show();
                     me.selectFromMap = false;
                     me.insertWithClipboard = false;
@@ -468,7 +467,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     fileInput.hide();
                     me.insertWithClipboard = true;
                     clipboardInfo.show();
-                    mapInfo.hide();
                     me.selectFromMap = false;
                 }
                 me.updateEditable();
@@ -476,9 +474,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
 
                 jQuery('.mapselect').on("click", function() {
                     me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
-                    fileInput.hide();
-                    clipboardInfo.hide();
-                    mapInfo.show();
                     me.selectFromMap = true; 
                     me.insertWithClipboard = false;                   
                 });
@@ -511,9 +506,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     }
                 })
                 });
-            jQuery('.removerow').on('click', function () {
+            // jQuery('.removerow').on('click', function () {
                 
-            });
+            // });
         },
         addToInputTable: function (coords) {
             var table = jQuery(this.conversionContainer).find('#oskari-coordinate-table');
@@ -521,9 +516,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 var row = this._template.tablerow( { coords: coords[i] } );
                 table.find('tr:first').after(row);
                 //append the click event to the new rows aswell
-                jQuery('.removerow').on('click', function () {
-                    jQuery(this).parent().parent().remove();
-                }); 
+                // jQuery('.removerow').on('click', function () {
+                //     jQuery(this).parent().parent().remove();
+                // }); 
             }
         },
         getRows: function () {
