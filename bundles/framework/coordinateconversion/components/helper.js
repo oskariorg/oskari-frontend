@@ -25,15 +25,17 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
     getCoordinatesFromMap: function() {
         return this.clickCoordinates;
     },
-    moveToCoords: function (coords) {
+    addMarkerForCoords: function (coords, startingSystem) {
     var reqBuilder = this.sb.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
         if (reqBuilder) {
                 var data = {
                     x: Number(coords.lon),
                     y: Number(coords.lat),
-                    iconUrl: '/Oskari/resources/icons/marker-pin2.png',
-                    msg: "lon: "+coords.lon+ "lat: "+coords.lat
+                    iconUrl: '/Oskari/resources/icons/marker-pin2.png'
                 };
+                if( startingSystem ) {
+                    data.msg = "lon: "+coords.lon+ "lat: "+coords.lat;
+                }
             var request = reqBuilder(data);
             this.sb.request('MainMapModule', request);
         }

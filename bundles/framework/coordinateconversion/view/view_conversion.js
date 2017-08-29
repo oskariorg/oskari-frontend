@@ -7,13 +7,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.selectFromMap = false;
         me.insertWithClipboard = false;
         me.conversionContainer = null
+        me.startingSystemSelected = false;
         me._template = {
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
                                     '<h4><%= title %></h4>'+
                                     '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
                                     '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div>  </div> </br> ' +
                                     '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br>' +
-                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> </b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
+                                    '<div class="geodetic-coordinatesystem"><b class="dropdown_title"><%= geodetic_coordinate_system %> *</b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
                                     '<div class="height-system"><b class="dropdown_title"><%= height_system %></b></div> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div>'
                                 ),
             coordinatedatasource: _.template('<div class="coordinateconversion-datasource"> </br> ' +
@@ -255,6 +256,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     if( instance.instances[2].getValue() === "GK" ) {
                         instance.dropdowns[3].find('option').hide();
                         instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
+                    }
+                    if( instance.instances[3].getValue() !== "COORDSYS_DEFAULT" ) {
+                        me.startingSystemSelected = true;
+                    } else {
+                        me.startingSystemSelected = true;
                     }
                     if( instance.instances[4].getValue() === "KORKEUSJ_DEFAULT") {
                         rows.each( function ( idx, row ) {
@@ -502,7 +508,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     var lon = jQuery(this).find('.lon').html();
                     if(lat != "  " && lon != "  "){
                         var coords = { lon: lon, lat: lat };
-                        helper.moveToCoords(coords);
+                        helper.addMarkerForCoords(coords, me.startingSystemSelected);
                     }
                 })
                 });
