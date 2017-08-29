@@ -60,6 +60,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
+        this.sortOptions = {};
 
         /* last sort parameters are saved so we can change sort direction if the
          * same column is sorted again
@@ -1425,7 +1426,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
          */
         select: function (value, keepPrevious, scrollableElement) {
-            var key = this.model.getIdField(),
+            var me = this,
+                key = this.model.getIdField(),
                 dataArray = this.model.getData(),
                 index,
                 rows,
@@ -1444,6 +1446,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             jQuery(rows[index]).addClass('selected');
 
+            // Move selected rows top if configured
+            if (me.lastSort && me.sortOptions.moveSelectedRowsTop) {
+                // sort with last know sort when updating data
+                me.sortBy(me.lastSort.attr, me.lastSort.descending);
+            }
+
             if(scrollableElement) {
                 scrollableElement.scrollTop(0);
                 var row = scrollableElement.find('tr[data-id="'+value+'"]');
@@ -1451,6 +1459,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     scrollableElement.scrollTop(row.position().top);
                 }
             }
+
+
         },
         /**
          * @method removeSelections
@@ -1640,11 +1650,79 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
         },
 
+        _getSelectedRows: function(){
+            var me = this;
+            var selected = {
+                elements: [],
+                values : []
+            };
+            me.table.find('tr.selected').each(function(){
+                var el = jQuery(this);
+                selected.elements.push(el);
+                selected.values.push(el.attr('data-id'));
+            });
+            return selected;
+        },
+
+        /**
+         * Move selected rows on the top
+         * @method @public moveSelectedRowsTop
+         * @param {Boolean} move is wanted move selected rows on the top of grid?
+         */
+        moveSelectedRowsTop: function(move){
+            var me = this;
+            me.sortOptions.moveSelectedRowsTop = !!move;
+
+            // If there is sort then keep rows order when selected keep selected rows on the top
+            if(me._getSelectedRows().length > 0 && me.lastSort) {
+                me.sortBy(me.lastSort.attr, me.lastSort.descending);
+            }
+            // Otherwise do only moving selected rows to top
+            else {
+                me._moveSelectedRowsTop();
+            }
+        },
+
+        /**
+         * Move selected rows to top of grid
+         * @method  @private _moveSelectedRowsTop
+         */
+        _moveSelectedRowsTop: function(){
+            var me = this;
+            if(me.sortOptions.moveSelectedRowsTop) {
+                var selected = me._getSelectedRows();
+                var moveRow = function(rowEl) {
+                    me.table.prepend(rowEl);
+                };
+                selected.elements.forEach(function(el){
+                    moveRow(el);
+                });
+
+                // Also sort model data
+                var idField = me.model.getIdField();
+                var data = [];
+                var moveData = function(item){
+                    if(selected.values.indexOf(item[idField]) > -1) {
+                        data.unshift(item);
+                    } else {
+                        data.push(item);
+                    }
+                };
+                me.model.getData().forEach(function(item){
+                    moveData(item);
+                });
+
+                me.model.data = data;
+            }
+        },
+
         sortBy: function(scopedValue, descending) {
             if(!this.model) {
                 return;
             }
             var me = this;
+            var selected = me._getSelectedRows();
+
             // sort the results
             me._sortBy(scopedValue, descending);
             // populate table content
@@ -1655,6 +1733,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             this.table.find('tbody').empty();
             me._renderBody(this.table, fieldNames);
+
+            // Highlight selected back
+            selected.values.forEach(function(value){
+                me.table.find('tr[data-id="'+value+'"]').addClass('selected');
+            });
+
+            me._moveSelectedRowsTop();
+
             me.trigger('sort', {
                 column : scopedValue,
                 ascending : !descending
