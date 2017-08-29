@@ -327,7 +327,6 @@ Oskari.clazz.define(
             }
             panel.getContainer().append(this.instance.getLocalization('loading'));
 
-
             if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
             }
@@ -470,6 +469,39 @@ Oskari.clazz.define(
         },
 
         /**
+         * Get visible fields
+         * @method @public getVisibleFields
+         * @param  {Object} layer
+         * @return {Array}  visible fields
+         */
+        getVisibleFields: function(layer){
+            var me = this;
+            var fields = layer.getFields();
+            var hiddenFields = [];
+            var visibleFields = [];
+            hiddenFields.push('__fid');
+            hiddenFields.push('__centerX');
+            hiddenFields.push('__centerY');
+            hiddenFields.push('geometry');
+            // helper function for visibleFields
+            var contains = function (a, obj) {
+                for (var i = 0; i < a.length; i += 1) {
+                    if (a[i] === obj) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            // filter out certain fields
+            for (var i = 0; i < fields.length; i += 1) {
+                if (!contains(hiddenFields, fields[i])) {
+                    visibleFields.push(fields[i]);
+                }
+            }
+            return visibleFields;
+        },
+
+        /**
          * @private @method _prepareData
          * Updates data for layer
          *
@@ -515,11 +547,6 @@ Oskari.clazz.define(
                     fields.unshift('locate_on_map');
                 }
 
-                hiddenFields.push('__fid');
-                hiddenFields.push('__centerX');
-                hiddenFields.push('__centerY');
-                hiddenFields.push('geometry');
-
                 // check if properties (fields or locales) have changed
                 if (!panel.fields || !panel.locales || !me._isArrayEqual(fields, panel.fields) || !me._isArrayEqual(locales, panel.locales)) {
                     panel.fields = fields;
@@ -530,6 +557,7 @@ Oskari.clazz.define(
                 var visibleFields = [];
 
                 if(!panel.grid){
+                    firstTimeRender = true;
                     panel.grid = grid = Oskari.clazz.create(
                             'Oskari.userinterface.component.Grid',
                             me.instance.getLocalization('columnSelectorTooltip')
@@ -564,7 +592,6 @@ Oskari.clazz.define(
                             layer.getPermission('download') === 'download_permission_ok'
                         );
                     }
-
                 }
 
                 if (panel.propertiesChanged) {
@@ -583,26 +610,9 @@ Oskari.clazz.define(
                             panel.grid.setColumnUIName(fields[k], locales[k]);
                         }
                     }
-
-                    // helper function for visibleFields
-                    var contains = function (a, obj) {
-                        for (var i = 0; i < a.length; i += 1) {
-                            if (a[i] === obj) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    };
-
-                    // filter out certain fields
-                    for (var i = 0; i < fields.length; i += 1) {
-                        if (!contains(hiddenFields, fields[i])) {
-                            visibleFields.push(fields[i]);
-                        }
-                    }
+                    visibleFields = me.getVisibleFields(layer);
 
                     panel.grid.setVisibleFields(visibleFields);
-
                 }
                 model.fields.push('');
                 panel.grid.setDataModel(model);
@@ -690,7 +700,8 @@ Oskari.clazz.define(
 
                 if(!panel.checkbox) {
                     panel.checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-                    panel.checkbox.setTitle('Näytä valitut ensin');
+                    var locale = me.instance.getLocalization();
+                    panel.checkbox.setTitle(locale.showSelectedFirst);
                     panel.checkbox.setChecked(false);
                     panel.checkbox.setHandler(function() {
                         panel.grid.moveSelectedRowsTop(panel.checkbox.isChecked());

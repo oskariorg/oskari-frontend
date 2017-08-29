@@ -1656,11 +1656,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 elements: [],
                 values : []
             };
-            me.table.find('tr.selected').each(function(){
-                var el = jQuery(this);
-                selected.elements.push(el);
-                selected.values.push(el.attr('data-id'));
-            });
+            if(me.table){
+                me.table.find('tr.selected').each(function(){
+                    var el = jQuery(this);
+                    selected.elements.push(el);
+                    selected.values.push(el.attr('data-id'));
+                });
+            }
             return selected;
         },
 
@@ -1674,7 +1676,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.sortOptions.moveSelectedRowsTop = !!move;
 
             // If there is sort then keep rows order when selected keep selected rows on the top
-            if(me._getSelectedRows().length > 0 && me.lastSort) {
+            if(me._getSelectedRows().values && me._getSelectedRows().values.length > 0 && me.lastSort) {
                 me.sortBy(me.lastSort.attr, me.lastSort.descending);
             }
             // Otherwise do only moving selected rows to top
@@ -1717,7 +1719,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         sortBy: function(scopedValue, descending) {
-            if(!this.model) {
+            if(!this.model || !this.table) {
                 return;
             }
             var me = this;
