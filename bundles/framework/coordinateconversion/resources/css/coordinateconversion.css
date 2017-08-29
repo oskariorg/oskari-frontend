@@ -36,16 +36,10 @@
     height:auto;
     /* display: inline-block; */
 }
-.coordinatefield-input {
+ .coordinatefield-input {
     float:left;
-    width: 20em !important;
-}
-.scrollable {
-    overflow: hidden;
-    height:13em;
-    margin-bottom: 1em;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
-}
+} 
+
 .coordinatefield-result {
     float:left;
     width: 20em !important;
@@ -79,24 +73,7 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
     text-shadow: none;
 }
-.overlay-btn {
-      color:#08233e;
-    font:2.4em Futura, ‘Century Gothic’, AppleGothic, sans-serif;
-    font-size:70%;
-    padding:8px;
-     background:url(../images/overlay-gray.png) repeat-x center #E5E5E5; 
-    background-color:rgba(229,229,229,1);
-    /* border:1px solid #ffcc00; */
-    -moz-border-radius:2px;
-    -webkit-border-radius:2px;
-    border-radius:2px;
-    border-bottom:1px solid #9f9f9f;
-    -moz-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
-    -webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
-    cursor:pointer;
-    text-shadow: none;
-}
+
 
 .clipboardinfo {
     margin-top:2%;
@@ -188,6 +165,69 @@ input[type="radio"]:checked + label span {
   -moz-transition:background-color 0.4s linear;
   transition:background-color 0.4s linear;
 }
+
+/*
+*TABLE
+*/
+#oskari-coordinate-table {
+    height: 100%;
+    overflow-y: scroll;
+}
+#oskari-coordinate-table-result {
+    height: 100%;
+    overflow-y: scroll;
+}
+.oskari-table-content {
+    float:left;
+    width: 20em !important;
+    height: 20em;
+    overflow: hidden;
+    margin-top: 0px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.oskari-table-content-target {
+    float:right;
+    width: 20em !important;
+    height: 20em;
+    overflow: hidden;
+    margin-top: 0px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.oskari-table-header {
+    background-color:rgba(37, 184, 193, 0.8);
+    width: 20em !important;
+}
+#oskari-tbl-header {
+    margin-bottom: 0;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+th {
+  padding: 20px 8px;
+  text-align: left;
+  font-weight: 500;
+  font-size: calc(0.55rem + 0.28vh);
+  color: #fff;
+  text-transform: uppercase;
+  width: 33% !important;
+}
+td {
+    background: #FAFAFA;
+    text-align: center;
+}
+.cell {
+    height: 1em;
+}
+.cell.control {
+    border: inherit; 
+    border-bottom: 1px solid black;
+    display: none; 
+    position: relative;
+}
+
+/*
+* TABLE HOVER
+*/
 .hoverable {
   background: white;
   border-radius:3px;
@@ -200,13 +240,13 @@ input[type="radio"]:checked + label span {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
 }
-.hoverable td{ 
+.hoverable td { 
     padding:7px; border:#4e95f4 1px solid;
     width:33% !important;
 }
 /* Define the hover highlight color for the table row */
 .hoverable tr:hover {
-    background:#4E5066;
+  background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
@@ -219,45 +259,16 @@ tr:hover td {
 }
 .hoverable tr:hover .cell.control { 
     /* float: right; */
-    display: inline-block;
-}
-.cell {
-    height: 1em;
-}
-.cell.control {
-    border: inherit; 
-    border-bottom: 1px solid black;
-     display: none; 
+    /* display: inline-block; */
 }
 
-/*td, th { border: 1px solid #CCC; height: 30px; }  Make cells a bit taller */
-
-.rowHeader th {
-  
-  background:#ffd400;
-  border-bottom:2px solid #9ea7af;
-  border-right: 1px solid #343a45;
-  height: 1.5em;
-  font-size:1.1em;
-  font-weight: 100;
-  text-align:left;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  vertical-align:middle;
-
-}
-
-td {  
-    background: #FAFAFA; /* Lighter grey background */
-    text-align: center; /* Center our text */
-}
-.rowHeader {
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-}
 .removerow {
     border-radius: 50%;
     height:1.3em;
     width:1.4em;
     background-image: url('../images/icon-close.png');
+    right:-5em;
+    position: absolute;
 }
 .select {
     float:right;
@@ -273,4 +284,24 @@ td {
     background-image: url('../images/icon-info.png');
     height: 1.3em;
     width: 1.3em;
+}
+::-webkit-scrollbar {
+    width: 6px;
+} 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+} 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
+@media screen and (max-width: 640px) {
+	table {
+		overflow-x: auto;
+	}
+}
+@media screen and (max-width: 780px) {
+	table {
+		overflow-x: auto;
+	}
 }
