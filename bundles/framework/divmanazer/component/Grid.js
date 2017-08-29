@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateTabTools = jQuery('<div class="tab-tools"></div>');
         this.templateExporter = jQuery('<div class="exporter"></div>');
         this.templateColumnSelectorTitle = jQuery(
-            '<div class="column-selector-title"></div>'
+            '<div class="column-selector-title"><div class="title"></div><div class="icon"></div></div>'
         );
         this.templateColumnSelectorWrapper = jQuery('<div/>', {});
         this.templateColumnSelector = jQuery('<div/>', {});
@@ -991,7 +991,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector = me.templateColumnSelectorWrapper.clone();
             me.visibleColumnSelector.addClass('column-selector-placeholder');
             columnSelector.addClass('column-selector');
-            columnSelectorLabel.append(me._loc.columnSelector.title);
+            columnSelectorLabel.find('.title').html(me._loc.columnSelector.title);
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
