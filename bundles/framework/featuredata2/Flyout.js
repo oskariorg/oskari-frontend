@@ -306,6 +306,7 @@ Oskari.clazz.define(
          * Updates data for layer
          */
         updateData: function (layer) {
+            var me = this;
             if (!this.active || !layer) {
                 return;
             }
@@ -349,6 +350,10 @@ Oskari.clazz.define(
 
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
+
+            if(me.layers[layer.getId()] && me.layers[layer.getId()].showSelectedRowsFirst) {
+                me.layers[layer.getId()].grid.moveSelectedRowsTop(true);
+            }
         },
 
         /**
@@ -505,8 +510,6 @@ Oskari.clazz.define(
 
                 fields = model.getFields();
 
-
-
                 //ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
                 if (allowLocateOnMap) {
                     fields.unshift('locate_on_map');
@@ -526,36 +529,20 @@ Oskari.clazz.define(
 
                 var visibleFields = [];
 
-                if (!panel.grid || panel.propertiesChanged) {
-                    panel.propertiesChanged = false;
-
-                    var grid = Oskari.clazz.create(
+                if(!panel.grid){
+                    panel.grid = grid = Oskari.clazz.create(
                             'Oskari.userinterface.component.Grid',
                             me.instance.getLocalization('columnSelectorTooltip')
-                        ),
-                        k;
-
-                    // Data source & metadata link
-                    grid.setDataSource(
-                        layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
-                    );
-                    grid.setMetadataLink(layer.getMetadataIdentifier());
-
-                    // localizations
-                    if (locales) {
-                        for (k = 0; k < locales.length; k += 1) {
-                            grid.setColumnUIName(fields[k], locales[k]);
-                        }
-                    }
+                        );
 
                     // set selection handler
-                    grid.addSelectionListener(function (pGrid, dataId) {
+                    panel.grid.addSelectionListener(function (pGrid, dataId) {
                         me._handleGridSelect(layer, dataId);
                     });
 
                     // set popup handler for inner data
                     var showMore = me.instance.getLocalization('showmore');
-                    grid.setAdditionalDataHandler(showMore,
+                    panel.grid.setAdditionalDataHandler(showMore,
                         function (link, content) {
                             var dialog = Oskari.clazz.create(
                                 'Oskari.userinterface.component.Popup'
@@ -567,6 +554,35 @@ Oskari.clazz.define(
                             }
                             me.dialog = dialog;
                         });
+
+
+                    panel.grid.setColumnSelector(true);
+                    panel.grid.setResizableColumns(true);
+
+                    if (conf && !conf.disableExport) {
+                        panel.grid.setExcelExporter(
+                            layer.getPermission('download') === 'download_permission_ok'
+                        );
+                    }
+
+                }
+
+                if (panel.propertiesChanged) {
+                    panel.propertiesChanged = false;
+                    var k;
+
+                    // Data source & metadata link
+                    panel.grid.setDataSource(
+                        layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                    );
+                    panel.grid.setMetadataLink(layer.getMetadataIdentifier());
+
+                    // localizations
+                    if (locales) {
+                        for (k = 0; k < locales.length; k += 1) {
+                            panel.grid.setColumnUIName(fields[k], locales[k]);
+                        }
+                    }
 
                     // helper function for visibleFields
                     var contains = function (a, obj) {
@@ -585,23 +601,13 @@ Oskari.clazz.define(
                         }
                     }
 
-                    grid.setVisibleFields(visibleFields);
-                    grid.setColumnSelector(true);
-                    grid.setResizableColumns(true);
+                    panel.grid.setVisibleFields(visibleFields);
 
-
-                    if (conf && !conf.disableExport) {
-                        grid.setExcelExporter(
-                            layer.getPermission('download') === 'download_permission_ok'
-                        );
-                    }
-
-                    panel.grid = grid;
                 }
                 model.fields.push('');
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
-                    grid.setNumericField(field, me._fixedDecimalCount);
+                    panel.grid.setNumericField(field, me._fixedDecimalCount);
                 });
 
                 //custom renderer for locating feature on map
@@ -682,8 +688,21 @@ Oskari.clazz.define(
                     });
                 }
 
+                if(!panel.checkbox) {
+                    panel.checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                    panel.checkbox.setTitle('Näytä valitut ensin');
+                    panel.checkbox.setChecked(false);
+                    panel.checkbox.setHandler(function() {
+                        panel.grid.moveSelectedRowsTop(panel.checkbox.isChecked());
+                        panel.showSelectedRowsFirst = panel.checkbox.isChecked();
+                    });
+                }
+                panel.getContainer().append(panel.checkbox.getElement());
+                var gridEl = jQuery('<div class="featuredata2-grid"></div>');
+                panel.getContainer().append(gridEl);
+                panel.grid.renderTo(gridEl);
 
-                panel.grid.renderTo(panel.getContainer());
+
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
                     content = jQuery('div.oskari-flyoutcontent.featuredata'),
