@@ -59,6 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     field.setLabel(data.label);
                     field.setTooltip(data.tooltip, data.helptags);
                     field.setPlaceholder(data.placeholder);
+                    field.addMarginToLabel(20);
                     data.field = field;
                 }
             }

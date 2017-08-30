@@ -2,6 +2,21 @@
 
 ## 1.44.0
 
+### FormInput
+
+Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
+
+### Drawtools
+
+Fixed failing StopDrawingRequest.
+
+
+### Guidedtour
+
+Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
+
+By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
+
 ### framework/download-basket
 
 Added support to use download basket. Layers need following layer attributes:

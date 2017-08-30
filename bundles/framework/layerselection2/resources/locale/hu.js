@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Térképréteg",
                 "type-wfs": "Adattermék"
             }
+        },
+        "guidedTour": {
+            "title": "Kiválasztott térképrétegek",
+            "message": "Kattintással és húzással megváltoztathatja a térképrétegek sorrendjét, valamint azok átlátszóságát.",
+            "openLink": "Kiválasztott térképrétegek megjelenítése",
+            "closeLink": "Kiválasztott térképrétegek elrejtése",
+            "tileText": "Kiválasztott térképrétegek"
         }
     }
 });

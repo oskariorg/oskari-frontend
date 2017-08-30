@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Zatvori",
             "title": "Rezultati pretrage"
+        },
+        "guidedTour": {
+            "title": "Pretraga",
+            "message": "Upotrebi pretragu za pozicioniranje na željenu lokaciju",
+            "openLink": "Prikaži pretragu",
+            "closeLink": "Sakrij pretragu",
+            "tileText": "Pretraga"
         }
     }
 });

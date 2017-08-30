@@ -29,6 +29,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Cerrar",
             "title": "Resultados de la búsqueda"
+        },
+        "guidedTour": {
+            "title": "Buscar",
+            "message": "El menú de búsqueda se dividido en dos funciones: «Búsqueda de localización» (búsqueda de una localización por nombre, dirección e identiificadores de unidad catastral y el mapa se centra en la localización) y «Búsqueda de metadatos» (búsqueda de datos por diferentes criterios de búsqueda. Los resultados de la búsqueda incluyen también los conjuntos de datos que no están isponibles en Oskari",
+            "openLink": "Mostrar búsqueda",
+            "closeLink": "Ocultar búsqueda",
+            "tileText": "Buscar"
         }
     }
 });

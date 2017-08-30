@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Jah",
             "no": "Ei"
+        },
+        "guidedTour": {
+            "title": "Minu andmed",
+            "message": "Kõiki kaardil märgitud kohti, salvestatud kaardivaateid ja põimitud kaarte näidatakse, kui oled teenusesse sisse loginud.",
+            "openLink": "Näita minu andmeid",
+            "closeLink": "Peida minu andmed",
+            "tileText": "Minu andmed"
         }
     }
 });
