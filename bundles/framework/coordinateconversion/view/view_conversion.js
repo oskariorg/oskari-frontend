@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         getName: function() {
             return 'Oskari.framework.bundle.coordinateconversion.view.conversion';
         },
-        createUI: function(container) {
+        createUI: function( container ) {
            var me = this;
            this.conversionContainer = container;
             var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
@@ -159,6 +159,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         this.handleClipboard();
         this.handleButtons();
         this.handleRadioButtons();
+        this.tableDisplayNumOfRows();
          if( this.canUseAdvancedUpload() ) {
             this.handleDragAndDrop();
          }
@@ -171,7 +172,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var selectInstances = [];
             var options = {}
             jQuery.each( json, function ( key, value ) {
-                var size = Object.keys(value).length;
+                var size = Object.keys( value ).length;
                  jQuery.each( value, function ( key, val ) {
                     var valObject = {
                         id : val.id,
@@ -179,7 +180,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         cls: val.cls
                     };
                     selections.push( valObject );
-                    if (key === "0") {
+                    if ( key === "0" ) {
                         options = {
                             placeholder_text: val.title,
                             allow_single_deselect : true,
@@ -187,24 +188,24 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                             width: '100%'
                         };
                     }
-                     if (key == size -1) {
+                     if ( key == size -1 ) {
                         var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', "id");
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};
 
-                        dropdown.css({width:'130px', float:'right'});
+                        dropdown.css( { width:'130px', float:'right' } );
                         select.adjustChosen();
                         select.selectFirstValue();
                         // if(index > 0) {
                         //     dropdown.parent().addClass('margintop');
                         // }
-                        dropdowns.push(dropdown);
-                        selectInstances.push(select);
+                        dropdowns.push( dropdown );
+                        selectInstances.push( select );
                      }
                 });
             });
-            return {"instances": selectInstances, "dropdowns": dropdowns};
+            return { "instances": selectInstances, "dropdowns": dropdowns };
         },
           /**
          * @method selectGetValue
@@ -218,7 +219,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         selectGetValue: function ( instance, called ) {
             var me = this;
             var values = [];
-            var rows = this.getRows();
+            var rows = this.getElements().rows;
             if( !called ) {
                 jQuery( this.conversionContainer ).find('#inputcoordsystem').on("change", function() {
                     for (var i = 0; i < instance.instances.length; i++ ) {
@@ -284,25 +285,25 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         instance.instances[2].resetToPlaceholder();
                     }
 
-                    if( instance.instances[0].getValue() !== this.currentDatum || this.currentDatum === undefined) {
+                    if( instance.instances[0].getValue() !== this.currentDatum || this.currentDatum === undefined ) {
                         if( i !== 0 ) {
                             instance.instances[i].resetToPlaceholder();
                         }
                     }
-                    if( instance.instances[1].getValue() !== this.currentCoordinatesystem || this.currentCoordinatesystem === undefined) {
+                    if( instance.instances[1].getValue() !== this.currentCoordinatesystem || this.currentCoordinatesystem === undefined ) {
                         if( i > 1) {
                             instance.instances[i].resetToPlaceholder();
                         }
                     }
                     values = [];
                     instance.instances[i].update();
-                    for (var j = 0; j < instance.instances.length; j++ ) {
+                    for ( var j = 0; j < instance.instances.length; j++ ) {
                         var vl = instance.instances[j].getValue();
-                        values.push(vl);
+                        values.push( vl );
                     }
                     if( i == instance.instances.length -1 ) {
-                        me.updateTableTitle(values);
-                        me.updateEditable(values);
+                        me.updateTableTitle( values );
+                        me.updateEditable( values );
                         this.currentDatum = instance.instances[0].getValue();
                         this.currentCoordinatesystem = instance.instances[1].getValue();
                     }
@@ -322,7 +323,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             if(typeof values === null) {
                 values = undefined;
             }
-            var rows = this.getRows();
+            var rows = this.getElements().rows;
             if( !this.insertWithClipboard ) {
                 rows.each( function ( row ) {
                     jQuery(this).find('td').attr("contenteditable", false);
@@ -339,7 +340,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
 
         },
         updateTableTitle: function (values) {
-            jQuery(this.conversionContainer).find(".oskari-table-header").remove();
+            this.getElements().tableHeader.remove();
+            
             var x = y = z = "";
             if( values[3].indexOf("COORDSYS_KKJ") !== -1 ) {
                 x = this.loc.coordinatefield.kkjnorth
@@ -364,10 +366,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                    x = this.loc.coordinatefield.geox
                    y = this.loc.coordinatefield.geoy
                    z = this.loc.coordinatefield.geoz
-            }
-
-            if(jQuery(this.conversionContainer).find('.rowHeader')) {
-                jQuery(this.conversionContainer).find('.rowHeader').remove();
             }
 
             if( x !== '' && y !== '' || z !== '' ) {
@@ -444,12 +442,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
          * {Object} data, each key need to have property lon & lat 
          */
         populateTableWithData: function( cell, data ) {
+            var table = this.getElements().table;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     var row = this._template.tablerow( { coords: data[key] } );
                     jQuery(cell).parent().after(row);
                 }
             }
+            table.trigger('rowCountChanged');
         },
         /**
          * @method handleRadioButtons
@@ -502,7 +502,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 }
             });
             jQuery(this.conversionContainer).find('.show').on("click", function () {
-                var rows = me.getRows();
+                var rows = me.this.getElements().rows;
                 rows.each(function () {
                     var lat = jQuery(this).find('.lat').html();
                     var lon = jQuery(this).find('.lon').html();
@@ -517,7 +517,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             // });
         },
         addToInputTable: function (coords) {
-            var table = jQuery(this.conversionContainer).find('#oskari-coordinate-table');
+            var table = this.getElements().table;
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this._template.tablerow( { coords: coords[i] } );
                 table.find('tr:first').after(row);
@@ -526,10 +526,25 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 //     jQuery(this).parent().parent().remove();
                 // }); 
             }
+            table.trigger('rowCountChanged');
         },
-        getRows: function () {
-            var rows = jQuery(this.conversionContainer).find("#oskari-coordinate-table tr");
-            return rows;
+        tableDisplayNumOfRows: function () {
+            var me = this;
+            var table = this.getElements().table;
+            table.bind('rowCountChanged', function (evt) {
+                var rows = me.getElements().rows;
+                    if( rows.length >= 1000 ) {
+                        rows.slice(1000).css('display', 'none');
+                    }
+                });
+        },
+        getElements: function () {
+            var elements = {
+                "table": jQuery(this.conversionContainer).find('#oskari-coordinate-table'),
+                "rows": jQuery(this.conversionContainer).find("#oskari-coordinate-table tr"),
+                "tableHeader": jQuery(this.conversionContainer).find(".oskari-table-header")
+            }
+            return elements;
         },
         /**
          * @method handleDragAndDrop
