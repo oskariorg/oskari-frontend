@@ -55,6 +55,7 @@
 }
 .coordinateconversion-buttons{
     clear: left;
+    width: 100%;
 }
 .coordinateconversion-buttons.show.clear{
     float:left;
