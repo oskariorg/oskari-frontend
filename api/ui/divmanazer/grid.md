@@ -81,6 +81,12 @@ grid.renderTo(someElement);
 
 // select row and scroll table to selected
 grid.select(wantedRowValue, false, scrollableElement);
+
+// show selected rows top
+grid.moveSelectedRowsTop(true);
+
+// not show selected rows top
+grid.moveSelectedRowsTop(false);
 ```
 
 ## Dependencies
