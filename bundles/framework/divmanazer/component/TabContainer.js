@@ -208,6 +208,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          */
         insertTo: function (container) {
             container.append(this.ui);
+
+            // Check if  tabcontainer is rendered flyout, fix then flyout overflow
+            this.ui.parents('.oskari-flyoutcontentcontainer').css('overflow', 'hidden');
         },
 
         destroy: function () {
