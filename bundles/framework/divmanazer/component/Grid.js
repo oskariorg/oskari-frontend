@@ -50,28 +50,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.exportPopup = null;
         this.table = null;
         this.fieldNames = [];
-        this.selectionListeners = [];
         this.additionalDataHandler = null;
-        this.visibleColumnSelector = null;
-        this.showColumnSelector = false;
         this.showExcelExporter = false;
         this.resizableColumns = false;
         this.autoHeightHeader = false;
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
-        this.sortOptions = {};
-
-        /* last sort parameters are saved so we can change sort direction if the
-         * same column is sorted again
-         */
-        this.lastSort = null;
 
         /** Grouping headers */
         this._groupingHeaders = null;
-
-        /* Current page. Used to keep track current page when sorting cols */
-        this._currentPage = {};
 
         Oskari.makeObservable(this);
     }, {
@@ -222,20 +210,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setVisibleFields: function (pFieldNames) {
             this.fieldNames = pFieldNames;
         },
-        /**
-         * @method addSelectionListener
-         * The callback function will receive reference to the grid in question
-         * as first parameter and the id for the selected data as second
-         * parameter:
-         * function({Oskari.userinterface.component.Grid} grid, {String} dataId)
-         *
-         * @param {function} pCallback
-         * Callback to call when a row has been selected
-         *
-         */
-        addSelectionListener: function (pCallback) {
-            this.selectionListeners.push(pCallback);
-        },
+
         /**
          * @private @method _createSubTable
          * Creates columns from a subtable object.
@@ -413,211 +388,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this._groupingHeaders = headers;
         },
 
-        /**
-         * @method  @private _selectActivePage Select active to visible page
-         */
-        _selectActivePage: function(){
-            var me = this;
-            // Safety checks
-            if(!this.table || !me._groupingHeaders) {
-                return;
-            }
-            var selected = this.table.find('th.selected');
-            if(!selected.is(':visible')) {
-                var colIndex = this.table.find('tr th:not(.grouping)').index(selected);
-                var cols = 0;
-
-                // Resolve wanted page to visible
-                selected.parent().parent().find('tr.grouping th').each(function(){
-                    var groupHeader = jQuery(this);
-                    if(!groupHeader.attr('colspan')){
-                        cols++;
-                    } else {
-                        cols += Number(groupHeader.attr('colspan'));
-                    }
-                    var maxCols = Number(groupHeader.attr('data-max-cols'));
-                    var groupStartCol = Number(groupHeader.attr('data-start-col'));
-
-                    // Founded matching group header
-                    if(colIndex < cols && colIndex + 1 >= groupStartCol && !!maxCols) {
-                        // resolve wanted page
-                        var wantedPage = (colIndex - (colIndex % maxCols)) / maxCols;
-                        if(colIndex % maxCols > 0) {
-                            wantedPage += 1;
-                        }
-                        groupHeader.attr('data-page',wantedPage);
-                        me._changePage(groupHeader);
-                    }
-                });
-            }
-        },
-
-        /**
-         * @method  @private _changePage  Change page
-         * @param  {Object} groupHeader group header
-         */
-        _changePage: function(groupHeader){
-            var me = this;
-
-            if(me._groupingHeaders && groupHeader.attr('data-group-cols')) {
-                var page = Number(groupHeader.attr('data-page'));
-                var groupIndex = groupHeader.attr('data-header-index');
-                me._currentPage[groupIndex] = page;
-                var maxCols = Number(groupHeader.attr('data-max-cols'));
-                var maxPages = Number(groupHeader.attr('data-max-page'));
-                var groupCols = Number(groupHeader.attr('data-group-cols'));
-                var groupStartCol = Number(groupHeader.attr('data-start-col'));
-                var table = groupHeader.parents('table');
-                var next = groupHeader.find('.paging.next');
-                var previous = groupHeader.find('.paging.previous');
-                var c;
-
-                // hide grouping cols
-                for(var i=groupStartCol;i<groupCols+groupStartCol;i++){
-                    var content = table.find('tr th:not(.grouping):nth-child('+i+') ,td:not(.grouping):nth-child('+i+')');
-                    content.hide();
-                }
-
-                var pagingHandler = function(groupHeader, data) {
-                    var headerIndex = Number(groupHeader.attr('data-header-index'));
-                    var header = me._groupingHeaders[headerIndex];
-                    // If header has paging handler then do it
-                    if(typeof header.pagingHandler === 'function') {
-                        header.pagingHandler(groupHeader.find('.title'), data);
-                    }
-                    // otherwise show default text, for example: "2-4/5"
-                    else if(!header.text) {
-                        groupHeader.find('.title').html(data.visible.start + '-' + data.visible.end + '/' + data.count);
-                    }
-                };
-
-                // Check buttons visibility
-                var checkPagingButtonsVisiblity = function(){
-                    var page = Number(groupHeader.attr('data-page'));
-                    var next = groupHeader.find('.paging.next');
-                    var previous = groupHeader.find('.paging.previous');
-                    next.removeClass('hidden');
-                    previous.removeClass('hidden');
-                    if(page===1) {
-                        previous.addClass('hidden');
-                    } else if(page === Number(groupHeader.attr('data-max-page'))){
-                        next.addClass('hidden');
-                    }
-                };
-
-                var visibleCols = Array.apply(null, {length: groupCols}).map(Number.call, Number);
-
-                // Get visible cols and shows them
-                // If page is first then show only first cols
-                if(page === 1) {
-                    visibleCols = visibleCols.slice(0, maxCols);
-                }
-                // else page is latest
-                else if (page === maxPages) {
-                    visibleCols = visibleCols.slice(Math.max(groupCols - maxCols, 1));
-                }
-                // else page is between first and latest
-                else {
-                    visibleCols = visibleCols.slice((page-1) * maxCols, page * maxCols);
-                }
-
-                // Show page cols
-                visibleCols.forEach(function(element){
-                    var colIndex = element + groupStartCol;
-                    var currentColEl = table.find('tr th:nth-child(' + colIndex + '):not(.grouping),td:nth-child(' + colIndex + '):not(.grouping)');
-                    currentColEl.show();
-                });
-
-
-                if(visibleCols.length < groupCols) {
-                    pagingHandler(groupHeader, {
-                        visible: {
-                            start: visibleCols[0] + 1,
-                            end: visibleCols[visibleCols.length-1] + 1
-                        },
-                        count: groupCols,
-                        page: page,
-                        maxPages: maxPages
-                    });
-
-                    checkPagingButtonsVisiblity();
-                }
-
-
-            }
-        },
-        /**
-         * @method  @private_checkPaging Check table paging
-         * @param  {Object} table jQuery table dom
-         */
-        _checkPaging: function(table){
-            var me = this;
-            if(me._groupingHeaders) {
-                // Paging handlers
-                var prevHandler = function(evt) {
-                    evt.stopPropagation();
-                    var groupHeader = jQuery(this).parents('th.grouping');
-                    var page = Number(groupHeader.attr('data-page')) - 1;
-                    if(page < 1) {
-                        page = 1;
-                    }
-                    groupHeader.attr('data-page', page);
-                    me._changePage(groupHeader);
-                };
-
-                var nextHandler = function(evt) {
-                    evt.stopPropagation();
-                    var groupHeader = jQuery(this).parents('th.grouping');
-                    var page = Number(groupHeader.attr('data-page')) + 1;
-                    if(page > groupHeader.attr('data-max-page')) {
-                        page = groupHeader.attr('data-max-page');
-                    }
-                    groupHeader.attr('data-page', page);
-                    me._changePage(groupHeader);
-                };
-                table.find('th.grouping').each(function(){
-                    var groupHeader = jQuery(this);
-                    var groupCols = groupHeader.attr('colspan') ?  Number(groupHeader.attr('colspan')) :  1;
-                    var maxCols = groupHeader.attr('data-max-cols');
-                    var next = groupHeader.find('.paging.next');
-                    var previous = groupHeader.find('.paging.previous');
-                    if(!!maxCols && groupCols > maxCols){
-                        if(me._groupingHeaders.length > 1 && i === 0) {
-                            next.addClass('hidden');
-                        } else if(me._groupingHeaders.length > 1 && i > 0) {
-                            previous.addClass('hidden');
-                        }
-
-                        var maxPage = (groupCols - (groupCols % maxCols)) / maxCols;
-                        if(groupCols % maxCols > 0) {
-                            maxPage += 1;
-                        }
-                        groupHeader.attr('data-group-cols', groupCols);
-                        groupHeader.attr('data-max-page', maxPage);
-                        groupHeader.attr('data-page', maxPage);
-
-                        var groupIndex = groupHeader.attr('data-header-index');
-
-                        // Bind events
-                        next.unbind('click');
-                        next.bind('click', nextHandler);
-                        previous.unbind('click');
-                        previous.bind('click', prevHandler);
-
-                        if(me._currentPage[groupIndex]) {
-                            groupHeader.attr('data-page', me._currentPage[groupIndex]);
-                            // release current page information
-                            delete me._currentPage[groupIndex];
-                        }
-
-                        me._changePage(groupHeader);
-                    } else {
-                        next.remove();
-                        previous.remove();
-                    }
-                });
-            }
-        },
         /**
          * @private @method _renderHeader
          * Renders the header part for data in #getDataModel() to the given
@@ -1400,120 +1170,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         },
 
         /**
-         * @private @method _dataSelected
-         * Notifies all selection listeners about selected data.
-         *
-         * @param {String} dataId id for the selected data
-         */
-        _dataSelected: function (dataId) {
-            var i;
-
-            for (i = 0; i < this.selectionListeners.length; i += 1) {
-                this.selectionListeners[i](this, dataId);
-            }
-        },
-        /**
-         * @method select
-         * Tries to find an object from #getDataModel() using the the id given
-         * as parameter "value".
-         * Oskari.mapframework.bundle.featuredata.domain.GridModel.getIdField()
-         * is used to determine the field which value is compared against.
-         * If found, selects the corresponding row in the grid.
-         *
-         * @param {String} value id for the data to be selected
-         * @param {Boolean} keepPrevious
-         * True to keep previous selection, false to clear before selecting
-         * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
-         */
-        select: function (value, keepPrevious, scrollableElement) {
-            var me = this,
-                key = this.model.getIdField(),
-                dataArray = this.model.getData(),
-                index,
-                rows,
-                data;
-
-            for (index = 0; index < dataArray.length; index += 1) {
-                data = dataArray[index];
-                if (data[key] === value) {
-                    // found
-                    break;
-                }
-            }
-            rows = this.table.find('tbody tr');
-            if (keepPrevious !== true) {
-                rows.removeClass('selected');
-            }
-            jQuery(rows[index]).addClass('selected');
-
-            // Move selected rows top if configured
-            if (me.lastSort && me.sortOptions.moveSelectedRowsTop) {
-                // sort with last know sort when updating data
-                me.sortBy(me.lastSort.attr, me.lastSort.descending);
-            }
-
-            if(scrollableElement) {
-                scrollableElement.scrollTop(0);
-                var row = scrollableElement.find('tr[data-id="'+value+'"]');
-                if(row.length > 0) {
-                    scrollableElement.scrollTop(row.position().top);
-                }
-            }
-
-
-        },
-        /**
-         * @method removeSelections
-         */
-        removeSelections: function () {
-            var rows = this.table.find('tbody tr');
-
-            rows.removeClass('selected');
-        },
-        /**
-         * @method getSelection
-         * Returns current selection visible on grid.
-         *
-         * @return {Object[]}
-         * Subset of #getDataModel() that is currently selected in grid
-         */
-        getSelection: function () {
-            var dataArray = this.model.getData(),
-                selection = [],
-                rows = this.table.find('tbody tr'),
-                i,
-                row;
-
-            for (i = 0; i < rows.length; i += 1) {
-                row = jQuery(rows[i]);
-                if (row.hasClass('selected')) {
-                    selection.push(dataArray[i]);
-                }
-            }
-            return selection;
-        },
-        /**
-         * @method selectColumn
-         * Sets "selected" class to the column header
-         * @param {String} value id for the column to be selected
-         */
-        selectColumn: function (value) {
-            // set selectedColumn in either case so render will use it immediately
-            this.__selectedColumn = value;
-
-            if(!this.table) {
-                return;
-            }
-            // remove selection from headers
-            this.table.find('th').removeClass('selected');
-            // add selection to the one specified
-            var selected = this.table.find('th.' + this.__getHeaderClass(value));
-            selected.addClass('selected');
-
-            this._selectActivePage();
-        },
-
-        /**
          * @method getTable
          * Returns the grid table.
          *
@@ -1607,146 +1263,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             return ret;
-        },
-        /**
-         * @private @method _sortBy
-         * Sorts the last search result by comparing given attribute on the search objects
-         *
-         * @param {String} pAttribute
-         * Attributename to sort by (e.g. result[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         */
-        _sortBy: function (pAttribute, pDescending) {
-            if(!this.model) {
-                return;
-            }
-            var me = this,
-                dataArray = me.model.getData();
-            if (dataArray.length === 0) {
-                return;
-            }
-            this.lastSort = {
-                attr: pAttribute,
-                descending: pDescending
-            };
-
-            dataArray.sort(function (a, b) {
-                if (typeof a[pAttribute] === 'object' ||
-                    typeof b[pAttribute] === 'object') {
-                    // not sorting objects
-                    return 0;
-                }
-
-                var nameA = me._getAttributeValue(a, pAttribute);
-                var nameB = me._getAttributeValue(b, pAttribute);
-
-                var renderer = me.valueRenderer[pAttribute];
-                if (renderer) {
-                    nameA = renderer(nameA);
-                    nameB = renderer(nameB);
-                }
-
-                return Oskari.util.naturalSort(nameA, nameB, pDescending);
-            });
-        },
-
-        _getSelectedRows: function(){
-            var me = this;
-            var selected = {
-                elements: [],
-                values : []
-            };
-            if(me.table){
-                me.table.find('tr.selected').each(function(){
-                    var el = jQuery(this);
-                    selected.elements.push(el);
-                    selected.values.push(el.attr('data-id'));
-                });
-            }
-            return selected;
-        },
-
-        /**
-         * Move selected rows on the top
-         * @method @public moveSelectedRowsTop
-         * @param {Boolean} move is wanted move selected rows on the top of grid?
-         */
-        moveSelectedRowsTop: function(move){
-            var me = this;
-            me.sortOptions.moveSelectedRowsTop = !!move;
-
-            // If there is sort then keep rows order when selected keep selected rows on the top
-            if(me._getSelectedRows().values && me._getSelectedRows().values.length > 0 && me.lastSort) {
-                me.sortBy(me.lastSort.attr, me.lastSort.descending);
-            }
-            // Otherwise do only moving selected rows to top
-            else {
-                me._moveSelectedRowsTop();
-            }
-        },
-
-        /**
-         * Move selected rows to top of grid
-         * @method  @private _moveSelectedRowsTop
-         */
-        _moveSelectedRowsTop: function(){
-            var me = this;
-            if(me.sortOptions.moveSelectedRowsTop) {
-                var selected = me._getSelectedRows();
-                var moveRow = function(rowEl) {
-                    me.table.prepend(rowEl);
-                };
-                selected.elements.reverse().forEach(function(el){
-                    moveRow(el);
-                });
-
-                // Also sort model data
-                var idField = me.model.getIdField();
-                var data = [];
-                var moveData = function(item){
-                    if(selected.values.indexOf(item[idField]) > -1) {
-                        data.unshift(item);
-                    } else {
-                        data.push(item);
-                    }
-                };
-                me.model.getData().forEach(function(item){
-                    moveData(item);
-                });
-
-                me.model.data = data;
-            }
-        },
-
-        sortBy: function(scopedValue, descending) {
-            if(!this.model || !this.table) {
-                return;
-            }
-            var me = this;
-            var selected = me._getSelectedRows();
-
-            // sort the results
-            me._sortBy(scopedValue, descending);
-            // populate table content
-            var fieldNames = me.fieldNames;
-            // if visible fields not given, show all
-            if (fieldNames.length === 0) {
-                fieldNames = me.model.getFields();
-            }
-            this.table.find('tbody').empty();
-            me._renderBody(this.table, fieldNames);
-
-            // Highlight selected back
-            selected.values.forEach(function(value){
-                me.table.find('tr[data-id="'+value+'"]').addClass('selected');
-            });
-
-            me._moveSelectedRowsTop();
-
-            me.trigger('sort', {
-                column : scopedValue,
-                ascending : !descending
-            });
         },
 
         /**
@@ -1868,5 +1384,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 this.sizeInterval = setInterval(setHeight, 1000);
             }
         }
+    },
+    {
     }
 );
