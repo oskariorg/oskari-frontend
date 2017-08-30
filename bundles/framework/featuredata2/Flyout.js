@@ -324,6 +324,10 @@ Oskari.clazz.define(
                 panel.getContainer().append(this.instance.getLocalization('errorscale'));
                 return;
             }
+            if(layer.getFields().length === 0) {
+                panel.getContainer().append(this.instance.getLocalization('errorNoFields'));
+                return;
+            }
             panel.getContainer().append(this.instance.getLocalization('loading'));
 
 
