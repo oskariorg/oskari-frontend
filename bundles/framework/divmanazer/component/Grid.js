@@ -1696,7 +1696,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var moveRow = function(rowEl) {
                     me.table.prepend(rowEl);
                 };
-                selected.elements.forEach(function(el){
+                selected.elements.reverse().forEach(function(el){
                     moveRow(el);
                 });
 
