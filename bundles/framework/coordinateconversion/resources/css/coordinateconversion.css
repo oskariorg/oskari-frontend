@@ -1,3 +1,8 @@
+.conversionwrapper {
+    max-width: 47em !important;
+    display: flex;
+    flex-flow: row wrap;
+}
 .coordinateconversion-csystem {
     display: inline-block;
     font-size: 12px;
@@ -51,15 +56,13 @@
 .coordinateconversion-buttons{
     clear: left;
 }
+.coordinateconversion-buttons.show.clear{
+    float:left;
+}
 .export {
     float:right;
 }
-.show {
-    float:left;
-}
-.clear {
-    float:left;
-}
+
 .heightsystem {
     background-color: lightgray;
 }
@@ -296,12 +299,64 @@ tr:hover td {
 }
 
 @media screen and (max-width: 640px) {
-	table {
-		overflow-x: auto;
-	}
+    .conversionwrapper {
+        max-width: 27em !important;
+    }
+
+    #targetcoordsystem {
+        margin-left: 0;
+        clear:both;
+        order:4;
+    }
+    #inputcoordsystem {
+        order:2;
+    }
+    .coordinatefield-input {
+        order:3;
+    }
+    .coordinatefield-result {
+        order:6;
+    }
+    .conversionbtn {
+        order:5;
+        clear:both;
+        /* margin-top: 6.25rem; */
+    }
+    .coordinateconversion-datasource {
+        order:1;
+    }
+    .coordinateconversion-buttons {
+        order: 7;
+    }
 }
-@media screen and (max-width: 780px) {
-	table {
-		overflow-x: auto;
-	}
+@media screen and (max-width: 785px) {
+    .conversionwrapper {
+        max-width: 27em !important;
+    }
+    #targetcoordsystem {
+        margin-left: 0;
+        clear:both;
+        order:4;
+    }
+    #inputcoordsystem {
+        order:2;
+    }
+    .coordinatefield-input {
+        order:3;
+    }
+    .coordinatefield-result {
+        order:6;
+    }
+    .conversionbtn {
+        order:5;
+        clear:both;
+        /* margin-top: 6.25rem; */
+    }
+    .coordinateconversion-datasource {
+        order:1;
+    }
+    .coordinateconversion-buttons {
+        order: 7;
+    }
+
 }
