@@ -3,41 +3,83 @@ $pagingArrowActiveColor: #f0f0f0;
 $pagingArrowHoverColor: #ffd400;
 $pagingArrowDeactiveColor: transparent;
 
-div.column-selector-placeholder {
-    border-style: none;
-    float: left;
-    opacity: 1.0;
-    margin-left: 8px;
-    padding: 0;
-    right: 0;
-    width: 200px;
-    height: 30px;
-    max-width: 200px;
-    max-height: 35px;
-}
+div.tab-tools {
+    height: 34px;
+    position: static;
 
-div.column-selector-title {
-    margin-top: 10px;
-    margin-left: 2px;
-    cursor: pointer;
+    div.column-selector-placeholder {
+        border-style: none;
+        float: right;
+        opacity: 1.0;
+        margin-right: 0;
+        padding: 0;
+        right: 0;
+        width: 200px;
+        height: 30px;
+        max-width: 200px;
+        max-height: 35px;
 
-    .title {
-        padding-left: 4px;
-        float: left;
-        width: 171px;
-        border: 1px solid #999;
+        div.column-selector-title {
+            margin-top: 10px;
+            margin-left: 2px;
+            cursor: pointer;
+
+            .title {
+                padding-left: 4px;
+                float: left;
+                width: 171px;
+                border: 1px solid #999;
+            }
+
+            .icon {
+                background-image: url(../images/desc_arrow.png);
+                background-repeat: no-repeat;
+                background-position: 6px 7px;
+                float: right;
+                width: 20px;
+                border-top: 1px solid #999;
+                border-bottom: 1px solid #999;
+                border-right: 1px solid #999;
+                height: 21px;
+            }
+        }
+
+        div.column-selector {
+            max-height: 40%;
+            width: 270px;
+            overflow: auto;
+            position: absolute;
+            visibility: hidden;
+            background-color: white;
+            margin-top: 22px;
+            margin-left: -72px;
+            margin-right: 5px;
+            padding: 0;
+            border: 1px solid;
+            z-index: 10001;
+
+            div.close-selector-button {
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+
+            ul.column-selector-list {
+                list-style-type: none;
+                padding-right: 30px;
+            }
+
+            label.column-label {
+                padding-left: 5px;
+            }
+        }
     }
 
-    .icon {
-        background-image: url(../images/desc_arrow.png);
-        background-repeat: no-repeat;
-        background-position: 6px 7px;
-        float: right;
-        width: 20px;
-        border-top: 1px solid #999;
-        border-bottom: 1px solid #999;
-        border-right: 1px solid #999;
-        height: 21px;
+    div.exporter {
+        float: left;
+        text-align: left;
     }
 }
 
@@ -51,48 +93,6 @@ div.icon-menu {
     height: 8px;
     max-width: 25px;
     max-height: 7px;
-}
-
-div.column-selector {
-    max-height: 40%;
-    width: 270px;
-    overflow: auto;
-    position: absolute;
-    visibility: hidden;
-    background-color: white;
-    margin-top: 22px;
-    margin-left: 2px;
-    margin-right: 5px;
-    padding: 0;
-    border: 1px solid;
-    z-index: 10001;
-
-    div.close-selector-button {
-        width: 16px;
-        height: 16px;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-    }
-
-    ul.column-selector-list {
-        list-style-type: none;
-        padding-right: 30px;
-    }
-
-    label.column-label {
-        padding-left: 5px;
-    }
-}
-
-div.tab-tools {
-    height: 34px;
-    position: static;
-}
-
-div.exporter {
-    float: right;
-    text-align: left;
 }
 
 input.csvExportButton {
