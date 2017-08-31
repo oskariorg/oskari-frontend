@@ -58,6 +58,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.columnTools = {};
         this.valueRenderer = {};
         this.toolRow = null;
+        this.visibleColumns = [];
+        this.toolsRenderedTo = null;
 
         /** Grouping headers */
         this._groupingHeaders = null;
@@ -680,10 +682,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 // print data
                 body = table.find('tbody'),
                 dataArray = me.model.getData(),
-                i,
                 row,
                 data,
-                f,
                 key,
                 value,
                 cell,
@@ -692,14 +692,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 rows,
                 rowClicked;
 
-            for (i = 0; i < dataArray.length; i += 1) {
+            dataArray.forEach(function(data) {
                 row = me.templateRow.clone();
-                data = dataArray[i];
 
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
-                for (f = 0; f < fieldNames.length; f += 1) {
-                    key = fieldNames[f];
+                fieldNames.forEach(function(key) {
                     value = data[key];
                     // Handle subtables
                     if (typeof value === 'object') {
@@ -709,7 +707,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             key,
                             value
                         );
-                        // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
                         cell = me.templateCell.clone();
                         renderer = me.valueRenderer[key];
@@ -720,9 +717,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         row.append(cell);
                         columnIndex = columnIndex + 1;
                     }
-                }
+                });
                 body.append(row);
-            }
+            });
             rows = table.find('tbody tr');
             rowClicked = function () {
                 me._dataSelected(jQuery(this).attr('data-id'));
@@ -753,21 +750,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 columnSelectorList = me.templateColumnSelectorList.clone(),
                 columnSelectorClose = me.templateColumnSelectorClose.clone(),
                 fields,
-                visibleField,
-                i,
-                j,
                 newColumn,
                 checkboxInput;
-
+            if(me.visibleColumnSelector) {
+                me.visibleColumnSelector.remove();
+                me.visibleColumnSelector = null;
+            }
             me.visibleColumnSelector = me.templateColumnSelectorWrapper.clone();
             me.visibleColumnSelector.addClass('column-selector-placeholder');
+
             columnSelector.addClass('column-selector');
             columnSelectorLabel.find('.title').html(me._loc.columnSelector.title);
             me.visibleColumnSelector.append(columnSelectorLabel);
             me.visibleColumnSelector.append(columnSelector);
 
-            // FIXME check this how can be more spefied selctor?
-            jQuery('input.oskari-divmanazer-component-grid').remove();
             // Open or close the checkbox dropdown list
             me.visibleColumnSelector.click(function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
@@ -783,62 +779,55 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             fields = me.model.getFields();
 
             var checkbocInputChange = function () {
-                    var fieldSelectors = jQuery(
-                            'input.column-selector-list-item'
-                        ),
-                        oldFields = me.model.getFields(),
-                        newFields = [],
-                        k,
-                        l;
+                    var fieldSelectors = me.visibleColumnSelector.find('input.column-selector-list-item:checked');
+                    me.visibleColumns = [];
 
-                    for (k = 0; k < oldFields.length; k += 1) {
-                        for (l = 0; l < fieldSelectors.length; l += 1) {
-                            if (oldFields[k] === fieldSelectors[l].id) {
-                                if (fieldSelectors[l].checked) {
-                                    newFields.push(oldFields[k]);
-                                }
-                                break;
-                            }
-                        }
+                    fieldSelectors.each(function(){
+                        me.visibleColumns.push(jQuery(this).attr('data-id'));
+                    });
+
+                    if(me.visibleColumns.length>0) {
+                       me.setVisibleFields(me.visibleColumns);
                     }
-                    if (newFields.length > 0) {
-                        me.setVisibleFields(newFields);
-                    }
+
                     me.renderTo(table.parent(), {
                         columnSelector: 'open'
                     });
                 };
 
-            // Add field names to the list
-            for (i = 0; i < fields.length; i += 1) {
-                visibleField = false;
-                // Set current checkbox value for the field
-                for (j = 0; j < fieldNames.length; j += 1) {
-                    if (fields[i] === fieldNames[j]) {
-                        visibleField = true;
-                        break;
-                    }
+            // Set current checkbox value for the field
+            fieldNames.forEach(function(field){
+                if(!me.visibleColumns.includes(field)) {
+                    me.visibleColumns.push(field);
                 }
-                newColumn = me.templateColumnSelectorListItem.clone();
-                newColumn.addClass('column-selector-list-item');
-                checkboxInput = newColumn.find('input');
-                checkboxInput.attr('checked', visibleField);
-                checkboxInput.addClass('column-selector-list-item');
-                checkboxInput.attr('id', fields[i]);
-                newColumn.find('label')
-                    .attr({
-                        'for': fields[i],
-                        'class': 'column-label'
-                    })
-                    .html(fields[i]);
-                newColumn.css({
-                    'margin': '5px'
-                });
+            });
 
-                // Update visible fields after checkbox change
-                checkboxInput.change(checkbocInputChange);
-                columnSelectorList.append(newColumn);
-            }
+            // Add field names to the list
+            fields.forEach(function(field){
+                if(field) {
+                    newColumn = me.templateColumnSelectorListItem.clone();
+                    newColumn.addClass('column-selector-list-item');
+                    checkboxInput = newColumn.find('input');
+                    checkboxInput.attr('checked',me.visibleColumns.includes(field));
+
+                    checkboxInput.addClass('column-selector-list-item');
+                    checkboxInput.attr('data-id', field);
+                    checkboxInput.attr('id', 'oskari-grid-column-selector-' + field);
+                    newColumn.find('label')
+                        .attr({
+                            'for': 'oskari-grid-column-selector-' + field,
+                            'class': 'column-label'
+                        })
+                        .html(field);
+                    newColumn.css({
+                        'margin': '5px'
+                    });
+
+                    // Update visible fields after checkbox change
+                    checkboxInput.change(checkbocInputChange);
+                    columnSelectorList.append(newColumn);
+                }
+            });
             columnSelectorList.attr('class', 'column-selector-list');
             columnSelector.append(columnSelectorList, columnSelectorClose);
             columnSelectorClose.click(function (e) {
@@ -905,23 +894,30 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 fieldNames,
                 table;
 
+            var selected = me._getSelectedRows();
+
             container.empty();
+
+            var toolEl = toolRowElement || me.toolsRenderedTo;
 
             // Tool row
             if (me.showColumnSelector || me.showExcelExporter) {
-                if(me.toolRow) {
-                    me.toolRow.remove();
-                    me.toolRow = null;
+                if(!me.toolRow) {
+                    me.toolRow = me.templateGridTools.clone();
                 }
-                me.toolRow = me.templateGridTools.clone();
-                if(toolRowElement) {
-                    toolRowElement.prepend(me.toolRow);
+
+                if(toolEl) {
+                    me.toolsRenderedTo = toolEl;
+                    toolEl.prepend(me.toolRow);
                 } else {
                     container.parent().prepend(me.toolRow);
                 }
             }
 
-            fieldNames = me.fieldNames;
+            fieldNames = me.visibleColumns;
+            if(fieldNames.length === 0) {
+                fieldNames = me.fieldNames;
+            }
             table = me.template.clone();
             // if visible fields not given, show all
             if (fieldNames.length === 0) {
@@ -1039,6 +1035,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             if (me.resizableColumns) {
                 me._enableColumnResizer();
+            }
+
+            // Keep already selected to selected
+            if(selected.values.length > 0 && state && state.columnSelector === 'open') {
+                selected.values.forEach(function(selection){
+                    me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
+                    me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
+                });
             }
         },
 

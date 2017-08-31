@@ -31,7 +31,10 @@ Oskari.clazz.category(
             // sort the results
             me._sortBy(scopedValue, descending);
             // populate table content
-            var fieldNames = me.fieldNames;
+            var fieldNames = me.visibleColumns;
+            if(fieldNames.length === 0) {
+                fieldNames = me.fieldNames;
+            }
             // if visible fields not given, show all
             if (fieldNames.length === 0) {
                 fieldNames = me.model.getFields();
