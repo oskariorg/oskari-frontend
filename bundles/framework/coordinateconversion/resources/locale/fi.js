@@ -4,9 +4,11 @@ Oskari.registerLocalization(
     "key": "coordinateconversion",
     "value": {
         "title": "Koordinaattimuunnos",
-        "desc": "",
         "flyout": {
-            "flyoutTitle": "Koordinaattimuunnos",
+        "title": {
+            "input": "Lähtötiedot",
+            "result": "Tulostiedot"
+        },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "geodetic_datum": "Geodeettinen datumi",

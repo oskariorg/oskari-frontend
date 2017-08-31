@@ -1,12 +1,14 @@
 Oskari.registerLocalization(
 {
     "lang": "sv",
-    "key": "kordinatstransformation",
-    "value": {
-        "title": "",
-        "desc": "",
+    "key": "koordinatstransformation",
+     "value": {
+    "title": "Koordinatstransformation",
         "flyout": {
-            "flyoutTitle": "kordinats",
+        "title": {
+            "input": "Lähtötiedot",
+            "result": "Tulostiedot"
+        },
             "coordinatesystem": {
                 "title": "Koordinaattijärjestelmän tiedot",
                 "geodetic_datum": "Geodeettinen datumi",
@@ -17,19 +19,20 @@ Oskari.registerLocalization(
             },
             "datasource": {
                 "title": "Koordinaattitietojen lähde",
-                "file": "Fil",
+                "file": "Tiedostosta",
                 "clipboard": "Kopionti leikepöydältä",
-                "map": "Kartalta",
+                "map": "Valitse sijainnit kartalta",
                 "choose":"Valitse sijainti kartalta"
             },
             "datasourceinfo": {
                 "fileupload": "Raahaa lähtöaineiston sisältävä tiedosto tähän tai",
                 "link":"valitse selaamalla",
                 "clipboardupload":"Kopioi lähtötiedot taulukkoon Muunnettavat koordinaatit ja valitse sen jälkeen Muunna.",
-                "mapinfo":"Tämän ollessa valittuna valitse kartalta klikkaamalla yksi tai useampia pisteitä.",
+                "mapinfo":"Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
                 "uploading":"Ladataan",
-                "success":"Valmis!",
+                "success":"Valmis",
                 "error":"Virhe!",
+                "cancel":"Peruuta"
             },
             "coordinatefield": {
                 "input": "Muunnettavat koordinaatit",
@@ -47,9 +50,9 @@ Oskari.registerLocalization(
                 "ellipse_height":"Ellipsoidinen korkeus [m]"
             },
             "utils": {
-                "clear":"Tyhjennä kentät",
-                "show":"Näytä sijainnit kartalla",
-                "export":"Vie tulokset tiedostoon"
+                "clear": "Tyhjennä taulukot",
+                "show": "Näytä sijainnit kartalla",
+                "export": "Vie tulokset tiedostoon"
             }
         }
     }
