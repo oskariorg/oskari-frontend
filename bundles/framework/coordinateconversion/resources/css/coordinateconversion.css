@@ -2,7 +2,6 @@
     max-width: 47em !important;
     display: flex;
     flex-flow: row wrap;
-    margin-top: -2.1875em;
 }
 .coordinateconversion-csystem {
     display: inline-block;
@@ -37,6 +36,11 @@
 }
 #rowwidth {
     max-width: 100px !important;
+}
+.header {
+    font-size: 15px;
+    line-height: 22px;
+    padding-bottom: 0.5em;
 }
 .coordinateconversion-field {
     height:auto;

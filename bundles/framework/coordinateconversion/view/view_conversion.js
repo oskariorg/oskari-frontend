@@ -10,8 +10,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.startingSystemSelected = false;
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
+            title: _.template('<h4 class="header"><%= title %></h4>'),
             coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
-                                    '<h4><%= title %></h4>'+
+                                    '<h5><%= title %></h5>'+
                                     '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
                                     '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div>  </div> </br> ' +
                                     '<div class="map-projection" style="display:none;"> <%= map_projection %> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br>' +
@@ -24,7 +25,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                                 '<input type="radio" id="clipboard" name="load" value="2"><label for="clipboard"><span></span> <%= clipboard %> </label>'+
                                                 '<input type="radio" id="file" name="load" value="1"><label for="file"> <span></span> <%= file %> </label>'+
                                                 '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>">'+
-                                            '</form> </div>'),
+                                            '</form>'+
+                                            '</div>'),
             datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
                                     '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput" style="display:none">'+
                                         '<div class="box__input">'+
@@ -96,6 +98,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         createUI: function( container ) {
            var me = this;
            this.conversionContainer = container;
+
+           var inputTitle = this._template.title( { title: this.loc.title.input } );
+           var resultTitle = this._template.title( { title: this.loc.title.result } ); 
             var coordinatesystem = this._template.coordinatesystem({ title: this.loc.coordinatesystem.title,
                                                           geodetic_datum: this.loc.coordinatesystem.geodetic_datum,
                                                           coordinate_system: this.loc.coordinatesystem.coordinate_system,
@@ -133,8 +138,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var wrapper = me._template.wrapper;
             wrapper.append(coordinatesystem);
             wrapper.find('.coordinateconversion-csystem').attr('id','inputcoordsystem');
+            // jQuery(inputTitle).insertBefore(wrapper.find('#inputcoordsystem'));
+            wrapper.find('#inputcoordsystem').prepend(inputTitle);
             wrapper.append(coordinatesystem);
             wrapper.find('.coordinateconversion-csystem').not('#inputcoordsystem').attr('id','targetcoordsystem');
+            // jQuery(resultTitle).insertBefore(wrapper.find('#targetcoordsystem'));
+            wrapper.find('#targetcoordsystem').prepend(resultTitle);
             wrapper.append(coordinatedatasource);
             wrapper.append(datasourceinfo);
 
@@ -153,7 +162,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 jQuery(this).append(target_instance.dropdowns[index]);
             });
             var coords = {} 
-            for( var i = 0; i < 8; i++ ) {
+            for( var i = 0; i < 6; i++ ) {
                 wrapper.find("#oskari-coordinate-table").append(this._template.tablerow( { coords: coords } ) );
                 wrapper.find("#oskari-coordinate-table-result").append(this._template.tablerow( { coords: coords } ) );
             }
