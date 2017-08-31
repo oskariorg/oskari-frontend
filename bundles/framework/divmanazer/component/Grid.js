@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
         this.templatePopupLink = jQuery('<a href="JavaScript: void(0);"></a>');
-        this.templateTabTools = jQuery('<div class="tab-tools"></div>');
+        this.templateGridTools = jQuery('<div class="grid-tools"></div>');
         this.templateExporter = jQuery('<div class="exporter"></div>');
         this.templateColumnSelectorTitle = jQuery(
             '<div class="column-selector-title"><div class="title"></div><div class="icon"></div></div>'
@@ -57,6 +57,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.uiNames = {};
         this.columnTools = {};
         this.valueRenderer = {};
+        this.toolRow = null;
 
         /** Grouping headers */
         this._groupingHeaders = null;
@@ -896,8 +897,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Object} state
          * Tells into what state we are going to render this grid
          * (e.g. columnSelector: open tells that we want to show columnselector)
+         * @param {Object} toolRowELement jQuery element where tool row rendered (prepend use)
          */
-        renderTo: function (container, state) {
+        renderTo: function (container, state, toolRowElement) {
             var me = this,
                 toolRow,
                 fieldNames,
@@ -906,10 +908,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             container.empty();
 
             // Tool row
-            if ((me.showColumnSelector) || (me.showExcelExporter)) {
-                toolRow = me.templateTabTools.clone();
-                container.parent().children('.tab-tools').remove();
-                container.parent().prepend(toolRow);
+            if (me.showColumnSelector || me.showExcelExporter) {
+                if(me.toolRow) {
+                    me.toolRow.remove();
+                    me.toolRow = null;
+                }
+                me.toolRow = me.templateGridTools.clone();
+                if(toolRowElement) {
+                    toolRowElement.prepend(me.toolRow);
+                } else {
+                    container.parent().prepend(me.toolRow);
+                }
             }
 
             fieldNames = me.fieldNames;
@@ -928,16 +937,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             me._renderBody(table, fieldNames);
 
-            if (me.showColumnSelector) {
+            if (me.showColumnSelector && me.toolRow) {
                 me._renderColumnSelector(table, fieldNames);
-                container.parent().find('.tab-tools').append(me.visibleColumnSelector);
+                me.toolRow.append(me.visibleColumnSelector);
                 if (state !== null && state !== undefined && state.columnSelector === 'open') {
                     me.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
             }
 
             // Exporter
-            if (me.showExcelExporter) { // Todo: configure this
+            if (me.showExcelExporter && me.toolRow) { // Todo: configure this
                 var exporter = me.templateExporter.clone(),
                     exportForm = me._createExportForm(),
                     exportPopupButton = Oskari.clazz.create(
@@ -1007,7 +1016,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
                 exporter.append(exportPopupButton.getElement());
 
-                container.parent().find('.tab-tools').append(exporter);
+                me.toolRow.append(exporter);
             }
 
             container.append(table);

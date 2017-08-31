@@ -440,12 +440,20 @@ Oskari.clazz.define(
 
                     var tabsContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tabsContent'),
                         newMaxHeight = e.pageY - tabsContent[0].offsetTop - resizerHeight - bottomPadding,
-                        tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-tools');
+                        tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.grid-tools');
                     if (tabTools.length > 0) {
                         newMaxHeight = newMaxHeight - tabTools.height();
                     }
 
-                    flyout.find('div.tab-content').css('max-height', newMaxHeight.toString() + 'px');
+                    // FIXME Need calculate different way or only use styles
+                    var paddings = tabTools.height() +
+                        flyout.find('.tabsHeader').height() +
+                        parseInt(content.css('padding-top') || 0) +
+                        parseInt(content.css('padding-bottom') || 0) +
+                        (flyout.find('.exporter').height() || 0) + 10;
+
+                    var parent = flyout.find('.oskari-flyoutcontentcontainer');
+                    flyout.find('div.tab-content').css('height', (parent.height() - paddings) + 'px');
                 }
             });
 
@@ -708,10 +716,25 @@ Oskari.clazz.define(
                         panel.showSelectedRowsFirst = panel.checkbox.isChecked();
                     });
                 }
-                panel.getContainer().append(panel.checkbox.getElement());
+
                 var gridEl = jQuery('<div class="featuredata2-grid"></div>');
+                var panelParent = panel.getContainer().parent();
                 panel.getContainer().append(gridEl);
-                panel.grid.renderTo(gridEl);
+                panel.grid.renderTo(gridEl, null, panelParent);
+
+                var checkboxEl = jQuery(panel.checkbox.getElement());
+
+                if (conf && !conf.disableExport && layer.getPermission('download') === 'download_permission_ok') {
+                    checkboxEl.insertAfter(panelParent.find('.grid-tools'));
+                    jQuery('<div style="clear:both;"></div>').insertAfter(panelParent.find('.grid-tools'));
+                } else {
+                    checkboxEl.css('margin-top', '7px');
+                    panelParent.find('.grid-tools').append(checkboxEl);
+                    gridEl.css({
+                        'position':'relative',
+                        'top':'6px'
+                    });
+                }
 
 
                 // define flyout size to adjust correctly to arbitrary tables
@@ -721,7 +744,17 @@ Oskari.clazz.define(
 
                 if (!me.resized) {
                     // Define default size for the object data list
-                    flyout.find('div.tab-content').css('max-height', (mapdiv.height() / 4).toString() + 'px');
+                    var tabContent = flyout.find('div.tab-content');
+                    var parent = tabContent.parent('.oskari-flyoutcontentcontainer');
+
+                    // FIXME Need calculate different way or only use styles
+                    var paddings = flyout.find('.grid-tools').height() +
+                        flyout.find('.tabsHeader').height() +
+                        parseInt(tabContent.css('padding-top') || 0) +
+                        parseInt(tabContent.css('padding-bottom') || 0) +
+                        (flyout.find('.exporter').height() || 0) + 10;
+
+                    tabContent.css('height', (parent.height() - paddings) + 'px');
                     flyout.css('max-width', mapdiv.width().toString() + 'px');
                 }
                 if (me.resizable) {
