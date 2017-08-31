@@ -3,9 +3,12 @@ $pagingArrowActiveColor: #f0f0f0;
 $pagingArrowHoverColor: #ffd400;
 $pagingArrowDeactiveColor: transparent;
 
-div.tab-tools {
+div.grid-tools {
     height: 34px;
     position: static;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 6px;
 
     div.column-selector-placeholder {
         border-style: none;

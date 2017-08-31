@@ -105,6 +105,10 @@ div.oskariTabs .tabsHeader ul li .union-filter {
     margin-right: 10px;
 }
 
+div.oskariTabs .tabsContent .oskari-checkboxinput {
+    margin-left: 10px;
+}
+
 div.flyout-resizer {
     float: right;
     cursor: nw-resize;

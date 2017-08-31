@@ -1,9 +1,12 @@
-div.tab-tools {
+div.grid-tools {
     height: 34px;
     position: static;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 6px;
 }
 
-div.tab-tools div.column-selector-placeholder {
+div.grid-tools div.column-selector-placeholder {
     border-style: none;
     float: right;
     opacity: 1.0;
@@ -16,20 +19,20 @@ div.tab-tools div.column-selector-placeholder {
     max-height: 35px;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector-title {
+div.grid-tools div.column-selector-placeholder div.column-selector-title {
     margin-top: 10px;
     margin-left: 2px;
     cursor: pointer;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector-title .title {
+div.grid-tools div.column-selector-placeholder div.column-selector-title .title {
     padding-left: 4px;
     float: left;
     width: 171px;
     border: 1px solid #999;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector-title .icon {
+div.grid-tools div.column-selector-placeholder div.column-selector-title .icon {
     background-image: url(../images/desc_arrow.png);
     background-repeat: no-repeat;
     background-position: 6px 7px;
@@ -41,7 +44,7 @@ div.tab-tools div.column-selector-placeholder div.column-selector-title .icon {
     height: 21px;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector {
+div.grid-tools div.column-selector-placeholder div.column-selector {
     max-height: 40%;
     width: 270px;
     overflow: auto;
@@ -56,7 +59,7 @@ div.tab-tools div.column-selector-placeholder div.column-selector {
     z-index: 10001;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector div.close-selector-button {
+div.grid-tools div.column-selector-placeholder div.column-selector div.close-selector-button {
     width: 16px;
     height: 16px;
     position: absolute;
@@ -64,16 +67,16 @@ div.tab-tools div.column-selector-placeholder div.column-selector div.close-sele
     right: 5px;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector ul.column-selector-list {
+div.grid-tools div.column-selector-placeholder div.column-selector ul.column-selector-list {
     list-style-type: none;
     padding-right: 30px;
 }
 
-div.tab-tools div.column-selector-placeholder div.column-selector label.column-label {
+div.grid-tools div.column-selector-placeholder div.column-selector label.column-label {
     padding-left: 5px;
 }
 
-div.tab-tools div.exporter {
+div.grid-tools div.exporter {
     float: left;
     text-align: left;
 }
