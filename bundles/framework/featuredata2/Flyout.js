@@ -307,18 +307,19 @@ Oskari.clazz.define(
          */
         updateData: function (layer) {
             var me = this;
-            if (!this.active || !layer) {
+            var panel = this.layers['' + layer.getId()];
+            var isOk = this.tabsContainer.isSelected(panel);
+            if (!this.active || !layer || !isOk) {
                 return;
             }
 
             var map = this.instance.sandbox.getMap(),
-                panel = this.layers['' + layer.getId()],
                 selection = null,
                 i,
                 selectedFeatures;
 
             if (panel.grid) {
-                selection = panel.grid.getSelection();
+                selection = panel.grid._getSelectedRows();
             }
             panel.getContainer().empty();
             if (!layer.isInScale(map.getScale())) {
@@ -333,10 +334,11 @@ Oskari.clazz.define(
 
             // in scale, proceed
             this._prepareData(layer);
-            if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
-                for (i = 0; i < selection.length; i += 1) {
-                    panel.grid.select(selection[i].featureId, true);
-                }
+            if (selection && selection.values.length > 0) {
+                selection.values.forEach(function(selectedFeature){
+                    // update map
+                   panel.grid.select(selectedFeature, true);
+                });
             }
 
             // filter
@@ -527,8 +529,10 @@ Oskari.clazz.define(
                 isManualRefresh = layer.isManualRefresh(),
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
 
+
             if (isOk) {
                 panel.getContainer().empty();
+                panel.getContainer().parent().find('.grid-tools').remove();
 
                 // create model
                 var model = Oskari.clazz.create(
@@ -563,9 +567,10 @@ Oskari.clazz.define(
                 }
 
                 var visibleFields = [];
+                var panelParent = panel.getContainer().parent();
+                var gridEl = jQuery('<div class="featuredata2-grid"></div>');
 
                 if(!panel.grid){
-                    firstTimeRender = true;
                     panel.grid = grid = Oskari.clazz.create(
                             'Oskari.userinterface.component.Grid',
                             me.instance.getLocalization('columnSelectorTooltip')
@@ -622,7 +627,6 @@ Oskari.clazz.define(
 
                     panel.grid.setVisibleFields(visibleFields);
                 }
-                model.fields.push('');
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
                     panel.grid.setNumericField(field, me._fixedDecimalCount);
@@ -706,36 +710,8 @@ Oskari.clazz.define(
                     });
                 }
 
-                if(!panel.checkbox) {
-                    panel.checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-                    var locale = me.instance.getLocalization();
-                    panel.checkbox.setTitle(locale.showSelectedFirst);
-                    panel.checkbox.setChecked(false);
-                    panel.checkbox.setHandler(function() {
-                        panel.grid.moveSelectedRowsTop(panel.checkbox.isChecked());
-                        panel.showSelectedRowsFirst = panel.checkbox.isChecked();
-                    });
-                }
-
-                var gridEl = jQuery('<div class="featuredata2-grid"></div>');
-                var panelParent = panel.getContainer().parent();
                 panel.getContainer().append(gridEl);
                 panel.grid.renderTo(gridEl, null, panelParent);
-
-                var checkboxEl = jQuery(panel.checkbox.getElement());
-
-                if (conf && !conf.disableExport && layer.getPermission('download') === 'download_permission_ok') {
-                    checkboxEl.insertAfter(panelParent.find('.grid-tools'));
-                    jQuery('<div style="clear:both;"></div>').insertAfter(panelParent.find('.grid-tools'));
-                } else {
-                    checkboxEl.css('margin-top', '7px');
-                    panelParent.find('.grid-tools').append(checkboxEl);
-                    gridEl.css({
-                        'position':'relative',
-                        'top':'6px'
-                    });
-                }
-
 
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
@@ -763,6 +739,31 @@ Oskari.clazz.define(
 
                 // Extra header message on top of grid
                 this._appendHeaderMessage(panel, locales, layer);
+
+                if(!panel.selectedFirstCheckbox) {
+                    panel.selectedFirstCheckbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                    var locale = me.instance.getLocalization();
+                    panel.selectedFirstCheckbox.setTitle(locale.showSelectedFirst);
+                    panel.selectedFirstCheckbox.setChecked(false);
+                    panel.selectedFirstCheckbox.setHandler(function() {
+                        panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked());
+                        panel.showSelectedRowsFirst = panel.selectedFirstCheckbox.isChecked();
+                    });
+
+                    // Allign checkbox
+                    var checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
+                    if (conf && !conf.disableExport && layer.getPermission('download') === 'download_permission_ok') {
+                        checkboxEl.insertAfter(panelParent.find('.grid-tools'));
+                        jQuery('<div style="clear:both;"></div>').insertAfter(panelParent.find('.grid-tools'));
+                    } else {
+                        checkboxEl.css('margin-top', '7px');
+                        panelParent.find('.grid-tools').append(checkboxEl);
+                        gridEl.css({
+                            'position':'relative',
+                            'top':'6px'
+                        });
+                    }
+                }
             }
         },
         setGridOpacity: function (layer, opacity) {
@@ -924,7 +925,12 @@ Oskari.clazz.define(
             var layer = event.getMapLayer(),
                 panel = this.layers['' + layer.getId()],
                 fids = event.getWfsFeatureIds(),
+                isOk = this.tabsContainer.isSelected(panel),
                 i;
+
+            if(!isOk) {
+                return;
+            }
 
             if (fids !== null && fids !== undefined && fids.length > 0) {
                 panel.grid.select(fids[0], event.isKeepSelection());
@@ -934,7 +940,7 @@ Oskari.clazz.define(
                     }
                 }
             } else {
-                if (panel && panel.grid) {
+                if (panel && panel.grid && isOk) {
                     panel.grid.removeSelections();
                 }
             }

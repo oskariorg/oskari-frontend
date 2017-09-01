@@ -895,7 +895,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 table;
 
             var selected = me._getSelectedRows();
-
             container.empty();
 
             var toolEl = toolRowElement || me.toolsRenderedTo;
@@ -905,11 +904,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if(!me.toolRow) {
                     me.toolRow = me.templateGridTools.clone();
                 }
-
                 if(toolEl) {
                     me.toolsRenderedTo = toolEl;
                     toolEl.prepend(me.toolRow);
                 } else {
+                    me.toolsRenderedTo = container.parent();
                     container.parent().prepend(me.toolRow);
                 }
             }
