@@ -3,51 +3,47 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "userinterface.UserGuide",
     "value": {
-        "title": "Hjälp",
+        "title": "HjÃ¤lp",
         "desc": "",
         "flyout": {
             "title": "Bruksanvisningar",
-            "loadingtxt": "<p>Laddar bruksanvisningar…</p>"
+            "loadingtxt": "<p>Laddar bruksanvisningarâ€¦</p>"
         },
         "tile": {
             "title": "Bruksanvisningar"
         },
         "error": {
             "title": "Fel",
-            "generic": "Laddningen av anvisningarna misslyckades. Försök på nytt senare."
+            "generic": "Laddningen av anvisningarna misslyckades. FÃ¶rsÃ¶k pÃ¥ nytt senare."
         },
         "tabs": [
             {
-                "title": "Kartfönstret",
-                "tags": "kartfönstret,snappguide"
+                "title": "KartfÃ¶nstret",
+                "tags": "guide_welcome_sv"
             },
             {
                 "title": "Kartverktyg",
-                "tags": "guide_tools"
+                "tags": "guide_tools_sv"
             },
             {
-                "title": "Sökning",
-                "tags": "guide_search"
+                "title": "SÃ¶kning",
+                "tags": "guide_search_sv"
             },
             {
                 "title": "Kartlager",
-                "tags": "guide_maplayers"
+                "tags": "guide_maplayers_sv"
             },
             {
-                "title": "Kartpublicering",
-                "tags": "guide_publishing"
+                "title": "Nedladdningskorg",
+                "tags": "guide_download-basket_temp_sv"
             },
             {
-                "title": "Temakartor",
-                "tags": "guide_thematic"
-            },
-            {
-                "title": "Analys",
-                "tags": "guide_analysis"
+                "title": "FAQ",
+                "tags": "guide_faq_sv"
             }
         ],
         "help": {
-            "tags": "kartfönstret,snappguide"
+            "tags": "kartfÃ¶nstret,snappguide"
         }
     }
 });

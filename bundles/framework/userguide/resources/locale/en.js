@@ -19,31 +19,27 @@ Oskari.registerLocalization(
         "tabs": [
             {
                 "title": "Map Window",
-                "tags": "guide_welcome"
+                "tags": "guide_welcome_en"
             },
             {
                 "title": "Map Tools",
-                "tags": "guide_tools"
+                "tags": "guide_tools_en"
             },
             {
                 "title": "Search",
-                "tags": "guide_search"
+                "tags": "guide_search_en"
             },
             {
                 "title": "Map Layers",
-                "tags": "guide_maplayers"
+                "tags": "guide_maplayers_en"
             },
             {
-                "title": "Map Publishing",
-                "tags": "guide_publishing"
+                "title": "Download Basket",
+                "tags": "guide_download-basket_temp_en"
             },
             {
-                "title": "Thematic Maps",
-                "tags": "guide_thematic"
-            },
-            {
-                "title": "Analysis",
-                "tags": "guide_analysis"
+                "title": "FAQ",
+                "tags": "guide_faq_en"
             }
         ],
         "help": {

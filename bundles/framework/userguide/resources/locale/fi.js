@@ -6,15 +6,15 @@ Oskari.registerLocalization(
         "title": "Ohje",
         "desc": "",
         "flyout": {
-            "title": "Käyttöohje",
-            "loadingtxt": "<p>Ladataan käyttöohjetta...</p>"
+            "title": "KÃ¤yttÃ¶ohje",
+            "loadingtxt": "<p>Ladataan kÃ¤yttÃ¶ohjetta...</p>"
         },
         "tile": {
-            "title": "Käyttöohje"
+            "title": "KÃ¤yttÃ¶ohje"
         },
         "error": {
             "title": "Virhe",
-            "generic": "Käyttöohjetta ei voida näyttää."
+            "generic": "KÃ¤yttÃ¶ohjetta ei voida nÃ¤yttÃ¤Ã¤."
         },
         "tabs": [
             {
@@ -22,7 +22,7 @@ Oskari.registerLocalization(
                 "tags": "ohje_karttaikkuna"
             },
             {
-                "title": "Työkalut",
+                "title": "TyÃ¶kalut",
                 "tags": "ohje_tyokalut"
             },
             {
@@ -34,16 +34,12 @@ Oskari.registerLocalization(
                 "tags": "ohje_karttatasot"
             },
             {
-                "title": "Karttajulkaisu",
-                "tags": "ohje_karttajulkaisu"
+                "title": "Latauskori",
+                "tags": "ohje_latauskori_temp"
             },
             {
-                "title": "Teemakartat",
-                "tags": "ohje_teemakartat"
-            },
-            {
-                "title": "Analyysi",
-                "tags": "ohje_analyysi"
+                "title": "FAQ",
+                "tags": "ohje_faq"
             }
         ],
         "help": {
