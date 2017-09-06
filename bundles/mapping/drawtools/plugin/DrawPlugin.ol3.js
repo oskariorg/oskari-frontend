@@ -632,6 +632,7 @@ Oskari.clazz.define(
             me._modify[me._id].on('modifyend', function() {
                 me._showIntersectionWarning = true;
                 me._mode = '';
+                me._sketch = null;
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             });

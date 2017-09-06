@@ -320,6 +320,7 @@ Oskari.clazz.define(
             }
 
             var map = this.instance.sandbox.getMap(),
+                container = panel.getContainer(),
                 selection = null,
                 i,
                 selectedFeatures;
@@ -327,12 +328,22 @@ Oskari.clazz.define(
             if (panel.grid) {
                 selection = panel.grid._getSelectedRows();
             }
-            panel.getContainer().empty();
+            container.empty();
             if (!layer.isInScale(map.getScale())) {
-                panel.getContainer().append(this.instance.getLocalization('errorscale'));
+                container.append(this.instance.getLocalization('errorscale'));
                 return;
             }
-            panel.getContainer().append(this.instance.getLocalization('loading'));
+            if(layer.getFields().length === 0) {
+                container.append(this.instance.getLocalization('errorNoFields'));
+                return;
+            }
+            if(layer.getActiveFeatures().length === 0) {
+                container.parent().children('.tab-tools').remove();
+                container.removeAttr('style');
+                container.append(this.instance.getLocalization('layer')['out-of-content-area']);
+                return;
+            }
+            container.append(this.instance.getLocalization('loading'));
 
             if (this.instance.__loadingStatus[layer.getId()] === 'loading' || this.instance.__loadingStatus[layer.getId()] === 'error') {
                 return;
