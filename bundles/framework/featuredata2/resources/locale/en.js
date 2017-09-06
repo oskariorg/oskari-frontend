@@ -11,6 +11,7 @@ Oskari.registerLocalization(
         "featureNameAll": "Data type",
         "errorscale": "Feature data are not available on this scale level. Please use the scale bar to select another scale level.",
         "errordata": "Feature data are invalid. Please update data by panning the map view slightly.",
+        "errorNoFields": "The map layer has no feature data.",
         "columnSelectorTooltip": "Select visible columns",
         "featureDataPopup": "Statistical values",
         "selectionTools": {
