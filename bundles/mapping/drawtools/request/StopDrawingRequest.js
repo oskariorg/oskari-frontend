@@ -16,11 +16,15 @@ Oskari.clazz
          *        id for drawing as given in StartDrawingRequest
          * @param {boolean} clearCurrent
          *        true to remove the current drawing
+         * @param {boolean} clearCurrent
+         *        true to remove the current drawing
          */
 
-        function(id, clearCurrent) {
+        function(id, clearCurrent, sendEvent) {
             this._id = id;
             this._clearCurrent = !!clearCurrent;
+            this._sendEvent = sendEvent;
+
         }, {
             /** @static @property __name request name */
             __name: "DrawTools.StopDrawingRequest",
@@ -44,6 +48,13 @@ Oskari.clazz
              */
             isClearCurrent: function() {
                 return this._clearCurrent;
+            },
+            /**
+             * @method isSendEvent
+             * @return {boolean} false to not send event
+             */
+            isSendEvent: function() {
+                return this._sendEvent;
             }
         }, {
             /**

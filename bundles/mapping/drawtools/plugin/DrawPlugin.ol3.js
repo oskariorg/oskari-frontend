@@ -24,6 +24,7 @@ Oskari.clazz.define(
         this._modify = {};
         this._functionalityIds = {};
         this._showIntersectionWarning = false;
+        this._circleHasGeom = false;
         this._defaultStyle = {
             fill : {
                 color : 'rgba(255,0,255,0.2)'
@@ -49,7 +50,7 @@ Oskari.clazz.define(
                 }
             }
         };
-
+        this.geometry = null;
         this.wgs84Sphere = new ol.Sphere(6378137);
     },
     {
@@ -60,15 +61,27 @@ Oskari.clazz.define(
          * @param {Object} styles. If not given, will set default styles
          */
         setDefaultStyle : function(styles) {
-            var me = this;
-            styles = styles || {};
-            //setting defaultStyles
-            _.each(me._styleTypes, function (type) {
-                // overriding default style configured style
-                var styleForType = styles[type] || {};
-                var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
-                me._styles[type] = me.getMapModule().getStyle(styleDef);
-            });
+          var me = this;
+          styles = styles || {};
+          //setting defaultStyles
+          _.each(me._styleTypes, function (type) {
+            // overriding default style configured style
+            var styleForType = styles[type] || {};
+            var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
+            me._styles[type] = me.getMapModule().getStyle(styleDef);
+          });
+        },
+        /**
+         * @Return{String} reference system as defined in GeoJSON format
+         * @method _getSRS
+         */
+        _getSRS: function () {
+            return {
+                type: 'name',
+                properties: {
+                    'name': this.getSandbox().getMap().getSrsName()
+                }
+            };
         },
         /**
          * @method draw
@@ -166,14 +179,14 @@ Oskari.clazz.define(
          * @param {String} id
          * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
-        stopDrawing : function(id, clearCurrent) {
+        stopDrawing : function(id, clearCurrent, sendEvent) {
             var me = this;
             var options = {
                 clearCurrent: clearCurrent,
                 isFinished: true
             };
             if(me._functionalityIds[id]) {
-                me.sendDrawingEvent(id, options);
+                sendEvent === true ? me.sendDrawingEvent(id, options) : me.clearDrawing(id);
                 //deactivate draw and modify controls
                 me.removeInteractions(me._draw, id);
                 me.removeInteractions(me._modify, id);
@@ -183,8 +196,6 @@ Oskari.clazz.define(
                 if (me._gfiReqBuilder) {
                     me._sandbox.request(me, me._gfiReqBuilder(true));
                 }
-
-
             }
         },
         /**
@@ -208,7 +219,7 @@ Oskari.clazz.define(
             if(me._bufferedFeatureLayerId) {
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
-            if(me._shape === 'Circle') {
+            if(me._shape === 'Circle' && me._circleHasGeom) {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
             } else if(me._shape === 'LineString' && me._buffer > 0) {
@@ -216,6 +227,7 @@ Oskari.clazz.define(
             }
             // TODO: get geojson for matching id
             var geojson = me.getFeaturesAsGeoJSON(features);
+            var crs = me._getSRS();
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
             var data = {
@@ -223,7 +235,8 @@ Oskari.clazz.define(
                 area : me._area,
                 buffer: me._buffer,
                 bufferedGeoJson: bufferedGeoJson,
-                shape: me._shape
+                shape: me._shape,
+                geometry: me.geometry
             };
 
             if (me._options.showMeasureOnMap) {
@@ -237,8 +250,7 @@ Oskari.clazz.define(
             if(options.isFinished) {
                 isFinished = options.isFinished;
             }
-
-            var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
+            var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, crs, isFinished, this.geometry);
             me._sandbox.notifyAll(event);
         },
         /**
@@ -300,7 +312,7 @@ Oskari.clazz.define(
             var optionsForDrawingEvent = {
                 isFinished: false
             };
-            if (shape === 'LineString') {
+            if (shape === 'LineString' || shape === 'line') {
                  geometryFunction = function (coordinates, geometry) {
                      if (!geometry) {
                           geometry = new ol.geom.LineString(null);
@@ -327,11 +339,23 @@ Oskari.clazz.define(
                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                    return geometry;
                  }
+            } else if (shape === 'point' || shape === 'Point') {
+                 maxPoints = 2;
+                 geometryType = 'Point';
+                 geometryFunction = function(coordinates, geometry) {
+                   if (!geometry) {
+                     geometry = new ol.geom.Circle(coordinates, options.buffer);
+                   }
+                   me.pointerMoveHandler();
+                   me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                   return geometry;
+                 }
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
                 geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
+                me._circleHasGeom = true;
                 geometryFunction = function(coordinates, geometry) {
                      if (!geometry) {
                          geometry = new ol.geom.Circle(coordinates, options.buffer);
@@ -340,7 +364,10 @@ Oskari.clazz.define(
                      me.sendDrawingEvent(me._id, optionsForDrawingEvent);
                      return geometry;
                  }
-            } else if(shape === 'Polygon') {
+            } else if(shape === 'Circle' && ! options.buffer) {
+                geometryType = 'Circle';
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+            } else if(shape === 'Polygon' || shape === 'area') {
                 geometryFunction = function(coordinates, geometry) {
                     if (!geometry) {
                         geometry = new ol.geom.Polygon(null);
@@ -352,7 +379,7 @@ Oskari.clazz.define(
                     return geometry;
                  }
             }
-
+            this.geometry = geometryFunction;
             me._draw[me._id] = new ol.interaction.Draw({
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
