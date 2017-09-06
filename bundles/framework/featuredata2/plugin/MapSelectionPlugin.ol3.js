@@ -94,14 +94,6 @@ Oskari.clazz.define(
             // disable all draw controls
             this._toggleControl();
         },
-        /**
-         * @method setDrawing
-         * Sets an initial geometry
-         */
-        setDrawing: function (geometry) {
-            var features = [new OpenLayers.Feature.Vector(geometry)];
-            this.drawLayer.addFeatures(features);
-        },
 
         /**
          * @method forceFinishDraw
