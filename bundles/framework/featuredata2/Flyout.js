@@ -181,6 +181,12 @@ Oskari.clazz.define(
                         me.updateData(selectedPanel.layer);
                         // sendout highlight request for selected tab
                         if (me.active) {
+                            var selection = me.layers[selectedPanel.layer.getId()].grid.getSelection();
+                            if(selection && selection.length>0) {
+                                selection.forEach(function(selected, index){
+                                    me._handleGridSelect(selectedPanel.layer, selected.__fid, index!==0);
+                                });
+                            }
                             request = reqBuilder(selectedPanel.layer.getId(), true);
                             sandbox.request(me.instance.getName(), request);
                         }
@@ -345,7 +351,7 @@ Oskari.clazz.define(
             selectedFeatures = this.WFSLayerService.getSelectedFeatureIds(layer._id);
             if (panel.grid &&  selectedFeatures && selectedFeatures.length > 0) {
                 for (i = 0; i < selectedFeatures.length; i++) {
-                    panel.grid.select(selectedFeatures[i], true);
+                    //panel.grid.select(selectedFeatures[i], true);
                 }
             }
 
@@ -898,7 +904,13 @@ Oskari.clazz.define(
         _handleGridSelect: function (layer, dataId, keepCollection) {
             var sandbox = this.instance.sandbox,
                 featureIds = [dataId],
-                builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+                builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
+                panel = this.layers['' + layer.getId()],
+                isOk = this.tabsContainer.isSelected(panel);
+
+            if(!isOk) {
+                return;
+            }
             if (keepCollection === undefined) {
                 keepCollection = sandbox.isCtrlKeyDown();
             }
