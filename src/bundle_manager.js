@@ -8,7 +8,7 @@
     /**
      * singleton instance of the class system
      */
-    var cs = o.claz;
+    var cs = o.clazz;
 
     /* legacy Bundle_manager */
 
