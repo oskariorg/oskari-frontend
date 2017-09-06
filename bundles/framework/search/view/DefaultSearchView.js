@@ -450,7 +450,7 @@ Oskari.clazz.define(
                     loc.title,
                     content,
                     {   
-                        lon:result.lon,
+                        lon: result.lon,
                         lat: result.lat
                     },
                     options
