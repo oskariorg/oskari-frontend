@@ -194,6 +194,10 @@ Oskari.clazz.define(
                 }
             );
             me.tabsContainer.insertTo(flyout);
+
+            // Check if  tabcontainer is rendered flyout, fix then flyout overflow
+            var containerEl = me.tabsContainer.getElement();
+            containerEl.parents('.oskari-flyoutcontentcontainer').css('overflow', 'hidden');
         },
 
         /**
