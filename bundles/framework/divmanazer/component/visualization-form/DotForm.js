@@ -174,7 +174,7 @@ Oskari.clazz.define(
 
                 btnContainer.html(svgObj.outerHTML());
 
-                if(i === this.defaultValues.shape) {
+                if(i == this.values.shape) {
                     btnContainer.css('border', '2px solid');
                 }
 
