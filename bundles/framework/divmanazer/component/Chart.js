@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this.x, this.y = null;
   this.colorScale = null;
   this.data = null;
+  this.chartType;
   this._g;
 }, {
     _template: {
@@ -20,7 +21,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
     },
     sortData: function () {
         this.data = this.data.sort(function (a, b) {
-        return d3.ascending(a.value, b.value);
+            return d3.ascending(a.value, b.value);
         })
     },
     chartDimensions: function () {
@@ -71,9 +72,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         return svg;
     },
     initAxis: function () {
-        var stateService = this.service.getStateService();
-        var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
-        var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+        // var stateService = this.service.getStateService();
+        // var classificationOpts = stateService.getClassificationOpts(this.activeIndicator.hash);
+        // var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+        var color = "#DC143C";
         // Init axes
         this.yAxis = d3.axisLeft(this.y)
         .tickSize(10);
@@ -83,7 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
 
         this.colorScale = d3.scaleQuantize()
         .domain([0, this.data.length])
-        .range(colors);
+        .range(color);
     },
     initChart: function() {
         var selections = this.initSelection();
@@ -142,6 +144,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             return me.x(d.value);
         });
 
+        this.chartType = 'barchart';
+
         return this.getGraph();
     },
     createLineChart: function ( data, options ) {
@@ -163,7 +167,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .attr('stroke', 'green')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
-        
+
+        this.chartType = 'linechart';
         return this.getGraph();
     },
     chart: function (selection) {
@@ -188,15 +193,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         });
     },
     redraw: function (data) {
-        if( data ) {
-        this.data = data;
-        this.sortData();
+        var chart;
+        if( data != undefined ) {
+            this.handleData(data);
         }
         //Clear previous graphs
         this._template.graph.empty(); 
-        var selections = this.initSelection();
-        var scales = this.initScales();
-        var chart = this.chart(selections);
+        if( this.chartType === 'barchart' ) {
+            chart = this.createBarChart(this.data);
+        } else if( this.chartType === 'linechart' ) {
+            chart = this.createLineChart(this.data);
+        }
+
         return chart;
     },
     getGraph: function() {
