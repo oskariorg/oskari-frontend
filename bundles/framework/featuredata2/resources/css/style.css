@@ -5,6 +5,10 @@
     /* Override sort img position */
 }
 
+.featuredata .oskariTabs {
+    overflow: auto;
+}
+
 .featuredata div.tab-content {
     max-height: 535px;
     overflow: auto;
