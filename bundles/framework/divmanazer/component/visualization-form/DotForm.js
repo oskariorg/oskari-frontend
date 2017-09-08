@@ -280,8 +280,12 @@ Oskari.clazz.define(
             var colorCheckbox = me.templateColorSource.clone();
 
             colorCheckbox.change(function () {
+                var cell = me.activeColorCell.toString();
                 jQuery('input.custom-color').prop('disabled', !this.checked);
-                var activeCell = jQuery('#' + me.activeColorCell + 'ColorCell');
+                if (me.activeColorCell < 10) {
+                    cell = '0' + cell;
+                }
+                var activeCell = jQuery('#' + cell + 'ColorCell');
                 if (this.checked) {
                     activeCell.css('border', '1px solid #000000');
                 } else {
