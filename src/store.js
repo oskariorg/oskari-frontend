@@ -1,8 +1,8 @@
-(function(o) {
+(function (o) {
     // default impl for validator and defaultValue generator
-    var noop = function() { return true; };
+    var noop = function () { return true; };
 
-    var setterGetter = function setterGetterFn(collection, key, value, defaultValue, validator) {
+    var setterGetter = function setterGetterFn (collection, key, value, defaultValue, validator) {
         if (!collection) {
             return;
         }
@@ -29,7 +29,7 @@
             };
             return result;
         } else {
-            if(!collection[key]) {
+            if (!collection[key]) {
                 collection[key] = defaultValue(key);
             }
             // return values registered for name
@@ -47,7 +47,7 @@
     - data(key, value) :
         - the actual method name can be overridden with constructor arg (defaults to data)
     */
-    var Storage = function(methodName, options) {
+    var Storage = function (methodName, options) {
         // normalize params
         if (typeof methodName !== 'string') {
             options = methodName;
@@ -61,7 +61,7 @@
 
         var _collection = {};
         var _me = {
-            reset: function(key) {
+            reset: function (key) {
                 if (!key) {
                     // do we need to loop and delete here to save memory?
                     _collection = {};
@@ -80,14 +80,14 @@
             validator = noop;
         }
 
-        _me[methodName] = function(key, value) {
+        _me[methodName] = function (key, value) {
             return setterGetter(_collection, key, value, defaultValue, validator);
         };
 
         return _me;
     };
 
-    o.createStore = function(methodName, options) {
+    o.createStore = function (methodName, options) {
         return new Storage(methodName, options);
     };
 }(Oskari));

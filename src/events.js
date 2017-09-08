@@ -1,7 +1,7 @@
 /**
  * Creates on, off, trigger functions for Oskari
  */
-(function(o) {
+(function (o) {
     if (!o) {
         // can't add eventbus if no Oskari ref
         return;
@@ -12,17 +12,16 @@
     }
     var log = Oskari.log('Events');
 
-    var EventBus = function() {
-
+    var EventBus = function () {
         var store = o.createStore('subscribers', {
-            defaultValue: function() {
+            defaultValue: function () {
                 // return an array as default for any key
                 return [];
             }
         });
 
         return {
-            'on': function(event, handlerFn) {
+            'on': function (event, handlerFn) {
                 // only allow functions to be stored as handlers
                 if (typeof handlerFn !== 'function') {
                     return false;
@@ -35,7 +34,7 @@
                 return store.subscribers(event, list);
             },
 
-            'off': function(event, handlerFn) {
+            'off': function (event, handlerFn) {
                 var currentSubs = store.subscribers(event);
 
                 // remove if handlerFn found in currentSubs
@@ -52,10 +51,10 @@
                 return success;
             },
 
-            'trigger': function(event, data) {
+            'trigger': function (event, data) {
                 var currentSubs = store.subscribers(event);
                 var count = 0;
-                currentSubs.forEach(function(sub) {
+                currentSubs.forEach(function (sub) {
                     try {
                         sub(data, event);
                         count++;
@@ -75,7 +74,7 @@
      * @param  {Object} target optional target to attach observable functions
      * @return {Object} object with on, off and trigger functions
      */
-    o.makeObservable = function(target) {
+    o.makeObservable = function (target) {
         var bus = new EventBus();
         if (!target) {
             return bus;
@@ -88,5 +87,4 @@
 
     // create eventbus for Oskari core
     o.makeObservable(o);
-
 }(Oskari));

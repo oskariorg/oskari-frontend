@@ -29,11 +29,11 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      *          Refreshes the map state so that the added layers are shown correctly
      */
     syncMapState: function (blnInitialMove, mapModule) {
-        var mapDomain = this.getMap(),
-            zoom = mapDomain.getZoom(),
-            maxZoom = 13;
+        var mapDomain = this.getMap();
+        var zoom = mapDomain.getZoom();
+        var maxZoom = 13;
 
-        if(mapModule) {
+        if (mapModule) {
             maxZoom = mapModule.getMaxZoomLevel();
         }
 
@@ -64,19 +64,19 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
     generateMapLinkParameters: function (options) {
         // get stateful component parameters
         // Note! These parameters must be passed to the server in index.js to be used
-        var components = this.getStatefulComponents(),
-            iterator = null,
-            component = null,
-            optionsLinkParameterArray = [],
-            componentLinkParameterArray = [];
+        var components = this.getStatefulComponents();
+        var iterator = null;
+        var component = null;
+        var optionsLinkParameterArray = [];
+        var componentLinkParameterArray = [];
         for (iterator in components) {
             if (components.hasOwnProperty(iterator)) {
                 component = components[iterator];
 
                 // Make sure the function exists and is a function
-                if (component.getStateParameters && typeof component.getStateParameters === "function") {
+                if (component.getStateParameters && typeof component.getStateParameters === 'function') {
                     var params = component.getStateParameters();
-                    if(params) {
+                    if (params) {
                         componentLinkParameterArray.push(params);
                     }
                 }
@@ -85,9 +85,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
 
         // use given options or empty object to have the strings only once
         options = options || {
-            "showMarker": false,
-            "forceCache": false,
-            "noSavedState": false
+            'showMarker': false,
+            'forceCache': false,
+            'noSavedState': false
         };
 
         for (iterator in options) {
