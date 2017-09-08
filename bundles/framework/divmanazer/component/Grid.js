@@ -896,7 +896,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             var selected = me._getSelectedRows();
             container.empty();
-            if(me.toolRow) {
+            if(me.toolRow && (state === null || state.columnSelector !== 'open')) {
                 me.toolRow.remove();
                 me.toolRow = null;
             }
@@ -945,7 +945,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             // Exporter
-            if (me.showExcelExporter && me.toolRow) { // Todo: configure this
+            if (me.showExcelExporter && me.toolRow && me.toolRow.find('.exporter').length === 0) { // Todo: configure this
                 var exporter = me.templateExporter.clone(),
                     exportForm = me._createExportForm(),
                     exportPopupButton = Oskari.clazz.create(
