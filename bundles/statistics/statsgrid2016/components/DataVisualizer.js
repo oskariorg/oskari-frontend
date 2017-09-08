@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
-  this._barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc, this.getIndicator());
+  this._barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc);
   this.shouldUpdate = false;
   this._select = null;
   this.events();
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function(insta
       return;
     }
     if( !this._barchart.chartIsInitialized() ) {
-      var barchart = this._barchart.initChart(data);
+      var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator() });
       this.tabsContainer.panels[0].getContainer().append(barchart);
     } else {
       var updated = this._barchart.redraw(data);
