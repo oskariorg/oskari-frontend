@@ -473,7 +473,7 @@ Oskari.clazz.define(
                         flyout.find('.tabsHeader').height() +
                         parseInt(content.css('padding-top') || 0) +
                         parseInt(content.css('padding-bottom') || 0) +
-                        (flyout.find('.exporter').height() || 0) + 10;
+                        (flyout.find('.exporter').height() || 0) + 20;
 
                     var parent = flyout.find('.oskari-flyoutcontentcontainer');
                     flyout.find('div.tab-content').css('height', (parent.height() - paddings) + 'px');
@@ -551,7 +551,9 @@ Oskari.clazz.define(
                 allowLocateOnMap = isManualRefresh && this.instance && this.instance.conf && this.instance.conf.allowLocateOnMap;
 
 
+
             if (isOk) {
+                panel.getContainer().parent().find('.featuredata2-show-selected-first').remove();
                 panel.getContainer().empty();
                 panel.getContainer().parent().find('.grid-tools').remove();
 
@@ -592,7 +594,7 @@ Oskari.clazz.define(
                 var gridEl = jQuery('<div class="featuredata2-grid"></div>');
 
                 if(!panel.grid){
-                    panel.grid = grid = Oskari.clazz.create(
+                    panel.grid = Oskari.clazz.create(
                             'Oskari.userinterface.component.Grid',
                             me.instance.getLocalization('columnSelectorTooltip')
                         );
@@ -768,23 +770,31 @@ Oskari.clazz.define(
                     panel.selectedFirstCheckbox.setChecked(false);
                     panel.selectedFirstCheckbox.setHandler(function() {
                         panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked());
-                        panel.showSelectedRowsFirst = panel.selectedFirstCheckbox.isChecked();
                     });
 
-                    // Allign checkbox
-                    var checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
-                    if (conf && !conf.disableExport && layer.getPermission('download') === 'download_permission_ok') {
-                        checkboxEl.insertAfter(panelParent.find('.grid-tools'));
-                        jQuery('<div style="clear:both;"></div>').insertAfter(panelParent.find('.grid-tools'));
-                    } else {
-                        checkboxEl.css('margin-top', '7px');
-                        panelParent.find('.grid-tools').append(checkboxEl);
-                        gridEl.css({
-                            'position':'relative',
-                            'top':'6px'
-                        });
-                    }
+
                 }
+
+                panel.selectedFirstCheckbox.setChecked(panel.selectedFirstCheckbox.isChecked() === true);
+                panel.grid.moveSelectedRowsTop(panel.selectedFirstCheckbox.isChecked() === true);
+
+                // Checkbox
+                var checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
+                checkboxEl.addClass('featuredata2-show-selected-first');
+                var gridToolsEl = panelParent.find('.grid-tools:visible');
+                gridToolsEl.find('.featuredata2-show-selected-first').remove();
+                if (conf && !conf.disableExport && layer.getPermission('download') === 'download_permission_ok') {
+                    checkboxEl.insertAfter(gridToolsEl);
+                    jQuery('<div class="featuredata2-show-selected-first" style="clear:both;"></div>').insertAfter(gridToolsEl);
+                } else {
+                    checkboxEl.css('margin-top', '7px');
+                    gridToolsEl.append(checkboxEl);
+                    gridEl.css({
+                        'position':'relative',
+                        'top':'6px'
+                    });
+                }
+
             }
         },
         setGridOpacity: function (layer, opacity) {

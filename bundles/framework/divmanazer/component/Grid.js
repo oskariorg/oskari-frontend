@@ -896,6 +896,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             var selected = me._getSelectedRows();
             container.empty();
+            if(me.toolRow) {
+                me.toolRow.remove();
+                me.toolRow = null;
+            }
 
             var toolEl = toolRowElement || me.toolsRenderedTo;
 
@@ -1037,7 +1041,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             // Keep already selected to selected
-            if(selected.values.length > 0 && state && state.columnSelector === 'open') {
+            if(selected.values.length > 0) {
                 selected.values.forEach(function(selection){
                     me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
                     me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
