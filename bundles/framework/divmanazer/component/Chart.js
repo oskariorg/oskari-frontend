@@ -23,9 +23,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         return d3.ascending(a.value, b.value);
         })
     },
-    setData: function (data) {
-        this.data = data;
-    },
     chartDimensions: function () {
         var me = this;
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
@@ -88,17 +85,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .domain([0, this.data.length])
         .range(colors);
     },
-    initChart: function( data, options ) {
-        this.setData(data);
-        this.sortData(this.data);
-        var options = options || {};
-        if( 'key' in options) {
-            this.parseOptions( options );
-        }
+    initChart: function() {
         var selections = this.initSelection();
         var scales = this.initScales();
         var chart = this.chart(selections);
         return chart;
+    },
+    handleData: function( data ) {
+        this.data = data;
+        this.sortData( this.data );
     },
     parseOptions: function (options) {
         if( options.activeIndicator ) {
@@ -119,6 +114,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .call(this.xAxis)
     },
     createBarChart: function ( data, options ) {
+        if( data != undefined ) {
+            this.handleData(data);
+        }
+        var options = options || {};
+        if( Object.keys(options).length !== 0 ) {
+            this.parseOptions( options );
+        }
         this.initChart();
         var me = this;
         var bars = this.svg.selectAll(".bar")
@@ -139,8 +141,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .attr("width", function (d) {
             return me.x(d.value);
         });
+
+        return this.getGraph();
     },
     createLineChart: function ( data, options ) {
+        if( data != undefined ) {
+            this.handleData(data);
+        }
+        var options = options || {};
+        if( Object.keys(options).length !== 0 ) {
+            this.parseOptions( options );
+        }
         this.initChart();
         var me = this;
         var linegen = d3.line()
@@ -152,7 +163,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .attr('stroke', 'green')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
-            
+        
+        return this.getGraph();
     },
     chart: function (selection) {
         var me = this;
@@ -174,7 +186,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             .tickFormat("")
             )
         });
-    return this.getGraph();
     },
     redraw: function (data) {
         if( data ) {

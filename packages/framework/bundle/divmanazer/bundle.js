@@ -304,7 +304,10 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
-            }
+            }, {
+                "type": "text/javascript",
+                "src": "../../../libraries/d3/d3.min.js"
+            }, 
         ],
         "locales": [{
             "lang": "af",
