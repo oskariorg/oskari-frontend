@@ -362,14 +362,6 @@ Oskari.clazz.define(
                 });
             }
 
-            // filter
-            selectedFeatures = this.WFSLayerService.getSelectedFeatureIds(layer._id);
-            if (panel.grid &&  selectedFeatures && selectedFeatures.length > 0) {
-                for (i = 0; i < selectedFeatures.length; i++) {
-                    //panel.grid.select(selectedFeatures[i], true);
-                }
-            }
-
             // Grid opacity
             this.setGridOpacity(layer, 1.0);
 
