@@ -797,7 +797,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             // Set current checkbox value for the field
             fieldNames.forEach(function(field){
-                if(!me.visibleColumns.includes(field)) {
+                if(me.visibleColumns.indexOf(field) === -1) {
                     me.visibleColumns.push(field);
                 }
             });
@@ -808,7 +808,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     newColumn = me.templateColumnSelectorListItem.clone();
                     newColumn.addClass('column-selector-list-item');
                     checkboxInput = newColumn.find('input');
-                    checkboxInput.attr('checked',me.visibleColumns.includes(field));
+                    checkboxInput.attr('checked', (me.visibleColumns.indexOf(field) !== -1));
 
                     checkboxInput.addClass('column-selector-list-item');
                     checkboxInput.attr('data-id', field);
