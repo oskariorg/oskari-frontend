@@ -244,7 +244,8 @@ Oskari.clazz.define(
                 colorCell.attr('id', id);
                 colorCell.click(function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        return;
+                        jQuery('.color-source').attr('checked', false);
+                        jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
                     if (cellIndex === me.activeColorCell) {
