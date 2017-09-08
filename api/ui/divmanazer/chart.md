@@ -6,8 +6,8 @@ Create barcharts or linecharts with d3
 
 ## How to use
 
-Creates a button with label "Alert" and binds a handler to it that shows an alert when clicked. `addClass('primary')` makes it visually a "primary" button (colored blue).
-
+Creates instance of chart class, pass it data in very specific form (array with objects, ie: [{ name: "", value: Number }]).  
+Chart returns a div that can be appended where you desire.  
 ```javascript
 var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
 var data = [{name:"2", value:1},{name:"1", value:3},{name:"11", value:31},{name:"12", value:32},{name:"13", value:300},{name:"14", value:355},{name:"15", value:366},{name:"16", value:377}];
