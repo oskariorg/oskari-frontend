@@ -449,7 +449,10 @@ Oskari.clazz.define(
                     popupId,
                     loc.title,
                     content,
-                    new OpenLayers.LonLat(result.lon, result.lat),
+                    {   
+                        lon: result.lon,
+                        lat: result.lat
+                    },
                     options
                 );
 
