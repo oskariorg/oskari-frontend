@@ -288,6 +288,10 @@ Oskari.clazz.define(
                 var activeCell = jQuery('#' + cell + 'ColorCell');
                 if (this.checked) {
                     activeCell.css('border', '1px solid #000000');
+                    jQuery('.custom-red-value').val(parseInt(me.values.color.substring(0, 2), 16));
+                    jQuery('.custom-green-value').val(parseInt(me.values.color.substring(2, 4), 16));
+                    jQuery('.custom-blue-value').val(parseInt(me.values.color.substring(4), 16));
+                    me.activeColorCell = -1;
                 } else {
                     activeCell.css('border', '3px solid #ffffff');
                 }
