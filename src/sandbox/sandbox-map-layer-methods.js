@@ -36,7 +36,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      */
     findAllHighlightedLayers: function () {
         var layersList = this.getMap().getActivatedLayers();
-        return layersList.slice(0);;
+        return layersList.slice(0);
     },
 
     /**
@@ -61,7 +61,6 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
     isLayerAlreadySelected: function (id) {
         return this.getMap().isLayerSelected(id);
     },
-
 
     /**
      * @method isMapLayerHighLighted
@@ -91,7 +90,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-layer-methods', {
      * @param  {String/Number} layerId
      * @return {undefined}
      */
-    removeMapLayer: function(layerId) {
+    removeMapLayer: function (layerId) {
         this.getMap().removeLayer(layerId);
     }
 });

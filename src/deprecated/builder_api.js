@@ -1,5 +1,5 @@
-(function(o){
-    if(!o) {
+(function (o) {
+    if (!o) {
         // can't add functions if no Oskari ref
         return;
     }
@@ -131,7 +131,6 @@
         return rv;
     };
 
-
     /**
      * @public @static @method Oskari.extensionCls O2 api for extension classes
      *
@@ -176,7 +175,9 @@
                 'Bundle-Identifier': bundleId
             }
         });
-        bm.installBundleClassInfo(bundleId, rv.classInfo);
+        // Probably broken since bm is not defined
+        var bm = {};
+        // bm.installBundleClassInfo(bundleId, rv.classInfo);
 
         rv.___bundleIdentifier = bundleId;
 

@@ -1,8 +1,8 @@
 // So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
 jQuery.ajaxSetup({ cache: false });
 
-(function(o){
-    if(!o) {
+(function (o) {
+    if (!o) {
         // can't add loader if no Oskari ref
         return;
     }
@@ -56,22 +56,21 @@ jQuery.ajaxSetup({ cache: false });
          *
          */
         playBundle: function (recData, config, callback) {
-            if(typeof recData !== 'object') {
+            if (typeof recData !== 'object') {
                 throw new Error('Bundle def is not an object');
             }
-            if(typeof config === 'function') {
+            if (typeof config === 'function') {
                 callback = config;
                 config = undefined;
             }
 
-            if(config) {
+            if (config) {
                 // wrap to acceptable format
                 var configName = recData.bundleinstancename || recData.bundlename;
                 var tmp = {};
                 tmp[configName] = config;
                 config = tmp;
-            }
-            else {
+            } else {
                 config = this.appConfig;
             }
             var loader = Oskari.loader([recData], config);
@@ -85,22 +84,22 @@ jQuery.ajaxSetup({ cache: false });
          * @param  {Function} successCB Optional callback that is called when the application has started
          * @param  {Function} modifyCB  Optional callback that is called appsetup is loaded, but before it's used by Oskari
          */
-        loadAppSetup : function(url, params, errorCB, successCB, modifyCB) {
+        loadAppSetup: function (url, params, errorCB, successCB, modifyCB) {
             var me = this;
             jQuery.ajax({
-                type : 'GET',
-                dataType : 'json',
-                data : params || {},
+                type: 'GET',
+                dataType: 'json',
+                data: params || {},
                 url: url,
-                success : function(setup) {
-                    if(typeof modifyCB ==='function') {
+                success: function (setup) {
+                    if (typeof modifyCB === 'function') {
                         modifyCB(setup);
                     }
                     me.setApplicationSetup(setup);
                     me.startApplication(successCB);
                 },
-                error : function(jqXHR) {
-                    if(typeof errorCB === 'function') {
+                error: function (jqXHR) {
+                    if (typeof errorCB === 'function') {
                         errorCB(jqXHR);
                     }
                 }
@@ -118,21 +117,21 @@ jQuery.ajaxSetup({ cache: false });
          */
         setApplicationSetup: function (setup) {
             this.appSetup = setup;
-            if(setup.configuration) {
+            if (setup.configuration) {
                 this.setConfiguration(setup.configuration);
             }
             setup.env = setup.env || {};
-            if(typeof Oskari.setLang === 'function') {
+            if (typeof Oskari.setLang === 'function') {
                 Oskari.setLang(setup.env.lang || window.language);
             }
-            if(typeof Oskari.setSupportedLocales === 'function') {
+            if (typeof Oskari.setSupportedLocales === 'function') {
                 Oskari.setSupportedLocales(setup.env.locales);
             }
-            if(typeof Oskari.setDecimalSeparator === 'function') {
+            if (typeof Oskari.setDecimalSeparator === 'function') {
                 Oskari.setDecimalSeparator(setup.env.decimalSeparator);
             }
 
-            if(typeof Oskari.setMarkers === 'function') {
+            if (typeof Oskari.setMarkers === 'function') {
                 Oskari.setMarkers(setup.env.svgMarkers || []);
             }
         },
