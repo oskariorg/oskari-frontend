@@ -87,21 +87,43 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .domain([0, this.data.length])
         .range(color);
     },
+    /**
+     * initializes the chart skeleton without any specific line or bar options
+     *
+     * @method initChart
+     * 
+     */
     initChart: function() {
         var selections = this.initSelection();
         var scales = this.initScales();
         var chart = this.chart(selections);
         return chart;
     },
+    /**
+     * sets this.data and sorts the values in ascending order
+     *
+     * @method handleData
+     * @param  [] data only supports following format: [ { name: "", value: int } ]
+     */
     handleData: function( data ) {
         this.data = data;
         this.sortData( this.data );
     },
+    /**
+     * parses the options passed in
+     *
+     * @method parseOptions
+     * @param  {} options
+     */
     parseOptions: function (options) {
         if( options.activeIndicator ) {
             this.activeIndicator = options.activeIndicator;
         }
     },
+    /**
+     * 
+     * @method callGroups
+     */
     callGroups: function () {
         var padding = this.dimensions.label.padding;
         var lblCenterPadding = this.dimensions.label.verticalCenterPadding;
@@ -115,6 +137,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         .attr("class", "x axis")
         .call(this.xAxis)
     },
+    /**
+     * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element 
+     * @method createBarChart
+     */
     createBarChart: function ( data, options ) {
         if( data != undefined ) {
             this.handleData(data);
@@ -148,6 +174,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
 
         return this.getGraph();
     },
+    /**
+     * handles data & options passed to it, initializes skeleton chart and then applies linechart specific options to the element 
+     * @method createLineChart
+     */
     createLineChart: function ( data, options ) {
         if( data != undefined ) {
             this.handleData(data);
@@ -171,6 +201,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         this.chartType = 'linechart';
         return this.getGraph();
     },
+    /**
+     * skeleton chart with no data applied to it
+     * @method chart
+     * @param  d3 svg-element
+     */
     chart: function (selection) {
         var me = this;
         //update x & y scales
@@ -192,6 +227,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             )
         });
     },
+    /**
+     * remove old graph and redraw
+     * @method redraw
+     * @param  [data]
+     */
     redraw: function (data) {
         var chart;
         if( data != undefined ) {
