@@ -1,23 +1,22 @@
 
-(function(o){
-    if(!o || !o.clazz) {
+(function (o) {
+    if (!o || !o.clazz) {
         // can't add loader if no Oskari ref
         return;
     }
-    var log = Oskari.log('Oskari.bundle_manager');
+    var log = Oskari.log('Oskari.BundleManager');
     /**
      * singleton instance of the class system
      */
-    var class_singleton = o.clazz;
-    var cs = class_singleton;
+    var cs = o.clazz;
 
     /* legacy Bundle_manager */
 
     /**
      * @singleton @class Oskari.Bundle_manager
      */
-    var Bundle_manager = function () {
-    	this.clazz = o.clazz;
+    var BundleManager = function () {
+        this.clazz = o.clazz;
         var me = this;
         me.serial = 0;
         me.bundleDefinitions = {};
@@ -38,7 +37,7 @@
         me.loaderStateListeners = [];
     };
 
-    Bundle_manager.prototype = {
+    BundleManager.prototype = {
 
         /**
          * @private @method _getSerial
@@ -55,8 +54,8 @@
          * @private @method _purge
          */
         _purge: function () {
-            var p,
-                me = this;
+            var p;
+            var me = this;
 
             for (p in me.sources) {
                 if (me.sources.hasOwnProperty(p)) {
@@ -88,8 +87,8 @@
          *
          */
         _install: function (biid, bundleDefinition, srcFiles, bundleMetadata) {
-            var me = this,
-                defState = me.bundleDefinitionStates[biid];
+            var me = this;
+            var defState = me.bundleDefinitionStates[biid];
 
             if (defState) {
                 defState.state = 1;
@@ -108,7 +107,7 @@
 
             me.bundleDefinitions[biid] = bundleDefinition;
             me.sources[biid] = srcFiles;
-            //postChange(null, null, 'bundle_definition_loaded');
+            // postChange(null, null, 'bundle_definition_loaded');
         },
 
         /**
@@ -121,11 +120,11 @@
          */
         installBundleClass: function (biid, className) {
             var clazz = Oskari.clazz.create(className);
-            if(clazz) {
+            if (clazz) {
                 // Oskari.bundle is the new registry for requirejs loader
                 Oskari.bundle(biid, {
-                    clazz : clazz,
-                    metadata : cs.getMetadata(className).meta
+                    clazz: clazz,
+                    metadata: cs.getMetadata(className).meta
                 });
             }
         },
@@ -139,9 +138,9 @@
          *
          */
         installBundleClassInfo: function (biid, classInfo) {
-            var bundleDefinition = cs.getBuilderFromClassInfo(classInfo),
-                bundleMetadata = classInfo._metadata,
-                sourceFiles = {};
+            var bundleDefinition = cs.getBuilderFromClassInfo(classInfo);
+            var bundleMetadata = classInfo._metadata;
+            var sourceFiles = {};
 
             if (biid === null || biid === undefined) {
                 throw new TypeError('installBundleClassInfo(): Missing biid');
@@ -172,10 +171,10 @@
          * @return {Object}      Bundle
          */
         createBundle: function (biid, bid) {
-            var bundle,
-                bundleDefinition,
-                me = this,
-                bundleDefinitionState;
+            var bundle;
+            var bundleDefinition;
+            var me = this;
+            var bundleDefinitionState;
 
             if (biid === null || biid === undefined) {
                 throw new TypeError('createBundle(): Missing biid');
@@ -208,7 +207,7 @@
                 state: true,
                 bundlImpl: biid
             };
-            //postChange(bundle, null, 'bundle_created');
+            // postChange(bundle, null, 'bundle_created');
             return bundle;
         },
 
@@ -224,10 +223,10 @@
             // creates a bundle_instance
             // any configuration and setup IS BUNDLE / BUNDLE INSTANCE specific
             // create / config / start / process / stop / destroy ...
-            var me = this,
-                bundle,
-                bundleInstance,
-                bundleInstanceId;
+            var me = this;
+            var bundle;
+            var bundleInstance;
+            var bundleInstanceId;
 
             if (bid === null || bid === undefined) {
                 throw new TypeError('createInstance(): Missing bid');
@@ -262,7 +261,7 @@
 
             this.bundleInstances[bundleInstanceId] = bundleInstance;
 
-            //postChange(bundle, bundleInstance, 'instance_created');
+            // postChange(bundle, bundleInstance, 'instance_created');
             return bundleInstance;
         },
 
@@ -289,5 +288,5 @@
         }
     };
 
-    o.bundle_manager = new Bundle_manager();
+    o.bundle_manager = new BundleManager();
 }(Oskari));

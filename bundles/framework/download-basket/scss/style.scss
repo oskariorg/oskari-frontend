@@ -1,0 +1,67 @@
+.download-basket__component {
+    margin-top: 10px;
+}
+
+.download-basket__component-title {
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    background: #ffde00;
+    color: #000;
+}
+
+.download-basket__component-layer-name {
+    float: left;
+    padding: 5px;
+}
+
+.download-basket__component-title-close {
+    float: right;
+    margin-top: 5px;
+    margin-right: 4px;
+}
+
+.download-basket__component-title-clear {
+    clear: both;
+}
+
+.download-basket__component-content {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.oskari__download-basket-buttons {
+    float: right;
+    padding-top: 13px;
+}
+
+.oskari__download-basket-user-info {
+    form {
+        margin-top: 10px;
+
+        label {
+            clear: both;
+            display: block;
+            margin-bottom: 8px;
+
+            &:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        }
+
+        span {
+            display: block;
+            float: left;
+            width: 12em;
+            line-height: 34px;
+        }
+
+        input {
+            display: block;
+            float: left;
+            width: 15em;
+        }
+    }
+}

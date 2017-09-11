@@ -1,5 +1,6 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(sandbox, locale) {
     this.sb = sandbox;
+    this.LAYER_ID = 'STATS_LAYER';
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
     this.locale = locale;
@@ -225,6 +226,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         if(updateClassification) {
             state.setClassification(ind.hash,  me.getSelectedValues(), true);
         }
+
+        if(classification.transparency) {
+            me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
+        }
     },
 
     /**
@@ -255,7 +260,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             delete values.transparency;
         } else {
             delete values.type;
-             delete values.mode;
+            delete values.mode;
         }
 
         return values;

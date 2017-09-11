@@ -64,10 +64,11 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "FeedbackServiceTool": "Palautteen antaminen (Open311)",
-                "MapLegend":"Näytä karttaselitteet",
+                "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
+                    "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
                     "measureline": "Matkan mittaus",
@@ -245,6 +246,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
+        },
+        "guidedTour": {
+            "title": "Karttajulkaisu",
+            "message": "Karttajulkaisu-toiminnolla voit julkaista karttoja omalla verkkosivullasi. <br/><br/> Valitse kartalla näytettävät karttatasot, kerro missä aiot julkaista kartan, valitse työkalut ja määrittele kartan ulkoasu. Paina Tallenna ja kartta on valmis julkaistavaksi. Kopioi vain saamasi html-koodi verkkosviullesi. <br/><br/> Voit myöhemmin päivittää karttaa Omat tiedot -valikon kautta. Muutokset näkyvät heti myös omalla verkkosivullasi.<br/><br/> Vain kirjautuneet käyttäjät voivat julkaista karttoja.",
+            "openLink": "Näytä Karttajulkaisu",
+            "closeLink": "Piilota Karttajulkaisu",
+            "tileText": "Karttajulkaisu"
         }
     }
 });

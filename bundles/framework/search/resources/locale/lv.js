@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Aizvērt",
             "title": "Meklēšanas rezultāti"
+        },
+        "guidedTour": {
+            "title": "Meklēšana",
+            "message": "Izmantojiet meklēšanas funkciju, lai pārvietotu kartes skatu tieši uz to vietu, ko meklējat",
+            "openLink": "Parādīt meklēšanu",
+            "closeLink": "Paslēpt meklēšanu",
+            "tileText": "Meklēt"
         }
     }
 });

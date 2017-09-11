@@ -34,9 +34,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             var me = this;
 
             var conf = me.getConfiguration() || {};
-            me.termsUrl = conf.termsUrl || '';
-            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/';
-            me.loginUrl = conf.loginUrl || 'https://kartta.paikkatietoikkuna.fi/auth';
+            me.registerUrl = conf.registerUrl || 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            me.loginUrl = conf.loginUrl || '/auth';
 
             me.loginbar = me.loginbarTemplate.clone();
             me.loginContainer = jQuery(me.loginContainerId);
@@ -68,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             registerInfo.append(me.loc.popup.registerInfo);
 
             var linkInfo = me.linkToTermsOfUse.clone();
-            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.termsUrl + '>' + this.loc.popup.termsOfUseLink + '</a>');
+            var termsOfUseTemplate = jQuery('<a target="_blank" href=' + me.loc.popup.termsOfUseLink + '>' + me.loc.popup.termsOfUseLinkText + '</a>');
             linkInfo.append(termsOfUseTemplate);
             linkInfo.prepend(me.loc.popup.registerInfo2);
 

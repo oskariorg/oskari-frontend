@@ -1,6 +1,104 @@
 # Release Notes
 
+## 1.44.0
+
+### FormInput
+
+Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
+
+### Drawtools
+
+Fixed failing StopDrawingRequest.
+
+
+### Guidedtour
+
+Bundles now register themselves into the guided tour with an AddToGuidedTourRequest, giving a delegate object with properties and methods used when rendering the guided tour dialog for the requesting bundle.
+
+By default (without guided tour bundle configuration), dialogs for all registered bundles are shown in the order of "priority" property given in AddToGuidedTourRequest. To override the default behavior, the guided tour bundle can be given configuration to show only a subset of the registered bundle dialogs and alter their ordering. The content of the dialogs can also be replaced with tags referring to GetArticlesByTag API articles.
+
+### framework/download-basket
+
+Added support to use download basket. Layers need following layer attributes:
+- unique: layer unique column name
+- geometryColumn (optional): cropping layer filter type, currently supported value STRING. These means at filter is made by STRING query for backend (property LIKE 'wantedvalue%'), otherwise used int/double/boolean filter
+- geometry: layer geometry column name
+- cropping: true/false, if true then used layer for cropping selection
+- basemap: true/false, if true then skipping it for using download basket
+- raster: true/false, is layer raster layer? if true then show popup for this at not supported and skipping it
+
+Known issues:
+    - only localized in Finnish
+    - only supported one license type
+
+### statistics/statsgrid2016
+
+Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
+
+### mapmodule
+
+Changed using escape funtion to encodeURIComponent because escape function is depricated in JavaScript version 1.5.
+
+#### VectorLayerPlugin ol2/ol3
+
+New functionalities for ``AddFeaturesToMapRequest``. New options available:
+- layerInspireName : Inspire name for added layer
+- layerOrganizationName: Organization name for added layer
+- showLayer: Show layer to layerselector2/layerselection2. If setted truue then show map (add layer to mapservice).
+- opacity: Added layer opacity. IE 11 cannot handle right vector laeyr opacity if used SVG icon.
+- layerName: Added layer name (showed in layerselector2/layerselection2)
+- layerDescription: Added layer description (showed subtitle in layerselection2)
+- layerPermissions: Added layer permission
+
+### Oskari.util
+
+Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
+
+### infobox
+
+Fixed issue where Get Feature Info (GFI) popup did not fit on the visible map area.
+
+### Myplacesimport
+
+Changed import file POST to use ajax XHR2 instead of iframe. Added upload progress bar and error handling. Some localization changes and error messages added. Choose a file dialog now shows only zip-files and folders.
+
+Now shows imported feature count in the success message. On error shows error message and tips. The message popup doesn't fadeout if error or warning occurs.
+
+### Myplaces2
+
+The drawn figures are now removed from the map when PlaceForm is closed by clicking x-icon (cancel).
+
+DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
+A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
+
+### Search
+
+The default search UI now includes an optional autocomplete functionality.
+Searchchannels in oskari-server must provide support for it to be useful.
+See oskari-server ReleaseNotes on details how to support autocompletion.
+
+### Visualization form UI for polygon styles with no fill / no stroke
+
+User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+
+### Background layerselector plugin
+
+Previously the layer selector UI was hidden if user opened Analysis, Thematic or Publish map modes.
+This change keeps the layer selector visible always (except Publish map), but turns the selector into a dropdown menu if the map is too narrow to fit the buttons.
+
+### Analysis
+
+Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
 ## 1.43.0
+
+### Minifier script
+
+No longer assumes "oskari" as the folder name when processing images. Now determines the folder name based on the parent-folder name for the Gruntfile.js
+
+### Publisher2/history tools
+
+History tools (moving to previous or next view) can no be published only together. If there are published maps with only one of history tools, the other one will be added there as well. This is done because moving to next view is useless without possibility to move to previous view.
 
 ### Grid
 
@@ -37,7 +135,7 @@ This might affect usage of the component if an external code snippet assumes tha
 
 ### paikkatietoikkuna/register
 
-New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in. 
+New paikkatietoikkuna-specific bundle that creates login and registration links as well as logout link after user is logged in.
 Bundle also creates registration popup to give information about registration before directing to registration page.
 
 ## 1.42.1

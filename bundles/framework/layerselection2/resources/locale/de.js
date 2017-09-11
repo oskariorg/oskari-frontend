@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Der logische Operator fehlt."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Ausgewählte Kartenebenen",
+            "message": "Sie können die Reihenfolge, in der die Kartenebenen angezeigt werden, durch Anklicken und Verschieben verändern. Die Transparenz der Kartenebenen kann angepasst werden. Die Veränderungen werden im Kartenfenster angezeigt.",
+            "openLink": "Zeige ausgewählte Kartenebenen",
+            "closeLink": "Verberge ausgewählte Kartenebenen",
+            "tileText": "Ausgewählte Kartenebenen"
         }
     }
 });

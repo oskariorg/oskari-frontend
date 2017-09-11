@@ -141,6 +141,11 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Error fetching suitable regions for the data.",
             "regionsDataError": "Error fetching regions.",
             "regionsDataIsEmpty": "The list of suitable regions is empty."
+        },
+        "layer": {
+            "name": "Thematic map region",
+            "inspireName": "Thematic map",
+            "organizationName": "Thematic map"
         }
     }
 });

@@ -29,6 +29,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Fermer",
             "title": "Résultats de la recherche"
+        },
+        "guidedTour": {
+            "title": "Search",
+            "message": "The Search -menu has divided in two search functions: \"Location Search\" and \"Metadata Search\". By Location Search you can search locations by placenames, addresses and real estate unit identifiers and focus your map to that location. By Metadata Search you can search spatial data sets by many different search options. The search results include also the data sets that are not available in Paikkatietoikkuna.",
+            "openLink": "Show Search",
+            "closeLink": "Hide Search",
+            "tileText": "Search"
         }
     }
 });

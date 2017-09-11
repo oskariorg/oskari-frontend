@@ -107,6 +107,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Tsentreeri kaart oma asukohale"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Navigeeri kaardivaadet",
+                "message": "Kaardi kuvas saab liikuda klikkides ja vedades või kasutades liikumise nuppe | Vaikimisi kuvale tagasipöördumine toimub keskmisele liikumise nupule klikkides.  Soovitus: kaardil saab liikuda ka klaviatuuri noolenuppude abil."
+            },
+            "help2": {
+                "title": "Suurenda ja vähenda",
+                "message": "Kaardil saab sisse-välja suumida kasutades mõõtkava kerimisriba või pluss- või miinusnuppu kerimisriba kõrval. Soovitus: suumida saab ka klaviatuuril asuvate miinus- ja plussnuppude abil või sisse suumida topeltklõpsuga kaardil. Suumida saab ka hiire kerimisrattaga."
+            }
         }
     }
 });

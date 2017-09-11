@@ -66,6 +66,7 @@ Oskari.registerLocalization(
                 "CrosshairTool": "Näita kaardi keskpunkti",
                 "FeedbackServiceTool": "",
                 "toolbarToolNames": {
+                    "history": "Liigu eelmisesse või järgmisesse",
                     "history_back": "Liigu eelmisesse vaatesse",
                     "history_forward": "Liigu järgmisesse vaatesse",
                     "measureline": "Mõõda vahemaad",
@@ -243,6 +244,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näita ainult avalikustatavaid kaardikihte."
             }
+        },
+        "guidedTour": {
+            "title": "Loo kaart",
+            "message": "Loodud kaardi saab lihtsalt põimida veebilehele. Lihtsalt määra oma kaardi suurus ja kasutajaliides ning kopeeri HTML-koodirida oma veebilehele.",
+            "openLink": "Näita loodud kaarti",
+            "closeLink": "Peida loodud kaart",
+            "tileText": "Loo kaart"
         }
     }
 });

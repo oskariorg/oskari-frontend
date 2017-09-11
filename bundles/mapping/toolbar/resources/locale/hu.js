@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Vonal mérése a térképen. Mérés befejezése dupla kattintással.",
                 "measurearea": "Terület mérése a térképen. Mérés befejezése dupla kattintással."
             }
+        },
+        "guidedTour": {
+            "title": "Eszközök",
+            "message": "Az eszközöket használhatja helyek megadásához, térképnézet elmentéséhez, megosztásához vagy visszatérhet egy korábbi nézetbe. Az eszköz használati tippekhez tartsa az egér mutatóját az eszköz felett."
         }
     }
 });

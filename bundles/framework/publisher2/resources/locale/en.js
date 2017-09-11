@@ -64,10 +64,11 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
                 "FeedbackServiceTool": "Feedback (Open311) service",
-                "MapLegend":"Show map legend",
-                "MapRotator":"Enable map rotation",
+                "MapLegend": "Show map legend",
+                "MapRotator": "Enable map rotation",
                 "CrosshairTool": "Show map focal point",
                 "toolbarToolNames": {
+                    "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
                     "measureline": "Measure distance",
@@ -245,6 +246,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Show only publishable map layers."
             }
+        },
+        "guidedTour": {
+            "title": "Map Publishing",
+            "message": "In the Map Publishing menu you can publish embedded maps on your own website. <br/><br/> Select map layers, define a website, select tools and desing a layout. Click Save and your map is ready for publishing. Jast copy one line html code to your website. <br/><br/> If you want to update the map, you can find it in the My Data menu. Updates are shown immediately on your map. <br/><br/> Map Publishing is available only for logged-in users.",
+            "openLink": "Show Map Publishing",
+            "closeLink": "Hide Map Publishing",
+            "tileText": "Map Publishing"
         }
     }
 });

@@ -63,10 +63,11 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagren meny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
                 "FeedbackServiceTool": "Feedback (Open311) functionality",
-                "MapLegend":"Visa kartförklaringen",
-                "MapRotator":"Tillåt kartrotation",
+                "MapLegend": "Visa kartförklaringen",
+                "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
                 "toolbarToolNames": {
+                    "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
                     "measureline": "Mät avstånd",
@@ -244,6 +245,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion"
             }
+        },
+        "guidedTour": {
+            "title": "Skapa karta",
+            "message": "I \"Skapa Karta\"-menyn kan du skapa din egen karta och publicera den på din hemsida. Du behöver bara välja kartlagret, ge några uppgifter om kartan för publicering, ange kartans storlek, välja lämpliga kartverktyg och utforma layouten. Efter alla dessa val får du en rad html-kod. Lägg den till din kod och nu har du en karta på din webbplats. Kom ihåg att kontrollera att alla valda kartlager är publicerbara.",
+            "openLink": "Visa skapa karta",
+            "closeLink": "Göm skapa karta",
+            "tileText": "Skapa karta"
         }
     }
 });

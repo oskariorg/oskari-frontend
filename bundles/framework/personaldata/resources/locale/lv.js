@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Jā",
             "no": "Nē"
+        },
+        "guidedTour": {
+            "title": "Mani dati",
+            "message": "Visas vietas, ko Jūs atzīmējat kartē, Jūsu saglabātie karšu skati un iegultās kartes, tiek attēlotas šeit, kad Jūs esat pieteikušies servisam.",
+            "openLink": "Rādīt manus datus",
+            "closeLink": "Paslēpt manus datus",
+            "tileText": "Mani dati"
         }
     }
 });
