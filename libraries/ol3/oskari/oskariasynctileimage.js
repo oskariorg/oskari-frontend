@@ -86,10 +86,6 @@ ol.source.OskariAsyncTileImage.prototype.getWFSTileCache_ = function() {
     return this.tileLayerCache;
 };
 
-ol.source.OskariAsyncTileImage.prototype.purgeWFSTileCache_ = function() {
-
-};
-
 /**
  * @api
  */
@@ -101,8 +97,6 @@ ol.source.OskariAsyncTileImage.prototype.getNonCachedGrid = function (grid) {
 
     var wfsTileCache = me.getWFSTileCache_();
         var layerTileInfos = wfsTileCache.tileInfos;
-
-    this.purgeWFSTileCache_();
 
     wfsTileCache.tileSetIdentifier =  ++wfsTileCache.tileSetIdentifier ;
     for (i = 0; i < grid.bounds.length; i += 1) {
