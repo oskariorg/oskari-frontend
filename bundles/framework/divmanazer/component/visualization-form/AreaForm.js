@@ -17,9 +17,6 @@ Oskari.clazz.define(
         this.defaultValues = defaultValues;
         this.instance = parent;
 
-        // Temporary IE8 fix
-        this.first = true;
-
         this.values = {
             lineWidth: this.defaultValues.line.width,
             lineCorner: this.defaultValues.line.corner,
@@ -561,12 +558,6 @@ Oskari.clazz.define(
         },
 
         _updatePreview: function (dialog) {
-            // Temporary IE8 fix
-            if (this.first) {
-                this.first = false;
-                this.values.fillStyle = this.defaultValues.fill.style;
-            }
-
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
                 preview = view.find('.preview');
@@ -592,11 +583,10 @@ Oskari.clazz.define(
             });
 
             preview.empty();
-
             // Patterns (IE8 compatible version)
             if (me.values.fillStyle >= 0) {
                 var pathSvg = jQuery('<path></path>');
-                switch (me.values.fillStyle) {
+                switch (parseInt(me.values.fillStyle)) {
                     case 0:
                         var p01a = [10.5,17.5];
                         var p02a = [12.3,19.7];
