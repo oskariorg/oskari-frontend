@@ -365,7 +365,7 @@ Oskari.clazz.define(
                             values[i] = '0' + values[i];
                         }
                     }
-                    me.values[(colorType === 0) ? 'lineColor' : 'fillColor'] = values.join('');
+                    me.values[(colorType === '0') ? 'lineColor' : 'fillColor'] = values.join('');
                     me._updatePreview();
                 };
 
@@ -457,8 +457,7 @@ Oskari.clazz.define(
                     dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
                     dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
                 }
-
-                content.find('.custom-color').change(customColorChangeHandler.bind(null, c));
+                content.find('.custom-color').change(customColorChangeHandler.bind(null, c.toString()));
             }
 
             // remove color links
@@ -497,7 +496,7 @@ Oskari.clazz.define(
                 var fillBtnContainer = me.templateButton.clone();
                 fillBtnContainer.addClass(me.fillButtonNames[i]);
                 fillBtnContainer.attr('id', i + 'fillstyle');
-                if (i === me.values.fillStyle) {
+                if (i == me.values.fillStyle) {
                     this._styleSelectedButton(fillBtnContainer);
                 }
                 fillBtnContainer.click(function () {
