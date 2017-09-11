@@ -1498,7 +1498,7 @@ goog.inherits = function(childCtor, parentCtor) {
  */
 goog.base = function(me, opt_methodName, var_args) {
 	function caller (){
-		return agruments.callee.caller;
+		return arguments.callee.caller;
 	}
   var caller = caller();
 
