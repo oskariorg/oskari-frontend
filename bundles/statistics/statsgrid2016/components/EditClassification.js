@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="classification-mode visible-map-style-choropleth">'+
+                '<div class="classification-mode visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label">'+ this.locale.classify.mode +'</div>'+
                     '<div class="classify-mode value">'+
                         '<select class="classify-mode">'+
@@ -260,7 +260,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
             delete values.transparency;
         } else {
             delete values.type;
-            delete values.mode;
         }
 
         return values;
