@@ -205,7 +205,8 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         showForm: function (renderButton, state) {
-            var me = this;
+            var me = this,
+                tempValues = jQuery.extend(true, {}, me.values);
 
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.area);
@@ -528,12 +529,12 @@ Oskari.clazz.define(
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
-                me.values.lineWidth = me.defaultValues.line.width;
-                me.values.lineCorner = me.defaultValues.line.corner;
-                me.values.lineStyle = me.defaultValues.line.style;
-                me.values.lineColor = me.defaultValues.line.color;
-                me.values.fillColor = me.defaultValues.fill.color;
-                me.values.fillStyle = me.defaultValues.fill.style;
+                me.values.lineWidth = tempValues.lineWidth;
+                me.values.lineCorner = tempValues.lineCorner;
+                me.values.lineStyle = tempValues.lineStyle;
+                me.values.lineColor = tempValues.lineColor;
+                me.values.fillColor = tempValues.fillColor;
+                me.values.fillStyle = tempValues.fillStyle;
                 renderDialog.close();
             });
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);

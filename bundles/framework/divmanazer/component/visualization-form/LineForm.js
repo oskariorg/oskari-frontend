@@ -164,7 +164,8 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         showForm: function (renderButton, state) {
-            var me = this;
+            var me = this,
+                tempValues = jQuery.extend(true, {}, me.values);
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.line);
             }
@@ -417,10 +418,11 @@ Oskari.clazz.define(
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
-                //what is this thing called size???
-                me.values.size = me.defaultValues.size;
-                me.values.color = me.defaultValues.color;
-                me.values.shape = me.defaultValues.shape;
+                me.values.cap = tempValues.cap;
+                me.values.color = tempValues.color;
+                me.values.corner = tempValues.corner;
+                me.values.style = tempValues.style;
+                me.values.width = tempValues.width;
                 renderDialog.close();
             });
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
