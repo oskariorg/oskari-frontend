@@ -76,7 +76,7 @@ Oskari.registerLocalization(
                 "remove": "Ta bort",
                 "removeButton": "Ta bort"
             },
-            "confirmDeleteMsg": "Vill du ta bort:",
+            "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Avbryt",

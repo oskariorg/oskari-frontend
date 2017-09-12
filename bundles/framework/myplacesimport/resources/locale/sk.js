@@ -56,7 +56,7 @@ Oskari.registerLocalization(
                 "remove": "Vymazať",
                 "removeButton": "Vymazať"
             },
-            "confirmDeleteMsg": "Chcete vymazať dataset?",
+            "confirmDeleteMsg": "Chcete vymazať dataset \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Zrušiť",
