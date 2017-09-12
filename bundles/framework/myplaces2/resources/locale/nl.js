@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Verwijder plaats",
-                    "confirm": "Wilt u deze plaats verwijderen?",
+                    "confirm": "Wilt u deze plaats verwijderen \"{name}\"?",
                     "btnDelete": "Verwijderen",
                     "btnCancel": "Annuleren",
                     "success": "Deze plaats is verwijderd",

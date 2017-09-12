@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Kustuta objekt",
-                    "confirm": "Kas soovid kustutada valitud objekti?",
+                    "confirm": "Kas soovid kustutada valitud objekti \"{name}\"?",
                     "btnDelete": "Kustuta",
                     "btnCancel": "Tühista",
                     "success": "Objekt on kustutatud",
