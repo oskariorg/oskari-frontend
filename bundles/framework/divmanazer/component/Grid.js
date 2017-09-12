@@ -1425,6 +1425,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Object} scrollableElement If element defined then scroll grid to selected row. If scrollableELment is null then not scroll.
          */
         select: function (value, keepPrevious, scrollableElement) {
+            if(!this.model) {
+                return;
+            }
             var key = this.model.getIdField(),
                 dataArray = this.model.getData(),
                 index,

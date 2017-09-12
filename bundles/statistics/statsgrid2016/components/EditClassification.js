@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
             '<div class="classification-options">'+
+                // map style
                 '<div class="classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector">'+
                     '<div class="label">'+ this.locale.classify.map.mapStyle +'</div>'+
                     '<div class="map-style value">'+
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-
+                // method
                 '<div class="classification-method visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label">'+ this.locale.classify.classifymethod +'</div>'+
                     '<div class="method value">'+
@@ -34,6 +35,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
+                // classes
                 '<div class="classification-count visible-map-style-choropleth visible-map-style-points">'+
                     // use colorService.getOptionsForType()
                     '<div class="label">'+ this.locale.classify.classes +'</div>'+
@@ -43,13 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                '<div class="point-size oskariui visible-map-style-points visible-on-vector">'+
-                    '<div class="label">'+ this.locale.classify.map.pointSize +'</div>'+
-                    '<div class="minmaxlabels"><div class="min">'+ this.locale.classify.map.min +'</div><div class="max">'+ this.locale.classify.map.max +'</div><div class="clear"></div></div>' +
-                    '<div class="point-range value">'+
-                    '</div>'+
-                '</div>'+
-
+                // classify mode
                 '<div class="classification-mode visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label">'+ this.locale.classify.mode +'</div>'+
                     '<div class="classify-mode value">'+
@@ -61,6 +57,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
+                // points size
+                '<div class="point-size oskariui visible-map-style-points visible-on-vector">'+
+                    '<div class="label">'+ this.locale.classify.map.pointSize +'</div>'+
+                    '<div class="minmaxlabels"><div class="min">'+ this.locale.classify.map.min +'</div><div class="max">'+ this.locale.classify.map.max +'</div><div class="clear"></div></div>' +
+                    '<div class="point-range value">'+
+                    '</div>'+
+                '</div>'+
+
+                // numeric value
+                '<div class="numeric-value visible-map-style-points visible-on-vector">'+
+                '</div>'+
+
+                // colors
                 '<div class="classification-colors visible-map-style-choropleth visible-map-style-points">'+
                     '<div class="label visible-map-style-choropleth">'+ this.locale.colorset.button +'</div>'+
                     '<div class="label visible-map-style-points">'+ this.locale.classify.map.color +'</div>'+
@@ -79,9 +88,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     '</div>'+
                 '</div>'+
 
-                // numeric value
-                '<div class="numeric-value visible-map-style-points visible-on-vector">'+
-                '</div>'+
 
                 '<div class="classification-color-set visible-map-style-choropleth">'+
                     '<div class="label">'+ this.locale.colorset.setselection +'</div>'+
