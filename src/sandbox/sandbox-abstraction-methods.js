@@ -49,9 +49,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'abstraction-methods', {
                 }
             };
             // if data != null -> type = POST
-            var type = "GET";
+            var type = 'GET';
             if (data) {
-                type = "POST";
+                type = 'POST';
             }
 
             jQuery.ajax({
@@ -59,14 +59,13 @@ Oskari.clazz.category('Oskari.Sandbox', 'abstraction-methods', {
                 url: url,
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 data: data,
                 success: success,
                 error: failureWrapper
             });
-
         } else {
             // TODO: fallback to Openlayers?
             failure();

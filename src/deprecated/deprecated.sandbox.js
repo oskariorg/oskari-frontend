@@ -3,30 +3,30 @@
  * Deprecated sandbox functions
  * ***********************************************************************************************
  */
-(function(o) {
-	var log = o.log('Sandbox.deprecated');
+(function (o) {
+    var log = o.log('Sandbox.deprecated');
 
     var extraInfo = {
-    	addRequestHandler : "Use Sandbox.requestHandler(requestName, handlerInstance) instead.",
-    	removeRequestHandler : "Use Sandbox.requestHandler(requestName, null) instead.",
-    	isCtrlKeyDown : "It works on Openlayers 2 only.",
-		getEventBuilder : "Use Oskari.eventBuilder() instead.",
-		getRequestBuilder : "Use Oskari.requestBuilder() instead.",
-		printDebug : "Use Oskari.log() instead.",
-		printWarn : "Use Oskari.log() instead.",
-		printError : "Use Oskari.log() instead.",
-		setUser : "Use Oskari.user() instead.",
-		getUser : "Use Oskari.user() instead"
+        addRequestHandler: 'Use Sandbox.requestHandler(requestName, handlerInstance) instead.',
+        removeRequestHandler: 'Use Sandbox.requestHandler(requestName, null) instead.',
+        isCtrlKeyDown: 'It works on Openlayers 2 only.',
+        getEventBuilder: 'Use Oskari.eventBuilder() instead.',
+        getRequestBuilder: 'Use Oskari.requestBuilder() instead.',
+        printDebug: 'Use Oskari.log() instead.',
+        printWarn: 'Use Oskari.log() instead.',
+        printError: 'Use Oskari.log() instead.',
+        setUser: 'Use Oskari.user() instead.',
+        getUser: 'Use Oskari.user() instead'
     };
     // Warn 2 times before falling silent
     var warnMessagesSent = {};
-    var warn = function(name) {
-        if(!warnMessagesSent[name]) {
+    var warn = function (name) {
+        if (!warnMessagesSent[name]) {
             warnMessagesSent[name] = 0;
         }
         warnMessagesSent[name]++;
-        if(warnMessagesSent[name] < 3) {
-			log.warn('Sandbox.' + name + '() will be removed in future release.', extraInfo[name] || 'Remove calls to it.');
+        if (warnMessagesSent[name] < 3) {
+            log.warn('Sandbox.' + name + '() will be removed in future release.', extraInfo[name] || 'Remove calls to it.');
         }
     };
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
@@ -38,7 +38,7 @@
          * @param {Oskari.mapframework.core.RequestHandler} handlerInstance request handler
          */
         addRequestHandler: function (requestName, handlerInstance) {
-        	warn('addRequestHandler');
+            warn('addRequestHandler');
             this.requestHandler(requestName, handlerInstance);
         },
 
@@ -50,12 +50,12 @@
          * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
          */
         removeRequestHandler: function (requestName, handlerInstance) {
-        	warn('removeRequestHandler');
+            warn('removeRequestHandler');
             this.requestHandler(requestName, null);
         },
 
-        isCtrlKeyDown : function() {
-        	warn('isCtrlKeyDown');
+        isCtrlKeyDown: function () {
+            warn('isCtrlKeyDown');
             return Oskari.ctrlKeyDown();
         },
         /**
@@ -67,8 +67,8 @@
          * @return {Function} builder function for given request
          */
         getRequestBuilder: function (name) {
-        	warn('getRequestBuilder');
-            if(!this.hasHandler(name)) {
+            warn('getRequestBuilder');
+            if (!this.hasHandler(name)) {
                 log.warn('Request ' + name + ' defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
@@ -84,7 +84,7 @@
          * @return {Function} builder function for given event
          */
         getEventBuilder: function (name) {
-        	warn('getEventBuilder');
+            warn('getEventBuilder');
             return Oskari.eventBuilder(name);
         },
         /**
@@ -92,7 +92,7 @@
          * Utility method for printing debug messages to browser console
          */
         printDebug: function () {
-        	warn('printDebug');
+            warn('printDebug');
             log.debug.apply(log, arguments);
         },
         /**
@@ -100,7 +100,7 @@
          * Utility method for printing warn messages to browser console
          */
         printWarn: function () {
-        	warn('printWarn');
+            warn('printWarn');
             log.warn.apply(log, arguments);
         },
         /**
@@ -108,7 +108,7 @@
          * Utility method for printing error messages to browser console
          */
         printError: function () {
-        	warn('printError');
+            warn('printError');
             log.error.apply(log, arguments);
         },
 
@@ -121,8 +121,8 @@
          *     JSON presentation of user
          */
         setUser: function (userData) {
-        	warn('setUser');
-        	Oskari.user(userData);
+            warn('setUser');
+            Oskari.user(userData);
         },
 
         /**
@@ -132,9 +132,8 @@
          * @return {Oskari.User} user
          */
         getUser: function () {
-        	warn('getUser');
-        	return Oskari.user();
+            warn('getUser');
+            return Oskari.user();
         }
     });
-
 }(Oskari));

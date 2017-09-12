@@ -86,6 +86,10 @@ User can select "no stroke" and "no fill" as stroke and fill colors. This result
 Previously the layer selector UI was hidden if user opened Analysis, Thematic or Publish map modes.
 This change keeps the layer selector visible always (except Publish map), but turns the selector into a dropdown menu if the map is too narrow to fit the buttons.
 
+### Analysis
+
+Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
 ## 1.43.0
 
 ### Minifier script
