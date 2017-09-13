@@ -8,16 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlayba
      * @method create called automatically on construction
      * @static
      *
-     * @param {String}
-     *            layerId layerId
-     * @param {String}
-     *            time requested point in time
-     * @param {Boolean}
-     *            playing should the animation start/stop 
-     * @param {Number}
-     *            frameInterval minimun time beween frames
-     * @param {Number}
-     *            stepInterval target millisedonds between timeseries "times"
+     * @param {String} layerId layerId
+     * @param {String} time requested point in time
+     * @param {Boolean} playing should the animation start/stop 
+     * @param {Number} frameInterval minimun time beween frames
+     * @param {Number} stepInterval target millisedonds between timeseries "times"
      */
 
     function (layerId, time, playing, frameInterval, stepInterval) {

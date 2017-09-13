@@ -521,6 +521,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
         getSelectedLayerId: function() {
             return this._selectedLayerId;
         },
+        /**
+         * @method setPlaybackState
+         * Updates UI to reflect animation playback state
+         * @param {String} layerId id of the animating layer
+         * @param {String} time current time (ISO-string)
+         * @param {Boolean} playing is the animation playing?
+         */
         setPlaybackState: function (layerId, time, playing) {
             if(this._selectedLayerId !== layerId) {
                 console.warn('event layerId is not current');

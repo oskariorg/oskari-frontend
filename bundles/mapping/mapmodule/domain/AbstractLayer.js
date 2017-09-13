@@ -1240,6 +1240,11 @@ Oskari.clazz.define(
             }
             me._scheduleNextTimestep = false;
         },
+        /**
+         * @method _getTileUrls
+         * Get tile urls for given time
+         * @param {String} time time as ISO-string 
+         */
         _getTileUrls: function (time) {
             var OLlayers = this._mapModule.getOLMapLayers(this._id);
             var urls = [];
@@ -1250,6 +1255,11 @@ Oskari.clazz.define(
             });
             return urls;
         },
+        /**
+         * @method _getNextTimestep
+         * Get next timestep from timeseries
+         * @param {Number} stepInterval time as ISO-string 
+         */
         _getNextTimestep(stepInterval){
             var times = this.getAttributes().times;
             var nextTime;
@@ -1296,6 +1306,14 @@ Oskari.clazz.define(
 
             return nextTime;
         },
+        /**
+         * @method configureTimeseriesPlayback
+         * Get next timestep from timeseries
+         * @param {String} time time to move playback head to (ISO-string)
+         * @param {Boolean} playing should the animation run
+         * @param {Number} frameInterval time in milliseconds between animation frames (playback)
+         * @param {Number} stepInterval time interval to skip ahead on each frame in milliseconds
+         */
         configureTimeseriesPlayback(time, playing, frameInterval, stepInterval){
             if(!this.hasTimeseries()){
                 console.warn('Layer does not have timeseries! Cannot start playback.');
@@ -1308,17 +1326,31 @@ Oskari.clazz.define(
                 this._stopTimeseriesPlayback();
             }
         },
+        /**
+        * @method _resetBuffer
+        * Cancel any future frame buffering that might be ongoing
+        */
         _resetBuffer() {
             if(this._cancelBuffering){
                 this._cancelBuffering();
                 this._cancelBuffering = null;
             }
         },
+        /**
+        * @method _stopTimeseriesPlayback
+        * Stop playback animation of timeseries layer
+        */
         _stopTimeseriesPlayback() {
             this._resetBuffer();
             this._scheduleNextTimestep = false;
             this._mapModule.sendTimeseriesAnimationEvent(this._id, this._currentTime, false);
         },
+        /**
+        * @method _setLayerTimestep
+        * Set current shown time of layer and playback state
+        @param {String} time current shown time (ISO-string)
+        @param {Boolean} playing should start playback?
+        */
         _setLayerTimestep(time, playing){
             this._currentTime = time;
             this._lastFrameLoadTime = Date.now();
