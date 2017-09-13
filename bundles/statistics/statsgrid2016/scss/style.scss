@@ -532,6 +532,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
 
 .statsgrid-legend-flyout {
     .oskari-flyoutcontentcontainer{
-        overflow:hidden;
+        overflow-x:hidden;
+        overflow-y: auto;
     }
 }

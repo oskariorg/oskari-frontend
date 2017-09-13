@@ -322,6 +322,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     clear: both; }
 
 .statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
-  overflow: hidden; }
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 /*# sourceMappingURL=style.css.map */
