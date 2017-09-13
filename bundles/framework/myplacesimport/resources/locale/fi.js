@@ -75,22 +75,30 @@ Oskari.registerLocalization(
                 "name": "Nimi",
                 "description": "Kuvaus",
                 "source": "Tietolähde",
+                "edit": "Muokkaa",
+                "editButton": "Muokkaa",
                 "remove": "Poista",
                 "removeButton": "Poista"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston:",
             "buttons": {
                 "ok": "OK",
+                "save": "Tallenna",
                 "cancel": "Peruuta",
-                "delete": "Poista"
+                "delete": "Poista",
+                "close": "Sulje"
             },
             "notification": {
                 "deletedTitle": "Poista aineisto",
-                "deletedMsg": "Aineisto on poistettu."
+                "deletedMsg": "Aineisto on poistettu.",
+                "editedMsg": "Aineisto on päivitetty."
             },
             "error": {
                 "title": "Virhe",
-                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi."
+                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
+                "editMsg": "Aineiston päivitys epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
+                "getStyle": "Aineistolle määritettyä omaa tyyliä ei onnistuttu hakemaan. Muuta tyylimäärittelyt ennen muutosten tallennusta.",
+                "styleName": "Anna karttatasolle nimi ja yritä sitten uudelleen."
             }
         },
         "layer": {

@@ -73,22 +73,31 @@ Oskari.registerLocalization(
                 "name": "Namn",
                 "description": "Beskrivning",
                 "source": "Datakälla",
+                "edit": "Redigera",
+                "editButton": "Redigera",
                 "remove": "Ta bort",
                 "removeButton": "Ta bort"
             },
             "confirmDeleteMsg": "Vill du ta bort:",
             "buttons": {
                 "ok": "OK",
+                "save": "Spara",
                 "cancel": "Avbryt",
-                "delete": "Ta bort"
+                "delete": "Ta bort",
+                "close": "Stäng"
             },
             "notification": {
                 "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort"
+                "deletedMsg": "Datasetet har tagits bort",
+                "editedMsg": "Ändringar i datasetet har sparats."
+
             },
             "error": {
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare."
+                "generic": "Systemfel. Försök på nytt senare.",
+                "editMsg": "Systemfel. Försök på nytt senare.",
+                "getStyle": "Sökning för datamängdens/datasetets anpassade still misslyckades. Redigera dataset stil definitionerna förrän du sparar ändringarna.",
+                "styleName": "Namnet på kartlagret saknas."
             }
         },
         "layer": {
