@@ -30,6 +30,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Close",
             "title": "Search Results"
+        },
+        "guidedTour": {
+            "title": "Search",
+            "message": "In the Search menu you can search locations and spatial data <br/><br/>  Location Search: Search locations by placenames, address or real estate identifiers. Click the result and the map will be focused on the selected location. <br/><br/> Metadata Search: Search datasets, dataset series and services. Use a simple text search or advanced search conditions. In the search results you can open a metadata description or open the selected data on the map, if the map layer is available.",
+            "openLink": "Show Search",
+            "closeLink": "Hide Search",
+            "tileText": "Search"
         }
     }
 });

@@ -214,6 +214,7 @@ Oskari.registerLocalization(
                     "labelOr": "or",
                     "labelCustom": "Custom colour (RGB 0-255)"
                 },
+                "lineRemove": "Remove line style and colour",
                 "color": {
                     "label": "Fill colour",
                     "labelOr": "or",
@@ -222,6 +223,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Fill pattern"
                 },
+                "fillRemove": "Remove fill colour and pattern",
                 "preview": {
                     "label": "Preview"
                 },

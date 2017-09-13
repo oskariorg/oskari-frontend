@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Merenje linije na mapi. Dupli klik za kraj merenja.",
                 "measurearea": "Merenje površine na mapi. Dupli klik za kraj merenja."
             }
+        },
+        "guidedTour": {
+            "title": "Alati",
+            "message": "Koristite ovaj alat da dodate lokacije, sačuvate prikaz mape, razmenite putanju do vašeg pogleda mape ili se vratite u prethodni pogled mape. Zadržite pokazivač miša neko vreme, iznad alatke, da bi videli njenu oznaku."
         }
     }
 });

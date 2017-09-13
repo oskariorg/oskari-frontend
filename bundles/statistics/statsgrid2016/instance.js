@@ -68,17 +68,14 @@ Oskari.clazz.define(
                 dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
             }
 
-            // Check if configurated to show indicators on the map for vector format
-            if(conf && conf.vectorViewer === true) {
-                // regionsetViewer creation need be there because of start order
-                this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
-            }
+            // regionsetViewer creation need be there because of start order
+            this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
         },
         hasData: function () {
-            return this.statsService.getDatasource().length && this.statsService.getRegionsets().length;
+            return this.statsService.getDatasource().length;
         },
 
         /**

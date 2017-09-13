@@ -931,8 +931,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
                 values.area = {
                     size: formValues.area.lineWidth,
-                    lineColor: '#' + formValues.area.lineColor,
-                    fillColor: '#' + formValues.area.fillColor,
+                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner

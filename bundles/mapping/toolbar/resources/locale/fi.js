@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä.",
                 "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä. Lopuksi kaksoisklikkaa alkupistettä."
             }
+        },
+        "guidedTour": {
+            "title": "Työkalut",
+            "message": "Työkalujen avulla voit muokata karttanäkymää. Pidä hiiren kursoroa työkalun päällä ja saat ohjeet sen käyttöön. <br/> <br/> Osa työkaluista on saatavilla vain kirjautuneille käyttäjille."
         }
     }
 });

@@ -105,6 +105,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Centreer kaart om de lokatie"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Verschuif de kaartweergave",
+                "message": "U kunt de weergave op de kaart verplaatsen door te klikken en te slepen of door gebruik te maken van de verschuifopties | Keer terug naar de standaardweergave door op de knop in het midden van de verschuifopties te klikken. Tip: U kunt ook de kaart verschuiven met de pijltjestoetsen op uw toetsenbord."
+            },
+            "help2": {
+                "title": "Vergroten en verkleinen",
+                "message": "U kunt de kaart vergroten en verkleinen met behulp van de schaalschuifbalk of de + / - knoppen naast de schuifbalk. Tip: U kunt ook vergroten en verkleinen met behulp van de + / - toetsen op het toetsenbord of door te dubbelklikken op de kaart. Het is ook mogelijk om te vergroten en verkleinen met te scrollen met de muis."
+            }
         }
     }
 });

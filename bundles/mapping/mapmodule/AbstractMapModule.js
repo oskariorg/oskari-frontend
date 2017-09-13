@@ -263,6 +263,7 @@ Oskari.clazz.define(
             me.startPlugins();
             me._adjustMobileMapSize();
             this.updateCurrentState();
+            this._registerForGuidedTour();
         },
         /**
          * @method stop
@@ -1745,8 +1746,6 @@ Oskari.clazz.define(
 
             svgObject.data = this.__addPositionMarks(svgObject);
 
-
-
             marker.append(svgObject.data);
 
             // IE needs this because ol.style.Icon opacity property not work on IE
@@ -1781,7 +1780,7 @@ Oskari.clazz.define(
                 markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
             }
 
-            var svgSrc = 'data:image/svg+xml,' + escape(markerHTML);
+            var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(markerHTML);
 
             return svgSrc;
         },
@@ -2352,16 +2351,99 @@ Oskari.clazz.define(
          * @param {String} layerId layerId
          * @param {String} time requested point in time
          * @param {Boolean} playing should the animation start/stop 
-         * @param {Number} nthStep playback only nth time steps (optional, default 1)
+         * @param {Number} frameInterval time in milliseconds between animation frames (playback)
+         * @param {Number} stepInterval time interval to skip ahead on each frame in milliseconds
          */
         handleMapLayerPlaybackRequest: function(layerId, time, playing, frameInterval, stepInterval){
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
             layer.configureTimeseriesPlayback(time, playing, frameInterval, stepInterval);
         },
+        /**
+         * @method sendTimeseriesAnimationEvent
+         * Send event about state of layer animation
+         * @param {String} layerId layerId
+         * @param {String} time requested point in time
+         * @param {Boolean} playing should the animation start/stop 
+         */
         sendTimeseriesAnimationEvent(layerId, time, playing) {
             var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
             var evt = eventBuilder(layerId, time, playing);
             this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplates
+         * Delegate object templates given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplates: [{
+            priority: 70,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help1.title
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help1.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.panbuttonDiv');
+            },
+            positionAlign: 'left'
+        },
+        {
+            priority: 80,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help2.title
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help2.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.pzbDiv');
+            },
+            positionAlign: 'left'
+        }],
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    me.__guidedTourDelegateTemplates.forEach(function(template, i){
+                        var delegate = {
+                            bundleName: me.getName() + '_' + (i+1)
+                        };
+                        for(prop in template){
+                            if(typeof template[prop] === 'function') {
+                                delegate[prop] = template[prop].bind(me); // bind methods to bundle instance
+                            } else {
+                                delegate[prop] = template[prop]; // assign values
+                            }
+                        }
+                        me._sandbox.request(me, requestBuilder(delegate));
+                    });
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me._sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

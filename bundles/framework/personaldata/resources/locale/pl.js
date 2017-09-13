@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Tak",
             "no": "Nie"
+        },
+        "guidedTour": {
+            "title": "Moje dane",
+            "message": "Wszystkie miejsca które zaznaczono na mapie, zapisane widoki oraz wbudowane mapy wyświetlane są po zalogowaniu do serwisu.",
+            "openLink": "Wyświetl moje dane",
+            "closeLink": "Ukryj moje dane",
+            "tileText": "Moje dane"
         }
     }
 });

@@ -132,6 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Kyllä",
             "no": "Ei"
+        },
+        "guidedTour": {
+            "title": "Omat tiedot",
+            "message": "Omat tiedot -valikosta voit tarkistaa tallentamasi paikkatiedot ja käyttäjätilisi tiedot. <br/><br/> Tarkista ja päivitä omat kohteet, karttanäkymät, julkaistut kartat, indikaattorit, analyysit ja aineistot. <br/><br> Vain kirjautuneet käyttäjät voivat nähdä Omat tiedot.",
+            "openLink": "Näytä Omat tiedot",
+            "closeLink": "Piilota Omat tiedot",
+            "tileText": "Omat tiedot"
         }
     }
 });

@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Shtresa e hartës",
                 "type-wfs": "Produkti i të dhënave"
             }
+        },
+        "guidedTour": {
+            "title": "Shtresat e hartës së zgjedhur",
+            "message": "Ju mund ta ndryshoni rradhitjen e shtresave të hartës duke klikuar dhe tërhequr si dhe ta ndryshoni dukshmërinë e tyre. Ndryshimet tregohen në dritaren e hartës.",
+            "openLink": "Paraqit shtresat e hartës së zgjedhur",
+            "closeLink": "Fshehë shtresat e hartës së zgjedhur",
+            "tileText": "Shtresat e hartës për zgjedhur"
         }
     }
 });

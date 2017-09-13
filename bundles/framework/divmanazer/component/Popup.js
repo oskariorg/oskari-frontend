@@ -35,7 +35,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 i,
                 contentHeight,
                 reasonableHeight,
-                focusedButton = -1;
+                focusedButton = -1,
+                screenWidth = window.innerWidth;
             this.setTitle(title);
             this.setContent(message);
 
@@ -77,8 +78,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._isVisible = true;
 
             var map = Oskari.getSandbox().getMap();
-            if(map && contentDiv.width() > map.getWidth()) {
-                this.dialog.css('max-width', map.getWidth() + 'px');
+            if(map && contentDiv.width() > screenWidth) {
+                this.dialog.css('max-width', screenWidth + 'px');
             }
 
             this._bringMobilePopupToTop();
