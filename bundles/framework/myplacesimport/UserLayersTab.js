@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         me.loc = localization;
         me.layerMetaType = 'USERLAYER';
         me.visibleFields = [
-            'name', 'description', 'source', 'remove'
+            'name', 'description', 'source', 'edit', 'remove'
         ];
         me.grid = undefined;
         me.container = undefined;
@@ -60,10 +60,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 });
                 return link;
             });
+            grid.setColumnValueRenderer('edit', function (name, data) {
+                var link = me.template.link.clone();
+
+                link.append(me.loc.grid['editButton']).bind('click', function () {
+                    me._editUserLayer(data);
+                    return false;
+                });
+                return link;
+            });
             grid.setColumnValueRenderer('remove', function (name, data) {
                 var link = me.template.link.clone();
 
-                link.append(me.loc.buttons['delete']).bind('click', function () {
+                link.append(me.loc.grid['removeButton']).bind('click', function () {
                     me._confirmDeleteUserLayer(data);
                     return false;
                 });
@@ -235,5 +244,148 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 }
             });
             return gridModel;
+        },
+        /**
+         * Request backend to update userlayer name, source, description and style.
+         * On success updates the layer on the map and layerservice.
+         * On failure displays a notification.
+         *
+         * @method _editUserLayer
+         * @private
+         * @param {Object} data
+         */
+        _editUserLayer: function(data){
+            var me = this,
+                form,
+                content,
+                style,
+                dialog,
+                buttons = [],
+                saveBtn,
+                cancelBtn,
+                action = this.instance.getService().getEditLayerUrl(),
+                tokenIndex = data.id.lastIndexOf("_") + 1,
+                idParam = data.id.substring(tokenIndex);
+            me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+            form = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.StyleForm', me.instance);
+
+            me._setStyleValuesToStyleForm(idParam, form);
+
+            content = form.getForm();
+            content.find('input[data-name=userlayername]').val(data.name);
+            content.find('input[data-name=userlayerdesc]').val(data.description);
+            content.find('input[data-name=userlayersource]').val(data.source);
+
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+            saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            saveBtn.setTitle(me.loc.buttons.save);
+            saveBtn.addClass('primary');
+            saveBtn.setHandler(function () {
+                var values = form.getValues(),
+                    errors,
+                    msg,
+                    layerJson,
+                    title,
+                    fadeout;
+                values.id = idParam;
+
+                if (!values.name){
+                    me._showMessage(me.loc.error.title, me.loc.error.styleName, false);
+                    return; //e.preventDefault()
+                }
+
+                jQuery.ajax({
+                    url: action,
+                    data: values,
+                    type: 'POST',
+                    success: function (response) {
+                        if (typeof jQuery.parseJSON(response) == 'object') {
+                            msg = me.loc.notification.editedMsg;
+                            title = me.loc.title;
+                            me.instance.getService().updateLayer(data.id, response);
+                            me.refresh();
+                            fadeout = true;
+                        } else {
+                            msg = me.loc.error.editMsg;
+                            title = me.loc.error.title;
+                            fadeout = false;
+                        }
+                        me._showMessage(title, msg, fadeout);
+                    },
+                    error: function (jqXHR, textStatus) {
+                        msg = me.loc.error.editMsg;
+                        title = me.loc.error.title;
+                        fadeout = false;
+                        me._showMessage(title, msg, fadeout);
+                    }
+                });
+
+                dialog.close();
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            });
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelBtn.setTitle(me.loc.buttons.cancel);
+            cancelBtn.setHandler(function () {
+                dialog.close();
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            });
+            buttons.push(cancelBtn);
+            buttons.push(saveBtn);
+            dialog.makeModal();
+            dialog.show(me.loc.title, content, buttons);
+            form.start();
+        },
+        /**
+         * Retrieves the userlayer style from the backend and sets it to the style form
+         *
+         * @method _setStyleValuesToStyleForm
+         * @private
+         * @param {String} id
+         * @param {Object} form
+         */
+        _setStyleValuesToStyleForm: function (id, form){
+            var style,
+                me = this,
+                action = this.instance.getService().getGetUserLayerStyleUrl();
+
+            jQuery.ajax({
+                url: action,
+                data: {
+                    id: id
+                },
+                type: 'POST',
+                success: function (response) {
+                    if (typeof jQuery.parseJSON(response) == 'object'){
+                        form.setStyleValues(response);
+                    }else{
+                        me._showMessage(me.loc.error.title, me.loc.error.styleError, false);
+                    }
+                },
+                error: function (jqXHR, textStatus){
+                    me._showMessage(me.loc.error.title, me.loc.error.styleError, false);
+                }
+            });
+        },
+        /**
+         * Displays a message on the screen
+         *
+         * @method _showMessage
+         * @private
+         * @param  {String} title
+         * @param  {String} message
+         * @param  {Boolean} fadeout optional default true
+         */
+        _showMessage: function (title, message, fadeout){
+            fadeout = fadeout !== false;
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                btn = dialog.createCloseButton(me.loc.buttons.close);
+
+            dialog.makeModal();
+            dialog.show(title, message, [btn]);
+            if (fadeout) {
+                dialog.fadeout(5000);
+            }
         }
     });
