@@ -8,6 +8,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     me.service.on('StatsGrid.ClassificationChangedEvent', function(event) {
         me.setValues(event.getCurrent());
     });
+    me.service.on('AfterChangeMapLayerOpacityEvent', function(event) {
+        me.setLayerOpacityValue(event.getMapLayer());
+    });
     this.__templates = {
         classification: jQuery('<div class="classifications">'+
             '<div class="classification-options">'+
@@ -135,6 +138,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         me._element.find('.visible-map-style-points').hide();
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
+    },
+    setLayerOpacityValue: function(layer){
+        var me = this;
+        if(me.hasSelectChange) {
+            me.hasSelectChange = false;
+            return;
+        }
+        if(layer.getId() === me.LAYER_ID) {
+            var transparencyEl = me._element.find('select.transparency-value');
+            transparencyEl.find('option#hiddenvalue').remove();
+            var hiddenOption = jQuery('<option id="hiddenvalue" disabled hidden>' + layer.getOpacity() + ' %' +'</option>');
+            hiddenOption.attr('value', layer.getOpacity());
+            hiddenOption.hide();
+            hiddenOption.attr('selected', 'selected');
+            transparencyEl.append(hiddenOption);
+            transparencyEl.trigger('chosen:updated');
+
+        }
     },
     /**
      * @method setValues init selections
@@ -296,6 +317,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 
         var stateService = me.service.getStateService();
         var updateClassification = function() {
+            me.hasSelectChange = true;
             stateService.setClassification(stateService.getActiveIndicator().hash, me.getSelectedValues());
         };
 
