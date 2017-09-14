@@ -1806,7 +1806,7 @@ Oskari.clazz.define(
             var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
             var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))) ? true : false;
 
-            var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
+            var markerSize = (marker && marker.data && marker.data.size) ? me.getPixelForSize(marker.data.size) : 32;
 
             var markerDetails = {
                 offsetX: 16,
@@ -1911,11 +1911,11 @@ Oskari.clazz.define(
         },
         /**
          * Converts from abstract marker size to real pixel size
-         * @method  @public getMarkerIconSize
-         * @param size Abstract size
-         * @returns {number} Size in pixels
+         * @method  @public getPixelForSize
+         * @param {Number} size Abstract size if number then calculated new size.
+         * @returns {Number} Size in pixels
          */
-        getMarkerIconSize : function(size) {
+        getPixelForSize : function(size) {
             return 40 + 10 * size;
         },
 /* --------------- /SVG MARKER ------------------------ */
@@ -2352,7 +2352,7 @@ Oskari.clazz.define(
         __guidedTourDelegateTemplates: [{
             priority: 70,
             getTitle: function () {
-                return this.getLocalization().guidedTour.help1.title
+                return this.getLocalization().guidedTour.help1.title;
             },
             getContent: function () {
                 var content = jQuery('<div></div>');
@@ -2367,7 +2367,7 @@ Oskari.clazz.define(
         {
             priority: 80,
             getTitle: function () {
-                return this.getLocalization().guidedTour.help2.title
+                return this.getLocalization().guidedTour.help2.title;
             },
             getContent: function () {
                 var content = jQuery('<div></div>');
@@ -2393,7 +2393,7 @@ Oskari.clazz.define(
                         var delegate = {
                             bundleName: me.getName() + '_' + (i+1)
                         };
-                        for(prop in template){
+                        for(var prop in template){
                             if(typeof template[prop] === 'function') {
                                 delegate[prop] = template[prop].bind(me); // bind methods to bundle instance
                             } else {

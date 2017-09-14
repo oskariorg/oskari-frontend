@@ -223,7 +223,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     }
                     return iconSize;
                 };
-                var maxSize = mapModule.getMarkerIconSize(getMarkerSize(0));
+                var maxSize = mapModule.getPixelForSize(getMarkerSize(0));
 
                 svg.find('svg').first().attr('height', maxSize + fontSize);
                 svg.find('svg.symbols').attr('y', fontSize);
@@ -265,7 +265,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
                     var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
 
-                    var size = mapModule.getMarkerIconSize(iconSize);
+                    var size = mapModule.getPixelForSize(iconSize);
                     svgMain.attr('width', size);
                     svgMain.attr('height', size);
                     x = (maxSize - size)/2;

@@ -463,7 +463,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
 
-            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
+            var size = (style.image && style.image.size) ? this.getPixelForSize(style.image.size) : this._defaultMarker.size;
             olStyle.graphicWidth = size;
             olStyle.graphicHeight = size;
 
