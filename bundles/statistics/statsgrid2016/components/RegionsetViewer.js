@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         x: 32,
                         y: 0
                     },
-                    size: size
+                    sizePx: size
                 }
             };
         }

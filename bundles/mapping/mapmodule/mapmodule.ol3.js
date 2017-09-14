@@ -653,7 +653,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __getImageStyle: function(styleDef) {
             var me = this;
             var image = {};
-            var size = (styleDef.image && styleDef.image.size) ? me.getPixelForSize(styleDef.image.size) : this._defaultMarker.size;
+
+            var size = (styleDef.image) ? styleDef.image.size | styleDef.image.sizePx : this._defaultMarker.size;
+            if(!size || typeof size !== 'number'){
+                size = this._defaultMarker.size;
+            }
+
             styleDef.image.size = size;
 
             if(me.isSvg(styleDef.image)) {

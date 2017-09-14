@@ -180,130 +180,133 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             return response;
         },
+        _getPixelSize: function(size) {
+            return 30 + 10 * size;
+        },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
+            var me = this;
             var legend = jQuery('<div class="statsgrid-legend"></div>');
-                var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
-                var svg = jQuery('<div>'+
-                    '   <svg xmlns="http://www.w3.org/2000/svg">'+
-                    '       <svg class="symbols"></svg>'+
-                    '       <svg class="texts"></svg>'+
-                    '   </svg>'+
-                    '</div>');
+            var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
+            var svg = jQuery('<div>'+
+                '   <svg xmlns="http://www.w3.org/2000/svg">'+
+                '       <svg class="symbols"></svg>'+
+                '       <svg class="texts"></svg>'+
+                '   </svg>'+
+                '</div>');
 
-                var pointSymbol = jQuery('<div>'+
-                    '   <svg viewBox="0 0 64 64">'+
-                    '       <svg width="64" height="64" x="0" y="0">'+
-                    '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>'+
-                    '       </svg>'+
-                    '   </svg>'+
-                    '</div>');
+            var pointSymbol = jQuery('<div>'+
+                '   <svg viewBox="0 0 64 64">'+
+                '       <svg width="64" height="64" x="0" y="0">'+
+                '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>'+
+                '       </svg>'+
+                '   </svg>'+
+                '</div>');
 
-                var lineAndText = jQuery('<div>'+
-                    '   <svg>'+
-                    '       <g>'+
-                    '           <svg>'+
-                    '               <line stroke="#000000" stroke-width="1"></line>'+
-                    '           </svg>'+
-                    '       </g>'+
-                    '   </svg>'+
-                    '</div>');
+            var lineAndText = jQuery('<div>'+
+                '   <svg>'+
+                '       <g>'+
+                '           <svg>'+
+                '               <line stroke="#000000" stroke-width="1"></line>'+
+                '           </svg>'+
+                '       </g>'+
+                '   </svg>'+
+                '</div>');
 
-                var sb = Oskari.getSandbox();
-                var mapModule = sb.findRegisteredModuleInstance('MainMapModule');
-                var x = 0, y = 0;
-                var fontSize = 10;
+            var sb = Oskari.getSandbox();
+            var x = 0, y = 0;
+            var fontSize = 10;
 
-                var getMarkerSize = function(index) {
-                    var iconSize = null;
-                    var min = opts.min;
-                    var max = opts.max;
-                    var step = (max-min) / ranges.length;
-                    if(min && max) {
-                        iconSize = (max - step * index);
-                    }
-                    return iconSize;
-                };
-                var maxSize = mapModule.getPixelForSize(getMarkerSize(0));
-
-                svg.find('svg').first().attr('height', maxSize + fontSize);
-                svg.find('svg.symbols').attr('y', fontSize);
-                svg.find('svg.texts').attr('y', fontSize);
-                svg.find('svg.texts').attr('height', maxSize + fontSize);
-
-                // Fixes legend texts when mode is distinct
-                if(opts.mode == 'distinct') {
-                    var isInt = function(n) {
-                       return typeof n === 'number' && parseFloat(n) == parseInt(n, 10) && !isNaN(n);
-                    }; // 6 characters
-                    ranges.forEach(function(range, index){
-                        var tmp = range.split(statsOpts.separator);
-                        var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
-                        var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
-                        if(index != 0) {
-                            if(isInt(start_value)) {
-                                start_value = parseInt(start_value) + 1;
-                                // format to float if necessary
-                                if(statsOpts.precisionflag == 'manual' && statsOpts.precision != 0) start_value = parseFloat(start_value).toFixed(statsOpts.precision);
-                            } else {
-                                start_value = parseFloat(start_value) + (1 / Math.pow(10,statsOpts.precision));
-                                // strangely the formula above return sometimes long decimal values,
-                                // the following instruction fix it
-                                start_value = parseFloat(start_value).toFixed(statsOpts.precision);
-                            }
-                        }
-                        ranges[index] = start_value + statsOpts.separator + end_value;
-                    });
+            var getMarkerSize = function(index) {
+                var iconSize = null;
+                var min = opts.min;
+                var max = opts.max;
+                var step = (max-min) / ranges.length;
+                if(min && max) {
+                    iconSize = (max - step * index);
                 }
+                return iconSize;
+            };
+            var maxSize = me._getPixelSize(getMarkerSize(0));
 
-                ranges.reverse().forEach(function(range, index){
-                    // Create point symbol
-                    var point = pointSymbol.clone();
-                    var svgMain = point.find('svg').first();
-                    var iconSize = getMarkerSize(index);
+            svg.find('svg').first().attr('height', maxSize + fontSize);
+            svg.find('svg.symbols').attr('y', fontSize);
+            svg.find('svg.texts').attr('y', fontSize);
+            svg.find('svg.texts').attr('height', maxSize + fontSize);
 
+            // Fixes legend texts when mode is distinct
+            if(opts.mode == 'distinct') {
+                var isInt = function(n) {
+                   return typeof n === 'number' && parseFloat(n) == parseInt(n, 10) && !isNaN(n);
+                }; // 6 characters
+                ranges.forEach(function(range, index){
                     var tmp = range.split(statsOpts.separator);
                     var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
                     var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
+                    if(index != 0) {
+                        if(isInt(start_value)) {
+                            start_value = parseInt(start_value) + 1;
+                            // format to float if necessary
+                            if(statsOpts.precisionflag == 'manual' && statsOpts.precision != 0) start_value = parseFloat(start_value).toFixed(statsOpts.precision);
+                        } else {
+                            start_value = parseFloat(start_value) + (1 / Math.pow(10,statsOpts.precision));
+                            // strangely the formula above return sometimes long decimal values,
+                            // the following instruction fix it
+                            start_value = parseFloat(start_value).toFixed(statsOpts.precision);
+                        }
+                    }
+                    ranges[index] = start_value + statsOpts.separator + end_value;
+                });
+            }
 
-                    var size = mapModule.getPixelForSize(iconSize);
-                    svgMain.attr('width', size);
-                    svgMain.attr('height', size);
-                    x = (maxSize - size)/2;
-                    y = (maxSize - size);
+            ranges.reverse().forEach(function(range, index){
+                // Create point symbol
+                var point = pointSymbol.clone();
+                var svgMain = point.find('svg').first();
+                var iconSize = getMarkerSize(index);
 
-                    svgMain.attr('x', x);
-                    svgMain.attr('y', y);
+                var tmp = range.split(statsOpts.separator);
+                var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
+                var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
 
-                    var circle = point.find('circle');
-                    circle.attr({
-                        'fill': '#' + color
-                    });
+                var size = me._getPixelSize(iconSize);
+                svgMain.attr('width', size);
+                svgMain.attr('height', size);
+                x = (maxSize - size)/2;
+                y = (maxSize - size);
 
-                    svg.find('svg.symbols').append(point.html());
+                svgMain.attr('x', x);
+                svgMain.attr('y', y);
 
-                    // Create texts and lines
-                    var label = lineAndText.clone();
-                    var line = label.find('line');
-                    line.attr({
-                        x1: maxSize/2,
-                        y1: y+1.5,
-                        x2: maxSize * 1.1,
-                        y2: y+1.5
-                    });
-
-                    var count = counter[index];
-                    var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value + '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
-                    text.find('text').attr({
-                        x: maxSize * 1.105,
-                        y: y + 7
-                    });
-                    label.find('g').append(text);
-                    svg.find('svg.texts').append(label.html());
+                var circle = point.find('circle');
+                circle.attr({
+                    'fill': '#' + color
                 });
 
-                block.append(svg);
-                legend.append(block);
-                return legend;
+                svg.find('svg.symbols').append(point.html());
+
+                // Create texts and lines
+                var label = lineAndText.clone();
+                var line = label.find('line');
+                line.attr({
+                    x1: maxSize/2,
+                    y1: y+1.5,
+                    x2: maxSize * 1.1,
+                    y2: y+1.5
+                });
+
+                var count = counter[index];
+                var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value + '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
+                text.find('text').attr({
+                    x: maxSize * 1.105,
+                    y: y + 7
+                });
+                label.find('g').append(text);
+                svg.find('svg.texts').append(label.html());
+            });
+
+            block.append(svg);
+            legend.append(block);
+            return legend;
         },
         /**
          * Validates and normalizes options
