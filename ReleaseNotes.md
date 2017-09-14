@@ -2,6 +2,31 @@
 
 ## 1.44.0
 
+### featuredata2
+
+Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
+
+### Grid
+
+Grid split into smaller files to make it more manageable:
+
+- GridSelection.js includes select functionalities
+- GridPaging.js includes paging functionalities
+- GridSort.js includes sorting functionalaties
+
+New ``moveSelectedRowsTop()``-function. This can be used to move selected rows on top of the table. Boolean true param moves the selected rows on top while false will return them on correct places based on current sorting. If the table is not currently sorted the rows are not moved with false-parameter.
+
+```javascript
+  var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+  ...
+  // show selected rows top
+  grid.moveSelectedRowsTop(true);
+
+  // not show selected rows top
+  grid.moveSelectedRowsTop(false);
+```
+
+
 ### FormInput
 
 Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".

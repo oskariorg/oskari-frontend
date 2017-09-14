@@ -345,6 +345,7 @@ Oskari.clazz.define(
                     if(input) {
                         input.focus();
                     }
+
                     if (me.coverageButton) {
                         me.coverageButton[0].data = '';
                     }
