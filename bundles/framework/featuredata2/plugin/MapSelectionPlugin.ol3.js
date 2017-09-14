@@ -11,12 +11,11 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin';
         me._name = 'MapSelectionPlugin';
-        if(config.instance){
+        if( config.instance ) {
             me.caller = config.instance;
         }
         me.drawControls = null;
         me.editMode = false;
-        me.listeners = [];
         me.currentDrawMode = null;
         me.prefix = 'Default.';
         me.sandbox = sandbox;
@@ -33,17 +32,8 @@ Oskari.clazz.define(
             me.graphicFill = me._config.graphicFill;
         }
         me.multipart = (me._config && me._config.multipart === true);
+        Oskari.makeObservable(this);
     }, {
-
-        /**
-         * @method addListener
-         * Registers a listener that will be notified when a selection has been made.
-         * The function will receive the selection geometry as parameter (OpenLayers.Geometry).
-         * @param {Function} listenerFunction
-         */
-        addListener: function (listenerFunction) {
-            this.listeners.push(listenerFunction);
-        },
         getCurrentDrawReqId: function () {
             return this._currentRequestID;
         },
@@ -55,23 +45,7 @@ Oskari.clazz.define(
         startDrawing: function (params) {
             //Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
             this.WFSLayerService.setSelectionToolsActive(true);
-            // this.drawControls[params.drawMode]()
-            if (params.isModify) {
-                // preselect it for modification
-                this.modifyControls.select.select(this.drawLayer.features[0]);
-            } else if (params.geometry) {
-                // sent existing geometry == edit mode
-                this.editMode = true;
-                // add feature to draw layer
-                var features = [new OpenLayers.Feature.Vector(params.geometry)];
-                this.drawLayer.addFeatures(features);
-                // preselect it for modification
-                this.drawControls.select.select(this.drawLayer.features[0]);
-            } else {
-                // otherwise activate requested draw control for new geometry
-                this.editMode = false;
-                this._toggleControl(params.drawMode);
-            }
+            this._toggleControl(params.drawMode);
         },
         clearDrawing: function() {
             var me = this;
@@ -93,48 +67,6 @@ Oskari.clazz.define(
             removeActive === true ? this.removeActiveClass() : this.clearDrawing();
             // disable all draw controls
             this._toggleControl();
-        },
-
-        /**
-         * @method forceFinishDraw
-         * Calls _finishDrawing method to stop selection
-         */
-        forceFinishDraw: function () {
-            this._finishedDrawing(true);
-        },
-
-        /**
-         * @method _finishedDrawing
-         * Called when drawing is finished.
-         * Disables all draw controls and
-         * calls all listeners with the drawn the geometry.
-         * @param {Boolean} isForced stops selection when true
-         * @private
-         */
-        _finishedDrawing: function (isForced) {
-            if (!this.editMode) {
-                // programmatically select the drawn feature ("not really supported by openlayers")
-                // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-                var lastIndex = this.drawLayer.features.length - 1;
-                this.drawControls.select.select(
-                    this.drawLayer.features[lastIndex]
-                );
-            }
-
-            var event;
-            if (!this.multipart || isForced) {
-                event = this.getSandbox().getEventBuilder(
-                    this.prefix + 'FinishedDrawingEvent'
-                )(this.getDrawing(), this.editMode);
-
-                this.getSandbox().notifyAll(event);
-            } else {
-                event = this.getSandbox().getEventBuilder(
-                    this.prefix + 'AddedFeatureEvent'
-                )(this.getDrawing(), this.currentDrawMode);
-
-                this.getSandbox().notifyAll(event);
-            }
         },
 
         /**

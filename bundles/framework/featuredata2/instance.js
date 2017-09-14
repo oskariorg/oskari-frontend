@@ -420,10 +420,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     }
                     var geojson = evt.getGeoJson();
                     var pixelTolerance = 15;
-                    geojson.features[0].properties.buffer_radius = me.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
-                    
+                    if( geojson.features.length > 0 ) {
+                        geojson.features[0].properties.buffer_radius = me.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
+                    } else {
+                        //no features
+                        return;
+                    }
                     me.selectionPlugin.setFeatures(geojson.features);
-                    me.selectionPlugin.setDrawing(evt.getOLDrawing());
+                    // me.selectionPlugin.setDrawing(evt.getOLDrawing());
                     me.selectionPlugin.stopDrawing(true);
 
                     var event = me.sandbox.getEventBuilder("WFSSetFilter")(geojson);
