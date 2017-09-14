@@ -109,12 +109,17 @@ function(instance) {
         var mapLayerService = this.sandbox
                 .getService('Oskari.mapframework.service.MapLayerService'),
             layer = mapLayerService.findMapLayer(id),
+            request = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(id, true),
+            layerIsSelected = this.sandbox.isLayerAlreadySelected(id),
             evt = this.sandbox.getEventBuilder('MapLayerEvent')(id, 'update');
         layer.setName(updatedLayer.name);
         layer.setSource(updatedLayer.source);
         layer.setDescription(updatedLayer.description);
 
         this.sandbox.notifyAll(evt);
+        if (layerIsSelected){
+            this.instance.sandbox.request(this.instance, request);
+        }
     },
     /**
      * Adds the layers to the map layer service.
