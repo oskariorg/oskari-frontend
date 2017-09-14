@@ -175,6 +175,9 @@ Oskari.clazz.define(
          */
         stopDrawing : function(id, clearCurrent, supressEvent) {
             var me = this;
+            if( typeof supressEvent === undefined ) {
+                supressEvent = false;
+            }
             var options = {
                 clearCurrent: clearCurrent,
                 isFinished: true
