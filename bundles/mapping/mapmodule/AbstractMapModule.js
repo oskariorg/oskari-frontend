@@ -2334,7 +2334,10 @@ Oskari.clazz.define(
             	sandbox = me.getSandbox(),
             	layerPlugins = me.getLayerPlugins(),
             	layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-
+            if(!layer){
+                // couldn't find layer to update
+                return;
+            }
             _.each(layerPlugins, function (plugin) {
                 // true if either plugin doesn't have the function or says the layer is supported.
                 var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
