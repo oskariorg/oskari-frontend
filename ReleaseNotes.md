@@ -2,6 +2,16 @@
 
 ## 1.44.0
 
+### Core/Oskari-global
+
+Added new localization function that supports message templates: Oskari.getMsg(). It should be used instead of Oskari.getLocalization().
+
+  Oskari.getMsg('<MyBundlesLocalizationKey>', '<path.to.message>', {key1: value1, key2: value2});
+
+Included intl-messageformat library into frontend core. It uses standard ICU message format and allows interpolation, pluralization, number/date formatting.
+
+For more details see http://oskari.org/documentation/development/localization
+
 ### featuredata2
 
 Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
@@ -26,15 +36,9 @@ New ``moveSelectedRowsTop()``-function. This can be used to move selected rows o
   grid.moveSelectedRowsTop(false);
 ```
 
-
 ### FormInput
 
 Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
-
-### Drawtools
-
-Fixed failing StopDrawingRequest.
-
 
 ### Guidedtour
 
@@ -62,7 +66,7 @@ Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymo
 
 ### mapmodule
 
-Changed using escape funtion to encodeURIComponent because escape function is depricated in JavaScript version 1.5.
+Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
 
 #### VectorLayerPlugin ol2/ol3
 
