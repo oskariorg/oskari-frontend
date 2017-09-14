@@ -4,16 +4,18 @@
 
 ### featuredata2
 
-Featuredata2 plugin now support to show selected rows top of grid.
+Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
 
 ### Grid
 
-Spitted Grid into smaller files:
-- GridSelection.js nows include select functionalities
-- GridPaging.js nows include paging functionalities
-- GridSort.js nows include sorting functionalaties
+Grid split into smaller files to make it more manageable:
 
-New ``moveSelectedRowsTop``-function. This is used to show selected rows on top of table. When called with true param then selected rows are moved to top.
+- GridSelection.js includes select functionalities
+- GridPaging.js includes paging functionalities
+- GridSort.js includes sorting functionalaties
+
+New ``moveSelectedRowsTop()``-function. This can be used to move selected rows on top of the table. Boolean true param moves the selected rows on top while false will return them on correct places based on current sorting. If the table is not currently sorted the rows are not moved with false-parameter.
+
 ```javascript
   var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
   ...
