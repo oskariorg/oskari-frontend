@@ -1,12 +1,22 @@
 {
-    "name" : "Oskari",
-    "version" : "0.0.1",
-    "description": "Build tools for Oskari core",
-    "keywords": [ "Oskari"],
-    "main": "grunt.js",
-    "dependencies" : {
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    }
+  "name": "Oskari",
+  "version": "0.0.1",
+  "description": "Build tools for Oskari core",
+  "keywords": [
+    "Oskari"
+  ],
+  "main": "grunt.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "eslint -c .eslintrc.js src/**/*.js",
+    "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
 }

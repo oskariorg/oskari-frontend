@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Mat një vijë në hartë. Kliko dy herë për ta ndalur matjen.",
                 "measurearea": "Mat një sipërfaqe në hartë. Kliko dy herë për ta ndalur matjen."
             }
+        },
+        "guidedTour": {
+            "title": "Veglat (mjetet)",
+            "message": "Përdor veglat për të shtuar vende, ruaj një pamje në hartë, shpërndaje një link për një pamje në hartë apo për t’u kthyer tek një pamje e mëhershme në hartë. Mbajeni kursorin në majë të veglave për një moment për të shikuar një informatë të caktuar"
         }
     }
 });

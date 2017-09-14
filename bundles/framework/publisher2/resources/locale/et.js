@@ -244,6 +244,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näita ainult avalikustatavaid kaardikihte."
             }
+        },
+        "guidedTour": {
+            "title": "Loo kaart",
+            "message": "Loodud kaardi saab lihtsalt põimida veebilehele. Lihtsalt määra oma kaardi suurus ja kasutajaliides ning kopeeri HTML-koodirida oma veebilehele.",
+            "openLink": "Näita loodud kaarti",
+            "closeLink": "Peida loodud kaart",
+            "tileText": "Loo kaart"
         }
     }
 });

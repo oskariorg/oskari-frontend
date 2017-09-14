@@ -105,6 +105,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Centriraj karto glede na tvojo lokacijo"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Premakni pogled karte",
+                "message": "Pogled karte lahko spremeniš s klikom in premikom ali z uporabo orodja za premikanje. Za vrnitev na privzet pogled klikni gumb na sredini orodja za premikanje. Nasvet: karto lahko premikaš tudi s smernimi tipkami na tipkovnici."
+            },
+            "help2": {
+                "title": "Približaj in oddalji pogled",
+                "message": "Karto lahko približaš in oddaljiš z uporabo drsnika merila ali s plus in minus tipko ob drsniku. Nasvet: Približuješ in oddaljiš lahko tudi s plus in minus tipko na tipkovnici, z dvojnim klikom na karto ali z vrtljivim kolescem na miški. Približaš se lahko tudi z dvojnim klikom na karto."
+            }
         }
     }
 });

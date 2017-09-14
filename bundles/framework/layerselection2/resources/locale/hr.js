@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Sloj karte",
                 "type-wfs": "Podatkovni proizvod"
             }
+        },
+        "guidedTour": {
+            "title": "Odabrani slojevi karte",
+            "message": "Klikom ili povlačenjem možete izmijeniti redoslijed kojim su prikazani slojevi karte ili promijeniti njihovu vidljivost. Promjene su vidljive u prozoru s kartom.",
+            "openLink": "Prikaži odabrane slojeve karte",
+            "closeLink": "Sakrij odabrane slojeve karte",
+            "tileText": "Odabrani slojevi karte"
         }
     }
 });

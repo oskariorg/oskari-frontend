@@ -109,7 +109,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
       color: #ff9100; 
     }
     
-    .dropdown {
+    &.dropdown {
       div.currentSelection {
         display: block;
         div.header-icon {
@@ -145,7 +145,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
           display: none; 
         }
       }
-      .open {
+      &.open {
         ul {
           display: block; 
         }

@@ -104,6 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "Operador lógico no encontrado"
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Capas seleccionadas",
+            "message": "Se puede cambiar el orden de las capas mostradas haciendo clic y arrastrándolas. También se puede cambiar la opacidad y para algunas capas, se puede seleccionar el estilo predefinido. Para productos de datos es posible mostrar los datos de los objetos en una tabla. La capa puede o mostrarse o esconderse.",
+            "openLink": "Mostrar capas seleccionadas",
+            "closeLink": "Ocultar capas seleccionadas",
+            "tileText": "Capas seleccionadas"
         }
     }
 });

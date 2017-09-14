@@ -331,15 +331,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSFeature: function (data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
-            self = this;
+            self = this,
+            feature;
         if (data.data.feature !== 'empty' && data.data.feature !== 'max') {
             feature = data.data.feature;
-        }
-
-        if (typeof layer.getFeatureProperties === "function"){
-            layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
-        } else{
-            layer.setActiveFeature(feature);
+            if (typeof layer.getFeatureProperties === "function"){
+                layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
+            } else{
+                layer.setActiveFeature(feature);
+            }
         }
 
         if (this._featureTimer) {

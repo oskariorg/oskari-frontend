@@ -1,16 +1,16 @@
 
-(function(o){
-    if(!o) {
+(function (o) {
+    if (!o) {
         // can't add functions if no Oskari ref
         return;
     }
     var defaultName = 'sandbox';
-    var getName = function(name) {
+    var getName = function (name) {
         return name || defaultName;
-    }
+    };
 
     var sandboxStore = o.createStore({
-        defaultValue : function(sandboxName) {
+        defaultValue: function (sandboxName) {
             // Notice that these are not part of the core.
             var sb = o.clazz.create('Oskari.Sandbox', getName(sandboxName));
             return sb;
@@ -24,7 +24,7 @@
      *
      * @return {Object}              Sandbox
      */
-     o.getSandbox = function (name) {
+    o.getSandbox = function (name) {
         return sandboxStore.data(getName(name));
     };
 }(Oskari));

@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Kortlag",
                 "type-wfs": "Dataprodukt"
             }
+        },
+        "guidedTour": {
+            "title": "Valgte kortlag",
+            "message": "Du kan ændre rækkefølgen på hvilke kortlag, der er vist, ved at klikke og trække, såvel som ændre deres gennemsigtighedsgrad. Ændringer er vist i kortvinduet.",
+            "openLink": "Vis valgte kortlag",
+            "closeLink": "Skjul valgte kortlag",
+            "tileText": "Valgte kortlag"
         }
     }
 });

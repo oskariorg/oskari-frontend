@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kaartlagen",
+            "message": "U kunt de productgegevens op de kaart laten weergeven door kaartlagen te selecteren. Klik op een categorie om deze te openen en selecteer een laag of typ een paar letters in van de naam van het product dat u zoekt in het zoekveld.",
+            "openLink": "Toon kaartlagen",
+            "closeLink": "Verberg kaartlagen",
+            "tileText": "Kaartlagen"
         }
     }
 });
