@@ -82,10 +82,10 @@ grid.renderTo(someElement);
 // select row and scroll table to selected
 grid.select(wantedRowValue, false, scrollableElement);
 
-// show selected rows top
+// moves selected rows as first rows of the table
 grid.moveSelectedRowsTop(true);
 
-// not show selected rows top
+// Resumes current ordering of the rows (if not table is not sorted, rows remain as is)
 grid.moveSelectedRowsTop(false);
 ```
 
