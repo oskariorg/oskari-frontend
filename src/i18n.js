@@ -267,4 +267,40 @@
         }
         return value;
     };
+    var intlCache = {};
+    function resolvePath(key, path) {
+        var ob = O.getLocalization(key);
+        var parts = path.split('.');
+        for (var i = 0; i < parts.length; i++) {
+            ob = ob[parts[i]];
+            if (!ob) {
+                if(i === parts.length-1 && ob === '') {
+                    return ob;
+                }
+                return null;
+            }
+        }
+        return ob;
+    }
+    O.getMsg = function (key, path, values) {
+        var message;
+        if (!values) {
+            message = resolvePath(key, path);
+            if(message === null) {
+                return path;
+            }
+            return message;
+        }
+        var cacheKey = oskariLang + '_' + key + '_' + path;
+        var formatter = intlCache[cacheKey];
+        if (!formatter) {
+            message = resolvePath(key, path);
+            if(message === null) {
+                return path;
+            }
+            formatter = new IntlMessageFormat(message, oskariLang);
+            intlCache[cacheKey] = formatter;
+        }
+        return formatter.format(values);
+    };
 }(Oskari));
