@@ -236,7 +236,6 @@ Oskari.clazz.define(
             //register request handlers
             this.requestHandlers = {
                 mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapLayerPlaybackHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerPlaybackRequestHandler', sandbox, this),
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
@@ -245,7 +244,6 @@ Oskari.clazz.define(
             };
 
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.requestHandler('MapModulePlugin.MapLayerPlaybackRequest', this.requestHandlers.mapLayerPlaybackHandler);
             sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
@@ -942,7 +940,7 @@ Oskari.clazz.define(
 
           this.loadtimer = setTimeout( function() {
             var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
-            var event = eventBuilder( done, 'maplayer' );
+            var event = eventBuilder(done, layerId);
             me._sandbox.notifyAll( event );
           }, 50 );
         },
@@ -2344,31 +2342,6 @@ Oskari.clazz.define(
                     plugin.updateLayerParams(layer, forced, params);
                 }
             });
-        },
-        /**
-         * @method handleMapLayerPlaybackRequest
-         * Start playback of timeline on requested layer
-         * @param {String} layerId layerId
-         * @param {String} time requested point in time
-         * @param {Boolean} playing should the animation start/stop 
-         * @param {Number} frameInterval time in milliseconds between animation frames (playback)
-         * @param {Number} stepInterval time interval to skip ahead on each frame in milliseconds
-         */
-        handleMapLayerPlaybackRequest: function(layerId, time, playing, frameInterval, stepInterval){
-            var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            layer.configureTimeseriesPlayback(time, playing, frameInterval, stepInterval);
-        },
-        /**
-         * @method sendTimeseriesAnimationEvent
-         * Send event about state of layer animation
-         * @param {String} layerId layerId
-         * @param {String} time requested point in time
-         * @param {Boolean} playing should the animation start/stop 
-         */
-        sendTimeseriesAnimationEvent(layerId, time, playing) {
-            var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
-            var evt = eventBuilder(layerId, time, playing);
-            this.getSandbox().notifyAll(evt);
         },
         /**
          * @static

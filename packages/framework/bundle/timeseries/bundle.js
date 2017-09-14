@@ -28,6 +28,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/timeseries/TimeseriesPlayback.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/TimeseriesAnimationPlugin.js"
+            }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/timeseries/resources/css/timeseriesplayback.css"
             }, {
@@ -36,6 +39,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/timeseries/request/AnimateLayerRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/timeseries/event/TimeseriesAnimationEvent.js"
             }, {
                 "type": "text/javascript",
                 "src" : "../../../../libraries/moment/2.10.6/moment-with-locales.js"

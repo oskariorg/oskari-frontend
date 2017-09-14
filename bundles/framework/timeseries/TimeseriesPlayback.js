@@ -367,12 +367,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
             if(isNaN(popupIndex)){
                 return;
             }
-            var time = me._playbackSlider.times[popupIndex].value
-            var playbackRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerPlaybackRequest');
-            var playbackRequest;
+            var time = me._playbackSlider.times[popupIndex].value;
 
-            playbackRequest = playbackRequestBuilder(this._selectedLayerId, time, me._isPlaying, 500, me._stepInterval);
-            me.sandbox.request(this.instance, playbackRequest);
+            this.instance.requestPlayback(this._selectedLayerId, time, me._isPlaying, 500, me._stepInterval);
         },
         /**
          * @method  @private _addDayLines add day lines to slider
