@@ -216,7 +216,7 @@ Oskari.clazz.define(
          */
         setId: function (id) {
             //if (typeof id !== 'string') {
-            //    //console.warn('ID not passed as string:', id);
+            //    //Oskari.log('AbstractLayer').warn('ID not passed as string:', id);
             //    this._id = String(id);
             //} else {
             this._id = id;
@@ -1265,22 +1265,22 @@ Oskari.clazz.define(
             var nextTime;
             var projection;
             if(!times) {
-                console.warn('layer does not have "times" attribute');
+                Oskari.log('AbstractLayer').warn('layer does not have "times" attribute');
                 return;
             }
             if(!this._currentTime) {
-                console.warn('current timestep not set for layer');
+                Oskari.log('AbstractLayer').warn('current timestep not set for layer');
                 return;
             }
 
             if(Array.isArray(times)){
                 var index = times.indexOf(this._currentTime);
                 if(index < 0) {
-                    console.warn('current timestep not found in "times" array');
+                    Oskari.log('AbstractLayer').warn('current timestep not found in "times" array');
                     return;
                 }
                 if(index === times.length-1) {
-                    console.warn('timestep would be after timeseries end, cannot advance');
+                    Oskari.log('AbstractLayer').warn('timestep would be after timeseries end, cannot advance');
                     return;
                 }
                 projection = moment(this._currentTime).add(stepInterval, 'milliseconds');
@@ -1298,7 +1298,7 @@ Oskari.clazz.define(
 
                 projection = moment(this._currentTime).add(interval * numIntervals, 'milliseconds');
                 if(next.isAfter(times.end)) {
-                    console.warn('next timestep would be after end of series, cannot advance');
+                    Oskari.log('AbstractLayer').warn('next timestep would be after end of series, cannot advance');
                     return;
                 }
                 nextTime = projection.toISOString();
@@ -1316,7 +1316,7 @@ Oskari.clazz.define(
          */
         configureTimeseriesPlayback(time, playing, frameInterval, stepInterval){
             if(!this.hasTimeseries()){
-                console.warn('Layer does not have timeseries! Cannot start playback.');
+                Oskari.log('AbstractLayer').warn('Layer does not have timeseries! Cannot start playback.');
                 return;
             }
             this._stepInterval = stepInterval;

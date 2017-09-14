@@ -530,7 +530,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
          */
         setPlaybackState: function (layerId, time, playing) {
             if(this._selectedLayerId !== layerId) {
-                console.warn('event layerId is not current');
+                Oskari.log(this.instance.getName()).warn('event layerId is not current');
                 return;
             }
             if(playing) {
