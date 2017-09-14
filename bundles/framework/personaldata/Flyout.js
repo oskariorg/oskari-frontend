@@ -51,14 +51,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            var me = this,
-                tabsLocalization = me.instance.getLocalization('tabs');
+            var me = this;
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
-                "myviews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance, tabsLocalization.myviews),
-                "publishedmaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance, tabsLocalization.publishedmaps),
+                "myviews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
+                "publishedmaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
                 // TODO should we pass conf to accounttab here?
-                "account": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance, tabsLocalization.account)
+                "account": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance)
             };
         },
         /**

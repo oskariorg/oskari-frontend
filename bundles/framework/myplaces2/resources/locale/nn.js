@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Slett stad",
-                    "confirm": "Vil du slette dette stedet?",
+                    "confirm": "Vil du slette dette stedet \"{name}\"?",
                     "btnDelete": "Slett",
                     "btnCancel": "Avbryt",
                     "success": "Staden er sletta",

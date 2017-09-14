@@ -32,7 +32,7 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "The map view name is required. Please type a name and try again.",
                     "deletetitle": "Delete Map View",
-                    "deletemsg": "Do you want to delete the map view?",
+                    "deletemsg": "Do you want to delete the map view \"{name}\"?",
                     "default": "Default view"
                 },
                 "save": {
@@ -89,7 +89,7 @@ Oskari.registerLocalization(
                     "cancel": "Cancel",
                     "error_noname": "The map layer name is required. Please type a name and try again.",
                     "deletetitle": "Delete Embedded Map",
-                    "deletemsg": "You are deleting this embedded map. After that the map is not visible at your website. Do you want to delete the map?",
+                    "deletemsg": "You are deleting the embedded map \"{name}\". After that the map is not visible at your website. Do you want to delete the map?",
                     "showErrorTitle": "Error",
                     "showConfirmMissing": "All the map layers are not available. Do you want to open the embedded map?",
                     "showConfirmNotLoaded": "All the map layers could not be loaded."

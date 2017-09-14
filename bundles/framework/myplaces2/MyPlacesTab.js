@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
      *      reference to component that created the tile
      */
 
-    function (instance, localization) {
+    function (instance) {
         this.instance = instance;
-        this.loc = localization;
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
         this.tabsContainer = undefined;
         this.tabPanels = {};
 
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             return 'MyPlaces2.MyPlaces';
         },
         getTitle: function () {
-            return this.loc.title;
+            return this.loc('tab.title');
         },
         getTabsContainer: function () {
             return this.tabsContainer;
@@ -41,14 +41,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
         initContainer: function () {
             var me = this;
             me.addAddLayerButton();
-            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc.nocategories, me.addLayerButton);
+            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc('tab.nocategories'), me.addLayerButton);
         },
 
         addAddLayerButton: function () {
             var me = this;
             me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             // TODO I18N
-            me.addLayerButton.setTitle(me.loc.addCategoryFormButton);
+            me.addLayerButton.setTitle(me.loc('tab.addCategoryFormButton'));
             me.addLayerButton.setHandler(function () {
                 me.instance.openAddLayerDialog('div.personaldata ul li select', 'right');
             });
@@ -114,14 +114,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     var editLink = this.linkTemplate.clone();
                     editLink.addClass('categoryOp');
                     editLink.addClass('edit');
-                    editLink.append(this.loc.editCategory);
+                    editLink.append(this.loc('tab.editCategory'));
                     editLink.bind('click', editLinkClosure(id));
                     panel.getContainer().append(editLink);
 
                     var deleteLink = this.linkTemplate.clone();
                     deleteLink.addClass('categoryOp');
                     deleteLink.addClass('delete');
-                    deleteLink.append(this.loc.deleteCategory);
+                    deleteLink.append(this.loc('tab.deleteCategory'));
                     deleteLink.bind('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
 
@@ -183,10 +183,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
         _deletePlace: function (data) {
             var me = this,
                 sandbox = this.instance.sandbox,
-                loc = this.loc.notification['delete'],
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(loc.btnDelete);
+            okBtn.setTitle(me.loc('tab.notification.delete.btnDelete'));
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
@@ -196,21 +195,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     var request;
 
                     if (isSuccess) {
-                        dialog.show(loc.title, loc.success);
+                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.deletesuccess'));
                         request = me.instance.sandbox
                             .getRequestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
 
                         me.instance.sandbox.request(me.instance, request);
                     } else {
-                        dialog.show(loc.title, loc.error);
+                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'));
                     }
                     dialog.fadeout();
                 };
                 service.deleteMyPlace(data.id, callback);
             });
-            var cancelBtn = dialog.createCloseButton(loc.btnCancel),
-                confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
-            dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
+            var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel')),
+                confirmMsg = me.loc('tab.notification.delete.confirm', {name: data.name});
+            dialog.show(me.loc('tab.notification.delete.title'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
         /**
@@ -293,7 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 key;
             for (i = 0; i < visibleFields.length; ++i) {
                 key = visibleFields[i];
-                panel.grid.setColumnUIName(key, this.loc.grid[key]);
+                panel.grid.setColumnUIName(key, me.loc('tab.grid.' + key));
             }
             return panel;
         },
@@ -323,8 +322,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                         'attention_text': places[i].getAttention_text(),
                         'geometry': places[i].getGeometry(),
                         'categoryId': places[i].getCategoryID(),
-                        'edit': this.loc.edit,
-                        'delete': this.loc['delete'],
+                        'edit': this.loc('tab.edit'),
+                        'delete': this.loc('tab.delete'),
                         'createDate': this._formatDate(service, places[i].getCreateDate()),
                         'updateDate': this._formatDate(service, places[i].getUpdateDate()),
                         'measurement': measurement
@@ -419,7 +418,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
         _informOfMaxFeatures: function(container) {
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
-            alert.setContent(this.loc.maxFeaturesExceeded);
+            alert.setContent(this.loc('tab.maxFeaturesExceeded'));
         },
         /**
          *  Expand bounds, if bounds area is zero
