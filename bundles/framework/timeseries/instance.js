@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance
  *
  * Registers and starts the
- * Oskari.mapframework.bundle.timeseries.TimeseriesPlaybackPlugin plugin for main map.
+ * Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance",
 
@@ -111,7 +111,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var sandbox = me.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var locale = this.getLocalization('timeseriesplayback');
-            var playback = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesPlayback', this, me.conf, locale, mapModule, sandbox);
+            var playback = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControl', this, me.conf, locale, mapModule, sandbox);
             me._modules.playback = playback;
         },
         /**

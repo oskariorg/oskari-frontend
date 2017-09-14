@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.timeseries.TimeseriesPlayback
+ * @class Oskari.mapframework.bundle.timeseries.TimeseriesControl
  *
- * Handles timeseries playback functionality.
+ * Creates timeseries playback UI.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesPlayback",
+Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesControl",
 
     /**
      * @method create called automatically on construction
