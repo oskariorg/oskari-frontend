@@ -68,13 +68,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                         iconSize = min + step * index;
                     }
 
+                    var iconSizePx = service.getClassificationService().getPixelForSize(iconSize);
+
                     regiongroup.forEach(function(region){
                         var wantedRegion = jQuery.grep(regions, function(r) {
                             return r.id === region;
                         });
 
                         if(wantedRegion && wantedRegion.length === 1) {
-                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSize));
+                            optionalStyles.push(me._getFeatureStyle(classification,region, color,highlightRegion, iconSizePx));
                             features.push(me._getFeature(classification,wantedRegion[0], data[wantedRegion[0].id].toString()));
                         }
                     });

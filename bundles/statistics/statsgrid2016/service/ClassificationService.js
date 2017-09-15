@@ -180,8 +180,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             return response;
         },
-        _getPixelSize: function(size) {
-            return 30 + 10 * size;
+        getPixelForSize: function(size) {
+            return 20 + Math.pow(2, size * 0.8);
+            //return 20 + 5 * size;
+            // original return 40 + 10 * size; --> 40  palautti 0:lla
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
@@ -226,7 +228,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 return iconSize;
             };
-            var maxSize = me._getPixelSize(getMarkerSize(0));
+            var maxSize = me.getPixelForSize(getMarkerSize(0));
 
             svg.find('svg').first().attr('height', maxSize + fontSize);
             svg.find('svg.symbols').attr('y', fontSize);
@@ -268,7 +270,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
                 var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
 
-                var size = me._getPixelSize(iconSize);
+                var size = me.getPixelForSize(iconSize);
                 svgMain.attr('width', size);
                 svgMain.attr('height', size);
                 x = (maxSize - size)/2;
