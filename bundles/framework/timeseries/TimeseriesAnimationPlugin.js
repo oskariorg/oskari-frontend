@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
          * Get next timestep from timeseries
          * @param {Number} stepInterval time as ISO-string 
          */
-        _getNextTimestep(stepInterval){
+        _getNextTimestep: function(stepInterval){
             var times = this._getLayer().getAttributes().times;
             var nextTime;
             var projection;
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
          * @param {Number} frameInterval time in milliseconds between animation frames (playback)
          * @param {Number} stepInterval time interval to skip ahead on each frame in milliseconds
          */
-        configureTimeseriesPlayback(layerId, time, playing, frameInterval, stepInterval){
+        configureTimeseriesPlayback: function(layerId, time, playing, frameInterval, stepInterval){
             this._currentLayerId = layerId;
             if(!this._getLayer().hasTimeseries()){
                 Oskari.log('TimeseriesAnimationPlugin').warn('Layer does not have timeseries! Cannot start playback.');
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         * @method _resetBuffer
         * Cancel any future frame buffering that might be ongoing
         */
-        _resetBuffer() {
+        _resetBuffer: function() {
             if(this._cancelBuffering){
                 this._cancelBuffering();
                 this._cancelBuffering = null;
@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         * @method _stopTimeseriesPlayback
         * Stop playback animation of timeseries layer
         */
-        _stopTimeseriesPlayback() {
+        _stopTimeseriesPlayback: function() {
             this._resetBuffer();
             this._scheduleNextTimestep = false;
             this._sendTimeseriesAnimationEvent(this._currentLayerId, this._currentTime, false);
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         @param {String} time current shown time (ISO-string)
         @param {Boolean} playing should start playback?
         */
-        _setLayerTimestep(time, playing){
+        _setLayerTimestep: function(time, playing){
             this._currentTime = time;
             this._lastFrameLoadTime = Date.now();
             this._scheduleNextTimestep = playing;
@@ -172,7 +172,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
          * @param {String} time requested point in time
          * @param {Boolean} playing should the animation start/stop 
          */
-        _sendTimeseriesAnimationEvent(layerId, time, playing) {
+        _sendTimeseriesAnimationEvent: function(layerId, time, playing) {
             var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
             var evt = eventBuilder(layerId, time, playing);
             this.getSandbox().notifyAll(evt);
