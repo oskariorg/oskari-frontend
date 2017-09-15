@@ -940,7 +940,7 @@ Oskari.clazz.define(
 
           this.loadtimer = setTimeout( function() {
             var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
-            var event = eventBuilder( done, 'maplayer' );
+            var event = eventBuilder(done, layerId);
             me._sandbox.notifyAll( event );
           }, 50 );
         },

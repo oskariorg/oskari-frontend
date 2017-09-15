@@ -11,6 +11,14 @@ Some extra tags:
 
 ## 1.44
 
+#### [mod] [breaking] ProgressEvent
+
+The event API itself is unchanged, but the only core bundle that sent out the event was not using it according to the API docs. You can ignore this change if your code does not expect ProgressEvent's getID() method to always return string 'maplayer'.
+
+#### [add] TimeseriesAnimationEvent
+
+Event is sent out when timeseries animation advances or is stopped
+
 #### [mod] [rpc]AddFeaturesToMapRequest
 
 New functionalities for ``AddFeaturesToMapRequest``. New options available:
