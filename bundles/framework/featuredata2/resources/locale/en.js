@@ -99,6 +99,7 @@ Oskari.registerLocalization(
             "differenceMessage": "The difference of unauthorized feature values is presented with value ",
             "noDataMessage": "Count = Number of features without unauthorized features",
             "noDataCommonMessage": "There are unauthorized feature values in the data"
-        }
+        },
+        "showSelectedFirst": "Show selected first"
     }
 });

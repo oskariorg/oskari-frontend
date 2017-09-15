@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Kohteen poistaminen",
-                    "confirm": "Haluatko poistaa kohteen?",
+                    "confirm": "Haluatko poistaa kohteen \"{name}\"?",
                     "btnDelete": "Poista",
                     "btnCancel": "Peruuta",
                     "success": "Kohde on poistettu.",
@@ -285,7 +285,7 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Karttatason poistaminen",
-                "deleteConfirmMove": "Olet poistamassa karttatasoa {0}. Karttatasolla on {1} kohdetta. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää kohteet oletuskarttatasolle ennen karttatason poistoa?",
+                "deleteConfirmMove": "Olet poistamassa karttatasoa \"{0}\". Karttatasolla on {1, plural, one {# kohde} other {# kohdetta}}. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää {1, plural, one {kohteen} other {kohteet}} oletuskarttatasolle ennen karttatason poistoa?",
                 "deleteConfirm": "Haluatko poistaa karttatason {0}?",
                 "deleted": "Karttataso on poistettu."
             },

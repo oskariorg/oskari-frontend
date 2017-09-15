@@ -377,7 +377,7 @@ Oskari.registerLocalization(
                 "delete": "Delete"
             },
             "title": "Analysis",
-            "confirmDeleteMsg": "Do you want to delete the analysis layer:",
+            "confirmDeleteMsg": "Do you want to delete the analysis layer \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",

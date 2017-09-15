@@ -32,7 +32,7 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Karttanäkymän nimi puuttuu. Anna nimi ja yritä uudelleen.",
                     "deletetitle": "Poista karttanäkymä",
-                    "deletemsg": "Haluatko poistaa valitun karttanäkymän?",
+                    "deletemsg": "Haluatko poistaa karttanäkymän \"{name}\"?",
                     "default": "Oletusnäkymä"
                 },
                 "save": {
@@ -89,7 +89,7 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta",
                     "error_noname": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
                     "deletetitle": "Poista julkaistu kartta",
-                    "deletemsg": "Haluatko poistaa tämän julkaistun kartan? Kartta ei tämän jälkeen näy enää verkkosivullasi.",
+                    "deletemsg": "Haluatko poistaa julkaistun kartan \"{name}\"? Kartta ei tämän jälkeen näy enää verkkosivullasi.",
                     "showErrorTitle": "Karttanäkymässä on puutteita",
                     "showConfirmMissing": "Osa karttatasoista ei ole käytettävissä. Haluatko silti avata karttanäkymän?",
                     "showConfirmNotLoaded": "Osa karttatasoista ei latautunut karttanäkymään."

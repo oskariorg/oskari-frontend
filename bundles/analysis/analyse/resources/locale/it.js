@@ -355,7 +355,7 @@ Oskari.registerLocalization(
                 "delete": "Cancella"
             },
             "title": "Analisi",
-            "confirmDeleteMsg": "Vuoi cancellare:",
+            "confirmDeleteMsg": "Vuoi cancellare \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Annulla",

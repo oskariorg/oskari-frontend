@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Abbrechen",
                     "error_noname": "Geben Sie den Namen der Kartenansicht ein",
                     "deletetitle": "Kartenansicht löschen",
-                    "deletemsg": "Möchten Sie diese Kartenansicht löschen?"
+                    "deletemsg": "Möchten Sie diese Kartenansicht löschen \"{name}\"?"
                 },
                 "save": {
                     "success": "Diese Kartenansicht wurde gespeichert.",
