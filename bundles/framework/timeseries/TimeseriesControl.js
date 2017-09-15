@@ -53,6 +53,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesControl",
                         '<div class="playback-button">'+
                             '<button class="pause" name="pause"></button>'+
                         '</div>'+
+                        /*
                         '<div class="timestep-holder">'+
                             '<select>'+ 
                                 '<option value="minutes">+minute</option>'+
@@ -62,6 +63,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesControl",
                                 '<option value="months">+month</option>'+
                             '</select>'+
                         '</div>'+
+                        */
                         '<div class="oskari-timeslider-empty">&nbsp;</div>'+
                         '<div class="oskari-timeslider"></div>'+
                     '</div>'+
