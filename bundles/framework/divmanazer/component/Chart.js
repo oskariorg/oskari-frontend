@@ -4,11 +4,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this.svg = null;
   this.dimensions = this.chartDimensions();
-  this.x, this.y = null;
+  this.x = null;
+  this.y = null;
   this.colorScale = null;
   this.data = null;
-  this.chartType;
-  this._g;
+  this.chartType = null;
+  this._g = null;
 }, {
     _template: {
         btn: _.template('<button>${ icon }</button>'),
@@ -22,30 +23,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
     sortData: function () {
         this.data = this.data.sort(function (a, b) {
             return d3.ascending(a.value, b.value);
-        })
+        });
     },
     chartDimensions: function () {
         var me = this;
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
         var dimensions = {
-        margin: {
-            top: 15,
-            right: 25,
-            bottom: 15,
-            left: 80
-        },
-        label: {
-            padding: 20,
-            verticalCenterPadding: 8
-        },
-        width: function () { return 960 - this.margin.left - this.margin.right },
-        height: function () { return ( me.data.length * 21 ) - ( this.margin.top - this.margin.bottom ) }
-        }
+            margin: {
+                top: 15,
+                right: 25,
+                bottom: 15,
+                left: 80
+            },
+            label: {
+                padding: 20,
+                verticalCenterPadding: 8
+            },
+            width: function () {
+                return 960 - this.margin.left - this.margin.right;
+            },
+            height: function () {
+                return ( me.data.length * 21 ) - ( this.margin.top - this.margin.bottom );
+            }
+        };
         return dimensions;
     },
     createGridlines: function () {
-        return d3.axisBottom(this.x)
-            .ticks(10)
+        return d3.axisBottom(this.x).ticks(10);
     },
     initScales: function () {
         this.x = d3.scaleLinear()
@@ -91,7 +95,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
      * initializes the chart skeleton without any specific line or bar options
      *
      * @method initChart
-     * 
+     *
      */
     initChart: function() {
         var selections = this.initSelection();
@@ -121,7 +125,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         }
     },
     /**
-     * 
+     *
      * @method callGroups
      */
     callGroups: function () {
@@ -129,62 +133,63 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
         var lblCenterPadding = this.dimensions.label.verticalCenterPadding;
         //groups
         var gy = this.svg.append("g")
-        .attr("class", "y axis")
-        .attr("transform", "translate(0," + (padding + lblCenterPadding) + ")")
-        .call(this.yAxis)
+            .attr("class", "y axis")
+            .attr("transform", "translate(0," + (padding + lblCenterPadding) + ")")
+            .call(this.yAxis);
 
         var gx = this.svg.append("g")
-        .attr("class", "x axis")
-        .call(this.xAxis)
+            .attr("class", "x axis")
+            .call(this.xAxis);
     },
     /**
-     * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element 
+     * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
      * @method createBarChart
      */
     createBarChart: function ( data, options ) {
         if( data != undefined ) {
             this.handleData(data);
         }
-        var options = options || {};
-        if( Object.keys(options).length !== 0 ) {
-            this.parseOptions( options );
+        var opts = options || {};
+        if( Object.keys(opts).length !== 0 ) {
+            this.parseOptions( opts );
         }
         this.initChart();
+
         var me = this;
         var bars = this.svg.selectAll(".bar")
-        .data(this.data)
-        .enter()
-        .append("g")
+            .data(this.data)
+            .enter()
+            .append("g");
 
         //append rects
         bars.append("rect")
-        .attr("class", "bar")
-        .attr("text-anchor", "middle")
-        .attr("y", function (d) {
-            return me.y(d.name) + me.y.bandwidth() / 2 + me.dimensions.label.padding;
-        })
-        .style('fill',function(d,i){ return me.colorScale(i); })
-        .attr("height", 15)
-        .attr("x", 0)
-        .attr("width", function (d) {
-            return me.x(d.value);
-        });
+            .attr("class", "bar")
+            .attr("text-anchor", "middle")
+            .attr("y", function (d) {
+                return me.y(d.name) + me.y.bandwidth() / 2 + me.dimensions.label.padding;
+            })
+            .style('fill',function(d,i){ return me.colorScale(i); })
+            .attr("height", 15)
+            .attr("x", 0)
+            .attr("width", function (d) {
+                return me.x(d.value);
+            });
 
         this.chartType = 'barchart';
 
         return this.getGraph();
     },
     /**
-     * handles data & options passed to it, initializes skeleton chart and then applies linechart specific options to the element 
+     * handles data & options passed to it, initializes skeleton chart and then applies linechart specific options to the element
      * @method createLineChart
      */
     createLineChart: function ( data, options ) {
         if( data != undefined ) {
             this.handleData(data);
         }
-        var options = options || {};
-        if( Object.keys(options).length !== 0 ) {
-            this.parseOptions( options );
+        var opts = options || {};
+        if( Object.keys(opts).length !== 0 ) {
+            this.parseOptions( opts );
         }
         this.initChart();
         var me = this;
@@ -218,13 +223,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             me.callGroups();
             // add the X gridlines
             me.svg.append("g")
-            .attr("class", "grid")
-            .attr("text-anchor", "middle")
-            .attr("transform", "translate(0," +  me.dimensions.height() + ")")
-            .call(me.createGridlines()
-            .tickSize(-me.dimensions.height() +30, 0, 0)
-            .tickFormat("")
-            )
+                .attr("class", "grid")
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(0," +  me.dimensions.height() + ")")
+                .call(me.createGridlines()
+                .tickSize(-me.dimensions.height() +30, 0, 0)
+                .tickFormat("")
+            );
         });
     },
     /**
@@ -238,7 +243,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
             this.handleData(data);
         }
         //Clear previous graphs
-        this._template.graph.empty(); 
+        this._template.graph.empty();
         if( this.chartType === 'barchart' ) {
             chart = this.createBarChart(this.data);
         } else if( this.chartType === 'linechart' ) {
@@ -253,7 +258,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function(sandbox, lo
       // getters and setters for `chart`
     "chart.g": function( val ) {
         if ( !val ) {
-        return this.chart_g;
+            return this.chart_g;
         }
         this._g = val;
         return line_chart;
