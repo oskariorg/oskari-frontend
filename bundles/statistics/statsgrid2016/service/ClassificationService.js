@@ -180,10 +180,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             return response;
         },
-        getPixelForSize: function(size) {
-            return 20 + Math.pow(2, size * 0.8);
-            //return 20 + 5 * size;
-            // original return 40 + 10 * size; --> 40  palautti 0:lla
+        getPixelForSize: function(index, size, range) {
+            var iconSize = size || {};
+            var ranges = range || {};
+            if(!iconSize.min) {
+                iconSize.min = 10;
+            }
+            if(!iconSize.max) {
+                iconSize.max = 150;
+            }
+            if(!ranges.min) {
+                ranges.min = 0;
+            }
+            if(!ranges.max) {
+                ranges.max = 4;
+            }
+            var x = d3.scaleSqrt()
+                .domain([ranges.min, ranges.max])
+                .range([iconSize.min, iconSize.max]);
+            return x(index+1);
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
@@ -197,11 +212,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 '</div>');
 
             var pointSymbol = jQuery('<div>'+
-                '   <svg viewBox="0 0 64 64">'+
-                '       <svg width="64" height="64" x="0" y="0">'+
+                '       <svg x="0" y="0">'+
                 '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>'+
                 '       </svg>'+
-                '   </svg>'+
                 '</div>');
 
             var lineAndText = jQuery('<div>'+
@@ -218,17 +231,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             var x = 0, y = 0;
             var fontSize = 10;
 
-            var getMarkerSize = function(index) {
-                var iconSize = null;
-                var min = opts.min;
-                var max = opts.max;
-                var step = (max-min) / ranges.length;
-                if(min && max) {
-                    iconSize = (max - step * index);
+            var maxSize = me.getPixelForSize(ranges.length-1,
+                {
+                    min:opts.min,
+                    max:opts.max
+                },{
+                    min:0,
+                    max:opts.count-1
                 }
-                return iconSize;
-            };
-            var maxSize = me.getPixelForSize(getMarkerSize(0));
+            );
 
             svg.find('svg').first().attr('height', maxSize + fontSize);
             svg.find('svg.symbols').attr('y', fontSize);
@@ -264,15 +275,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 // Create point symbol
                 var point = pointSymbol.clone();
                 var svgMain = point.find('svg').first();
-                var iconSize = getMarkerSize(index);
 
                 var tmp = range.split(statsOpts.separator);
                 var start_value = parseFloat(tmp[0]).toFixed(statsOpts.precision);
                 var end_value = parseFloat(tmp[1]).toFixed(statsOpts.precision);
 
-                var size = me.getPixelForSize(iconSize);
-                svgMain.attr('width', size);
-                svgMain.attr('height', size);
+                var size = me.getPixelForSize(index,
+                    {
+                        min:opts.min,
+                        max:opts.max
+                    },{
+                        min:0,
+                        max:opts.count-1
+                    }
+                );
+                svgMain.find('circle').attr('cx', size/2);
+                svgMain.find('circle').attr('cy', size/2);
+                svgMain.find('circle').attr('r', (size/2)-1);
                 x = (maxSize - size)/2;
                 y = (maxSize - size);
 
@@ -284,7 +303,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     'fill': '#' + color
                 });
 
-                svg.find('svg.symbols').append(point.html());
+                svg.find('svg.symbols').prepend(point.html());
 
                 // Create texts and lines
                 var label = lineAndText.clone();

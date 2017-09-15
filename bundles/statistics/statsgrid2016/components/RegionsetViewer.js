@@ -59,16 +59,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function(inst
                     var optionalStyles = [];
                     var color = colors[index];
 
-                    // Get point symbol size
-                    var min = classification.min;
-                    var max = classification.max;
-                    var iconSize = null;
-                    if(min && max) {
-                        var step = (max-min) / regiongroups.length;
-                        iconSize = min + step * index;
-                    }
-
-                    var iconSizePx = service.getClassificationService().getPixelForSize(iconSize);
+                    var iconSizePx = service.getClassificationService().getPixelForSize(index,
+                        {
+                            min:classification.min,
+                            max:classification.max
+                        },{
+                            min:0,
+                            max:classification.count-1
+                        }
+                    );
 
                     regiongroup.forEach(function(region){
                         var wantedRegion = jQuery.grep(regions, function(r) {
