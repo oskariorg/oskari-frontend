@@ -2,6 +2,18 @@
 
 ## 1.44.0
 
+### divmanazer Chart component
+
+``New component`` allows make bar or line charts.
+
+```javascript
+var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
+var data = [{name:"2", value:1},{name:"1", value:3},{name:"11", value:31},{name:"12", value:32},{name:"13", value:300},{name:"14", value:355},{name:"15", value:366},{name:"16", value:377}];
+barchart.createBarChart(data);
+jQuery('<div></div>').append(barchart);
+
+```
+
 ### Core/Oskari-global
 
 Added new localization function that supports message templates: Oskari.getMsg(). It should be used instead of Oskari.getLocalization().

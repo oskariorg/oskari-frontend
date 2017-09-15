@@ -2,7 +2,7 @@
 
 ## Description
 
-Create barcharts or linecharts with d3
+Create bar or line charts with d3.
 
 ## How to use
 
