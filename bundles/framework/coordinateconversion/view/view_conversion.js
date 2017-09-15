@@ -27,21 +27,13 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                                 '<input type="button" id="overlay-btn" class="mapselect" name="load" value="<%= map %>">'+
                                             '</form>'+
                                             '</div>'),
-            datasourceinfo: _.template('<div class="coordinateconversion-datasourceinfo" style=display:none;"></div>' +
-                                    '<form method="post" action="", enctype="multipart/form-data" class="box" id="fileinput" style="display:none">'+
-                                        '<div class="box__input">'+
-                                            '<input type="file" name="file" id="file" class="box__file" />'+
-                                            '<label>  <%= fileupload %> <label for="file" style="cursor: pointer;"> <a> <%= link %> </a> </label> </label> '+
-                                        '</div>'+
-                                        '<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
-                                        '<div class="box__success"><%= success %></div>'+
-                                        '<div class="box__error"><%= error %></div>'+
-                                    '</form>'+
-                                    '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
-                                        '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
-                                    '</div>' +
-                                    '<div class="coordinateconversion-mapinfo" style=display:none;">'+
-                                        '<div class="mapinfo"> <i><%= mapinfo %><i> </div>'+
+            datasourceinfo: _.template('<div class="datasource-info">' +
+                                            '<div class="coordinateconversion-clipboardinfo" style=display:none;">'+
+                                                '<div class="clipboardinfo"> <i><%= clipboardupload %><i> </div>'+
+                                            '</div>' +
+                                            '<div class="coordinateconversion-mapinfo" style=display:none;">'+
+                                                '<div class="mapinfo"> <i><%= mapinfo %><i> </div>'+
+                                            '</div>' +
                                     '</div>'
                                     ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
@@ -123,17 +115,14 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
 
             var resultcoordinatefield = this._template.oskari_result_table_content({ result: this.loc.coordinatefield.result });
 
-            var datasourceinfo = this._template.datasourceinfo({ fileupload: this.loc.datasourceinfo.fileupload,
-                                                            link: this.loc.datasourceinfo.link,
-                                                            clipboardupload: this.loc.datasourceinfo.clipboardupload,
-                                                            mapinfo: this.loc.datasourceinfo.mapinfo,
-                                                            uploading: this.loc.datasourceinfo.uploading,
-                                                            success: this.loc.datasourceinfo.success,
-                                                            error: this.loc.datasourceinfo.error });
+            var datasourceinfo = this._template.datasourceinfo({ clipboardupload: this.loc.datasourceinfo.clipboardupload,
+                                                            mapinfo: this.loc.datasourceinfo.mapinfo,});
 
             var utilbuttons = this._template.utilbuttons({ clear: this.loc.utils.clear,
                                                             show: this.loc.utils.show,
                                                             fileexport: this.loc.utils.export });
+
+            var fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
                                                             
             var wrapper = me._template.wrapper;
             wrapper.append(coordinatesystem);
@@ -146,6 +135,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             wrapper.find('#targetcoordsystem').prepend(resultTitle);
             wrapper.append(coordinatedatasource);
             wrapper.append(datasourceinfo);
+            wrapper.find('.datasource-info').append( fileinput.create() );
 
             wrapper.append(inputcoordinatefield);
             wrapper.append(conversionbutton);
@@ -174,9 +164,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             this.handleButtons();
             this.handleRadioButtons();
             this.tableDisplayNumOfRows();
-            if( this.canUseAdvancedUpload() ) {
-                this.handleDragAndDrop();
-            }
         },
         createSelect: function() {
             var json = this.helper.getOptionsJSON();
@@ -391,16 +378,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             }
         },
         /**
-         * @method canUseAdvancedUpload
-         *
-         * Checks if the browser supports drag and drop events aswell as formdata & filereader
-         * @return {boolean} true if supported 
-         */
-        canUseAdvancedUpload: function() {
-            var div = document.createElement('div');
-            return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
-         },
-        /**
          * @method handleClipboard
          *
          * Handles the paste event in the input table
@@ -474,8 +451,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var me = this;
             var clipboardInfo = jQuery(me.conversionContainer).find('.coordinateconversion-clipboardinfo');
             var mapInfo = jQuery(me.conversionContainer).find('.coordinateconversion-mapinfo');
-            var fileInput = jQuery(me.conversionContainer).find('#fileinput');
-
+            var fileInput = jQuery(me.conversionContainer).find('.oskari-fileinput');
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
                     clipboardInfo.hide();
@@ -559,74 +535,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 "tableHeader": jQuery(this.conversionContainer).find(".oskari-table-header")
             }
             return elements;
-        },
-        /**
-         * @method handleDragAndDrop
-         * Checks for drag and drop events, on submit makes ajax request
-         * 
-         *
-         */
-        handleDragAndDrop: function() {
-            var me = this;
-            var form = jQuery(this.conversionContainer).find('.box');
-            var input = form.find('input[type="file"]');
-            form.addClass('has-advanced-upload');
-
-             var droppedFiles = false;
-
-            form.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            })
-            .on('dragover dragenter', function() {
-                form.addClass('is-dragover');
-            })
-            .on('dragleave dragend drop', function() {
-                form.removeClass('is-dragover');
-            })
-            .on('drop', function(e) {
-                droppedFiles = e.originalEvent.dataTransfer.files;
-                form.trigger('submit');
-            });
-            
-
-            form.on('submit', function(e) {
-                if (form.hasClass('is-uploading')) return false;
-
-                form.addClass('is-uploading').removeClass('is-error');
-
-                e.preventDefault();
-
-                var ajaxData = new FormData(form.get(0));
-
-                if (droppedFiles) {
-                    jQuery.each( droppedFiles, function(i, file) {
-                    ajaxData.append( input.attr('name'), file );
-                    });
-                }
-
-                jQuery.ajax({
-                    url: form.attr('action'),
-                    type: form.attr('method'),
-                    data: ajaxData,
-                    dataType: 'json',
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    complete: function() {
-                        form.removeClass('is-uploading');
-                    },
-                    success: function(data) {
-                        form.addClass( data.success == true ? 'is-success' : 'is-error' );
-                        if (!data.success) $errorMsg.text(data.error);
-                    },
-                    error: function() {
-                        form.addClass('is-error').removeClass('is-uploading');
-                    // Log the error, show an alert, whatever works for you
-                    }
-                });
-            
-            });
         }
     }
 );

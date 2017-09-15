@@ -8,9 +8,9 @@
     font-size: 12px;
     padding-left: 3px;
 }
- .coordinateconversion-csystem,  .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
+ .geodetic-datum, .coordinate-system, .map-projection, .geodetic-coordinatesystem, .height-system {
     clear: left;
-    padding-top: 0.875em;
+     padding-top: 0.875em; 
 } 
 #overlay-btn {
   color:#08233e;
@@ -93,53 +93,6 @@
     margin-top:2%;
     margin-left:3%;
     font-size:0.95em;
-}
-.box__file {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-.box__file + label {
-    margin-top:2%;
-    margin-left:3%;
-    font-size: 1em;
-    font-weight: 700;
-    display: inline-block;
-}
-.box__input {
-    height:4em;
-}
-
-.box__file:focus + label,
-/* .box__file + label:hover {
-    background-color: lavender;
-} */
-.box__dragndrop,
-.box__uploading,
-.box__success,
-.box__error {
-  display: none;
-}
-
-.box.has-advanced-upload {
-  background-color: white;
-   outline: 1px dashed lavender; 
-   outline-offset: -10px; 
-}
-.box.has-advanced-upload .box__dragndrop {
-  display: inline;
-}
-.box.is-dragover {
-  background-color: lavender;
-}
-.box.is-uploading .box__input {
-  visibility: none;
-}
-.box.is-uploading .box__uploading {
-  display: block;
 }
 input[type="radio"] {
     display:none;
