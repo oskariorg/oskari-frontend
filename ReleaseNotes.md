@@ -2,6 +2,13 @@
 
 ## 1.44.0
 
+### Timeseries improvements
+
+Animation now waits for frame to load before advancing.
+The next animation frame is buffered before it's shown. Depending on the service used this might make the animation go slower, but is more user (and service) friendly.
+Added new event TimeseriesAnimationEvent.
+Changed ProgressEvent to include layer id instead of 'maplayer' (functionality id) string as ID value.
+
 ### divmanazer Chart component
 
 ``New component`` allows make bar or line charts.
