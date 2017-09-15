@@ -233,8 +233,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             var maxSize = me.getPixelForSize(ranges.length-1,
                 {
-                    min:opts.min,
-                    max:opts.max
+                    min:10,
+                    max:120
                 },{
                     min:0,
                     max:opts.count-1
@@ -271,7 +271,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 });
             }
 
-            ranges.reverse().forEach(function(range, index){
+            ranges.forEach(function(range, index){
                 // Create point symbol
                 var point = pointSymbol.clone();
                 var svgMain = point.find('svg').first();
@@ -282,8 +282,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 var size = me.getPixelForSize(index,
                     {
-                        min:opts.min,
-                        max:opts.max
+                        min:10,
+                        max:120
                     },{
                         min:0,
                         max:opts.count-1
