@@ -144,8 +144,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Select.js"
-            },
-            {
+            },{
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/SelectList.js"
             }, {
@@ -163,6 +162,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/CheckboxInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/divmanazer/component/FileInput.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/TextInput.js"
@@ -278,6 +280,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/css/forminput.css"
+            },{
+                "type": "text/css",
+                "src": "../../../../bundles/framework/divmanazer/resources/css/fileinput.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/css/grid.css"
