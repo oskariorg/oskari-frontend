@@ -5,6 +5,7 @@
     var oskariLang = 'en';
     var localizations = {};
     var supportedLocales = null;
+    var log = Oskari.log('Oskari.deprecated');
 
     // ------------------------------------------------
     // Locales/lang
@@ -135,6 +136,7 @@
      * @return {string}     Localized value for key
      */
     O.getLocalization = function (key, lang, fallbackToDefault) {
+        log.deprecated('Oskari.getLocalization()', 'Use Oskari.getMsg() instead.');
         var l = lang || oskariLang;
         if (key === null || key === undefined) {
             throw new TypeError(

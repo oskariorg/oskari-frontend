@@ -24,6 +24,18 @@ Included intl-messageformat library into frontend core. It uses standard ICU mes
 
 For more details see http://oskari.org/documentation/development/localization
 
+#### Logger
+
+Oskari.log() now has an additional function for notifying about deprecated calls without spamming the developer console:
+
+     Oskari.log([name]).deprecated('myOldFunc()');
+     Oskari.log([name]).deprecated('myOtherOldFunc()', 'Use myNewFunc() instead.');
+
+Prints out:
+
+- myOldFunc() will be removed in future release. Remove calls to it.
+- myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
 ### featuredata2
 
 Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
