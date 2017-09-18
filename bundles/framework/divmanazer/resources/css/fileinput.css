@@ -19,7 +19,7 @@
 
 .box__file:focus + label,
  .box__file + label:hover {
-    background-color: lavender;
+    /* background-color: lavender; */
 } 
 .box__dragndrop,
 .box__uploading,
@@ -37,7 +37,7 @@
   display: inline;
 }
 .box.is-dragover {
-  background-color: lavender;
+  /* background-color: lavender; */
 }
 .box.is-uploading .box__input {
   visibility: none;

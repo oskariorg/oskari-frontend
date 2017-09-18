@@ -19,6 +19,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
                 '</div>')
     }
 }, {
+        getElement: function () {
+            return this.el;
+        },
+        setElement: function ( el ) {
+            this.el = jQuery(el);
+        },
         /**
          * @method canUseAdvancedUpload
          *
@@ -35,13 +41,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
          * 
          *
          */
-        handleDragAndDrop: function() {
+        handleDragAndDrop: function( cb ) {
             var me = this;
-            var form = jQuery(this.el).find('.box');
+            var form = this.getElement().find('.box');
             var input = form.find('input[type="file"]');
             form.addClass('has-advanced-upload');
-
-             var droppedFiles = false;
+            var droppedFiles = false;
 
             form.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
                 e.preventDefault();
@@ -55,7 +60,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
             })
             .on('drop', function(e) {
                 droppedFiles = e.originalEvent.dataTransfer.files;
-                form.trigger('submit');
+                // form.trigger('submit');
+                me.readFilesInBrowser( droppedFiles, cb );
             });
             
 
@@ -70,59 +76,51 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
 
                 if ( droppedFiles ) {
                     jQuery.each( droppedFiles, function(i, file) {
-                    ajaxData.append( input.attr('name'), file );
+                        ajaxData.append( input.attr('name'), file );
                     });
                 }
 
-                jQuery.ajax({
-                    url: form.attr('action'),
-                    type: form.attr('method'),
-                    data: ajaxData,
-                    dataType: 'json',
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    complete: function() {
-                        form.removeClass('is-uploading');
-                    },
-                    success: function(data) {
-                        form.addClass( data.success == true ? 'is-success' : 'is-error' );
-                        if (!data.success) $errorMsg.text(data.error);
-                    },
-                    error: function() {
-                        form.addClass('is-error').removeClass('is-uploading');
-                    // Log the error, show an alert, whatever works for you
-                    }
-                });
+                // jQuery.ajax({
+                //     url: form.attr('action'),
+                //     type: form.attr('method'),
+                //     data: ajaxData,
+                //     dataType: 'json',
+                //     cache: false,
+                //     contentType: false,
+                //     processData: false,
+                //     complete: function() {
+                //         form.removeClass('is-uploading');
+                //     },
+                //     success: function(data) {
+                //         form.addClass( data.success == true ? 'is-success' : 'is-error' );
+                //         if (!data.success) $errorMsg.text(data.error);
+                //     },
+                //     error: function() {
+                //         form.addClass('is-error').removeClass('is-uploading');
+                //     // Log the error, show an alert, whatever works for you
+                //     }
+                // });
             
             });
+            this.setElement( form.parent() );
+            return this.getElement();
         },
-        readFilesInBrowser: function (evt) {
-            var files = evt.target.files; // FileList object
+        readFilesInBrowser: function ( files, cb ) {
+            var files = files; // FileList object
 
             // Loop through the FileList and render image files as thumbnails.
             for (var i = 0, f; f = files[i]; i++) {
+                var reader = new FileReader();
 
-            // Only process image files.
-            if (!f.type.match('image.*')) {
-                continue;
-            }
+                // Closure to capture the file information.
+                reader.onload = ( function( file ) {
+                    return function(e) {
+                        var fileContent = e.target.result;
+                        cb( fileContent );
+                    };
+                })(f);
 
-            var reader = new FileReader();
-
-            // Closure to capture the file information.
-            reader.onload = (function(theFile) {
-                return function(e) {
-                // Render thumbnail.
-                var span = document.createElement('span');
-                span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                    '" title="', escape(theFile.name), '"/>'].join('');
-                document.getElementById('list').insertBefore(span, null);
-                };
-            })(f);
-
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(f);
+                reader.readAsText(f);
             
             }
         },
@@ -132,12 +130,69 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
                                                     uploading: this.loc.datasourceinfo.uploading,
                                                     success: this.loc.datasourceinfo.success,
                                                     error: this.loc.datasourceinfo.error });
+            this.setElement(fileinput);
 
-            this.el = fileinput;
-            if( this.canUseAdvancedUpload ) {
-                this.handleDragAndDrop();
+            // if( this.canUseAdvancedUpload ) {
+            //     this.handleDragAndDrop( fileinput );
+            // }
+            // return this.getElement();
+        },
+        exportToFile: function ( data, filename ) {
+            var me = this;
+            function onInitFs(fs) {
+
+            fs.root.getFile( filename, {create: true}, function(fileEntry) {
+                console.log(fs.root);
+
+                // Create a FileWriter object for our FileEntry (log.txt).
+                fileEntry.createWriter( function( fileWriter ) {
+
+                fileWriter.onwriteend = function(e) {
+                    console.log('Write completed.');
+                };
+
+                fileWriter.onerror = function(e) {
+                    console.log('Write failed: ' + e.toString());
+                };
+
+                // Create a new Blob and write it to log.txt.
+                var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
+
+                fileWriter.write(blob);
+
+                }, me.errorHandler);
+
+            }, me.errorHandler);
+
             }
-            return this.el;
+
+            window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, me.errorHandler);
+        },
+         errorHandler: function( e ) {
+            var msg = '';
+
+            switch (e.code) {
+                case FileError.QUOTA_EXCEEDED_ERR:
+                msg = 'QUOTA_EXCEEDED_ERR';
+                break;
+                case FileError.NOT_FOUND_ERR:
+                msg = 'NOT_FOUND_ERR';
+                break;
+                case FileError.SECURITY_ERR:
+                msg = 'SECURITY_ERR';
+                break;
+                case FileError.INVALID_MODIFICATION_ERR:
+                msg = 'INVALID_MODIFICATION_ERR';
+                break;
+                case FileError.INVALID_STATE_ERR:
+                msg = 'INVALID_STATE_ERR';
+                break;
+                default:
+                msg = 'Unknown Error';
+                break;
+            };
+
+            console.log('Error: ' + msg);
         }
 }, {
 
