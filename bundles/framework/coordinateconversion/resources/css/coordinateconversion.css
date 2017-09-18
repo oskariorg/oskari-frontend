@@ -1,5 +1,8 @@
+.oskari-flyoutcontentcontainer{
+    max-height: 1000px !important;
+}
 .conversionwrapper {
-    max-width: 47em !important;
+    max-width: 50em !important;
     display: flex;
     flex-flow: row wrap;
 }
@@ -64,6 +67,9 @@
 }
 .coordinateconversion-buttons.show.clear{
     float:left;
+}
+.coordinateconversion-datasource {
+    width: 100%;
 }
 .export {
     float:right;
