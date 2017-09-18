@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.insertWithClipboard = false;
         me.conversionContainer = null
         me.startingSystemSelected = false;
+        me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
@@ -121,8 +122,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var utilbuttons = this._template.utilbuttons({ clear: this.loc.utils.clear,
                                                             show: this.loc.utils.show,
                                                             fileexport: this.loc.utils.export });
-
-            var fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
                                                             
             var wrapper = me._template.wrapper;
             wrapper.append(coordinatesystem);
@@ -135,7 +134,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             wrapper.find('#targetcoordsystem').prepend(resultTitle);
             wrapper.append(coordinatedatasource);
             wrapper.append(datasourceinfo);
-            wrapper.find('.datasource-info').append( fileinput.create() );
+
+            me.fileinput.create();
+            if( me.fileinput.canUseAdvancedUpload() ) {
+                var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
+            }
+            wrapper.find('.datasource-info').append( fileInputElement );
 
             wrapper.append(inputcoordinatefield);
             wrapper.append(conversionbutton);
@@ -195,7 +199,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         selections = [];
                         options = {};
 
-                        dropdown.css( { width:'130px', float:'right' } );
+                        dropdown.css( { width:'170px', float:'right' } );
                         select.adjustChosen();
                         select.selectFirstValue();
                         // if(index > 0) {
@@ -378,6 +382,28 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             }
         },
         /**
+         * @method validateData
+         * check different conditions if data matches to them
+         */
+        validateData: function( data ) {
+            var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
+            var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
+            var numeric = new RegExp(/[0-9.]+/);
+            
+            var jsonLonLat = {};
+            var fullLonLatMatch = data.match(fullLonlat);
+            for(var i = 0; i < fullLonLatMatch.length; i++) {
+                jsonLonLat[i] = {lon:'',lat:''};
+                var lonlatMatch = fullLonLatMatch[i].match(lonlat);
+                var lonValue = lonlatMatch[0].match(numeric);
+                var latValue = lonlatMatch[1].match(numeric);
+                jsonLonLat[i].lon = lonValue[0];
+                jsonLonLat[i].lat = latValue[0];
+            }
+
+            return jsonLonLat;
+        },
+        /**
          * @method handleClipboard
          *
          * Handles the paste event in the input table
@@ -407,25 +433,21 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         clipboardData = e.clipboardData || window.clipboardData;
                         pastedData = clipboardData.getData('Text');
 
-                        var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
-                        var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
-                        var numeric = new RegExp(/[0-9.]+/);
-                        
-                        var jsonLonLat = {};
-                        var fullLonLatMatch = pastedData.match(fullLonlat);
-                        for(var i = 0; i < fullLonLatMatch.length; i++) {
-                            jsonLonLat[i] = {lon:'',lat:''};
-                            var lonlatMatch = fullLonLatMatch[i].match(lonlat);
-                            var lonValue = lonlatMatch[0].match(numeric);
-                            var latValue = lonlatMatch[1].match(numeric);
-                            jsonLonLat[i].lon = lonValue[0];
-                            jsonLonLat[i].lat = latValue[0];
-                        }
+                        var dataJson = me.validateData(pastedData);
 
-                        me.populateTableWithData(e.target, jsonLonLat);
+                        me.populateTableWithData(e.target, dataJson);
 
                 });
             }
+        },
+        /**
+         * @method handleFile
+         * Pass this function as a callback to fileinput to get the file-data
+         */
+        handleFile: function( fileContent ) {
+            var dataJson = this.validateData( fileContent );
+            var insertTarget = jQuery('#oskari-coordinate-table').find('td').first();
+            this.populateTableWithData( insertTarget, dataJson );
         },
         /**
          * @method populateTableWithData
@@ -501,7 +523,18 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         helper.addMarkerForCoords(coords, me.startingSystemSelected);
                     }
                 })
-                });
+            });
+            jQuery(this.conversionContainer).find('.export').on("click", function () {
+                var rows = me.getElements().rows;
+                rows.each(function () {
+                    var lat = jQuery(this).find('.lat').html();
+                    var lon = jQuery(this).find('.lon').html();
+                    if ( lat != "  " && lon != "  " ) {
+                        var coords = { lon: lon, lat: lat };
+                        me.fileinput.exportToFile( coords, 'transformedcoordinates.txt' );
+                    }
+                })
+            });
             // jQuery('.removerow').on('click', function () {
                 
             // });
