@@ -526,14 +526,16 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             });
             jQuery(this.conversionContainer).find('.export').on("click", function () {
                 var rows = me.getElements().rows;
+                var arr = [];
                 rows.each(function () {
                     var lat = jQuery(this).find('.lat').html();
                     var lon = jQuery(this).find('.lon').html();
                     if ( lat != "  " && lon != "  " ) {
                         var coords = { lon: lon, lat: lat };
-                        me.fileinput.exportToFile( coords, 'transformedcoordinates.txt' );
+                        arr.push( JSON.stringify( coords ) );
                     }
-                })
+                });
+                me.fileinput.exportToFile( arr, 'transformedcoordinates.txt' );
             });
             // jQuery('.removerow').on('click', function () {
                 
