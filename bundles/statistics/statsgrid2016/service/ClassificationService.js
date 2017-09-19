@@ -164,6 +164,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     if(opts.mode ===  'discontinuous'){
                         ranges = stats.getInnerRanges();
                     }
+
+                    if(!ranges) {
+                        return;
+                    }
+
                     return me._getPointsLegend(ranges, opts, colors[0], counter,
                         {
                             separator: stats.separator,
