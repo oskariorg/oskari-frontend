@@ -270,7 +270,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     ranges[index] = start_value + statsOpts.separator + end_value;
                 });
             }
-console.log(opts.min, opts.max);
+
             ranges.forEach(function(range, index){
                 // Create point symbol
                 var point = pointSymbol.clone();
