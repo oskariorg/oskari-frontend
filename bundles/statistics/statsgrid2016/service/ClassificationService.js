@@ -207,7 +207,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             var svg = jQuery('<div>'+
                 '   <svg xmlns="http://www.w3.org/2000/svg">'+
                 '       <svg class="symbols"></svg>'+
-                '       <svg class="texts"></svg>'+
                 '   </svg>'+
                 '</div>');
 
@@ -232,6 +231,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             var fontSize = 10;
 
             var maxSize = me.getPixelForSize(ranges.length-1,
+                {
+                    min: opts.min,
+                    max: opts.max
+                }, {
+                    min: 0,
+                    max: opts.count-1
+                }
+            );
+
+            var minSize = me.getPixelForSize(0,
                 {
                     min: opts.min,
                     max: opts.max
@@ -271,6 +280,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 });
             }
 
+            var legendValuesPosition = function(size, index) {
+                var step = ((maxSize-1)-minSize/2)/(ranges.length-1);
+                var y = (ranges.length - index-1) * step;
+                if(y == 0) {
+                    y=1;
+                }
+                return {
+                    x1: maxSize/2,
+                    x2: maxSize + 10,
+                    y1: y,
+                    y2: y
+                };
+            };
+
             ranges.forEach(function(range, index){
                 // Create point symbol
                 var point = pointSymbol.clone();
@@ -308,21 +331,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 // Create texts and lines
                 var label = lineAndText.clone();
                 var line = label.find('line');
+                var valPos = legendValuesPosition(size,index);
                 line.attr({
-                    x1: maxSize/2,
-                    y1: y+1.5,
-                    x2: maxSize * 1.1,
-                    y2: y+1.5
+                    x1: valPos.x1,
+                    y1: valPos.y1,
+                    x2: valPos.x2,
+                    y2: valPos.y2,
+                    'shape-rendering': 'crispEdges'
                 });
 
                 var count = counter[index];
-                var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value + '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
+                var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value +
+                    '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
                 text.find('text').attr({
-                    x: maxSize * 1.105,
-                    y: y + 7
+                    x: valPos.x2 + 5,
+                    y: valPos.y2 + 7
                 });
                 label.find('g').append(text);
-                svg.find('svg.texts').append(label.html());
+                svg.find('svg.symbols').prepend(label.html());
             });
 
             block.append(svg);
