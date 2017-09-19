@@ -202,6 +202,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
+            var sb = Oskari.getSandbox();
+            var x = 0, y = 0;
+            var fontSize = 8;
+
             var legend = jQuery('<div class="statsgrid-svg-legend"></div>');
             var svg = jQuery('<svg xmlns="http://www.w3.org/2000/svg">'+
                 '   <svg class="symbols"></svg>'+
@@ -222,10 +226,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 '       </g>'+
                 '   </svg>'+
                 '</div>');
-
-            var sb = Oskari.getSandbox();
-            var x = 0, y = 0;
-            var fontSize = 8;
 
             var maxSize = me.getPixelForSize(ranges.length-1,
                 {
@@ -341,14 +341,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 });
 
                 var count = counter[index];
-                var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value +
-                    '<tspan font-size="'+fontSize+'" fill="#666" dx="4">('+count+')</tspan></text></svg>');
-                text.find('text').attr({
+                var text = start_value + statsOpts.legendSeparator + end_value;
+                if(start_value === end_value) {
+                    text = start_value;
+                }
+                var textSvgEl = jQuery('<svg>'+
+                '   <text fill="#000000" font-size="'+fontSize+'" letter-spacing="0.7">'+
+                    text + '<tspan font-size="'+fontSize+'" fill="#666" dx="4">('+count+')</tspan>' +
+                '   </text>'+
+                '</svg>');
+
+                textSvgEl.find('text').attr({
                     x: valPos.x2 + 4,
-                    y: valPos.y2 + fontSize/2,
-                    'letter-spacing': 1.05
+                    y: valPos.y2 + fontSize/2
                 });
-                label.find('g').append(text);
+
+                label.find('g').append(textSvgEl);
                 svg.find('svg.symbols').prepend(label.html());
             });
 
