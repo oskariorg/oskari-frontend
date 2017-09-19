@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
     this._element = null;
     this._rangeSlider = {
         min: 10,
-        max: 150,
+        max: 120,
         defaultValues: [10,100],
         step: 10,
         element: null
@@ -132,9 +132,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
 }, {
     _toggleMapStyle: function(mapStyle) {
         var me = this;
-
         var style = mapStyle || 'choropleth';
-
         me._element.find('.visible-map-style-points').hide();
         me._element.find('.visible-map-style-choropleth').hide();
         me._element.find('.visible-map-style-' + style).show();
@@ -241,7 +239,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
         var max = classification.max || me._rangeSlider.defaultValues[1];
         var updateClassification = false;
 
-        if(max-min < classification.count) {
+        if(max-min < classification.count * (me._rangeSlider.step || 1) ) {
             min = me._rangeSlider.defaultValues[0];
             max = me._rangeSlider.defaultValues[1];
             updateClassification = true;
@@ -335,8 +333,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function(s
                     var max = ui.values[1];
                     var el = jQuery(this);
                     var count = (!isNaN(el.attr('data-count'))) ? parseFloat(el.attr('data-count')) : 2;
-
-                    if(max-min >= count) {
+                    if(max-min >= count * (me._rangeSlider.step || 1)) {
                         return true;
                     }
                     return false;

@@ -202,13 +202,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         _getPointsLegend: function(ranges, opts, color, counter, statsOpts){
             var me = this;
-            var legend = jQuery('<div class="statsgrid-legend"></div>');
-            var block = jQuery('<div><div class="statsgrid-svg-legend"></div></div>');
-            var svg = jQuery('<div>'+
-                '   <svg xmlns="http://www.w3.org/2000/svg">'+
-                '       <svg class="symbols"></svg>'+
-                '   </svg>'+
-                '</div>');
+            var legend = jQuery('<div class="statsgrid-svg-legend"></div>');
+            var svg = jQuery('<svg xmlns="http://www.w3.org/2000/svg">'+
+                '   <svg class="symbols"></svg>'+
+                '</svg>');
 
             var pointSymbol = jQuery('<div>'+
                 '       <svg x="0" y="0">'+
@@ -228,7 +225,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             var sb = Oskari.getSandbox();
             var x = 0, y = 0;
-            var fontSize = 10;
+            var fontSize = 8;
 
             var maxSize = me.getPixelForSize(ranges.length-1,
                 {
@@ -250,7 +247,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
             );
 
-            svg.find('svg').first().attr('height', maxSize + fontSize);
+            svg.attr('height', maxSize + fontSize);
             svg.find('svg.symbols').attr('y', fontSize);
             svg.find('svg.texts').attr('y', fontSize);
             svg.find('svg.texts').attr('height', maxSize + fontSize);
@@ -285,6 +282,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 var y = (ranges.length - index-1) * step;
                 if(y == 0) {
                     y=1;
+                }
+                if(index == ranges.length-1) {
+                    y+=3;
                 }
                 return {
                     x1: maxSize/2,
@@ -342,17 +342,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 var count = counter[index];
                 var text = jQuery('<svg><text fill="#000000" font-size="'+fontSize+'">' + start_value + statsOpts.legendSeparator + end_value +
-                    '<tspan font-size="10" fill="#666" dx="4">('+count+')</tspan></text></svg>');
+                    '<tspan font-size="'+fontSize+'" fill="#666" dx="4">('+count+')</tspan></text></svg>');
                 text.find('text').attr({
-                    x: valPos.x2 + 5,
-                    y: valPos.y2 + 7
+                    x: valPos.x2 + 4,
+                    y: valPos.y2 + fontSize/2,
+                    'letter-spacing': 1.05
                 });
                 label.find('g').append(text);
                 svg.find('svg.symbols').prepend(label.html());
             });
 
-            block.append(svg);
-            legend.append(block);
+            legend.append(svg);
             return legend;
         },
         /**
