@@ -118,21 +118,12 @@ function () {
             sandbox.request(this, request);
             me.createUi();
         } else {
-             me.createPlugin();
+            
         }
     },
     stop: function () {
         this.sandbox = null;
         this.started = false;
-    },
-    createPlugin: function() {
-        var conf = this.conf || {};
-
-        var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinateconversion.plugin.ConversionPlugin', conf, this.plugins);
-
-        this._mapmodule.registerPlugin(plugin);
-        this._mapmodule.startPlugin(plugin);
-        this.plugin = plugin;
     },
     getPlugins: function() {
         return this.plugins;
