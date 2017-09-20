@@ -100,8 +100,13 @@ Fixed followings in point map style:
 - maked smaller point more smaller
 - legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
 - legend: fixed distinct legend value labels
-- ui improvements: moved show values checkbox before color selection
-- ui improvements: layer opacity value are now showed opacity selectbox
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
 
 ### mapmodule
 
