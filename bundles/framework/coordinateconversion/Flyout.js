@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
     function( instance ) {
         var me = this;
         me.instance = instance;
-        me.loc = this.instance.getLocalization("flyout");
+        me.loc = this.instance.getLocalization();
         me.container = null;
         this.conversionView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.conversion', me.instance);
         this.mapselectView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.mapselect', me.instance);
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
             return 'Oskari.framework.bundle.coordinateconversion.Flyout';
         },
         getTitle: function() {
-            return this.loc.flyoutTtitle;
+            return this.loc.title;
         },
         setEl: function(el, width, height) {
             this.container = el[0];
