@@ -23,7 +23,7 @@ Add specs to SpecRunner.html
 
 ## Running the tests
 
-SpecRunner.html runs the defined specs.
+SpecRunner.html runs the defined specs. Open it from server (for example http://localhost:8080/Oskari/tests/rpc/SpecRunner.html).
 
 ### All tests
 
