@@ -95,7 +95,22 @@ Known issues:
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
 
+Fixed followings in point map style:
+- allowed change classify (distinct/discontinous)
+- maked smaller point more smaller
+- legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
+- legend: fixed distinct legend value labels
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
+
 ### mapmodule
+
+Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
 
 Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
 

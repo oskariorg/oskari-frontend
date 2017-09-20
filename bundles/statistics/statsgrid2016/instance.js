@@ -208,7 +208,10 @@ Oskari.clazz.define(
             },
             FeatureEvent: function(evt) {
                 this.statsService.notifyOskariEvent(evt);
-            }
+            },
+            AfterChangeMapLayerOpacityEvent: function (evt) {
+                 this.statsService.notifyOskariEvent(evt);
+             }
         },
 
         /**
