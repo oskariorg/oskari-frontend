@@ -29,6 +29,7 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
+- image.sizePx: image icon size in pixels. Used this is size not defined (size is used for Oskari icon size calculation)
 
 ## 1.42
 
