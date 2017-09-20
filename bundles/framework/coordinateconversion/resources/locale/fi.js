@@ -52,7 +52,22 @@ Oskari.registerLocalization(
             "utils": {
                 "clear": "Tyhjennä taulukot",
                 "show": "Näytä sijainnit kartalla",
-                "export": "Vie tulokset tiedostoon"
+                "export": "Vie tulokset tiedostoon",
+                "cancel": "Peruuta"
+            },
+            "filesetting": {
+                "export": {
+                    "title": "Aineiston muodostaminen",
+                    "filename": "Tiedoston nimi",
+                    "format": "Kulman muoto/yksikkö",
+                    "decimalseparator": "Desimaalierotin",
+                    "headercount": "Otsakerivien määrä",
+                    "reversecoords": "Koordinaatit käänteisesti",
+                    "id": "Käytä tunnistetta"   
+                },
+                "import": {
+
+                }
             }
         }
     }

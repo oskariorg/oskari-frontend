@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect
                 me.instance.plugins['Oskari.userinterface.Flyout'].conversionView.addToInputTable(me.mapcoords);
                 me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
                 me.mapcoords = [];
-            })
+            });
 
             dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
             dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);

@@ -9,6 +9,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.conversionContainer = null
         me.startingSystemSelected = false;
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
+        me.file = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.filesettings', me.instance, me.loc);
+        me.file.create();
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
@@ -140,6 +142,13 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
             }
             wrapper.find('.datasource-info').append( fileInputElement );
+            
+            // var file = me.fileinputTemplate;
+            // file.create();
+            // var exportfile = file.getExportTemplate();
+            // var importfile = file.getImportTemplate();
+            // wrapper.append(importfile);
+            // wrapper.append(exportfile);
 
             wrapper.append(inputcoordinatefield);
             wrapper.append(conversionbutton);
@@ -389,19 +398,36 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
             var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
             var numeric = new RegExp(/[0-9.]+/);
-            
+            var numericMatcher = new RegExp(/([0-9.])+\s*,?/g);
+            var whitespaceseparatednum = new RegExp(/^[0-9.]+\s[0-9.]+,/gmi)
+
+            var getMatchedValues = function( matchedData, useLonLatMatcher ) {
+                var jsonLonLat = {};
+                for(var i = 0; i < matchedData.length; i++) {
+                    jsonLonLat[i] = {lon:'',lat:''};
+
+                    if( useLonLatMatcher ) {
+                        var match = matchedData[i].match(lonlat);
+                    } else {
+                        var match = matchedData[i].match(numericMatcher);
+                    }
+                    var lonValue = match[0].match(numeric);
+                    var latValue = match[1].match(numeric);
+                    jsonLonLat[i].lon = lonValue[0];
+                    jsonLonLat[i].lat = latValue[0];
+                }
+                return jsonLonLat;
+            };
             var jsonLonLat = {};
             var fullLonLatMatch = data.match(fullLonlat);
-            for(var i = 0; i < fullLonLatMatch.length; i++) {
-                jsonLonLat[i] = {lon:'',lat:''};
-                var lonlatMatch = fullLonLatMatch[i].match(lonlat);
-                var lonValue = lonlatMatch[0].match(numeric);
-                var latValue = lonlatMatch[1].match(numeric);
-                jsonLonLat[i].lon = lonValue[0];
-                jsonLonLat[i].lat = latValue[0];
+            var numMatch = data.match(whitespaceseparatednum);
+            if( fullLonLatMatch !== null ) {
+                return getMatchedValues( fullLonLatMatch, true );
+            } else {
+                if( numMatch !== null ) {
+                    return getMatchedValues( numMatch, false );
+                }
             }
-
-            return jsonLonLat;
         },
         /**
          * @method handleClipboard
@@ -525,6 +551,21 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 })
             });
             jQuery(this.conversionContainer).find('.export').on("click", function () {
+                var exportfile = me.file.getElement().export;
+                me.showDialogue( exportfile );
+            });
+        },
+        showDialogue: function( content ) {
+            var jc = jQuery(content);
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.makeDraggable();
+            dialog.createCloseIcon();
+            dialog.show(this.loc.filesetting.export.title, jc);
+            this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent() );
+
+        },
+        exportFile: function ( settings ) {
+            var me = this;
                 var rows = me.getElements().rows;
                 var arr = [];
                 rows.each(function () {
@@ -534,12 +575,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         var coords = { lon: lon, lat: lat };
                         arr.push( JSON.stringify( coords ) );
                     }
-                });
-                me.fileinput.exportToFile( arr, 'transformedcoordinates.txt' );
-            });
-            // jQuery('.removerow').on('click', function () {
-                
-            // });
+                }); 
+            me.fileinput.exportToFile( arr, settings.filename+'.txt' );
+
         },
         addToInputTable: function (coords) {
             var table = this.getElements().table;
