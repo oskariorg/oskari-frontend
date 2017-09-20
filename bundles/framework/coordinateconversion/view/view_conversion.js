@@ -142,13 +142,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
             }
             wrapper.find('.datasource-info').append( fileInputElement );
-            
-            // var file = me.fileinputTemplate;
-            // file.create();
-            // var exportfile = file.getExportTemplate();
-            // var importfile = file.getImportTemplate();
-            // wrapper.append(importfile);
-            // wrapper.append(exportfile);
 
             wrapper.append(inputcoordinatefield);
             wrapper.append(conversionbutton);
@@ -211,9 +204,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         dropdown.css( { width:'170px', float:'right' } );
                         select.adjustChosen();
                         select.selectFirstValue();
-                        // if(index > 0) {
-                        //     dropdown.parent().addClass('margintop');
-                        // }
+
                         dropdowns.push( dropdown );
                         selectInstances.push( select );
                      }
@@ -584,10 +575,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this._template.tablerow( { coords: coords[i] } );
                 table.find('tr:first').after(row);
-                //append the click event to the new rows aswell
-                // jQuery('.removerow').on('click', function () {
-                //     jQuery(this).parent().parent().remove();
-                // }); 
             }
             table.trigger('rowCountChanged');
         },

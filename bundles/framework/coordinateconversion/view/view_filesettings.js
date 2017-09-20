@@ -64,7 +64,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.filesetti
                                                     });
             var fileimport = this._template.import();
             this.setElement( { import: fileimport, export: fileexport } );
-            // this.handleButtons();
         },
         /**
          * @method getExportSettings
