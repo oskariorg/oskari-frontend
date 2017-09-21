@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Nyaste",
-                "stats": "Vektorlager"
+                "vectors": "Vektorlager"
             },
             "tooltips": {
                 "newest": "Visa de ## nyaste kartlager",
-                "stats": "Visa endast vektorlager",
+                "vectors": "Visa endast vektorlager",
                 "remove": "Ta bort filter"
             }
         },

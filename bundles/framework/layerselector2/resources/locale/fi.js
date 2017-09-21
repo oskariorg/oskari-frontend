@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusimmat",
-                "stats": "Vektoritasot"
+                "vectors": "Vektoritasot"
             },
             "tooltips": {
                 "newest": "Näytä ## uusinta karttatasoa",
-                "stats": "Näytä vain vektoritasot",
+                "vectors": "Näytä vain vektoritasot",
                 "remove": "Poista suodatus"
             }
         },

@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Novejši",
-                "stats": "Vektorski sloji"
+                "vectors": "Vektorski sloji"
             },
             "tooltips": {
                 "newest": "Prikaži ## novejše sloje karte",
-                "stats": "Prikaži samo vektorske sloje",
+                "vectors": "Prikaži samo vektorske sloje",
                 "remove": "Odstrani filter"
             }
         },

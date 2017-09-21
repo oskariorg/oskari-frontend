@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Plus récent",
-                "stats": "Couches vecteur"
+                "vectors": "Couches vecteur"
             },
             "tooltips": {
                 "newest": "Montrer les ## couches cartographiques les plus récentes",
-                "stats": "Ne montrer que les couches vecteur",
+                "vectors": "Ne montrer que les couches vecteur",
                 "remove": "Supprimer le filtre"
             }
         },
