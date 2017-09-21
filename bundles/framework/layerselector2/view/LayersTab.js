@@ -167,7 +167,6 @@ Oskari.clazz.define(
                 'oskari_layerselector2_search_input_tab_' + oskarifieldId
             );
 
-
             me.accordion = Oskari.clazz.create(
                 'Oskari.userinterface.component.Accordion'
             );
@@ -277,6 +276,8 @@ Oskari.clazz.define(
                 group.layerListPanel = groupPanel;
 
                 groupContainer = groupPanel.getContainer();
+                groupContainer.hide();
+                var containers = jQuery();
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
                     layerWrapper =
@@ -287,10 +288,11 @@ Oskari.clazz.define(
                             localization
                         );
                     layerContainer = layerWrapper.getContainer();
-                    groupContainer.append(layerContainer);
-
+                    containers.add(layerContainer);
                     me.layerContainers[layer.getId()] = layerWrapper;
                 }
+                groupContainer.append(containers);
+                groupContainer.show();
                 me.accordion.addPanel(groupPanel);
             }
 

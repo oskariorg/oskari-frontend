@@ -340,6 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         populateLayers: function () {
             //"use strict";
+            var me = this;
             var sandbox = this.instance.getSandbox(),
                 // populate layer list
                 mapLayerService = sandbox.getService(
@@ -360,6 +361,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                         layersCopy,
                         tab.groupingMethod
                     );
+
+                    me._counterLog++;
                     tab.showLayerGroups(groups);
                 }
             }
@@ -395,8 +398,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                         groupAttr
                     );
-
-
                     groupList.push(group);
                 }
 
@@ -698,7 +699,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 });
             });
 
-            me.activateFilter();
+            if(!notDeactivateThisFilter) {
+                me.activateFilter();
+            }
         }
     }, {
 

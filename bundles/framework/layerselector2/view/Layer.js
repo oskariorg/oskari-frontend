@@ -25,7 +25,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     '   <div class="layer-info"></div>'+
                     '</div>' +
                     '<div class="layer-title"></div>' +
-        //'<div class="layer-keywords"></div>' +
         '</div>',
         /**
          * @method getId
