@@ -244,9 +244,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @param  {String} selectedFilter selected filter, can be a 'vectors', 'newest' or 'publishable'
          */
         enableFilter: function(selectedFilter) {
-            // FIXME: Fixe jQuery selectors more specific
+            // Trigger first founded tab filter --> this activate/deactivate filterings also another tabs
             var me = this,
-                filterButton = jQuery('.layer-filter .filter-'+selectedFilter).first(),
+                filterContainer = (me.layerTabs.length>0) ? me.layerTabs[0].getTabPanel().getContainer().find('.layerselector2-layer-filter') : jQuery('<div></div>'),
+                filterButton = filterContainer.find('.filter[data-filter='+selectedFilter+']'),
                 filterIcon = filterButton.find('.filter-icon'),
                 active = jQuery('.layer-filter').find('.filter-icon.active');
 
@@ -292,6 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 'Oskari.userinterface.component.TabContainer'
             );
 
+            // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
                 if(me._currentFilter) {
                     me.activateFilter(me._currentFilter);
@@ -302,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 tab = me.layerTabs[i];
                 me.tabContainer.addPanel(tab.getTabPanel());
             }
-            //me.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
+
             me.tabContainer.addTabChangeListener(
                 function (previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
