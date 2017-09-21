@@ -361,8 +361,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                         layersCopy,
                         tab.groupingMethod
                     );
-
-                    me._counterLog++;
                     tab.showLayerGroups(groups);
                 }
             }
