@@ -11,6 +11,18 @@ Some extra tags:
 
 ## 1.44
 
+### [mod] [breaking] ShowFilteredLayerListRequest
+
+Changed ``stats`` filter name to ``vectors`` (because it's filter vector layers).
+```javascript
+var sb = Oskari.getSandbox();
+var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
+if (reqBuilder) {
+    var request = reqBuilder(null, 'vectors', false);
+    sb.request('MainMapModule', request);
+}
+```
+
 #### [mod] [breaking] ProgressEvent
 
 The event API itself is unchanged, but the only core bundle that sent out the event was not using it according to the API docs. You can ignore this change if your code does not expect ProgressEvent's getID() method to always return string 'maplayer'.

@@ -2,6 +2,20 @@
 
 ## 1.44.0
 
+### layerselector2
+
+Fixed filter buttons to show each tabs. Also fixed undefined error for ShowFilteredLayerListRequest.
+
+Changed ``stats`` filter name to ``vectors`` (because it's filter vector layers).
+```javascript
+var sb = Oskari.getSandbox();
+var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
+if (reqBuilder) {
+    var request = reqBuilder(null, 'vectors', false);
+    sb.request('MainMapModule', request);
+}
+```
+
 ### Timeseries improvements
 
 Animation now waits for frame to load before advancing.
