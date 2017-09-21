@@ -11,10 +11,11 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.file = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.filesettings', me.instance, me.loc);
         me.file.create();
+        me.numrows = 1;
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
-            coordinatesystem: _.template(' <div class="coordinateconversion-csystem"> </br> ' +
+            coordinatesystem: _.template(' <div class="coordinateconversion-csystem">' +
                                     '<h5><%= title %></h5>'+
                                     '<div class="geodetic-datum"><b class="dropdown_title"><%= geodetic_datum %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div> </div> </br> ' +
                                     '<div class="coordinate-system"><b class="dropdown_title"><%= coordinate_system %></b> <a href="#"><div class="infolink"></div></a> <div class="select"></div>  </div> </br> ' +
@@ -40,6 +41,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                                     '</div>'
                                     ),  
             conversionfield: jQuery('<div class="coordinateconversion-field"></div>'),
+            rowcounter: _.template('<div class="rowcount"><span id="num"></span> <%= rows %> </div>'),
             oskari_input_table_content: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
                                         '<div class="oskari-table-content">'+
@@ -124,6 +126,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var utilbuttons = this._template.utilbuttons({ clear: this.loc.utils.clear,
                                                             show: this.loc.utils.show,
                                                             fileexport: this.loc.utils.export });
+            var rowcounter = this._template.rowcounter({ rows: this.loc.utils.rows })
                                                             
             var wrapper = me._template.wrapper;
             wrapper.append(coordinatesystem);
@@ -142,8 +145,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
             }
             wrapper.find('.datasource-info').append( fileInputElement );
-
             wrapper.append(inputcoordinatefield);
+            wrapper.find('.coordinatefield-input h5').append(rowcounter);
             wrapper.append(conversionbutton);
             wrapper.append(resultcoordinatefield);
             // wrapper.append(this._template.conversionfield);
@@ -157,12 +160,15 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
            wrapper.find('#targetcoordsystem').find('.select').each(function (index) {
                 jQuery(this).append(target_instance.dropdowns[index]);
             });
+
+            jQuery(container).append(wrapper);
+
             var coords = {} 
             for( var i = 0; i < 6; i++ ) {
                 wrapper.find("#oskari-coordinate-table").append(this._template.tablerow( { coords: coords } ) );
                 wrapper.find("#oskari-coordinate-table-result").append(this._template.tablerow( { coords: coords } ) );
+                me.updateRowCount();
             }
-            jQuery(container).append(wrapper);
 
             var inputValues = this.selectGetValue(input_instance, false);
             var targetValues = this.selectGetValue(target_instance, true);
@@ -381,6 +387,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             jQuery(tableHeader).insertBefore(jQuery(this.conversionContainer).find(".oskari-table-content-target"));
             }
         },
+        updateRowCount: function () {
+            jQuery(this.conversionContainer).find("#num").text(this.numrows++);
+        },
         /**
          * @method validateData
          * check different conditions if data matches to them
@@ -477,6 +486,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 if (data.hasOwnProperty(key)) {
                     var row = this._template.tablerow( { coords: data[key] } );
                     jQuery(cell).parent().after(row);
+                    this.updateRowCount();
                 }
             }
             table.trigger('rowCountChanged');
@@ -491,8 +501,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             var clipboardInfo = jQuery(me.conversionContainer).find('.coordinateconversion-clipboardinfo');
             var mapInfo = jQuery(me.conversionContainer).find('.coordinateconversion-mapinfo');
             var fileInput = jQuery(me.conversionContainer).find('.oskari-fileinput');
+            var importfile = me.file.getElement().import;
             jQuery('input[type=radio][name=load]').change(function() {
                 if (this.value == '1') {
+                    me.showDialogue( importfile, false );
                     clipboardInfo.hide();
                     fileInput.show();
                     me.selectFromMap = false;
@@ -543,16 +555,23 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             });
             jQuery(this.conversionContainer).find('.export').on("click", function () {
                 var exportfile = me.file.getElement().export;
-                me.showDialogue( exportfile );
+                me.showDialogue( exportfile, true );
             });
         },
-        showDialogue: function( content ) {
+        showDialogue: function( content, shouldExport ) {
             var jc = jQuery(content);
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.makeDraggable();
             dialog.createCloseIcon();
-            dialog.show(this.loc.filesetting.export.title, jc);
-            this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent() );
+            if( shouldExport ) {
+                dialog.show(this.loc.filesetting.export.title, jc);
+                this.file.getExportSettings( this.exportFile.bind(this), dialog.getJqueryContent(), dialog );
+            } else {
+                dialog.show(this.loc.filesetting.import.title, jc);
+                this.file.getImportSettings(  this.importSettings.bind(this), dialog.getJqueryContent(), dialog );
+            }
+        },
+        importSettings: function ( settings ) {
 
         },
         exportFile: function ( settings ) {
@@ -575,6 +594,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this._template.tablerow( { coords: coords[i] } );
                 table.find('tr:first').after(row);
+                me.updateRowCount();
             }
             table.trigger('rowCountChanged');
         },
