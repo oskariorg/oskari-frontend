@@ -1,6 +1,6 @@
 # ShowFilteredLayerListRequest
 
-Layerlist showed layers can be filtered by sending ShowFilteredLayerListRequest. The request must contain the filter function 
+Layerlist showed layers can be filtered by sending ShowFilteredLayerListRequest. The request must contain the filter function
 or selected filter as well as optional paramater, which is open layer list.
 
 ## Examples
@@ -24,12 +24,12 @@ if (reqBuilder) {
 }
 ```
 
-Filter layerlist to show only analysable layers using the code below:
+Filter layerlist to show only vector layers using the code below:
 ```javascript
 var sb = Oskari.getSandbox();
 var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
 if (reqBuilder) {
-    var request = reqBuilder(null, 'stats', false);
+    var request = reqBuilder(null, 'vectors', false);
     sb.request('MainMapModule', request);
 }
 ```
