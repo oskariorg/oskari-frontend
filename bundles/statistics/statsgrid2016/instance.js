@@ -191,6 +191,9 @@ Oskari.clazz.define(
              *
              */
             MapLayerEvent: function (event) {
+                if(!this.getTile()) {
+                    return;
+                }
                 // Enable tile when stats layer is available
                 this.getTile().setEnabled(this.hasData());
                 // setup tools for new layers
