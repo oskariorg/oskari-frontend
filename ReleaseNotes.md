@@ -16,7 +16,7 @@ if (reqBuilder) {
 }
 ```
 
-Fastened layers filterings (before made duplicate layer rendering).
+Fastened layers filtering (before made duplicate layer rendering).
 
 ### Timeseries improvements
 
