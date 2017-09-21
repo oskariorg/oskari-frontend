@@ -469,21 +469,33 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return  layer._created !== null && !isNaN(layer._created.getTime());
             });
 
+            var layersWhereNoCreatedDate = jQuery.grep(this._loadedLayersList, function(layer) {
+                return  layer._created === null || (layer._created !== null && isNaN(layer._created.getTime()));
+            });
+
             var newestToOldestLayers = layersWhereCreatedDate.sort(function(a,b){
-                if(a.getCreated()>b.getCreated()) {
+                if(a.getCreated() > b.getCreated()) {
                     return -1;
-                } else if(a.getCreated()<b.getCreated()) {
+                } else if(a.getCreated() < b.getCreated()) {
                     return 1;
                 } else {
                     return 0;
                 }
-
             });
 
             for (i = 0; i<newestToOldestLayers.length; i++) {
                 list.push(newestToOldestLayers[i]);
                 if(list.length === count) {
                     break;
+                }
+            }
+
+            if(list.length < count) {
+                for (i = 0; i<layersWhereNoCreatedDate.length; i++) {
+                    list.push(layersWhereNoCreatedDate[i]);
+                    if(list.length === count) {
+                        break;
+                    }
                 }
             }
 
