@@ -16,6 +16,8 @@ if (reqBuilder) {
 }
 ```
 
+Fastened layers filterings (before made duplicate layer rendering).
+
 ### Timeseries improvements
 
 Animation now waits for frame to load before advancing.
