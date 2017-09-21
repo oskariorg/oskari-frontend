@@ -1,5 +1,8 @@
 .oskari-flyoutcontentcontainer{
-    max-height: 1000px !important;
+    max-height: 875px !important;
+}
+.coordinateconversion-flyout {
+    top: 0 !important;
 }
 .conversionwrapper {
     max-width: 50em !important;
