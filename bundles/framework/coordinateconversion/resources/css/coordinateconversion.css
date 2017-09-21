@@ -71,7 +71,7 @@
 .coordinateconversion-datasource {
     width: 100%;
 }
-.export {
+.export, .rowcount {
     float:right;
 }
 
