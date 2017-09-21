@@ -277,7 +277,6 @@ Oskari.clazz.define(
 
                 groupContainer = groupPanel.getContainer();
                 groupContainer.hide();
-                var containers = jQuery();
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
                     layerWrapper =
@@ -288,10 +287,9 @@ Oskari.clazz.define(
                             localization
                         );
                     layerContainer = layerWrapper.getContainer();
-                    containers.add(layerContainer);
+                    groupContainer.append(layerContainer);
                     me.layerContainers[layer.getId()] = layerWrapper;
                 }
-                groupContainer.append(containers);
                 groupContainer.show();
                 me.accordion.addPanel(groupPanel);
             }
