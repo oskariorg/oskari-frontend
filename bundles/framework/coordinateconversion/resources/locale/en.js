@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "coordinateconversion",
     "value": {
-    "title": "Coordinateconversion",
+        "title": "Coordinateconversion",
         "flyout": {
         "title": {
             "input": "Lähtötiedot",
@@ -52,7 +52,31 @@ Oskari.registerLocalization(
             "utils": {
                 "clear": "Tyhjennä taulukot",
                 "show": "Näytä sijainnit kartalla",
-                "export": "Vie tulokset tiedostoon"
+                "export": "Vie tulokset tiedostoon",
+                "done": "Valmis",
+                "cancel": "Peruuta",
+                "rows": "Riviä"
+            },
+            "filesetting": {
+                "general": {
+                    "degree": "Aste",
+                    "gradian": "Gooni (graadi)",
+                    "radian": "Radiaani",
+                    "point": "Piste",
+                    "comma": "Pilkku",
+                    "format": "Kulman muoto/yksikkö",
+                    "decimalseparator": "Desimaalierotin",
+                    "headercount": "Otsakerivien määrä",
+                    "reversecoords": "Koordinaatit käänteisesti",
+                    "id": "Käytä tunnistetta"   
+                },
+                "export": {
+                    "title": "Aineiston muodostaminen",
+                    "filename": "Tiedoston nimi",
+                },
+                "import": {
+                    "title": "Lähtöaineiston ominaisuudet",
+                }
             }
         }
     }
