@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
 
             if(request.getFilterFunction()) {
                 layerSelectorFlyout.setLayerListFilteringFunction(request.getFilterFunction());
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [layerSelector, 'attach']);
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [layerSelectorFlyout, 'attach']);
                 layerSelectorFlyout.populateLayers();
                 layerSelectorFlyout.enableFilter(null);
             } else if(request.getSelectedFilter()){
