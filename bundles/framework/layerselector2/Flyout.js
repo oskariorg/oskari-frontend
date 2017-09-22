@@ -128,16 +128,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             me.addFilterTool(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount),
-                function(layer){
-                    if(me._newestLayers === null) {
-                        me._newestLayers = mapLayerService.getNewestLayers(me._filterNewestCount);
-                    }
-                    var ids = [];
-                    jQuery(me._newestLayers).each(function(index, layer){
-                       ids.push(layer.getId());
-                    });
-                    return (jQuery.inArray(layer.getId(), ids) !== -1);
-                },
                 'layer-newest',
                 'layer-newest-disabled',
             'newest');
@@ -162,9 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             me.addFilterTool(loc.buttons.featuredata,
                 loc.tooltips.featuredata,
-                function(layer){
-                    return (layer.hasFeatureData());
-                },
                 'layer-stats',
                 'layer-stats-disabled',
             'featuredata');
@@ -367,7 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 mapLayerService = sandbox.getService(
                     'Oskari.mapframework.service.MapLayerService'
                 ),
-                layers = mapLayerService.getAllLayers(),
+                layers = (me._currentFilter) ? mapLayerService.getFilteredLayers(me._currentFilter) : mapLayerService.getAllLayers(),
                 i,
                 tab,
                 layersCopy,
@@ -420,9 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     groupList.push(group);
                 }
 
-                if (!me.layerListFilteringFunction || (me.layerListFilteringFunction && me.layerListFilteringFunction(layer))) {
-                    group.addLayer(layer);
-                }
+                group.addLayer(layer);
             }
             var sortedGroupList = jQuery.grep(groupList, function(group,index){
                 return group.getLayers().length > 0;
@@ -538,30 +523,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * @method  @public setLayerListFilteringFunction set layer list function
-         * @param {Function} layerListFilteringFunction layer list filter function
-         */
-        setLayerListFilteringFunction: function(layerListFilteringFunction) {
-            this.layerListFilteringFunction = layerListFilteringFunction;
-        },
-
-        /**
          * Add filter tool to layer list.
          * @method  @public addFilterTool
          * @param {String} toolText             tool button text
          * @param {String} tooltip              tool tooltip text
-         * @param {Function} filterFunction     filter function
          * @param {String} iconClassActive      tool icon active class
          * @param {String} iconClassDeactive    tool icon deactive class
          * @param {String} filterName           filter name
          */
-        addFilterTool: function(toolText, tooltip, filterFunction, iconClassActive, iconClassDeactive, filterName) {
+        addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
             var me = this;
 
             var filter = {
                 toolText: toolText,
                 tooltip: tooltip,
-                filterFunction: filterFunction,
                 iconClassActive: iconClassActive,
                 iconClassDeactive: iconClassDeactive,
                 filterName: filterName
@@ -659,35 +634,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * Get currently selected filter function
-         * @method  @private _getFilterFunction
-         * @param  {String} filterName filter name
-         * @return {Function}  currently selected filter function. If no filter or filter has no filter function then return default all layers filter function.
-         */
-        _getFilterFunction:  function(filterName) {
-            var me = this;
-
-            // Default filter function shows all layers
-            var filterFunction = function(){
-                return true;
-            };
-
-            // If founded current filter then use this filter function
-            var currentFilter = me._getCurrentFilter(filterName);
-            if(currentFilter) {
-                filterFunction = currentFilter.filterFunction;
-            }
-            return filterFunction;
-        },
-
-        /**
          * Activate selected filter.
          * @method @public activateFilter
          * @param  {Function} filterName activate filter name
          */
         activateFilter: function(filterName){
             var me = this;
-            me.setLayerListFilteringFunction(me._getFilterFunction(filterName));
             me._currentFilter = filterName;
             me.populateLayers();
         },
