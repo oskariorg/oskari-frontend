@@ -9,7 +9,7 @@ or selected filter as well as optional paramater, which is open layer list.
 
 Default filter are:
 * newest, this shows 20 newest layers on layerlist
-* stats , this shows only analysable layers on layerlist
+* featuredata , this shows only featuredata layers on layerlist
 * publishable, this shows only publishable layers on layerlist
 
 You can use default filters only when filter buttons are showed on layerlist.
@@ -21,7 +21,7 @@ Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'ne
 
 Filter layerlist to show only vector layers using the code below:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata', false]);
 ```
 
 Filter layerlist to show only publishable layers using the code below:

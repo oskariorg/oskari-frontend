@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Najnovší",
-                "vectors": "Vrstvy vektorov"
+                "featuredata": "Vrstvy vektorov"
             },
             "tooltips": {
                 "newest": "Zobraz ## najnovšie mapové vrstvy",
-                "vectors": "Zobraz iba vrstvy vektorov",
+                "featuredata": "Zobraz iba vrstvy vektorov",
                 "remove": "Odstrániť filter"
             }
         },

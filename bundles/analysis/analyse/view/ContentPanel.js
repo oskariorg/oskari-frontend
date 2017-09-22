@@ -968,7 +968,7 @@ Oskari.clazz.define(
                 var requestName = 'ShowFilteredLayerListRequest';
                 me.sandbox.postRequestByName(
                     requestName,
-                    [null, 'vectors']
+                    [null, 'featuredata']
                 );
                 clearTimeout(this._flyoutTimeOut);
                 this._flyoutTimeOut = setTimeout(function(){

@@ -13,7 +13,7 @@ Some extra tags:
 
 ### [mod] [breaking] ShowFilteredLayerListRequest
 
-Changed ``stats`` filter name to ``vectors`` (because it's actually filter vector layers).
+Changed ``stats`` filter name to ``featuredata`` (because it's actually filter vector layers).
 
 Before:
 ```javascript
@@ -22,7 +22,7 @@ Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'st
 
 After:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors']);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
 ```
 
 #### [mod] [breaking] ProgressEvent

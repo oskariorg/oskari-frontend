@@ -111,8 +111,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             // Add newest filter
             me.addNewestFilter();
 
-            // Add featuredata filter // stats name
-            me.addVectorsFilter();
+            // Add featuredata filter
+            me.addFeaturedataFilter();
         },
 
         /**
@@ -153,21 +153,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * Add stats filter.
-         * @method  @public addVectorsFilter
+         * Add featuredata filter.
+         * @method  @public addFeaturedataFilter
          */
-        addVectorsFilter: function(){
+        addFeaturedataFilter: function(){
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
-            me.addFilterTool(loc.buttons.vectors,
-                loc.tooltips.vectors,
+            me.addFilterTool(loc.buttons.featuredata,
+                loc.tooltips.featuredata,
                 function(layer){
                     return (layer.hasFeatureData());
                 },
                 'layer-stats',
                 'layer-stats-disabled',
-            'vectors');
+            'featuredata');
         },
 
         /**
@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         /**
          * Hande selected filter request
          * @method  public enableFilter
-         * @param  {String} selectedFilter selected filter, can be a 'vectors', 'newest' or 'publishable'
+         * @param  {String} selectedFilter selected filter, can be a 'featuredata', 'newest' or 'publishable'
          */
         enableFilter: function(selectedFilter) {
             var me = this;

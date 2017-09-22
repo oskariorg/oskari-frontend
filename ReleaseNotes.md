@@ -6,9 +6,9 @@
 
 Fixed filter buttons to show each tabs. Also fixed undefined error for ShowFilteredLayerListRequest.
 
-Changed ``stats`` filter name to ``vectors`` (because it's filter vector layers).
+Changed ``stats`` filter name to ``featuredata`` (because it's filter vector layers).
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors']);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
 ```
 
 Filtering performance has been improved.
