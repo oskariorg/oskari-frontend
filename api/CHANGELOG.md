@@ -17,22 +17,12 @@ Changed ``stats`` filter name to ``vectors`` (because it's actually filter vecto
 
 Before:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'stats', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'stats']);
 ```
 
 After:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'vectors', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors']);
 ```
 
 #### [mod] [breaking] ProgressEvent
