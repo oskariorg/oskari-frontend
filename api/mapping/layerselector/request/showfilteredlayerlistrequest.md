@@ -16,62 +16,37 @@ You can use default filters only when filter buttons are showed on layerlist.
 
 Filter layerlist to show only newest layers using the code below:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'newest', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'newest', false]);
 ```
 
 Filter layerlist to show only vector layers using the code below:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'vectors', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors', false]);
 ```
 
 Filter layerlist to show only publishable layers using the code below:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'publishable', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'publishable', false]);
 ```
 
 ### Create own filters
 
 Create own filter (this we wanted to show only layers with name start 'a' or 'A') using the code below:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(function(layer){
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer){
         var name = layer.getName().toLowerCase(),
             nameFirstChar = name.substring(0,1);
         return (nameFirstChar === 'a');
-    }, null, false);
-    sb.request('MainMapModule', request);
-}
+    }, null, false]);
 ```
 
 ### Open layerlist when sending request
 
 Open layerlist when sending request (same code as upper but changed latest param from false to true) using the code below:
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(function(layer){
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer){
         var name = layer.getName().toLowerCase(),
             nameFirstChar = name.substring(0,1);
         return (nameFirstChar === 'a');
-    }, null, true);
-    sb.request('MainMapModule', request);
-}
+    }, null, true]);
 ```

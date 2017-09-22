@@ -8,15 +8,10 @@ Fixed filter buttons to show each tabs. Also fixed undefined error for ShowFilte
 
 Changed ``stats`` filter name to ``vectors`` (because it's filter vector layers).
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
-if (reqBuilder) {
-    var request = reqBuilder(null, 'vectors', false);
-    sb.request('MainMapModule', request);
-}
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'vectors']);
 ```
 
-Fastened layers filtering (before made duplicate layer rendering).
+Filtering performance has been improved.
 
 ### Timeseries improvements
 
