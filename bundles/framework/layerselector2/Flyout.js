@@ -239,17 +239,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
         },
         /**
+         * Get seleted tab panel
+         * @method  @public getSelectedTabPanel
+         * @return {Object} tab panel jQuery element
+         */
+        getSelectedTabPanel: function(){
+            var me = this;
+            var selectedTabPanel = null;
+            me.layerTabs.forEach(function(tab){
+                if(me.tabContainer.isSelected(tab.getTabPanel())) {
+                    selectedTabPanel =  tab.getTabPanel();
+                }
+            });
+            return selectedTabPanel;
+        },
+        /**
          * Hande selected filter request
          * @method  public enableFilter
          * @param  {String} selectedFilter selected filter, can be a 'vectors', 'newest' or 'publishable'
          */
         enableFilter: function(selectedFilter) {
-            // Trigger first founded tab filter --> this activate/deactivate filterings also another tabs
-            var me = this,
-                filterContainer = (me.layerTabs.length>0) ? me.layerTabs[0].getTabPanel().getContainer().find('.layerselector2-layer-filter') : jQuery('<div></div>'),
+            var me = this;
+            var selectedTabPanel = me.getSelectedTabPanel();
+
+            // if selected panel not found then return
+            if(!selectedTabPanel) {
+                return;
+            }
+
+            var filterContainer = selectedTabPanel.getContainer().find('.layerselector2-layer-filter'),
                 filterButton = filterContainer.find('.filter[data-filter='+selectedFilter+']'),
                 filterIcon = filterButton.find('.filter-icon'),
-                active = jQuery('.layer-filter').find('.filter-icon.active');
+                active = filterButton.find('.filter-icon.active');
 
             if(selectedFilter !== null) {
                 if(!filterIcon.hasClass('active')) {
