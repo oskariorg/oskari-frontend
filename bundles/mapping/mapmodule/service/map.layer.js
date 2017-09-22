@@ -551,16 +551,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         registerLayerFilter: function (filterId, filterFunction) {
             var me = this;
             if(typeof filterFunction !== 'function') {
-                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has not filter function! Not added to layer filters.');
+                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has not filter function! Not register layer filter.');
                 return;
             }
             if(typeof filterId !== 'string') {
-                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has not string name. Not added to layer filters.');
+                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has not string name. Not register layer filter.');
                 return;
             }
 
-            if(me.layerList[filterId]) {
-                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has allready defined. Not added to layer filters.');
+            if(me.layerFilters[filterId]) {
+                Oskari.log(this.getName()).warn('[MapLayerService] "' + filterId + '" -layer filter has allready defined. Not register layer filter.');
                 return;
             }
             me.layerFilters[filterId] = filterFunction;
