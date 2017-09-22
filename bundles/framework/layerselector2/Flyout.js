@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
         this.filters= [];
         this._filterNewestCount = 20;
-        this._newestLayers = null;
         this._currentFilter = null;
     }, {
 
@@ -134,15 +133,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * Clear newest filter cache.
-         * @method  @public clearNewestFilter
-         */
-        clearNewestFilter: function(){
-            var me = this;
-            me._newestLayers = null;
-        },
-
-        /**
          * Add featuredata filter.
          * @method  @public addFeaturedataFilter
          */
@@ -223,48 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     this.tabContainer.select(tab.getTabPanel());
                     tab.setState(state);
                 }
-            }
-        },
-        /**
-         * Get seleted tab panel
-         * @method  @public getSelectedTabPanel
-         * @return {Object} tab panel jQuery element
-         */
-        getSelectedTabPanel: function(){
-            var me = this;
-            var selectedTabPanel = null;
-            me.layerTabs.forEach(function(tab){
-                if(me.tabContainer.isSelected(tab.getTabPanel())) {
-                    selectedTabPanel =  tab.getTabPanel();
-                }
-            });
-            return selectedTabPanel;
-        },
-        /**
-         * Hande selected filter request
-         * @method  public enableFilter
-         * @param  {String} selectedFilter selected filter, can be a 'featuredata', 'newest' or 'publishable'
-         */
-        enableFilter: function(selectedFilter) {
-            var me = this;
-            var selectedTabPanel = me.getSelectedTabPanel();
-
-            // if selected panel not found then return
-            if(!selectedTabPanel) {
-                return;
-            }
-
-            var filterContainer = selectedTabPanel.getContainer().find('.layerselector2-layer-filter'),
-                filterButton = filterContainer.find('.filter[data-filter='+selectedFilter+']'),
-                filterIcon = filterButton.find('.filter-icon'),
-                active = filterButton.find('.filter-icon.active');
-
-            if(selectedFilter !== null) {
-                if(!filterIcon.hasClass('active')) {
-                    filterButton.trigger('click');
-                }
-            } else if(active.length>0) {
-                me.deactivateAllFilters();
             }
         },
 

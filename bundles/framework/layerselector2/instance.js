@@ -210,8 +210,6 @@ Oskari.clazz.define(
                     layerId = event.getLayerId(),
                     layer;
 
-                flyout.clearNewestFilter();
-
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
                     flyout.handleLayerModified(layer);
@@ -275,7 +273,6 @@ Oskari.clazz.define(
                 // Remove the filtering, if opened by ShowFilteredLayerListRequest.
                 else if(me.filteredLayerListOpenedByRequest) {
                     plugin.deactivateAllFilters();
-                    plugin.setLayerListFilteringFunction(null);
                     me.filteredLayerListOpenedByRequest = false;
                 }
             }
