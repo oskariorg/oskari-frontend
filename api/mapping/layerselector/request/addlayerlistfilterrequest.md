@@ -10,19 +10,18 @@ The filter name parameter is used in ShowFilteredLayerListRequest request when a
 ### Add publishable filter to layerlist
 
 ```javascript
-var sb = Oskari.getSandbox();
-var reqBuilder = sb.getRequestBuilder('AddLayerListFilterRequest');
-if (reqBuilder) {
-    var request = reqBuilder(
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
         'Publishable',
         'Show publishable layers',
-        function(layer){
-            return (layer.getPermission('publish') === 'publication_permission_ok');
-        },
         'layer-publishable',
         'layer-publishable-disabled',
         'publishable'
-    );
-    sb.request('MainMapModule', request);
-}
+]);
 ```
