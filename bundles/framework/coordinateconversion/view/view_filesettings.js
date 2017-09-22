@@ -129,7 +129,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.filesetti
             jQuery( ctx ).find('.import').on("click", function () {
             var el = jQuery(this).parent();
             var settings = {
-                    filename: el.find('#filename').val(),
                     angle: el.find('#angletype option:checked').val(),
                     decimalseparator: el.find('#decimalseparator option:checked').val(),
                     id: el.find('#useid').is(":checked"),

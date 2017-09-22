@@ -4,14 +4,15 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
         me.helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', me.instance, me.loc);
-        me.selectFromMap = false;
-        me.insertWithClipboard = false;
+        me.mapselect = false;
+        me.clipboardInsert = false;
         me.conversionContainer = null
-        me.startingSystemSelected = false;
+        me.startingSystem = false;
         me.fileinput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', me.loc);
         me.file = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.filesettings', me.instance, me.loc);
         me.file.create();
         me.numrows = 1;
+        me._userSelections = { "import": null, "export": null };
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
@@ -170,8 +171,8 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 me.updateRowCount();
             }
 
-            var inputValues = this.selectGetValue(input_instance, false);
-            var targetValues = this.selectGetValue(target_instance, true);
+            var inputValues = this.getSelection(input_instance, false);
+            var targetValues = this.getSelection(target_instance, true);
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
@@ -219,7 +220,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             return { "instances": selectInstances, "dropdowns": dropdowns };
         },
           /**
-         * @method selectGetValue
+         * @method getSelection
          * which key corresponds to which dropdown in the array:
          * [0] = geodetic datum,
          * [1] = coordinate system
@@ -227,7 +228,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
          * [3] = geodetic coordinate system
          * [4] = heigth system
          */
-        selectGetValue: function ( instance, called ) {
+        getSelection: function ( instance, called ) {
             var me = this;
             var values = [];
             var rows = this.getElements().rows;
@@ -270,9 +271,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         instance.dropdowns[i].find('.'+ instance.instances[2].getValue()).show();
                     }
                     if( instance.instances[3].getValue() !== "COORDSYS_DEFAULT" ) {
-                        me.startingSystemSelected = true;
+                        me.startingSystem = true;
                     } else {
-                        me.startingSystemSelected = true;
+                        me.startingSystem = true;
                     }
                     if( instance.instances[4].getValue() === "KORKEUSJ_DEFAULT") {
                         rows.each( function ( idx, row ) {
@@ -330,12 +331,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             }
             return values;
         },
-         updateEditable: function (values) {
+        updateEditable: function (values) {
             if(typeof values === null) {
                 values = undefined;
             }
             var rows = this.getElements().rows;
-            if( !this.insertWithClipboard ) {
+            if( !this.clipboardInsert ) {
                 rows.each( function ( row ) {
                     jQuery(this).find('td').attr("contenteditable", false);
                 });
@@ -395,6 +396,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
          * check different conditions if data matches to them
          */
         validateData: function( data ) {
+            var userSpec = this.getUserSelections().import;
+            if( !userSpec ) {
+                Oskari.log(this.getName()).warn("No specification for file-import");
+            }
             var lonlat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
             var fullLonlat = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
             var numeric = new RegExp(/[0-9.]+/);
@@ -450,7 +455,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         e.stopPropagation();
                         e.preventDefault();
 
-                    if( me.insertWithClipboard === false ) {
+                    if( me.clipboardInsert === false ) {
                         return;
                     }
                     var clipboardData, pastedData;
@@ -476,22 +481,6 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             this.populateTableWithData( insertTarget, dataJson );
         },
         /**
-         * @method populateTableWithData
-         *
-         * {Object} data, each key need to have property lon & lat 
-         */
-        populateTableWithData: function( cell, data ) {
-            var table = this.getElements().table;
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    var row = this._template.tablerow( { coords: data[key] } );
-                    jQuery(cell).parent().after(row);
-                    this.updateRowCount();
-                }
-            }
-            table.trigger('rowCountChanged');
-        },
-        /**
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
          * 
@@ -507,22 +496,21 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     me.showDialogue( importfile, false );
                     clipboardInfo.hide();
                     fileInput.show();
-                    me.selectFromMap = false;
-                    me.insertWithClipboard = false;
+                    me.mapselect = false;
+                    me.clipboardInsert = false;
                 }
                 else if (this.value == '2') {
                     fileInput.hide();
-                    me.insertWithClipboard = true;
+                    me.clipboardInsert = true;
                     clipboardInfo.show();
-                    me.selectFromMap = false;
+                    me.mapselect = false;
                 }
                 me.updateEditable();
             });
-
                 jQuery('.mapselect').on("click", function() {
                     me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
-                    me.selectFromMap = true; 
-                    me.insertWithClipboard = false;                   
+                    me.mapselect = true; 
+                    me.clipboardInsert = false;                   
                 });
          },
         /**
@@ -549,7 +537,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                     var lon = jQuery(this).find('.lon').html();
                     if(lat != "  " && lon != "  "){
                         var coords = { lon: lon, lat: lat };
-                        helper.addMarkerForCoords(coords, me.startingSystemSelected);
+                        helper.addMarkerForCoords(coords, me.startingSystem);
                     }
                 })
             });
@@ -557,6 +545,22 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 var exportfile = me.file.getElement().export;
                 me.showDialogue( exportfile, true );
             });
+        },
+        /**
+         * @method populateTableWithData
+         *
+         * {Object} data, each key need to have property lon & lat 
+         */
+        populateTableWithData: function( cell, data ) {
+            var table = this.getElements().table;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var row = this._template.tablerow( { coords: data[key] } );
+                    jQuery(cell).parent().after(row);
+                    this.updateRowCount();
+                }
+            }
+            table.trigger('rowCountChanged');
         },
         showDialogue: function( content, shouldExport ) {
             var jc = jQuery(content);
@@ -572,7 +576,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
             }
         },
         importSettings: function ( settings ) {
-
+            this._userSelections = { "import": settings };
         },
         exportFile: function ( settings ) {
             var me = this;
@@ -585,9 +589,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                         var coords = { lon: lon, lat: lat };
                         arr.push( JSON.stringify( coords ) );
                     }
-                }); 
-            me.fileinput.exportToFile( arr, settings.filename+'.txt' );
-
+                });
+            if( arr.length !== 0 ) {
+                me.fileinput.exportToFile( arr, settings.filename+'.txt' );
+            } else {
+                Oskari.log(me.getName()).warn("No transformed coordinates to write to file!");
+            }
         },
         addToInputTable: function (coords) {
             var table = this.getElements().table;
@@ -615,6 +622,9 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.conversio
                 "tableHeader": jQuery(this.conversionContainer).find(".oskari-table-header")
             }
             return elements;
+        },
+        getUserSelections: function () {
+            return this._userSelections;
         }
     }
 );

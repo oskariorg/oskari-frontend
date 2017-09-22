@@ -4,10 +4,10 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
     this.sb = instance.sandbox;
     this.sb.register(this);
     for (var p in this.eventHandlers) {
-    this.sb.registerForEventByName(this, p);
-    this.clickCoordinates = null;
-    this.moveReq = this.sb.getRequestBuilder('MapMoveRequest');
-}
+        this.sb.registerForEventByName(this, p);
+        this.clickCoordinates = null;
+        this.moveReq = this.sb.getRequestBuilder('MapMoveRequest');
+    }
 }, {
     getName: function() {
         return 'Oskari.framework.bundle.coordinateconversion.helper';
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', funct
             this.clickCoordinates = event._lonlat;        
         }
     },
-    getCoordinatesFromMap: function() {
+    getMapCoordinates: function() {
         return this.clickCoordinates;
     },
     addMarkerForCoords: function (coords, startingSystem) {

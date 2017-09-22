@@ -34,12 +34,12 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect
 
             dialog.show('Note', this.loc.datasourceinfo.mapinfo, [cancelBtn, btn]);
             dialog.moveTo(jQuery('.oskari-tile.coordinateconversion'), 'right', true);
-            this.getCoordinatesFromMap();
+            this.getMapCoordinates();
         },
-        getCoordinatesFromMap: function() {
+        getMapCoordinates: function() {
             var me = this;
             jQuery('#mapdiv').on("click", function () {
-                    var coords = me.helper.getCoordinatesFromMap();
+                    var coords = me.helper.getMapCoordinates();
                     if(coords != null) {
                         me.mapcoords.push(coords);
                     }
