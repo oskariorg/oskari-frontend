@@ -11,18 +11,75 @@ Some extra tags:
 
 ## 1.44
 
-### [mod] [breaking] ShowFilteredLayerListRequest
+### [mod] [breaking] AddLayerListFilterRequest
 
-Changed ``stats`` filter name to ``featuredata`` (because it's actually filter vector layers).
+Made request serializable to JSON (removed function parameter).
 
 Before:
 ```javascript
+// Add new layerlist filter button to layerselector
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest',[
+    'Publishable',
+    'Show publishable layers',
+    function(layer){
+        return (layer.getPermission('publish') === 'publication_permission_ok');
+    },
+    'layer-publishable',
+    'layer-publishable-disabled',
+    'publishable'
+]);
+```
+
+After:
+
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
+### [mod] [breaking] ShowFilteredLayerListRequest
+
+Changed ``stats`` filter name to ``featuredata`` (because it's actually filter featuredata layers). Also made request serializable to JSON (removed function parameter).
+
+Before:
+```javascript
+// Use buil-in filter
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'stats']);
+
+// Register new filter and use this
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer){
+    var name = layer.getName().toLowerCase(),
+            nameFirstChar = name.substring(0,1);
+        return (nameFirstChar === 'a');
+},'find_layers_name_start_a', false]);
 ```
 
 After:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
+// Use buil-in filter
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata']);
+
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
+    var name = layer.getName().toLowerCase(),
+            nameFirstChar = name.substring(0,1);
+        return (nameFirstChar === 'a');
+});
+// Use new filter by request
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
 ```
 
 #### [mod] [breaking] ProgressEvent

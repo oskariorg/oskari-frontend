@@ -13,6 +13,45 @@ Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'fe
 
 Filtering performance has been improved.
 
+Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored so at there is no anymore function parameters.
+Filter-functions can be registered to MapLayerService and it will have built-in filters for 'featuredata' and 'newest' ids.
+
+Use built-in filters:
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest', false]);
+```
+
+Register new filter and use this:
+```javascript
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
+    var name = layer.getName().toLowerCase(),
+            nameFirstChar = name.substring(0,1);
+        return (nameFirstChar === 'a');
+});
+// Use new filter by request
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
+```
+
+Add new layer lis filter button:
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
 ### Timeseries improvements
 
 Animation now waits for frame to load before advancing.
