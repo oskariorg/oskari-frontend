@@ -13,7 +13,19 @@ Some extra tags:
 
 ### [mod] [breaking] ShowFilteredLayerListRequest
 
-Changed ``stats`` filter name to ``vectors`` (because it's filter vector layers).
+Changed ``stats`` filter name to ``vectors`` (because it's actually filter vector layers).
+
+Before:
+```javascript
+var sb = Oskari.getSandbox();
+var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
+if (reqBuilder) {
+    var request = reqBuilder(null, 'stats', false);
+    sb.request('MainMapModule', request);
+}
+```
+
+After:
 ```javascript
 var sb = Oskari.getSandbox();
 var reqBuilder = sb.getRequestBuilder('ShowFilteredLayerListRequest');
