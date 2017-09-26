@@ -16,18 +16,11 @@
         printWarn: 'Use Oskari.log() instead.',
         printError: 'Use Oskari.log() instead.',
         setUser: 'Use Oskari.user() instead.',
-        getUser: 'Use Oskari.user() instead'
+        getUser: 'Use Oskari.user() instead.'
     };
     // Warn 2 times before falling silent
-    var warnMessagesSent = {};
     var warn = function (name) {
-        if (!warnMessagesSent[name]) {
-            warnMessagesSent[name] = 0;
-        }
-        warnMessagesSent[name]++;
-        if (warnMessagesSent[name] < 3) {
-            log.warn('Sandbox.' + name + '() will be removed in future release.', extraInfo[name] || 'Remove calls to it.');
-        }
+        log.deprecated('Sandbox.' + name + '()', extraInfo[name]);
     };
     Oskari.clazz.category('Oskari.Sandbox', 'deprecated-sb-methods', {
         /**

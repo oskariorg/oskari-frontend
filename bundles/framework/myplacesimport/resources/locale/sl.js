@@ -56,7 +56,7 @@ Oskari.registerLocalization(
                 "remove": "Briši",
                 "removeButton": "Briši"
             },
-            "confirmDeleteMsg": "Ali želiš izbrisati:",
+            "confirmDeleteMsg": "Ali želiš izbrisati \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Prekliči",

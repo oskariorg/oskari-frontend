@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         this.popupId = 'myplacesForm';
         this.form = undefined;
         this.drawPluginId = this.instance.getName();
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
     }, {
         __name: 'MyPlacesMainView',
         /**
@@ -168,7 +169,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         showPlaceForm: function (location, place) {
             var me = this,
                 layerId,
-                loc  = me.instance.getLocalization(),
                 sandbox = me.instance.sandbox;
 
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
@@ -216,7 +216,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
 
             var actions = [
                 {
-                    name: loc.buttons.cancel,
+                    name: me.loc('buttons.cancel'),
                     type: "button",
                     group: 1,
                     action: function () {
@@ -226,7 +226,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         //me.instance.sandbox.request(me, toolbarRequest);
                     }
                 }, {
-                    name: loc.buttons.save,
+                    name: me.loc('buttons.save'),
                     type: "button",
                     group: 1,
                     action: function () {
@@ -241,7 +241,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var options = {
                 hidePrevious: true
             };
-            var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, options);
+            var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, me.loc('placeform.title'), content, location, options);
             sandbox.request(me.getName(), request);
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[name=placename]').focus();
@@ -269,36 +269,35 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @return {Object[]}
          */
         _validateForm: function (values) {
-            var errors = [],
+            var me = this,
+                errors = [],
                 categoryHandler = this.instance.getCategoryHandler();
             if (categoryHandler && categoryHandler.validateCategoryFormValues) {
                 errors = categoryHandler.validateCategoryFormValues(values.category);
             }
 
-            var loc = this.instance.getLocalization('validation');
             if (!values.place.name) {
                 errors.push({
                     name: 'name',
-                    error: loc.placeName
+                    error: me.loc('validation.placeName')
                 });
             } else if (Oskari.util.sanitize(values.place.name) !== values.place.name) {
                 errors.push({
                     name: 'name',
-                    error: loc.placeNameIllegal
+                    error: me.loc('validation.placeNameIllegal')
                 });
             }
             if (Oskari.util.sanitize(values.place.desc) !== values.place.desc) {
                 errors.push({
                     name: 'desc',
-                    error: loc.descIllegal
+                    error: me.loc('validation.descIllegal')
                 });
             }
             return errors;
         },
         _showValidationErrorMessage: function (errors) {
-            var loc = this.instance.getLocalization(),
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = dialog.createCloseButton(loc.buttons.ok),
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = dialog.createCloseButton(this.loc('buttons.ok')),
                 content = jQuery('<ul></ul>'),
                 i,
                 row;
@@ -308,7 +307,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 content.append(row);
             }
             dialog.makeModal();
-            dialog.show(loc.validation.title, content, [okBtn]);
+            dialog.show(this.loc('validation.title'), content, [okBtn]);
         },
         /**
          * @method _saveForm
@@ -350,11 +349,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         me.__savePlace(formValues.place);
                     } else {
                         // blnNew should always be true since we are adding a category
-                        var loc = me.instance.getLocalization('notification').error;
                         if (blnNew) {
-                            me.instance.showMessage(loc.title, loc.addCategory);
+                            me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.addCategory'));
                         } else {
-                            me.instance.showMessage(loc.title, loc.editCategory);
+                            me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.editCategory'));
                         }
                     }
                 };
@@ -371,13 +369,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @param {Object} values place properties
          */
         __savePlace: function (values) {
-            var me = this,
-                loc;
+            var me = this;
             // form not open, nothing to do
             if (!values) {
                 // should not happen
-                loc = me.instance.getLocalization('notification').error;
-                me.instance.showMessage(loc.title, loc.savePlace);
+                me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
                 return;
             }
             var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace'),
@@ -431,14 +427,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     me.cleanupPopup();
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    loc = me.instance.getLocalization('notification').placeAdded;
-                    dialog.show(loc.title, loc.message);
+                    dialog.show(me.loc('notification.placeAdded.title'), me.loc('notification.placeAdded.message'));
                     dialog.fadeout();
                     // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
                     //me.drawPlugin.stopDrawing();
                 } else {
-                    loc = me.instance.getLocalization('notification').error;
-                    me.instance.showMessage(loc.title, loc.savePlace);
+                    me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
                 }
             };
             this.instance.getService().saveMyPlace(place, serviceCallback);

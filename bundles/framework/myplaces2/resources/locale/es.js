@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Borrar sitio",
-                    "confirm": "¿Desea borrar este sitio?",
+                    "confirm": "¿Desea borrar este sitio? \"{name}\"",
                     "btnDelete": "Borrar",
                     "btnCancel": "Cancelar",
                     "success": "Se ha borrado el sitio.",

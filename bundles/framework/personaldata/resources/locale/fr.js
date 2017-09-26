@@ -32,7 +32,7 @@ Oskari.registerLocalization(
                     "cancel": "Annuler",
                     "error_noname": "Saisissez le nom de la vue cartographique",
                     "deletetitle": "Supprimer la vue cartographique",
-                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique ?",
+                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique \"{name}\"?",
                     "default": "Vue par défaut"
                 },
                 "save": {

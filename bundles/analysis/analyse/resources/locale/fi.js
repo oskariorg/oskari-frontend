@@ -436,7 +436,7 @@ Oskari.registerLocalization(
                 "delete": "Poista"
             },
             "title": "Analyysit",
-            "confirmDeleteMsg": "Haluatko poistaa analyysin:",
+            "confirmDeleteMsg": "Haluatko poistaa analyysin \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",

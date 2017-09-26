@@ -139,7 +139,6 @@ Oskari.clazz.define(
         me.loaded = 0;
         me.tilesToLoad = 0;
         me.errors = 0;
-
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1197,6 +1196,14 @@ Oskari.clazz.define(
          */
         isRealtime: function () {
             return this._realtime;
+        },
+        /**
+         * @method hasTimeseries
+         * @return {Boolean}
+         * Has timeseries data
+         */
+        hasTimeseries: function () {
+            return !!this.getAttributes().times;
         },
         /**
          * @method setRefreshRate

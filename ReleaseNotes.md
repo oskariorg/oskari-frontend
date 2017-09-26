@@ -2,14 +2,74 @@
 
 ## 1.44.0
 
+### Timeseries improvements
+
+Animation now waits for frame to load before advancing.
+The next animation frame is buffered before it's shown. Depending on the service used this might make the animation go slower, but is more user (and service) friendly.
+Added new event TimeseriesAnimationEvent.
+Changed ProgressEvent to include layer id instead of 'maplayer' (functionality id) string as ID value.
+
+### divmanazer Chart component
+
+``New component`` allows make bar or line charts.
+
+```javascript
+var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
+var data = [{name:"2", value:1},{name:"1", value:3},{name:"11", value:31},{name:"12", value:32},{name:"13", value:300},{name:"14", value:355},{name:"15", value:366},{name:"16", value:377}];
+barchart.createBarChart(data);
+jQuery('<div></div>').append(barchart);
+
+```
+
+### Core/Oskari-global
+
+Added new localization function that supports message templates: Oskari.getMsg(). It should be used instead of Oskari.getLocalization().
+
+  Oskari.getMsg('<MyBundlesLocalizationKey>', '<path.to.message>', {key1: value1, key2: value2});
+
+Included intl-messageformat library into frontend core. It uses standard ICU message format and allows interpolation, pluralization, number/date formatting.
+
+For more details see http://oskari.org/documentation/development/localization
+
+#### Logger
+
+Oskari.log() now has an additional function for notifying about deprecated calls without spamming the developer console:
+
+     Oskari.log([name]).deprecated('myOldFunc()');
+     Oskari.log([name]).deprecated('myOtherOldFunc()', 'Use myNewFunc() instead.');
+
+Prints out:
+
+- myOldFunc() will be removed in future release. Remove calls to it.
+- myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
+### featuredata2
+
+Featuredata2 now has a new control for showing selected rows on top of the table. This makes finding and comparing selected items easier.
+
+### Grid
+
+Grid split into smaller files to make it more manageable:
+
+- GridSelection.js includes select functionalities
+- GridPaging.js includes paging functionalities
+- GridSort.js includes sorting functionalaties
+
+New ``moveSelectedRowsTop()``-function. This can be used to move selected rows on top of the table. Boolean true param moves the selected rows on top while false will return them on correct places based on current sorting. If the table is not currently sorted the rows are not moved with false-parameter.
+
+```javascript
+  var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+  ...
+  // show selected rows top
+  grid.moveSelectedRowsTop(true);
+
+  // not show selected rows top
+  grid.moveSelectedRowsTop(false);
+```
+
 ### FormInput
 
 Added floating label functionality to FormInput. Floating labels are created by calling setPlaceholder(). If the floating label is of from the input field you can adjust it with addMarginToLabel, which adds a a value (px) to the css-directive "top".
-
-### Drawtools
-
-Fixed failing StopDrawingRequest.
-
 
 ### Guidedtour
 
@@ -35,9 +95,24 @@ Known issues:
 
 Statsgrid shows now areas as vectors on the map layer (WMS layers not used anymore to show areas).
 
+Fixed followings in point map style:
+- allowed change classify (distinct/discontinous)
+- maked smaller point more smaller
+- legend: dublicate values now displayed one time ( 0.0000 - 0.0000  --> 0.0000)
+- legend: fixed distinct legend value labels
+
+Changes:
+- used d3 library for calculating point symbol sizes
+
+UI improvements:
+- moved show values checkbox before color selection
+- layer opacity value are now showed opacity selectbox
+
 ### mapmodule
 
-Changed using escape funtion to encodeURIComponent because escape function is depricated in JavaScript version 1.5.
+Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
+
+Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
 
 #### VectorLayerPlugin ol2/ol3
 
