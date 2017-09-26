@@ -9,6 +9,28 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.44
+
+#### [mod] [breaking] ProgressEvent
+
+The event API itself is unchanged, but the only core bundle that sent out the event was not using it according to the API docs. You can ignore this change if your code does not expect ProgressEvent's getID() method to always return string 'maplayer'.
+
+#### [add] TimeseriesAnimationEvent
+
+Event is sent out when timeseries animation advances or is stopped
+
+#### [mod] [rpc]AddFeaturesToMapRequest
+
+New functionalities for ``AddFeaturesToMapRequest``. New options available:
+- layerInspireName : Inspire name for added layer
+- layerOrganizationName: Organization name for added layer
+- showLayer: Show layer to layerselector2/layerselection2. If setted truue then show map (add layer to mapservice).
+- opacity: Added layer opacity
+- layerName: Added layer name (showed in layerselector2/layerselection2)
+- layerDescription: Added layer description (showed subtitle in layerselection2)
+- layerPermissions: Added layer permission
+- image.sizePx: image icon size in pixels. Used this is size not defined (size is used for Oskari icon size calculation)
+
 ## 1.42
 
 #### [mod] [rpc] SearchResultEvent

@@ -329,7 +329,7 @@ Oskari.clazz.define(
                  }
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = ol.interaction.Draw.createRegularPolygon(400);
+                geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
                 geometryFunction = function(coordinates, geometry) {
@@ -632,6 +632,7 @@ Oskari.clazz.define(
             me._modify[me._id].on('modifyend', function() {
                 me._showIntersectionWarning = true;
                 me._mode = '';
+                me._sketch = null;
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             });

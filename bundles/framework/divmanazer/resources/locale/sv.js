@@ -214,6 +214,7 @@ Oskari.registerLocalization(
                     "labelOr": "eller",
                     "labelCustom": "Egen RGB-färg (0-255)"
                 },
+                "lineRemove": "Ta bort linjens stil och färg",
                 "color": {
                     "label": "Ifyllnadsfärg för område",
                     "labelOr": "eller",
@@ -222,6 +223,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Ifyllnandsmönster för område"
                 },
+                "fillRemove": "Ta bort ifyllnadsfärg och mönster",
                 "preview": {
                     "label": "Förhandsvisning"
                 },

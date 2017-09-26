@@ -214,6 +214,7 @@ Oskari.registerLocalization(
                     "labelOr": "tai",
                     "labelCustom": "Oma RGB-väri (0-255)"
                 },
+                "lineRemove": "Poista reunaviivan tyyli ja väri",
                 "color": {
                     "label": "Täyttöväri",
                     "labelOr": "tai",
@@ -222,6 +223,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Täyttökuvio"
                 },
+                "fillRemove": "Poista täyttöväri ja -kuvio",
                 "preview": {
                     "label": "Esikatselu"
                 },

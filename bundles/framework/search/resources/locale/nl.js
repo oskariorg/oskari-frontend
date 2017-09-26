@@ -29,6 +29,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Sluiten",
             "title": "Zoekresultaten"
+        },
+        "guidedTour": {
+            "title": "Zoeken",
+            "message": "Gebruik de zoekfunctie om de kaartweergave rechtstreeks naar de plaats die u zoekt te brengen.",
+            "openLink": "Toon zoekoptie",
+            "closeLink": "Verberg zoekoptie",
+            "tileText": "Zoeken"
         }
     }
 });

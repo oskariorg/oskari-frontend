@@ -14,16 +14,16 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             input;
         Oskari.log('Oskari.userinterface.component.FormInput').warn('Deprecated - please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
-        this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
+        this.template = jQuery('<div class="oskarifield"><label class="oskarifield_label"></label><input id="oskari_input" class="oskarifield_input" type="text" /></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
         this.templateTooltip = jQuery('<div class="icon-info"></div>');
         this.templateClearButton = jQuery('<div class="icon-close"></div>');
         this._field = this.template.clone();
 
-        label = this._field.find('label');
+        label = this._field.find('.oskarifield_label');
         label.attr('for', name);
 
-        input = this._field.find('input').focus();
+        input = this._field.find('.oskarifield_input').focus();
 
         input.attr('name', name);
         this._name = name;
@@ -32,13 +32,27 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._requiredMsg = 'required';
         this._contentCheck = false;
         this._contentCheckMsg = 'illegal characters';
+        this._labelMargin = null;
 
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
         this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
-
+        bindOnInput: function() {
+            var me = this;
+            this._field.find('.oskarifield_input').on('input', function() {
+                var $field = jQuery(this).closest('.oskarifield');
+                if (this.value) {
+                    $field.addClass('oskarifield--not-empty');
+                    if(me._labelMargin !== null) {
+                        $field.find('.oskarifield_label').css('top', me._labelMargin + 'px');
+                    }
+                } else {
+                    $field.removeClass('oskarifield--not-empty');
+                }
+            });
+        },
         /**
          * @method focus
          * Focuses the component.
@@ -100,6 +114,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setPlaceholder: function (pLabel) {
             var input = this._field.find('input');
             input.attr('placeholder', pLabel);
+            // if we set placeholder we can set the label aswell for floating label
+            this.setLabel(pLabel);
+            this.bindOnInput();
+        },
+        addMarginToLabel: function ( margin ) {
+           this._labelMargin = margin;
         },
         /**
          * @method setRequired
@@ -358,11 +378,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             var me = this,
                 input = this._field.find('input');
 
-            input.keydown(function (event) {
-                if (me._isUpPress(event)) {
-                    event.preventDefault();
-                    callback(event);
-                }
+            input.keyup(function (event) {
+                callback(event);
             });
         },
 
@@ -414,7 +431,22 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input.keyup(callback);
             }
         },
-
+        bindAutocompleteSelect: function (callback) {
+            var input = this._field.find('input');
+            input.on("autocompleteselect", callback);
+        },
+        autocomplete: function (results) {
+            var input = this._field.find('input');
+            input.attr('autocomplete', 'on');
+            input.autocomplete({
+                source: results
+            });
+            input.autocomplete('search', input.val());
+        },
+        addClass: function(className) {
+            var input = this._field.find('input');
+            input.addClass(className);
+        },
         /**
          * @method addClearButton
          * Adds a clear button to the field
@@ -422,13 +454,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          */
         addClearButton: function (id) {
             var clearButton = this.templateClearButton.clone(),
-                input = this._field.find('input');
+                input = this._field.find('.oskarifield_input');
 
             clearButton.attr('id', id);
             clearButton.bind('click', function () {
                 input.val('');
                 input.trigger('change');
                 input.trigger('keyup');
+                jQuery(this).parent().removeClass('oskarifield--not-empty');
             });
             input.after(clearButton);
         },

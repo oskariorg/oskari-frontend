@@ -154,6 +154,11 @@ Oskari.registerLocalization(
           "selectClr": "Valittu väri",
           "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
           "chooseColor": "Valitse väri"
+        },
+        "layer": {
+            "name": "Teemakartan aluejako",
+            "inspireName": "Teemakartta",
+            "organizationName": "Teemakartta"
         }
     }
 });

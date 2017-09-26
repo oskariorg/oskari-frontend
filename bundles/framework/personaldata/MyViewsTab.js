@@ -12,14 +12,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
      *      reference to component that created the tab
      */
 
-    function (instance, localization) {
+    function (instance) {
         this.instance = instance;
-        this.loc = localization;
+        this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.template = jQuery('<div class="viewsList volatile"></div>');
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
         this.templateDefaultGridView = jQuery('<input type="checkbox" name="isDefault"/>');
         this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
-            '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>');
+            '<textarea id="view_description" name="description" placeholder="' + this.loc('tabs.myviews.popup.description_placeholder') + '"></textarea></div>');
         this.templateDefaultView = jQuery('<div class="oskarifield"><input type="checkbox" id="defaultview"/><label for="defaultview"></label></div>');
         this.container = null;
 
@@ -30,15 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             reqBuilder;
         if (rbState) {
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            var tbstt = 'localization.button.toolbarsave';
-            if (localization &&
-                    localization.button &&
-                    localization.button.toolbarsave) {
-                tbstt = localization.button.toolbarsave;
-            }
             sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
                 iconCls: 'tool-save-view',
-                tooltip: tbstt,
+                tooltip: this.loc('tabs.myviews.button.toolbarsave') || '',
                 sticky: false,
                 // disable button for non logged in users
                 enabled : Oskari.user().isLoggedIn(),
@@ -69,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @return {String}
          */
         getTitle: function () {
-            return this.loc.title;
+            return this.loc('tabs.myviews.title');
         },
         /**
          * Writes the tab content to the given container
@@ -84,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             me.container = container;
 
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc.button.saveCurrent);
+            okBtn.setTitle(this.loc('tabs.myviews.button.saveCurrent'));
             okBtn.addClass('primary');
 
             var okBtnContainer = jQuery("<div class='myViewsTabButtonContainer'/>");
@@ -140,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 if (isSuccess) {
                     me._renderViewsList(response.views);
                 } else {
-                    me._showErrorMessage(me.loc.error.loadfailed);
+                    me._showErrorMessage(me.loc('tabs.myviews.error.loadfailed'));
                 }
             });
         },
@@ -171,14 +165,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _editViewSuccessNotify: function(isSuccess) {
-            var me = this;
             if (isSuccess) {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                dialog.show(me.loc.popup.title, me.loc.save.success);
+                dialog.show(this.loc('tabs.myviews.popup.title'), this.loc('tabs.myviews.save.success'));
                 dialog.fadeout();
-                me._refreshViewsList();
+                this._refreshViewsList();
             } else {
-                me._showErrorMessage(me.loc.error.notsaved);
+                this._showErrorMessage(this.loc('tabs.myviews.error.notsaved'));
             }
         },
 
@@ -201,14 +194,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
 
             var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
             var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
-            nameInput.setPlaceholder(this.loc.popup.name_placeholder);
-            var title = this.loc.popup.title;
+            nameInput.setPlaceholder(this.loc('tabs.myviews.popup.name_placeholder'));
+            nameInput.addMarginToLabel(9);
+            var title = this.loc('tabs.myviews.popup.title');
             if (viewName) {
-                title = this.loc.popup.edit;
+                title = this.loc('tabs.myviews.popup.edit');
                 nameInput.setValue(viewName);
             }
-            nameInput.setRequired(true, me.loc.save.error_noname);
-            nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
+            nameInput.setRequired(true, me.loc('tabs.myviews.save.error_noname'));
+            nameInput.setContentCheck(true, me.loc('tabs.myviews.save.error_illegalchars'));
             form.addField(nameInput);
 
             var template = form.getForm();
@@ -219,14 +213,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             }
 
             var defaultViewTemplate = me.templateDefaultView.clone();
-            defaultViewTemplate.find('label').html(me.loc.popup['default']);
+            defaultViewTemplate.find('label').html(me.loc('tabs.myviews.popup.default'));
             isDefault = isDefault ? isDefault : false;
             defaultViewTemplate.find("#defaultview").prop('checked', isDefault);
             template.append(defaultViewTemplate);
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc.button.save);
+            okBtn.setTitle(this.loc('tabs.myviews.button.save'));
             okBtn.addClass('primary');
 
             var sandbox = this.instance.sandbox;
@@ -240,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     form.showErrors();
                 }
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+            var cancelBtn = dialog.createCloseButton(this.loc('tabs.myviews.button.cancel'));
             cancelBtn.setHandler(function() {
                 dialog.close(true);
                 me.dialog = null;
@@ -288,10 +282,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     'description': view.description,
                     'isPublic': isPublic,
                     'isDefault': isDefault,
-                    'edit': this.loc.edit,
-                    'publish': isPublic ? this.loc.unpublish : this.loc.publish,
-                    'delete': this.loc['delete'],
-                    'default': this.loc['default']
+                    'edit': this.loc('tabs.myviews.edit'),
+                    'publish': isPublic ? this.loc('tabs.myviews.unpublish') : this.loc('tabs.myviews.publish'),
+                    'delete': this.loc('tabs.myviews.delete'),
+                    'default': this.loc('tabs.myviews.default')
                 };
                 gridModel.addData(data);
             }
@@ -393,52 +387,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             };
             grid.setColumnValueRenderer('delete', deleteRenderer);
 
-            // set up the link from edit field
-            /*
-        var service = instance.getViewService();
-        var publishRenderer = function(name, data) {
-            var link = me.templateLink.clone();
-            link.html(name);
-            link.bind('click', function() {
-                var view = me._getViewById(data.id);
-                if(view) {
-                    var newState = !view.isPublic;
-                    service.makeViewPublic(data.id, newState, function(isSuccess) {
-                        if(isSuccess) {
-                            view.isPublic = newState;
-                            if (view.isPublic) {
-                                data.publish = me.loc['unpublish'];
-                            } else {
-                                data.publish = me.loc['publish'];
-                            }
-                            link.html(data.publish);
-                        }
-                        else if(newState) {
-                            me._showErrorMessage(me.loc['error'].makePublic);
-                        }
-                        else {
-                            me._showErrorMessage(me.loc['error'].makePrivate);
-                        }
-                    });
-                }
-            });
-            return link;
-        };
-        grid.setColumnValueRenderer('publish', publishRenderer);
-        */
             var i,
                 key,
+                path,
                 coluiname;
             // setup localization
             for (i = 0; i < visibleFields.length; ++i) {
                 key = visibleFields[i];
-                coluiname = 'grid.' + key;
-                if (this.loc &&
-                        this.loc.grid &&
-                        this.loc.grid[key]) {
-                    coluiname = this.loc.grid[key];
-                }
-                grid.setColumnUIName(key, coluiname);
+                path = 'tabs.myviews.grid.' + key;
+                coluiname = this.loc(path);
+                grid.setColumnUIName(key, coluiname || path);
             }
 
             return grid;
@@ -463,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 }
             }
             // couldn't find view -> show an error
-            this._showErrorMessage(this.loc.error.generic);
+            this._showErrorMessage(this.loc('tabs.myviews.error.generic'));
         },
         /**
          * Shows a confirmation dialog on deleting a view
@@ -476,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc['delete']);
+            okBtn.setTitle(this.loc('tabs.myviews.delete'));
             okBtn.addClass('primary');
 
             var sandbox = this.instance.sandbox;
@@ -487,8 +445,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             dialog.onClose(function () {
                 me.popupOpen = false;
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-            dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
+            var cancelBtn = dialog.createCloseButton(this.loc('tabs.myviews.button.cancel'));
+            dialog.show(me.loc('tabs.myviews.popup.deletetitle'), me.loc('tabs.myviews.popup.deletemsg', {name: view.name}), [cancelBtn, okBtn]);
             me.popupOpen = true;
             dialog.makeModal();
         },
@@ -507,7 +465,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 if (isSuccess) {
                     me._refreshViewsList();
                 } else {
-                    me._showErrorMessage(me.loc.error.notdeleted);
+                    me._showErrorMessage(me.loc('tabs.myviews.error.notdeleted'));
                 }
             });
         },
@@ -521,9 +479,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         _showErrorMessage: function (msg) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             // delete failed
-            var button = dialog.createCloseButton(this.loc.button.ok);
+            var button = dialog.createCloseButton(this.loc('tabs.myviews.button.ok'));
             button.addClass('primary');
-            dialog.show(this.loc.error.title, msg, [button]);
+            dialog.show(this.loc('tabs.myviews.error.title'), msg, [button]);
         },
 
         /**
@@ -567,12 +525,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             'StateSavedEvent': function (event) {
                 if (event.isError()) {
                     // save failed
-                    this._showErrorMessage(this.loc.error.notsaved);
+                    this._showErrorMessage(this.loc('tabs.myviews.error.notsaved'));
                     return;
                 }
 
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                dialog.show(this.loc.popup.title, this.loc.save.success);
+                dialog.show(this.loc('tabs.myviews.popup.title'), this.loc('tabs.myviews.save.success'));
                 dialog.fadeout();
                 // reload views on success
                 this._refreshViewsList();

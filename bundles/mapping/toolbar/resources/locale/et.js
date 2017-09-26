@@ -28,6 +28,10 @@ Oskari.registerLocalization(
                 "measureline": "Mõõda joon kaardil. Topeltklõps lõpetab mõõtmise.",
                 "measurearea": "Mõõda pindala kaardil. Topeltkklõps lõpetab mõõtmise."
             }
+        },
+        "guidedTour": {
+            "title": "Tööriistad",
+            "message": "Kasuta tööriistu kohtade lisamiseks, kaardivaate salvestamiseks, viida jagamiseks kaardivaates või tagasipöördumiseks varasemale kaardivaatele. Hüpikabi nägemiseks hoia viivuks hiirt tööriista peal."
         }
     }
 });

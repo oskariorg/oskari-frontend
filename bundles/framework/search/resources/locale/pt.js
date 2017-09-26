@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Fechar",
             "title": "Resultados da pesquisa"
+        },
+        "guidedTour": {
+            "title": "Pesquisa",
+            "message": "Use a função de pesquisa para mover a vista diretamente para o lugar que procura",
+            "openLink": "Mostrar pesquisa",
+            "closeLink": "Esconder pesquisa",
+            "tileText": "Pesquisa"
         }
     }
 });

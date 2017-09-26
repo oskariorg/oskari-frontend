@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Bīdīt kartes skatu",
+                "message": "Jūs varat pārvietot skatu uz kartes klikšķinot un pavelkot vai izmantojot bīdīšanas rīku.| Atgriezieties pie noklusējuma skata klikšķinot starp bīdīšanas rīkiem. Padoms: Jūs varat bīdīt karti arī izmantojot bulttaustiņus uz savas tastatūras."
+            },
+            "help2": {
+                "title": "Pietuvināt un attālināt",
+                "message": "Jūs varat pietuvināt un attālināt karti izmantojot mēroga ritjoslu vai plusa un mīnusa pogas blakus ritjoslai. Padoms: Veicot dubultklikšķi uz kartes, Jūs varat tālummainīt izmantojot plusa un mīnusa taustiņus uz Jūsu tastatūras. Tāpat ir iespējams tālummainīt izmantojot Jūsu datorpeles rullīti."
+            }
         }
     }
 });

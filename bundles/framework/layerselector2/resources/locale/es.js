@@ -79,6 +79,13 @@ Oskari.registerLocalization(
                 "stats": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Capas",
+            "message": "En el Menú de Capas, usted puede seleccionar la capa a mostrar en el mapa. Usted puede listar las capas por tema o por proveedor. Puede también buscar capas por nombre de capa, nombre del productor de datos o una palabra clave. Y puede chequear las capas seleccionadas en el menú de Capas seleccionadas.",
+            "openLink": "Mostrar las capas",
+            "closeLink": "Ocultar las capas",
+            "tileText": "Capas"
         }
     }
 });

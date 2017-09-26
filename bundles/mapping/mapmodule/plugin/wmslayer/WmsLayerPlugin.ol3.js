@@ -66,6 +66,10 @@ Oskari.clazz.define(
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {},
                     layerAttributes = _layer.getAttributes() || undefined;
+                
+                if(!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
+                    layerOptions.singleTile = true;
+                }
 
                 if (_layer.isRealtime()) {
                     var date = new Date();

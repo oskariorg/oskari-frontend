@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Закрити",
             "title": "Результати пошуку"
+        },
+        "guidedTour": {
+            "title": "Пошук",
+            "message": "Використовуйте пошук для швидкого переходу до місця, яке шукаєте.",
+            "openLink": "Показати пошук",
+            "closeLink": "Приховати пошук",
+            "tileText": "Пошук"
         }
     }
 });

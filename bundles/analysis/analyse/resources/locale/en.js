@@ -129,7 +129,7 @@ Oskari.registerLocalization(
                         "tooltip": "Select features from the layer to be intersected. The features partially or totally inside the features on the intersecting layer are selected."
                     },
                     {
-                        "id": "oskari_analyse_areas_and_sectors",
+                        "id": "oskari_analyse_layer_union",
                         "label": "Analysis Layer Union",
                         "classForPreview": "layer_union",
                         "tooltip": "Combine the selected map layers. You can combine them only if they have same attributes."
@@ -436,7 +436,7 @@ Oskari.registerLocalization(
                 "delete": "Remove"
             },
             "title": "Analysis",
-            "confirmDeleteMsg": "Do you want to remove the analysis layer:",
+            "confirmDeleteMsg": "Do you want to remove the analysis layer \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",

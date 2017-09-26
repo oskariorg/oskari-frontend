@@ -78,7 +78,7 @@ Oskari.registerLocalization(
                 "remove": "Poista",
                 "removeButton": "Poista"
             },
-            "confirmDeleteMsg": "Haluatko poistaa aineiston:",
+            "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",

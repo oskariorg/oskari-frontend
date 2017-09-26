@@ -48,6 +48,13 @@ Oskari.registerLocalization(
                 "type-wms": "Sloj",
                 "type-wfs": "Podaci sa atributima"
             }
+        },
+        "guidedTour": {
+            "title": "Izabrani slojevi",
+            "message": "Možete da promenite redosled prikaza slojeva izborom i prevlačenjem, kao i njihovu providnost. Promene se prikazuju u kartograskom prikazu.",
+            "openLink": "Prikaži izabrane slojevi",
+            "closeLink": "Sakrij izabrane slojeve",
+            "tileText": "Izabrani slojevi"
         }
     }
 });
