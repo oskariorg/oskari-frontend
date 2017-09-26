@@ -564,24 +564,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         },
 
         /**
-         * Get currently selected filter.
-         * @method  @private _getCurrentFilter
-         * @param  {String} filterName filter name
-         * @return {Object|null}  filter object if founded or null
-         */
-        _getCurrentFilter: function(filterName) {
-            var me = this;
-            // Checks at if filter founded then return this
-            var currentFilter = jQuery.grep(me.filters || [], function(filter){
-                return filter.filterName === filterName;
-            });
-            if(currentFilter.length > 0) {
-                return currentFilter[0];
-            }
-            return null;
-        },
-
-        /**
          * Activate selected filter.
          * @method @public activateFilter
          * @param  {Function} filterName activate filter name
@@ -604,7 +586,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me._currentFilter = null;
             me.layerTabs.forEach(function(tab, tabIndex){
                 var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                jQuery.each(me.filters, function(index, filter) {
+
+                me.filters.forEach(function(filter, index) {
                     if(!notDeactivateThisFilter || filter.filterName !== notDeactivateThisFilter) {
                         var filterIcon = filterContainer.find('.filter-icon.' + 'filter-'+filter.filterName);
                         filterIcon.removeClass(filter.iconClassActive);
