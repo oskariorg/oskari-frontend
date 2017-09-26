@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-  this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter');
+  this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       this.filter.setContent(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
       var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
       var container = panel.getContainer();
-      container.append(this.filter.getContent());
+      container.append(this.filter.getElement());
 
       panel.on('open', function () {
       });

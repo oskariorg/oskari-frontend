@@ -156,7 +156,10 @@ Oskari.registerLocalization(
           "chooseColor": "Valitse väri"
         },
         "filter": {
-            "title": "Suodatus"
+            "title": "Suodatus",
+            "indicatorToFilter": "Suodatettava muuttuja",
+            "condition": "Ehto",
+            "value": "Arvo"
         },
         "layer": {
             "name": "Teemakartan aluejako",
