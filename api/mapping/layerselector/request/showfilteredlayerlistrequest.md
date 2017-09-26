@@ -1,7 +1,30 @@
 # ShowFilteredLayerListRequest
 
-Layerlist showed layers can be filtered by sending ShowFilteredLayerListRequest. The request must contain the filter function
-or selected filter as well as optional paramater, which is open layer list.
+Filter wanted layers visible in layerlist.
+
+## Use cases
+
+- filter layerlist
+
+## Description
+
+Layerlist showed layers can be filtered by sending ShowFilteredLayerListRequest.
+
+## Parameters
+
+(* means the parameter is required)
+
+<table class="table">
+<tr>
+  <th> Name</th><th> Type</th><th> Description</th><th> Default value</th>
+</tr>
+<tr>
+  <td>* selectedFilter</td><td>String</td><td>Used layerlist filter identifier</td><td> </td>
+</tr>
+<tr>
+  <td>openLayerList</td><td>Boolean</td><td>Open layerlist flyout</td><td>false</td>
+</tr>
+</table>
 
 ## Examples
 
