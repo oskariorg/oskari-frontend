@@ -87,7 +87,10 @@ Oskari.clazz.define(
             	me.__doSearch();
             };
 
-            var doAutocompleteSearch = function() {
+            var doAutocompleteSearch = function(e) {
+                if(e.keyCode === 38 || e.keyCode === 40 ) { // arrow keys up/down
+                    return;
+                }
                 me.__doAutocompleteSearch();
             };
 
@@ -96,6 +99,7 @@ Oskari.clazz.define(
 
             if(this.instance.conf.autocomplete === true) {
                 field.bindUpKey(doAutocompleteSearch);
+                field.bindAutocompleteSelect(doSearch);
             }
 
             var controls = searchContainer.find('div.controls');
@@ -326,10 +330,6 @@ Oskari.clazz.define(
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
-                // close flyout
-                inst.sandbox.postRequestByName('userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
-                );
             }
             // render results
             var table = jQuery(this.__templates.resultTable()),
@@ -398,7 +398,7 @@ Oskari.clazz.define(
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if(result.zoomScale) {
-                var zoom = {scale : result.zoomScale};
+                zoom = {scale : result.zoomScale};
             }
             sandbox.request(
                 me.instance.getName(),
@@ -413,19 +413,19 @@ Oskari.clazz.define(
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
                     resultAction = {};
-                    resultAction['name'] = name;
-                    resultAction['type'] = 'link';
-                    resultAction['action'] = action(result);
-                    resultAction['group'] = 1;
+                    resultAction.name = name;
+                    resultAction.type = 'link';
+                    resultAction.action = action(result);
+                    resultAction.group = 1;
                     resultActions.push(resultAction);
                 }
             }
 
             var closeAction = {};
-            closeAction['name'] = loc.close;
-            closeAction['type'] = 'link';
-            closeAction['group'] = 1;
-            closeAction['action'] = function () {
+            closeAction.name = loc.close;
+            closeAction.type = 'link';
+            closeAction.group = 1;
+            closeAction.action = function () {
                 var rN = 'InfoBox.HideInfoBoxRequest',
                     rB = sandbox.getRequestBuilder(rN),
                     request = rB(popupId);
@@ -449,7 +449,10 @@ Oskari.clazz.define(
                     popupId,
                     loc.title,
                     content,
-                    new OpenLayers.LonLat(result.lon, result.lat),
+                    {   
+                        lon: result.lon,
+                        lat: result.lat
+                    },
                     options
                 );
 

@@ -246,6 +246,9 @@ div.oskari-flyoutcontent.statsgrid {
       font-size: 12px;
       padding: 0;
       font-weight: normal; }
+    .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .classification-options .numeric-value .oskari-formcomponent {
+      margin-bottom: 4px;
+      margin-top: 8px; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications .label {
       font-weight: bold; }
     .statsgrid-legend-container > .accordion .accordion_panel .content .classifications select {
@@ -319,6 +322,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     clear: both; }
 
 .statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
-  overflow: hidden; }
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 /*# sourceMappingURL=style.css.map */

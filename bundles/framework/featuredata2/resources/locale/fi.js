@@ -11,6 +11,7 @@ Oskari.registerLocalization(
         "featureNameAll": "Tietotyyppi",
         "errorscale": "Kohdetietoja ei voida näyttää tällä mittakaavatasolla. Siirry sopivalle mittakaavatasolle mittakaavasäätimen avulla.",
         "errordata": "Palvelimelta saaduissa kohdetiedoissa oli virheitä. Siirrä hieman karttaa, jolloin tiedot päivittyvät.",
+        "errorNoFields": "Karttatasolla ei ole kohdetietoja.",
         "columnSelectorTooltip": "Valitse näytettävät sarakkeet",
         "featureDataPopup": "Tunnusluvut",
         "selectionTools": {
@@ -98,6 +99,7 @@ Oskari.registerLocalization(
             "differenceMessage": "Tietosuojattujen kohteiden muutos esitetään arvolla ",
             "noDataMessage": "Kohteiden_lukumäärä = Laskennassa käytettävien tilastointiyksiköiden tai -alueiden lukumäärä, tietosuojatut kohteet eivät sisälly laskentaan arvolla",
             "noDataCommonMessage": "Aineisto sisältää tietosuojattuja ominaisuustietoja, jotka eivät sisälly tunnuslukujen laskentaan"
-        }
+        },
+        "showSelectedFirst": "Näytä valitut ensin"
     }
 });

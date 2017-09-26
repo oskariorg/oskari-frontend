@@ -1,6 +1,6 @@
 
-(function(o){
-	var cs = o.clazz;
+(function (o) {
+    var cs = o.clazz;
 
     /* @class Oskari.ModuleSpec
      * Helper class instance of which is returned from oskari 2.0 api
@@ -14,7 +14,6 @@
         this.cs = cs;
         this.classInfo = classInfo;
         this.className = className;
-
     }, {
 
         /**

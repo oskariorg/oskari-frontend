@@ -36,7 +36,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Smazat místo",
-                    "confirm": "Chcete toto místo smazat?",
+                    "confirm": "Chcete toto místo smazat? \"{name}\"",
                     "btnDelete": "Smazat",
                     "btnCancel": "Storno",
                     "success": "Místo bylo smazáno.",

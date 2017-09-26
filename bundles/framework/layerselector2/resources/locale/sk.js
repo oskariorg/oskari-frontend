@@ -80,6 +80,13 @@ Oskari.registerLocalization(
                 "stats": "Zobraz iba vrstvy vektorov",
                 "remove": "Odstrániť filter"
             }
+        },
+        "guidedTour": {
+            "title": "Mapové vrstvy",
+            "message": "Môžete si vybrať aby sa údaje o produktoch zobrazili na mape vybratím mapových vrstiev. Kliknite a otvorte kategóriu, zvoľte vrstvu alebo do vyhľadávacieho okna napíšte pár písmen, ktoré sa nachádzajú v hľadanom výraze",
+            "openLink": "Zobraziť mapové vrstvy",
+            "closeLink": "Skryť mapové vrstvy",
+            "tileText": "Mapové vrstvy"
         }
     }
 });

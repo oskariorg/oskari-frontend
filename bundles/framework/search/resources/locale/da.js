@@ -26,6 +26,13 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Luk",
             "title": "Søgeresultater"
+        },
+        "guidedTour": {
+            "title": "Søg",
+            "message": "Brug søgefunktionen for at flytte map view'et direkte til det sted du leder efter",
+            "openLink": "Vis søgning",
+            "closeLink": "Skjul søgning",
+            "tileText": "Søg"
         }
     }
 });

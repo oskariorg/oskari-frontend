@@ -67,6 +67,7 @@ Options object
     },
     centerTo: true,
     featureStyle: null,
+    optionalStyles: null,
     attributes: null,
     cursor: 'zoom-in',
     prio: 1,
@@ -99,7 +100,7 @@ Options object
 		<b>featureStyle</b> - A style object.
 	</li>
 	<li>
-    		<b>optionalStyles</b> - Styles for geojson features. Style is used, if feature property value matches to style property value
+    <b>optionalStyles</b> - Styles for geojson features. Style is used, if feature property value matches to style property value
     </li>
 	<li>
 		<b>attributes</b> - Feature's attributes, especially handy when the geometry is a WKT-string.
@@ -113,7 +114,6 @@ Options object
   <li>
     <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
   </li>
-
   <li>
     <b>layerInspireName</b> - Layer Inspire name when adding layer to visible (see showLayer).
   </li><li>
@@ -129,9 +129,63 @@ Options object
   </li><li>
     <b>layerPermissions</b> - Layer permissions.
   </li>
-
-
 </ul>
+
+FeatureStyle/optionalStyles object
+
+FeatureStyle property tells generic and all features used style. OptionalStyles property you can specify style only wanted features. In both of these are same style constructor but in OptionalStyle you need also tell feature where style is used:
+```javascript
+property: {
+  key: 'id',
+  value: region
+}
+```
+<ul>
+  <li>
+    <b>key</b> - feature property what checked for use optional style.
+  </li>
+  <li>
+    <b>value</b> - feature property value what need match to use optianal style for feature.
+  </li>
+</ul>
+Both supported style object:
+```javascript
+"featureStyle/optionalStyle": {
+  "fill": { // fill styles
+    "color": "#ff00ff" // fill color
+  },
+  "stroke": { // stroke styles
+    "color": "#ff00ff", // stroke color
+    "width": 3, // stroke width
+    "lineDash": "dot", // line dash, also supported: dash, dashdot, longdash, longdashdot or solid
+    "lineCap": "but" // line cap, also supported: round or square
+  },
+  "text": { // text style
+    "fill": { // text fill style
+      "color": "#0000ff" // fill color
+    },
+    "stroke": { // text stroke style
+      "color": "#ff00ff", // stroke color
+      "width": 4 // stroke width
+    },
+    "font": "bold 12px Arial", // font
+    "textAlign": "top", // text align
+    "offsetX": 12, // text offset x
+    "offsetY": 12, // text offset y
+    "labelText": "example", // label text
+    "labelProperty": "propertyName" // read label from feature property
+  },
+  "image": { // image style
+    "shape": "marker.png", // external icon
+    "size": 3, // Oskari icon size.
+    "sizePx": 20, // Exact icon px size. Used if 'size' not defined.
+    "offsetX": 0, // image offset x
+    "offsetY": 0, // image offset y
+    "opacity": 0.7, // image opacity
+    "radius" 2 // image radius
+  }
+}
+```
 
 ## Examples
 
@@ -186,31 +240,31 @@ var featureStyle = {
   }
 };
 // Override feature style with feature property based style
- var optionalStyles = [{
-                                property: {
-                                    value: 'AIRPLANE',
-                                    key: 'mode'
-                                },
-                                fill: {
-                                    color: '#FF0000'
-                                },
-                                stroke: {
-                                    color: '#FF0000',
-                                    width: 5
-                                }
-                            },{
-                                property: {
-                                    value: 'BUS',
-                                    key: 'mode'
-                                },
-                                fill: {
-                                    color: '#0000ff'
-                                },
-                                stroke: {
-                                    color: '#0000ff',
-                                    width: 5
-                                }
-                            }];
+var optionalStyles = [{
+  property: {
+      value: 'AIRPLANE',
+      key: 'mode'
+  },
+  fill: {
+      color: '#FF0000'
+  },
+  stroke: {
+      color: '#FF0000',
+      width: 5
+  }
+  },{
+  property: {
+      value: 'BUS',
+      key: 'mode'
+  },
+  fill: {
+      color: '#0000ff'
+  },
+  stroke: {
+      color: '#0000ff',
+      width: 5
+  }
+  }];
 >- *key* is feature property name
 >- *value* is the property matching value to style
 ```
@@ -224,7 +278,8 @@ Oskari.getSandbox().postRequestByName(rn, [geojsonObject, {
     layerOptions: null,
     centerTo: false,
     featureStyle: featureStyle,
-    attributes: null
+    attributes: null,
+    optionalStyles: optionalStyles
 }]);
 ```
 

@@ -55,7 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
-            var controls = ol.control.defaults({ rotate: false });
+            var controls = ol.control.defaults({
+                zoom: false,
+                attribution: false,
+                rotate: false
+            });
             var interactions = ol.interaction.defaults({
                 altShiftDragRotate: false,
                 pinchRotate:false
@@ -649,7 +653,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         __getImageStyle: function(styleDef) {
             var me = this;
             var image = {};
-            var size = (styleDef.image && styleDef.image.size) ? me.getMarkerIconSize(styleDef.image.size) : this._defaultMarker.size;
+
+            var size = (styleDef.image) ? styleDef.image.size | styleDef.image.sizePx : this._defaultMarker.size;
+            if(!size || typeof size !== 'number'){
+                size = this._defaultMarker.size;
+            }
+
             styleDef.image.size = size;
 
             if(me.isSvg(styleDef.image)) {

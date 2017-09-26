@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Przesuń widok mapy",
+                "message": "Można przesuwać widok mapy poprzez klikanie i przeciągnięcie albo za pomocą kontrolerów przesuwania. Powrót do widoku  domyślnego przez kliknięcie przycisku znajdującego się na pośrodku kontrolerów przesuwania. Pomoc: Można przesuwać mapę za pomocą strzałek na klawiaturze."
+            },
+            "help2": {
+                "title": "Przybliżanie i oddalanie",
+                "message": "Możliwe jest przybliżanie I oddalanie mapy przy pomocy suwaka ze skalą lub przycisków plus i minus. Pomoc: Możliwe jest przybliżanie i oddalanie przy pomocy klawiszy plus i minus na klawiaturze lub za pomocą przycisku przewijania w myszce."
+            }
         }
     }
 });

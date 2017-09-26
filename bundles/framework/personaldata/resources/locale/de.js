@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Abbrechen",
                     "error_noname": "Geben Sie den Namen der Kartenansicht ein",
                     "deletetitle": "Kartenansicht löschen",
-                    "deletemsg": "Möchten Sie diese Kartenansicht löschen?"
+                    "deletemsg": "Möchten Sie diese Kartenansicht löschen \"{name}\"?"
                 },
                 "save": {
                     "success": "Diese Kartenansicht wurde gespeichert.",
@@ -129,6 +129,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nein"
+        },
+        "guidedTour": {
+            "title": "Meine Daten",
+            "message": "Alle von Ihnen auf der Karte markierten Orte, Ihre gespeicherten Kartenansichten und eingebundenen Karten werden angezeigt, wenn Sie sich angemeldet haben.",
+            "openLink": "Zeige \"Meine Daten\"",
+            "closeLink": "Verberge \"Meine Daten\"",
+            "tileText": "Meine Daten"
         }
     }
 });

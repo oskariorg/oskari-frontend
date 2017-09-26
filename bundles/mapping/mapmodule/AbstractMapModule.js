@@ -261,6 +261,7 @@ Oskari.clazz.define(
             me.startPlugins();
             me._adjustMobileMapSize();
             this.updateCurrentState();
+            this._registerForGuidedTour();
         },
         /**
          * @method stop
@@ -939,7 +940,7 @@ Oskari.clazz.define(
 
           this.loadtimer = setTimeout( function() {
             var eventBuilder = Oskari.eventBuilder( 'ProgressEvent' );
-            var event = eventBuilder( done, 'maplayer' );
+            var event = eventBuilder(done, layerId);
             me._sandbox.notifyAll( event );
           }, 50 );
         },
@@ -1805,7 +1806,7 @@ Oskari.clazz.define(
             var isMarkerShape  = (marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)) ? true : false;
             var isCustomMarker  = (marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))) ? true : false;
 
-            var markerSize = (marker && marker.data && marker.data.size) ? me.getMarkerIconSize(marker.data.size) : 32;
+            var markerSize = (marker && marker.data && marker.data.size) ? me.getPixelForSize(marker.data.size) : 32;
 
             var markerDetails = {
                 offsetX: 16,
@@ -1910,11 +1911,11 @@ Oskari.clazz.define(
         },
         /**
          * Converts from abstract marker size to real pixel size
-         * @method  @public getMarkerIconSize
-         * @param size Abstract size
-         * @returns {number} Size in pixels
+         * @method  @public getPixelForSize
+         * @param {Number} size Abstract size if number then calculated new size.
+         * @returns {Number} Size in pixels
          */
-        getMarkerIconSize : function(size) {
+        getPixelForSize : function(size) {
             return 40 + 10 * size;
         },
 /* --------------- /SVG MARKER ------------------------ */
@@ -2341,6 +2342,81 @@ Oskari.clazz.define(
                     plugin.updateLayerParams(layer, forced, params);
                 }
             });
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplates
+         * Delegate object templates given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplates: [{
+            priority: 70,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help1.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help1.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.panbuttonDiv');
+            },
+            positionAlign: 'left'
+        },
+        {
+            priority: 80,
+            getTitle: function () {
+                return this.getLocalization().guidedTour.help2.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.help2.message);
+                return content;
+            },
+            getPositionRef: function () {
+                return jQuery('.pzbDiv');
+            },
+            positionAlign: 'left'
+        }],
+
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    me.__guidedTourDelegateTemplates.forEach(function(template, i){
+                        var delegate = {
+                            bundleName: me.getName() + '_' + (i+1)
+                        };
+                        for(var prop in template){
+                            if(typeof template[prop] === 'function') {
+                                delegate[prop] = template[prop].bind(me); // bind methods to bundle instance
+                            } else {
+                                delegate[prop] = template[prop]; // assign values
+                            }
+                        }
+                        me._sandbox.request(me, requestBuilder(delegate));
+                    });
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me._sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
 /* --------------- /MAP LAYERS ------------------------ */
     }, {

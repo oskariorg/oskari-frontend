@@ -74,6 +74,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": ""
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Deplasare hartă",
+                "message": "Puteţi muta harta prin selectare şi mutare sau cu ajutorul butoanelor de deplasare. Reveniţi la vederea implicită prin selectarea butonului din centrul butoanelor de deplasare. Indicaţie: puteţi de asemenea deplasa harta cu ajutorul săgeţilor de pe tastatură"
+            },
+            "help2": {
+                "title": "Mărire şi micşorare",
+                "message": "Puteţi mări şi micşora harta folosind bara de scroll pentru scară sau butoanele plus şi minus de lângă bara de scroll. Indicaţie: puteţi de asemenea să măriţi sau micşoraţi folosind butoanele de plus şi minus ale tastaturii. Este de asemenea posibil să măriţi şi să micşoraţi cu ajutorul rotiţei de scroll a mouse-ului"
+            }
         }
     }
 });

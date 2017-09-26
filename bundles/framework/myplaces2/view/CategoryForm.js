@@ -56,24 +56,24 @@ Oskari.clazz.define(
             formOptions
         );
 
-        var loc = instance.getLocalization('categoryform');
+        var loc = Oskari.getMsg.bind(null, 'MyPlaces2');
 
         this.template = jQuery(
             '<div class="myplacescategoryform">' +
             '  <div class="field">' +
-            '    <label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
-            '    <input type="text" data-name="categoryname" placeholder="' + loc.name.placeholder + '"/>' +
+            '    <label for="categoryname">' + loc('categoryform.name.label') + '</label><br clear="all" />' +
+            '    <input type="text" data-name="categoryname" placeholder="' + loc('categoryform.name.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field drawing">' +
-            '    <label>' + loc.drawing.label + '</label><br clear="all" />' +
+            '    <label>' + loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
 // Currently visible fields are not saved or used in any way so commenting out the UI for now
 /*            '<div class="field visibleFields">' +
-            '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
-            '<input type="checkbox" name="placename" checked="checked" />' + loc.visibleFields.placename + '<br/>' +
-            '<input type="checkbox" name="placedesc" checked="checked" />' + loc.visibleFields.placedesc + '<br/>' +
-            '<input type="checkbox" name="image" checked="checked" />' + loc.visibleFields.image + '<br/>' +
+            '<label>' + loc('categoryform.visibleFields.label') + '</label><br clear="all" />' +
+            '<input type="checkbox" name="placename" checked="checked" />' + loc('categoryform.visibleFields.placename') + '<br/>' +
+            '<input type="checkbox" name="placedesc" checked="checked" />' + loc('categoryform.visibleFields.placedesc') + '<br/>' +
+            '<input type="checkbox" name="image" checked="checked" />' + loc('categoryform.visibleFields.image') + '<br/>' +
             '</div>' + */
             '</div>'
         );
