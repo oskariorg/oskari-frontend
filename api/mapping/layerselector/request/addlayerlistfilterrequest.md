@@ -80,3 +80,53 @@ Icon style classes:
     background-position: -1445px 0px !important;
 }
 ```
+
+### Create own filters and add button for this
+
+Create own filter (this we wanted to show only layers with name start 'a' or 'A') and use new filter the code below:
+```javascript
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
+    var name = layer.getName().toLowerCase(),
+            nameFirstChar = name.substring(0,1);
+        return (nameFirstChar === 'a');
+});
+// Add layerlist filter button what use previously created new filter
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+    'Layer what name start "A"',
+    'Show layers whatn name starts a',
+    'layer-start-a',
+    'layer-start-a-disabled',
+    'find_layers_name_start_a'
+]);
+```
+
+Icon style classes:
+```
+.layer-start-a {
+    height:16px;
+}
+
+.layer-start-a:before {
+    content: "A";
+    font-size: 16px;
+    color: #00cd98;
+    line-height: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.layer-start-a-disabled {
+    height:16px;
+}
+
+.layer-start-a-disabled:before {
+    content: "A";
+    font-size: 16px;
+    color: #cccdcc;
+    line-height: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+```
