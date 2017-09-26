@@ -255,7 +255,7 @@ Oskari.clazz.define(
                 layerWrapper,
                 layerContainer,
                 selectedLayers;
-
+console.log(me.accordion.ui);
             me.accordion.removeAllPanels();
             me.layerContainers = {};
             me.layerGroups = groups;
@@ -276,7 +276,7 @@ Oskari.clazz.define(
                 group.layerListPanel = groupPanel;
 
                 groupContainer = groupPanel.getContainer();
-                groupContainer.hide();
+                groupContainer.addClass('oskari-hidden');
                 for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
                     layerWrapper =
@@ -290,7 +290,7 @@ Oskari.clazz.define(
                     groupContainer.append(layerContainer);
                     me.layerContainers[layer.getId()] = layerWrapper;
                 }
-                groupContainer.show();
+                groupContainer.removeClass('oskari-hidden');
                 me.accordion.addPanel(groupPanel);
             }
 
