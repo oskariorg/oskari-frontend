@@ -155,6 +155,9 @@ Oskari.registerLocalization(
           "clrFromMap": "Värit kartalla olevan luokittelun mukaan",
           "chooseColor": "Valitse väri"
         },
+        "filter": {
+            "title": "Suodatus"
+        },
         "layer": {
             "name": "Teemakartan aluejako",
             "inspireName": "Teemakartta",

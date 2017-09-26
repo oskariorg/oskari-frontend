@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+  this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter');
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
@@ -29,13 +30,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       if (this.__datachartFlyout) {
         return this.__datachartFlyout;
       }
+      this.filter.createUI(); 
       this.addTab();
       var accordion = Oskari.clazz.create(
         'Oskari.userinterface.component.Accordion'
       );
-      var panel = this._getPanels();
-      panel.open();
-      accordion.addPanel(panel);
+      var panels = this._getPanels();
+      for (var i = 0; i < panels.length; i++ ) {
+        accordion.addPanel(panels[i]);
+      }
+
       accordion.insertTo(el);
 
       var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.loc.datacharts.flyout, {
@@ -61,8 +65,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       return this._barchart;
     },
     _getPanels: function () {
-      var chartPanel = this._createDataVisualizerPanel(this.loc.datacharts.desc);
-      return chartPanel;
+      var visualizerPanel = this._createDataVisualizerPanel(this.loc.datacharts.desc);
+      var filterPanel = this._createFilterPanel();
+      return [ filterPanel, visualizerPanel ];
     },
     /**
      * Creates an accordion panel for legend and classification edit with eventlisteners on open/close
@@ -80,6 +85,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       panel.on('close', function () {
       });
       panel.setTitle(title);
+      panel.open();
+      return panel;
+    },
+    _createFilterPanel: function () {
+      this.filter.setContent(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
+      var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+      var container = panel.getContainer();
+      container.append(this.filter.getContent());
+
+      panel.on('open', function () {
+      });
+      panel.on('close', function () {
+      });
+      panel.setTitle(this.loc.filter.title);
       return panel;
     },
     _createGrid: function () {

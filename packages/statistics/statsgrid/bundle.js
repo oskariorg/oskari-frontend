@@ -52,9 +52,12 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetSelector.js"
-            },  {
+            }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/DataVisualizer.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/Filter.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
