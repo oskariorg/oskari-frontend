@@ -18,17 +18,22 @@ You can use default filters only when filter buttons are showed on layerlist.
 
 Filter layerlist to show only newest layers using the code below:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest']);
 ```
 
 Filter layerlist to show only vector layers using the code below:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata']);
 ```
 
 Filter layerlist to show only publishable layers using the code below:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['publishable', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['publishable']);
+```
+
+If you want also open layerlist (layerselector2 Flyout) then send request with second parameter true.
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest',true]);
 ```
 
 ### Create own filters
@@ -43,12 +48,12 @@ mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
         return (nameFirstChar === 'a');
 });
 // Use new filter by request
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a']);
 ```
 
 ### Open layerlist when sending request
 
-Open layerlist when sending request (same code as upper but changed latest param from false to true) using the code below:
+Open layerlist (layerselector2 Flyout) when sending request (same code as upper but added second parameter true) using the code below:
 ```javascript
 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
 mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
