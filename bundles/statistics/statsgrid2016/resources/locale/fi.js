@@ -143,11 +143,11 @@ Oskari.registerLocalization(
             "regionsDataIsEmpty": "Valitulle aineistolle ei saatu alueiden arvoja."
         },
         "datacharts": {
-          "flyout": "Taulukko ja kuvaajat",
+          "flyout": "Haettu aineisto",
           "barchart": "Pylväskuvio",
           "linechart": "Viivakuvio",
           "table": "Taulukko",
-          "desc": "Kuvaajat",
+          "desc": "Taulukko ja kuvaajat",
           "nodata": "Ei valittuja indikaattoreita",
           "indicatorVar": "Kuvaajassa esitettävä muuttuja",
           "descColor": "Kuvaajan väri",
