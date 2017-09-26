@@ -94,7 +94,7 @@ mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
 });
 // Add layerlist filter button what use previously created new filter
 Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
-    'Layer what name start "A"',
+    'Layers what name start "A"',
     'Show layers whatn name starts a',
     'layer-start-a',
     'layer-start-a-disabled',
