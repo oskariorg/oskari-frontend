@@ -13,7 +13,7 @@ Some extra tags:
 
 ### [mod] [breaking] AddLayerListFilterRequest
 
-Made request serializable to JSON (removed function parameter).
+Removed function parameter to make request serializable to JSON. The filter function can now be registered to MapLayerService.
 
 Before:
 ```javascript
@@ -51,7 +51,7 @@ Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
 
 ### [mod] [breaking] ShowFilteredLayerListRequest
 
-Changed ``stats`` filter name to ``featuredata`` (because it's actually filter featuredata layers). Also made request serializable to JSON (removed function parameter).
+Changed ``stats`` filter name to ``featuredata`` (because it filters featuredata layers and not stats layers). Also made request serializable to JSON (removed function parameter).
 
 Before:
 ```javascript
@@ -59,24 +59,22 @@ Before:
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'stats']);
 
 // Register new filter and use this
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer){
-    var name = layer.getName().toLowerCase(),
-            nameFirstChar = name.substring(0,1);
-        return (nameFirstChar === 'a');
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
 },'find_layers_name_start_a', false]);
 ```
 
 After:
 ```javascript
-// Use buil-in filter
+// Use built-in filter
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata']);
 
 // Register new filter
 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
-    var name = layer.getName().toLowerCase(),
-            nameFirstChar = name.substring(0,1);
-        return (nameFirstChar === 'a');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
 });
 // Use new filter by request
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);

@@ -4,37 +4,36 @@
 
 ### layerselector2
 
-Fixed filter buttons to show each tabs. Also fixed undefined error for ShowFilteredLayerListRequest.
+Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
 
-Changed ``stats`` filter name to ``featuredata`` (because it's filter vector layers).
+Changed ``stats`` filter name to ``featuredata`` for consistency as it filters layers having feature data and not stats layers.
 ```javascript
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'featuredata']);
 ```
 
 Filtering performance has been improved.
 
-Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored so at there is no anymore function parameters.
-Filter-functions can be registered to MapLayerService and it will have built-in filters for 'featuredata' and 'newest' ids.
+Requests should be serializable to JSON and shouldn't be used to pass functions. AddLayerListFilterRequest and ShowFilteredLayerListRequest refactored based on this and the function parameters have been removed.
+Filter-functions can be registered to MapLayerService. By default it includes built-in filters for 'featuredata' and 'newest' ids.
 
 Use built-in filters:
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest', false]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest']);
 ```
 
 Register new filter and use this:
 ```javascript
 // Register new filter
 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
-    var name = layer.getName().toLowerCase(),
-            nameFirstChar = name.substring(0,1);
-        return (nameFirstChar === 'a');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
 });
-// Use new filter by request
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
+// Use new filter by request, the second parameter opens the layer listing flyout if it's closed
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', true]);
 ```
 
-Add new layer lis filter button:
+Add new filter button for layer listing:
 ```javascript
 // Add layer filter to map layer service
 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
@@ -61,7 +60,7 @@ Changed ProgressEvent to include layer id instead of 'maplayer' (functionality i
 
 ### divmanazer Chart component
 
-``New component`` allows make bar or line charts.
+``New component`` for creating bar or line charts.
 
 ```javascript
 var barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox());
@@ -92,6 +91,10 @@ Prints out:
 
 - myOldFunc() will be removed in future release. Remove calls to it.
 - myOtherOldFunc() will be removed in future release. Use myNewFunc() instead.
+
+#### Oskari.util
+
+Changed mobile mode detection. Now the mode switch is determined from ´#mapdiv´-element size (previous was window size).
 
 ### featuredata2
 
@@ -174,10 +177,6 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
-
-### Oskari.util
-
-Changed mobile mode detection. Now size is checked from ´#mapdiv´-element (previous was window size):
 
 ### infobox
 

@@ -1,14 +1,12 @@
 # AddLayerListFilterRequest
 
-Layerlist new filter buttons can be added by sending AddLayerListFilterRequest.
+ Filter buttons can be added for layerlist by sending AddLayerListFilterRequest.
 
 ## Use cases
 
 - add layerlist filter
 
 ## Description
-
-Layerlist new filter buttons can be added by sending AddLayerListFilterRequest.
 
 The filter name parameter is used in ShowFilteredLayerListRequest request when activating allready defined filter.
 
@@ -43,7 +41,7 @@ filter function, button icon style class name when tool is active, button icon s
 
 ## Examples
 
-### Add publishable filter to layerlist
+### Add publishable layers filter to layerlist
 
 ```javascript
 // Add layer filter to map layer service
@@ -62,7 +60,7 @@ Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
 ]);
 ```
 
-Icon style classes:
+Icon style classes (generated with build-script based on png-files in oskari-frontend/resouces/icons folder):
 ```
 .layer-publishable {
     width: 16px;
@@ -81,24 +79,27 @@ Icon style classes:
 }
 ```
 
-### Create own filters and add button for this
+### Creating custom filters
 
-Create own filter (this we wanted to show only layers with name start 'a' or 'A') and use new filter the code below:
+Register a custom filter (for example filtering layers where name starts with 'a' or 'A') to MapLayerService:
 ```javascript
 // Register new filter
 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer){
+mapLayerService.registerLayerFilter('layer_name_startswith_a', function(layer){
     var name = layer.getName().toLowerCase(),
             nameFirstChar = name.substring(0,1);
         return (nameFirstChar === 'a');
 });
+```
+Add a button for the filter above to the UI in layerselector:
+```javascript
 // Add layerlist filter button what use previously created new filter
 Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
-    'Layers what name start "A"',
-    'Show layers whatn name starts a',
+    'Layer names starting with "A"',
+    'Show layers where name starts with a',
     'layer-start-a',
     'layer-start-a-disabled',
-    'find_layers_name_start_a'
+    'layer_name_startswith_a'
 ]);
 ```
 
