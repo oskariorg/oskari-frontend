@@ -99,7 +99,10 @@ Oskari.clazz.define(
 
             if(this.instance.conf.autocomplete === true) {
                 field.bindUpKey(doAutocompleteSearch);
-                field.bindAutocompleteSelect(doSearch);
+                field.bindAutocompleteSelect(function(event, ui){
+                    field.setValue(ui.item.value);
+                    doSearch();
+                });
             }
 
             var controls = searchContainer.find('div.controls');

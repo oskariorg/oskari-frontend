@@ -437,7 +437,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         },
         autocomplete: function (results) {
             var input = this._field.find('input');
-            input.attr('autocomplete', 'on');
+            input.attr('autocomplete', 'off');
             input.autocomplete({
                 source: results
             });
