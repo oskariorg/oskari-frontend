@@ -1288,6 +1288,21 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method  @private _isNotPluginNamed
+         * @param  {Object}  plugin OSkari plugin
+         * @param  {String}  regex  regex
+         * @return {Boolean}        is plugin not named
+         */
+        _isNotPluginNamed: function(plugin, regex) {
+            // Check at puligin has name
+            if(!plugin || !plugin.getName()) {
+                return false;
+            }
+
+            return plugin.getName().match(regex) && plugin.getName() !== me.drawPlugin.getName();
+        },
+
+        /**
          * Either starts or stops draw plugins which are added to the map module
          * (except the one created in this class).
          *
@@ -1299,17 +1314,11 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.sandbox,
                 mapModule = me.mapModule;
-            var isValidPlugin = function(plugin) {
-                return plugin && plugin.getName() !== null;
-            };
-            var isNotAnalyseDrawPlugin = function(plugin) {
-               return plugin.getName().match(/DrawPlugin$/) &&
-                            plugin.getName() !== me.drawPlugin.getName();
-            };
+
             var drawPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return isValidPlugin(plugin) && isNotAnalyseDrawPlugin(plugin);
+                    return me._isNotPluginNamed(plugin, /DrawPlugin$/);
                 }
             );
 
@@ -1333,17 +1342,11 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = this.sandbox,
                 mapModule = this.mapModule;
-            var isValidPlugin = function(plugin) {
-                return plugin && plugin.getName() !== null;
-            };
-            var isNotAnalyseDrawFilterPlugin = function(plugin) {
-               return plugin.getName().match(/DrawFilterPlugin$/) &&
-                            plugin.getName() !== me.drawPlugin.getName();
-            };
+
             var drawFilterPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return isValidPlugin(plugin) && isNotAnalyseDrawFilterPlugin(plugin);
+                    return  me._isNotPluginNamed(plugin, /DrawFilterPlugin$/);
                 }
             );
 
