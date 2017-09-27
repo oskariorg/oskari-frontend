@@ -82,7 +82,7 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
         },
-        extendTile: function (el) {
+        extendTile: function ( el ) {
           var container = this.getTile().container.append(el);
           var extension = container.find(el);
           this._tileExtensions.push(extension);

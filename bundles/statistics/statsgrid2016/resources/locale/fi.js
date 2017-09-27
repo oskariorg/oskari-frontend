@@ -159,7 +159,16 @@ Oskari.registerLocalization(
             "title": "Suodatus",
             "indicatorToFilter": "Suodatettava muuttuja",
             "condition": "Ehto",
-            "value": "Arvo"
+            "value": "Arvo",
+            "variable": "Muuttuja",
+            "conditionPlaceholder": "Valitse ehto",
+            "greater": "Suurempi kuin (>)",
+            "greaterEqual": "Suurempi tai yhtäsuuri kuin (>=)",
+            "equal": "Yhtäsuuri kuin (=)",
+            "lessEqual": "Pienempi tai yhtäsuuri kuin (<=)",
+            "lessThan": "Pienempi kuin (<)",
+            "between": "Välillä (poissulkeva)",
+            "filter": "Suodata arvot"
         },
         "layer": {
             "name": "Teemakartan aluejako",

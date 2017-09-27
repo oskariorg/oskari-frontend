@@ -108,6 +108,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/barchart.css"
             }, {
                 "type": "text/css",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/css/filter.css"
+            }, {
+                "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
             }, {
                 "type" : "text/javascript",
