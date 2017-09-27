@@ -1288,12 +1288,12 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method  @private _isNotPluginNamed
-         * @param  {Object}  plugin OSkari plugin
+         * @method  @private _isPluginNamed
+         * @param  {Object}  plugin Oskari plugin
          * @param  {String}  regex  regex
          * @return {Boolean}        is plugin not named
          */
-        _isNotPluginNamed: function(plugin, regex) {
+        _isPluginNamed: function(plugin, regex) {
             // Check at puligin has name
             if(!plugin || !plugin.getName()) {
                 return false;
@@ -1318,7 +1318,7 @@ Oskari.clazz.define(
             var drawPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return me._isNotPluginNamed(plugin, /DrawPlugin$/);
+                    return me._isPluginNamed(plugin, /DrawPlugin$/);
                 }
             );
 
@@ -1346,7 +1346,7 @@ Oskari.clazz.define(
             var drawFilterPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return  me._isNotPluginNamed(plugin, /DrawFilterPlugin$/);
+                    return  me._isPluginNamed(plugin, /DrawFilterPlugin$/);
                 }
             );
 
