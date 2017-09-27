@@ -255,7 +255,6 @@ Oskari.clazz.define(
                 layerWrapper,
                 layerContainer,
                 selectedLayers;
-console.log(me.accordion.ui);
             me.accordion.removeAllPanels();
             me.layerContainers = {};
             me.layerGroups = groups;
