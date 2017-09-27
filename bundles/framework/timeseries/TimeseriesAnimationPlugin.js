@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         this._cancelBuffering = null;
         this._frameInterval = 1000;
         this._currentLayerId = null;
+        this.pluginName = 'TimeseriesAnimationPlugin';
     }, {
         __name : 'TimeseriesAnimationPlugin',
         _clazz : 'Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin',
@@ -46,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         /**
          * @method _getTileUrls
          * Get tile urls for given time
-         * @param {String} time time as ISO-string 
+         * @param {String} time time as ISO-string
          */
         _getTileUrls: function (time) {
             var OLlayers = this._mapModule.getOLMapLayers(this._currentLayerId);
@@ -61,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
         /**
          * @method _getNextTimestep
          * Get next timestep from timeseries
-         * @param {Number} stepInterval time as ISO-string 
+         * @param {Number} stepInterval time as ISO-string
          */
         _getNextTimestep: function(stepInterval){
             var times = this._getLayer().getAttributes().times;
@@ -161,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
             this._scheduleNextTimestep = playing;
 
             this._resetBuffer();
-            
+
             this._mapModule.handleMapLayerUpdateRequest(this._currentLayerId, true, {"TIME": time});
             this._sendTimeseriesAnimationEvent(this._currentLayerId, time, playing);
         },
@@ -170,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
          * Send event about state of layer animation
          * @param {String} layerId layerId
          * @param {String} time requested point in time
-         * @param {Boolean} playing should the animation start/stop 
+         * @param {Boolean} playing should the animation start/stop
          */
         _sendTimeseriesAnimationEvent: function(layerId, time, playing) {
             var eventBuilder = Oskari.eventBuilder('TimeseriesAnimationEvent');
@@ -194,7 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.ImageBuffer',
         this._images = [];
         this._currentBatch = 0;
         this._timeout = null;
-        this._startTime;
+        this._startTime = null;
     },
     {
         loadImages: function (urls, millisToTarget, millisToTimeout, callback) {
@@ -225,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.ImageBuffer',
                             }
                         }
                     }
-                }
+                };
                 image.src = url;
                 me._images.push(image);
             });
@@ -239,6 +240,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.ImageBuffer',
             return function() {
                 aborted = true;
                 clearTimeout(me._timeout);
-            }
+            };
         }
     });
