@@ -1298,14 +1298,20 @@ Oskari.clazz.define(
         _toggleDrawPlugins: function (enabled) {
             var me = this,
                 sandbox = me.sandbox,
-                mapModule = me.mapModule,
-                drawPlugins = _.filter(
-                    mapModule.getPluginInstances(),
-                    function (plugin) {
-                        return (plugin.getName().match(/DrawPlugin$/) &&
-                            plugin.getName() !== me.drawPlugin.getName());
-                    }
-                );
+                mapModule = me.mapModule;
+            var isValidPlugin = function(plugin) {
+                return plugin && plugin.getName() !== null;
+            };
+            var isNotAnalyseDrawPlugin = function(plugin) {
+               return plugin.getName().match(/DrawPlugin$/) &&
+                            plugin.getName() !== me.drawPlugin.getName();
+            };
+            var drawPlugins = _.filter(
+                mapModule.getPluginInstances(),
+                function (plugin) {
+                    return isValidPlugin(plugin) && isNotAnalyseDrawPlugin(plugin);
+                }
+            );
 
             _.each(drawPlugins, function (plugin) {
                 if (enabled) {
@@ -1326,14 +1332,20 @@ Oskari.clazz.define(
         _toggleDrawFilterPlugins: function (enabled) {
             var me = this,
                 sandbox = this.sandbox,
-                mapModule = this.mapModule,
-                drawFilterPlugins = _.filter(
-                    mapModule.getPluginInstances(),
-                    function (plugin) {
-                        return (plugin.getName().match(/DrawFilterPlugin$/) &&
-                            plugin.getName() !== me.drawFilterPlugin.getName());
-                    }
-                );
+                mapModule = this.mapModule;
+            var isValidPlugin = function(plugin) {
+                return plugin && plugin.getName() !== null;
+            };
+            var isNotAnalyseDrawFilterPlugin = function(plugin) {
+               return plugin.getName().match(/DrawFilterPlugin$/) &&
+                            plugin.getName() !== me.drawPlugin.getName();
+            };
+            var drawFilterPlugins = _.filter(
+                mapModule.getPluginInstances(),
+                function (plugin) {
+                    return isValidPlugin(plugin) && isNotAnalyseDrawFilterPlugin(plugin);
+                }
+            );
 
             _.each(drawFilterPlugins, function (plugin) {
                 if (enabled) {
