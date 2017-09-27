@@ -1,6 +1,6 @@
 # ShowFilteredLayerListRequest
 
-Filter wanted layers visible in layerlist.
+Filter layers shown on layerlist.
 
 ## Use cases
 
@@ -8,7 +8,7 @@ Filter wanted layers visible in layerlist.
 
 ## Description
 
-Layerlist showed layers can be filtered by sending ShowFilteredLayerListRequest.
+Layers shown to the user can be filtered by sending ShowFilteredLayerListRequest.
 
 ## Parameters
 
@@ -35,7 +35,7 @@ Default filter are:
 * featuredata, this shows only featuredata layers on layerlist
 
 Bundles registered filters:
-* publishable, this shows only publishable layers on layerlist. Available only then if publisher2 bundle started and user is logged in.
+* publishable, this shows only publishable layers on layerlist. Added by publisher2 bundle if the user is logged in.
 
 You can use default filters only when filter buttons are showed on layerlist.
 
