@@ -268,6 +268,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
           }
         }
       });
+      this.service.on('StatsGrid.Filter', function(event) {
+        var filterOptions = event.getFilter();
+
+      });
     },
     createBarCharts: function () {
       if (this.getFlyout() === null) {

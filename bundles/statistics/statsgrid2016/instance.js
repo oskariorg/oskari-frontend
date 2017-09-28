@@ -187,6 +187,9 @@ Oskari.clazz.define(
             'StatsGrid.DatasourceEvent': function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.Filter': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent' : function() {
                 // close/tear down the ui when receiving the event
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);

@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
     this.container = null;
     this.content = null;
     this.conditionSelect = null;
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
 }, {
     _template: {
       wrapper: jQuery('<div></div>'),
@@ -149,6 +150,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
     filter: function () {
         var options = this.getFilterOptions();
         this.updateAppliedFilters( options );
+        this.service.getStateService().addFilter( options );
     }
 
 });
