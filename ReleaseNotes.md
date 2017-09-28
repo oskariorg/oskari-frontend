@@ -2,6 +2,10 @@
 
 ## 1.44.0
 
+### Openlayers version upgrade
+
+For ol3 mapmodule (published maps) from 3.20.1 to 4.3.1
+
 ### layerselector2
 
 Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
@@ -195,15 +199,18 @@ The drawn figures are now removed from the map when PlaceForm is closed by click
 DrawPlugin now checks preconditions before trying to save the drawn figures on the map.
 A line should have 2 points or finished figure (double click) and an area should have 3 points or finished figure (double click).
 
+Fix for layer updating on map when myplaces are updated by the user.
+
 ### Search
 
 The default search UI now includes an optional autocomplete functionality.
 Searchchannels in oskari-server must provide support for it to be useful.
 See oskari-server ReleaseNotes on details how to support autocompletion.
 
-### Visualization form UI for polygon styles with no fill / no stroke
+### Visualization form UI
 
-User can select "no stroke" and "no fill" as stroke and fill colors. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+User can select "no stroke" and "no fill" as stroke and fill colors for polygons. This results in no stroke / fill being rendered. Requires updated code in oskari-server.
+Bug fixes for default values (point marker), color selections and restoring values for the forms when editing.
 
 ### Background layerselector plugin
 
@@ -213,6 +220,10 @@ This change keeps the layer selector visible always (except Publish map), but tu
 ### Analysis
 
 Fixed an issue with english translations where selecting analysis method "Analysis Layer Union" showed the parameters for "Buffers and sector".
+
+### Initial tests for RPC
+
+Initial versions of tests have been added under oskari-frontend/test/rpc.
 
 ## 1.43.0
 
