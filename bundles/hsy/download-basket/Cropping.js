@@ -296,8 +296,6 @@ Oskari.clazz.define(
             layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
             layerNameLang = jQuery('.cropping-btn.selected').val();
 
-            console.info();
-
             jQuery.ajax({
                 type: "POST",
                 dataType: 'json',

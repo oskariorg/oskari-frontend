@@ -242,8 +242,6 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             feats.push(ef);
         }
 
-//        console.log("metadataflyout.showExtentOnMap", Oskari.getSandbox().getMap().getSrsName(), "should match", "EPSG:3067");
-
         var eventBuilder = me.getSandbox().getEventBuilder("FeaturesAvailableEvent");
         // FIXME: FeaturesAvailableEvent has been removed. Use MapModulePlugin.AddFeaturesToMapRequest instead.
         if(eventBuilder) {

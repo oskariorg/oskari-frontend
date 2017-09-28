@@ -67,7 +67,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                     }
                     me.setOLMapLayers(layer.getId(), wmtsLayer);
             }, function() {
-//                console.log("Error loading capabilitiesXML");
             });
 
 
