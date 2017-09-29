@@ -587,11 +587,6 @@ Oskari.clazz.define(
              var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw'], 30);
              me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
              me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
-//           _.each(me._drawLayers[me._layerId].getSource().getFeaturesCollection(), function (f) {
-//                console.log(f);
-//                var feature = me.getBufferedFeature(f.values_.geometry, buffer, me._style);
-//                me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(feature);
-//           });
         },
          /**
          * @method modifyStartEvent
