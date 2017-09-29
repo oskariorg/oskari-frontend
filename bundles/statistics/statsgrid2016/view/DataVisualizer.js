@@ -1,14 +1,14 @@
 /*
 * Creates a flyout with accordion containing charts from Charts.js
 */
-Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function (instance) {
   this.sb = instance.getSandbox();
   this.loc = instance.getLocalization()
   this.isEmbedded = instance.isEmbedded();
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-  this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
+  // this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
   this.container = null;
   this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
   this._isOpen = false;
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       if (this.__datachartFlyout) {
         return this.__datachartFlyout;
       }
-      this.filter.createUI(); 
+      // this.filter.createUI(); 
       this.addTab();
       var accordion = Oskari.clazz.create(
         'Oskari.userinterface.component.Accordion'
@@ -41,19 +41,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.DataVisualizer', function (inst
       }
 
       accordion.insertTo(el);
-
-      var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.loc.datacharts.flyout, {
-        width: 'auto',
-        height: 'auto',
-        cls: 'statsgrid-chart-flyout'
-      });
-      flyout.makeDraggable({
-        handle: '.oskari-flyouttoolbar, .statsgrid-chart-container > .header',
-        scroll: false
-      });
-      flyout.setContent(el);
-      this.__datachartFlyout = flyout;
-      this._isOpen = true;
+      return el;
     },
     getFlyout: function () {
       return this.__datachartFlyout;

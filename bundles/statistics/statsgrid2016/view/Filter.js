@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instance) {
     this.instance = instance;
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization('filter');
@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
     this.content = null;
     this.conditionSelect = null;
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.events();
 }, {
     _template: {
       wrapper: jQuery('<div></div>'),
@@ -27,16 +28,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
                                         ' </table>'+
                                      '</div>'),
       appliedFilters: _.template('<div class="active-filters right">' +
-                                        '<table id="oskari-active-filters" style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
+                                        '<table id="oskari-active-filters" hoverable  style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">'+
                                             '<tbody></tbody'+
                                         '</table>'+
                                     '</div>'+
                                 '</div>'),
-        tablerow: _.template('<tr>' +
+        tablerow: _.template('<tr id="active-filters-row">' +
                                 '<td class="remove"> <div class="removerow"></div></td>'+
                                 '<td class="cell indicator" headers="indicator" > <%= options.indicator %> </td>'+
-                                '<td class="cell condition" headers="condition" style=" border: 1px solid black ;"> <%= options.condition %> </td>'+
-                                '<td class="cell value" headers="value" style=" border: 1px solid black;"> <%= options.value %> </td>'+
+                                '<td class="cell condition" headers="condition" style=" border: 1px solid black ;" > <%= options.condition %> </td>'+
+                                '<td class="cell value" headers="value" style=" border: 1px solid black;" > <%= options.value %> </td>'+
                             '</tr> '),
     },
     setElement: function ( el ) {
@@ -116,22 +117,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
       wrapper.find('.filterIndicator').append( selectionComponent.getIndicatorSelector() );
       wrapper.find('.filterIndicator').after( appliedFilters );
       jQuery( appliedHeader ).insertBefore( wrapper.find('.filterIndicator') );
-    //   wrapper.find('.active-filters').insertBefore( appliedHeader );
       wrapper.find('.filterCondition').append( this.createSelect() );
-      wrapper.find('.filter-button').on( 'click', this.filter.bind(me) );
 
       this.setElement(el);
+      this.bindButtons();
     },
-    getTable: function () {
+    bindButtons: function () {
+        this.getElements().filterButton.on( 'click', this.filter.bind( this ) );
+    },
+    getElements: function () {
             var elements = {
                 "table": this.getElement().find('.active-filters'),
                 "rows": this.getElement().find(".active-filters tr"),
+                "filterValue": this.getElement().find(".filterValue input"),
+                "filterCondition": this.getElement().find(".filterCondition"),
+                "filterIndicator": this.getElement().find(".filterIndicator"),
+                "filterButton": this.getElement().find(".filter-button")
             }
             return elements;
-        },
+    },
+    editFilter: function ( filterRow ) {
+        var jEl = jQuery( filterRow );
+        jEl.toggleClass( "filter-edit-active", true );
+        this.conditionSelect.setValue( jEl.find('.condition').text().trim() );
+        this.getElements().filterValue.val( jEl.find('.value').text().trim() );
+    },
     getFilterOptions: function () {
         var condition = this.conditionSelect.getValue();
-        var value = this.getElement().find('.value').val();
+        var value = this.getElements().filterValue.val();
         return {
             indicator: null,
             condition: condition,
@@ -140,17 +153,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Filter', function (instance) {
     },
     updateAppliedFilters: function ( options ) {
         var me = this;
-        var table = this.getTable().table;
+        var table = this.getElements().table;
             var row = this._template.tablerow( { options: options } );
             table.find('#oskari-active-filters').append(row);
+            table.find('#active-filters-row'). on( 'click', function () {
+                me.editFilter.call( me, this);
+            } );
             table.find('.removerow').on( 'click', this.clearFilter );
     },
     clearFilter: function () {
+        jQuery(this).parent().parent().remove();
     },
     filter: function () {
         var options = this.getFilterOptions();
-        this.updateAppliedFilters( options );
         this.service.getStateService().addFilter( options );
+    },
+    events: function () {
+        var me = this;
+        this.service.on('StatsGrid.Filter', function( event ) {
+            var filterOptions = event.getFilter();
+            me.updateAppliedFilters( filterOptions );
+        });
     }
 
 });
