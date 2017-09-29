@@ -651,11 +651,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {ol.style.Circle}
          */
         __getImageStyle: function(styleDef) {
-            var me = this;
-            var image = {};
+            var me = this,
+                image = {},
+                size;
 
-            var size = (styleDef.image) ? styleDef.image.size | styleDef.image.sizePx : this._defaultMarker.size;
-            if(!size || typeof size !== 'number'){
+            if (styleDef.image && styleDef.image.sizePx){
+                size = styleDef.image.sizePx;
+            } else if (styleDef.image && styleDef.image.size){
+                size = this.getPixelForSize(styleDef.image.size);
+            } else {
+                size = this._defaultMarker.size;
+            }
+
+            if(typeof size !== 'number'){
                 size = this._defaultMarker.size;
             }
 

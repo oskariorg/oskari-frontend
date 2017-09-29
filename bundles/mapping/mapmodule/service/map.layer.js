@@ -239,7 +239,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            json conf for the layer. NOTE! Only updates name for now
          */
         updateLayer: function (layerId, newLayerConf) {
-            //console.log("MapLayerService: updateLayer");
             var layer = this.findMapLayer(layerId);
             if (!layer) {
                 // couldn't find layer to update
@@ -355,7 +354,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Function} callbackFailure method to be called when something went wrong
          */
         loadAllLayersAjax: function (callbackSuccess, callbackFailure) {
-            //console.log("loadAllLayersAjax");
             var me = this,
                 epsg = me._sandbox.getMap().getSrsName();
             // Used to bypass browsers' cache especially in IE, which seems to cause

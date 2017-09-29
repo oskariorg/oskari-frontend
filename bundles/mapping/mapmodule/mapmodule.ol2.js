@@ -458,12 +458,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
-            var me = this;
-            var style = jQuery.extend(true, {}, styleDef);
+            var me = this,
+                style = jQuery.extend(true, {}, styleDef),
+                size;
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
-            var size = (style.image) ? style.image.size | style.image.sizePx : this._defaultMarker.size;
-            if(!size || typeof size !== 'number'){
+            // use sizePx if given
+            if (style.image && style.image.sizePx){
+                size = style.image.sizePx;
+            } else if (style.image && style.image.size){
+                size = this.getPixelForSize(style.image.size);
+            } else {
+                size = this._defaultMarker.size;
+            }
+
+            if(typeof size !== 'number'){
                 size = this._defaultMarker.size;
             }
 
