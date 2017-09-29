@@ -215,12 +215,9 @@ Oskari.clazz.define(
                     flyout.handleLayerModified(layer);
                 } else if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    // wait at backend status event received
-                    if(me._backendStatusReceived) {
-                        flyout.handleLayerAdded(layer);
-                        // refresh layer count
-                        tile.refresh();
-                    }
+                    flyout.handleLayerAdded(layer);
+                    // refresh layer count
+                    tile.refresh();
                 } else if (event.getOperation() === 'remove') {
                     flyout.handleLayerRemoved(layerId);
                     // refresh layer count
@@ -242,8 +239,6 @@ Oskari.clazz.define(
                         'Oskari.mapframework.service.MapLayerService'
                     ),
                     layer;
-
-                me._backendStatusReceived = true;
 
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
