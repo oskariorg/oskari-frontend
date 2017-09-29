@@ -167,9 +167,12 @@ UI improvements:
 
 ### mapmodule
 
+Zoom level is always now integer or NaN. This fix issue on Android mobile pinch zoom (layer not visible before/after pinch zoom).
+
 Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
 
 Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
 
 #### VectorLayerPlugin ol2/ol3
 
