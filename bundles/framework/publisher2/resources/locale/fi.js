@@ -204,9 +204,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
             "signup": "Kirjaudu sisään",
-            "signupUrl": "/web/fi/login",
-            "register": "Rekisteröidy",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Rekisteröidy"
         },
         "StartView": {
             "text": "Tervetuloa karttajulkaisuun. Toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla.",
