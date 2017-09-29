@@ -15,7 +15,7 @@ Oskari.clazz.define(
             name: 'StatsGrid',
             sandbox: 'sandbox',
             stateful: true,
-            tileClazz: 'Oskari.userinterface.extension.DefaultTile',
+            // tileClazz: 'Oskari.userinterface.extension.DefaultTile',
             flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
             vectorViewer: false
         };
@@ -26,15 +26,12 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
-
         this.regionsetViewer = null;
-        this._tileExtensions = [];
-        this._templates = {
-            search: jQuery('<span class="statsgrid-functionality" id="material-search"><h5 id="material-desc">Aineistohaku</h5></span>'),
-            view: jQuery('<span class="statsgrid-functionality" id="material-view"><h5 id="material-desc">Haun tulokset</h5></span>')
-            // edit: jQuery('<span class="statsgrid-functionality" id="material-edit"><h5 id="material-desc">Aineiston muokkaus</h5></span>')
-        }
     }, {
+        startExtensions: function () {
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.statsgrid.Tile', this);
+            this.plugins['Oskari.userinterface.Tile'].startPlugin();
+        },
         afterStart: function (sandbox) {
             var me = this;
 
@@ -43,14 +40,10 @@ Oskari.clazz.define(
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
+            this.startExtensions();
 
             var conf = this.getConfiguration() || {};
             
-            for ( var template in this._templates ) {
-              var icon = this._templates[template];
-              this.extendTile(icon);
-            }
-            this.hideExtension();
             // Check if vector is configurated
             // If it is set map modes to support also vector
             if(conf && conf.vectorViewer === true) {
@@ -58,7 +51,6 @@ Oskari.clazz.define(
             }
             statsService.addDatasource(conf.sources);
             // disable tile if we don't have anything to show or enable if we do
-            this.getTile().setEnabled(this.hasData());
             // setup initial state
             this.setState();
 
@@ -81,31 +73,6 @@ Oskari.clazz.define(
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
-        },
-        extendTile: function ( el ) {
-          var container = this.getTile().container.append(el);
-          var extension = container.find(el);
-          this._tileExtensions.push(extension);
-        },
-        hideExtension: function () {
-          this._tileExtensions.forEach(function(extension){
-            extension.hide();
-          });
-        },
-        showExtension: function (el, callback) {
-            el.show();
-            el.on("click", function(event) {
-                if( jQuery(this).hasClass('material-selected') ) {
-                    jQuery(this).removeClass('material-selected');
-                } else {
-                    jQuery(this).addClass('material-selected').siblings().removeClass('material-selected');
-                }
-                event.stopPropagation();
-                callback();
-            })
-        },
-        getExtensions: function () {
-          return this._tileExtensions;
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -214,24 +181,7 @@ Oskari.clazz.define(
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
-                if( wasClosed ) {
-                  this.hideExtension();
-                    return;
-                } else {
-                  this.getExtensions().forEach(function(extension) {
-                    if(extension[0].id === "material-search") {
-                        //the flyout will be opened so we put the selected icon on it
-                        extension.addClass('material-selected')
-                        me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
-                    }
-                    if(extension[0].id === "material-view"){
-                        me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
-                    }
-                    // if(extension[0].id === "material-edit"){
-                    //     me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
-                    // }
-                  });
-                }
+
                 var renderMode = this.isEmbedded();
                 // rendermode changes if we are in geoportal and open the flyout in publisher
                 if(this._lastRenderMode !== renderMode && visibilityChanged) {
@@ -247,7 +197,7 @@ Oskari.clazz.define(
              */
             MapLayerEvent: function (event) {
                 // Enable tile when stats layer is available
-                this.getTile().setEnabled(this.hasData());
+                // this.getTile().setEnabled(this.hasData());
                 // setup tools for new layers
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
