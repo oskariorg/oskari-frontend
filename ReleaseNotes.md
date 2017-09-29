@@ -167,7 +167,7 @@ UI improvements:
 
 ### mapmodule
 
-Zoom level is always now integer or NaN. This fix issue on Android mobile pinch zoom (layer not visible before/after pinch zoom).
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
 
 Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
 
