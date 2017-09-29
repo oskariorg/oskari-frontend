@@ -206,12 +206,7 @@ Oskari.clazz.define(
          * (e.g. MapLayerService)
          */
         setId: function (id) {
-            //if (typeof id !== 'string') {
-            //    //console.warn('ID not passed as string:', id);
-            //    this._id = String(id);
-            //} else {
             this._id = id;
-            //}
         },
         /**
          * @method getId
