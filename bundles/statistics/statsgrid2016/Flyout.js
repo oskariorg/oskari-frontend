@@ -60,32 +60,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             flyout.setContent(container);
             return this.__legendFlyout;
         },
-        getDataCharts : function () {
-          if( this.datacharts ) {
-            return this.datacharts;
-          }
-          this.datacharts = Oskari.clazz.create('Oskari.statistics.statsgrid.DataVisualizer', this.instance);
-          return this.datacharts;
-        },
-        showDataCharts: function () {
-          var me = this;
-              var charts = me.getDataCharts();
-              if( charts.getFlyout() === null || charts.shouldUpdate) {
-                charts.createUi();
-                charts.shouldUpdate = false;
-              }
-            this.chartsFlyout = charts.getFlyout();
-            if( charts.getCharts() !== null && charts.hasActiveIndicator() !== null ) {
-                charts.createBarCharts();
-            }
-              if( this.chartsFlyout.isVisible() ) {
-                  this.chartsFlyout.hide();
-              } else {
-                  this.chartsFlyout.move(600, 300, true);
-                  this.chartsFlyout.show();
-                  this.chartsFlyout.bringToTop();
-              }
-        },
         showLegend : function(enabled) {
             if(!enabled) {
                 this.removeSideTools();
