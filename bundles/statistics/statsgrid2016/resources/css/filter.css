@@ -57,3 +57,31 @@ td {
 .remove {
     width:5%;
 }
+.filter-edit-active{
+    background: olivedrab !important;
+}
+.hoverable {
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 15em;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+/* Define the hover highlight color for the table row */
+.hoverable tr:hover {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}
+tr:hover td {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+  border-bottom: 1px solid #22262e;
+}

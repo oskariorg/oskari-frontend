@@ -339,6 +339,9 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   #material-search {
         background-image: url("../images/mobile-search-light.png");
   }
+  #material-filter {
+        background-image: url("../images/icon-funnel.png");
+  }
   #material-desc {
     margin-left: 3.9em;
     white-space: nowrap;
