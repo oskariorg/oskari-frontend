@@ -167,9 +167,12 @@ UI improvements:
 
 ### mapmodule
 
+Fixed an issue where layers disappeared when pinch zooming on Android. Caused by zoom level having decimals instead of integer values.
+
 Featurestyle now supports image.sizePx parameter what is used exact icon size without Oskari icon size calculation.
 
 Changed using escape funtion to encodeURIComponent because escape function is deprecated in JavaScript version 1.5.
+
 
 #### VectorLayerPlugin ol2/ol3
 
