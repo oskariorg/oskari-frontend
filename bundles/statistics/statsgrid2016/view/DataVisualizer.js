@@ -25,8 +25,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       select: jQuery('<div class="dropdown"></div>'),
       tabControl: jQuery('<div class="tab-material-controls"></div>')
     },
+    setElement: function ( el ) {
+        this.container = el;
+    },
+    getElement: function () {
+        return this.container;
+    },
+    clearUi: function () {
+      this.container = null;
+    },
     createUi: function () {
       var el = this._template.container;
+      this.clearUi();
       if (this.__datachartFlyout) {
         return this.__datachartFlyout;
       }
@@ -41,7 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       }
 
       accordion.insertTo(el);
-      return el;
+      this.setElement(el);
     },
     getFlyout: function () {
       return this.__datachartFlyout;
@@ -54,8 +64,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     },
     _getPanels: function () {
       var visualizerPanel = this._createDataVisualizerPanel(this.loc.datacharts.desc);
-      var filterPanel = this._createFilterPanel();
-      return [ filterPanel, visualizerPanel ];
+      // var filterPanel = this._createFilterPanel();
+      return [ visualizerPanel ];
     },
     /**
      * Creates an accordion panel for legend and classification edit with eventlisteners on open/close

@@ -15,8 +15,6 @@ Oskari.clazz.define(
             name: 'StatsGrid',
             sandbox: 'sandbox',
             stateful: true,
-            // tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
             vectorViewer: false
         };
         this.visible = false;
@@ -28,9 +26,8 @@ Oskari.clazz.define(
         this.togglePlugin = null;
         this.regionsetViewer = null;
     }, {
-        startExtensions: function () {
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.statsgrid.Tile', this);
-            this.plugins['Oskari.userinterface.Tile'].startPlugin();
+        startExtension: function () {
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.statistics.statsgrid.Tile', this);
         },
         afterStart: function (sandbox) {
             var me = this;
@@ -40,7 +37,7 @@ Oskari.clazz.define(
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
-            this.startExtensions();
+            this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
 
             var conf = this.getConfiguration() || {};
             
@@ -160,13 +157,7 @@ Oskari.clazz.define(
             'UIChangeEvent' : function() {
                 // close/tear down the ui when receiving the event
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-                var flyout = this.getFlyout();
-                if(flyout) {
-                    var legend = this.getFlyout().getLegendFlyout();
-                    if(legend) {
-                        legend.hide();
-                    }
-                }
+
             },
             /**
              * @method userinterface.ExtensionUpdatedEvent
@@ -183,12 +174,6 @@ Oskari.clazz.define(
                 this.visible = !wasClosed;
 
                 var renderMode = this.isEmbedded();
-                // rendermode changes if we are in geoportal and open the flyout in publisher
-                if(this._lastRenderMode !== renderMode && visibilityChanged) {
-                    this.getFlyout().render(renderMode);
-                    this._lastRenderMode = renderMode;
-                    this.getFlyout().setGridHeaderHeight();
-                }
             },
             /**
              * @method MapLayerEvent
@@ -339,7 +324,6 @@ Oskari.clazz.define(
             if(!this.togglePlugin) {
                 this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
             }
-            me.getFlyout().move(0,0);
             mapModule.registerPlugin(me.togglePlugin);
             mapModule.startPlugin(me.togglePlugin);
             me.togglePlugin.showTable(visible || me.visible);

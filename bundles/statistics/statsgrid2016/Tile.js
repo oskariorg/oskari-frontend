@@ -1,9 +1,5 @@
-/*
- * @class Oskari.mapframework.bundle.layerselection2.Tile
- *
- * Renders the "selected layers" tile.
- */
-Oskari.clazz.define('Oskari.mapframework.statsgrid.Tile',
+
+Oskari.clazz.define('Oskari.statistics.statsgrid.Tile',
 
 /**
  * @method create called automatically on construction
@@ -20,12 +16,11 @@ function(instance) {
     this.container = null;
     this.template = null;
     this._tileExtensions = [];
-    this._flyouManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance);
-    this._flyouManager.init();
+    this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance);
     this._templates = {
-        search: jQuery('<span class="statsgrid-functionality" id="material-search"><h5 id="material-desc">Aineistohaku</h5></span>'),
-        view: jQuery('<span class="statsgrid-functionality" id="material-view"><h5 id="material-desc">Haun tulokset</h5></span>'),
-        filter: jQuery('<span class="statsgrid-functionality" id="material-filter"><h5 id="material-desc">Aineiston suodatus</h5></span>')
+        search: jQuery('<span class="statsgrid-functionality" id="search"><h5 id="material-desc">Aineistohaku</h5></span>'),
+        view: jQuery('<span class="statsgrid-functionality" id="dataview"><h5 id="material-desc">Haun tulokset</h5></span>'),
+        filter: jQuery('<span class="statsgrid-functionality" id="filter"><h5 id="material-desc">Aineiston suodatus</h5></span>')
     }
 }, {
     /**
@@ -33,7 +28,7 @@ function(instance) {
      * @return {String} the name for the component
      */
     getName : function() {
-        return 'Oskari.mapframework.bundle.layerselection2.Tile';
+        return 'Oskari.statistics.statsgrid.Tile';
     },
     hasData: function () {
         return this.statsService.getDatasource().length;
@@ -57,11 +52,15 @@ function(instance) {
      * Interface method implementation, calls #refresh()
      */
     startPlugin : function() {
+        // this.setEl( jQuery('<div></div>') );
         this._addTileStyleClasses();
         for (var p in this.eventHandlers) {
             this.instance.getSandbox().registerForEventByName(this, p);
         }
         this.refresh();
+    },
+    initFlyoutManager: function () {
+        this._flyoutManager.init();
     },
     _addTileStyleClasses: function() {
         var isContainer = (this.container && this.instance.mediator) ? true : false;
@@ -87,7 +86,7 @@ function(instance) {
      * @return {String} localized text for the title of the tile
      */
     getTitle : function() {
-        return this.instance.getLocalization('flyout').title;
+        return this.instance.getLocalization().flyout.title;
     },
     /**
      * @method getDescription
@@ -120,7 +119,6 @@ function(instance) {
         var instance = me.instance;
         var sandbox = instance.getSandbox();
         // this.setEnabled(this.hasData());
-        this.container = jQuery('<div></div>');
         for ( var template in this._templates ) {
             var icon = this._templates[template];
             this.extendTile(icon);
@@ -144,14 +142,21 @@ function(instance) {
             if( jQuery(this).hasClass('material-selected') ) {
                 jQuery(this).removeClass('material-selected');
             } else {
-                jQuery(this).addClass('material-selected').siblings().removeClass('material-selected');
+                jQuery(this).addClass('material-selected');
             }
             event.stopPropagation();
-            callback();
+            callback( this.id );
         })
     },
     getExtensions: function () {
         return this._tileExtensions;
+    },
+    getFlyout: function ( type ) {
+        return this._flyoutManager.getFlyout( type );
+    },
+    openFlyout: function ( type ) {
+        var flyout = this._flyoutManager.getFlyout( type );
+        this._flyoutManager.open( flyout );
     },
     /**
      * @method onEvent
@@ -184,17 +189,18 @@ function(instance) {
             this.hideExtension();
                 return;
             } else {
-            this.getExtensions().forEach(function(extension) {
-                if(extension[0].id === "material-search") {
+            this.getExtensions().forEach( function( extension ) {
+                if( extension[0].id === "search" ) {
                     //the flyout will be opened so we put the selected icon on it
-                    extension.addClass('material-selected')
-                    me.showExtension(extension, me.getFlyout().toggleFlyout.bind(me.getFlyout()));
+                    me.showExtension( extension, me.openFlyout.bind( me ) );    
                 }
-                if(extension[0].id === "material-view"){
-                    me.showExtension(extension, me.getFlyout().showDataCharts.bind(me.getFlyout()));
+                if( extension[0].id === "dataview" ) {
+                    // me.showExtension.call(me, extension, me.openFlyout.bind( me.openFlyout.bind("dataview") ) );
+
+                    me.showExtension( extension, me.openFlyout.bind( me ) );
                 }
-                if(extension[0].id === "material-filter"){
-                    me.showExtension(extension, me.getFlyout().showFilter());
+                if( extension[0].id === "filter" ) {
+                    me.showExtension( extension, me.openFlyout.bind(  me ) );
                 }
             });
             }
