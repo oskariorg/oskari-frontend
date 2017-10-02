@@ -85,3 +85,9 @@ tr:hover td {
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
+.filter {
+    padding: 1.2em;
+}
+.tabsHeader {
+    padding-top:2em !important;
+}

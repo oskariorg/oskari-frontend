@@ -168,7 +168,10 @@ Oskari.registerLocalization(
             "lessEqual": "Pienempi tai yhtäsuuri kuin (<=)",
             "lessThan": "Pienempi kuin (<)",
             "between": "Välillä (poissulkeva)",
-            "filter": "Suodata arvot"
+            "filter": "Suodata arvot",
+            "desc": "Suodata arvoilla",
+            "filtered": "Suodatetut arvot",
+            "area": "Suodata Alueilla"
         },
         "layer": {
             "name": "Teemakartan aluejako",

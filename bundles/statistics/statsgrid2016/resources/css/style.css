@@ -333,13 +333,13 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     height: 36px;
     display: block;
   }
-  #material-view {
+  #view {
         background-image: url("../images/table_light.png");
   }
-  #material-search {
+  #search {
         background-image: url("../images/mobile-search-light.png");
   }
-  #material-filter {
+  #filter {
         background-image: url("../images/icon-funnel.png");
   }
   #material-desc {
@@ -352,5 +352,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
   }
   div.tab-material-controls div.title {
     font-weight: bold;
+  }
+  .statsgrid-search-container {
+    padding: 1.2em;
   }
 /*# sourceMappingURL=style.css.map */
