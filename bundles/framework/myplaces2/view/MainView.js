@@ -78,14 +78,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             mapModule.registerPlugin(drawPlugin);
             mapModule.startPlugin(drawPlugin);
             this.drawPlugin = drawPlugin;
-
-            // register plugin for map (hover tooltip for my places)
-            // TODO: start when a myplaces layer is added and stop when last is removed?
-            /*var hoverPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin');
-        mapModule.registerPlugin(hoverPlugin);
-        mapModule.startPlugin(hoverPlugin);
-        this.hoverPlugin = hoverPlugin;
-        */
         },
         /**
          * @method update
@@ -221,9 +213,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     group: 1,
                     action: function () {
                         me.cleanupPopup();
-                        // ask toolbar to select default tool
-                        //var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
-                        //me.instance.sandbox.request(me, toolbarRequest);
                     }
                 }, {
                     name: me.loc('buttons.save'),
