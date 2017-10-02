@@ -76,7 +76,7 @@ jQuery(document).ready(function () {
                 return;
             }
 
-            terribleHackToBeRemoved(app.configuration);
+            terribleHackToBeRemoved(app.configuration, app.env.lang || window.language);
 
             app.setApplicationSetup(appSetup);
 
@@ -96,7 +96,7 @@ jQuery(document).ready(function () {
 // currently personaldata, publisher, analysis etc require
 // bundle-specific config for login/register urls
 // Should be changed so that Oskari.getURLs() could be used as a generic config/environment
-    function terribleHackToBeRemoved(conf) {
+    function terribleHackToBeRemoved(conf, lang) {
         if(!conf.personaldata) {
             conf.personaldata = {};
         }
@@ -105,6 +105,7 @@ jQuery(document).ready(function () {
         }
         if(!conf.personaldata.conf.loginUrl) {
             conf.personaldata.conf.loginUrl = '/auth';
+            // personal data doesn't support registration link
         }
 
         if(!conf.analyse) {
@@ -117,7 +118,7 @@ jQuery(document).ready(function () {
             conf.analyse.conf.loginUrl = '/auth';
         }
         if(!conf.analyse.conf.registerUrl) {
-            conf.analyse.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            conf.analyse.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
         }
 
         if(!conf.publisher2) {
@@ -130,7 +131,7 @@ jQuery(document).ready(function () {
             conf.publisher2.conf.loginUrl = '/auth';
         }
         if(!conf.publisher2.conf.registerUrl) {
-            conf.publisher2.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + Oskari.getLang();
+            conf.publisher2.conf.registerUrl = 'https://omatili.maanmittauslaitos.fi/?lang=' + lang;
         }
     }
 });
