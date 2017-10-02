@@ -37,17 +37,21 @@ function() {
         return this.renderingElement;
     },
     setFeatureProperties: function(fields){
-            this.featureProperties = fields;
+        this.featureProperties = fields;
     },
     getFeatureProperties: function(){
-            return this.featureProperties;
+        return this.featureProperties;
     },
     setFeaturePropertyIndexes: function(indexes){
-            this.featurePropertyIndexes = indexes;
+        this.featurePropertyIndexes = indexes;
     },
     getFeaturePropertyIndexes: function(){
-            return this.featurePropertyIndexes;
+        return this.featurePropertyIndexes;
+    },
+    hasOrder: function(){
+        return this.featureProperties && this.featureProperties.length > 1;
     }
+
 }, {
     "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]
 });

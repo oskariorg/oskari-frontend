@@ -302,7 +302,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 this.plugin.mapMoveHandler();
             }
 
-            if (typeof layer.getFeatureProperties === "function"){
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder()){
                 this.setOrderForFeatureProperties(layer,data.data.fields);
                 layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
                 layer.setLocales (this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
@@ -335,7 +335,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             feature;
         if (data.data.feature !== 'empty' && data.data.feature !== 'max') {
             feature = data.data.feature;
-            if (typeof layer.getFeatureProperties === "function"){
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder()){
                 layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
             } else{
                 layer.setActiveFeature(feature);
@@ -392,7 +392,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
-            if (typeof layer.getFeatureProperties === "function" && data.data.features !== 'empty'){
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder() && data.data.features !== 'empty'){
                 features = data.data.features;
                 for (i=0; i<features.length; i++){
                     features [i] = this.sortArrayByFeaturePropertyIndexes (layer, features[i]);
