@@ -103,8 +103,8 @@ jQuery(document).ready(function () {
         if(!conf.personaldata.conf) {
             conf.personaldata.conf = {};
         }
-        if(!conf.personaldata.conf.loginUrl) {
-            conf.personaldata.conf.loginUrl = '/auth';
+        if(!conf.personaldata.conf.logInUrl) {
+            conf.personaldata.conf.logInUrl = '/auth';
             // personal data doesn't support registration link
         }
 

@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
 
             if(conf.logInUrl) {
                 //loginUrl = Oskari.getLocalized(conf.loginUrl); !!!!
-                notLoggedInText = '<a href="' + Oskari.getLocalized(conf.loginUrl) + '">' + this.instance.getLocalization('notLoggedInText') + '</a>';
+                notLoggedInText = '<a href="' + Oskari.getLocalized(conf.logInUrl) + '">' + this.instance.getLocalization('notLoggedInText') + '</a>';
             }
 
             notLoggedInFullText += '<br/><br/>' + notLoggedInText;
