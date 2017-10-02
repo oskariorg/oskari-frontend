@@ -76,7 +76,7 @@ jQuery(document).ready(function () {
                 return;
             }
 
-            terribleHackToBeRemoved(app.configuration, app.env.lang || window.language);
+            terribleHackToBeRemoved(appSetup.configuration, appSetup.env.lang || window.language);
 
             app.setApplicationSetup(appSetup);
 
