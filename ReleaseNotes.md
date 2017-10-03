@@ -2,10 +2,6 @@
 
 ## 1.44.0
 
-### Openlayers version upgrade
-
-For ol3 mapmodule (published maps) from 3.20.1 to 4.3.1
-
 ### layerselector2
 
 Filter buttons are now shown on each tab instead of just the first one. Also fixed undefined error for ShowFilteredLayerListRequest.
