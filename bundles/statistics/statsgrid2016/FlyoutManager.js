@@ -16,17 +16,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             }
         }
         var view = this.views[flyout.options.view];
-        if(view === "") {
-            return;
-        }
+
         if( view.getElement() === null ) {
             view.createUi();
             flyout.makeDraggable({
                 handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
                 scroll : false
             });
+            flyout.setContent( view.getElement() );
         }
-        flyout.setContent( view.getElement() );
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
         this.openFlyouts.push(flyout);
@@ -34,9 +32,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     hide: function ( flyout ) {
         flyout.hide();
         this.openFlyouts.splice( flyout, 1 );
-    },
-    mapViewToFlyout: function () {
-
     },
     initFlyouts: function () {
         return flyouts = {
