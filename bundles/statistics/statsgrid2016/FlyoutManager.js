@@ -15,17 +15,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 return;
             }
         }
-        flyout.makeDraggable({
-            handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-            scroll : false
-        });
-
-        var me = this;
         var view = this.views[flyout.options.view];
         if(view === "") {
             return;
         }
-        view.createUi();
+        if( view.getElement() === null ) {
+            view.createUi();
+            flyout.makeDraggable({
+                handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
+                scroll : false
+            });
+        }
         flyout.setContent( view.getElement() );
         flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
         flyout.show();
@@ -37,26 +37,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     mapViewToFlyout: function () {
 
-    },
-    getDataFlyout : function() {
-        if(this.__dataFlyout) {
-            return this.__dataFlyout;
-        }
-        var locale = this.instance.getLocalization('');
-        var flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', this.instance.getLocalization().title, {
-            width: 'auto',
-            cls: 'statsgrid-data-flyout'
-        });
-        flyout.makeDraggable({
-            handle : '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-            scroll : false
-        });
-        this.__dataFlyout = flyout;
-        // render content
-        this.__data = this.getViews().data;
-        var el = this.__data.createUi();
-        flyout.setContent(el);
-        return this.__dataFlyout;
     },
     initFlyouts: function () {
         return flyouts = {
@@ -99,9 +79,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     getFlyout: function ( flyout ) {
         return this.flyouts[flyout];
-    },
-    renderViewToFlyout: function () {
-
     }
 }, {
 

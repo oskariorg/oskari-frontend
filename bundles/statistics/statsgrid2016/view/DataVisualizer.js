@@ -268,7 +268,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       });
       this.service.on('StatsGrid.Filter', function(event) {
         var filterOptions = event.getFilter();
-
       });
     },
     createBarCharts: function () {
@@ -326,10 +325,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       return this._isOpen;
     }
   }, {
-    /**
-     * @property {String[]} protocol
-     * @static
-     */
-    protocol: ['Oskari.userinterface.Flyout'],
-    "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
+        extend: ['Oskari.userinterface.extension.DefaultView']
   });

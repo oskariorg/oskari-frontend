@@ -3,9 +3,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization('filter');
     this.container = null;
-    this.content = null;
+    this.panels = {};
     this.conditionSelect = null;
-    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.service = this.instance.statsService;
     this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
     this.events();
 }, {
@@ -47,11 +47,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
     getElement: function () {
         return this.container;
     },
-    setContent: function ( content ) {
-        this.content = content;
+    getPanels: function () {
+        return this.panels;
     },
-    getContent: function () {
-        return this.content;
+    setPanels: function () {
+        var me = this;
+        var panels = {};
+        this.tabsContainer.panels.forEach( function( panel ) {
+            var id = panel.getId();
+            panels[id] = panel;
+        });
+        this.panels = panels;
     },
     createSelect: function () {
         var conditions = [
@@ -108,34 +114,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
 
       wrapper.append( filterIndicator );
 
-      el.append( wrapper );
 
       wrapper.find('.filterIndicator').append( selectionComponent.getIndicatorSelector() );
 
-    //   var accordion = Oskari.clazz.create(
-    //     'Oskari.userinterface.component.Accordion'
-    //   );
-    //   var panels = this._getPanels();
-    //   for (var i = 0; i < panels.length; i++ ) {
-    //     accordion.addPanel(panels[i]);
-    //   }
+      var tabs = this.createTabs();
+      wrapper.append( tabs );
+      el.append( wrapper );
 
-    //   accordion.insertTo(el);
       this.setElement(el);
-        this.addTab();
       this.bindButtons();
     },
     bindButtons: function () {
         this.getElements().filterButton.on( 'click', this.filter.bind( this ) );
     },
     getElements: function () {
+        var panels = this.getPanels();
+        var valuePanel = panels["value-filter"].getContainer();
+        var appliedPanel = panels["applied-filter"].getContainer();
             var elements = {
-                "table": this.getElement().find('.active-filters'),
-                "rows": this.getElement().find(".active-filters tr"),
+                "table": appliedPanel.find('.active-filters'),
+                "rows": appliedPanel.find(".active-filters tr"),
                 "filterValue": this.getElement().find(".filterValue input"),
-                "filterCondition": this.getElement().find(".filterCondition"),
-                "filterIndicator": this.getElement().find(".filterIndicator"),
-                "filterButton": this.getElement().find(".filter-button")
+                "filterCondition": valuePanel.find(".filterCondition"),
+                "filterIndicator": valuePanel.find(".filterIndicator"),
+                "filterButton": valuePanel.find(".filter-button")
             }
             return elements;
     },
@@ -172,22 +174,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         this.service.getStateService().addFilter( options );
     },
     events: function () {
-        var me = this;
-        this.service.on('StatsGrid.Filter', function( event ) {
-            var filterOptions = event.getFilter();
-            me.updateAppliedFilters( filterOptions );
-        });
+            var me = this;
+            this.service.on('StatsGrid.Filter', function( event ) {
+                var filterOptions = event.getFilter();
+                me.updateAppliedFilters( filterOptions );
+            });
     },
     _createAreaFilterTab: function (title) {
-      var me = this;
-      var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-      panel.setTitle(title);
-      var panelWrapper = jQuery('<div></div>');
+        var me = this;
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+        panel.setTitle(title);
+        var panelWrapper = jQuery('<div></div>');
 
         panel.getContainer().prepend(panelWrapper); 
         panel.setPriority(1.0);
-      this.tabsContainer.addPanel(panel);
-      return panel;
+        panel.setId('area-filter');
+        this.tabsContainer.addPanel(panel);
+        return panel;
     },
     _createValueFilterTab: function (title) {
       var me = this;
@@ -206,6 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
 
         panel.getContainer().prepend(panelWrapper); 
         panel.setPriority(1.0);
+        panel.setId('value-filter');
       this.tabsContainer.addPanel(panel);
       return panel;
     },
@@ -223,20 +227,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
 
         panel.getContainer().prepend(panelWrapper); 
         panel.setPriority(1.0);
+        panel.setId('applied-filter');
         this.tabsContainer.addPanel(panel);
         return panel;
     },
-    addTab: function () {
-      var me = this,
-        flyout = jQuery(me.container);
-      // Change into tab mode if not already
-      if (me.tabsContainer.panels.length === 0) {
-        me.tabsContainer.insertTo(flyout);
-      }
-    this._createAreaFilterTab(this.loc.area);
-      this._createValueFilterTab( this.loc.desc );
-      this.appliedFiltersTab( this.loc.filtered );
-      this.getElement().append( me.tabsContainer.ui );
-    },
-
+    createTabs: function () {
+        var me = this;
+        this._createAreaFilterTab(this.loc.area);
+        this._createValueFilterTab( this.loc.desc );
+        this.appliedFiltersTab( this.loc.filtered );
+        this.setPanels();
+        return me.tabsContainer.ui;
+    }
+}, {
+        extend: ['Oskari.userinterface.extension.DefaultView'] 
 });

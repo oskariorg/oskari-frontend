@@ -328,7 +328,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // notify
             var eventBuilder = Oskari.eventBuilder('StatsGrid.Filter');
             this.sandbox.notifyAll(eventBuilder(filter));
-        },
+        }
 
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

@@ -171,7 +171,7 @@ Oskari.registerLocalization(
             "filter": "Suodata arvot",
             "desc": "Suodata arvoilla",
             "filtered": "Suodatetut arvot",
-            "area": "Suodata Alueilla"
+            "area": "Suodata alueilla"
         },
         "layer": {
             "name": "Teemakartan aluejako",

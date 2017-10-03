@@ -27,7 +27,7 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
     }, {
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.statistics.statsgrid.Tile', this);
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.statistics.statsgrid.Tile', this, this.statsService);
         },
         afterStart: function (sandbox) {
             var me = this;
@@ -159,21 +159,28 @@ Oskari.clazz.define(
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
 
             },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
-                    // not me/no data -> do nothing
-                    return;
-                }
+            'userinterface.ExtensionUpdatedEvent': function ( event ) {
                 var me = this;
                 var wasClosed = event.getViewState() === 'close';
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
-
-                var renderMode = this.isEmbedded();
+                if( wasClosed ) {
+                    me.getTile().hideExtension();
+                    return;
+                } else {
+                this.getExtensions().forEach( function( extension ) {
+                    if( extension[0].id === "search" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );    
+                    }
+                    if( extension[0].id === "dataview" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
+                    }
+                    if( extension[0].id === "filter" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind(  me ) );
+                    }
+                });
+                }
             },
             /**
              * @method MapLayerEvent

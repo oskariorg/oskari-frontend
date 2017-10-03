@@ -9,10 +9,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile',
  * instance
  *      reference to component that created the tile
  */
-function(instance) {
+function(instance, service) {
     this.instance = instance;
     this.sb = this.instance.getSandbox(),
-    this.statsService = instance.statsService;
+    this.statsService = service;
     this.container = null;
     this.template = null;
     this._tileExtensions = [];
@@ -186,17 +186,14 @@ function(instance) {
             var visibilityChanged = this.visible === wasClosed;
             this.visible = !wasClosed;
             if( wasClosed ) {
-            this.hideExtension();
+                this.hideExtension();
                 return;
             } else {
             this.getExtensions().forEach( function( extension ) {
                 if( extension[0].id === "search" ) {
-                    //the flyout will be opened so we put the selected icon on it
                     me.showExtension( extension, me.openFlyout.bind( me ) );    
                 }
                 if( extension[0].id === "dataview" ) {
-                    // me.showExtension.call(me, extension, me.openFlyout.bind( me.openFlyout.bind("dataview") ) );
-
                     me.showExtension( extension, me.openFlyout.bind( me ) );
                 }
                 if( extension[0].id === "filter" ) {
@@ -204,7 +201,13 @@ function(instance) {
                 }
             });
             }
-        }   
+        },
+        'StatsGrid.Filter': function(evt) {
+            if( this.statsService === undefined ) {
+                this.statsService = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+            }
+                this.statsService.notifyOskariEvent(evt);
+        },   
     }
 }, {
     /**
