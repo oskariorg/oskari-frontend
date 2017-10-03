@@ -179,9 +179,13 @@ Oskari.clazz.define(
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
                         me.updateData(selectedPanel.layer);
+
                         // sendout highlight request for selected tab
                         if (me.active) {
-                            var selection = me.layers[selectedPanel.layer.getId()].grid.getSelection();
+                            var selection = [];
+                            if(me.layers[selectedPanel.layer.getId()] && me.layers[selectedPanel.layer.getId()].grid) {
+                                selection = me.layers[selectedPanel.layer.getId()].grid.getSelection();
+                            }
                             if(selection && selection.length>0) {
                                 selection.forEach(function(selected, index){
                                     me._handleGridSelect(selectedPanel.layer, selected.__fid, index!==0);
