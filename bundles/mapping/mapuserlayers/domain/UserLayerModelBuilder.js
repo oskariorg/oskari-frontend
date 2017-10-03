@@ -30,7 +30,11 @@ Oskari.clazz.define(
             layer.setSource(mapLayerJson.source);
             layer.setRenderingElement(mapLayerJson.renderingElement);
             layer.addLayerUrl(mapLayerJson.renderingUrl);
-            layer.setFeatureProperties(this.addHiddenFields(mapLayerJson.fields));
+            if (mapLayerJson.fields && mapLayerJson.fields.length !== 0){
+                layer.setFeatureProperties(this.addHiddenFields(mapLayerJson.fields));
+            } else {
+                layer.setFeatureProperties([]);
+            }
         },
 
         addHiddenFields: function(fields){
