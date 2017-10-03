@@ -781,10 +781,6 @@ Oskari.clazz.define(
                 } else {
                     checkboxEl.css('margin-top', '7px');
                     gridToolsEl.append(checkboxEl);
-                    gridEl.css({
-                        'position':'relative',
-                        'top':'6px'
-                    });
                 }
 
             }
