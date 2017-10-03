@@ -264,4 +264,7 @@ div.featuredata-go-to-location {
     cursor: pointer;
 }
 
+.featuredata label.oskari-formcomponent {
+    display: inline-block;
+    width: 140px; }
 /*# sourceMappingURL=style.css.map */

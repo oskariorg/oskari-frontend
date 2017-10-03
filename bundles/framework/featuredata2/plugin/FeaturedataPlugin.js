@@ -153,13 +153,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
 
             linkElement.bind('click', function () {
-                if(me._mapStatusChanged) {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                    var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
-                    sandbox.notifyAll(event);
-                    me._mapStatusChanged = false;
+                if(!me._flyoutOpen) {
+                    if(me._mapStatusChanged) {
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')();
+                        sandbox.notifyAll(event);
+                        me._mapStatusChanged = false;
+                    } else {
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                    }
+                    me._flyoutOpen = true;
                 } else {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
+                    me._flyoutOpen = undefined;
                 }
                 return false;
             });
@@ -284,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 height = jQuery(mobileDiv).outerHeight(true),
                 flyoutTop = parseInt(top)+parseInt(height);
 
-            flyout.container.parentElement.parentElement.style['top'] = flyoutTop + 'px';
+            flyout.container.parentElement.parentElement.style.top = flyoutTop + 'px';
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
