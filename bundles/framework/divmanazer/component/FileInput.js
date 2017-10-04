@@ -79,28 +79,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (locali
                         ajaxData.append( input.attr('name'), file );
                     });
                 }
-
-                // jQuery.ajax({
-                //     url: form.attr('action'),
-                //     type: form.attr('method'),
-                //     data: ajaxData,
-                //     dataType: 'json',
-                //     cache: false,
-                //     contentType: false,
-                //     processData: false,
-                //     complete: function() {
-                //         form.removeClass('is-uploading');
-                //     },
-                //     success: function(data) {
-                //         form.addClass( data.success == true ? 'is-success' : 'is-error' );
-                //         if (!data.success) $errorMsg.text(data.error);
-                //     },
-                //     error: function() {
-                //         form.addClass('is-error').removeClass('is-uploading');
-                //     // Log the error, show an alert, whatever works for you
-                //     }
-                // });
-            
             });
             this.setElement( form.parent() );
             return this.getElement();
