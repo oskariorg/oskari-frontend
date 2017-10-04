@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.44.1
+
+### publisher2
+
+Fixed an issue where the button to add layers in publisher didn't work.
+
 ## 1.44.0
 
 ### layerselector2
