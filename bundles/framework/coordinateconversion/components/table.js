@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                                     '<td class="cell heightsystem" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
-            oskari_input_table_content: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
+            input_table: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
                                         '<h5> <%= input %> </h5>' +
                                         '<div class="oskari-table-content">'+
                                          '<div style="width:100%;height:98%; overflow:auto;">'+
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                                          '</div>'+
                                         '</div>'+
                                     '</div>'),
-            oskari_result_table_content: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left:8px;">' +
+            output_table: _.template('<div class="coordinatefield-result" style="display:inline-block; padding-left:8px;">' +
                                         '<h5> <%= result %> </h5>' +
                                         '<div class="oskari-table-content-target">'+
                                          '<div style="width:100%;height:98%; overflow:auto;">'+
@@ -58,8 +58,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
         create: function () {
             var me = this;
                 var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
-                var resultcoordinatefield = this.template.oskari_result_table_content({ result: this.loc.coordinatefield.result });
-                var inputcoordinatefield = this.template.oskari_input_table_content({  input: this.loc.coordinatefield.input,
+                var resultcoordinatefield = this.template.output_table({ result: this.loc.coordinatefield.result });
+                var inputcoordinatefield = this.template.input_table({  input: this.loc.coordinatefield.input,
                                                                                 north:this.loc.coordinatefield.north,
                                                                                 east:this.loc.coordinatefield.east,
                                                                                 ellipse_height: "" });
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
         updateRowCount: function () {
                 this.getElement().input.find("#num").text( this.numrows++ );
         },
-        isTableEditable: function ( editable ) {
+        isEditable: function ( editable ) {
             var rows = this.getElements().rows;
             if( !editable ) {
                 rows.each( function ( row ) {
@@ -104,22 +104,22 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
 
         },
         /**
-         * @method populateTableWithData
+         * @method populate
          *
          * {Object} data, each key need to have property lon & lat 
          */
-        populateTableWithData: function( cell, data ) {
+        populate: function( cell, data ) {
             var table = this.getElements().table;
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
+            for ( var key in data ) {
+                if ( data.hasOwnProperty( key ) ) {
                     var row = this.template.row( { coords: data[key] } );
-                    jQuery(cell).parent().after(row);
+                    jQuery( cell ).parent().after( row );
                     this.updateRowCount();
                 }
             }
             table.trigger('rowCountChanged');
         },
-        addToInputTable: function (coords) {
+        addRows: function (coords) {
             var table = this.getElements().table;
             for (var i = 0; i < coords.length; i++ ) {
                 var row = this.template.row( { coords: coords[i] } );
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             }
             table.trigger('rowCountChanged');
         },
-        tableDisplayNumOfRows: function () {
+        displayNumOfRows: function () {
             var me = this;
             var table = this.getElements().table;
             table.bind('rowCountChanged', function (evt) {
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                     }
                 });
         },
-        updateTableTitle: function (values) {
+        updateTitle: function (values) {
             this.getElements().header.input.remove();
             this.getElements().header.output.remove();
             

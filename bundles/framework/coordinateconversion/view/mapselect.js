@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
 
             btn.setHandler(function() {
                 dialog.close();
-                me.instance.plugins['Oskari.userinterface.Flyout'].getViews().conversion.table.addToInputTable(me.mapcoords);
+                me.instance.plugins['Oskari.userinterface.Flyout'].getViews().conversion.table.addRows( me.mapcoords );
                 me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
                 me.mapcoords = [];
             });

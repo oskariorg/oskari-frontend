@@ -46,12 +46,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             conversionbutton: _.template('<div class="conversionbtn" style="display:inline-block; padding-left: 8px;">' +
                                             '<input id="convert" type="button" value="<%= convert %> >>">' +
                                          '</div>'),
-            tablerow: _.template('<tr>' +
-                                    '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
-                                    '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell heightsystem" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
-                                    '<td class="cell control"> <div class="removerow"></div></td>'+
-                                '</tr> '),
             utilbuttons: _.template('<div class="coordinateconversion-buttons">' +
                                         '<input id="overlay-btn" class="clear" type="button" value="<%= clear %> ">' +
                                         '<input id="overlay-btn" class="show" type="button" value="<%= show %> ">' +
@@ -68,7 +62,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         createUI: function( container ) {
            var me = this;
            this.conversionContainer = container;
-           var table = me.table.create();
 
            var inputTitle = this._template.title( { title: this.loc.title.input } );
            var resultTitle = this._template.title( { title: this.loc.title.result } ); 
@@ -98,16 +91,16 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             var wrapper = me._template.wrapper;
             wrapper.append(coordinatesystem);
             wrapper.find('.coordinateconversion-csystem').attr('id','inputcoordsystem');
-            // jQuery(inputTitle).insertBefore(wrapper.find('#inputcoordsystem'));
             wrapper.find('#inputcoordsystem').prepend(inputTitle);
             wrapper.append(coordinatesystem);
             wrapper.find('.coordinateconversion-csystem').not('#inputcoordsystem').attr('id','targetcoordsystem');
-            // jQuery(resultTitle).insertBefore(wrapper.find('#targetcoordsystem'));
             wrapper.find('#targetcoordsystem').prepend(resultTitle);
             wrapper.append(coordinatedatasource);
             wrapper.append(datasourceinfo);
 
             me.fileinput.create();
+            var table = me.table.create();
+
             if( me.fileinput.canUseAdvancedUpload() ) {
                 var fileInputElement = me.fileinput.handleDragAndDrop( this.handleFile.bind(this) );
             }
@@ -135,7 +128,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
-            this.table.tableDisplayNumOfRows();
+            this.table.displayNumOfRows();
         },
         createSelect: function() {
             var json = this.helper.getOptionsJSON();
@@ -273,8 +266,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                         values.push( vl );
                     }
                     if( i == instance.instances.length -1 ) {
-                        me.table.updateTableTitle( values );
-                        me.table.isTableEditable( me.clipboardInsert );
+                        me.table.updateTitle( values );
+                        me.table.isEditable( me.clipboardInsert );
                         this.currentDatum = instance.instances[0].getValue();
                         this.currentCoordinatesystem = instance.instances[1].getValue();
                     }
@@ -365,7 +358,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
 
                         var dataJson = me.validateData(pastedData);
 
-                        me.table.populateTableWithData(e.target, dataJson);
+                        me.table.populate(e.target, dataJson);
 
                 });
             }
@@ -377,7 +370,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         handleFile: function( fileContent ) {
             var dataJson = this.validateData( fileContent );
             var insertTarget = jQuery('#oskari-coordinate-table').find('td').first();
-            this.table.populateTableWithData( insertTarget, dataJson );
+            this.table.populate( insertTarget, dataJson );
         },
         /**
          * @method handleRadioButtons
@@ -404,7 +397,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                     clipboardInfo.show();
                     me.mapselect = false;
                 }
-                me.table.isTableEditable( me.clipboardInsert );
+                me.table.isEditable( me.clipboardInsert );
             });
                 jQuery('.mapselect').on("click", function() {
                     me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
