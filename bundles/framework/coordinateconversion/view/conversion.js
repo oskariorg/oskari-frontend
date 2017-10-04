@@ -274,7 +274,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                     }
                     if( i == instance.instances.length -1 ) {
                         me.table.updateTableTitle( values );
-                        me.updateEditable( values );
+                        me.table.isTableEditable( me.clipboardInsert );
                         this.currentDatum = instance.instances[0].getValue();
                         this.currentCoordinatesystem = instance.instances[1].getValue();
                     }
@@ -289,26 +289,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 });
             }
             return values;
-        },
-        updateEditable: function (values) {
-            if(typeof values === null) {
-                values = undefined;
-            }
-            var rows = this.getElements().rows;
-            if( !this.clipboardInsert ) {
-                rows.each( function ( row ) {
-                    jQuery(this).find('td').attr("contenteditable", false);
-                });
-            }
-            else {
-                rows.each( function ( row ) {
-                    jQuery(this).find('td').attr("contenteditable", true);
-                });
-            }
-            if(values === undefined) {
-                return;
-            }
-
         },
         /**
          * @method validateData
@@ -424,7 +404,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                     clipboardInfo.show();
                     me.mapselect = false;
                 }
-                me.updateEditable();
+                me.table.isTableEditable( me.clipboardInsert );
             });
                 jQuery('.mapselect').on("click", function() {
                     me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());

@@ -2,6 +2,10 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
     this.instance = instance;
     this.loc = loc;
     this.numrows = 1;
+    this.container = {
+        input: null,
+        output: null,
+    }
     this.template = {
             inputWrapper: jQuery('<div class="table-input"></div>'),
             outputWrapper: jQuery('<div class="table-output"></div>'),
@@ -44,7 +48,13 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                                         '</div>'+
                                     '</div>'),
     }
-},  {
+},  {   
+        getElement: function () {
+            return this.container;
+        },
+        setElement: function ( el ) {
+            this.container = el;
+        },
         create: function () {
             var me = this;
                 var rowcounter = this.template.rowcounter({ rows: this.loc.utils.rows })
@@ -59,8 +69,12 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
 
                 input.append(inputcoordinatefield);
                 output.append(resultcoordinatefield);
+                
 
                 input.find('.coordinatefield-input h5').append(rowcounter);
+
+                this.setElement( { input: input, output: output } );
+
 
                 var coords = {};
                 for( var i = 0; i < 6; i++ ) {
@@ -68,11 +82,26 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                     output.find("#oskari-coordinate-table-result").append(this.template.row( { coords: coords } ) );
                     me.updateRowCount();
                 }
-                return { input: input, output: output }
+
+                return this.getElement();
 
         },
         updateRowCount: function () {
-                jQuery(this.instance.getContainer()).find("#num").text( this.numrows++ );
+                this.getElement().input.find("#num").text( this.numrows++ );
+        },
+        isTableEditable: function ( editable ) {
+            var rows = this.getElements().rows;
+            if( !editable ) {
+                rows.each( function ( row ) {
+                    jQuery(this).find('td').attr("contenteditable", false);
+                });
+            }
+            else {
+                rows.each( function ( row ) {
+                    jQuery(this).find('td').attr("contenteditable", true);
+                });
+            }
+
         },
         /**
          * @method populateTableWithData
@@ -110,7 +139,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                 });
         },
         updateTableTitle: function (values) {
-            this.getElements().header.remove();
+            this.getElements().header.input.remove();
+            this.getElements().header.output.remove();
             
             var x = y = z = "";
             if( values[3].indexOf("COORDSYS_KKJ" ) !== -1 ) {
@@ -144,15 +174,18 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
                                                      east: y,
                                                      ellipse_height: z });
 
-                jQuery(header).insertBefore( jQuery( this.instance.getContainer() ).find(".oskari-table-content") );
-                jQuery(header).insertBefore( jQuery( this.instance.getContainer() ).find(".oskari-table-content-target") );
+                jQuery( header ).insertBefore( jQuery( this.getElement().input ).find(".oskari-table-content") );
+                jQuery( header ).insertBefore( jQuery( this.getElement().output ).find(".oskari-table-content-target") );
             }
     },
     getElements: function () {
         var elements = {
-            "table": jQuery( this.instance.getContainer() ).find( '#oskari-coordinate-table' ),
-            "rows": jQuery( this.instance.getContainer() ).find( "#oskari-coordinate-table tr" ),
-            "header": jQuery( this.instance.getContainer() ).find( ".oskari-table-header" )
+            "table": this.getElement().input.find( '#oskari-coordinate-table' ),
+            "rows": this.getElement().input.find( "#oskari-coordinate-table tr" ),
+            "header": {
+                input: this.getElement().input.find( ".oskari-table-header"),
+                output: this.getElement().output.find( ".oskari-table-header" )
+            }
         }
         return elements;
     }
