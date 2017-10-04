@@ -1,15 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.cooridinateconversion.Tile
+ * @class Oskari.bundle.cooridinateconversion.Tile
  * 
  */
-Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Tile',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     * @param {Oskari.mapframework.bundle.maplegend.LayerSelectorBundleInstance} instance
-     *      reference to component that created the tile
-     */
+Oskari.clazz.define('Oskari.coordinateconversion.Tile',
 
     function (instance) {
         this.instance = instance;
@@ -21,7 +14,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Tile',
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.framework.bundle.coordinateconversion.Tile';
+            return 'Oskari.framework.coordinateconversion.Tile';
         },
         /**
          * @method setEl

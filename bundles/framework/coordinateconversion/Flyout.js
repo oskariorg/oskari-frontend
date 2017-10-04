@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
+Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
 
     /**
      * @method create called automatically on construction
@@ -11,35 +11,40 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
         me.instance = instance;
         me.loc = this.instance.getLocalization();
         me.container = null;
-        this.conversionView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.conversion', me.instance);
-        this.mapselectView = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.view.mapselect', me.instance);
+        this.views = {
+            conversion: Oskari.clazz.create('Oskari.coordinateconversion.view.conversion', me.instance),
+            mapselect: Oskari.clazz.create('Oskari.coordinateconversion.view.mapselect', me.instance)
+        }
     }, {
         /**
          * @method getName
          * @return {String} the name for the component
          */
         getName: function() {
-            return 'Oskari.framework.bundle.coordinateconversion.Flyout';
+            return 'Oskari.coordinateconversion.Flyout';
         },
         getTitle: function() {
             return this.loc.title;
         },
+        getViews: function () {
+            return this.views;
+        },
         setEl: function(el, width, height) {
             this.container = el[0];
-            if (!jQuery(this.container).hasClass('coordinateconversion-flyout')) {
-                jQuery(this.container).addClass('coordinateconversion-flyout');
+            if ( !jQuery( this.container ).hasClass('coordinateconversion-flyout') ) {
+                jQuery( this.container ).addClass('coordinateconversion-flyout');
             }
         },
         createUi: function() {
-            var view = this.conversionView.createUI(this.container);
+            var view = this.getViews().conversion.createUI(this.container);
         },
         shouldUpdate: function (caller) {
-            if( caller === this.conversionView.getName() ) {
-                jQuery(this.container).parent().parent().hide();
-                var mapselect = this.mapselectView.show();
+            if( caller === this.getViews().conversion.getName() ) {
+                jQuery( this.container ).parent().parent().hide();
+                var mapselect = this.getViews().mapselect.show();
             }
             else {
-                jQuery(this.container).parent().parent().show();
+                jQuery( this.container ).parent().parent().show();
             }
         },
         /**
@@ -52,7 +57,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.Flyout',
 
             this.template = jQuery();
             var elParent = this.container.parentElement.parentElement;
-            jQuery(elParent).addClass('coordinateconversion-flyout');
+            jQuery( elParent ).addClass('coordinateconversion-flyout');
         },
 
         /**

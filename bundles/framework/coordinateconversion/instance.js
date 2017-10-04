@@ -21,7 +21,7 @@
             }
             appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/framework/bundle/" } } };
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundleInstance",
+Oskari.clazz.define("Oskari.coordinateconversion.instance",
 function () {
         this.sandbox = null;
         this._localization = null;
@@ -63,8 +63,8 @@ function () {
      * Oskari.mapframework.bundle.maplegend.Tile
      */
     startExtension: function () {
-        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.Flyout', this);
-        this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.Tile', this);
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.coordinateconversion.Flyout', this);
+        this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.coordinateconversion.Tile', this);
     },
     /**
      * @method stopExtension

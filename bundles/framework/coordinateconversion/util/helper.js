@@ -1,16 +1,16 @@
-Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.helper', function(instance, locale) {
+Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, locale) {
     this.loc = locale;
     this.instance = instance;
     this.sb = instance.sandbox;
     this.sb.register(this);
-    for (var p in this.eventHandlers) {
+    for ( var p in this.eventHandlers ) {
         this.sb.registerForEventByName(this, p);
         this.clickCoordinates = null;
         this.moveReq = this.sb.getRequestBuilder('MapMoveRequest');
     }
 }, {
     getName: function() {
-        return 'Oskari.framework.bundle.coordinateconversion.helper';
+        return 'Oskari.coordinateconversion.helper';
     },
     init : function() {},
     /****** PUBLIC METHODS ******/

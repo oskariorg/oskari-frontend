@@ -1,14 +1,14 @@
-Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect',
+Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
     function (instance) {
         var me = this;
         me.instance = instance;
         me.loc = me.instance.getLocalization("flyout");
-        me.helper = Oskari.clazz.create('Oskari.framework.bundle.coordinateconversion.helper', me.instance, me.loc);
+        me.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', me.instance, me.loc);
         me.mapselectContainer = null;
         me.mapcoords = [];        
     }, {
         getName: function() {
-            return 'Oskari.framework.bundle.coordinateconversion.view.mapselect';
+            return 'Oskari.coordinateconversion.view.mapselect';
         },
         show: function() {
             var me = this;
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.framework.bundle.coordinateconversion.view.mapselect
 
             btn.setHandler(function() {
                 dialog.close();
-                me.instance.plugins['Oskari.userinterface.Flyout'].conversionView.addToInputTable(me.mapcoords);
+                me.instance.plugins['Oskari.userinterface.Flyout'].getViews().conversion.table.addToInputTable(me.mapcoords);
                 me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
                 me.mapcoords = [];
             });

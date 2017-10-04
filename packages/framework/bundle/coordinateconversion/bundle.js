@@ -1,10 +1,10 @@
 
-Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundle", function () {
+Oskari.clazz.define("Oskari.coordinateconversion.bundle", function () {
 
 },{
     "create": function () {
         var me = this,
-            inst = Oskari.clazz.create("Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundleInstance");
+            inst = Oskari.clazz.create("Oskari.coordinateconversion.instance");
         return inst;
 
     },
@@ -45,19 +45,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
             "src": "../../../../bundles/framework/coordinateconversion/Tile.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/components/table.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/components/helper.js"
+            "src": "../../../../bundles/framework/coordinateconversion/util/helper.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/view_conversion.js"
+            "src": "../../../../bundles/framework/coordinateconversion/view/conversion.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/view_mapselect.js"
+            "src": "../../../../bundles/framework/coordinateconversion/view/mapselect.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinateconversion/view/view_filesettings.js"
+            "src": "../../../../bundles/framework/coordinateconversion/view/filesettings.js"
         }, {
             "type": "text/css",
             "src": "../../../../bundles/framework/coordinateconversion/resources/css/filesettings.css"
@@ -118,4 +121,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinateconversion.CoordinateC
     "dependencies": ["jquery"]
 
 });
-Oskari.bundle_manager.installBundleClass("coordinateconversion", "Oskari.mapframework.bundle.coordinateconversion.CoordinateConversionBundle");
+Oskari.bundle_manager.installBundleClass("coordinateconversion", "Oskari.coordinateconversion.bundle");
