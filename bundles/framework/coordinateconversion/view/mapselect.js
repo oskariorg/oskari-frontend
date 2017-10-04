@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
         me.loc = me.instance.getLocalization("flyout");
         me.helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', me.instance, me.loc);
         me.mapselectContainer = null;
-        me.mapcoords = [];        
+        me.mapcoords = [];
     }, {
         getName: function() {
             return 'Oskari.coordinateconversion.view.mapselect';
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.mapselect',
 
             cancelBtn.setHandler(function() {
                 dialog.close();
-                me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate(me.getName());
+                me.instance.plugins['Oskari.userinterface.Flyout'].shouldUpdate( me.getName() );
                 me.mapcoords = [];
             });
 
