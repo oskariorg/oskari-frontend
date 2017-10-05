@@ -30,17 +30,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        }, {
 	            "type": "text/javascript",
 	            "src": "../../../../bundles/catalogue/metadatacatalogue/service/MetadataSearchService.js"
-	        }, 
-	        /* plugin */
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
-	        }, 
-	        /* event */
-	        {
-	            "type": "text/javascript",
-	            "src": "../../../../bundles/catalogue/metadatacatalogue/event/FinishedDrawingEvent.js"
-	        }, 
+	        },
 	        /* instance */
 	        {
 				"type" : "text/javascript",
@@ -53,7 +43,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        }, {
 	            "type": "text/javascript",
 	            "src": "../../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
-	        },
+			},
 	        /* css */
 			{
 				"type" : "text/css",
