@@ -252,7 +252,8 @@ Oskari.clazz.define(
             }
         },
         _removeFeaturesByAttribute: function(olLayer, identifier, value) {
-            var source = olLayer.getSource(),
+            var me = this,
+                source = olLayer.getSource(),
                 featuresToRemove = [];
 
             // add all features if identifier and value are missing or
@@ -265,19 +266,20 @@ Oskari.clazz.define(
             });
 
             // notify other components of removal
-            var formatter = this._supportedFormats.GeoJSON;
-            var sandbox = this.getSandbox();
-            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+            if(featuresToRemove && featuresToRemove.length > 0) {
+                var formatter = this._supportedFormats.GeoJSON;
+                var sandbox = this.getSandbox();
+                var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                var feature = featuresToRemove[i];
-                source.removeFeature(feature);
-                // remove from "cache"
-                this._removeFromCache(olLayer.get('id'), feature);
-                var geojson = formatter.writeFeaturesObject([feature]);
-                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                featuresToRemove.forEach(function(feature) {
+                    source.removeFeature(feature);
+                    // remove from "cache"
+                    me._removeFromCache(olLayer.get('id'), feature);
+                    var geojson = formatter.writeFeaturesObject([feature]);
+                    removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                });
+                sandbox.notifyAll(removeEvent);
             }
-            sandbox.notifyAll(removeEvent);
         },
         _removeFromCache : function(layerId, feature) {
             var storedFeatures = this._features[layerId];

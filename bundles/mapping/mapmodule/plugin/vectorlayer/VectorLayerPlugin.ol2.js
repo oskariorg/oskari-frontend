@@ -266,20 +266,21 @@ Oskari.clazz.define(
             }
 
             // notify other components of removal
-            var formatter = this._supportedFormats.GeoJSON;
-            var sandbox = this.getSandbox();
-            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+            if(featuresToRemove && featuresToRemove.length > 0) {
+                var formatter = this._supportedFormats.GeoJSON;
+                var sandbox = this.getSandbox();
+                var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
 
-            olLayer.removeFeatures(featuresToRemove);
-            for (var i = 0; i < featuresToRemove.length; i++) {
-                var feature = featuresToRemove[i];
+                olLayer.removeFeatures(featuresToRemove);
 
-                // remove from "cache"
-                me._removeFromCache(this._getLayerId(olLayer.name), feature);
-                var geojson = JSON.parse(formatter.write([feature]));
-                removeEvent.addFeature(feature.id, geojson, this._getLayerId(olLayer.name));
+                featuresToRemove.forEach(function(feature) {
+                    // remove from "cache"
+                    me._removeFromCache(me._getLayerId(olLayer.name), feature);
+                    var geojson = JSON.parse(formatter.write([feature]));
+                    removeEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
+                });
+                sandbox.notifyAll(removeEvent);
             }
-            sandbox.notifyAll(removeEvent);
         },
         _removeFromCache : function(layerId, feature) {
             var storedFeatures = this._features[layerId];
