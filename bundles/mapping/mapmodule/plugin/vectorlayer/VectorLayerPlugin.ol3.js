@@ -265,21 +265,24 @@ Oskari.clazz.define(
                 }
             });
 
-            // notify other components of removal
-            if(featuresToRemove && featuresToRemove.length > 0) {
-                var formatter = this._supportedFormats.GeoJSON;
-                var sandbox = this.getSandbox();
-                var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
-
-                featuresToRemove.forEach(function(feature) {
-                    source.removeFeature(feature);
-                    // remove from "cache"
-                    me._removeFromCache(olLayer.get('id'), feature);
-                    var geojson = formatter.writeFeaturesObject([feature]);
-                    removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
-                });
-                sandbox.notifyAll(removeEvent);
+            // If there is no features to remove then return
+            if(featuresToRemove.length === 0) {
+                return;
             }
+
+            // notify other components of removal
+            var formatter = this._supportedFormats.GeoJSON;
+            var sandbox = this.getSandbox();
+            var removeEvent = sandbox.getEventBuilder('FeatureEvent')().setOpRemove();
+
+            featuresToRemove.forEach(function(feature) {
+                source.removeFeature(feature);
+                // remove from "cache"
+                me._removeFromCache(olLayer.get('id'), feature);
+                var geojson = formatter.writeFeaturesObject([feature]);
+                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+            });
+            sandbox.notifyAll(removeEvent);
         },
         _removeFromCache : function(layerId, feature) {
             var storedFeatures = this._features[layerId];
