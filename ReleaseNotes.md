@@ -4,7 +4,7 @@
 
 #### VectorLayerPlugin ol2/ol3
 
-Fixed error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` requested remove all features on wanted layer and layer has not any features.
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
 
 ## 1.44.0
 
