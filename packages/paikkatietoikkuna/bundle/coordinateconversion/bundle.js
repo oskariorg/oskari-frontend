@@ -62,6 +62,9 @@ Oskari.clazz.define("Oskari.coordinateconversion.bundle", function () {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinateconversion/view/filesettings.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinateconversion/service/ConversionService.js"
+        }, {
             "type": "text/css",
             "src": "../../../../bundles/framework/coordinateconversion/resources/css/filesettings.css"
         }, {

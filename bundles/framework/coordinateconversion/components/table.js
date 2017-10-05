@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             row: _.template('<tr>' +
                                     '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
                                     '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell heightsystem" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
+                                    '<td class="cell heigth" headers="ellipse_height" style=" border: 1px solid black;"> </td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             input_table: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             "table": this.getElement().input.find( '#oskari-coordinate-table' ),
             "rows": this.getElement().input.find( "#oskari-coordinate-table tr" ),
             "header": {
-                input: this.getElement().input.find( ".oskari-table-header"),
+                input: this.getElement().input.find( ".oskari-table-header" ),
                 output: this.getElement().output.find( ".oskari-table-header" )
             }
         }

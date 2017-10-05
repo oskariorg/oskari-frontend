@@ -12,8 +12,8 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         me.file = Oskari.clazz.create('Oskari.coordinateconversion.view.filesettings', me.instance, me.loc);
         me.table = Oskari.clazz.create('Oskari.coordinateconversion.component.table', this, me.loc );
         me.file.create();
-        me._selectInstances = null;
-        me._userSelections = { "import": null, "export": null };
+        me._selectInstances = { input: null, target: null };
+        me._userSelections = { import: null, export: null };
         me._template = {
             wrapper: jQuery('<div class="conversionwrapper"></div>'),
             title: _.template('<h4 class="header"><%= title %></h4>'),
@@ -58,6 +58,9 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
         },
         getContainer: function () {
             return this.conversionContainer;
+        },
+        getSelectInstances: function () {
+            return this._selectInstances;
         },
         createUI: function( container ) {
            var me = this;
@@ -113,18 +116,20 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             wrapper.append(utilbuttons);
 
             var input_instance = me.createSelect();
+            this._selectInstances.input = input_instance.instances;
             wrapper.find('#inputcoordsystem').find('.select').each(function (index) {
                 jQuery(this).append(input_instance.dropdowns[index]);
             });
             var target_instance = me.createSelect();
+            this._selectInstances.target = target_instance.instances;
            wrapper.find('#targetcoordsystem').find('.select').each(function (index) {
                 jQuery(this).append(target_instance.dropdowns[index]);
             });
 
             jQuery(container).append(wrapper);
 
-            var inputValues = this.getSelection(input_instance, false);
-            var targetValues = this.getSelection(target_instance, true);
+            var inputValues = this.handleSelectionChanged(input_instance, false);
+            var targetValues = this.handleSelectionChanged(target_instance, true);
             this.handleClipboard();
             this.handleButtons();
             this.handleRadioButtons();
@@ -172,7 +177,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             return { "instances": selectInstances, "dropdowns": dropdowns };
         },
           /**
-         * @method getSelection
+         * @method handleSelectionChanged
          * which key corresponds to which dropdown in the array:
          * [0] = geodetic datum,
          * [1] = coordinate system
@@ -180,7 +185,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          * [3] = geodetic coordinate system
          * [4] = heigth system
          */
-        getSelection: function ( instance, called ) {
+        handleSelectionChanged: function ( instance, called ) {
             var me = this;
             var values = [];
             var rows = this.table.getElements().rows;
@@ -326,6 +331,28 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                 }
             }
         },
+        getSelectionValue: function ( selectListInstance ) {
+            return selectListInstance.getValue();
+        },
+        getCrsOptions: function () {
+            var instances = this.getSelectInstances();
+            var sourceSelection = this.getSelectionValue( instances.input[3] );
+            var targetSelection = this.getSelectionValue( instances.target[3] );
+            var heightSelection = this.getSelectionValue( instances.input[4] );
+            var source = this.helper.getMappedEPSG( sourceSelection );
+            var target = this.helper.getMappedEPSG( targetSelection );
+            var inputHeight = this.helper.getMappedEPSG( heightSelection );
+
+            return options = {
+                source: source,
+                target: target,
+                height: inputHeight
+            }
+        },
+        handleServerResponce: function ( response ) {
+            var insertTarget = jQuery('#oskari-coordinate-table-result').find('td').first();
+            this.table.populate( insertTarget, response );
+        },
         /**
          * @method handleClipboard
          *
@@ -377,7 +404,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          * Inits the on change listeners for the radio buttons
          * 
          */
-        handleRadioButtons: function() {
+        handleRadioButtons: function () {
             var me = this;
             var clipboardInfo = jQuery(me.conversionContainer).find('.coordinateconversion-clipboardinfo');
             var mapInfo = jQuery(me.conversionContainer).find('.coordinateconversion-mapinfo');
@@ -412,7 +439,6 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
          */
         handleButtons: function () {
             var me = this;
-            var helper = Oskari.clazz.create('Oskari.coordinateconversion.helper', this.instance, this.loc);
             jQuery(this.conversionContainer).find('.clear').on("click", function () {
                 var cells = jQuery('#oskari-coordinate-table tr .cell:not(.cell.control)');
                 for(var i = 0; i < cells.length; i++) {
@@ -429,13 +455,34 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                     var lon = jQuery(this).find('.lon').html();
                     if(lat != "  " && lon != "  "){
                         var coords = { lon: lon, lat: lat };
-                        helper.addMarkerForCoords(coords, me.startingSystem);
+                        me.helper.addMarkerForCoords(coords, me.startingSystem);
                     }
                 })
             });
             jQuery(this.conversionContainer).find('.export').on("click", function () {
                 var exportfile = me.file.getElement().export;
                 me.showDialogue( exportfile, true );
+            });
+            jQuery(this.conversionContainer).find('#convert').on("click", function () {
+                var crs = me.getCrsOptions();
+                var rows = me.table.getElements().rows;
+                var arr = [];
+                rows.each(function () {
+                    var lat = jQuery(this).find('.lat').html().trim();
+                    var lon = jQuery(this).find('.lon').html().trim();
+                    var height = jQuery(this).find('.heigth').html().trim();
+                    if ( lat != "" && lon != "" ) {
+                        var coords = { lon: lon, lat: lat, height: height };
+                        arr.push( coords );
+                    }
+                });
+                var payload = {
+                    sourceCrs: crs.source,
+                    heightCrs: crs.height,
+                    targetCrs: crs.target,
+                    coords: arr
+                }
+                me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponce.bind( me ) );
             });
         },
 
@@ -464,7 +511,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
                     var lon = jQuery(this).find('.lon').html();
                     if ( lat != "  " && lon != "  " ) {
                         var coords = { lon: lon, lat: lat };
-                        arr.push( JSON.stringify( coords ) );
+                        arr.push( coords );
                     }
                 });
             if( arr.length !== 0 ) {

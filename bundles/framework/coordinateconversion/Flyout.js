@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.Flyout',
         createUi: function() {
             var view = this.getViews().conversion.createUI(this.container);
         },
-        shouldUpdate: function (caller) {
+        shouldUpdate: function ( caller ) {
             if( caller === this.getViews().conversion.getName() ) {
                 jQuery( this.container ).parent().parent().hide();
                 var mapselect = this.getViews().mapselect.show();

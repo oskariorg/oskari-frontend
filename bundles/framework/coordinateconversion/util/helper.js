@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
                 15: { "id":"COORDSYS_ETRS-LCC", "title":"ETRS-LCC", "cls":"DATUM_EUREF-FIN" },
                 16: { "id":"COORDSYS_ETRS-TM34", "title":"ETRS-TM34", "cls":"DATUM_EUREF-FIN TM" },
                 17: { "id":"COORDSYS_ETRS-TM35", "title":"ETRS-TM35", "cls":"DATUM_EUREF-FIN TM" },
-                18: { "id":"COORDSYS_ETRS-TM35", "title":"ETRS-TM36", "cls":"DATUM_EUREF-FIN TM" },
+                18: { "id":"COORDSYS_ETRS-TM36", "title":"ETRS-TM36", "cls":"DATUM_EUREF-FIN TM" },
                 19: { "id":"COORDSYS_ETRS-TM35FIN", "title":"ETRS-TM35FIN", "cls":"DATUM_EUREF-FIN TM" },
                 20: { "id":"COORDSYS_EUREF-FIN-GEO2D", "title":"EUREF-FIN-GRS80", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_2D" },
                 21: { "id":"COORDSYS_EUREF-FIN-GEO3D", "title":"EUREF-FIN-GRS80h", "cls":"DATUM_EUREF-FIN KOORDINAATISTO_MAANT_3D" },
@@ -112,6 +112,44 @@ Oskari.clazz.define('Oskari.coordinateconversion.helper', function(instance, loc
                 }
             }
             return json;
-    }
-
+    },
+    getMappedEPSG: function ( value ) {
+        var EPSG = {
+            'COORDSYS_ETRS-GK19': "EPSG:3126",
+            'COORDSYS_ETRS-GK20': "EPSG:3127",
+            'COORDSYS_ETRS-GK21': "EPSG:3128",
+            'COORDSYS_ETRS-GK22': "EPSG:3129",
+            'COORDSYS_ETRS-GK23': "EPSG:3130",
+            'COORDSYS_ETRS-GK24': "EPSG:3131",
+            'COORDSYS_ETRS-GK25': "EPSG:3132",
+            'COORDSYS_ETRS-GK26': "EPSG:3133",
+            'COORDSYS_ETRS-GK27': "EPSG:3134",
+            'COORDSYS_ETRS-GK28': "EPSG:3135",
+            'COORDSYS_ETRS-GK29': "EPSG:3136",
+            'COORDSYS_ETRS-GK30': "EPSG:3137",
+            'COORDSYS_ETRS-GK31': "EPSG:3138",
+            'COORDSYS_ETRS-LAEA': "EPSG:3035",
+            'COORDSYS_ETRS-LCC': "EPSG:3034",
+            'COORDSYS_ETRS-TM34': "EPSG:3046",
+            'COORDSYS_ETRS-TM35': "EPSG:3047",
+            'COORDSYS_ETRS-TM36': "EPSG:3048", 
+            'COORDSYS_ETRS-TM35FIN': "EPSG:3067", 
+            'COORDSYS_EUREF-FIN-GEO2D': "EPSG:4258", 
+            'COORDSYS_EUREF-FIN-GEO3D': "EPSG:4937", 
+            'COORDSYS_ETRS-EUREF-FIN_SUORAK3d': "EPSG:4936", 
+            'COORDSYS_KKJ0': "EPSG:3386", 
+            'COORDSYS_KKJ1': "EPSG:2391", 
+            'COORDSYS_KKJ2': "EPSG:2392", 
+            'COORDSYS_KKJ3': "EPSG:2393", 
+            'COORDSYS_KKJ4': "EPSG:2394", 
+            'COORDSYS_KKJ5': "EPSG:3387", 
+            'COORDSYS_KKJ_GEO': "EPSG:4123", 
+	    }
+        var heightEPSG = {
+            'KORKEUSJ.N2000': "EPSG:3900",
+            'KORKEUSJ.N60': "EPSG:5717",
+            'KORKEUSJ.N43': "N43"
+        }
+        return EPSG[value];
+}
 });

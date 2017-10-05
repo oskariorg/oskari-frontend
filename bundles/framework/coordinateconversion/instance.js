@@ -27,6 +27,7 @@ function () {
         this._localization = null;
         this.plugins = {};
         this._mapmodule = null;
+        this.conversionservice = null;
 }, {
     __name: 'coordinateconversion',
     /**
@@ -54,6 +55,9 @@ function () {
      */
     getSandbox: function () {
         return this.sandbox;
+    },
+    getService: function () {
+        return this.conversionservice;
     },
     /**
      * @method startExtension
@@ -110,6 +114,7 @@ function () {
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName);
         me.setSandbox(sandbox);
+        this.conversionservice = this.createService(sandbox, conf);
         me._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization();
         sandbox.register(me);
@@ -136,6 +141,22 @@ function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
         this.plugins['Oskari.userinterface.Tile'].refresh();
     },
+            /**
+         * Creates the coordinateconversion service and registers it to the sandbox.
+         *
+         * @method createService
+         * @param  {Oskari.Sandbox} sandbox
+         * @param  {}  configuration   conf.reverseGeocodingIds is in use
+         * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
+         */
+        createService: function(sandbox, conf) {
+            var coordinateToolService = Oskari.clazz.create(
+                'Oskari.coordinateconversion.ConversionService',
+                this, conf || {}
+            );
+            sandbox.registerService(coordinateToolService);
+            return coordinateToolService;
+        },
 
 }, {
         /**
