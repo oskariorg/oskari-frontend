@@ -19,7 +19,7 @@
                 "en":"",
                 "title":"coordinateconversion" 
             }
-            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/framework/bundle/" } } };
+            appSetup.startupSequence[l].metadata= { "Import-Bundle": { "coordinateconversion": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } } };
 */
 Oskari.clazz.define("Oskari.coordinateconversion.instance",
 function () {
