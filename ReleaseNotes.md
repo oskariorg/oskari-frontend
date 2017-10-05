@@ -2,6 +2,10 @@
 
 ## 1.44.1
 
+#### VectorLayerPlugin ol2/ol3
+
+Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
+
 ### publisher2
 
 Fixed an issue where the button to add layers in publisher didn't work.
