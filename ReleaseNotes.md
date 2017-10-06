@@ -2,6 +2,12 @@
 
 ## 1.44.1
 
+### Grid
+
+Fixed issues:
+- grid paging didn't work
+- grid selection error when ``select``-function  is used to select row when grid has not data yet
+
 #### VectorLayerPlugin ol2/ol3
 
 Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to remove features from layer which has none.
