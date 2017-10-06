@@ -409,7 +409,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
             }
         });
         this.service.on('StatsGrid.Filter', function(event) {
- 
+
         });
     },
 
@@ -454,7 +454,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
     setHeaderHeight: function(){
         var me = this;
-        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
 
         // IE fix
         if(statsTableEl.length > 0) {
@@ -514,7 +514,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
      */
     updateModel : function(model, regions) {
         var me = this;
-        var statsTableEl = jQuery('.oskari-flyoutcontent.statsgrid .stats-table');
+        var statsTableEl = jQuery('.oskari-flyout.statsgrid-data-flyout .stats-table');
         var gridLoc = me.locale.statsgrid || {};
 
         var indicators = this.getIndicators();
