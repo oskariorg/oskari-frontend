@@ -3,14 +3,14 @@
 */
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function (instance) {
   this.sb = instance.getSandbox();
-  this.loc = instance.getLocalization()
+  this.loc = instance.getLocalization();
   this.isEmbedded = instance.isEmbedded();
   this.instance = instance;
   this.__datachartFlyout = null;
   this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
   // this.filter = Oskari.clazz.create('Oskari.statistics.statsgrid.Filter', this.instance);
   this.container = null;
-  this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+  this.service = this.instance.statsService;
   this._isOpen = false;
   this._barchart = Oskari.clazz.create('Oskari.userinterface.component.Chart', Oskari.getSandbox(), this.loc);
   this.shouldUpdate = false;
@@ -18,33 +18,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   this._grid = null;
   this.events();
 }, {
-    _template: {
-      error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
-      container: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
-      charts: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
-      select: jQuery('<div class="dropdown"></div>'),
-      tabControl: jQuery('<div class="tab-material-controls"></div>')
-    },
-    setElement: function ( el ) {
-        this.container = el;
-    },
-    getElement: function () {
-        return this.container;
-    },
-    clearUi: function () {
-      this.container = null;
-    },
-    createUi: function () {
-      var el = this._template.container;
-      this.clearUi();
-      if (this.__datachartFlyout) {
-        return this.__datachartFlyout;
-      }
-      // this.filter.createUI(); 
+  _template: {
+    error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
+    container: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
+    charts: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
+    select: jQuery('<div class="dropdown"></div>'),
+    tabControl: jQuery('<div class="tab-material-controls"></div>')
+  },
+  setElement: function ( el ) {
+    this.container = el;
+  },
+  getElement: function () {
+    return this.container;
+  },
+  clearUi: function () {
+    this.container = null;
+  },
+  createUi: function () {
+    var el = this._template.container;
+    this.clearUi();
+    if (this.__datachartFlyout) {
+      return this.__datachartFlyout;
+    }
+      // this.filter.createUI();
       this.addTab();
       var accordion = Oskari.clazz.create(
         'Oskari.userinterface.component.Accordion'
-      );
+        );
       var panels = this._getPanels();
       for (var i = 0; i < panels.length; i++ ) {
         accordion.addPanel(panels[i]);
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
      * @param  {String} title UI label
      * @return {Oskari.userinterface.component.AccordionPanel} panel without content
      */
-    _createDataVisualizerPanel: function (title) {
+     _createDataVisualizerPanel: function (title) {
       var me = this;
       var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
       var container = panel.getContainer();
@@ -166,8 +166,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         //hackish way of setting selected value as and new indicator and then getting the new indicator
         var hash = event.data.self.service.getStateService().getHash(event.data.self.getIndicator().datasource, event.data.self.getIndicator().indicator, event.data.keyValue[event.data.self.getSelect().getValue()]);
 
-        event.data.self.service.getStateService().addIndicator(event.data.self.getIndicator().datasource, event.data.self.getIndicator().indicator, event.data.keyValue[event.data.self.getSelect().getValue()]
-          , event.data.self.getIndicator().classification);
+        event.data.self.service.getStateService().addIndicator(event.data.self.getIndicator().datasource,
+          event.data.self.getIndicator().indicator,
+          event.data.keyValue[event.data.self.getSelect().getValue()],
+          event.data.self.getIndicator().classification);
 
         var data = event.data.self.getIndicatorData(hash);
 
@@ -210,8 +212,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         }
       });
 
-      var title = jQuery('<div class="title">' + title + '</div>');
-      me._template.tabControl.append(title);
+      var titleEl = jQuery('<div class="title">' + title + '</div>');
+      me._template.tabControl.append(titleEl);
       me._template.tabControl.append(dropdown);
 
       return this._template.tabControl;
@@ -246,9 +248,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, regionSet, function (err, data) {
         regionsNames = regionsNames;
         for (var dataset in data) {
+          var name = '';
           for (var region in regionsNames) {
             if (regionsNames[region].id === dataset) {
-              var name = regionsNames[region].name;
+              name = regionsNames[region].name;
             }
           }
           indicatorData.push({ name: name, value: data[dataset] });
@@ -303,7 +306,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       chartPanel.setTitle(
         this.loc.datacharts.barchart,
         'oskari_datachart_tabpanel_header'
-      );
+        );
       chartPanel.getContainer().prepend(this.createIndicatorSelector(this.loc.datacharts.indicatorVar));
       chartPanel.getContainer().prepend(this.createColorSelector(this.loc.datacharts.descColor));
       chartPanel.setId('oskari_search_tabpanel_header');
@@ -312,7 +315,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     },
     addTab: function () {
       var me = this,
-        flyout = jQuery(me.container);
+      flyout = jQuery(me.container);
       // Change into tab mode if not already
       if (me.tabsContainer.panels.length === 0) {
         me.tabsContainer.insertTo(flyout);
@@ -325,5 +328,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       return this._isOpen;
     }
   }, {
-        extend: ['Oskari.userinterface.extension.DefaultView']
+    extend: ['Oskari.userinterface.extension.DefaultView']
   });

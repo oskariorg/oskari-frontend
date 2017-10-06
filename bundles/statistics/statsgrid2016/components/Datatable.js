@@ -259,7 +259,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
 
                 // If not published then show close icon
                 if(me.indicatorRemovalEnabled) {
+                    tableHeader.find('.icon').attr('data-ind-hash', ind.hash);
                     tableHeader.find('.icon').bind('click', function(){
+                        var hash = jQuery(this).attr('data-ind-hash');
                         log.info('Removing indicator ', + ind.hash);
 
                         // Set default sort order
@@ -377,6 +379,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
         var state = this.service.getStateService();
 
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
+                debugger;
             if(event.isRemoved()) {
                 me._handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
             } else {
