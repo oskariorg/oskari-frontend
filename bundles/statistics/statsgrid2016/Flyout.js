@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
      */
     function () {
         this.__panels = null;
+        this._visible = false;
     }, {
         /**
          * @method getName
@@ -20,6 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getName: function () {
             return 'Oskari.statistics.statsgrid.Flyout';
         },
+        
         /**
          * @method startPlugin
          *
@@ -28,6 +30,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
          */
         startPlugin: function () {
             this.getEl().addClass('statsgrid');
+        },
+        toggleFlyout: function () {
+            this._visible = !this._visible;
+            if ( this._visible ) {
+                this.container.parent().parent().hide();
+            } else {
+                this.container.parent().parent().show();
+            }
         },
         getLegendFlyout : function() {
             if(this.__legendFlyout) {
@@ -98,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             this.addContent(this.getEl(), isEmbedded);
         },
 
-        setGridHeaderHeight: function(){
+        setGridHeaderHeight: function() {
             var me = this;
 
             if(me._grid) {
@@ -107,6 +117,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         },
 
         addContent : function (el, isEmbedded) {
+
             var me = this;
             var sb = this.instance.getSandbox();
 
@@ -126,14 +137,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
             });
 
             accordion.insertTo(el);
-
-            // Add grid
-            var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', sb, this.instance.getLocalization());
-            grid.showRegionsetSelector(!isEmbedded);
-            grid.showIndicatorRemoval(!isEmbedded);
-            grid.render(el);
-
-            me._grid = grid;
 
         },
         closePanels: function() {

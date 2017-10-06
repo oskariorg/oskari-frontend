@@ -322,7 +322,38 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     clear: both; }
 
 .statsgrid-legend-flyout .oskari-flyoutcontentcontainer {
-  overflow-x: hidden;
+  overflow: hidden;
   overflow-y: auto; }
-
+.statsgrid-functionality {
+    margin-right: 2px;
+    margin-left: 1em;
+    margin-bottom: 0.3em;
+    background-color: lightgray;
+    width:36px;
+    height: 36px;
+    display: block;
+  }
+  #view {
+        background-image: url("../images/table_light.png");
+  }
+  #search {
+        background-image: url("../images/mobile-search-light.png");
+  }
+  #filter {
+        background-image: url("../images/icon-funnel.png");
+  }
+  #material-desc {
+    margin-left: 3.9em;
+    white-space: nowrap;
+    text-transform: none !important;
+  }
+  .material-selected {
+    background-color: #ffd400;
+  }
+  div.tab-material-controls div.title {
+    font-weight: bold;
+  }
+  .statsgrid-search-container {
+    padding: 1.2em;
+  }
 /*# sourceMappingURL=style.css.map */

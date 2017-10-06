@@ -15,8 +15,6 @@ Oskari.clazz.define(
             name: 'StatsGrid',
             sandbox: 'sandbox',
             stateful: true,
-            tileClazz: 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz: 'Oskari.statistics.statsgrid.Flyout',
             vectorViewer: false
         };
         this.visible = false;
@@ -26,9 +24,11 @@ Oskari.clazz.define(
         this._lastRenderMode = null;
 
         this.togglePlugin = null;
-
         this.regionsetViewer = null;
     }, {
+        startExtension: function () {
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.statistics.statsgrid.Tile', this, this.statsService);
+        },
         afterStart: function (sandbox) {
             var me = this;
 
@@ -37,9 +37,10 @@ Oskari.clazz.define(
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
+            this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
 
             var conf = this.getConfiguration() || {};
-
+            
             // Check if vector is configurated
             // If it is set map modes to support also vector
             if(conf && conf.vectorViewer === true) {
@@ -47,7 +48,6 @@ Oskari.clazz.define(
             }
             statsService.addDatasource(conf.sources);
             // disable tile if we don't have anything to show or enable if we do
-            this.getTile().setEnabled(this.hasData());
             // setup initial state
             this.setState();
 
@@ -151,38 +151,35 @@ Oskari.clazz.define(
             'StatsGrid.DatasourceEvent': function(evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'StatsGrid.Filter': function(evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent' : function() {
                 // close/tear down the ui when receiving the event
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-                var flyout = this.getFlyout();
-                if(flyout) {
-                    var legend = this.getFlyout().getLegendFlyout();
-                    if(legend) {
-                        legend.hide();
-                    }
-                }
+
             },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                if (event.getExtension().getName() !== this.getName() || !this.hasData()) {
-                    // not me/no data -> do nothing
-                    return;
-                }
+            'userinterface.ExtensionUpdatedEvent': function ( event ) {
+                var me = this;
                 var wasClosed = event.getViewState() === 'close';
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
                 this.visible = !wasClosed;
-                if(wasClosed){
+                if( wasClosed ) {
+                    me.getTile().hideExtension();
                     return;
-                }
-                var renderMode = this.isEmbedded();
-                // rendermode changes if we are in geoportal and open the flyout in publisher
-                if(this._lastRenderMode !== renderMode && visibilityChanged) {
-                    this.getFlyout().render(renderMode);
-                    this._lastRenderMode = renderMode;
-                    this.getFlyout().setGridHeaderHeight();
+                } else {
+                this.getExtensions().forEach( function( extension ) {
+                    if( extension[0].id === "search" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );    
+                    }
+                    if( extension[0].id === "dataview" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
+                    }
+                    if( extension[0].id === "filter" ) {
+                        me.getTile().showExtension( extension, me.openFlyout.bind(  me ) );
+                    }
+                });
                 }
             },
             /**
@@ -195,7 +192,7 @@ Oskari.clazz.define(
                     return;
                 }
                 // Enable tile when stats layer is available
-                this.getTile().setEnabled(this.hasData());
+                // this.getTile().setEnabled(this.hasData());
                 // setup tools for new layers
                 if(event.getOperation() !== 'add')  {
                     // only handle add layer
@@ -337,7 +334,6 @@ Oskari.clazz.define(
             if(!this.togglePlugin) {
                 this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getSandbox(), this.getLocalization().published);
             }
-            me.getFlyout().move(0,0);
             mapModule.registerPlugin(me.togglePlugin);
             mapModule.startPlugin(me.togglePlugin);
             me.togglePlugin.showTable(visible || me.visible);

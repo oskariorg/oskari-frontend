@@ -408,6 +408,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.grid.selectColumn(current.hash);
             }
         });
+        this.service.on('StatsGrid.Filter', function(event) {
+ 
+        });
     },
 
     _setSort: function(){

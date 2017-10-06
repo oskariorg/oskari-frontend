@@ -323,6 +323,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         getHash : function(datasrc, indicator, selections) {
             return datasrc + '_' + indicator + '_' + JSON.stringify(selections);
+        },
+        addFilter : function( filter ) {
+            // notify
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.Filter');
+            this.sandbox.notifyAll(eventBuilder(filter));
         }
 
     }, {
