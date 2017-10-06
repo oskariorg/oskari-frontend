@@ -7,7 +7,7 @@ Oskari = (function () {
     var _markers = [];
 
     return {
-        VERSION: '1.44.0',
+        VERSION: '1.44.1',
 
         /**
          * @public @static @method Oskari.setMarkers
