@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.coordinateconversion.component.table', function( ins
             row: _.template('<tr>' +
                                     '<td class="cell lon" headers="north" style=" border: 1px solid black ;"> <%= coords.lon %> </td>'+
                                     '<td class="cell lat" headers="east" style=" border: 1px solid black ;"> <%= coords.lat %> </td>'+
-                                    '<td class="cell heigth" headers="ellipse_height" style=" border: 1px solid black;"> </td>'+
+                                    '<td class="cell height" headers="ellipse_height" style=" border: 1px solid black;"></td>'+
                                     '<td class="cell control"> <div class="removerow"></div></td>'+
                                 '</tr> '),
             input_table: _.template('<div class="coordinatefield-input" style="display:inline-block;">' +
