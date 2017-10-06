@@ -466,21 +466,21 @@ Oskari.clazz.define('Oskari.coordinateconversion.view.conversion',
             jQuery(this.conversionContainer).find('#convert').on("click", function () {
                 var crs = me.getCrsOptions();
                 var rows = me.table.getElements().rows;
-                var arr = [];
+                var coordinateArray = [];
                 rows.each(function () {
                     var lat = jQuery(this).find('.lat').html().trim();
                     var lon = jQuery(this).find('.lon').html().trim();
-                    var height = jQuery(this).find('.heigth').html().trim();
+                    var height = jQuery(this).find('.height').html().trim();
                     if ( lat != "" && lon != "" ) {
                         var coords = { lon: lon, lat: lat, height: height };
-                        arr.push( coords );
+                        coordinateArray.push( coords );
                     }
                 });
                 var payload = {
                     sourceCrs: crs.source,
                     heightCrs: crs.height,
                     targetCrs: crs.target,
-                    coords: arr
+                    coords: coordinateArray
                 }
                 me.instance.getService().getConvertedCoordinates( payload, me.handleServerResponce.bind( me ) );
             });
