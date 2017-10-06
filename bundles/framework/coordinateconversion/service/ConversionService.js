@@ -32,27 +32,20 @@ function(instance) {
 
     getConvertedCoordinates: function( payload, successCb, errorCb ) {
         successCb(payload.coords);
-        // var url = urlFunction();
-        // jQuery.ajax({
-        //     url : url,
-        //     type : 'GET',
-        //     dataType : 'json',
-        //     beforeSend: function(x) {
-        //         if (x && x.overrideMimeType) {
-        //             x.overrideMimeType("application/j-son;charset=UTF-8");
-        //         }
-        //     },
-        //     success: function(response) {
-        //         if (response) {
-        //             me._handleResponse(response, successCb);
-        //         }
-        //     },
-        //     error: function(jqXHR, textStatus) {
-        //         if (_.isFunction(errorCb) && jqXHR.status !== 0) {
-        //             errorCb(jqXHR, textStatus);
-        //         }
-        //     }
-        // });
+        jQuery.ajax({
+           dataType: "json",
+           type: "POST",
+           url: "/action?action_route=CoordinateTransformation&",
+           data: {
+               "sourceCrs": payload.sourceCrs,
+               "heightCrs": "10",
+               "targetCrs": payload.targetCrs,
+               "coords": JSON.stringify(payload.coords)
+           },
+           success: function(response) {
+               successCb(response);
+           }
+       });
     },
     _handleResponse: function(response, cb) {
         cb(response);
