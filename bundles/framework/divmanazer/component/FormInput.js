@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @method setFloatingLabel
          * Sets the fields floating label
          * @param {String} pLabel
-         * @param {Integer} topPosition (optional) to adjust floating label in pixels. In CSS oskarifield_floating_label default top value 20px.
+         * @param {Integer} topPosition (optional) to adjust floating label in pixels. In CSS oskarifield_floating_label default top value 0px.
          */
         setFloatingLabel: function (pLabel, topPosition) {
             var input = this._field.find('input'),
