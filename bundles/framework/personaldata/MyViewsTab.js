@@ -195,7 +195,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
             var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
             nameInput.setPlaceholder(this.loc('tabs.myviews.popup.name_placeholder'));
-            nameInput.addMarginToLabel(9);
             var title = this.loc('tabs.myviews.popup.title');
             if (viewName) {
                 title = this.loc('tabs.myviews.popup.edit');
