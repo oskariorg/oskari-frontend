@@ -11,17 +11,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile',
  */
 function(instance, service) {
     this.instance = instance;
-    this.sb = this.instance.getSandbox(),
+    this.sb = this.instance.getSandbox();
     this.statsService = service;
     this.container = null;
     this.template = null;
     this._tileExtensions = [];
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance);
+    // FIXME localize these
     this._templates = {
-        search: jQuery('<span class="statsgrid-functionality" id="search"><h5 id="material-desc">Aineistohaku</h5></span>'),
-        view: jQuery('<span class="statsgrid-functionality" id="dataview"><h5 id="material-desc">Haun tulokset</h5></span>'),
-        filter: jQuery('<span class="statsgrid-functionality" id="filter"><h5 id="material-desc">Aineiston suodatus</h5></span>')
-    }
+        search: jQuery('<span class="statsgrid-functionality search" data-view="search"><h5 class="material-desc">Aineistohaku</h5></span>'),
+        view: jQuery('<span class="statsgrid-functionality dataview" data-view="dataview"><h5 class="material-desc">Haun tulokset</h5></span>'),
+        filter: jQuery('<span class="statsgrid-functionality filter" data-view="filter"><h5 class="material-desc">Aineiston suodatus</h5></span>')
+    };
 }, {
     /**
      * @method getName
@@ -135,7 +136,7 @@ function(instance, service) {
           this._tileExtensions.forEach(function(extension) {
             extension.hide();
           });
-    },      
+    },
     showExtension: function (el, callback) {
         el.show();
         el.on("click", function(event) {
@@ -145,8 +146,8 @@ function(instance, service) {
                 jQuery(this).addClass('material-selected');
             }
             event.stopPropagation();
-            callback( this.id );
-        })
+            callback(jQuery(this).attr('data-view'));
+        });
     },
     getExtensions: function () {
         return this._tileExtensions;
@@ -189,25 +190,17 @@ function(instance, service) {
                 this.hideExtension();
                 return;
             } else {
-            this.getExtensions().forEach( function( extension ) {
-                if( extension[0].id === "search" ) {
-                    me.showExtension( extension, me.openFlyout.bind( me ) );    
-                }
-                if( extension[0].id === "dataview" ) {
+                this.getExtensions().forEach( function( extension ) {
                     me.showExtension( extension, me.openFlyout.bind( me ) );
-                }
-                if( extension[0].id === "filter" ) {
-                    me.showExtension( extension, me.openFlyout.bind(  me ) );
-                }
-            });
+                });
             }
         },
         'StatsGrid.Filter': function(evt) {
             if( this.statsService === undefined ) {
                 this.statsService = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
             }
-                this.statsService.notifyOskariEvent(evt);
-        },   
+            this.statsService.notifyOskariEvent(evt);
+        }
     }
 }, {
     /**
