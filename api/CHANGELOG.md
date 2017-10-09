@@ -52,6 +52,10 @@ Notes:
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
 
+### metadatacatalogue [rem] [breaking]
+
+Removed MetaData.FinishedDrawingEvent. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
+
 ## 1.44
 
 ### [mod] [breaking] AddLayerListFilterRequest
