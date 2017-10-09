@@ -52,9 +52,9 @@ Notes:
 - Only lines and polygons are counted for the area/length (circles/points with buffers are not).
 - The measurements are for non-buffered features.
 
-### metadatacatalogue [rem] [breaking]
+### metadatacatalogue [add]
 
-Removed MetaData.FinishedDrawingEvent. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
+Added new OpenLayers independent version of metadatacatalogue. New bundle.js is under packages/catalogue/metadatacatalogue/. In the new version `MetaData.FinishedDrawingEvent` is removed. Instead you can listen to `DrawingEvent` where id "catalogue.bundle.metadatacatalogue" and isFinished is true.
 
 ## 1.44
 
