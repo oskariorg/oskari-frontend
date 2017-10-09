@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this._localization = null;
         this._modules = {};
         this._plugin = null;
+        this._controlPlugin = null;
     }, {
         __name: 'timeseries',
         /**
@@ -91,6 +92,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this._plugin = plugin;
+
+            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', {});
+            mapModule.registerPlugin(controlPlugin);
+            mapModule.startPlugin(controlPlugin);
+            this._controlPlugin = controlPlugin;
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
