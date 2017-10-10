@@ -51,6 +51,7 @@ Oskari.clazz.define(
         };
 
         this.wgs84Sphere = new ol.Sphere(6378137);
+        this._loc = Oskari.getLocalization('DrawTools');
     },
     {
         /**
@@ -115,8 +116,6 @@ Oskari.clazz.define(
                 options.modifyControl = true;
             }
             me.setDefaultStyle(options.style);
-
-            me._loc = Oskari.getLocalization('DrawTools', Oskari.getLang() || Oskari.getDefaultLanguage());
 
             me._sandbox = me.getSandbox();
             me._map = me.getMapModule().getMap();
