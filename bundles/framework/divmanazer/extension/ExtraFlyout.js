@@ -177,5 +177,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             };
             me.__popup.css('position', 'absolute');
             me.__popup.draggable(dragOptions);
+        },
+        getElement: function(){
+            return this.__popup;
         }
 });

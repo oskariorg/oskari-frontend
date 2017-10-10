@@ -435,7 +435,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
     background-image: url("../images/table_light.png"); }
   .oskari-tile.statsgrid .statsgrid-functionality.search {
     background-image: url("../images/mobile-search-light.png"); }
-  .oskari-tile.statsgrid .statsgrid-functionality.filter {
+  .oskari-tile.statsgrid .statsgrid-functionality.filterdata {
     background-image: url("../images/icon-funnel.png"); }
 
 /* ********************************************

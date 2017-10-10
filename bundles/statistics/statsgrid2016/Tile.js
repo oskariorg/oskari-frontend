@@ -21,7 +21,7 @@ function(instance, service) {
     this._templates = {
         search: jQuery('<span class="statsgrid-functionality search" data-view="search"><h5 class="material-desc">Aineistohaku</h5></span>'),
         view: jQuery('<span class="statsgrid-functionality dataview" data-view="dataview"><h5 class="material-desc">Haun tulokset</h5></span>'),
-        filter: jQuery('<span class="statsgrid-functionality filter" data-view="filter"><h5 class="material-desc">Aineiston suodatus</h5></span>')
+        filterdata: jQuery('<span class="statsgrid-functionality filterdata" data-view="filterdata"><h5 class="material-desc">Aineiston suodatus</h5></span>')
     };
 }, {
     /**
@@ -53,7 +53,6 @@ function(instance, service) {
      * Interface method implementation, calls #refresh()
      */
     startPlugin : function() {
-        // this.setEl( jQuery('<div></div>') );
         this._addTileStyleClasses();
         for (var p in this.eventHandlers) {
             this.instance.getSandbox().registerForEventByName(this, p);
@@ -120,44 +119,57 @@ function(instance, service) {
         var instance = me.instance;
         var sandbox = instance.getSandbox();
         // this.setEnabled(this.hasData());
-        for ( var template in this._templates ) {
-            var icon = this._templates[template];
-            this.extendTile(icon);
+        for ( var type in this._templates ) {
+            var icon = this._templates[type];
+            this.extendTile(icon, type);
         }
         this.hideExtension();
 
     },
-    extendTile: function ( el ) {
+    extendTile: function (el,type) {
           var container = this.container.append(el);
           var extension = container.find(el);
-          this._tileExtensions.push(extension);
+          this._tileExtensions[type] = extension;
     },
     hideExtension: function () {
-          this._tileExtensions.forEach(function(extension) {
+        var me = this;
+        for(var type in me._tileExtensions) {
+            var extension = me._tileExtensions[type];
             extension.hide();
-          });
+        }
+    },
+    toggleExtensionClass: function(type, wasClosed) {
+        var me = this;
+        var el = jQuery('.statsgrid-functionality.'+type);
+        if(wasClosed) {
+            el.removeClass('material-selected');
+            me._flyoutManager.hide(type);
+            return;
+        }
+        if (el.hasClass('material-selected') ) {
+            el.removeClass('material-selected');
+        } else {
+            el.addClass('material-selected');
+        }
     },
     showExtension: function (el, callback) {
+        var me = this;
         el.show();
-        el.on("click", function(event) {
-            if( jQuery(this).hasClass('material-selected') ) {
-                jQuery(this).removeClass('material-selected');
-            } else {
-                jQuery(this).addClass('material-selected');
-            }
+        el.on('click', function(event) {
+            var type = jQuery(this).attr('data-view');
+            me.toggleExtensionClass(type);
             event.stopPropagation();
-            callback(jQuery(this).attr('data-view'));
+            callback(type);
         });
     },
     getExtensions: function () {
         return this._tileExtensions;
     },
-    getFlyout: function ( type ) {
-        return this._flyoutManager.getFlyout( type );
+    getFlyout: function (type) {
+        return this._flyoutManager.getFlyout(type);
     },
-    openFlyout: function ( type ) {
-        var flyout = this._flyoutManager.getFlyout( type );
-        this._flyoutManager.open( flyout );
+    openFlyout: function (type) {
+        this._flyoutManager.open(type);
     },
     /**
      * @method onEvent
@@ -165,7 +177,6 @@ function(instance, service) {
      * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
      */
     onEvent: function (event) {
-
         var handler = this.eventHandlers[event.getName()];
         if (!handler)
             return;
@@ -182,6 +193,10 @@ function(instance, service) {
     eventHandlers: {
         'userinterface.ExtensionUpdatedEvent': function ( event ) {
             var me = this;
+            // Not handle other extension update events
+            if(event.getExtension().getName() !== me.instance.getName()) {
+                return;
+            }
             var wasClosed = event.getViewState() === 'close';
             // moving flyout around will trigger attach states on each move
             var visibilityChanged = this.visible === wasClosed;
@@ -189,10 +204,14 @@ function(instance, service) {
             if( wasClosed ) {
                 this.hideExtension();
                 return;
-            } else {
-                this.getExtensions().forEach( function( extension ) {
-                    me.showExtension( extension, me.openFlyout.bind( me ) );
+            }
+            var showExtensionButton = function(extension){
+                me.showExtension(extension, function(type) {
+                    me.openFlyout(type);
                 });
+            };
+            for(var type in me.getExtensions()) {
+                showExtensionButton(me.getExtensions()[type]);
             }
         },
         'StatsGrid.Filter': function(evt) {
