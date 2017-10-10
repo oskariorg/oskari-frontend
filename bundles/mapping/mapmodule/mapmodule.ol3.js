@@ -331,14 +331,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 centerCoords = view.getCenter(),
                 centerPixels = this.getMap().getPixelFromCoordinate(centerCoords),
                 newCenterPixels = [centerPixels[0] + pX, centerPixels[1] + pY],
-                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels),
-                pan = ol.animation.pan({
-                    duration: 100,
-                    source: (centerCoords)
-                });
+                newCenterCoords = this.getMap().getCoordinateFromPixel(newCenterPixels);
 
-            this.getMap().beforeRender(pan);
-            view.setCenter(newCenterCoords);
+            view.animate({
+                duration: 100,
+                center: newCenterCoords
+            });
 
             this.updateDomain();
             // send note about map change
