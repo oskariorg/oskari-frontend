@@ -99,7 +99,7 @@ Oskari.clazz.define(
             var me = this;
             //disable gfi
             if (me._gfiReqBuilder) {
-                me._sandbox.request(me, me._gfiReqBuilder(false));
+                me.getSandbox().request(me, me._gfiReqBuilder(false));
             }
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
@@ -117,12 +117,10 @@ Oskari.clazz.define(
             }
             me.setDefaultStyle(options.style);
 
-            me._sandbox = me.getSandbox();
-            me._map = me.getMapModule().getMap();
-
             // creating layer for drawing (if layer not already added)
             if(!me._drawLayers[me._layerId]) {
                 me.addVectorLayer(me._layerId);
+                // BUG: this doesn't get assigned if drawlayer already exists!!!!!!!!
                 me._functionalityIds[id] = me._layerId;
             }
             // creating layer for buffered features (if layer not already added)
@@ -177,10 +175,10 @@ Oskari.clazz.define(
                 me.removeInteractions(me._draw, id);
                 me.removeInteractions(me._modify, id);
                 me.setVariablesToNull();
-                me._map.un('pointermove', me.pointerMoveHandler, me);
+                me.getMap().un('pointermove', me.pointerMoveHandler, me);
                 //enable gfi
                 if (me._gfiReqBuilder) {
-                    me._sandbox.request(me, me._gfiReqBuilder(true));
+                    me.getSandbox().request(me, me._gfiReqBuilder(true));
                 }
 
 
@@ -237,8 +235,8 @@ Oskari.clazz.define(
                 isFinished = options.isFinished;
             }
 
-            var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-            me._sandbox.notifyAll(event);
+            var event = me.getSandbox().getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
+            me.getSandbox().notifyAll(event);
         },
         /**
          * @method addVectorLayer
@@ -253,7 +251,7 @@ Oskari.clazz.define(
               source: new ol.source.Vector({features: new ol.Collection()}),
               style: me._styles['draw']
             });
-            me._map.addLayer(vector);
+            me.getMap().addLayer(vector);
             me._drawLayers[layerId] = vector;
         },
          /**
@@ -277,9 +275,9 @@ Oskari.clazz.define(
                 }
             }
             // remove overlays
-            me._map.getOverlays().forEach(function (o) {
+            me.getMap().getOverlays().forEach(function (o) {
               if(!id || o.id === id) {
-                  me._map.removeOverlay(o);
+                  me.getMap().removeOverlay(o);
               }
             });
             jQuery('.' + me._tooltipClassForMeasure).remove();
@@ -360,13 +358,13 @@ Oskari.clazz.define(
               maxPoints: maxPoints
             });
 
-            me._map.addInteraction(me._draw[me._id]);
+            me.getMap().addInteraction(me._draw[me._id]);
 
             me.drawStartEvent(options);
             me.drawingEndEvent(options, shape);
 
             if(options.showMeasureOnMap) {
-                me._map.on('pointermove', me.pointerMoveHandler, me);
+                me.getMap().on('pointermove', me.pointerMoveHandler, me);
             }
         },
          /**
@@ -496,7 +494,7 @@ Oskari.clazz.define(
                     tooltipCoord = geom.getLastCoordinate();
                 }
                 if(me._options.showMeasureOnMap && tooltipCoord) {
-                    me._map.getOverlays().forEach(function (o) {
+                    me.getMap().getOverlays().forEach(function (o) {
                         if(o.id === me._sketch.getId()) {
                             var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
                             ii.html(output);
@@ -531,8 +529,8 @@ Oskari.clazz.define(
                });
            }
            me.modifyStartEvent(shape, options);
-           me._map.on('pointermove', me.pointerMoveHandler, me);
-           me._map.addInteraction(me._modify[me._id]);
+           me.getMap().on('pointermove', me.pointerMoveHandler, me);
+           me.getMap().addInteraction(me._modify[me._id]);
         },
         /**
          * @method isValidJstsGeometry
@@ -678,10 +676,10 @@ Oskari.clazz.define(
             var me = this;
             if(!id || id===undefined || id === '') {
                 _.each(iteraction, function (key) {
-                    me._map.removeInteraction(key);
+                    me.getMap().removeInteraction(key);
                 });
             } else {
-                me._map.removeInteraction(iteraction[id]);
+                me.getMap().removeInteraction(iteraction[id]);
             }
         },
         setVariablesToNull: function() {
@@ -742,7 +740,7 @@ Oskari.clazz.define(
         getPolygonArea: function(geometry) {
             var area = 0;
             if (geometry && geometry.getType()==='Polygon') {
-                var sourceProj = this._map.getView().getProjection();
+                var sourceProj = this.getMap().getView().getProjection();
                 if (sourceProj.getUnits() === "degrees") {
                     var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
                     var coordinates = geom.getLinearRing(0).getCoordinates();
@@ -767,7 +765,7 @@ Oskari.clazz.define(
         getLineLength: function(geometry) {
             var length = 0;
             if(geometry && geometry.getType()==='LineString') {
-                var sourceProj = this._map.getView().getProjection();
+                var sourceProj = this.getMap().getView().getProjection();
                 if (sourceProj.getUnits() === "degrees") {
                     var coordinates = geometry.getCoordinates();
                     for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
@@ -909,7 +907,7 @@ Oskari.clazz.define(
            });
            tooltipElement.parentElement.style.pointerEvents = 'none';
            tooltip.id = id;
-           me._map.addOverlay(tooltip);
+           me.getMap().addOverlay(tooltip);
        },
        getLayerIdForFunctionality : function(id) {
            var me = this,
