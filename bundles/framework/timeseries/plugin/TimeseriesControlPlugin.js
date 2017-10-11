@@ -92,10 +92,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
+                me._initStepper();
                 me._updateTimelines();
             }
         },
-        _updateTimelines() {
+        _initStepper: function() {
+            var template = jQuery(
+                '<div class="timeseries-stepper">' + // &#10073;&#10073; pause
+                    '<div class="timeseries-back"></div><div class="timeseries-playpause">&#9654;</div><div class="timeseries-forward"></div><div class="timeseries-datetime"></div>' +
+                '</div>');
+            var dateTimeInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
+            dateTimeInput.setName('datetime');
+            template.find('.timeseries-datetime').append(dateTimeInput.getElement());
+            this._element.find('.timeseries-aux').append(template);
+        },
+        _updateTimelines: function() {
             var me = this;
             var svg = d3.select(this._element.find('.timeline-desktop').get(0));
             svg
