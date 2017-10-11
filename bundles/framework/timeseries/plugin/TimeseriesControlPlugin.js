@@ -25,6 +25,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             rangeEnd: null
         };
 
+        var times = delegate.getTimes();
+        this._uiState.times = times;
+        this._uiState.rangeStart = times.start;
+        this._uiState.rangeEnd = times.end;
+        this._uiState.currentTime = delegate.getCurrentTime();
+
         me._mobileDefs = {
             buttons: {
                 'mobile-featuredata': {
@@ -86,18 +92,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
-                me._initTimelines();
+                me._updateTimelines();
             }
-        },
-        _initTimelines() {
-            var times = this._delegate.getTimes();
-            this._uiState.times = times;
-            this._uiState.rangeStart = times.start;
-            this._uiState.rangeEnd = times.end;
-
-            this._uiState.currentTime = this._delegate.getCurrentTime();
-            
-            this._updateTimelines();
         },
         _updateTimelines() {
             var me = this;
