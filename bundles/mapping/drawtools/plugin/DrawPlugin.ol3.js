@@ -11,12 +11,12 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
-        this._gfiReqBuilder = Oskari.getSandbox().getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        this._gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         this._bufferedFeatureLayerId = 'BufferedFeatureDrawLayer';
         this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
         this._drawLayers = {};
-        this._idd = 0;
+        this._drawFeatureIdSequence = 0;
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = "";
         this._featuresValidity = {};
@@ -108,24 +108,25 @@ Oskari.clazz.define(
                 jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId()).remove();
             }
             me._shape = shape;
-            me._buffer = options.buffer;
+            if(me._id) {
+                Oskari.log('DrawTools').info('Previous drawing still on map and requesting new draw');
+            }
+            // setup functionality id
             me._id = id;
+            // setup options
             me._options = options;
-            me._layerId = shape + 'DrawLayer';
-            if(options.modifyControl===undefined) {
+            if(typeof this.getOpts('modifyControl') === 'undefined') {
                 options.modifyControl = true;
             }
+            me._layerId = this.getCurrentLayerId();
             me.setDefaultStyle(options.style);
 
             // creating layer for drawing (if layer not already added)
-            if(!me._drawLayers[me._layerId]) {
-                me.addVectorLayer(me._layerId);
+            if(!me.getCurrentDrawLayer()) {
+                me.addVectorLayer(me.getCurrentLayerId());
                 // BUG: this doesn't get assigned if drawlayer already exists!!!!!!!!
                 me._functionalityIds[id] = me._layerId;
-            }
-            // creating layer for buffered features (if layer not already added)
-            if(!me._drawLayers[me._bufferedFeatureLayerId]) {
-                me.addVectorLayer(me._bufferedFeatureLayerId);
+
             }
             //activate drawcontrols
             if(shape) {
@@ -133,6 +134,44 @@ Oskari.clazz.define(
             } else {
                 // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
             }
+        },
+        // for some reason there's always just one buffered features layer even though there are multiple draw layers
+        getBufferedFeatureLayer: function() {
+            if(!this._drawLayers[this._bufferedFeatureLayerId]) {
+                // creating layer for buffered features (if layer not already added)
+                this.addVectorLayer(this._bufferedFeatureLayerId);
+            }
+            return this._drawLayers[this._bufferedFeatureLayerId];
+        },
+        /**
+         * This is the shape type that is currently being drawn
+         * @return {String} 'Polygon' / 'LineString' etc
+         */
+        getCurrentDrawShape : function () {
+            return this._shape;
+        },
+        getCurrentLayerId : function () {
+            return this.getCurrentDrawShape() + 'DrawLayer';
+        },
+        getCurrentDrawLayer : function () {
+            return this._drawLayers[this.getCurrentLayerId()];
+        },
+        getCurrentFunctionalityId : function () {
+            return this._id;
+        },
+        generateNewFeatureId: function() {
+            return 'drawFeature' + this._drawFeatureIdSequence++;
+        },
+        getOpts : function (key) {
+            var opts = this._options || {};
+            if(key == 'modifyControl' && typeof opts[key] === 'undefined') {
+                // default for modifyControl key
+                return true;
+            }
+            if(key) {
+                return opts[key];
+            }
+            return opts;
         },
         /**
          * @method drawShape
@@ -146,13 +185,13 @@ Oskari.clazz.define(
             if(options.geojson) {
                 var jsonFormat = new ol.format.GeoJSON();
                 var featuresFromJson = jsonFormat.readFeatures(options.geojson);
-                me._drawLayers[me._layerId].getSource().addFeatures(featuresFromJson);
+                me.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
             }
             if(options.drawControl !== false) {
-                me.addDrawInteraction(me._layerId, shape, options);
+                me.addDrawInteraction(me.getCurrentLayerId(), shape, options);
             }
             if(options.modifyControl !== false) {
-                me.addModifyInteraction(me._layerId, shape, options);
+                me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
             }
 //          me.reportDrawingEvents();
         },
@@ -199,17 +238,19 @@ Oskari.clazz.define(
                 bufferedFeatures = null,
                 layerId = me.getLayerIdForFunctionality(id),
                 isFinished = false;
+            var requestedBuffer = me.getOpts('buffer');
             if(layerId) {
                 features = me.getFeatures(layerId);
             }
-            if(me._bufferedFeatureLayerId) {
+            if(requestedBuffer > 0) {
+                // TODO: check the ifs below if they should only be run if buffer is used
                 bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
             }
             if(me._shape === 'Circle') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
-            } else if(me._shape === 'LineString' && me._buffer > 0) {
-                me.addBufferPropertyToFeatures(features, me._buffer);
+            } else if(me._shape === 'LineString' && requestedBuffer > 0) {
+                me.addBufferPropertyToFeatures(features, requestedBuffer);
             }
             // TODO: get geojson for matching id
             var geojson = me.getFeaturesAsGeoJSON(features);
@@ -218,7 +259,7 @@ Oskari.clazz.define(
             var data = {
                 length : me._length,
                 area : me._area,
-                buffer: me._buffer,
+                buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me._shape
             };
@@ -235,7 +276,7 @@ Oskari.clazz.define(
                 isFinished = options.isFinished;
             }
 
-            var event = me.getSandbox().getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
+            var event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data, isFinished);
             me.getSandbox().notifyAll(event);
         },
         /**
@@ -270,9 +311,7 @@ Oskari.clazz.define(
                 if(me.getLayer(me._layerId)) {
                     me.getLayer(me._layerId).getSource().getFeaturesCollection().clear();
                 }
-                if(me.getLayer(me._bufferedFeatureLayerId)) {
-                    me.getLayer(me._bufferedFeatureLayerId).getSource().getFeaturesCollection().clear();
-                }
+                me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
             }
             // remove overlays
             me.getMap().getOverlays().forEach(function (o) {
@@ -291,8 +330,9 @@ Oskari.clazz.define(
          */
         addDrawInteraction : function(layerId, shape, options) {
             var me = this;
-            var geometryFunction, maxPoints, geometryType;
-            geometryType = shape;
+            var geometryFunction, maxPoints;
+            var functionalityId = this.getCurrentFunctionalityId();
+            var geometryType = shape;
             var sketch;
             var optionsForDrawingEvent = {
                 isFinished: false
@@ -307,7 +347,7 @@ Oskari.clazz.define(
                           me.drawBufferedGeometry(geometry, options.buffer);
                       }
                       me.pointerMoveHandler();
-                      me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                      me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                       return geometry;
                   };
             } else if (shape === 'Box') {
@@ -321,7 +361,7 @@ Oskari.clazz.define(
                    var end = coordinates[1];
                    geometry.setCoordinates([[start, [start[0], end[1]], end, [end[0], start[1]], start]]);
                    me.pointerMoveHandler();
-                   me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                   me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                    return geometry;
                  };
             } else if (shape === 'Square') {
@@ -334,7 +374,7 @@ Oskari.clazz.define(
                          geometry = new ol.geom.Circle(coordinates, options.buffer);
                      }
                      me.pointerMoveHandler();
-                     me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                      return geometry;
                  };
             } else if(shape === 'Polygon') {
@@ -345,12 +385,12 @@ Oskari.clazz.define(
                     geometry.setCoordinates(coordinates);
                     me.checkIntersection(geometry, options);
                     me.pointerMoveHandler();
-                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                     return geometry;
                  };
             }
 
-            me._draw[me._id] = new ol.interaction.Draw({
+            me._draw[functionalityId] = new ol.interaction.Draw({
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
               style: me._styles['draw'],
@@ -358,7 +398,7 @@ Oskari.clazz.define(
               maxPoints: maxPoints
             });
 
-            me.getMap().addInteraction(me._draw[me._id]);
+            me.getMap().addInteraction(me._draw[functionalityId]);
 
             me.drawStartEvent(options);
             me.drawingEndEvent(options, shape);
@@ -381,7 +421,7 @@ Oskari.clazz.define(
                      me.removeInteractions(me._modify, me._id);
                 }
                 me._mode = 'draw';
-                var id = 'drawFeature' + me._idd++;
+                var id = me.generateNewFeatureId();
                 evt.feature.setId(id);
                 me._sketch = evt.feature;
                 if(options.allowMultipleDrawing === 'single') {
@@ -580,10 +620,9 @@ Oskari.clazz.define(
          * @param {Number} buffer
          */
         drawBufferedGeometry : function(geometry, buffer) {
-             var me = this;
-             var bufferedFeature = me.getBufferedFeature(geometry, buffer, me._styles['draw'], 30);
-             me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().clear();
-             me._drawLayers[me._bufferedFeatureLayerId].getSource().getFeaturesCollection().push(bufferedFeature);
+             var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles['draw'], 30);
+             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
+             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
         },
          /**
          * @method modifyStartEvent
@@ -669,7 +708,7 @@ Oskari.clazz.define(
         },
         /**
          * @method removeInteractions
-         * -  removes draw and modify controls, sets _shape, _buffer, _id and _sketch to null
+         * -  removes draw and modify controls, sets _shape, _id and _sketch to null
          * @param {String} id
          */
         removeInteractions : function(iteraction, id) {
@@ -684,7 +723,6 @@ Oskari.clazz.define(
         },
         setVariablesToNull: function() {
             this._shape = null;
-            this._buffer= null;
             this._id = null;
             // Remove measure result from map
             if(this._sketch) {
@@ -704,7 +742,7 @@ Oskari.clazz.define(
             }
 
             if(me._draw[me._id]) {
-                me._draw.on('drawstart', function() {
+                me._draw[me._id].on('drawstart', function() {
                     Oskari.log('DrawPlugin').debug('drawstart');
                 });
                 me._draw[me._id].on('drawend', function() {
