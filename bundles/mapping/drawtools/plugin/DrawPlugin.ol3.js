@@ -122,11 +122,8 @@ Oskari.clazz.define(
             me._id = id;
             // setup options
             me._options = options;
-            if(typeof this.getOpts('modifyControl') === 'undefined') {
-                options.modifyControl = true;
-            }
             me._layerId = this.getCurrentLayerId();
-            me.setDefaultStyle(options.style);
+            me.setDefaultStyle(this.getOpts('style'));
 
             // creating layer for drawing (if layer not already added)
             if(!me.getCurrentDrawLayer()) {
@@ -164,14 +161,28 @@ Oskari.clazz.define(
         getCurrentDrawLayer : function () {
             return this._drawLayers[this.getCurrentLayerId()];
         },
+        /**
+         * The id sent in startdrawing request like "measure" or "feedback"
+         * @return {String|Number}
+         */
         getCurrentFunctionalityId : function () {
             return this._id;
         },
+        /**
+         * Each new geometry gets a "unique id" with this sequence
+         * @return {String} [description]
+         */
         generateNewFeatureId: function() {
             return 'drawFeature' + this._drawFeatureIdSequence++;
         },
-        getOpts : function (key) {
-            var opts = this._options || {};
+        /**
+         * Returns a value in the options.
+         * @param  {String} key  key for the value inside options
+         * @param  {Object} options optional options object, defaults to options in the startdrawing request if not given
+         * @return {Any}
+         */
+        getOpts : function (key, options) {
+            var opts = options || this._options || {};
             if(key == 'modifyControl' && typeof opts[key] === 'undefined') {
                 // default for modifyControl key
                 return true;
@@ -182,6 +193,20 @@ Oskari.clazz.define(
             return opts;
         },
         /**
+         * Returns true if the user has an unfinished sketch in the works (started drawing a geometry, but not yet finished it)
+         * @return {Boolean}
+         */
+        isCurrentlyDrawing : function() {
+            return this._mode === 'draw';
+        },
+        /**
+         * Returns true if the user is currently holding on to one of the edges in geometry and in process of editing the sketch
+         * @return {Boolean}
+         */
+        isCurrentlyModifying : function() {
+            return this._mode === 'modify';
+        },
+        /**
          * @method drawShape
          * - activates draw/modify controls. If geojson is given, setup editing it
          *
@@ -190,9 +215,10 @@ Oskari.clazz.define(
          */
         drawShape : function(shape, options) {
             var me = this;
-            if(options.geojson) {
+            var optionalFeatureForEditing = this.getOpts('geojson', options);
+            if(optionalFeatureForEditing) {
                 var jsonFormat = new ol.format.GeoJSON();
-                var featuresFromJson = jsonFormat.readFeatures(options.geojson);
+                var featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
                 me.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
             }
             if(options.drawControl !== false) {
@@ -267,9 +293,9 @@ Oskari.clazz.define(
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me._shape
             };
-
-            if (me._options.showMeasureOnMap) {
-                data['showMeasureOnMap'] = me._options.showMeasureOnMap;
+            var showMeasureUI = !!me.getOpts('showMeasureOnMap');
+            if (showMeasureUI) {
+                data['showMeasureOnMap'] = showMeasureUI;
             }
 
             if(options.clearCurrent) {
@@ -421,9 +447,7 @@ Oskari.clazz.define(
             me._draw[me._id].on('drawstart', function(evt) {
                 me._showIntersectionWarning = false;
                 // stop modify iteraction while draw-mode is active
-                if(options.modifyControl) {
-                     me.removeInteractions(me._modify, me._id);
-                }
+                me.removeInteractions(me._modify, me._id);
                 me._mode = 'draw';
                 var id = me.generateNewFeatureId();
                 evt.feature.setId(id);
@@ -478,7 +502,7 @@ Oskari.clazz.define(
                     me._featuresValidity[me._sketch.getId()] = false;
                 } else {
                     if(me._sketch && geometry.getArea()>0) {
-                        if(me._mode === 'draw') {
+                        if(me.isCurrentlyDrawing()) {
                             me._sketch.setStyle(me._styles['draw']);
                         } else {
                             me._sketch.setStyle(me._styles['modify']);
@@ -537,7 +561,7 @@ Oskari.clazz.define(
                     output = length;
                     tooltipCoord = geom.getLastCoordinate();
                 }
-                if(me._options.showMeasureOnMap && tooltipCoord) {
+                if(me.getOpts('showMeasureOnMap') && tooltipCoord) {
                     me.getMap().getOverlays().forEach(function (o) {
                         if(o.id === me._sketch.getId()) {
                             var ii = jQuery('div.' + me._tooltipClassForMeasure + "." + me._sketch.getId());
