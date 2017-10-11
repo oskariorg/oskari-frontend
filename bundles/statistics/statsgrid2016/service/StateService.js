@@ -296,7 +296,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
             this.indicators = newIndicators;
 
-            if(this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
+            if(removedIndicator && removedIndicator.hash && this.activeIndicator && this.activeIndicator.hash === removedIndicator.hash) {
                 // active was the one removed -> reset active
                 this.setActiveIndicator();
             }

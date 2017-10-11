@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Flyout',
         getName: function () {
             return 'Oskari.statistics.statsgrid.Flyout';
         },
-        
+
         /**
          * @method startPlugin
          *

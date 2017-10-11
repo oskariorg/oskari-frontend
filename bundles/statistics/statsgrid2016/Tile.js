@@ -16,7 +16,7 @@ function(instance, service) {
     this.container = null;
     this.template = null;
     this._tileExtensions = [];
-    this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance);
+    this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     // FIXME localize these
     this._templates = {
         search: jQuery('<span class="statsgrid-functionality search" data-view="search"><h5 class="material-desc">Aineistohaku</h5></span>'),

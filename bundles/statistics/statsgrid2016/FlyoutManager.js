@@ -77,8 +77,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     initViews: function () {
         var me = this;
         me.views = {
-            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance ),
-            dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance) ,
+            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance),
+            dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance),
             filterdata: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Filter', this.instance)
         };
     },

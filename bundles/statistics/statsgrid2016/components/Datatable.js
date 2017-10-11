@@ -1,7 +1,7 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(service, sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.service = service;
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
     this._bindToEvents();
@@ -376,10 +376,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
     _bindToEvents : function() {
         var me = this;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var state = this.service.getStateService();
+        if(me._bindedEvents === true) {
+            return;
+        }
 
         this.service.on('StatsGrid.IndicatorEvent', function(event) {
-                debugger;
             if(event.isRemoved()) {
                 me._handleIndicatorRemoved(event.getDatasource(), event.getIndicator(), event.getSelections());
             } else {
@@ -411,9 +412,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, l
                 me.grid.selectColumn(current.hash);
             }
         });
-        this.service.on('StatsGrid.Filter', function(event) {
-
-        });
+        me._bindedEvents = true;
     },
 
     _setSort: function(){

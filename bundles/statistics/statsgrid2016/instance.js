@@ -37,10 +37,9 @@ Oskari.clazz.define(
             var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
             sandbox.registerService(statsService);
             me.statsService = statsService;
-            this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
 
             var conf = this.getConfiguration() || {};
-            
+
             // Check if vector is configurated
             // If it is set map modes to support also vector
             if(conf && conf.vectorViewer === true) {
@@ -70,6 +69,7 @@ Oskari.clazz.define(
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
+            this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -171,7 +171,7 @@ Oskari.clazz.define(
                 } else {
                 this.getExtensions().forEach( function( extension ) {
                     if( extension[0].id === "search" ) {
-                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );    
+                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
                     }
                     if( extension[0].id === "dataview" ) {
                         me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
