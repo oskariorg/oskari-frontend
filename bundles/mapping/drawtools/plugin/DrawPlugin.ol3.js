@@ -63,7 +63,7 @@ Oskari.clazz.define(
             var me = this;
             styles = styles || {};
             //setting defaultStyles
-            _.each(me._styleTypes, function (type) {
+            me._styleTypes.forEach(function (type) {
                 // overriding default style configured style
                 var styleForType = styles[type] || {};
                 var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
@@ -221,7 +221,7 @@ Oskari.clazz.define(
                 //deactivate draw and modify controls
                 me.removeInteractions(me._draw, id);
                 me.removeInteractions(me._modify, id);
-                me.setVariablesToNull();
+                me._cleanupInternalState();
                 me.getMap().un('pointermove', me.pointerMoveHandler, me);
                 //enable gfi
                 me.setGFIEnabled(true);
@@ -718,14 +718,14 @@ Oskari.clazz.define(
         removeInteractions : function(iteraction, id) {
             var me = this;
             if(!id || id===undefined || id === '') {
-                _.each(iteraction, function (key) {
-                    me.getMap().removeInteraction(key);
+                Object.keys(iteraction).forEach(function (key) {
+                    me.getMap().removeInteraction(iteraction[key]);
                 });
             } else {
                 me.getMap().removeInteraction(iteraction[id]);
             }
         },
-        setVariablesToNull: function() {
+        _cleanupInternalState: function() {
             this._shape = null;
             this._id = null;
             // Remove measure result from map
@@ -833,10 +833,11 @@ Oskari.clazz.define(
             var me = this,
                 features = [];
             var featuresFromLayer = me._drawLayers[layerId].getSource().getFeatures();
-            _.each(featuresFromLayer, function (f) {
+            featuresFromLayer.forEach(function (f) {
                 features.push(f);
             });
-            if(me._sketch && layerId === me._shape + 'DrawLayer') {
+            if(me._sketch && layerId === me.getCurrentLayerId()) {
+                // include the unfinished (currently drawn) feature
                 features.push(me._sketch);
             }
             return features;
@@ -850,12 +851,15 @@ Oskari.clazz.define(
          */
         getFeaturesAsGeoJSON : function(features) {
             var me = this;
-            var geoJsonFormat = new ol.format.GeoJSON();
+            var geoJSONformatter = new ol.format.GeoJSON();
             var geoJsonObject =  {
                     type: 'FeatureCollection',
                     features: []
                 };
-            _.each(features, function (f) {
+            if(!features) {
+                return geoJsonObject;
+            }
+            features.forEach(function (f) {
                 var buffer, length, area;
                 if(f.buffer) {
                     buffer = f.buffer;
@@ -866,7 +870,7 @@ Oskari.clazz.define(
                 } else {
                     area = me._loc.intersectionNotAllowed;
                 }
-                var jsonObject = geoJsonFormat.writeFeatureObject(f);
+                var jsonObject = geoJSONformatter.writeFeatureObject(f);
                 jsonObject.properties = {};
                 if(buffer) {
                     jsonObject.properties.buffer = buffer;
@@ -892,13 +896,14 @@ Oskari.clazz.define(
         getCircleAsPolygonFeature: function(features) {
             var me = this;
             var polygonFeatures = [];
-            if(features) {
-                _.each(features, function (f) {
-                    var pointFeature = new ol.geom.Point(f.getGeometry().getCenter());
-                    var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles['draw'], 100);
-                        polygonFeatures.push(bufferedFeature);
-                });
+            if(!features) {
+                return polygonFeatures;
             }
+            features.forEach(function (f) {
+                var pointFeature = new ol.geom.Point(f.getGeometry().getCenter());
+                var bufferedFeature = me.getBufferedFeature(pointFeature, f.getGeometry().getRadius(), me._styles['draw'], 100);
+                polygonFeatures.push(bufferedFeature);
+            });
             return polygonFeatures;
         },
          /**
@@ -911,7 +916,10 @@ Oskari.clazz.define(
         getCircleAsPointFeature: function(features) {
             var me = this;
             var pointFeatures = [];
-            _.each(features, function (f) {
+            if(!features) {
+                return pointFeatures;
+            }
+            features.forEach(function (f) {
                 var feature = new ol.Feature({
                       geometry:  new ol.geom.Point(f.getGeometry().getCenter())
                     });
@@ -929,7 +937,7 @@ Oskari.clazz.define(
          */
         addBufferPropertyToFeatures: function(features, buffer) {
             if(features && buffer) {
-                _.each(features, function (f) {
+                features.forEach(function (f) {
                     f.buffer = buffer;
                 });
             }
