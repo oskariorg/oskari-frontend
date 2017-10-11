@@ -22,7 +22,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             times: null,
             currentTime: null,
             rangeStart: null,
-            rangeEnd: null
+            rangeEnd: null,
+            isAnimating: false
         };
 
         var times = delegate.getTimes();
@@ -97,13 +98,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
         },
         _initStepper: function() {
+            var me = this;
             var template = jQuery(
-                '<div class="timeseries-stepper">' + // &#10073;&#10073; pause
-                    '<div class="timeseries-back"></div><div class="timeseries-playpause">&#9654;</div><div class="timeseries-forward"></div><div class="timeseries-datetime"></div>' +
+                '<div class="timeseries-stepper">' +
+                    '<div class="timeseries-back"></div><div class="timeseries-playpause"></div><div class="timeseries-forward"></div><div class="timeseries-datetime"></div>' +
                 '</div>');
             var dateTimeInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
             dateTimeInput.setName('datetime');
             template.find('.timeseries-datetime').append(dateTimeInput.getElement());
+            template.find('.timeseries-playpause').on('click', function(e){
+                me._setAnmationState(!me._uiState.isAnimating);
+            });
             this._element.find('.timeseries-aux').append(template);
         },
         _updateTimelines: function() {
@@ -193,6 +198,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         teardownUI: function () {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
+        },
+
+        _setAnmationState: function(shouldAnimate){
+            this._uiState.isAnimating = shouldAnimate;
+            this._element.find('.timeseries-playpause').toggleClass('pause', shouldAnimate);
         },
 
         _createEventHandlers: function () {

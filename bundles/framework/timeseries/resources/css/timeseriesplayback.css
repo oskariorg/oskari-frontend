@@ -32,8 +32,8 @@
   background-color: #fff;
   border-radius: 50px;
   background: radial-gradient(ellipse at center, #ffffff 18%,#ededed 43%,#c4c4c4 100%);
-  line-height: 36px;
   cursor: pointer;
+  position: relative;
 }
 .timeseries-back:hover,
 .timeseries-playpause:hover,
@@ -46,7 +46,29 @@
   width: 26px;
   height: 26px;
   margin-top: 7px;
-  line-height: 26px;
+}
+.timeseries-playpause:not(.pause):after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 11px;
+  left: 13px;
+  border-style: solid;
+  border-width: 7px 0 7px 14px;
+  border-color: transparent transparent transparent #3c3c3c;
+}
+.timeseries-playpause.pause:before,
+.timeseries-playpause.pause:after {
+  width: 4px;
+  height: 12px;
+  background: #3c3c3c;
+  position: absolute;
+  content: "";
+  top: 12px;
+  left: 13px;
+}
+.timeseries-playpause.pause:after {
+  left: 19px;
 }
 .timeseries-datetime {
   width: 140px;
