@@ -124,10 +124,11 @@ Oskari.clazz.define(
             // creating layer for drawing (if layer not already added)
             if(!me.getCurrentDrawLayer()) {
                 me.addVectorLayer(me.getCurrentLayerId());
-                // BUG: this doesn't get assigned if drawlayer already exists!!!!!!!!
-                me._functionalityIds[id] = me._layerId;
-
             }
+
+            // always assign layerId for functionality id
+            me._functionalityIds[id] = me.getCurrentLayerId();
+
             //activate drawcontrols
             if(shape) {
                 me.drawShape(shape, options);
