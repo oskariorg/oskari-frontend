@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPl
                 }
 
                 projection = moment(this._currentTime).add(interval * numIntervals, 'milliseconds');
-                if(next.isAfter(times.end)) {
+                if(projection.isAfter(times.end)) {
                     Oskari.log('TimeseriesAnimationPlugin').warn('next timestep would be after end of series, cannot advance');
                     return;
                 }
