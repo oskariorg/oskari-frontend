@@ -11,7 +11,6 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
-        this._gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         this._bufferedFeatureLayerId = 'BufferedFeatureDrawLayer';
         this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
@@ -71,6 +70,16 @@ Oskari.clazz.define(
                 me._styles[type] = me.getMapModule().getStyle(styleDef);
             });
         },
+        setGFIEnabled : function(enabled) {
+            var reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            if (!reqBuilder) {
+                // GFI functionality not available
+                return;
+            }
+            // enable (resume showing gfi popups after drawing is completed)
+            // or disable (when drawing in progress to not generate popups on clicks)
+            this.getSandbox().request(this, reqBuilder(!!enabled));
+        },
         /**
          * @method draw
          * - activates draw and modify controls
@@ -98,9 +107,7 @@ Oskari.clazz.define(
             // use default style if options don't include custom style
             var me = this;
             //disable gfi
-            if (me._gfiReqBuilder) {
-                me.getSandbox().request(me, me._gfiReqBuilder(false));
-            }
+            me.setGFIEnabled(false);
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
 
@@ -217,11 +224,7 @@ Oskari.clazz.define(
                 me.setVariablesToNull();
                 me.getMap().un('pointermove', me.pointerMoveHandler, me);
                 //enable gfi
-                if (me._gfiReqBuilder) {
-                    me.getSandbox().request(me, me._gfiReqBuilder(true));
-                }
-
-
+                me.setGFIEnabled(true);
             }
         },
         /**
