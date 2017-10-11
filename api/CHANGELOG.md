@@ -9,6 +9,13 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.44.1
+
+### [mod] [rpc] DrawingEvent
+
+DrawingEvent with isFinished = true is now correctly triggered also when user modifies the geometry.
+Previously isFinished was only ever "true" for the original draw and always false for any modifications.
+
 ## 1.44
 
 ### [mod] [breaking] AddLayerListFilterRequest

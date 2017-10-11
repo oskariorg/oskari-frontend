@@ -668,6 +668,13 @@ Oskari.clazz.define(
                 me._showIntersectionWarning = true;
                 me._mode = '';
                 me._sketch = null;
+
+                // send isFinished when user stops modifying the feature
+                // (the user might make another edit, but at least he/she let go of the mouse button etc)
+                var opts = jQuery.extend({}, options);
+                opts.isFinished = true;
+                me.sendDrawingEvent(me._id, opts);
+
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             });
