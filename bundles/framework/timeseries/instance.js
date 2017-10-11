@@ -18,6 +18,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this._modules = {};
         this._plugin = null;
         this._controlPlugin = null;
+        this._layer;
     }, {
         __name: 'timeseries',
         /**
@@ -93,11 +94,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.startPlugin(plugin);
             this._plugin = plugin;
 
-            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', {});
-            mapModule.registerPlugin(controlPlugin);
-            mapModule.startPlugin(controlPlugin);
-            this._controlPlugin = controlPlugin;
-
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -131,6 +127,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
 
             //set the initial state, don't start playing yet.
             me.play(layerId, times, false, 'TIME', 'ISO8601');
+
+            this._layer = layer;
+
+            var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', this);
+            mapModule.registerPlugin(controlPlugin);
+            mapModule.startPlugin(controlPlugin);
+            this._controlPlugin = controlPlugin;
+        },
+        getTimes: function() {
+            return this._layer.getAttributes().times;
+        },
+        getCurrentTime: function() {
+            return this.getTimes().end;
         },
         /**
          * @method stop

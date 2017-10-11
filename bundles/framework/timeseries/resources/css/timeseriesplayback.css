@@ -1,3 +1,21 @@
+.timeseriescontrolplugin{
+
+}
+.timeseries-aux{
+  display: inline-block;
+  height: 100px;
+  background: #ddd;
+  width: 200px;
+}
+.timeseries-timelines{
+  display: inline-block;
+  height: 100px;
+  background: #999;
+}
+svg.timeline-desktop{
+  display: block;
+}
+
 div.mapplugin.timeseries {
   margin: auto;
   width: 82%;
