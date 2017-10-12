@@ -16,6 +16,28 @@ Some extra tags:
 DrawingEvent with isFinished = true is now correctly triggered also when user modifies the geometry.
 Previously isFinished was only ever "true" for the original draw and always false for any modifications.
 
+Length and area information in the event are now the sum for all the LineStrings (for length) and (non-intersecting) Polygons instead of the last drawn shape.
+The length/area is written to geojson properties per feature so if you need to access measurement for the latest feature it's still there like this:
+
+```javascript
+    {
+        data : {
+             length : 0,
+             area : 39696895.99975586
+        },
+        geojson : {
+            features : [{ geometry: ..., properties : {
+                    area : 20396544
+                },
+                { geometry: ..., properties : {
+                    area : 19300351.99975586
+                }]
+        }
+    }
+```
+
+To get the same information you can do `event.geojson.features[event.geojson.features.length - 1].properties.area`, but it makes more sense to have the sum on the data block instead of measures for the latest feature in a collection of features. Note! If you have just one feature ever this works like before.
+
 ## 1.44
 
 ### [mod] [breaking] AddLayerListFilterRequest
