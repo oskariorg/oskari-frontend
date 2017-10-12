@@ -36,7 +36,13 @@ The length/area is written to geojson properties per feature so if you need to a
     }
 ```
 
-To get the same information you can do `event.geojson.features[event.geojson.features.length - 1].properties.area`, but it makes more sense to have the sum on the data block instead of measures for the latest feature in a collection of features. Note! If you have just one feature ever this works like before.
+To get the same information you can do `event.geojson.features[event.geojson.features.length - 1].properties.area`, but it makes more sense to have the sum on the data block instead of measures for the latest feature in a collection of features.
+
+Notes:
+
+- If you have just one feature ever this works like before.
+- Only lines and polygons are counted for the area/length (circles/points with buffers are not).
+- The measurements are for non-buffered features.
 
 ## 1.44
 
