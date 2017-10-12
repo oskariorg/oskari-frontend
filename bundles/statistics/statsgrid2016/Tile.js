@@ -155,7 +155,8 @@ function(instance, service) {
     showExtension: function (el, callback) {
         var me = this;
         el.show();
-        el.on('click', function(event) {
+        el.unbind('click');
+        el.bind('click', function(event) {
             var type = jQuery(this).attr('data-view');
             me.toggleExtensionClass(type);
             event.stopPropagation();
@@ -194,35 +195,7 @@ function(instance, service) {
 
     },
     eventHandlers: {
-        'userinterface.ExtensionUpdatedEvent': function ( event ) {
-            var me = this;
-            // Not handle other extension update events
-            if(event.getExtension().getName() !== me.instance.getName()) {
-                return;
-            }
-            var wasClosed = event.getViewState() === 'close';
-            // moving flyout around will trigger attach states on each move
-            var visibilityChanged = this.visible === wasClosed;
-            this.visible = !wasClosed;
-            if( wasClosed ) {
-                this.hideExtension();
-                return;
-            }
-            var showExtensionButton = function(extension){
-                me.showExtension(extension, function(type) {
-                    me.openFlyout(type);
-                });
-            };
-            for(var type in me.getExtensions()) {
-                showExtensionButton(me.getExtensions()[type]);
-            }
-        },
-        'StatsGrid.Filter': function(evt) {
-            if( this.statsService === undefined ) {
-                this.statsService = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-            }
-            this.statsService.notifyOskariEvent(evt);
-        }
+
     }
 }, {
     /**

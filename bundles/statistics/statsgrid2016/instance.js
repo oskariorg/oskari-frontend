@@ -165,6 +165,10 @@ Oskari.clazz.define(
             },
             'userinterface.ExtensionUpdatedEvent': function ( event ) {
                 var me = this;
+                // Not handle other extension update events
+                if(event.getExtension().getName() !== me.getName()) {
+                    return;
+                }
                 var wasClosed = event.getViewState() === 'close';
                 // moving flyout around will trigger attach states on each move
                 var visibilityChanged = this.visible === wasClosed;
@@ -173,7 +177,6 @@ Oskari.clazz.define(
                     me.getTile().hideExtension();
                     return;
                 } else {
-
                     for(var extension in me.getTile().getExtensions()){
                         me.getTile().showExtension(
                             me.getTile().getExtensions()[extension],
@@ -182,7 +185,6 @@ Oskari.clazz.define(
                             }
                         );
                     }
-
                 }
             },
             /**
