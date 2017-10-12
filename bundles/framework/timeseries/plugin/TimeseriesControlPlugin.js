@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
             this._uiState.currentTime = this._uiState.times[index];
             this._requestNewTime();
-            this._rederHandle();
+            this._renderHandle();
         },
         /**
          * @method _createControlElement
@@ -125,8 +125,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                         '<div class="timeseries-aux"></div><div class="timeseries-timelines"><svg class="timeline-desktop">' +
                             '<g class="full-axis"></g>' +
                             '<g class="full-axis-brush"></g>' +
-                            '<g class="full-subset"></g>' +
-                            '<g class="drag-handle"><circle cx="0" cy="0" r="10"></circle></g>' +
+                            '<g class="subset-axis"></g>' +
+                            '<g class="subset-bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
+                            '<g class="drag-handle"><circle cx="0" cy="0" r="10"/></g>' +
                         '</svg></div>' +
                     '</div>');
             return el;
@@ -159,6 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
+                this._element.find('.timeseries-aux').empty();
                 me._initStepper();
                 me._updateTimelines();
             }
@@ -178,6 +180,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             this._element.find('.timeseries-aux').append(template);
         },
         _updateTimelines: function() {
+            var margin = {left: 15, right: 15}
             var me = this;
             var svg = d3.select(this._element.find('.timeline-desktop').get(0));
             svg
@@ -187,11 +190,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var times = this._uiState.times;
             var scaleFull = d3.scaleTime()
                 .domain([new Date(times[0]), new Date(times[times.length-1])])
-                .range([0, this.__timelineWidth]);
+                .range([margin.left, this.__timelineWidth - margin.right]);
 
             var scaleSubset = d3.scaleTime()
                 .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
-                .range([0, this.__timelineWidth]);
+                .range([margin.left, this.__timelineWidth - margin.right]);
 
             var axisFull = d3.axisTop(scaleFull);
             svg.select('.full-axis')
@@ -199,7 +202,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .call(axisFull);
 
             var axisSubset = d3.axisTop(scaleSubset);
-            svg.select('.full-subset')
+            svg.select('.subset-axis')
                 .attr('transform', 'translate(0,80)')
                 .call(axisSubset);
 
@@ -220,11 +223,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 }
                 renderHandle();
             }
-            me._rederHandle = renderHandle;
-            
-            var dragBehavior = d3.drag()
-            .on('drag', function(){
-                var newX = d3.event.x;
+            me._renderHandle = renderHandle;
+
+            function timeFromMouse(newX) {
                 var scaleRange = scaleSubset.range();
                 if(newX > scaleRange[1]) {
                     newX = scaleRange[1];
@@ -233,6 +234,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     newX = scaleRange[0];
                 }
                 updateCurrentTime(scaleSubset.invert(newX).toISOString());
+            }
+
+            svg.select('.subset-bg rect')
+                .attr('fill', 'rgba(255,255,255,0.01)')
+                .attr('x', margin.left)
+                .attr('y', 50)
+                .attr('width', this.__timelineWidth - margin.left - margin.right)
+                .attr('height', 50)
+                .on('click', null) // remove old event handlers
+                .on('click', function(e) {
+                    var newX = d3.mouse(this)[0];
+                    timeFromMouse(newX);
+                }); 
+            
+            var dragBehavior = d3.drag()
+            .on('drag', function(){
+                var newX = d3.event.x;
+                timeFromMouse(newX);
             })
             .on('end', function(){
                 // if brush too small, enlarge it
@@ -241,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             handle.call(dragBehavior);
 
             var brush = d3.brushX()
-                .extent([[0, 0], [this.__timelineWidth, 50]])
+                .extent([[margin.left, 0], [this.__timelineWidth - margin.right, 50]])
                 .handleSize(40)
                 .on(".brush", null) // remove old event handlers
                 .on('brush', brushed);
@@ -255,7 +274,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 var selection = d3.event.selection;
                 var inverted = selection.map(scaleFull.invert, scaleFull);
                 scaleSubset.domain(inverted);
-                svg.select('.full-subset').call(axisSubset);
+                svg.select('.subset-axis').call(axisSubset);
                 var invertedISO = inverted.map(function(e){return e.toISOString()});
 
                 var changedTime = me._uiState.currentTime;
