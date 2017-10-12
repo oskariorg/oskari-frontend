@@ -772,3 +772,102 @@ div.tab-material-controls div.title {
         padding: 1.2em;
     }
 }
+
+
+/* ********************************************
+ * Filter styles
+ * ********************************************/
+.oskari-flyout.statsgrid-filter-flyout {
+    .clear {
+        clear: both;
+    }
+    .right {
+        float: right;
+    }
+    .left {
+        float: left;
+    }
+    h5 {
+        padding-bottom: 0 !important;
+    }
+    .filter-button {
+        margin-top: 1em;
+    }
+    .active-filters {
+        width: 15em;
+    }
+    .content {
+        width:32em;
+    }
+    .filterIndicator, .filterCondition, .oskari-table-header {
+        width: 15em;
+    }
+    .cell {
+        height: 1em;
+        padding:7px;
+        text-align: center;
+    }
+    .indicator, #indicator {
+        width: 50%
+    }
+    .condition, #condition, .value, #value {
+        width: 20%
+    }
+    .headerCell {
+        padding: 0.9375em 0.5em;
+        text-align: left;
+        font-weight: 500;
+        font-size: calc(0.55rem + 0.28vh);
+        text-transform: uppercase;
+    }
+    td {
+        background: #FAFAFA;
+        text-align: center;
+    }
+    .oskari-table-header {
+        height: 3em;
+    }
+    .removerow {
+        border-radius: 50%;
+        height: 1.3em;
+        width: 1.37em;
+        background-image: url('../images/icon-close.png');
+    }
+    .remove {
+        width:5%;
+    }
+    .filter-edit-active{
+        background: olivedrab !important;
+    }
+    .hoverable {
+        background: white;
+        border-radius:3px;
+        border-collapse: collapse;
+        height: 15em;
+        margin: auto;
+        max-width: 600px;
+        padding:5px;
+        width: 100%;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        animation: float 5s infinite;
+
+        tr:hover {
+            background:#4E5066;
+            color:#FFFFFF;
+            border-top: 1px solid #22262e;
+            border-bottom: 1px solid #22262e;
+        }
+    }
+    tr:hover td {
+        background:#4E5066;
+        color:#FFFFFF;
+        border-top: 1px solid #22262e;
+        border-bottom: 1px solid #22262e;
+    }
+    .filter {
+        padding: 1.2em;
+    }
+    .tabsHeader {
+        padding-top:2em !important;
+    }
+}
