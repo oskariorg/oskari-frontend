@@ -28,8 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
         var times = delegate.getTimes();
         this._uiState.times = times;
-        this._uiState.rangeStart = times.start;
-        this._uiState.rangeEnd = times.end;
+        this._uiState.rangeStart = times[0];
+        this._uiState.rangeEnd = times[times.length-1];
         this._uiState.currentTime = delegate.getCurrentTime();
 
         me._mobileDefs = {
@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             var times = this._uiState.times;
             var scaleFull = d3.scaleTime()
-                .domain([new Date(times.start), new Date(times.end)])
+                .domain([new Date(times[0]), new Date(times[times.length-1])])
                 .range([0, this.__timelineWidth]);
 
             var scaleSubset = d3.scaleTime()

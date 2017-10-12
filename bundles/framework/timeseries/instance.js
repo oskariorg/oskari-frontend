@@ -137,10 +137,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             this._controlPlugin = controlPlugin;
         },
         getTimes: function() {
-            return this._layer.getAttributes().times;
+            var times = this._layer.getAttributes().times;
+            if(!Array.isArray(times)) {
+                var interval = moment.duration(times.interval);
+                var end = moment(times.end);
+                var t = moment(times.start);
+                times = [t.toISOString()];
+                while(t.add(interval) < end) {
+                    times.push(t.toISOString());
+                }
+                times.push(end.toISOString());
+            }
+            return times;
         },
         getCurrentTime: function() {
-            return this.getTimes().end;
+            var times = this.getTimes();
+            return times[times.length-1];
         },
         /**
          * @method stop
