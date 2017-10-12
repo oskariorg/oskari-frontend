@@ -278,7 +278,7 @@ Oskari.clazz.define(
                 bufferedFeatures = null,
                 layerId = me.getLayerIdForFunctionality(id),
                 isFinished = false;
-            var requestedBuffer = me.getOpts('buffer');
+            var requestedBuffer = me.getOpts('buffer') || 0;
             if(layerId) {
                 features = me.getFeatures(layerId);
             }
@@ -289,19 +289,22 @@ Oskari.clazz.define(
             if(me._shape === 'Circle') {
                 bufferedFeatures = me.getCircleAsPolygonFeature(features);
                 features = me.getCircleAsPointFeature(features);
+                // FIXME: circles don't get the area measurement
             } else if(me._shape === 'LineString' && requestedBuffer > 0) {
+                // TODO: Why is it that only linestrings get buffer properties?
                 me.addBufferPropertyToFeatures(features, requestedBuffer);
             }
             // TODO: get geojson for matching id
             var geojson = me.getFeaturesAsGeoJSON(features);
             var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
 
+            var measures = me.sumMeasurements(features);
             var data = {
-                length : me._length,
-                area : me._area,
+                length : measures.length,
+                area : measures.area,
                 buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
-                shape: me._shape
+                shape: me.getCurrentDrawShape()
             };
             var showMeasureUI = !!me.getOpts('showMeasureOnMap');
             if (showMeasureUI) {
@@ -361,27 +364,39 @@ Oskari.clazz.define(
                 if(f.buffer) {
                     buffer = f.buffer;
                 }
-                length = me.getLineLength(f.getGeometry());
-                if(me._featuresValidity[f.getId()]) {
-                    area = me.getPolygonArea(f.getGeometry());
-                } else {
-                    area = me._loc.intersectionNotAllowed;
-                }
+                var measures = me.sumMeasurements([f]);
                 var jsonObject = geoJSONformatter.writeFeatureObject(f);
                 jsonObject.properties = {};
                 if(buffer) {
                     jsonObject.properties.buffer = buffer;
                 }
-                if(length) {
-                    jsonObject.properties.length = length;
+                if(measures.length) {
+                    jsonObject.properties.length = measures.length;
                 }
-                if(area) {
-                    jsonObject.properties.area = area;
+                if(!me._featuresValidity[f.getId()]) {
+                    jsonObject.properties.area = me._loc.intersectionNotAllowed;
+                } else if(measures.area) {
+                    jsonObject.properties.area = measures.area;
                 }
                 geoJsonObject.features.push(jsonObject);
             });
 
             return geoJsonObject;
+        },
+        sumMeasurements : function(features) {
+            var me = this;
+            var value = {
+                length : 0,
+                area : 0
+            };
+
+            features.forEach(function (f) {
+                value.length += me.getLineLength(f.getGeometry());
+                if(me._featuresValidity[f.getId()]) {
+                    value.area += me.getPolygonArea(f.getGeometry());
+                }
+            });
+            return value;
         },
         /**
          * @method getPolygonArea
@@ -405,7 +420,6 @@ Oskari.clazz.define(
                     area = geometry.getArea();
                 }
             }
-            this._area = area;
             return area;
         },
         /**
@@ -433,7 +447,6 @@ Oskari.clazz.define(
                     length = geometry.getLength();
                 }
             }
-            this._length = length;
             return length;
         },
         /**
@@ -697,7 +710,6 @@ Oskari.clazz.define(
                         output = "";
                         if(me._showIntersectionWarning) {
                             output = me._loc.intersectionNotAllowed;
-                            me._area = output;
                         }
                     }
                 } else if (geom instanceof ol.geom.LineString) {
