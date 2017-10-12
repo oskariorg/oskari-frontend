@@ -413,25 +413,29 @@ Oskari.clazz.define(
                         geometry = new ol.geom.Polygon(null);
                     }
                     geometry.setCoordinates(coordinates);
-                    me.checkIntersection(geometry, options);
+                    if(options.selfIntersection !== false) {
+                        me.checkIntersection(geometry);
+                    }
                     me.pointerMoveHandler();
                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                     return geometry;
                  };
             }
 
-            me._draw[functionalityId] = new ol.interaction.Draw({
+            var drawInteraction = new ol.interaction.Draw({
               features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
               type: geometryType,
               style: me._styles['draw'],
               geometryFunction:  geometryFunction,
               maxPoints: maxPoints
             });
+            // does this need to be registered here and/or for each functionalityId?
+            me._draw[functionalityId] = drawInteraction;
 
-            me.getMap().addInteraction(me._draw[functionalityId]);
+            me.getMap().addInteraction(drawInteraction);
 
-            me.drawStartEvent(options);
-            me.drawingEndEvent(options, shape);
+            me.bindDrawStartEvent(drawInteraction, options);
+            me.bindDrawEndEvent(drawInteraction, options, shape);
 
             if(options.showMeasureOnMap) {
                 me.getMap().on('pointermove', me.pointerMoveHandler, me);
@@ -442,9 +446,9 @@ Oskari.clazz.define(
          * -  handles drawstart event
          * @param {Object} options
          */
-        drawStartEvent: function(options) {
+        bindDrawStartEvent: function(interaction, options) {
             var me = this;
-            me._draw[me._id].on('drawstart', function(evt) {
+            interaction.on('drawstart', function(evt) {
                 me._showIntersectionWarning = false;
                 // stop modify iteraction while draw-mode is active
                 me.removeInteractions(me._modify, me._id);
@@ -464,9 +468,9 @@ Oskari.clazz.define(
          * -  handles drawend event
          * @param {Object} options
          */
-        drawingEndEvent: function(options, shape) {
+        bindDrawEndEvent: function(interaction, options, shape) {
             var me = this;
-            me._draw[me._id].on('drawend', function(evt) {
+            interaction.on('drawend', function(evt) {
                 var eventOptions = {
                     isFinished: true
                 };
@@ -491,26 +495,48 @@ Oskari.clazz.define(
          * @param {ol.geom.ol.geom.Geometry} geometry
          * @param {Object} options
          */
-        checkIntersection: function (geometry, options) {
+        checkIntersection: function (geometry) {
             var me = this;
+            var currentDrawing = me._sketch;
+            if(!currentDrawing) {
+                // intersection is allowed or geometry isn't being drawn currently
+                return;
+            }
             var coord = geometry.getCoordinates()[0];
             var lines = me.getJstsLines(coord);
-            if(options.selfIntersection !== false && me._sketch) {
-                var invalid = me.isValidJstsGeometry(lines);
-                if(invalid) {
-                    me._sketch.setStyle(me._styles['intersect']);
-                    me._featuresValidity[me._sketch.getId()] = false;
-                } else {
-                    if(me._sketch && geometry.getArea()>0) {
-                        if(me.isCurrentlyDrawing()) {
-                            me._sketch.setStyle(me._styles['draw']);
-                        } else {
-                            me._sketch.setStyle(me._styles['modify']);
-                        }
-                        me._featuresValidity[me._sketch.getId()] = true;
-                    }
-                }
+            if(!me.isValidJstsGeometry(lines)) {
+                // lines intersect -> problem!!
+                currentDrawing.setStyle(me._styles['intersect']);
+                me._featuresValidity[currentDrawing.getId()] = false;
+                return;
             }
+            // geometry is valid
+            if(geometry.getArea() > 0) {
+                if(me.isCurrentlyDrawing()) {
+                    currentDrawing.setStyle(me._styles['draw']);
+                } else {
+                    currentDrawing.setStyle(me._styles['modify']);
+                }
+                me._featuresValidity[currentDrawing.getId()] = true;
+            }
+        },
+        /**
+         * @method isValidJstsGeometry
+         * -  checks if lines cross. If they do the geometry intersects itself and is not "valid"
+         * @param {Array} lines
+         * @return {boolean} true if lines don't cross (geometry is "valid")
+         */
+        isValidJstsGeometry : function(lines) {
+            var crosses = false;
+            lines.forEach(function(l) {
+                lines.forEach(function(li) {
+                    if (li !== l && li.crosses(l) === true) {
+                        crosses = true;
+                    }
+                });
+            });
+            // valid if lines don't cross
+            return !crosses;
         },
         /**
          * @method pointerMoveHandler - pointer moving handler for displaying
@@ -600,28 +626,8 @@ Oskari.clazz.define(
            me.getMap().on('pointermove', me.pointerMoveHandler, me);
            me.getMap().addInteraction(me._modify[me._id]);
         },
-        /**
-         * @method isValidJstsGeometry
-         * -  checks if lines cross
-         * @param {Array} lines
-         * @return {boolean} crosses
-         */
-        isValidJstsGeometry : function(lines) {
-            var crosses = false;
-            lines.forEach(function(l) {
-                lines.forEach(function(li) {
-                    if (li !== l) {
-                        if (li.crosses(l)===true) {
-                            crosses = true;
-                        }
-                    }
-                });
-            });
-            return crosses;
-        },
          /**
          * @method getJstsLines
-         * -  checks if lines cross
          * @param {Array} coord
          * @return {Array} lines
          */
@@ -678,8 +684,8 @@ Oskari.clazz.define(
                         if(options.buffer > 0) {
                             me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
                         }
-                    } else if (shape === "Polygon") {
-                        me.checkIntersection(me._sketch.getGeometry(), options);
+                    } else if (shape === "Polygon" && options.selfIntersection !== false) {
+                        me.checkIntersection(me._sketch.getGeometry());
                     }
                     me.sendDrawingEvent(me._id, options);
                     //probably safe to start listening again
