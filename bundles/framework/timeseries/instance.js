@@ -15,7 +15,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this.sandbox = null;
         this.started = false;
         this._localization = null;
-        this._modules = {};
         this._plugin = null;
         this._controlPlugin = null;
         this._layer;
@@ -113,28 +112,32 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var sandbox = me.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var locale = this.getLocalization('timeseriesplayback');
-            var playback = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControl', this, me.conf, locale, mapModule, sandbox);
-            me._modules.playback = playback;
         },
         /**
          * @method initTimeSeries
          * inits the timeline ui with values of a layer supporting times
          */
         initTimeseries: function(layer) {
-            var me = this,
-                times = layer.getAttributes().times,
-                layerId = layer.getId();
-
-            //set the initial state, don't start playing yet.
-            me.play(layerId, times, false, 'TIME', 'ISO8601');
-
             this._layer = layer;
-
-            var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            if(!this._controlPlugin) {
+                this._createControlPlugin();
+            }
+        },
+        _createControlPlugin: function (){
+            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', this);
             mapModule.registerPlugin(controlPlugin);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;
+        },
+        _removeControlPlugin: function () {
+            if(!this._controlPlugin) {
+                return;
+            }
+            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            mapModule.stopPlugin(this._controlPlugin);
+            mapModule.unregisterPlugin(this._controlPlugin);
+            this._controlPlugin = null;
         },
         getTimes: function() {
             var times = this._layer.getAttributes().times;
@@ -165,9 +168,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         stop: function () {
             var me = this;
             me.started = false;
-            if(me._modules.playback) {
-                me._modules.playback.removeSlider();
-            }
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.unregisterFromEventByName(me, p);
@@ -177,24 +177,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.stopPlugin(this._plugin);
             mapModule.unregisterPlugin(this._plugin);
 
+            this._removeControlPlugin();
+
             me.sandbox = null;
-        },
-        /**
-         * @method play
-         * init the timeline and slider + optionally start playing. Defaults to false.
-         */
-        play: function(layerId, times, autoPlay, dimensionName, units) {
-            this._modules.playback.showSlider(layerId, times, autoPlay, dimensionName, units);
         },
         /**
          * @method  @private _handleMapSizeChanged handle map size change event
          * @param  {Object} size map size
          */
         _handleMapSizeChanged: function(size){
-            var me = this;
-            if(me._modules.playback) {
-                me._modules.playback.handleMapSizeChanged(size);
-            }
+
         },
         /**
          * @method onEvent
@@ -228,9 +220,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             'AfterMapLayerRemoveEvent': function(event) {
                 this._checkIfTimeseriesLayersExist();
             },
+            /*
             'TimeseriesAnimationEvent': function(event) {
                  this._modules.playback.setPlaybackState(event.getLayerId(), event.getTime(), event.getPlaying());
             },
+            */
             'ProgressEvent': function(event) {
                 if(event.getStatus() && this._plugin.getCurrentLayerId() === event.getId()) {
                     console.log('progressevent. hass cb:', !!this._doneCallback)
@@ -252,21 +246,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             for (var i = 0; i < layers.length; i++) {
                 //the first layer to have times set, we'll use!
                 if (layers[i].hasTimeseries()) {
-                    //only reinitialise if the control has not yet been initialised with the data of this layer
-                    if (!(me._modules.playback.getControl()) ||
-                        !(me._modules.playback.getSelectedLayerId()) ||
-                         (me._modules.playback.getSelectedLayerId() && me._modules.playback.getSelectedLayerId() !== layers[i].getId())) {
-                            me.initTimeseries(layers[i]);
+                    if (me._controlPlugin) {
+                        this._removeControlPlugin();
                     }
+                    me.initTimeseries(layers[i]);
                     //time series layer found -> nothing more to do.
                     return;
                 }
             }
-            //no layers found -> remove the control
-            me._modules.playback.removeSlider();
-        },
-        requestPlayback: function(layerId, time, playing, frameInterval, stepInterval) {
-            this._plugin.configureTimeseriesPlayback(layerId, time, playing, frameInterval, stepInterval);
+            // no timeseries, remove control
+            this._removeControlPlugin();
         }
     }, {
         /**
