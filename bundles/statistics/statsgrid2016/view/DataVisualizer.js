@@ -20,8 +20,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
 }, {
   _template: {
     error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
-    container: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
-    charts: jQuery('<div class="oskari-datacharts" style="padding:20px"></div>'),
+    container: jQuery('<div class="oskari-datacharts" style=""></div>'),
+    charts: jQuery('<div class="oskari-datacharts" style=""></div>'),
     select: jQuery('<div class="dropdown"></div>'),
     tabControl: jQuery('<div class="tab-material-controls"></div>')
   },
@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   _createGrid: function () {
     var gridPoint = jQuery('<div></div>');
-    var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', this.service, this.sb, this.instance.getLocalization());
+    var grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable',this.sb, this.instance.getLocalization());
     grid.showRegionsetSelector(!this.isEmbedded);
     grid.showIndicatorRemoval(!this.isEmbedded);
     grid.render(gridPoint);
@@ -252,13 +252,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
   },
   events: function () {
     var me = this;
-    // not handele events right now
-    return;
     this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
 
       var current = event.getCurrent();
       if (current) {
         if (me.getCharts() !== null) {
+          me._barchart.redraw(me.getIndicatorData());
+        } else {
           me.createBarCharts();
         }
       }
@@ -268,11 +268,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     });
   },
   createBarCharts: function () {
+    var me = this;
     var data = this.getIndicatorData();
     if (data === undefined) {
       Oskari.log("no indicator data");
       return;
     }
+
     if (!this._barchart.chartIsInitialized()) {
       var barchart = this._barchart.createBarChart(data, { activeIndicator: this.getIndicator() });
       var bEl = jQuery(barchart);
@@ -281,10 +283,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
         'max-height':'400px',
         'overflow':'auto'
       });
-      this.tabsContainer.panels[0].getContainer().append(bEl);
+      var e = this.tabsContainer.panels[1];
+      return bEl;
     } else {
-      var updated = this._barchart.redraw(data);
-      this.tabsContainer.panels[0].getContainer().append(updated);
+      this._barchart.redraw(data);
     }
   },
   gridTab: function () {
@@ -305,16 +307,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
       this.loc.datacharts.barchart,
       'oskari_datachart_tabpanel_header'
       );
-    chartPanel.getContainer().prepend(me.createIndicatorSelector(this.loc.datacharts.indicatorVar));
-    chartPanel.getContainer().prepend(me.createColorSelector(this.loc.datacharts.descColor));
-    chartPanel.getContainer().prepend(me.createBarCharts());
+    chartPanel.getContainer().append(me.createIndicatorSelector(this.loc.datacharts.indicatorVar));
+    chartPanel.getContainer().append(me.createColorSelector(this.loc.datacharts.descColor));
+    chartPanel.getContainer().append(me.createBarCharts());
     chartPanel.setId('oskari_search_tabpanel_header');
     chartPanel.setPriority(1.0);
     this.tabsContainer.addPanel(chartPanel);
   },
   addTab: function () {
     var me = this,
-    flyout = jQuery(me.container);
+      flyout = jQuery(me.container);
     // Change into tab mode if not already
     if (me.tabsContainer.panels.length === 0) {
       me.tabsContainer.insertTo(flyout);

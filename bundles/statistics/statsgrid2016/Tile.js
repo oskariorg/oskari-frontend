@@ -165,6 +165,9 @@ function(instance, service) {
     getExtensions: function () {
         return this._tileExtensions;
     },
+    getFlyoutManager: function () {
+        return this._flyoutManager;
+    },
     getFlyout: function (type) {
         return this._flyoutManager.getFlyout(type);
     },

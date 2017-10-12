@@ -1,7 +1,7 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(service, sandbox, locale) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function(sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
-    this.service = service;
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
     this._bindToEvents();

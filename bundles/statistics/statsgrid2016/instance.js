@@ -15,6 +15,7 @@ Oskari.clazz.define(
             name: 'StatsGrid',
             sandbox: 'sandbox',
             stateful: true,
+            tileClazz: 'Oskari.statistics.statsgrid.Tile',
             vectorViewer: false
         };
         this.visible = false;
@@ -26,9 +27,6 @@ Oskari.clazz.define(
         this.togglePlugin = null;
         this.regionsetViewer = null;
     }, {
-        startExtension: function () {
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.statistics.statsgrid.Tile', this, this.statsService);
-        },
         afterStart: function (sandbox) {
             var me = this;
 
@@ -70,6 +68,12 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
             this.plugins['Oskari.userinterface.Tile'].initFlyoutManager();
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
+            }
         },
         isEmbedded: function() {
             return jQuery('#contentMap').hasClass('published');
@@ -169,17 +173,16 @@ Oskari.clazz.define(
                     me.getTile().hideExtension();
                     return;
                 } else {
-                this.getExtensions().forEach( function( extension ) {
-                    if( extension[0].id === "search" ) {
-                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
+
+                    for(var extension in me.getTile().getExtensions()){
+                        me.getTile().showExtension(
+                            me.getTile().getExtensions()[extension],
+                            function(type) {
+                                me.getTile().openFlyout(type);
+                            }
+                        );
                     }
-                    if( extension[0].id === "dataview" ) {
-                        me.getTile().showExtension( extension, me.openFlyout.bind( me ) );
-                    }
-                    if( extension[0].id === "filter" ) {
-                        me.getTile().showExtension( extension, me.openFlyout.bind(  me ) );
-                    }
-                });
+
                 }
             },
             /**

@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
     this.container = null;
     this.panels = {};
     this.conditionSelect = null;
-    this.service = this.instance.statsService;
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
     this.events();
 }, {
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
                 "filterCondition": valuePanel.find(".filterCondition"),
                 "filterIndicator": valuePanel.find(".filterIndicator"),
                 "filterButton": valuePanel.find(".filter-button")
-            }
+            };
             return elements;
     },
     editFilter: function ( filterRow ) {
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
             indicator: null,
             condition: condition,
             value: value
-        }
+        };
     },
     updateAppliedFilters: function ( options ) {
         var me = this;
@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         panel.setTitle(title);
         var panelWrapper = jQuery('<div></div>');
 
-        panel.getContainer().prepend(panelWrapper); 
+        panel.getContainer().prepend(panelWrapper);
         panel.setPriority(1.0);
         panel.setId('area-filter');
         this.tabsContainer.addPanel(panel);
@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
       panelWrapper.find('.filterCondition').append( this.createSelect() );
 
 
-        panel.getContainer().prepend(panelWrapper); 
+        panel.getContainer().prepend(panelWrapper);
         panel.setPriority(1.0);
         panel.setId('value-filter');
       this.tabsContainer.addPanel(panel);
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         panel.setTitle( title );
         var container = panel.getContainer();
-        var panelWrapper = jQuery('<div></div>'); 
+        var panelWrapper = jQuery('<div></div>');
         var appliedFilters = this._template.appliedFilters();
         var appliedHeader = this._template.appliedHeader({ indicator: this.loc.variable,
                                                             condition: this.loc.condition,
@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         panelWrapper.append( appliedHeader );
         panelWrapper.append( appliedFilters );
 
-        panel.getContainer().prepend(panelWrapper); 
+        panel.getContainer().prepend(panelWrapper);
         panel.setPriority(1.0);
         panel.setId('applied-filter');
         this.tabsContainer.addPanel(panel);
@@ -240,5 +240,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         return me.tabsContainer.ui;
     }
 }, {
-        extend: ['Oskari.userinterface.extension.DefaultView'] 
+        extend: ['Oskari.userinterface.extension.DefaultView']
 });
