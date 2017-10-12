@@ -285,6 +285,20 @@ div.oskari-flyout.statsgrid-data-flyout {
       background-color: #000000; }
       div.oskari-flyout.statsgrid-data-flyout .statsgrid-grouping-header.sources span {
         font-weight: normal; }
+  div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .bar {
+    fill: #5f89ad; }
+  div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .axis {
+    font-size: 13px; }
+    div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .axis path, div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .axis line {
+      fill: none;
+      display: none; }
+  div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .label {
+    font-size: 13px; }
+  div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7; }
+  div.oskari-flyout.statsgrid-data-flyout .oskari-datacharts #graphic .grid path {
+    stroke-width: 0; }
 
 /* ********************************************
  * Statsgrid legend

@@ -481,6 +481,35 @@ div.oskari-flyout {
                 }
             }
         }
+
+        .oskari-datacharts {
+            #graphic {
+                .bar {
+                    fill: #5f89ad;
+                }
+
+                .axis {
+                    font-size: 13px;
+                    path, line {
+                        fill: none;
+                        display: none;
+                    }
+                }
+
+                .label {
+                    font-size: 13px;
+                }
+                .grid {
+                    .tick {
+                        stroke: lightgrey;
+                        opacity: 0.7;
+                    }
+                    path {
+                        stroke-width: 0;
+                    }
+                }
+            }
+        }
     }
 }
 
