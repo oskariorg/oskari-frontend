@@ -23,7 +23,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             currentTime: null,
             rangeStart: null,
             rangeEnd: null,
-            isAnimating: false
+            isAnimating: false,
+            frameInterval: 1000,
+            stepInterval: moment.duration(1, 'minutes')
         };
 
         var times = delegate.getTimes();
@@ -31,6 +33,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.rangeStart = times[0];
         this._uiState.rangeEnd = times[times.length-1];
         this._uiState.currentTime = delegate.getCurrentTime();
+
+        me._throttleNewTime = me._throttle(me._requestNewTime.bind(me), 500);
+        me._throttleAnimation = me._throttle(me._animationStep.bind(me), me._uiState.frameInterval);
 
         me._mobileDefs = {
             buttons: {
@@ -49,6 +54,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
     }, {
         __timelineWidth: 600,
+
+        // Returns a function, that, when invoked, will only be triggered at most once
+        // during a given window of time. Normally, the throttled function will run
+        // as much as it can, without ever going more than once per `wait` duration;
+        // but if you'd like to disable the execution on the leading edge, pass
+        // `{leading: false}`. To disable execution on the trailing edge, ditto.
+        _throttle: function (func, wait, options) {
+            var context, args, result;
+            var timeout = null;
+            var previous = 0;
+            if (!options) options = {};
+            var later = function () {
+                previous = options.leading === false ? 0 : Date.now();
+                timeout = null;
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+            };
+            return function () {
+                var now = Date.now();
+                if (!previous && options.leading === false) previous = now;
+                var remaining = wait - (now - previous);
+                context = this;
+                args = arguments;
+                if (remaining <= 0 || remaining > wait) {
+                    if (timeout) {
+                        clearTimeout(timeout);
+                        timeout = null;
+                    }
+                    previous = now;
+                    result = func.apply(context, args);
+                    if (!timeout) context = args = null;
+                } else if (!timeout && options.trailing !== false) {
+                    timeout = setTimeout(later, remaining);
+                }
+                return result;
+            };
+        },
+        _requestNewTime: function() {
+            var me = this;
+            me._delegate.requestNewTime(me._uiState.currentTime, null, function(){
+                if(me._uiState.isAnimating) {
+                    me._throttleAnimation();
+                }
+
+            });
+        },
+        _animationStep: function() {
+            var targetTime = moment(this._uiState.currentTime).add(this._uiState.stepInterval, 'milliseconds').toISOString();
+            var index = d3.bisectRight(this._uiState.times, targetTime);
+            if(index > this._uiState.times.length-1) {
+                this._uiState.isAnimating = false;
+                return;
+            }
+            this._uiState.currentTime = this._uiState.times[index];
+            this._requestNewTime();
+            this._rederHandle();
+        },
         /**
          * @method _createControlElement
          * @private
@@ -68,6 +130,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                         '</svg></div>' +
                     '</div>');
             return el;
+        },
+        _getClosestTime: function (time){
+            var index = Math.max(d3.bisect(this._uiState.times, time)-1, 0);
+            return this._uiState.times[index];
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -141,12 +207,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('transform', 'translate('+ scaleSubset(new Date(this._uiState.currentTime)) +',80)')
                 .on(".drag", null); // remove old event handlers
 
-            function updateHandle(newTime) {
-                var newX = scaleSubset(new Date(newTime));
+
+            function renderHandle(){
+                var newX = scaleSubset(new Date(me._uiState.currentTime));
                 handle.attr('transform', 'translate('+ newX +',80)');
-                me._uiState.currentTime = newTime;
-                // TODO: debounce & send to delegate
             }
+            function updateCurrentTime(newTime) {
+                newTime = me._getClosestTime(newTime);
+                if(me._uiState.currentTime !== newTime){
+                    me._uiState.currentTime = newTime;
+                    me._throttleNewTime();
+                }
+                renderHandle();
+            }
+            me._rederHandle = renderHandle;
             
             var dragBehavior = d3.drag()
             .on('drag', function(){
@@ -158,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 if(newX < scaleRange[0]) {
                     newX = scaleRange[0];
                 }
-                updateHandle(scaleSubset.invert(newX).toISOString());
+                updateCurrentTime(scaleSubset.invert(newX).toISOString());
             })
             .on('end', function(){
                 // if brush too small, enlarge it
@@ -184,14 +258,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 svg.select('.full-subset').call(axisSubset);
                 var invertedISO = inverted.map(function(e){return e.toISOString()});
 
-                var currentTime = me._uiState.currentTime;
+                var changedTime = me._uiState.currentTime;
                 if(invertedISO[0] > me._uiState.currentTime) {
-                    currentTime = invertedISO[0];
+                    changedTime = invertedISO[0];
                 }
                 if(invertedISO[1] < me._uiState.currentTime) {
-                    currentTime = invertedISO[1];
+                    changedTime = invertedISO[1];
                 }
-                updateHandle(currentTime);
+                updateCurrentTime(changedTime);
             }
         },
 
@@ -201,7 +275,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         },
 
         _setAnmationState: function(shouldAnimate){
-            this._uiState.isAnimating = shouldAnimate;
+            if(shouldAnimate !== this._uiState.isAnimating) {
+                this._uiState.isAnimating = shouldAnimate;
+                if(shouldAnimate) {
+                    this._throttleAnimation();
+                }
+            }
             this._element.find('.timeseries-playpause').toggleClass('pause', shouldAnimate);
         },
 

@@ -34,10 +34,12 @@ function() {
     /**
      * @method requestNewTime
      * Requests change in current selected time
+     * @param {String} newTime change current time to this value(ISO string)
+     * @param {String} nextTime time value at next animation frame(ISO string). Can be null if not animating
      * @param {function} doneCallback callback that will be called after new time has been loaded
      * @throws always override this
      */
-    requestNewTime : function(doneCallback) {
+    requestNewTime : function(newTime, nextTime, doneCallback) {
         throw new Error("Implement your own");
     },
     /**

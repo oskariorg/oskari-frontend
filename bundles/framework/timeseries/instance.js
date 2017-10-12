@@ -154,6 +154,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var times = this.getTimes();
             return times[times.length-1];
         },
+        requestNewTime: function(newTime, nextTime, doneCallback) {
+            this._plugin.configureTimeseriesPlayback(this._layer.getId(), newTime, false, 500, moment.duration(1, 'minutes'));
+            this._doneCallback = doneCallback;
+        },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -229,7 +233,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             },
             'ProgressEvent': function(event) {
                 if(event.getStatus() && this._plugin.getCurrentLayerId() === event.getId()) {
-                    this._plugin.advancePlayback();
+                    console.log('progressevent. hass cb:', !!this._doneCallback)
+                    //this._plugin.advancePlayback();
+                    if(this._doneCallback){
+                        this._doneCallback();
+                        this._doneCallback = null;                                             
+                    }
                 }
             }
         },
