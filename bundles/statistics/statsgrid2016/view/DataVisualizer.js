@@ -74,11 +74,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
     var container = panel.getContainer();
     container.append(this._template.charts);
-
-    panel.on('open', function () {
-    });
-    panel.on('close', function () {
-    });
     panel.setTitle(title);
     panel.open();
     return panel;
@@ -88,11 +83,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
     var container = panel.getContainer();
     container.append(this.filter.getElement());
-
-    panel.on('open', function () {
-    });
-    panel.on('close', function () {
-    });
     panel.setTitle(this.loc.filter.title);
     return panel;
   },
@@ -161,9 +151,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     });
 
     me._template.tabControl.on('change', { self: me, keyValue: keyValue }, function (event) {
-      // FIXME simplifier code
-      //hackish way of setting selected value as and new indicator and then getting the new indicator
-      var hash = event.data.self.service.getStateService().getHash(event.data.self.getIndicator().datasource, event.data.self.getIndicator().indicator, event.data.keyValue[event.data.self.getSelect().getValue()]);
+      // hackish way of setting selected value as and new indicator and then getting the new indicator
+      var hash = event.data.self.service.getStateService().getHash(
+        event.data.self.getIndicator().datasource,
+        event.data.self.getIndicator().indicator,
+        event.data.keyValue[event.data.self.getSelect().getValue()]
+      );
 
       event.data.self.service.getStateService().addIndicator(event.data.self.getIndicator().datasource,
         event.data.self.getIndicator().indicator,
@@ -178,6 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
 
     return this._template.tabControl;
   },
+
   createColorSelector: function (title) {
     var me = this;
     var selections = [{
@@ -203,11 +197,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
 
     //update color based on selection
     dropdown.on("change", function (evt) {
-      evt.stopPropagation();
-      var barchart = me._barchart.createBarChart(me.getIndicatorData(), { activeIndicator: me.getIndicator() });
-      me.tabsContainer.panels[1].getContainer().append(barchart);
-
-
+        evt.stopPropagation();
+        var barchart = me._barchart.createBarChart(me.getIndicatorData(), { activeIndicator: me.getIndicator() });
+        me.tabsContainer.panels[1].getContainer().append(barchart);
         me._barchart.redraw();
     });
 
