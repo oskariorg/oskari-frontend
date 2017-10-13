@@ -1,6 +1,7 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instance, flyout) {
     this.instance = instance;
     this.container = null;
+    this.flyout = flyout;
 }, {
     setElement: function ( el ) {
         this.container = el;
@@ -35,7 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instanc
             parent.find('.oskari-flyout-title p').html(title);
             parent.find('.oskari-flyouttools').show();
         }
-        // this.showLegend(!isEmbedded);
+        this.showLegend(!isEmbedded);
         this.addContent(this.getElement(), isEmbedded);
     },
     addContent : function (el, isEmbedded) {
@@ -122,13 +123,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Search', function (instanc
         return this.__legendFlyout;
     },
     showLegend : function(enabled) {
+        var me = this;
         if(!enabled) {
-            this.removeSideTools();
+            me.flyout.removeSideTools();
             return;
         }
-        var me = this;
         var locale = this.instance.getLocalization();
-        this.addSideTool(locale.legend.title, function(el, bounds) {
+        me.flyout.addSideTool(locale.legend.title, function(el, bounds) {
             // lazy render
             var flyout = me.getLegendFlyout();
             if(flyout.isVisible()) {

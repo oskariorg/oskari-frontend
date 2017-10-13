@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 cls: 'statsgrid-search-flyout',
                 view:'search',
                 pos: {
-                    x: 220,
+                    x: 210,
                     y: 30
                 }
             }),
@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     initViews: function () {
         var me = this;
         me.views = {
-            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance),
+            search: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Search', this.instance, me.flyouts.search),
             dataview: Oskari.clazz.create('Oskari.statistics.statsgrid.view.DataVisualizer', this.instance),
             filterdata: Oskari.clazz.create('Oskari.statistics.statsgrid.view.Filter', this.instance)
         };
