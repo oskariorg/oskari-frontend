@@ -27,17 +27,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             rangeEnd: null,
             isAnimating: false,
             frameInterval: 1000,
-            stepInterval: moment.duration(1, 'minutes')
+            stepInterval: 'minutes'
         };
+        me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
+        me._throttleNewTime = me._throttle(me._requestNewTime.bind(me), 500);
 
         var times = delegate.getTimes();
         this._uiState.times = times;
         this._uiState.rangeStart = times[0];
         this._uiState.rangeEnd = times[times.length-1];
         this._uiState.currentTime = delegate.getCurrentTime();
-
-        me._throttleNewTime = me._throttle(me._requestNewTime.bind(me), 500);
-        me._throttleAnimation = me._throttle(me._animationStep.bind(me), me._uiState.frameInterval);
 
         me._mobileDefs = {
             buttons: {
@@ -93,6 +92,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 return result;
             };
         },
+        _setFrameInterval: function(interval) {
+            this._uiState.frameInterval = interval;
+            this._throttleAnimation = this._throttle(this._animationStep.bind(this), interval);
+        },
         _requestNewTime: function() {
             var me = this;
             me._delegate.requestNewTime(me._uiState.currentTime, null, function(){
@@ -103,20 +106,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             });
         },
         _animationStep: function() {
-            var targetTime = moment(this._uiState.currentTime).add(this._uiState.stepInterval, 'milliseconds').toISOString();
-            var index = d3.bisectRight(this._uiState.times, targetTime);
-            if(index > this._uiState.times.length-1) {
-                this._uiState.isAnimating = false;
-                return;
+            var targetTime = moment(this._uiState.currentTime);
+            if(this._uiState.stepInterval) {
+                targetTime.add(1, this._uiState.stepInterval);
             }
-            this._uiState.currentTime = this._uiState.times[index];
-            this._requestNewTime();
-            this._renderHandle();
+            var index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
+            if(index > this._uiState.times.length-1) {
+                this._setAnmationState(false);
+                index = this._uiState.times.length-1;
+            }
+            if(this._uiState.currentTime !== this._uiState.times[index]) {
+                this._uiState.currentTime = this._uiState.times[index];
+                this._requestNewTime();
+                this._renderHandle();
+            }
         },
         /**
          * @method _createControlElement
          * @private
-         * Creates UI for coordinate display and places it on the maps
+         * Creates UI for timeseries control
          * div where this plugin registered.
          */
         _createControlElement: function () {
@@ -197,17 +205,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             });
         },
         _initMenus: function() {
+            var me = this;
             var template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
 
             var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
             speedMenu.setOptions(this._generateSpeedOptions());
             speedMenu.setTitle(this.loc('label.animationSpeed'));
             speedMenu.setValue(this._uiState.frameInterval);
+            speedMenu.setHandler(function(value) {
+                me._setAnmationState(false);
+                me._setFrameInterval(parseInt(value));
+            });
             template.find('.timeseries-menus-half').first().append(speedMenu.getElement());
 
             var skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
             skipMenu.setOptions(this._generateSkipOptions());
             skipMenu.setTitle(this.loc('label.skipAhead'));
+            skipMenu.setValue(this._uiState.stepInterval);
+            skipMenu.setHandler(function(value) {
+                me._uiState.stepInterval = value;
+            });
             template.find('.timeseries-menus-half').last().append(skipMenu.getElement());
 
             this._element.find('.timeseries-aux').append(template);
@@ -341,13 +358,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         },
 
         _setAnmationState: function(shouldAnimate){
+            this._element.find('.timeseries-playpause').toggleClass('pause', shouldAnimate);
             if(shouldAnimate !== this._uiState.isAnimating) {
                 this._uiState.isAnimating = shouldAnimate;
                 if(shouldAnimate) {
                     this._throttleAnimation();
                 }
             }
-            this._element.find('.timeseries-playpause').toggleClass('pause', shouldAnimate);
         },
 
         _createEventHandlers: function () {
