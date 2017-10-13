@@ -183,31 +183,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._updateTimeDisplay();
             }
         },
-        _generateSpeedOptions(){
+        _generateSelectOptions(prefix, options){
             var me = this;
-            return [
-                {key: 'fast', value: 1000},
-                {key: 'normal', value: 2000},
-                {key: 'slow', value: 3000}
-            ].map(function(e) {
+            return options.map(function(e) {
                 return {
-                    title: me.loc('animatioSpeed.' + e.key),
-                    value: e.value
-                }
-            });
-        },
-        _generateSkipOptions(){
-            var me = this;
-            return [
-                {key: 'none', value: ''},
-                {key: 'minute', value: 'minutes'},
-                {key: 'hour', value: 'hours'},
-                {key: 'day', value: 'days'},
-                {key: 'week', value: 'weeks'},
-                {key: 'month', value: 'months'}
-            ].map(function(e) {
-                return {
-                    title: me.loc('skip.' + e.key),
+                    title: me.loc(prefix + e.key),
                     value: e.value
                 }
             });
@@ -217,7 +197,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
 
             var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
-            speedMenu.setOptions(this._generateSpeedOptions());
+            speedMenu.setOptions(this._generateSelectOptions('animationSpeed.', [
+                {key: 'fast', value: 1000},
+                {key: 'normal', value: 2000},
+                {key: 'slow', value: 3000}
+            ]));
             speedMenu.setTitle(this.loc('label.animationSpeed'));
             speedMenu.setValue(this._uiState.frameInterval);
             speedMenu.setHandler(function(value) {
@@ -227,7 +211,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             template.find('.timeseries-menus-half').first().append(speedMenu.getElement());
 
             var skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
-            skipMenu.setOptions(this._generateSkipOptions());
+            skipMenu.setOptions(this._generateSelectOptions('skip.', [
+                {key: 'none', value: ''},
+                {key: 'minute', value: 'minutes'},
+                {key: 'hour', value: 'hours'},
+                {key: 'day', value: 'days'},
+                {key: 'week', value: 'weeks'},
+                {key: 'month', value: 'months'}
+            ]));
             skipMenu.setTitle(this.loc('label.skipAhead'));
             skipMenu.setValue(this._uiState.stepInterval);
             skipMenu.setHandler(function(value) {

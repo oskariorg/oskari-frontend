@@ -9,7 +9,7 @@ Oskari.registerLocalization(
             "animationSpeed": "Animaationopeus",
             "skipAhead": "Hyppää eteenpäin"
         },
-        "animatioSpeed": {
+        "animationSpeed": {
             "slow": "Hidas",
             "normal": "Normaali",
             "fast": "Nopea"
