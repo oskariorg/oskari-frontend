@@ -227,7 +227,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DataVisualizer', function 
     var regionsNames = [];
     var activeIndicator = this.getIndicator(hash);
     if (activeIndicator === null) {
-      this._template.container.append(this._template.error({ msg: this.loc.legend.noActive }));
       return;
     }
     var regionSet = this.getRegionset();
