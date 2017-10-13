@@ -107,11 +107,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         },
         _animationStep: function() {
             var targetTime = moment(this._uiState.currentTime);
+            var index;
             if(this._uiState.stepInterval) {
                 targetTime.add(1, this._uiState.stepInterval);
+                index = d3.bisectLeft(this._uiState.times, targetTime.toISOString());
+            } else {
+                index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
             }
-            var index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
-            if(index > this._uiState.times.length-1) {
+            if(targetTime.toISOString() > this._uiState.rangeEnd) {
+                this._setAnmationState(false);
+                index = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeEnd)-1, 0);
+            } else if(index >= this._uiState.times.length-1) {
                 this._setAnmationState(false);
                 index = this._uiState.times.length-1;
             }
@@ -119,6 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 this._uiState.currentTime = this._uiState.times[index];
                 this._requestNewTime();
                 this._renderHandle();
+                this._updateTimeDisplay();
             }
         },
         /**
@@ -173,6 +180,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._initMenus();
                 me._initStepper();
                 me._updateTimelines();
+                me._updateTimeDisplay();
             }
         },
         _generateSpeedOptions(){
@@ -237,11 +245,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 '</div>');
             var dateTimeInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
             dateTimeInput.setName('datetime');
+            dateTimeInput.setEnabled(false);
+            me._updateTimeDisplay = function() {
+                dateTimeInput.setValue(me.loc('dateRender', {val: new Date(me._uiState.currentTime)}));
+            },
             template.find('.timeseries-datetime').append(dateTimeInput.getElement());
             template.find('.timeseries-playpause').on('click', function(e){
                 me._setAnmationState(!me._uiState.isAnimating);
             });
             this._element.find('.timeseries-aux').append(template);
+        },
+        _updateCurrentTime: function(newTime) {
+            newTime = this._getClosestTime(newTime);
+            if(this._uiState.currentTime !== newTime){
+                this._uiState.currentTime = newTime;
+                this._throttleNewTime();
+            }
+            this._renderHandle();
+            this._updateTimeDisplay();
         },
         _updateTimelines: function() {
             var margin = {left: 15, right: 15}
@@ -279,14 +300,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 var newX = scaleSubset(new Date(me._uiState.currentTime));
                 handle.attr('transform', 'translate('+ newX +',80)');
             }
-            function updateCurrentTime(newTime) {
-                newTime = me._getClosestTime(newTime);
-                if(me._uiState.currentTime !== newTime){
-                    me._uiState.currentTime = newTime;
-                    me._throttleNewTime();
-                }
-                renderHandle();
-            }
             me._renderHandle = renderHandle;
 
             function timeFromMouse(newX) {
@@ -297,7 +310,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 if(newX < scaleRange[0]) {
                     newX = scaleRange[0];
                 }
-                updateCurrentTime(scaleSubset.invert(newX).toISOString());
+                me._updateCurrentTime(scaleSubset.invert(newX).toISOString());
             }
 
             svg.select('.subset-bg rect')
@@ -348,7 +361,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 if(invertedISO[1] < me._uiState.currentTime) {
                     changedTime = invertedISO[1];
                 }
-                updateCurrentTime(changedTime);
+                me._uiState.rangeStart = invertedISO[0];
+                me._uiState.rangeEnd = invertedISO[1];
+                me._updateCurrentTime(changedTime);
             }
         },
 

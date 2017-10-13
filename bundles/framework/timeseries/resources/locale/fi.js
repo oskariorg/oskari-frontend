@@ -21,6 +21,7 @@ Oskari.registerLocalization(
             "day": "1 päivä",
             "week": "1 viikko",
             "month": "1 kuukausi"
-        }
+        },
+        "dateRender": "{val, date, short} {val, time, short}"
     }
 });
