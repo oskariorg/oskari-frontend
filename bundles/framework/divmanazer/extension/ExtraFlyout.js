@@ -38,6 +38,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 	    		'<div class="oskari-flyoutcontentcontainer"></div>' +
 	    		'</div>')
 	    },
+        __temp:{
+            sideTool:_.template(
+                '<div class="sidetool">'  +
+                '<div class="icon icon-arrow-white-right"></div>' +
+                '<label class="verticalsidelabel"></label>'  +
+                '</div>')
+        },
 	    isVisible : function() {
 	    	return this.__visible;
 	    },
@@ -180,5 +187,95 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         },
         getElement: function(){
             return this.__popup;
+        },
+
+/************************************************************************************************
+* Side tool functions
+************************************************************************************************/
+         //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
+        getSideLabel : function( text ) {
+            var sidelabel = jQuery(this.__temp.sideTool());
+            sidelabel.find('label').text(text);
+            return sidelabel;
+        },
+        _calcSideLabelPositions: function(){
+            var me = this;
+            var sidelabels = me.__popup.find('.sidetool');
+            var flyout = me.__popup;
+            var heights = flyout.find('.oskari-flyouttoolbar').outerHeight();
+            jQuery.each(sidelabels.get(), function(index, sidelabel) {
+                if(index === 0) {
+                    jQuery(this).css('top', heights);
+                    heights += jQuery(this).height() + 10;
+                }
+                else {
+                    jQuery(this).css('top', heights + 'px');
+                    heights += jQuery(this).height() + 10;
+                }
+            });
+        },
+        /**
+         * @method  @public addSideTool Add side tool for flyout
+         * @param {String}   label    sidetool label
+         * @param {Function} callback sidetool callback
+         */
+        addSideTool: function(label, callback){
+            var me = this;
+            var sidelabel = this.getSideLabel(label);
+
+            var textWidth = function (el)
+            {
+                // Only create the dummy element once
+                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
+                var width = calc.html(el.html()).width();
+                // Empty out the content until next time - not needed, but cleaner
+                calc.remove();
+                return width;
+            };
+
+            var textSize = textWidth(sidelabel.find('label'));
+
+            var flyout = me.__popup;
+            var parent = flyout.parent();
+
+            sidelabel.css('left', null);
+            flyout.append(sidelabel);
+
+            sidelabel.css('height', (textSize + sidelabel.find('.icon').height() + 10) + 'px');
+
+            if(typeof callback === 'function') {
+                sidelabel.on('click', function() {
+                    var position = me.__popup.position();
+                    var bounds = {
+                        left : position.left + sidelabel.position().left,
+                        top : position.top + sidelabel.position().top
+                    };
+                    bounds.right = bounds.left + sidelabel.outerWidth();
+                    bounds.bottom = bounds.top + sidelabel.height();
+                    callback(sidelabel, bounds);
+                });
+            }
+
+            me._calcSideLabelPositions();
+
+            if(!me._addedResizeListener){
+                me.__popup.bind('DOMSubtreeModified', function(){
+                    clearTimeout(me._sidetoolTimer);
+                    me._sidetoolTimer = setTimeout(function(){
+                        me._calcSideLabelPositions();
+                    }, 10);
+                });
+                me._addedResizeListener = true;
+            }
+        },
+        /**
+         * @method  @public removeSideTools Remove sidetools
+         */
+        removeSideTools: function(){
+            var me = this;
+            var sidelabels = me.__popup.find('.sidetool');
+            sidelabels.each(function(index, sidelabel) {
+                jQuery(sidelabel).remove();
+            });
         }
 });
