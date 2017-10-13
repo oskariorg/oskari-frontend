@@ -7,14 +7,36 @@
   background: #fff;
   vertical-align: top;
 }
-.timeseries-aux .oskari-textinput {
+.timeseries-aux .oskari-textinput, .timeseries-aux select {
   width: 100%!important;
 }
-.timeseries-aux label.oskari-formcomponent input[type=text] {
+.timeseries-aux label.oskari-formcomponent input[type=text],
+.timeseries-aux label.oskari-formcomponent.oskari-select {
   width: 100%!important;
+}
+.timeseries-aux label.oskari-formcomponent.oskari-select > div{
+  text-align: left;
+  font-size: 12px;
+  line-height: 15px;
+}
+.timeseries-menus {
+  height: 50px;
+  overflow: hidden;
+}
+.timeseries-menus-half {
+  display: inline-block;
+  width: 50%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.timeseries-menus-half:first-child{
+  padding-right: 2.5px;
+}
+.timeseries-menus-half:last-child{
+  padding-left: 2.5px;
 }
 .timeseries-stepper {
-  padding: 5px;
+  padding: 5px 5px 5px 10px;
 }
 .timeseries-back,
 .timeseries-playpause,
@@ -71,9 +93,9 @@
   left: 19px;
 }
 .timeseries-datetime {
-  width: 140px;
+  width: 122px;
   height: 40px;
-  margin: 0 0 0 5px;
+  margin: 0 0 0 10px;
 }
 .timeseries-timelines{
   display: inline-block;

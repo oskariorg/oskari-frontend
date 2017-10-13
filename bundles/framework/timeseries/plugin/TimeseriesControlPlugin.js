@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._index = 90;
         me._name = 'TimeseriesControlPlugin';
 
+        me.loc = Oskari.getMsg.bind(null, 'timeseries');
+
         me._delegate = delegate;
 
         me._uiState = {
@@ -160,10 +162,55 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 me._element = me._createControlElement();
                 this.addToPluginContainer(me._element);
-                this._element.find('.timeseries-aux').empty();
+                me._initMenus();
                 me._initStepper();
                 me._updateTimelines();
             }
+        },
+        _generateSpeedOptions(){
+            var me = this;
+            return [
+                {key: 'fast', value: 1000},
+                {key: 'normal', value: 2000},
+                {key: 'slow', value: 3000}
+            ].map(function(e) {
+                return {
+                    title: me.loc('animatioSpeed.' + e.key),
+                    value: e.value
+                }
+            });
+        },
+        _generateSkipOptions(){
+            var me = this;
+            return [
+                {key: 'none', value: ''},
+                {key: 'minute', value: 'minutes'},
+                {key: 'hour', value: 'hours'},
+                {key: 'day', value: 'days'},
+                {key: 'week', value: 'weeks'},
+                {key: 'month', value: 'months'}
+            ].map(function(e) {
+                return {
+                    title: me.loc('skip.' + e.key),
+                    value: e.value
+                }
+            });
+        },
+        _initMenus: function() {
+            var template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
+
+            var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
+            speedMenu.setOptions(this._generateSpeedOptions());
+            speedMenu.setTitle(this.loc('label.animationSpeed'));
+            speedMenu.setValue(this._uiState.frameInterval);
+            template.find('.timeseries-menus-half').first().append(speedMenu.getElement());
+
+            var skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
+            skipMenu.setOptions(this._generateSkipOptions());
+            skipMenu.setTitle(this.loc('label.skipAhead'));
+            template.find('.timeseries-menus-half').last().append(skipMenu.getElement());
+
+            this._element.find('.timeseries-aux').append(template);
         },
         _initStepper: function() {
             var me = this;

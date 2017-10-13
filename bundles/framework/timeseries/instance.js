@@ -14,7 +14,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
     function () {
         this.sandbox = null;
         this.started = false;
-        this._localization = null;
         this._plugin = null;
         this._controlPlugin = null;
         this._layer;
@@ -49,28 +48,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         update: function () {
         },
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for
-         * current language.
-         * If key-parameter is not given, returns the whole localization
-         * data.
-         *
-         * @param {String} key (optional) if given, returns the value for
-         *         key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-        /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
@@ -85,7 +62,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);
-            this.localization = Oskari.getLocalization(this.getName());
 
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin', mapModule);
@@ -111,7 +87,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var me = this;
             var sandbox = me.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = this.getLocalization('timeseriesplayback');
         },
         /**
          * @method initTimeSeries
