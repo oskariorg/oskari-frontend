@@ -19,9 +19,9 @@ function(instance, service) {
     this._flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', instance, service);
     // FIXME localize these
     this._templates = {
-        search: jQuery('<span class="statsgrid-functionality search" data-view="search"><h5 class="material-desc">Aineistohaku</h5></span>'),
-        view: jQuery('<span class="statsgrid-functionality dataview" data-view="dataview"><h5 class="material-desc">Haun tulokset</h5></span>'),
-        filterdata: jQuery('<span class="statsgrid-functionality filterdata" data-view="filterdata"><h5 class="material-desc">Aineiston suodatus</h5></span>')
+        search: jQuery('<div class="statsgrid-functionality search" data-view="search"><div class="icon"></div><div class="text">Aineistohaku</div><div class="clear"></div></div>'),
+        view: jQuery('<div class="statsgrid-functionality dataview" data-view="dataview"><div class="icon"></div><div class="text">Haun tulokset</div><div class="clear"></div></div>'),
+        filterdata: jQuery('<div class="statsgrid-functionality filterdata" data-view="filterdata"><div class="icon"></div><div class="text">Aineiston suodatus</div><div class="clear"></div></div>')
     };
 }, {
     /**
