@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             var flyout = me.__popup;
             var parent = flyout.parent();
 
-            sidelabel.css('left', null);
+            sidelabel.css('margin-left', '-16px');
             flyout.append(sidelabel);
 
             sidelabel.css('height', (textSize + sidelabel.find('.icon').height() + 10) + 'px');
@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 sidelabel.on('click', function() {
                     var position = me.__popup.position();
                     var bounds = {
-                        left : position.left + sidelabel.position().left,
+                        left : position.left + sidelabel.position().left - 16,
                         top : position.top + sidelabel.position().top
                     };
                     bounds.right = bounds.left + sidelabel.outerWidth();
