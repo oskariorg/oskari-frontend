@@ -106,18 +106,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
             // Let's add publishable filter to layerlist if user is logged in
             if(Oskari.user().isLoggedIn()) {
-                request = Oskari.requestBuilder('AddLayerListFilterRequest')(
-                    loc.layerFilter.buttons.publishable,
-                    loc.layerFilter.tooltips.publishable,
-                    function(layer){
-                        return (layer.getPermission('publish') === 'publication_permission_ok');
-                    },
-                    'layer-publishable',
-                    'layer-publishable-disabled',
-                    'publishable'
-                );
+                var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService.registerLayerFilter('publishable', function(layer){
+                    return (layer.getPermission('publish') === 'publication_permission_ok');
+                });
 
-                sandbox.request(this, request);
+                // Add layerlist filter button
+                Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+                        loc.layerFilter.buttons.publishable,
+                        loc.layerFilter.tooltips.publishable,
+                        'layer-publishable',
+                        'layer-publishable-disabled',
+                        'publishable'
+                ]);
             }
             this._registerForGuidedTour();
         },

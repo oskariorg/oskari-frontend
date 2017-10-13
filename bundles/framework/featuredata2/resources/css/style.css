@@ -5,6 +5,10 @@
     /* Override sort img position */
 }
 
+.featuredata .oskariTabs {
+    overflow: auto;
+}
+
 .featuredata div.tab-content {
     max-height: 535px;
     overflow: auto;
@@ -103,6 +107,10 @@ div.oskariTabs .tabsHeader ul li a {
 div.oskariTabs .tabsHeader ul li .union-filter {
     display: inline-block;
     margin-right: 10px;
+}
+
+div.oskariTabs .tabsContent .oskari-checkboxinput {
+    margin-left: 10px;
 }
 
 div.flyout-resizer {
@@ -256,4 +264,7 @@ div.featuredata-go-to-location {
     cursor: pointer;
 }
 
+.featuredata label.oskari-formcomponent {
+    display: inline-block;
+    width: 140px; }
 /*# sourceMappingURL=style.css.map */

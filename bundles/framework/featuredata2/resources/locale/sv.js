@@ -11,6 +11,7 @@ Oskari.registerLocalization(
         "featureNameAll": "Datatyp",
         "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
         "errordata": "Fel i data från servern. Flytta lite på kartan för att uppdatera den.",
+        "errorNoFields": "Detta kartlager saknar attributdata.",
         "columnSelectorTooltip": "Välj synliga kolumner",
         "featureDataPopup": "Summa värden",
         "selectionTools": {
@@ -98,6 +99,7 @@ Oskari.registerLocalization(
             "differenceMessage": "Förändrade data skyddade objekt har markerats med värde ",
             "noDataMessage": "Antal = Antal utan skyddad objekt",
             "noDataCommonMessage": "Antal = Antal utan skyddad objekt"
-        }
+        },
+        "showSelectedFirst": "Visa de valda först"
     }
 });

@@ -56,7 +56,7 @@ Oskari.registerLocalization(
                 "remove": "Supprimer",
                 "removeButton": "Supprimer"
             },
-            "confirmDeleteMsg": "Souhaitez-vous supprimer le jeu de données :",
+            "confirmDeleteMsg": "Souhaitez-vous supprimer le jeu de données \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Annuler",

@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance
  *
  * Registers and starts the
- * Oskari.mapframework.bundle.timeseries.TimeseriesPlaybackPlugin plugin for main map.
+ * Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance",
 
@@ -16,6 +16,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         this.started = false;
         this._localization = null;
         this._modules = {};
+        this._plugin = null;
     }, {
         __name: 'timeseries',
         /**
@@ -85,6 +86,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             me.setSandbox(sandbox);
             this.localization = Oskari.getLocalization(this.getName());
 
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesAnimationPlugin', mapModule);
+            mapModule.registerPlugin(plugin);
+            mapModule.startPlugin(plugin);
+            this._plugin = plugin;
+
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -104,7 +111,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             var sandbox = me.getSandbox();
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             var locale = this.getLocalization('timeseriesplayback');
-            var playback = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesPlayback', this, me.conf, locale, mapModule, sandbox);
+            var playback = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControl', this, me.conf, locale, mapModule, sandbox);
             me._modules.playback = playback;
         },
         /**
@@ -134,6 +141,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     me.sandbox.unregisterFromEventByName(me, p);
                 }
             }
+            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            mapModule.stopPlugin(this._plugin);
+            mapModule.unregisterPlugin(this._plugin);
+
             me.sandbox = null;
         },
         /**
@@ -184,6 +195,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             },
             'AfterMapLayerRemoveEvent': function(event) {
                 this._checkIfTimeseriesLayersExist();
+            },
+            'TimeseriesAnimationEvent': function(event) {
+                 this._modules.playback.setPlaybackState(event.getLayerId(), event.getTime(), event.getPlaying());
+            },
+            'ProgressEvent': function(event) {
+                if(event.getStatus() && this._plugin.getCurrentLayerId() === event.getId()) {
+                    this._plugin.advancePlayback();
+                }
             }
         },
         /**
@@ -195,7 +214,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 layers = me.sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
                 //the first layer to have times set, we'll use!
-                if (layers[i].getAttributes().times) {
+                if (layers[i].hasTimeseries()) {
                     //only reinitialise if the control has not yet been initialised with the data of this layer
                     if (!(me._modules.playback.getControl()) ||
                         !(me._modules.playback.getSelectedLayerId()) ||
@@ -208,6 +227,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             }
             //no layers found -> remove the control
             me._modules.playback.removeSlider();
+        },
+        requestPlayback: function(layerId, time, playing, frameInterval, stepInterval) {
+            this._plugin.configureTimeseriesPlayback(layerId, time, playing, frameInterval, stepInterval);
         }
     }, {
         /**

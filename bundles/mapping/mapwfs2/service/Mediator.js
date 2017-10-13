@@ -302,11 +302,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 this.plugin.mapMoveHandler();
             }
 
-            if (typeof layer.getFeatureProperties === "function"){
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder()) {
+                // this is a "userlayer" type layer
                 this.setOrderForFeatureProperties(layer,data.data.fields);
                 layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
                 layer.setLocales (this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
-            }else{
+            } else {
+                // this is any other layer supported by transport
                 layer.setFields(data.data.fields);
                 layer.setLocales(data.data.locales);
             }
@@ -331,15 +333,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSFeature: function (data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
-            self = this;
+            self = this,
+            feature;
         if (data.data.feature !== 'empty' && data.data.feature !== 'max') {
             feature = data.data.feature;
-        }
-
-        if (typeof layer.getFeatureProperties === "function"){
-            layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
-        } else{
-            layer.setActiveFeature(feature);
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder()) {
+                // this is a "userlayer" type layer
+                layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
+            } else {
+                // this is any other layer supported by transport
+                layer.setActiveFeature(feature);
+            }
         }
 
         if (this._featureTimer) {
@@ -392,7 +396,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
-            if (typeof layer.getFeatureProperties === "function" && data.data.features !== 'empty'){
+            if (typeof layer.getFeatureProperties === "function" && layer.hasOrder() && data.data.features !== 'empty'){
+                // this is a "userlayer" type layer - props are sorted to match the original order
                 features = data.data.features;
                 for (i=0; i<features.length; i++){
                     features [i] = this.sortArrayByFeaturePropertyIndexes (layer, features[i]);

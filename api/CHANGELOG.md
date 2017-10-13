@@ -14,6 +14,83 @@ Some extra tags:
 
 ## 1.44
 
+### [mod] [breaking] AddLayerListFilterRequest
+
+Removed function parameter to make request serializable to JSON. The filter function can now be registered to MapLayerService.
+
+Before:
+```javascript
+// Add new layerlist filter button to layerselector
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest',[
+    'Publishable',
+    'Show publishable layers',
+    function(layer){
+        return (layer.getPermission('publish') === 'publication_permission_ok');
+    },
+    'layer-publishable',
+    'layer-publishable-disabled',
+    'publishable'
+]);
+```
+
+After:
+
+```javascript
+// Add layer filter to map layer service
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('publishable', function(layer){
+    return (layer.getPermission('publish') === 'publication_permission_ok');
+});
+
+// Add layerlist filter button
+Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+        'Publishable',
+        'Show publishable layers',
+        'layer-publishable',
+        'layer-publishable-disabled',
+        'publishable'
+]);
+```
+
+### [mod] [breaking] ShowFilteredLayerListRequest
+
+Changed ``stats`` filter name to ``featuredata`` (because it filters featuredata layers and not stats layers). Also made request serializable to JSON (removed function parameter).
+
+Before:
+```javascript
+// Use buil-in filter
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [null, 'stats']);
+
+// Register new filter and use this
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', [function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+},'find_layers_name_start_a', false]);
+```
+
+After:
+```javascript
+// Use built-in filter
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['featuredata']);
+
+// Register new filter
+var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+mapLayerService.registerLayerFilter('find_layers_name_start_a', function(layer) {
+    var name = layer.getName().toLowerCase();
+    return (name.substring(0,1) === 'a');
+});
+// Use new filter by request
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['find_layers_name_start_a', false]);
+```
+
+#### [mod] [breaking] ProgressEvent
+
+The event API itself is unchanged, but the only core bundle that sent out the event was not using it according to the API docs. You can ignore this change if your code does not expect ProgressEvent's getID() method to always return string 'maplayer'.
+
+#### [add] TimeseriesAnimationEvent
+
+Event is sent out when timeseries animation advances or is stopped
+
 #### [mod] [rpc]AddFeaturesToMapRequest
 
 New functionalities for ``AddFeaturesToMapRequest``. New options available:
@@ -24,6 +101,7 @@ New functionalities for ``AddFeaturesToMapRequest``. New options available:
 - layerName: Added layer name (showed in layerselector2/layerselection2)
 - layerDescription: Added layer description (showed subtitle in layerselection2)
 - layerPermissions: Added layer permission
+- image.sizePx: image icon size in pixels. Used this is size not defined (size is used for Oskari icon size calculation)
 
 ## 1.42
 

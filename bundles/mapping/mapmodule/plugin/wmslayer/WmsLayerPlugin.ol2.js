@@ -75,6 +75,10 @@ Oskari.clazz.define(
                     layerParams = oskariLayer.getParams(),
                     layerOptions = oskariLayer.getOptions(),
                     layerAttributes = oskariLayer.getAttributes();
+                
+                if(layerAttributes.times) {
+                    defaultOptions.singleTile = true;
+                }
 
                 if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
                     defaultOptions.yx = _.clone(layerAttributes.reverseXY);

@@ -201,9 +201,7 @@ Oskari.registerLocalization(
         "NotLoggedView": {
             "text": "Þér er velkomið að gefa út ívafið kort á heimasíðunni þinni. Vinsamlegast byrjaðu á að skrá þig inn eða nýskrá þig.",
             "signup": "Innskrá",
-            "signupUrl": "/web/fi/login",
-            "register": "Skrá",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Skrá"
         },
         "StartView": {
             "text": "Þér er velkomið að gefa út ívafið kort á heimasíðunni þinni.",

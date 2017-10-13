@@ -744,7 +744,9 @@ Oskari.clazz.define(
          * @param  {Object} params
          */
         updateLayerParams : function(layer, forced, params) {
-            var ol = this.layers[layer.getId()];
+            var openLayerId = 'layer_' + layer.getId(),
+                ol = this.layers[openLayerId],
+                i;
             if(!ol) {
                 return;
             }
@@ -752,7 +754,18 @@ Oskari.clazz.define(
             if(forced) {
                 params._ts = Date.now();
             }
-            ol.mergeNewParams(params);
+            // myLayersGroup[openLayer, attentionLayer, clusterLayer]
+            if (jQuery.isArray(ol)){
+                for (i=0; i < ol.length; i+=1){
+                    if (typeof ol[i].mergeNewParams ==='function'){
+                        ol[i].mergeNewParams(params);
+                    }
+                }
+            } else {
+                if (typeof ol.mergeNewParams ==='function'){
+                    ol.mergeNewParams(params);
+                }
+            }
         },
 
         /**

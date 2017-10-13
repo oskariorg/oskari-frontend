@@ -6,7 +6,7 @@
 
 div.oskariTabs {
     /* tab headers */
-    
+
     .tabsHeader {
         clear: both;
         font-weight: bold;
@@ -27,6 +27,7 @@ div.oskariTabs {
                 border-width: 1px 1px 0 1px;
                 margin: 0;
                 padding: 0;
+
                 @include box-shadow(0 -3px 3px rgba(0, 0, 0, 0.1) inset);
 
                 &:first-of-type, &:last-of-type {
@@ -49,13 +50,13 @@ div.oskariTabs {
 
                 &.active {
                     background: none repeat scroll 0 0 #FAFAFA;
+
                     @include box-shadow(none);
 
                     a {
                         font-weight: bold;
                         padding-bottom: 11px;
                     }
-
                 }
 
                 &.fill a {
@@ -74,9 +75,7 @@ div.oskariTabs {
                 select {
                     margin-right: 10px;
                 }
-
             }
-
         }
 
         .extraContent {
@@ -85,21 +84,22 @@ div.oskariTabs {
             a {
                 padding: 0 3px;
             }
-
         }
-
     }
+
     /* "tab" content */
-    
+
     div.tabsContent {
         border: 1px solid #999;
+
         /*height: 90%;*/
     }
 
     div.tab-content {
-        padding: 10px;
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
         overflow: auto;
         clear: both;
     }
-
 }

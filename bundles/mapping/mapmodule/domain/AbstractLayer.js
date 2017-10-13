@@ -139,7 +139,6 @@ Oskari.clazz.define(
         me.loaded = 0;
         me.tilesToLoad = 0;
         me.errors = 0;
-
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -207,12 +206,7 @@ Oskari.clazz.define(
          * (e.g. MapLayerService)
          */
         setId: function (id) {
-            //if (typeof id !== 'string') {
-            //    //console.warn('ID not passed as string:', id);
-            //    this._id = String(id);
-            //} else {
             this._id = id;
-            //}
         },
         /**
          * @method getId
@@ -1197,6 +1191,14 @@ Oskari.clazz.define(
          */
         isRealtime: function () {
             return this._realtime;
+        },
+        /**
+         * @method hasTimeseries
+         * @return {Boolean}
+         * Has timeseries data
+         */
+        hasTimeseries: function () {
+            return !!this.getAttributes().times;
         },
         /**
          * @method setRefreshRate
