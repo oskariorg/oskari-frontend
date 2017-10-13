@@ -76,14 +76,52 @@
   height: 26px;
   margin-top: 7px;
 }
+.timeseries-forward:after,
+.timeseries-forward:before,
+.timeseries-back:after,
+.timeseries-back:before  {
+  content: '';
+  display: inline-block;
+  position: absolute;
+}
+.timeseries-forward:after,
+.timeseries-back:after {
+  border-style: solid;
+}
+.timeseries-forward:after {
+  top: 8px;
+  left: 10px;
+  border-width: 5px 0 5px 7px;
+  border-color: transparent transparent transparent #3c3c3c;
+}
+.timeseries-forward:before {
+  width: 1px;
+  height: 8px;
+  top: 9px;
+  left: 16px;
+  background: #3c3c3c;
+}
+.timeseries-back:after {
+  top: 8px;
+  right: 10px;
+  border-width: 5px 7px 5px 0;
+  border-color: transparent #3c3c3c transparent transparent;
+}
+.timeseries-back:before {
+  width: 1px;
+  height: 8px;
+  top: 9px;
+  right: 16px;
+  background: #3c3c3c;
+}
 .timeseries-playpause:not(.pause):after {
   content: '';
   display: inline-block;
   position: absolute;
   top: 11px;
-  left: 13px;
+  left: 14px;
   border-style: solid;
-  border-width: 7px 0 7px 14px;
+  border-width: 7px 0 7px 11px;
   border-color: transparent transparent transparent #3c3c3c;
 }
 .timeseries-playpause.pause:before,
