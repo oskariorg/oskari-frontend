@@ -8,6 +8,9 @@ Each addition is tagged with [add], [mod], [rem] telling if it's a new feature, 
 Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
+## 1.45
+#### [mod] [drawtools] StopDrawingRequest
+- A new optional third parameter supressEvent (boolean), if true don't send an event.
 
 ## 1.44
 
