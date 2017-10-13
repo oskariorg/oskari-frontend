@@ -54,7 +54,16 @@ Oskari.clazz.define(
                 }
             };
         },
+        getLayersFromMap: function () {
+            var layers = [];
 
+            var maplayers = this.getMap().getLayers().getArray();
+
+            maplayers.forEach( function (layer, i) {
+                layers.push(layer);
+            });
+            return layers;
+        },
         /**
          * @method preselectLayers
          * Adds given layers to map if of type WMS
@@ -130,8 +139,6 @@ Oskari.clazz.define(
                     defaultOptions[key] = layerOptions[key];
                 }
             }
-            // ol.layer.Tile or ol.layer.Image for wms
-            var openlayer = new ol.layer.Tile();
             var wmsSource = new ol.source.TileWMS({
                 id:layerIdPrefix + layer.getId(),
                 url: layer.getLayerUrls(),
@@ -139,13 +146,18 @@ Oskari.clazz.define(
                 defaultOptions
 
             });
-            openLayer.opacity = layer.getOpacity() / 100;
+            // ol.layer.Tile or ol.layer.Image for wms
+            var openlayer = new ol.layer.Heatmap({
+                source: wmsSource
+            });
+
+            openlayer.opacity = layer.getOpacity() / 100;
 
             var params = openlayer.getSource().getParams();
 
             // hackish way of hooking into layers redraw calls
-            var original = openLayer.redraw;
-            openLayer.redraw = function() {
+            var original = openlayer.redraw;
+            openlayer.redraw = function() {
 
             	// mergeNewParams triggers a new redraw so we need to use
             	// a flag variable to detect if we should redraw or calculate new SLD
@@ -158,15 +170,16 @@ Oskari.clazz.define(
             }
             // /hack
 
-            this.getMap().addLayer(openLayer);
+            this.getMap().addLayer(openlayer);
             this.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
             //setAt or use setZIndex() for the layer
             if (keepLayerOnTop) {
-                this.getMap().setAt(this.getMap().layers.length, openlayer);
+                // openlayer.setZIndex();
+                this.getMap().getLayers().setAt(this.getMap().getLayers().getArray().length, openlayer);
             } else {
-                this.getMap().setAt(0, openlayer);
+                this.getMap().getLayers().setAt(0, openlayer);
             }
         },
 
@@ -221,12 +234,21 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layer) {
-
+            var olLayers = [];
             if (!layer.isLayerOfType(this.TYPE)) {
                 return null;
             }
+            var layers = this.getLayersFromMap();
 
-            return this.getMap().getLayersByName('layer_' + layer.getId());
+            var layer;
+            for( var i = 0; i < layers.length; i++ ) {
+                if( layers[i].get("title") === 'layer_'+ layer.getId() ) {
+                    layer = layers[i];
+                    olLayers.push(layer);
+                }
+            }
+            debugger;
+            return olLayers;
         },
         __getSLD: function(layer) {
 			 var SLD = '<?xml version="1.0" ?>' +
