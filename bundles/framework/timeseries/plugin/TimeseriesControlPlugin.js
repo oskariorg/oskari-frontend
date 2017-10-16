@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         };
     }, {
         __timelineWidth: 600,
+        __fullAxisYPos: 35,
 
         // Returns a function, that, when invoked, will only be triggered at most once
         // during a given window of time. Normally, the throttled function will run
@@ -141,10 +142,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     '<div class="mapplugin timeseriescontrolplugin">' +
                         '<div class="timeseries-aux"></div><div class="timeseries-timelines"><svg class="timeline-desktop">' +
                             '<g class="full-axis"></g>' +
+                            '<g class="full-axis-controls"><line x1="0" y1="' + me.__fullAxisYPos + '" x2="0" y2="' + me.__fullAxisYPos + '" /><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/></g>' +
                             '<g class="full-axis-brush"></g>' +
                             '<g class="subset-axis"></g>' +
                             '<g class="subset-bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
-                            '<g class="drag-handle"><circle cx="0" cy="0" r="10"/></g>' +
+                            '<g class="drag-handle"><circle cx="0" cy="0" r="8"/></g>' +
                         '</svg></div>' +
                     '</div>');
             return el;
@@ -294,12 +296,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
                 .range([margin.left, this.__timelineWidth - margin.right]);
 
-            var axisFull = d3.axisTop(scaleFull);
+            var axisFull = d3.axisTop(scaleFull).tickPadding(7);
             svg.select('.full-axis')
-                .attr('transform', 'translate(0,30)')
+                .attr('transform', 'translate(0,' + me.__fullAxisYPos + ')')
                 .call(axisFull);
 
-            var axisSubset = d3.axisTop(scaleSubset);
+            var axisSubset = d3.axisTop(scaleSubset).tickPadding(7);
             svg.select('.subset-axis')
                 .attr('transform', 'translate(0,80)')
                 .call(axisSubset);
@@ -324,6 +326,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     newX = scaleRange[0];
                 }
                 me._updateCurrentTime(scaleSubset.invert(newX).toISOString());
+            }
+
+            function updateFullAxisControls() {
+                var range = scaleSubset.domain().map(scaleFull);
+                svg.selectAll('.full-axis-controls circle').each(function(d, i) {
+                    d3.select(this).attr('cx', range[i]);
+                });
+                svg.select('.full-axis-controls line')
+                    .attr('x1', range[0])
+                    .attr('x2', range[1]);
             }
 
             svg.select('.subset-bg rect')
@@ -358,7 +370,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             svg.select('.full-axis-brush')
                 .attr('class', 'brush')
                 .call(brush)
-                .call(brush.move, [scaleFull(new Date(this._uiState.rangeStart)), scaleFull(new Date(this._uiState.rangeEnd))]);
+                .call(brush.move, [scaleFull(new Date(this._uiState.rangeStart)), scaleFull(new Date(this._uiState.rangeEnd))])
+                .select('.selection')
+                .attr('stroke', null)
+                .attr('fill-opacity', 0);
 
             function brushed() {
                 var selection = d3.event.selection;
@@ -376,6 +391,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._uiState.rangeStart = inverted[0];
                 me._uiState.rangeEnd = inverted[1];
                 me._updateCurrentTime(changedTime);
+                updateFullAxisControls();
             }
         },
 

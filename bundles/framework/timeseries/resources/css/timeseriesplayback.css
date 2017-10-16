@@ -1,10 +1,44 @@
-.timeseriescontrolplugin{
-
+/* override these to theme component */
+.timeseries-aux, .timeseries-timelines {
+  background-color: rgba(255, 255, 255, 1);
 }
+g.full-axis .tick line {
+  visibility: hidden;
+}
+g.full-axis .domain {
+  stroke-width: 3px;
+  stroke: #E4E6E7;
+}
+g.full-axis-controls circle {
+  stroke: #E4E6E7;
+  stroke-width: 2px;
+  fill: #5C6160;
+}
+g.full-axis-controls line {
+  stroke: #FAD500;
+  stroke-width: 3px;
+}
+g.drag-handle circle{
+  fill: #FAD500;
+  stroke: #4E4E4E;
+  stroke-width: 2px;
+}
+g.subset-axis line, g.subset-axis path {
+  stroke: #333;
+}
+g.subset-axis text, g.full-axis text {
+  fill: #333;
+  stroke: none;
+}
+.timeseries-menus label.oskari-select {
+  color: #333;
+}
+/* end theming */
+
+
 .timeseries-aux{
   display: inline-block;
   height: 100px;
-  background: #fff;
   vertical-align: top;
 }
 .timeseries-aux .oskari-textinput, .timeseries-aux select {
@@ -60,7 +94,7 @@
 .timeseries-forward {
   background-color: #fff;
   border-radius: 50px;
-  background: radial-gradient(ellipse at center, #ffffff 18%,#ededed 43%,#c4c4c4 100%);
+  background: radial-gradient(ellipse at center, #ffffff 18%,#ededed 43%,#b4b4b4 100%);
   cursor: pointer;
   position: relative;
 }
@@ -149,7 +183,9 @@
 .timeseries-timelines{
   display: inline-block;
   height: 100px;
-  background: #999;
+}
+.timeseries-timelines text{
+  font-family: "Open Sans", Arial, sans-serif;
 }
 svg.timeline-desktop{
   display: block;
