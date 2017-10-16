@@ -10,6 +10,11 @@ Fixed an error when ``MapModulePlugin.RemoveFeaturesFromMapRequest`` is used to 
 
 Fixed an issue where the button to add layers in publisher didn't work.
 
+### drawtools
+
+See [api/CHANGELOG.md](api/CHANGELOG.md) for changes.
+Refactored the code for the functionality to make it more accessible.
+
 ## 1.44.0
 
 ### layerselector2
