@@ -20,7 +20,8 @@ Oskari.clazz.define(
         this._mode = "";
         this._featuresValidity = {};
         // TODO: figure out why we have some variables that are "globally reset" and some that are functionality id specific.
-        // As some are "global" resuming a previous id will probably NOT work the way expected and storing these/id probably not needed.
+        // As some are "global"/shared between functionalities resuming a previous id will probably NOT work the way expected
+        //  and storing these for each id is probably not needed.
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
@@ -72,6 +73,11 @@ Oskari.clazz.define(
                 me._styles[type] = me.getMapModule().getStyle(styleDef);
             });
         },
+        /**
+         * Used to toggle GFI functionality off when the user is drawing to not generate popups on clicks
+         * and on after the drawing is finished to resume showing GFI popups.
+         * @param {Boolean} enabled
+         */
         setGFIEnabled : function(enabled) {
             var reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             if (!reqBuilder) {
