@@ -54,38 +54,6 @@ Oskari.clazz.define(
                 }
             };
         },
-        getLayersFromMap: function () {
-            var layers = [];
-
-            var maplayers = this.getMap().getLayers().getArray();
-
-            maplayers.forEach( function (layer, i) {
-                layers.push(layer);
-            });
-            return layers;
-        },
-        /**
-         * @method preselectLayers
-         * Adds given layers to map if of type WMS
-         * @param {Oskari.mapframework.domain.WmsLayer[]} layers
-         */
-        preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
-                layer,
-                layerId;
-
-            for (i = 0; i < layers.length; i += 1) {
-                layer = layers[i];
-                layerId = layer.getId();
-
-                if (layer.isLayerOfType(this.TYPE)) {
-                    sandbox.printDebug('preselecting ' + layerId);
-                    this.addMapLayerToMap(layer, true, layer.isBaseLayer());
-                }
-            }
-
-        },
 
         /**
          * Adds a single WMS layer to this map
@@ -154,22 +122,7 @@ Oskari.clazz.define(
 
             var params = openlayer.getSource().getParams();
 
-            // hackish way of hooking into layers redraw calls
-            // var original = openlayer.redraw;
-            // openlayer.redraw = function() {
-
-            // 	// mergeNewParams triggers a new redraw so we need to use
-            // 	// a flag variable to detect if we should redraw or calculate new SLD
-            // 	if(this.____oskariFlagSLD === true) {
-            // 		this.____oskariFlagSLD = false;
-            // 		return original.apply(this, arguments);
-            // 	}
-        	// 	this.____oskariFlagSLD = true;
-            //     openlayer.getSource().updateParams(params);
-            // }
-            // /hack
-
-            this.getMap().addLayer(openlayer);
+            this.getMapModule().addLayer(openlayer, false);
             this.getSandbox().printDebug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for ' + layer.getId()
             );
@@ -214,25 +167,25 @@ Oskari.clazz.define(
                         remLayer = this.getLayersByName('basemap_' + subtmp.getId());
                         if ( remLayer ) {
                             remLayer.forEach( function  (layer ) {
-                                me.getMap().removeLayer( layer );
+                                me.getMapModule().removeLayer( layer );
                             });
                         }
                     }
                 } else {
                     remLayer = this.getLayersByName('layer_' + layer.getId());
                     remLayer.forEach( function  (layer ) {
-                        me.getMap().removeLayer( layer );
+                        me.getMapModule().removeLayer( layer );
                     });       
                 }
             } else {
                 remLayer = this.getLayersByName('layer_' + layer.getId());
                 remLayer.forEach( function  (layer ) {
-                    me.getMap().removeLayer( layer );
+                    me.getMapModule().removeLayer( layer );
                 });
             }
         },
         getLayersByName: function (name) {
-            var layers = this.getLayersFromMap();
+            var layers = this.getMapModule().getLayers();
             var foundLayers = [];
             for ( var i = 0; i < layers.length; i++ ) {
                 if( layers[i].get("title") === name ) {
@@ -252,7 +205,7 @@ Oskari.clazz.define(
             if (!layer.isLayerOfType(this.TYPE)) {
                 return null;
             }
-            var layers = this.getLayersFromMap();
+            var layers = this.getMapModule().getLayers();
 
             var layer;
             for( var i = 0; i < layers.length; i++ ) {
@@ -350,7 +303,7 @@ Oskari.clazz.define(
             var layer = event.getMapLayer(),
                 mapLayer;
 
-            if (!layer.isLayerOfType(this.TYPE)) {
+            if ( !layer.isLayerOfType( this.TYPE ) ) {
                 return;
             }
 
