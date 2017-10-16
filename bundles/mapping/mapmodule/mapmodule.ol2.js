@@ -180,7 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         },
 
         getMapZoom: function () {
-            return this.getMap().getZoom();
+            // Touch devices zoom level (after pinch zoom) may contains decimals
+            // for this reason zoom need rounded to nearest integer.
+            // Tested with Android pinch zoom.
+            return Math.round(this.getMap().getZoom());
         },
 
         getSize: function() {
@@ -458,12 +461,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {Object} ol2 specific style hash
          */
         getStyle : function(styleDef) {
-            var me = this;
-            var style = jQuery.extend(true, {}, styleDef);
+            var me = this,
+                style = jQuery.extend(true, {}, styleDef),
+                size;
             //create a blank style with default values
             var olStyle = OpenLayers.Util.applyDefaults({}, OpenLayers.Feature.Vector.style["default"]);
+            // use sizePx if given
+            if (style.image && style.image.sizePx){
+                size = style.image.sizePx;
+            } else if (style.image && style.image.size){
+                size = this.getPixelForSize(style.image.size);
+            } else {
+                size = this._defaultMarker.size;
+            }
 
-            var size = (style.image && style.image.size) ? this.getMarkerIconSize(style.image.size) : this._defaultMarker.size;
+            if(typeof size !== 'number'){
+                size = this._defaultMarker.size;
+            }
+
             olStyle.graphicWidth = size;
             olStyle.graphicHeight = size;
 

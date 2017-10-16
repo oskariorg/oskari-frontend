@@ -87,7 +87,10 @@ Oskari.clazz.define(
             	me.__doSearch();
             };
 
-            var doAutocompleteSearch = function() {
+            var doAutocompleteSearch = function(e) {
+                if(e.keyCode === 38 || e.keyCode === 40 ) { // arrow keys up/down
+                    return;
+                }
                 me.__doAutocompleteSearch();
             };
 
@@ -96,6 +99,10 @@ Oskari.clazz.define(
 
             if(this.instance.conf.autocomplete === true) {
                 field.bindUpKey(doAutocompleteSearch);
+                field.bindAutocompleteSelect(function(event, ui){
+                    field.setValue(ui.item.value);
+                    doSearch();
+                });
             }
 
             var controls = searchContainer.find('div.controls');
@@ -326,10 +333,6 @@ Oskari.clazz.define(
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
-                // close flyout
-                inst.sandbox.postRequestByName('userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
-                );
             }
             // render results
             var table = jQuery(this.__templates.resultTable()),
@@ -449,7 +452,10 @@ Oskari.clazz.define(
                     popupId,
                     loc.title,
                     content,
-                    new OpenLayers.LonLat(result.lon, result.lat),
+                    {   
+                        lon: result.lon,
+                        lat: result.lat
+                    },
                     options
                 );
 

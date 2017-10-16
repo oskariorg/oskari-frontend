@@ -378,7 +378,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             var me = this,
                 input = this._field.find('input');
 
-            input.keyup(function () {
+            input.keyup(function (event) {
                 callback(event);
             });
         },
@@ -431,9 +431,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 input.keyup(callback);
             }
         },
+        bindAutocompleteSelect: function (callback) {
+            var input = this._field.find('input');
+            input.on("autocompleteselect", callback);
+        },
         autocomplete: function (results) {
             var input = this._field.find('input');
-            input.attr('autocomplete', 'on');
+            input.attr('autocomplete', 'off');
             input.autocomplete({
                 source: results
             });

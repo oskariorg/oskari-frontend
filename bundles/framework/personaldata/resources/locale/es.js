@@ -32,7 +32,7 @@ Oskari.registerLocalization(
                     "cancel": "Cancelar",
                     "error_noname": "Teclear el nombre de la vista",
                     "deletetitle": "Borrar la vista",
-                    "deletemsg": "¿Desea borrar esta vista?",
+                    "deletemsg": "¿Desea borrar esta vista \"{name}\"?",
                     "default": "vista por defecto"
                 },
                 "save": {

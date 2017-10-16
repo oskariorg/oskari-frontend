@@ -31,7 +31,7 @@ Oskari.registerLocalization(
                     "cancel": "Anuluj",
                     "error_noname": "Wpisz nazwę",
                     "deletetitle": "Powierdź usunięcie",
-                    "deletemsg": "Czy chcesz usunąć ten widok mapy?"
+                    "deletemsg": "Czy chcesz usunąć ten widok mapy \"{name}\"?"
                 },
                 "save": {
                     "success": "Widok mapy został zapisany.",
@@ -86,7 +86,7 @@ Oskari.registerLocalization(
                     "cancel": "Anuluj",
                     "error_noname": "Podaj nazwę mapy",
                     "deletetitle": "Usunąć mapę?",
-                    "deletemsg": "Czy chcesz usunąć wbudowaną mapę? Nie będzie ona pokazywana na twojej stronie.",
+                    "deletemsg": "Czy chcesz usunąć wbudowaną mapę \"{name}\"? Nie będzie ona pokazywana na twojej stronie.",
                     "showErrorTitle": "Niekompletny widok",
                     "showConfirmMissing": "Niektóre zapisane warstwy mapy nie są jeszcze dostępne, czy nadal chcesz otworzyć ten widok?",
                     "showConfirmNotLoaded": "Niektóre warstwy mapy nie zostały jeszcze pobrane, spróbuj ponownie później."

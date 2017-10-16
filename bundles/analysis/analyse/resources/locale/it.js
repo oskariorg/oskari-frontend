@@ -3,16 +3,14 @@ Oskari.registerLocalization(
     "lang": "it",
     "key": "Analyse",
     "value": {
-        "title": "Analisi <font color=red>(BETA)</font>",
-        "flyouttitle": "Analisi <font color=red>(BETA)</font>",
+        "title": "Analisi",
+        "flyouttitle": "Analisi",
         "desc": "",
         "btnTooltip": "Analisi",
         "NotLoggedView": {
             "text": "Solo gli utenti registrati possono fare analisi.",
             "signup": "Accedi",
-            "signupUrl": "/web/en/login",
-            "register": "Registrati",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrati"
         },
         "AnalyseView": {
             "title": "Analisi",
@@ -355,7 +353,7 @@ Oskari.registerLocalization(
                 "delete": "Cancella"
             },
             "title": "Analisi",
-            "confirmDeleteMsg": "Vuoi cancellare:",
+            "confirmDeleteMsg": "Vuoi cancellare \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Annulla",

@@ -73,11 +73,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Uusim",
-                "stats": "Vektorkihid"
+                "featuredata": "Vektorkihid"
             },
             "tooltips": {
                 "newest": "Näita ## uusimaid kaardikihte",
-                "stats": "Näita ainult vektorkihte",
+                "featuredata": "Näita ainult vektorkihte",
                 "remove": "Eemalda filter"
             }
         },
