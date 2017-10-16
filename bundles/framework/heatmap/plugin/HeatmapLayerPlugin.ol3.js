@@ -106,15 +106,14 @@ Oskari.clazz.define(
 
             // default params and options
             var defaultParams = {
-                    layers: layer.getLayerName(),
-                    transparent: true,
+                    LAYERS: layer.getLayerName(),
+                    TRANSPARENT: true,
                     id: layer.getId(),
-                    styles: layer.getCurrentStyle().getName(),
-                    format: 'image/png',
-                    SLD_BODY : this.__getSLD(layer)
+                    STYLES: layer.getCurrentStyle().getName(),
+                    FORMAT: 'image/png',
+                    SLD_BODY : this.__getSLD(layer),
                 },
                 defaultOptions = {
-                    singleTile : true,
                     layerId: layer.getLayerName(),
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
@@ -139,35 +138,35 @@ Oskari.clazz.define(
                     defaultOptions[key] = layerOptions[key];
                 }
             }
-            var wmsSource = new ol.source.TileWMS({
+            var wmsSource = new ol.source.ImageWMS({
                 id:layerIdPrefix + layer.getId(),
-                url: layer.getLayerUrls(),
-                defaultParams,
-                defaultOptions
+                url: layer.getLayerUrls()[0],
+                params: defaultParams,
+                // defaultOptions
 
             });
             // ol.layer.Tile or ol.layer.Image for wms
-            var openlayer = new ol.layer.Heatmap({
+            var openlayer = new ol.layer.Image({
+                title: layerIdPrefix + layer.getId(),
                 source: wmsSource
             });
-
             openlayer.opacity = layer.getOpacity() / 100;
 
             var params = openlayer.getSource().getParams();
 
             // hackish way of hooking into layers redraw calls
-            var original = openlayer.redraw;
-            openlayer.redraw = function() {
+            // var original = openlayer.redraw;
+            // openlayer.redraw = function() {
 
-            	// mergeNewParams triggers a new redraw so we need to use
-            	// a flag variable to detect if we should redraw or calculate new SLD
-            	if(this.____oskariFlagSLD === true) {
-            		this.____oskariFlagSLD = false;
-            		return original.apply(this, arguments);
-            	}
-        		this.____oskariFlagSLD = true;
-                openlayer.getSource().updateParams(params);
-            }
+            // 	// mergeNewParams triggers a new redraw so we need to use
+            // 	// a flag variable to detect if we should redraw or calculate new SLD
+            // 	if(this.____oskariFlagSLD === true) {
+            // 		this.____oskariFlagSLD = false;
+            // 		return original.apply(this, arguments);
+            // 	}
+        	// 	this.____oskariFlagSLD = true;
+            //     openlayer.getSource().updateParams(params);
+            // }
             // /hack
 
             this.getMap().addLayer(openlayer);
@@ -202,7 +201,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          */
         _removeMapLayerFromMap: function (layer) {
-
+            var me = this;
             if (!layer.isLayerOfType(this.TYPE)) {
                 return;
             }
@@ -212,20 +211,35 @@ Oskari.clazz.define(
                 if (layer.getSubLayers().length > 0) {
                     for (i = 0; i < layer.getSubLayers().length; i += 1) {
                         var subtmp = layer.getSubLayers()[i];
-                        remLayer = this.getMap().getLayersByName('basemap_' + subtmp.getId());
-                        if (remLayer && remLayer[0] && remLayer[0].destroy) {
-                            remLayer[0].destroy();
+                        remLayer = this.getLayersByName('basemap_' + subtmp.getId());
+                        if ( remLayer ) {
+                            remLayer.forEach( function  (layer ) {
+                                me.getMap().removeLayer( layer );
+                            });
                         }
                     }
                 } else {
-                    remLayer = this.getMap().getLayersByName('layer_' + layer.getId());
-                    remLayer[0].destroy();
+                    remLayer = this.getLayersByName('layer_' + layer.getId());
+                    remLayer.forEach( function  (layer ) {
+                        me.getMap().removeLayer( layer );
+                    });       
                 }
             } else {
-                remLayer = this.getMap().getLayersByName('layer_' + layer.getId());
-                /* This should free all memory */
-                remLayer[0].destroy();
+                remLayer = this.getLayersByName('layer_' + layer.getId());
+                remLayer.forEach( function  (layer ) {
+                    me.getMap().removeLayer( layer );
+                });
             }
+        },
+        getLayersByName: function (name) {
+            var layers = this.getLayersFromMap();
+            var foundLayers = [];
+            for ( var i = 0; i < layers.length; i++ ) {
+                if( layers[i].get("title") === name ) {
+                    foundLayers.push(layers[i]);
+                }
+            }
+            return foundLayers;
         },
         /**
          * @method getOLMapLayers
@@ -242,12 +256,11 @@ Oskari.clazz.define(
 
             var layer;
             for( var i = 0; i < layers.length; i++ ) {
-                if( layers[i].get("title") === 'layer_'+ layer.getId() ) {
+                if( layers[i].get("title") === 'layer_'+ layer._id ) {
                     layer = layers[i];
                     olLayers.push(layer);
                 }
             }
-            debugger;
             return olLayers;
         },
         __getSLD: function(layer) {
@@ -344,8 +357,8 @@ Oskari.clazz.define(
             this.getSandbox().printDebug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity()
             );
-            mapLayer = this.getMap().getLayersByName('layer_' + layer.getId());
-            if (mapLayer[0] !== null && mapLayer[0] !== undefined) {
+            mapLayer = this.getLayersByName('layer_' + layer.getId());
+            if (mapLayer !== null && mapLayer !== undefined) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
             }
         },
@@ -358,6 +371,7 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         _updateLayer: function(layer) {
+            
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
                 layerList = subs.length ? subs : [layer],
