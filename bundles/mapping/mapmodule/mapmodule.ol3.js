@@ -132,9 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
         getLayers: function () {
-            var layers = [];
-            var maplayers = this.getMap().getLayers().getArray();
-            return layers;
+            return this.getMap().getLayers().getArray();
         },
         /**
          * Update a specific layer
